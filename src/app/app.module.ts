@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 //Import Components
 import { AppComponent } from './app.component';
@@ -13,6 +15,7 @@ import { MarketplaceComponent } from './components/marketplace/marketplace.compo
 import { PlanComponent } from './components/plan/plan.component';
 import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -23,11 +26,14 @@ import { WorkspacesComponent } from './components/workspaces/workspaces.componen
     MarketplaceComponent,
     PlanComponent,
     SearchComponent,
-    WorkspacesComponent
+    WorkspacesComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

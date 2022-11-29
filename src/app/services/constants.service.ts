@@ -1,0 +1,170 @@
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
+import { User } from '../shared/user.model';
+import { Workspace } from '../shared/workspace.model';
+import {secrets} from 'src/environments/secrets'
+@Injectable({
+  providedIn: 'root'
+})
+export class ConstantsService {
+
+
+
+
+  COOKIE_EXPIRE_TIME_DAYS: number = 1;
+
+  URL: string = environment.url;
+
+  WEBSTOMPURL: string = environment.webstompUrl;
+
+  APIURL: string = this.URL + 'rest';
+
+  AUTHURL: string = environment.authUrl;
+
+  BASEURL: string = environment.baseurl;
+
+  //IMPORTANT QUESTION HERE -> Check notes
+  m_bIgnoreWorkspaceApiUrl: boolean = false;
+
+  m_oUser: User = {} as User;
+
+  m_oActiveWorkspace: Workspace = {} as Workspace;
+
+  m_sRabbitUser: string = secrets.RABBIT_USER;
+
+  m_sRabbitPassword: string = secrets.RABBIT_PASSWORD;
+
+  m_sSelectedApplication: string = "";
+
+  constructor() {
+
+  }
+
+  // isMobile() {
+  //   if (navigator.userAgent.match((/Android)/i)) ||
+  //     navigator.userAgent.match(/BlackBerry/i) ||
+  //     navigator.userAgent.match(/iPhone|iPad|iPod/i) ||
+  //     navigator.userAgent.match(/Opera Mini/i) ||
+  //     navigator.userAgent.match(/IEMobile/i)
+  //   ) {
+  //     return true;
+  //   }
+
+  //   return false;
+  // }
+
+  getRabbitUser() {
+    return this.m_sRabbitUser;
+  }
+
+  getRabbitPassword() {
+    return this.m_sRabbitPassword
+  }
+
+  getURL() {
+    return this.URL;
+  }
+
+  getAUTHURL() {
+    return this.AUTHURL;
+  }
+
+  getAPIURL() {
+    return this.APIURL; 
+  }
+
+  /**
+  * Get flag ignore workspace's Api Url
+  * @returns {boolean}
+  */
+  getIgnoreWorkspaceApiUrl() {
+    return this.m_bIgnoreWorkspaceApiUrl = true;
+  }
+
+  getSessionId() {
+    if (Object.keys(this.m_oUser).length !== 0) {
+      if (this.m_oUser.sessionId != null) {
+        return this.m_oUser.sessionId;
+      }
+    }
+    return "";
+  }
+
+  pad(number: number, length: number) {
+    let string: string = "" + number;
+    while (string.length < length) {
+      string = "0" + string;
+    }
+    return string;
+  }
+
+
+  // getTimezoneOffset() {
+  //   let offset: any = new Date().getTimezoneOffset();
+  //   offset = ((offset < 0 ? "+" : "-") + this.pad(parseInt(Math.abs(offset / 60)), 2) + this.pad(Math.abs(offset % 60), 2))
+
+  //   return offset
+  // }
+  /*------------- USER --------------*/
+  setUser(oUser: User) {
+    this.m_oUser = oUser;
+
+    this.setCookie("oUser", this.m_oUser, this.COOKIE_EXPIRE_TIME_DAYS);
+  }
+
+  getUser() {
+    if (!this.m_oUser) {
+      let oUser = this.getCookie("oUser");
+
+      if (oUser) {
+        this.m_oUser = oUser;
+      } else {
+        this.m_oUser = {} as User;
+      }
+    }
+    return this.m_oUser;
+  }
+
+  getUserId() {
+    if (!this.m_oUser) {
+      return "";
+    }
+    return this.m_oUser.userId;
+  }
+
+  /*------------- WORKSPACES --------------*/
+  setActiveWorkspace(oWorkspace: Workspace) {
+    this.m_oActiveWorkspace = oWorkspace; 
+  }
+
+  getActiveWorkspace() {
+    return this.m_oActiveWorkspace;
+  }
+
+  /*------------- COOKIES --------------*/
+
+  setCookie(cookieName: string, cookieValue: any, exDays: number) {
+    let date = new Date();
+    date.setTime(date.getTime() + (exDays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + date.toUTCString();
+
+    //FOR OBJECT ELEMENT I ADD cvalue=JSON.stringify(cvalue);
+    cookieValue = JSON.stringify(cookieValue);
+    document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
+  }
+  getCookie(cookieName: string) {
+    let name: string = cookieName + "=";
+    let cookieArray: Array<string> = document.cookie.split(";");
+
+    for (let index: number = 0; index < cookieArray.length; index++) {
+      let cookie: string = cookieArray[index];
+
+      while (cookie.charAt(0) === ' ') {
+        return JSON.parse(cookie.substring(name.length, cookie.length));
+      }
+    }
+    return "";
+  }
+
+
+}
