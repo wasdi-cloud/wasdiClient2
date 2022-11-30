@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 //Import Components
@@ -17,6 +17,12 @@ import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
 
+//Import Interceptor
+import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
+
+//Import Services
+import { AuthService } from './services/auth.service';
+import { ConstantsService } from './services/constants.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +41,15 @@ import { LoginComponent } from './components/login/login.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    ConstantsService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SessionInjectorInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

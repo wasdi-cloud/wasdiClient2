@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { User } from '../shared/user.model';
 import { Workspace } from '../shared/workspace.model';
 import {secrets} from 'src/environments/secrets'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -81,9 +82,9 @@ export class ConstantsService {
     return this.m_bIgnoreWorkspaceApiUrl = true;
   }
 
-  getSessionId() {
+  getSessionId(){
     if (Object.keys(this.m_oUser).length !== 0) {
-      if (this.m_oUser.sessionId != null) {
+      if (this.m_oUser.sessionId !== null) {
         return this.m_oUser.sessionId;
       }
     }

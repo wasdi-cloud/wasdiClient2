@@ -9,7 +9,7 @@ import { User } from 'src/app/shared/user.model';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit { 
+export class LoginComponent implements OnInit {
   form: any = {
     username: null,
     password: null
@@ -28,36 +28,38 @@ export class LoginComponent implements OnInit {
   login(): void {
     const { username, password } = this.form;
     let oLoginInfo = {
-      userId: this.form.username, 
+      userId: this.form.username,
       userPassword: this.form.password
     }
     this.oConstantsService.setUser({} as User);
-    this.oAuthService.legacyLogin(oLoginInfo).subscribe(Response => {
-      this.callbackLogin(Response, this)
-    })
-    console.log(username); 
+    this.oAuthService.legacyLogin(oLoginInfo).subscribe((response => {
+      this.callbackLogin(response, this)
+      console.log(this.oConstantsService.getSessionId())
+    }))
   }
 
   callbackLogin(data: User, oController: this) {
-    if(!oController) {
-      oController = this; 
+    if (!oController) {
+      oController = this;
     }
-    if('sessionId' in data) {
+    if (data.hasOwnProperty("sessionId") && data.sessionId == null) {
+      //REPLACE THIS WITH DIALOG 
+      console.log("Login Error");
+      return
+    }
+    if (data.hasOwnProperty("sessionId")) {
       let oUser = {} as User;
-      oUser.userId = data.userId; 
-      oUser.authProvider = 'wasdi'; 
+      oUser.userId = data.userId;
+      oUser.authProvider = 'wasdi';
       oUser.name = data.name;
-      oUser.surname = data.surname; 
-      oUser.sessionId = data.sessionId; 
-      oUser.role = data.role; 
-      oUser.type = data.type; 
-      oUser.grantedAuthorities = data.grantedAuthorities; 
-      
-      this.oConstantsService.setUser(oUser); 
+      oUser.surname = data.surname;
+      oUser.sessionId = data.sessionId;
+      oUser.role = data.role;
+      oUser.type = data.type;
+      oUser.grantedAuthorities = data.grantedAuthorities;
 
-      this.router.navigate(['marketplace'])
-      
-      console.log(this.oConstantsService.getUser())
+      this.oConstantsService.setUser(oUser);
+      this.router.navigateByUrl('/marketplace')
     }
   }
 }
