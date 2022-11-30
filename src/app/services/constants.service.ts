@@ -2,15 +2,12 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { User } from '../shared/user.model';
 import { Workspace } from '../shared/workspace.model';
-import {secrets} from 'src/environments/secrets'
+import { secrets } from 'src/environments/secrets'
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConstantsService {
-
-
-
 
   COOKIE_EXPIRE_TIME_DAYS: number = 1;
 
@@ -23,6 +20,8 @@ export class ConstantsService {
   AUTHURL: string = environment.authUrl;
 
   BASEURL: string = environment.baseurl;
+
+  WMSURL: string = environment.wmsUrl;
 
   //IMPORTANT QUESTION HERE -> Check notes
   m_bIgnoreWorkspaceApiUrl: boolean = false;
@@ -37,9 +36,12 @@ export class ConstantsService {
 
   m_sSelectedApplication: string = "";
 
-  constructor() {
+  m_sSelectedReviewId: string = "";
 
-  }
+  m_oSelectedReview: object = {};
+
+  m_oSelectedComment: object = {};
+
 
   // isMobile() {
   //   if (navigator.userAgent.match((/Android)/i)) ||
@@ -71,7 +73,7 @@ export class ConstantsService {
   }
 
   getAPIURL() {
-    return this.APIURL; 
+    return this.APIURL;
   }
 
   /**
@@ -82,7 +84,7 @@ export class ConstantsService {
     return this.m_bIgnoreWorkspaceApiUrl = true;
   }
 
-  getSessionId(){
+  getSessionId() {
     if (Object.keys(this.m_oUser).length !== 0) {
       if (this.m_oUser.sessionId !== null) {
         return this.m_oUser.sessionId;
@@ -135,13 +137,48 @@ export class ConstantsService {
 
   /*------------- WORKSPACES --------------*/
   setActiveWorkspace(oWorkspace: Workspace) {
-    this.m_oActiveWorkspace = oWorkspace; 
+    this.m_oActiveWorkspace = oWorkspace;
   }
 
   getActiveWorkspace() {
     return this.m_oActiveWorkspace;
   }
 
+  setSelectedApplication(sProcessorName: string) {
+    this.m_sSelectedApplication = sProcessorName
+  }
+
+  getSelectedApplication() {
+    return this.m_sSelectedApplication;
+  }
+
+  setSelectedReviewId(sReviewId: string) {
+    this.m_sSelectedReviewId = sReviewId;
+  }
+
+  getSelectedReviewId() {
+    return this.m_sSelectedReviewId;
+  }
+
+  setSelectedReview(oReview: object) {
+    this.m_oSelectedReview = oReview;
+  }
+
+  getSelectedReview() {
+    return this.m_oSelectedReview;
+  }
+
+  setSelectedComment(oComment: object) {
+    this.m_oSelectedComment = oComment;
+  }
+
+  getSelectedComment() {
+    return this.m_oSelectedComment;
+  }
+
+  getStompUrl() {
+    return this.WEBSTOMPURL;
+  }
   /*------------- COOKIES --------------*/
 
   setCookie(cookieName: string, cookieValue: any, exDays: number) {
@@ -153,6 +190,7 @@ export class ConstantsService {
     cookieValue = JSON.stringify(cookieValue);
     document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
   }
+
   getCookie(cookieName: string) {
     let name: string = cookieName + "=";
     let cookieArray: Array<string> = document.cookie.split(";");
@@ -167,5 +205,97 @@ export class ConstantsService {
     return "";
   }
 
+  deleteCookie(cookieName: string) {
+    this.setCookie(cookieName, "", -1000);
+  }
+  /**************************************************/
 
+  /**
+   * LOGOUT
+   */
+  logOut() {
+    this.deleteCookie("oUser");
+    this.m_oUser = {} as User;
+  }
+
+  /**
+     * Logout from google
+     */
+  /*
+  this.logOutGoogle = function ()
+  {
+      try
+      {
+          if (_.isNil(gapi) == false)
+          {
+              var oController = this;
+              if (_.isNil(gapi.auth2) === true)
+              {
+                  gapi.load('auth2', function () {
+                      gapi.auth2.init();
+                      oController.googleSignOutAPI();
+                  });
+              }
+              else
+              {
+                  this.googleSignOutAPI();
+              }
+          }
+          else
+          {
+              throw "Google API null or undefined, cannot perform logout";
+          }
+      }catch (e)
+      {
+          console.error("logOutGoogle(): ", e);
+      }
+  }
+  */
+  /**
+   * Goggle sign out
+   */
+  /*
+  this.googleSignOutAPI = function()
+  {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+          console.log('User signed out.');
+      });
+  };
+  */
+  /**
+   * Get WASDI OGC WMS Server Address
+   */
+  getWmsUrlGeoserver() {
+    return this.WMSURL;
+  }
+
+  /* MEMBERS NEED TO USE METHODS*/
+  //this.m_oUser = this.getUser();
+
+  checkLocalStorageSupport() {
+    if (typeof (Storage) !== "undefined") {
+      return true;
+    } else {
+      console.log("Error - no web storage support")
+      return false;
+    }
+  }
+
+  getItemInLocalStorage(sName: string) {
+    if (!sName) {
+      return false;
+    }
+    //retrieve
+    return localStorage.getItem(sName);
+  }
+
+  removeLocalStorageItem(sName: string) {
+    if (!sName) {
+      return false;
+    }
+    return localStorage.removeItem(sName);
+  }
+
+  constructor() {}
 }
