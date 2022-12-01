@@ -38,7 +38,7 @@ export class MarketplaceComponent implements OnInit {
   constructor(private oProcessorService: ProcessorService) {}
 
   ngOnInit(): void {
-      this.oProcessorService.fetchMarketplaceList(this.m_oAppFilter).subscribe(response => {
+      this.oProcessorService.getMarketplaceList(this.m_oAppFilter).subscribe(response => {
         console.log(response)
       })
   }  

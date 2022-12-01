@@ -349,7 +349,4 @@ export class ProcessorService {
   saveProcessorUI(sProcessorName: string, sProcessorUI: string) {
     return this.oHttp.post(this.APIURL + '/processors/saveui?name=' + sProcessorName, sProcessorUI);
   }
-  fetchMarketplaceList(oFilter: object) {
-    return this.oHttp.post<any>(this.APIURL + '/processors/getmarketlist', oFilter)
-  }
 }
