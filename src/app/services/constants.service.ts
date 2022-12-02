@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { User } from '../shared/user.model';
-import { Workspace } from '../shared/workspace.model';
+import { User } from '../shared/models/user.model';
+import { Workspace } from '../shared/models/workspace.model';
 import { secrets } from 'src/environments/secrets'
 
 @Injectable({

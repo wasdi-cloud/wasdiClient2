@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Workspace } from 'src/app/shared/workspace.model';
+import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
 
 @Injectable({

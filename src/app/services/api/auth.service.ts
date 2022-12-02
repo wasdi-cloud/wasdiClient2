@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/shared/user.model';
-import { Workspace } from 'src/app/shared/workspace.model';
+import { User } from 'src/app/shared/models/user.model';
+import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
 
 @Injectable({
@@ -56,20 +56,7 @@ export class AuthService {
   //   resetSession()
   // }
 
-  getTokenObj() {
-    if (localStorage['access_token'] && localStorage['refresh_token'])
-      return { 'access_token': localStorage['access_token'], 'refresh_token': localStorage['refresh_token'] }
-    delete localStorage['access_token']
-    delete localStorage['refresh_token']
-    return null;
-  }
-
-  //What 'type' is token?
-  saveToken(token: any) {
-    window.localStorage['access_token'] = token['access_token']
-    window.localStorage['refresh_token'] = token['refresh_token']
-  }
-
+  
   login(oCredentials: { userId: string, userPassword: string }) {
 
     let sParams = 'client_id=' + this.m_sAuthClientId + '&grant_type=password&username=' + oCredentials.userId + '&password=' + oCredentials.userPassword
