@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
-//Import Components
+//Import Main Components
 import { AppComponent } from './app.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { EditComponent } from './components/edit/edit.component';
@@ -16,6 +16,9 @@ import { PlanComponent } from './components/plan/plan.component';
 import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
+
+//Workspaces Page Components
+import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
 
 //Import Interceptor
 import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
@@ -33,7 +36,8 @@ import { ConstantsService } from './services/constants.service';
     PlanComponent,
     SearchComponent,
     WorkspacesComponent,
-    LoginComponent
+    LoginComponent,
+    WorkspaceListItemComponent
   ],
   imports: [
     BrowserModule,

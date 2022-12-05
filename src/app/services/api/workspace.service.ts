@@ -13,7 +13,7 @@ export class WorkspaceService {
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
 
   getWorkspacesInfoListByUser() {
-    return this.oHttp.get(this.APIURL + '/ws/byuser');
+    return this.oHttp.get<Workspace[]>(this.APIURL + '/ws/byuser');
   };
 
   getWorkspaceEditorViewModel(sWorkspaceId: string) {
