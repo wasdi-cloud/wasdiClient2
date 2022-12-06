@@ -1,10 +1,13 @@
 <app-header></app-header>
-<div class="row col-12">
-    <div class="col-6 ">
+<div class="row col-12 d-flex flex-row mt-3" style="height: 90vh">
+    <div class="col-5">
         <h3>Workspaces</h3>
         <ul class="list-group">
             <app-workspace-list-item *ngFor="let workspace of workspaces" [workspace]="workspace">
             </app-workspace-list-item>
         </ul>
     </div>
+  <div class="col-7">
+    <app-workspaces-map></app-workspaces-map>
+  </div>
 </div>

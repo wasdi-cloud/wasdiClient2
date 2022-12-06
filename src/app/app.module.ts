@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 //Import Main Components
 import { AppComponent } from './app.component';
@@ -26,6 +27,7 @@ import { SessionInjectorInterceptor } from './services/interceptors/session-inje
 //Import Services
 import { AuthService } from './services/auth.service';
 import { ConstantsService } from './services/constants.service';
+import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/workspaces-map.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,13 +39,15 @@ import { ConstantsService } from './services/constants.service';
     SearchComponent,
     WorkspacesComponent,
     LoginComponent,
-    WorkspaceListItemComponent
+    WorkspaceListItemComponent,
+    WorkspacesMapComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule, 
+    LeafletModule
   ],
   providers: [
     AuthService,

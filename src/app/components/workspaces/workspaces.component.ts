@@ -15,7 +15,7 @@ export class WorkspacesComponent implements OnInit {
   workspaces: Workspace[] = []
 
   ngOnInit(): void {
-      this.fetchWorkspaceInfoList(); 
+    this.fetchWorkspaceInfoList();
   }
   fetchWorkspaceInfoList() {
     console.log("fetching workspaces")
@@ -25,7 +25,7 @@ export class WorkspacesComponent implements OnInit {
     if (oUser !== {} as User) {
       this.oWorkspaceService.getWorkspacesInfoListByUser().subscribe(response => {
         console.log(response)
-         this.workspaces = response;
+        this.workspaces = response;
       })
     }
   }
