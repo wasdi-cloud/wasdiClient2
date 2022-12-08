@@ -22,12 +22,13 @@ import { LoginComponent } from './components/login/login.component';
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
 
 //Import Interceptor
-import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
+//mport { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
 
 //Import Services
 import { AuthService } from './services/auth.service';
 import { ConstantsService } from './services/constants.service';
 import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/workspaces-map.component';
+import { WorkspacesWorldwindComponent } from './components/workspaces/workspaces-worldwind-map/workspaces-worldwind.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,8 @@ import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/w
     WorkspacesComponent,
     LoginComponent,
     WorkspaceListItemComponent,
-    WorkspacesMapComponent
+    WorkspacesMapComponent,
+    WorkspacesWorldwindComponent
   ],
   imports: [
     BrowserModule,
@@ -51,12 +53,12 @@ import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/w
   ],
   providers: [
     AuthService,
-    ConstantsService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: SessionInjectorInterceptor,
-      multi: true
-    }
+    ConstantsService
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: SessionInjectorInterceptor,
+    //   multi: true
+    // }
   ],
   bootstrap: [AppComponent]
 })
