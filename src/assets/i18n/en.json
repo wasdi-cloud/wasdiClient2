@@ -1,0 +1,10 @@
+{
+    "HEADER": {
+        "MARKETPLACE_BTN": "Marketplace",
+        "WORKSPACE_BTN": "Workspaces",
+        "PLAN_BTN": "Plan",
+        "SEARCH_BTN": "Search",
+        "EDIT_BTN": "Edit",
+        "ADMIN_BTN": "Admin"
+    }
+}

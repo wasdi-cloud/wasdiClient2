@@ -1,0 +1,10 @@
+{
+    "HEADER": {
+        "MARKETPLACE_BTN": "Piata de desfacere",
+        "WORKSPACE_BTN": "Spații de lucru",
+        "PLAN_BTN": "Plan",
+        "SEARCH_BTN": "Căutare",
+        "EDIT_BTN": "Editați",
+        "ADMIN_BTN": "Admin"
+    }
+}

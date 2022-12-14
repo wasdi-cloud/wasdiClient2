@@ -1,0 +1,10 @@
+{
+    "HEADER": {
+        "MARKETPLACE_BTN": "Marktplatz",
+        "WORKSPACE_BTN": "Arbeitsbereiche",
+        "PLAN_BTN": "Planen",
+        "SEARCH_BTN": "Suche",
+        "EDIT_BTN": "Bearbeiten",
+        "ADMIN_BTN": "Administrator"
+    }
+}
