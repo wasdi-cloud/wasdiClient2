@@ -31,6 +31,7 @@ import { SessionInjectorInterceptor } from './services/interceptors/session-inje
 import { AuthService } from './services/auth.service';
 import { ConstantsService } from './services/constants.service';
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http); 
@@ -62,7 +63,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       },
       
-    })
+    }),
+    NgbModule
 
   ],
   providers: [

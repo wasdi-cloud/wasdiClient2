@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { tap } from 'rxjs';
 import { ProcessorService } from 'src/app/services/api/processor.service';
-
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-marketplace',
   templateUrl: './marketplace.component.html',
@@ -35,11 +35,34 @@ export class MarketplaceComponent implements OnInit {
     votes: number,
   }[] = [];
 
-  constructor(private oProcessorService: ProcessorService) {}
+  closeResult = '';
+
+  constructor(private oProcessorService: ProcessorService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
-      this.oProcessorService.getMarketplaceList(this.m_oAppFilter).subscribe(response => {
-        console.log(response)
-      })
-  }  
+    this.oProcessorService.getMarketplaceList(this.m_oAppFilter).subscribe(response => {
+      console.log(response)
+    })
+  }
+  open(content: any) {
+
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', backdrop: 'static', keyboard: false }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      },
+    );
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 }

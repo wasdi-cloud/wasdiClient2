@@ -1,3 +1,20 @@
 <app-header></app-header>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch Bootstrap Ng Modal</button>
+
+<!-- Bootstrap Ng Modal (Static) -->
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Basic Modal</h4>
+        <button class="btn-close" type="close" (click)="modal.dismiss('Cross click')" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <p>Simple Modal</p>
+    </div>
+    <div class="modal-footer">
+        <p>Modal Footer</p>
+    </div>
+</ng-template>
 <p>marketplace works!</p>
 <app-marketplace-app-card></app-marketplace-app-card>
