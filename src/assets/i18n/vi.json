@@ -1,0 +1,10 @@
+{
+    "HEADER": {
+        "MARKETPLACE_BTN": "Thương trường",
+        "WORKSPACE_BTN": "Không gian làm việc",
+        "PLAN_BTN": "Kế hoạch",
+        "SEARCH_BTN": "Tìm kiếm",
+        "EDIT_BTN": "Chỉnh sửa",
+        "ADMIN_BTN": "Quản trị viên"
+    }
+}

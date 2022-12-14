@@ -1,0 +1,10 @@
+{
+    "HEADER": {
+        "MARKETPLACE_BTN": "Pasar",
+        "WORKSPACE_BTN": "Ruang kerja",
+        "PLAN_BTN": "Rencana",
+        "SEARCH_BTN": "Mencari",
+        "EDIT_BTN": "Sunting",
+        "ADMIN_BTN": "Admin"
+    }
+}

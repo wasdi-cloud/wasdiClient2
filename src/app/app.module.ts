@@ -3,8 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 
 //Import Main Components
 import { AppComponent } from './app.component';
@@ -27,6 +30,11 @@ import { SessionInjectorInterceptor } from './services/interceptors/session-inje
 //Import Services
 import { AuthService } from './services/auth.service';
 import { ConstantsService } from './services/constants.service';
+import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
+
+export function httpTranslateLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http); 
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,13 +47,23 @@ import { ConstantsService } from './services/constants.service';
     WorkspacesComponent,
     LoginComponent,
     WorkspaceListItemComponent,
-    MarketplaceAppCardComponent
+    MarketplaceAppCardComponent,
+    LanguageSwitchComponent
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
+    BrowserModule,
+    FormsModule,
     HttpClientModule,
-    FormsModule
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader, 
+        useFactory: httpTranslateLoaderFactory, 
+        deps: [HttpClient]
+      },
+      
+    })
+
   ],
   providers: [
     AuthService,
