@@ -20,7 +20,10 @@ import { PlanComponent } from './components/plan/plan.component';
 import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
+import { ConfirmationDialogComponent } from './shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
 //Workspaces Page Components
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
 
@@ -31,9 +34,11 @@ import { SessionInjectorInterceptor } from './services/interceptors/session-inje
 import { AuthService } from './services/auth.service';
 import { ConstantsService } from './services/constants.service';
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http); 
+  return new TranslateHttpLoader(http);
 }
 @NgModule({
   declarations: [
@@ -48,7 +53,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     LoginComponent,
     WorkspaceListItemComponent,
     MarketplaceAppCardComponent,
-    LanguageSwitchComponent
+    LanguageSwitchComponent,
+    CourseDialogComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -57,12 +64,15 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
-        provide: TranslateLoader, 
-        useFactory: httpTranslateLoaderFactory, 
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoaderFactory,
         deps: [HttpClient]
       },
-      
-    })
+
+    }),
+    BrowserAnimationsModule,
+    MatSlideToggleModule,
+    MatDialogModule
 
   ],
   providers: [
@@ -74,6 +84,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ConfirmationDialogComponent]
 })
 export class AppModule { }
