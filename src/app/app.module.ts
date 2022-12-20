@@ -31,6 +31,7 @@ import { SessionInjectorInterceptor } from './services/interceptors/session-inje
 import { AuthService } from './services/auth.service';
 import { ConstantsService } from './services/constants.service';
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
+import { ProductsListComponent } from './components/edit/products-list/products-list.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http); 
@@ -48,7 +49,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     LoginComponent,
     WorkspaceListItemComponent,
     MarketplaceAppCardComponent,
-    LanguageSwitchComponent
+    LanguageSwitchComponent,
+    ProductsListComponent
   ],
   imports: [
     AppRoutingModule,
