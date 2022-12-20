@@ -36,6 +36,7 @@ import { ConstantsService } from './services/constants.service';
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
+import { ProductsListComponent } from './components/edit/products-list/products-list.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -56,6 +57,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     LanguageSwitchComponent,
     CourseDialogComponent,
     ConfirmationDialogComponent
+    ProductsListComponent
   ],
   imports: [
     AppRoutingModule,

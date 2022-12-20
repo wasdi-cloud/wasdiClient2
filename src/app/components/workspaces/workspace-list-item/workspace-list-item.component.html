@@ -1,4 +1,10 @@
-<!-- <li class="list-group-item">
-    <p>{{workspace.workspaceName}}</p>
-    <p class="secondary-info">{{getDate(workspace.creationDate)}} / {{workspace.ownerUserId}}</p>
-</li> -->
+<li class="list-group-item d-flex flex-row align-items-center justify-content-between">
+    <div>
+        <p>{{workspace.workspaceName}}</p>
+        <p class="secondary-info">{{getDate(workspace.creationDate)}} / {{workspace.ownerUserId}}</p>
+    </div>
+    <div class="button-panel">
+        <button class="btn" (click)="openWorkspace(workspace)">Open</button>
+        <button class="btn">Delete</button>
+    </div>
+</li>

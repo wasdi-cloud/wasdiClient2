@@ -1,4 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { ProductService } from 'src/app/services/api/product.service';
+import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { ConstantsService } from 'src/app/services/constants.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 @Component({
@@ -7,7 +11,9 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
   styleUrls: ['./workspace-list-item.component.css']
 })
 export class WorkspaceListItemComponent {
-  @Input() workspace!: Workspace;
+  @Input() workspace!: any;
+
+  constructor(private oConstantsService: ConstantsService, private oRouter: Router, private oWorkspaceService: WorkspaceService) { }
 
   getDate(sTimestamp: number) {
     if (sTimestamp) {
@@ -15,5 +21,15 @@ export class WorkspaceListItemComponent {
       return sDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').substring(0, 10)
     }
     return "N/A"
+  }
+  openWorkspace(oWorkspace: Workspace) {
+    this.setActiveWorkspace(oWorkspace);
+    this.oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`);
+    
+
+  }
+
+  setActiveWorkspace(oWorkspace: Workspace) {
+   this.oConstantsService.setActiveWorkspace(oWorkspace)
   }
 }
