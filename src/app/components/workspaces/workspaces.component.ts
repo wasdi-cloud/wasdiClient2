@@ -20,7 +20,6 @@ export class WorkspacesComponent implements OnInit {
   fetchWorkspaceInfoList() {
     console.log("fetching workspaces")
 
-
     let oUser: User = this.oConstantsService.getUser();
     if (oUser !== {} as User) {
       this.oWorkspaceService.getWorkspacesInfoListByUser().subscribe(response => {

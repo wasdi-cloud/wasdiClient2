@@ -17,7 +17,7 @@ export class WorkspaceService {
   };
 
   getWorkspaceEditorViewModel(sWorkspaceId: string) {
-    return this.oHttp.get(this.APIURL + '/ws/getws?workspace=' + sWorkspaceId);
+    return this.oHttp.get<Workspace>(this.APIURL + '/ws/getws?workspace=' + sWorkspaceId);
   };
 
   createWorkspace(sName: string = "") {

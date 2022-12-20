@@ -13,7 +13,7 @@ import { WorkspacesComponent } from './components/workspaces/workspaces.componen
 const routes: Routes = [
   {path: '', component: LoginComponent},
   { path: 'admin', component: AdminComponent },
-  { path: 'edit', component: EditComponent },
+  { path: 'edit/:workspaceId', component: EditComponent },
   { path: 'marketplace', component: MarketplaceComponent },
   { path: 'plan', component: PlanComponent },
   { path: 'search', component: SearchComponent },
