@@ -1,29 +1,30 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/shared/models/user.model';
-import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
+import { HttpClient } from '@angular/common/http';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { Workspace } from '../../shared/models/workspace.model';
+import { User } from '../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient, public oJwtHelper: JwtHelperService) { }
+
   APIURL: string = this.oConstantsService.getAPIURL();
   AUTHURL: string = this.oConstantsService.getAUTHURL();
   m_bIgnoreWorkspaceApiUrl: boolean = this.oConstantsService.getIgnoreWorkspaceApiUrl();
 
-  acSessionChangedEvent = 'ac-session-changed';
-  acSession: {
-    authenticated: boolean,
-    user: User,
-    hat: {}
-  } = {
-      authenticated: false,
-      user: {} as User,
-      hat: {}
-    }
+  acSessionChangedEvent: string = 'ac-session-changed';
 
-  m_sAuthClientId = 'wasdi_client';
+  acSession = {
+    authenticated: false,
+    user: {},
+    hat: {}
+  }
+
+  m_sAuthClientId: string = 'wasdi_client';
 
   keycloakConfiguration = {
     //'token_endpoint': window.app.url.oidcIssuer + "protocol/openid-connect/token/",
@@ -32,50 +33,31 @@ export class AuthService {
     'end_session_endpoint': this.oConstantsService.getAUTHURL() + "/protocol/openid-connect/logout"
   }
 
-  constructor(private oHttp: HttpClient, private oConstantsService: ConstantsService) { }
+  public isAuthenticated(): boolean { 
+    const token = localStorage.getItem('refresh_token'); 
 
-  /**
-   * To Do Check - commented for now to replace $rootScope - doesn't exist in Angualr2
-   */
-  // raiseSessionChanged() {
-  //   $rootScope.acSession = acSession
-  //   $rootScope.$broadcast(acSessionChangedEvent, acSession)
-  // }
-
-  // resetSession() {
-  //   this.acSession = {
-  //     authenticated: false,
-  //     user: {} as User,
-  //     hat: {}
-  //   };
-  //   //raiseSessionChanged();
-  // }
-  // clearToken() {
-  //   // delete window.localStorage.access_token
-  //   // delete window.localStorage.refresh_token
-  //   resetSession()
-  // }
-
-  
-  login(oCredentials: { userId: string, userPassword: string }) {
-
-    let sParams = 'client_id=' + this.m_sAuthClientId + '&grant_type=password&username=' + oCredentials.userId + '&password=' + oCredentials.userPassword
-    let sAddress = this.keycloakConfiguration['token_endpoint'];
-    console.log(oCredentials)
-    return this.oHttp.post(sAddress,
-      sParams,
-      { 'headers': { 'Content-Type': 'application/x-www-form-urlencoded' } }
-    );
-
-    // return this.m_oHttp.post(this.AUTHURL + '/auth/login', oCredentials);
-    //return this.m_oHttp.post('http://localhost:8080/wasdiwebserver/rest//auth/login',oCredentials);
+    return !this.oJwtHelper.isTokenExpired(token); 
   }
-  legacyLogin(oCredentials: { userId: string, userPassword: string }) {
-    console.log(oCredentials);
-    return this.oHttp.post(this.APIURL + '/auth/login', oCredentials);
+  //Get token Object
+  getTokenObject() {
+    if (localStorage.getItem('access_token') && localStorage.getItem('refresh_token')) {
+      return {
+        'access_token': localStorage.getItem('access_token'),
+        'refresh_token': localStorage.getItem('refresh_token')
+      }
+    }
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    return null;
   }
 
-
+  saveToken(token: string) {
+    localStorage.setItem('access_token', token)
+    localStorage.setItem('refresh_token', token)
+  }
+  legacyLogin(oCredentials: any) {
+    return this.oHttp.post<any>(this.APIURL + '/auth/login', oCredentials)
+  }
   /**
    * logout
    */
@@ -112,19 +94,19 @@ export class AuthService {
     * @param sIdInput
     * @returns {null|*}
     */
-  deleteAccountUpload(sIdInput: string) {
-    if (!sIdInput) {
-      return null;
-    }
+  // deleteAccountUpload(sIdInput: string) {
+  //   if (!sIdInput) {
+  //     return null;
+  //   }
 
-    let oWorkspace = this.oConstantsService.getActiveWorkspace();
-    let sUrl = this.APIURL;
-    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
-      sUrl = oWorkspace.apiUrl;
-    }
-    
-    //return this.oHttp.delete(sUrl + '/auth/upload/removeaccount', sIdInput);
-  };
+  //   let oWorkspace = this.oConstantsService.getActiveWorkspace();
+  //   let sUrl = this.APIURL;
+  //   if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+  //     sUrl = oWorkspace.apiUrl;
+  //   }
+  //   return null
+  //   //return this.oHttp.delete(sUrl + '/auth/upload/removeaccount', sIdInput);
+  // };
 
   /**
    * Update SFTP Account Password

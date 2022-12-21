@@ -8,7 +8,6 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-
 //Import Main Components
 import { AppComponent } from './app.component';
 import { AdminComponent } from './components/admin/admin.component';
@@ -21,9 +20,14 @@ import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
 import { ConfirmationDialogComponent } from './shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ProductsListComponent } from './components/edit/products-list/products-list.component';
 
+//Angular Materials Imports 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTree, MatTreeModule } from '@angular/material/tree';
+import { MatIconModule } from "@angular/material/icon";
+
 //Workspaces Page Components
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
 
@@ -31,12 +35,13 @@ import { WorkspaceListItemComponent } from './components/workspaces/workspace-li
 import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
 
 //Import Services
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/auth/auth.service';
 import { ConstantsService } from './services/constants.service';
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
-import { ProductsListComponent } from './components/edit/products-list/products-list.component';
+
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -56,7 +61,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MarketplaceAppCardComponent,
     LanguageSwitchComponent,
     CourseDialogComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
     ProductsListComponent
   ],
   imports: [
@@ -70,11 +75,12 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
         useFactory: httpTranslateLoaderFactory,
         deps: [HttpClient]
       },
-
     }),
     BrowserAnimationsModule,
     MatSlideToggleModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTreeModule,
+    MatIconModule,
 
   ],
   providers: [
@@ -84,9 +90,12 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: SessionInjectorInterceptor,
       multi: true
-    }
+    },
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmationDialogComponent]
+  entryComponents: [ConfirmationDialogComponent],
+
 })
 export class AppModule { }
