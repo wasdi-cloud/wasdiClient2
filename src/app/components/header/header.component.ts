@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { ConstantsService } from 'src/app/services/constants.service';
 
 @Component({
   selector: 'app-header',
@@ -7,12 +9,17 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  constructor(public translate: TranslateService) {
+  constructor(public oConstantsService: ConstantsService, public oRouter: Router, public translate: TranslateService) {
     //Register translation languages:
     translate.addLangs(['en', 'fr', 'it', 'de', 'vi', 'id', 'ro'])
 
     translate.setDefaultLang('en')
   }
 
+  logout() {
+    this.oConstantsService.logOut();
+    this.oRouter.navigateByUrl("login")
+    console.log(document.cookie);
+  }
 
 }
