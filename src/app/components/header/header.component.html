@@ -20,13 +20,13 @@
                     <a class="nav-link" routerLink="/search">{{'HEADER.SEARCH_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/edit">{{'HEADER.EDIT_BTN' | translate}}</a>
+                    <a class="nav-link"  [ngClass]="{'disabled' : !sActiveWorkspaceId}"routerLink="/edit/{{sActiveWorkspaceId}}">{{'HEADER.EDIT_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/admin">{{'HEADER.ADMIN_BTN' | translate}}</a>
                 </li>
                 <app-language-switch></app-language-switch>
-                 <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
                 </li>
             </ul>
