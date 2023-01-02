@@ -1,4 +1,9 @@
 <app-header></app-header>
-<p>marketplace works!</p>
-<mat-slide-toggle></mat-slide-toggle>
-<app-marketplace-app-card></app-marketplace-app-card>
+<h2>Space Market</h2>
+<div class="px-3">
+    toolbar
+</div>
+<div class="processor-cards-container col-12 d-flex flex-row flex-wrap justify-content-between gap-1 px-3">
+    <app-marketplace-app-card style="width: 23%" *ngFor="let processor of m_aoApplications"
+        [processor]="processor"></app-marketplace-app-card>
+</div>

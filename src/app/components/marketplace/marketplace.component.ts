@@ -22,27 +22,19 @@ export class MarketplaceComponent implements OnInit {
     orderDirection: 1
   }
 
-  m_aoApplications: {
-    buyed: boolean,
-    friendlyName: string,
-    imgLink: string,
-    isMine: boolean,
-    price: number,
-    processorDescription: string,
-    processorId: string,
-    processorName: string,
-    publisher: string,
-    score: number,
-    votes: number,
-  }[] = [];
+  m_aoApplications: any = [];
+
 
   constructor(private oProcessorService: ProcessorService, private dialog: MatDialog) {}
 
+  
   ngOnInit(): void {
       this.oProcessorService.getMarketplaceList(this.m_oAppFilter).subscribe(response => {
         console.log(response)
+        this.m_aoApplications = response;
       })
   }  
+
 
 
 }
