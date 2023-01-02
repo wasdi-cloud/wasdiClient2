@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 //Import Components
 import { AdminComponent } from './components/admin/admin.component';
+import { AppDetailsComponent } from './components/app-details/app-details/app-details.component';
 import { EditComponent } from './components/edit/edit.component';
 import { LoginComponent } from './components/login/login.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
@@ -21,7 +22,8 @@ const routes: Routes = [
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'plan', component: PlanComponent, canActivate: [AuthGuard] },
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
-  { path: 'workspaces', component: WorkspacesComponent, canActivate: [AuthGuard] }
+  { path: 'workspaces', component: WorkspacesComponent, canActivate: [AuthGuard] },
+  {path: ':processorName/appDetails', component: AppDetailsComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
