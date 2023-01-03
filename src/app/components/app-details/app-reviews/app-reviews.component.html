@@ -1,1 +1,8 @@
 <p>{{oProcessor.friendlyName}}</p>
+
+<div class="border my-2" *ngFor="let review of reviews">
+    <p>{{review.userId}}</p>
+    <p>{{review.vote}}</p>
+    <p>{{review.title}}</p>
+    <p>{{review.comment}}</p>
+</div>

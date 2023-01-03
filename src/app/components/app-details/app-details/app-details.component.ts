@@ -30,7 +30,10 @@ export class AppDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.activeApplicationName)
-    this.getApplicationDetails(this.activeApplicationName)
+    if(this.activeApplicationName) {
+      this.getApplicationDetails(this.activeApplicationName)
+    }
+  
   }
 
   getApplicationDetails(applicationName: string) {
