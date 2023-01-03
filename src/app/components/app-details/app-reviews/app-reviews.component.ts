@@ -1,0 +1,23 @@
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { of } from 'rxjs';
+import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
+
+@Component({
+  selector: 'app-app-reviews',
+  templateUrl: './app-reviews.component.html',
+  styleUrls: ['./app-reviews.component.css']
+})
+export class AppReviewsComponent implements OnChanges{
+  @Input() oProcessor: any; 
+  review = []
+  constructor(private oProcessorMediaService: ProcessorMediaService) {}
+
+  ngOnChanges(): void {
+    if(this.oProcessor.friendlyName) {
+      this.oProcessorMediaService.getProcessorReviews(this.oProcessor.processorName, 0, 4).subscribe(response=> {
+      console.log(response.reviews)
+    })
+    }
+    
+  }
+}
