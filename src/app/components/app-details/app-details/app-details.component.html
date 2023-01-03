@@ -1,2 +1,47 @@
 <app-header></app-header>
-<p>app-details works!</p>
+<div class="toolbar-container d-flex flex-row justify-content-between py-2">
+    <a class="return-btn btn btn-success" (click)="marketplaceReturn()">
+        Back to the Future
+    </a>
+</div>
+<div class="info-container d-flex flex-column align-items-center justify-content-center py-2">
+    <div class="d-flex flex-row col-10">
+        <div class="processor-img col" style="background-image: url({{activeApplicationInfo.imgLink}}); background-size: cover;
+    background-position: center; height: 300px"></div>
+        <div class="processor-info mx-4 col">
+            <h3>{{activeApplicationInfo.friendlyName}}</h3>
+            <p>Reviews: {{activeApplicationInfo.reviewsCount}}</p>
+            <p>Published By: {{activeApplicationInfo.publisher}}</p>
+            <div class="categories-container">
+                <span>Categories</span>
+            </div>
+            <div class="price-container">
+                {{activeApplicationInfo.price}}
+            </div>
+            <div class="description-container">
+                {{activeApplicationInfo.processorDescription}}
+            </div>
+            <a class="open-application btn btn-dark">Open Application</a>
+        </div>
+    </div>
+    <div class="application-details row col-10 d-flex flex-row justify-content-between py-4">
+        <div class="publisher-info-col col-5">
+            <p>Publisher</p>
+            <p>Contact</p>
+            <p>Website</p>
+        </div>
+        <div class="application-info-col col-5">
+            <p>Publication Date: </p>
+            <p>Last Update:</p>
+            <p>Executions: </p>
+            <p>Success Rate: </p>
+            <p>Medium Time (minutes): </p>
+        </div>
+    </div>
+</div>
+<div class="reviews-container d-flex justify-content-center border-top pt-3">
+    <div class="reveiw-header row col-10 ">
+        <h4>Reviews</h4>
+    </div>
+
+</div>
