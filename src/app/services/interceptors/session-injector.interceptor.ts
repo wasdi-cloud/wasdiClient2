@@ -48,7 +48,7 @@ export class SessionInjectorInterceptor implements HttpInterceptor {
       tap(event => {
         if (event instanceof HttpResponse) {
           if (event.status === 200) {
-            console.log(event)
+
           }
         }
       })

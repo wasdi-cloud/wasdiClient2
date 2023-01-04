@@ -15,10 +15,6 @@ export class AuthGuard implements CanActivate {
       this.oRouter.navigate(["login"])
       return false;
     }
-    if(this.oAuthService.getTokenObject()?.refresh_token) {
-      console.log(this.oConstantsService.getCookie('oUser'))
-      console.log(this.oAuthService.getTokenObject()?.refresh_token)
-    }
     return true;
   }
   
