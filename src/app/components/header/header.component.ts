@@ -10,7 +10,7 @@ import { ConstantsService } from 'src/app/services/constants.service';
 })
 export class HeaderComponent implements OnInit{
 
-  sActiveWorkspaceId: string = "";
+  sActiveWorkspaceId: string | null = null;
   constructor(public oConstantsService: ConstantsService, public oRouter: Router, public translate: TranslateService) {
     //Register translation languages:
     translate.addLangs(['en', 'fr', 'it', 'de', 'vi', 'id', 'ro'])
