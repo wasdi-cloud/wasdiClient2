@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from 'src/app/services/api/product.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
@@ -12,6 +12,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 })
 export class WorkspaceListItemComponent {
   @Input() workspace!: any;
+  @Output() activeWorkspace = new EventEmitter<Workspace>(); 
 
   constructor(private oConstantsService: ConstantsService, private oRouter: Router, private oWorkspaceService: WorkspaceService) { }
 
@@ -25,11 +26,13 @@ export class WorkspaceListItemComponent {
   openWorkspace(oWorkspace: Workspace) {
     this.setActiveWorkspace(oWorkspace);
     this.oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`);
-    
-
   }
 
   setActiveWorkspace(oWorkspace: Workspace) {
-   this.oConstantsService.setActiveWorkspace(oWorkspace)
+    this.oConstantsService.setActiveWorkspace(oWorkspace);
+  }
+
+  showWorkspaceProperties(oWorkspace: Workspace) {
+    this.activeWorkspace.emit(oWorkspace);
   }
 }
