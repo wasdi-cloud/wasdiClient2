@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -27,6 +27,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTree, MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from "@angular/material/icon";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule} from '@angular/material/select';
+
 
 //Workspaces Page Components
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
@@ -43,6 +46,8 @@ import { CourseDialogComponent } from './shared/course-dialog/course-dialog.comp
 
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AppDetailsComponent } from './components/app-details/app-details/app-details.component';
+import { AppReviewsComponent } from './components/app-details/app-reviews/app-reviews.component';
+import { AppUiComponent } from './components/app-ui/app-ui.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -64,12 +69,15 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     CourseDialogComponent,
     ConfirmationDialogComponent,
     ProductsListComponent,
-    AppDetailsComponent
+    AppDetailsComponent,
+    AppReviewsComponent,
+    AppUiComponent
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -83,7 +91,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatDialogModule,
     MatTreeModule,
     MatIconModule,
-
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [
     AuthService,
