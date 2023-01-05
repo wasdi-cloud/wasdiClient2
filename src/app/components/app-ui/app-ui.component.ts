@@ -8,7 +8,6 @@ import {
   trigger
 } from '@angular/animations';
 import { Router } from '@angular/router';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
@@ -51,7 +50,7 @@ export class AppUiComponent implements OnInit {
   isCollapsed: boolean = true;
 
   //Text for the help tab
-  m_sHelpHtml!: SafeHtml;
+  m_sHelpHtml: string = "<p>No Help Provided</p>";
 
   //Processor History
   processorHistory: any = []
@@ -66,7 +65,7 @@ export class AppUiComponent implements OnInit {
     }
   }
 
-  constructor(private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router, private sanitizer: DomSanitizer) { }
+  constructor(private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router) { }
 
   /**
    * Change Active Tab
@@ -92,7 +91,7 @@ export class AppUiComponent implements OnInit {
 
   getHelpFromProcessor(sProcessorName: string) {
     this.oProcessorService.getHelpFromProcessor(sProcessorName).subscribe(response => {
-      this.m_sHelpHtml = this.sanitizer.bypassSecurityTrustHtml(response.stringValue);
+      this.m_sHelpHtml = response.stringValue;
     })
   }
 
