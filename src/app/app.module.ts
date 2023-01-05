@@ -48,6 +48,7 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AppDetailsComponent } from './components/app-details/app-details/app-details.component';
 import { AppReviewsComponent } from './components/app-details/app-reviews/app-reviews.component';
 import { AppUiComponent } from './components/app-ui/app-ui.component';
+import { MarkdownPipe } from './shared/pipes/markdown.pipe';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -71,7 +72,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProductsListComponent,
     AppDetailsComponent,
     AppReviewsComponent,
-    AppUiComponent
+    AppUiComponent,
+    MarkdownPipe
   ],
   imports: [
     AppRoutingModule,
