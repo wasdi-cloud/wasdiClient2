@@ -43,6 +43,11 @@ export class AppUiComponent implements OnInit {
   processorName: string = this.oConstantsService.getSelectedApplication();
   processorInformation: any = {} as application;
 
+  m_aoViewElements: any = [];
+
+  //Flag to know if all the inputs must be rendered as strings or objects
+  m_bRenderAsStrings: boolean = false;
+
   //Active Tab Element
   activeTab: string = ""
 
@@ -55,17 +60,52 @@ export class AppUiComponent implements OnInit {
   //Processor History
   processorHistory: any = []
 
+  //Processor JSON string
+  m_sJSONParam = "{}";
+
+  //Array of names for the Tabs
+  m_aoTabs: any[] = [];
 
 
   ngOnInit(): void {
     if (this.processorName) {
       this.getProcessorDetails(this.processorName);
+      this.getProcessorUI(this.processorName);
+
     } else {
       console.log("Problem getting Processor Name")
     }
   }
 
   constructor(private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router) { }
+
+  /**
+   * Get Processor UI from Server
+   */
+  getProcessorUI(processorName: string) {
+    this.oProcessorService.getProcessorUI(processorName).subscribe(response => {
+      console.log(response)
+    })
+  }
+
+  generateViewElements(oFormToGenerate: any) {
+    // Output initialization
+    let aoViewElements: any = [];
+    // Create the factory
+    //let oFactory = new ViewElementFactory();
+
+    // For each tab
+    for (let iTabs = 0; iTabs < oFormToGenerate.tabs.length; iTabs++) {
+      // Get the tab
+      let oTab = oFormToGenerate.tabs[iTabs];
+      // Let the factory create the array of controls to add
+      //let aoTabControls = oFactory.getTabElements(oTab);
+      // Save the tab controls in the relative property
+      // aoViewElements[oTab.name] = aoTabControls;
+    }
+
+    return aoViewElements;
+  }
 
   /**
    * Change Active Tab
@@ -103,20 +143,55 @@ export class AppUiComponent implements OnInit {
       this.processorHistory = response
       console.log(this.processorHistory)
     })
-
-
   }
+  /**
+   * Get JSON parameters from the UI 
+   */
+  // showParamsJSON() {
+  //   let oProcessorInput = this.getProcessorUI();
+  //   console.log(oProcessorInput);
+  //   this.m_sJSONParam = JSON.stringify(oProcessorInput)
+  //   console.log(this.m_sJSONParam); 
+  // }
 
   /**
-   * 
-   * @param processorName 
-   * @returns 
+   * Get processor details
    */
 
   getProcessorDetails(processorName: string) {
     return this.oProcessorService.getMarketplaceDetail(processorName).subscribe(response => {
       this.processorInformation = response;
     })
+  }
+
+  /**
+   * 
+   */
+  createParams() {
+    // Output initialization
+    let oProcessorInput: any = {};
+
+    // For each tab
+    for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
+      // Get the name of the tab
+      let sTab = this.m_aoTabs[iTabs];
+
+      // For all the view elements of the tab
+      for (let iControls = 0; iControls < this.m_aoViewElements[sTab].length; iControls++) {
+        // Take the element
+        let oElement = this.m_aoViewElements[sTab][iControls];
+
+        // Save the value to the output json
+        if (this.m_bRenderAsStrings && oElement.type != 'numeric') {
+          oProcessorInput[oElement.paramName] = oElement.getStringValue();
+        } else {
+          oProcessorInput[oElement.paramName] = oElement.getValue();
+        }
+
+      }
+    }
+    console.log(oProcessorInput)
+    return oProcessorInput
   }
 
   toggleCollapse() {
