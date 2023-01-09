@@ -29,24 +29,25 @@ export class AppDetailsComponent implements OnInit {
   constructor(private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oRouter: Router) { }
 
   ngOnInit(): void {
-    console.log(this.sActiveApplicationName)
     if(this.sActiveApplicationName) {
       this.getApplicationDetails(this.sActiveApplicationName)
     }
   
   }
 
+  //Get application details from server
   getApplicationDetails(applicationName: string) {
     return this.oProcessorService.getMarketplaceDetail(applicationName).subscribe(response => {
       this.sActiveApplicationInfo = response
-      console.log(response)
     });
   }
 
+  //Routing for back button
   marketplaceReturn(){
     this.oRouter.navigateByUrl('marketplace')
   }
 
+  //Routing for opening AppUI page
   openAppUI(processorName: string) {
     this.oRouter.navigateByUrl(`${processorName}/appui`)
   }
