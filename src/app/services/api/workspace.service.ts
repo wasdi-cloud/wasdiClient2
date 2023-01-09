@@ -3,6 +3,21 @@ import { Injectable } from '@angular/core';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
 
+export interface WorkspaceViewModel {
+  activeNode: boolean;
+  apiUrl: string;
+  cloudProvider: string;
+  creationDate: number;
+  lastEditDate: number;
+  name: string;
+  nodeCode: string;
+  processesCount: string;
+  sharedUsers: string[];
+  slaLink: string;
+  userId: string;
+  workspaceId: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +32,7 @@ export class WorkspaceService {
   };
 
   getWorkspaceEditorViewModel(sWorkspaceId: string) {
-    return this.oHttp.get<Workspace>(this.APIURL + '/ws/getws?workspace=' + sWorkspaceId);
+    return this.oHttp.get<WorkspaceViewModel >(this.APIURL + '/ws/getws?workspace=' + sWorkspaceId);
   };
 
   createWorkspace(sName: string = "") {
