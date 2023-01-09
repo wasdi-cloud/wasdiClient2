@@ -23,27 +23,31 @@ export interface application {
   styleUrls: ['./app-details.component.css']
 })
 export class AppDetailsComponent implements OnInit {
-  activeApplicationName: string = this.oConstantsService.getSelectedApplication()
-  activeApplicationInfo: any = {} as application;
+  sActiveApplicationName: string = this.oConstantsService.getSelectedApplication()
+  sActiveApplicationInfo: any = {} as application;
 
   constructor(private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oRouter: Router) { }
 
   ngOnInit(): void {
-    console.log(this.activeApplicationName)
-    if(this.activeApplicationName) {
-      this.getApplicationDetails(this.activeApplicationName)
+    console.log(this.sActiveApplicationName)
+    if(this.sActiveApplicationName) {
+      this.getApplicationDetails(this.sActiveApplicationName)
     }
   
   }
 
   getApplicationDetails(applicationName: string) {
     return this.oProcessorService.getMarketplaceDetail(applicationName).subscribe(response => {
-      this.activeApplicationInfo = response
+      this.sActiveApplicationInfo = response
       console.log(response)
     });
   }
 
   marketplaceReturn(){
     this.oRouter.navigateByUrl('marketplace')
+  }
+
+  openAppUI(processorName: string) {
+    this.oRouter.navigateByUrl(`${processorName}/appui`)
   }
 }
