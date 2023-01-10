@@ -1,9 +1,32 @@
 <app-header></app-header>
-<h2>Space Market</h2>
-<div class="px-3">
-    toolbar
+<h2 class="px-3">Space Market</h2>
+<div class="app-search-container d-flex flex-row align-items-center justify-content-between mb-3 px-3">
+    <div class="filter-container d-flex flex-row align-items-center gap-1 col-6">
+        <h5 class="w-100">FILTER BY: </h5>
+        <select class="form-select" ng-model="publisherFilter">
+            <option selected>Developer</option>
+            <option *ngFor="let publisher of publishers" [ngValue]="publisher">{{publisher.publisher}}</option>
+        </select>
+        <select name="" id="" class="form-select">
+            <option selected>Success Rate</option>
+            <option value="20">Above 20%</option>
+            <option value="40">Above 40%</option>
+            <option value="60">Above 60%</option>
+            <option value="80">Above 80%</option>
+        </select>
+        <select name="" id="" class="form-select">
+            <option value="mostUsed" selected>Most Used</option>
+            <option value="leastUsed">Least Used</option>
+        </select>
+        <input type="text" name="" id="" class="form-control" placeholder="Max Price">
+    </div>
+    <div class="col-2">
+        <input type="text" name="" id="" class="form-control" placeholder="Search" [(ngModel)]="searchWord" (ngModelChange)="searchApps()">
+    </div>
 </div>
-<div class="processor-cards-container col-12 d-flex flex-row flex-wrap justify-content-between gap-1 px-3">
-    <app-marketplace-app-card style="width: 23%" *ngFor="let processor of m_aoApplications"
-        [processor]="processor"></app-marketplace-app-card>
+
+
+<div class="processor-cards-container col-12 d-flex flex-row justify-content-between gap-1 px-3">
+    <app-marketplace-app-card style="width: 23%" *ngFor="let oProcessor of m_aoApplications"
+        [oProcessor]="oProcessor"></app-marketplace-app-card>
 </div>
