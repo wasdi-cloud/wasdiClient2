@@ -47,7 +47,10 @@ export class WorkspacesComponent implements OnInit {
     }
   }
 
-
+  onDeleteWorkspace(oWorkspace: Workspace) {
+    this.fetchWorkspaceInfoList(); 
+  }
+  
   onShowWorkspace(oWorkspace: Workspace) {
     this.oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
       this.activeWorkspace = response

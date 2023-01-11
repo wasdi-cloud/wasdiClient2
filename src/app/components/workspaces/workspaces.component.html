@@ -5,7 +5,8 @@
         <div class="overflow-auto">
             <ul class="list-group" style="height: 45vh">
                 <app-workspace-list-item *ngFor="let workspace of workspaces" [workspace]="workspace"
-                    (activeWorkspace)="onShowWorkspace($event)">
+                    (activeWorkspace)="onShowWorkspace($event)"
+                    (deletedWorkspace)="onDeleteWorkspace($event)">
                 </app-workspace-list-item>
             </ul>
         </div>

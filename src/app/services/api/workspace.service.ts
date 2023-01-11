@@ -18,6 +18,13 @@ export interface WorkspaceViewModel {
   workspaceId: string;
 }
 
+interface oConfirmation {
+  boolValue: boolean | null,
+  doubleValue: number | null,
+  intValue: number | null,
+  stringValue: string | null
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,10 +39,10 @@ export class WorkspaceService {
   };
 
   getWorkspaceEditorViewModel(sWorkspaceId: string) {
-    return this.oHttp.get<WorkspaceViewModel >(this.APIURL + '/ws/getws?workspace=' + sWorkspaceId);
+    return this.oHttp.get<WorkspaceViewModel>(this.APIURL + '/ws/getws?workspace=' + sWorkspaceId);
   };
 
-  createWorkspace(sName: string = "") {
+  createWorkspace(sName: string) {
 
     let sRestPath = '/ws/create';
 
@@ -43,20 +50,19 @@ export class WorkspaceService {
       sRestPath = sRestPath + "?name=" + sName;
     }
 
-    return this.oHttp.get(this.APIURL + sRestPath);
+    return this.oHttp.get<oConfirmation>(this.APIURL + sRestPath);
   };
 
   updateWorkspace(oWorkspace: Workspace) {
     return this.oHttp.post(this.APIURL + '/ws/update', oWorkspace);
   };
 
-  deleteWorkspace(oWorkspace: Workspace, bDeleteFile: boolean, bDeleteLayer: boolean) {
+  deleteWorkspace(oWorkspace: WorkspaceViewModel, bDeleteFile: boolean, bDeleteLayer: boolean) {
 
     let sUrl: string = this.APIURL;
 
-    //REFACTOR TO REFLECT WORKSPACE
-    if (oWorkspace != null) {
-      if (oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+    if (oWorkspace) {
+      if (oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
         sUrl = oWorkspace.apiUrl;
       }
 
