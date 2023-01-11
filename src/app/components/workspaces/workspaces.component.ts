@@ -42,7 +42,6 @@ export class WorkspacesComponent implements OnInit {
     let oUser: User = this.oConstantsService.getUser();
     if (oUser !== {} as User) {
       this.oWorkspaceService.getWorkspacesInfoListByUser().subscribe(response => {
-        console.log(response)
         this.workspaces = response;
       })
     }
@@ -51,7 +50,6 @@ export class WorkspacesComponent implements OnInit {
 
   onShowWorkspace(oWorkspace: Workspace) {
     this.oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
-      console.log(response);
       this.activeWorkspace = response
       this.sharedUsers = response.sharedUsers
     })
