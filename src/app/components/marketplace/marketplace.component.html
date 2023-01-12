@@ -27,6 +27,6 @@
 
 
 <div class="processor-cards-container col-12 d-flex flex-row flex-wrap justify-content-between px-3">
-    <app-marketplace-app-card class="col-xs-12 col-md-6 col-lg-3 px-1" *ngFor="let oProcessor of m_aoApplications"
+    <app-marketplace-app-card class="col-xs-12 col-md-6 col-lg-3 px-1" *ngFor="let oProcessor of m_aoApplications | filter: searchWord"
         [oProcessor]="oProcessor"></app-marketplace-app-card>
 </div>

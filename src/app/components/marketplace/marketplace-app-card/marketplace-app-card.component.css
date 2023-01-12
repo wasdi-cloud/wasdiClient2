@@ -20,6 +20,7 @@ div.card-body {
 
 div.card-description {
     height: 20%;
+    overflow: hidden;
 }
 
 span.publisher-name {

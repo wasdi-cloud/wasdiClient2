@@ -28,7 +28,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTree, MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from "@angular/material/icon";
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 
 
 //Workspaces Page Components
@@ -48,7 +48,10 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AppDetailsComponent } from './components/app-details/app-details/app-details.component';
 import { AppReviewsComponent } from './components/app-details/app-reviews/app-reviews.component';
 import { AppUiComponent } from './components/app-ui/app-ui.component';
+
+//Import custom pipes
 import { MarkdownPipe } from './shared/pipes/markdown.pipe';
+import { FilterPipe } from './shared/pipes/filter.pipe';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -73,7 +76,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AppDetailsComponent,
     AppReviewsComponent,
     AppUiComponent,
-    MarkdownPipe
+    MarkdownPipe,
+    FilterPipe
   ],
   imports: [
     AppRoutingModule,
