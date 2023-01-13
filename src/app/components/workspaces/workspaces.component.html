@@ -1,18 +1,17 @@
 <app-header></app-header>
-<div class="row col-12 px-3 d-flex flex-column justify-content-between">
-    <div class="col-sm-5">
-        <h4 class="bg-light py-3 my-0">Workspaces</h4>
-        <div class="overflow-auto">
-            <ul class="list-group" style="height: 45vh">
+<h4 class="bg-light py-3 px-4 my-0">Workspaces</h4>
+<div class="row col-12 p-auto px-3 d-flex flex-row m-0" style="height: 80vh;">
+    <div class="col-sm-5 d-flex flex-column justify-content-between align-items-center">
+        <div class="overflow-auto" style="height: 50%; width: 100%">
+            <ul class="list-group" >
                 <app-workspace-list-item *ngFor="let workspace of workspaces" [workspace]="workspace"
-                    (activeWorkspace)="onShowWorkspace($event)"
-                    (deletedWorkspace)="onDeleteWorkspace($event)">
+                    (activeWorkspace)="onShowWorkspace($event)" (deletedWorkspace)="onDeleteWorkspace($event)">
                 </app-workspace-list-item>
             </ul>
         </div>
-        <div class="properties-container border mt-3 overflow-auto" style="height: 30vh">
+        <div class="properties-container border mt-3 overflow-auto"  style="height: 50%; max-height: 50%; width: 100%">
             <h3>Properties</h3>
-            <div *ngIf="activeWorkspace" >
+            <div class="px-3 d-inline-block" *ngIf="activeWorkspace">
                 <div class="d-flex flex-row justify-content-between">
                     <p><strong>Owner: </strong>{{activeWorkspace.userId}}</p>
                     <p><strong>Cloud: </strong> {{activeWorkspace.cloudProvider}}</p>
@@ -29,7 +28,7 @@
             </div>
         </div>
     </div>
-  <div class="col-7">
-    <app-workspaces-map></app-workspaces-map>
-  </div>
+    <div class="col-7 p-0">
+        <app-workspaces-map></app-workspaces-map>
+    </div>
 </div>

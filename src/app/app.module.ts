@@ -3,8 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -32,6 +30,7 @@ import { MatTree, MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from "@angular/material/icon";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { CdkTreeModule } from '@angular/cdk/tree';
 
 
 //Workspaces Page Components
@@ -73,7 +72,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WorkspacesComponent,
     LoginComponent,
     WorkspaceListItemComponent,
-    WorkspacesMapComponent
+    WorkspacesMapComponent,
     MarketplaceAppCardComponent,
     LanguageSwitchComponent,
     CourseDialogComponent,
@@ -92,7 +91,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule, 
-    LeafletModule
+    LeafletModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -106,7 +105,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatTreeModule,
     MatIconModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    CdkTreeModule
   ],
   providers: [
     AuthService,
