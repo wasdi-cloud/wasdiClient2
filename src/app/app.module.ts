@@ -3,6 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -40,6 +43,8 @@ import { SessionInjectorInterceptor } from './services/interceptors/session-inje
 //Import Services
 import { AuthService } from './services/auth/auth.service';
 import { ConstantsService } from './services/constants.service';
+
+import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/workspaces-map.component';
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
@@ -68,6 +73,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WorkspacesComponent,
     LoginComponent,
     WorkspaceListItemComponent,
+    WorkspacesMapComponent
     MarketplaceAppCardComponent,
     LanguageSwitchComponent,
     CourseDialogComponent,
@@ -85,6 +91,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    FormsModule, 
+    LeafletModule
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
