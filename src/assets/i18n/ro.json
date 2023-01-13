@@ -76,5 +76,28 @@
         "WAP_SELECT_WORKSPACE": "Selectați spațiu de lucru",
         "WAP_RUN_APP": "Rulați aplicația",
         "WAP_MORE_INFO": "Mai multe informații"
+    },
+    "MARKET": {
+        "MARKET_SEARCH_APP": "Căutați aplicații”",
+        "MARKET_NAME": "NAMA",
+        "MARKET_DATE": "DATE",
+        "MARKET_PRICE": "PRICE",
+        "MARKET_CATEGORY": "Categorie",
+        "MARKET_FILTERS": "FILTRAȚI PENTRU",
+        "MARKET_DEVELOPER": "Dezvoltator",
+        "MARKET_MOST_USED": "Cel mai folosit",
+        "MARKET_LEAST_USED": "Cel mai puțin folosit",
+        "MARKET_MAX_PRICE": "Preț maxim",
+        "MARKET_SUCCESS": "Rata de succes",
+        "MARKET_ABOVE": "Deasupra",
+        "MARKET_RATINGS": "Evaluări",
+        "MARKET_RATINGS_ALL": "toate evaluările",
+        "MARKET_MORE_STARS": "și mai mult",
+        "MARKET_PURCHASED": "Deja achiziționat!",
+        "MARKET_PUBLISHED_BY": "Publicat de",
+        "MARKET_OWNER": "Tu ești maestrul!",
+        "MARKET_FREE": "Gratuit",
+        "MARKET_START_PRICE": "de la €",
+        "MARKET_LOAD_MORE": "ÎNCĂRCĂ MAI MULTE APLICAȚII SPATIALE"
     }
 }

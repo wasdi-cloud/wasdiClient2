@@ -76,5 +76,28 @@
         "WAP_SELECT_WORKSPACE": "Sélectionner l'espace de travail",
         "WAP_RUN_APP": "Exécuter l'application",
         "WAP_MORE_INFO": "Plus d'informations"
+    },
+    "MARKET": {
+        "MARKET_SEARCH_APP": "Rechercher des applications",
+        "MARKET_NAME": "NOM",
+        "MARKET_DATE": "DATE",
+        "MARKET_PRICE": "PRIX",
+        "MARKET_CATEGORY": "Catégorie",
+        "MARKET_FILTERS": "FILTRER PAR",
+        "MARKET_DEVELOPER": "Développeur",
+        "MARKET_MOST_USED": "Les plus utilisés",
+        "MARKET_LEAST_USED": "Le moins utilisé",
+        "MARKET_MAX_PRICE": "Prix maximum",
+        "MARKET_SUCCESS": "Taux de réussite",
+        "MARKET_ABOVE": "Au-dessus",
+        "MARKET_RATINGS": "NOTES",
+        "MARKET_RATINGS_ALL": "toutes les notes",
+        "MARKET_MORE_STARS": "et plus",
+        "MARKET_PURCHASED": "Déjà acheté !",
+        "MARKET_PUBLISHED_BY": "Publié par",
+        "MARKET_OWNER": "Vous êtes le Maître !",
+        "MARKET_FREE": "Gratuit",
+        "MARKET_START_PRICE": "à partir de €",
+        "MARKET_LOAD_MORE": "CHARGER PLUS D'APPLICATIONS D'ESPACE"
     }
 }

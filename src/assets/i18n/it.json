@@ -76,5 +76,28 @@
         "WAP_SELECT_WORKSPACE": "Seleziona spazio di lavoro",
         "WAP_RUN_APP": "Esegui app",
         "WAP_MORE_INFO": "Ulteriori informazioni"
+    },
+    "MARKET": {
+        "MARKET_SEARCH_APP": "Cerca applicazioni",
+        "MARKET_NAME": "NOME",
+        "DATA_MERCATO": "DATA",
+        "MARKET_PRICE": "PREZZO",
+        "MARKET_CATEGORY": "Categoria",
+        "MARKET_FILTERS": "FILTRA PER",
+        "MARKET_DEVELOPER": "Sviluppatore",
+        "MARKET_MOST_USED": "I più utilizzati",
+        "MARKET_LEAST_USED": "Meno utilizzato",
+        "MARKET_MAX_PRICE": "Prezzo massimo",
+        "MARKET_SUCCESS": "Percentuale di successo",
+        "MARKET_ABOVE": "Sopra",
+        "MARKET_RATINGS": "VALUTAZIONI",
+        "MARKET_RATINGS_ALL": "tutte le valutazioni",
+        "MARKET_MORE_STARS": "e altro",
+        "MARKET_PURCHASED": "Già acquistato!",
+        "MARKET_PUBLISHED_BY": "Pubblicato da",
+        "MARKET_OWNER": "Tu sei il Maestro!",
+        "MARKET_FREE": "Gratis",
+        "MARKET_START_PRICE": "da €",
+        "MARKET_LOAD_MORE": "CARICA ALTRE APP SPAZIALI"
     }
 }

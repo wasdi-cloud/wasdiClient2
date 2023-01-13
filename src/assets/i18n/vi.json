@@ -76,5 +76,28 @@
         "WAP_SELECT_WORKSPACE": "Chọn vùng làm việc",
         "WAP_RUN_APP": "Chạy ứng dụng",
         "WAP_MORE_INFO": "Thông tin thêm"
+    },
+    "MARKET": {
+        "MARKET_SEARCH_APP": "Ứng dụng tìm kiếm",
+        "MARKET_NAME": "TÊN",
+        "MARKET_DATE": "NGÀY",
+        "MARKET_PRICE": "GIÁ",
+        "MARKET_CATEGORY": "Danh mục",
+        "MARKET_FILTERS": "LỌC THEO",
+        "MARKET_DEVELOPER": "Nhà phát triển",
+        "MARKET_MOST_USED": "Được sử dụng nhiều nhất",
+        "MARKET_LEAST_USED": "Ít được sử dụng nhất",
+        "MARKET_MAX_PRICE": "Giá tối đa",
+        "MARKET_SUCCESS": "Tỷ lệ thành công",
+        "MARKET_ABOVE": "Ở trên",
+        "MARKET_RATINGS": "XẾP HẠNG",
+        "MARKET_RATINGS_ALL": "tất cả xếp hạng",
+        "MARKET_MORE_STARS": "và hơn thế nữa",
+        "MARKET_PURCHASED": "Đã mua!",
+        "MARKET_PUBLISHED_BY": "Được xuất bản bởi",
+        "MARKET_OWNER": "Bạn là Chủ!",
+        "MARKET_FREE": "Miễn phí",
+        "MARKET_START_PRICE": "từ €",
+        "MARKET_LOAD_MORE": "TẢI THÊM ỨNG DỤNG KHÔNG GIAN"
     }
 }

@@ -76,5 +76,28 @@
         "WAP_SELECT_WORKSPACE": "Pilih Ruang Kerja",
         "WAP_RUN_APP": "Jalankan Aplikasi",
         "WAP_MORE_INFO": "Info Lebih Lanjut"
+    }, 
+    "MARKET" : {
+        "MARKET_SEARCH_APP": "Aplikasi Penelusuran",
+        "MARKET_NAME": "NAMA",
+        "MARKET_DATE": "TANGGAL",
+        "MARKET_PRICE": "PRICE",
+        "MARKET_CATEGORY": "Kategori",
+        "MARKET_FILTERS": "FILTER DENGAN",
+        "MARKET_DEVELOPER": "Pengembang",
+        "MARKET_MOST_USED": "Paling Banyak Digunakan",
+        "MARKET_LEAST_USED": "Paling Jarang Digunakan",
+        "MARKET_MAX_PRICE": "Harga Maks",
+        "MARKET_SUCCESS": "Tingkat Keberhasilan",
+        "MARKET_ABOVE": "Di atas",
+        "MARKET_RATINGS": "RATINGS",
+        "MARKET_RATINGS_ALL": "semua peringkat",
+        "MARKET_MORE_STARS": "dan banyak lagi",
+        "MARKET_PURCHASED": "Sudah Dibeli!",
+        "MARKET_PUBLISHED_BY": "Diterbitkan oleh",
+        "MARKET_OWNER": "Anda adalah Tuannya!",
+        "MARKET_FREE": "Gratis",
+        "MARKET_START_PRICE": "dari €",
+        "MARKET_LOAD_MORE": "MUAT LEBIH BANYAK APLIKASI RUANG"
     }
 }
