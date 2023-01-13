@@ -8,24 +8,29 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto-sm ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/marketplace">Marketplace</a>
+                    <a class="nav-link" routerLink="/marketplace">{{'HEADER.MARKETPLACE_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/workspaces">Workspaces</a>
+                    <a class="nav-link" routerLink="/workspaces">{{'HEADER.WORKSPACE_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/plan">Plan</a>
+                    <a class="nav-link" routerLink="/plan">{{'HEADER.PLAN_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/search">Search</a>
+                    <a class="nav-link" routerLink="/search">{{'HEADER.SEARCH_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/edit">Edit</a>
+                    <a class="nav-link"  [ngClass]="{'disabled' : !sActiveWorkspaceId}"routerLink="/edit/{{sActiveWorkspaceId}}">{{'HEADER.EDIT_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/admin">Admin</a>
+                    <a class="nav-link" routerLink="/admin">{{'HEADER.ADMIN_BTN' | translate}}</a>
+                </li>
+                <app-language-switch></app-language-switch>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
                 </li>
             </ul>
+
 
         </div>
     </div>

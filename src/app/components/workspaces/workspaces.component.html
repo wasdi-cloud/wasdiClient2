@@ -1,11 +1,33 @@
 <app-header></app-header>
-<div class="row col-12 d-flex flex-row mt-3" style="height: 90vh">
-    <div class="col-5">
-        <h3>Workspaces</h3>
-        <ul class="list-group">
-            <app-workspace-list-item *ngFor="let workspace of workspaces" [workspace]="workspace">
-            </app-workspace-list-item>
-        </ul>
+<div class="row col-12 px-3 d-flex flex-column justify-content-between">
+    <div class="col-sm-5">
+        <h4 class="bg-light py-3 my-0">Workspaces</h4>
+        <div class="overflow-auto">
+            <ul class="list-group" style="height: 45vh">
+                <app-workspace-list-item *ngFor="let workspace of workspaces" [workspace]="workspace"
+                    (activeWorkspace)="onShowWorkspace($event)"
+                    (deletedWorkspace)="onDeleteWorkspace($event)">
+                </app-workspace-list-item>
+            </ul>
+        </div>
+        <div class="properties-container border mt-3 overflow-auto" style="height: 30vh">
+            <h3>Properties</h3>
+            <div *ngIf="activeWorkspace" >
+                <div class="d-flex flex-row justify-content-between">
+                    <p><strong>Owner: </strong>{{activeWorkspace.userId}}</p>
+                    <p><strong>Cloud: </strong> {{activeWorkspace.cloudProvider}}</p>
+                </div>
+                <p><strong>Node Code:</strong>{{activeWorkspace.nodeCode}}</p>
+                <p><strong>Products</strong></p>
+                <p><strong>Name: </strong>{{activeWorkspace.name}}</p>
+                <p><strong>Workspace Id: </strong> {{activeWorkspace.workspaceId}}</p>
+                <p><strong>Processes Executed: </strong>{{activeWorkspace.processesCount}}</p>
+                <strong>Shared With: </strong>
+                <ul>
+                    <li *ngFor="let user of activeWorkspace.sharedUsers">{{ user }}</li>
+                </ul>
+            </div>
+        </div>
     </div>
   <div class="col-7">
     <app-workspaces-map></app-workspaces-map>

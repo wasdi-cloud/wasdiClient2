@@ -6,6 +6,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 //Import Main Components
 import { AppComponent } from './app.component';
@@ -13,10 +17,22 @@ import { AdminComponent } from './components/admin/admin.component';
 import { EditComponent } from './components/edit/edit.component';
 import { HeaderComponent } from './components/header/header.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
+import { MarketplaceAppCardComponent } from './components/marketplace/marketplace-app-card/marketplace-app-card.component';
 import { PlanComponent } from './components/plan/plan.component';
 import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
+import { ConfirmationDialogComponent } from './shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ProductsListComponent } from './components/edit/products-list/products-list.component';
+
+//Angular Materials Imports 
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTree, MatTreeModule } from '@angular/material/tree';
+import { MatIconModule } from "@angular/material/icon";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+
 
 //Workspaces Page Components
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
@@ -25,9 +41,26 @@ import { WorkspaceListItemComponent } from './components/workspaces/workspace-li
 import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
 
 //Import Services
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/auth/auth.service';
 import { ConstantsService } from './services/constants.service';
+
 import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/workspaces-map.component';
+import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
+
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { AppDetailsComponent } from './components/app-details/app-details/app-details.component';
+import { AppReviewsComponent } from './components/app-details/app-reviews/app-reviews.component';
+import { AppUiComponent } from './components/app-ui/app-ui.component';
+
+//Import custom pipes
+import { MarkdownPipe } from './shared/pipes/markdown.pipe';
+import { FilterPipe } from './shared/pipes/filter.pipe';
+
+export function httpTranslateLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,13 +74,39 @@ import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/w
     LoginComponent,
     WorkspaceListItemComponent,
     WorkspacesMapComponent
+    MarketplaceAppCardComponent,
+    LanguageSwitchComponent,
+    CourseDialogComponent,
+    ConfirmationDialogComponent,
+    ProductsListComponent,
+    AppDetailsComponent,
+    AppReviewsComponent,
+    AppUiComponent,
+    MarkdownPipe,
+    FilterPipe
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     FormsModule, 
     LeafletModule
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoaderFactory,
+        deps: [HttpClient]
+      },
+    }),
+    BrowserAnimationsModule,
+    MatSlideToggleModule,
+    MatDialogModule,
+    MatTreeModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [
     AuthService,
@@ -56,8 +115,12 @@ import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/w
       provide: HTTP_INTERCEPTORS,
       useClass: SessionInjectorInterceptor,
       multi: true
-    }
+    },
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ConfirmationDialogComponent],
+
 })
 export class AppModule { }

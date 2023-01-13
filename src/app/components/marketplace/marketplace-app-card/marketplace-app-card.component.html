@@ -1,0 +1,19 @@
+<a (click)="openProcessorDetails(oProcessor.processorName)">
+    <div class="card d-flex">
+        <div class="featured-img" style="background-image: url({{oProcessor.imgLink}});"></div>
+        <div class=" card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title">{{oProcessor.friendlyName}}</h5>
+            <div class="card-drescription">
+                <p>{{oProcessor.processorDescription}}</p>
+            </div>
+            <div class="processor-badges d-flex flex-row justify-content-between">
+                <!-- There are no categories in test - placeholder example for now -->
+                <h3><span class="category-badge badge bg-secondary">Fire</span></h3>
+            </div>
+            <div class="creator-price-container d-flex flex-row justify-content-between align-items-center flex-wrap">
+                <span class="publisher-name">MADE BY: {{oProcessor.publisher}}</span>
+                <h4><span class="badge rounded-pill text-bg-success">{{getPrice(oProcessor.price)}}</span></h4>
+            </div>
+        </div>
+    </div>
+</a>

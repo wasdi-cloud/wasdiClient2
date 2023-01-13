@@ -1,0 +1,48 @@
+<app-header></app-header>
+<div class="toolbar-container d-flex flex-row justify-content-between py-2">
+    <a class="return-btn btn btn-success" (click)="marketplaceReturn()">
+        Back to the Future
+    </a>
+</div>
+<div class="info-container d-flex flex-column align-items-center justify-content-center py-2">
+    <div class="d-flex flex-row col-10">
+        <div class="processor-img col" style="background-image: url({{sActiveApplicationInfo.imgLink}});"></div>
+        <div class="processor-info mx-4 col">
+            <h3>{{sActiveApplicationInfo.friendlyName}}</h3>
+            <p>Reviews: {{sActiveApplicationInfo.reviewsCount}}</p>
+            <p>Published By: {{sActiveApplicationInfo.publisher}}</p>
+            <div class="categories-container">
+                <span>Categories</span>
+            </div>
+            <div class="price-container">
+                {{sActiveApplicationInfo.price}}
+            </div>
+            <div class="description-container">
+                {{sActiveApplicationInfo.processorDescription}}
+            </div>
+            <a class="open-application btn btn-dark" (click)="openAppUI(sActiveApplicationInfo.processorName)">Open
+                Application</a>
+        </div>
+    </div>
+    <div class="application-details row col-10 d-flex flex-row justify-content-between py-4">
+        <div class="publisher-info-col col-5">
+            <p>Publisher: {{sActiveApplicationInfo.publisher}}</p>
+            <p>Contact: {{sActiveApplicationInfo.email}}</p>
+            <p>Website: {{sActiveApplicationInfo.link}}</p>
+        </div>
+        <div class="application-info-col col-5">
+            <p>Publication Date: {{sActiveApplicationInfo.publishDate | date}}</p>
+            <p>Last Update: {{sActiveApplicationInfo.updateDate | date}}</p>
+            <p>Executions: </p>
+            <p>Success Rate: </p>
+            <p>Medium Time (minutes): </p>
+        </div>
+    </div>
+</div>
+<div class="reviews-container d-flex flex-column align-items-center border-top pt-3">
+    <div class="reveiw-header row col-10">
+        <h4>Reviews</h4>
+        <app-app-reviews [oProcessor]="sActiveApplicationInfo"></app-app-reviews>
+    </div>
+
+</div>

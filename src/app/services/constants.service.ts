@@ -192,17 +192,20 @@ export class ConstantsService {
   }
 
   getCookie(cookieName: string) {
-    let name: string = cookieName + "=";
-    let cookieArray: Array<string> = document.cookie.split(";");
+    // let name: string = cookieName + "=";
+    // let cookieArray: Array<string> = document.cookie.split(";");
 
-    for (let index: number = 0; index < cookieArray.length; index++) {
-      let cookie: string = cookieArray[index];
+    // for (let index: number = 0; index < cookieArray.length; index++) {
+    //   let cookie: string = cookieArray[index];
 
-      while (cookie.charAt(0) === ' ') {
-        return JSON.parse(cookie.substring(name.length, cookie.length));
-      }
-    }
-    return "";
+    //   while (cookie.charAt(0) === ' ') {
+    //     return JSON.parse(cookie.substring(name.length, cookie.length));
+    //   }
+    // }
+    if(!document.cookie) {
+      return ""
+    } 
+    return JSON.parse(document.cookie.substring(6));
   }
 
   deleteCookie(cookieName: string) {

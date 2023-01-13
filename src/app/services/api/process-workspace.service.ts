@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Process } from 'src/app/shared/models/process.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
 
+export interface Process {
+
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -82,7 +84,7 @@ export class ProcessWorkspaceServiceService {
    * @param sProcessorName Name of the processor to search for
    * @returns {*} List of Process Workpsace View Models
    */
-  thigetProcessesByProcessor(sProcessorName: string) {
+  getProcessesByProcessor(sProcessorName: string) {
     let sUrl = this.APIURL;
     return this.oHttp.get(sUrl + '/process/byapp?processorName=' + sProcessorName);
   };
@@ -179,48 +181,48 @@ export class ProcessWorkspaceServiceService {
    * @param sTypeOfProcess
    * @returns {boolean}
    */
-  checkIfFileIsDownloading(oLayer: object, sTypeOfProcess: string) {
-    if (!oLayer) {
-      return false;
-    }
-    let sProcessName = oLayer.title;
-    let sLink = oLayer.link;
-    if (!sProcessName) {
-      return false;
-    }
-    if (!sTypeOfProcess) {
-      return false;
-    }
+  // checkIfFileIsDownloading(oLayer: object, sTypeOfProcess: string) {
+  //   if (!oLayer) {
+  //     return false;
+  //   }
+  //   let sProcessName = oLayer.title;
+  //   let sLink = oLayer.link;
+  //   if (!sProcessName) {
+  //     return false;
+  //   }
+  //   if (!sTypeOfProcess) {
+  //     return false;
+  //   }
 
-    let sProcess: {
-      productName: string,
-      operationType: string,
-      sTypeOfProcess: string,
-      link: string
-    } = { productName: sProcessName, operationType: sTypeOfProcess, link: sLink };
+  //   let sProcess: {
+  //     productName: string,
+  //     operationType: string,
+  //     sTypeOfProcess: string,
+  //     link: string
+  //   } = { productName: sProcessName, operationType: sTypeOfProcess, link: sLink };
 
-    if (!sProcess) {
-      return false;
-    }
+  //   if (!sProcess) {
+  //     return false;
+  //   }
 
-    var aoProcesses = this.getProcesses();
-    if (!aoProcesses) {
-      return false;
-    }
+  //   var aoProcesses = this.getProcesses();
+  //   if (!aoProcesses) {
+  //     return false;
+  //   }
 
-    var iNumberOfProcesses = aoProcesses.length;
+  //   var iNumberOfProcesses = aoProcesses.length;
 
-    for (var iIndex = 0; iIndex < iNumberOfProcesses; iIndex++) {
-      /*check if the processes are equals*/
-      //aoProcesses[iIndex].productName == sProcess.productName
-      // if ((utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.productName) === true || utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.link) === true)
-      //   && aoProcesses[iIndex].operationType == sProcess.operationType && aoProcesses[iIndex].status === "RUNNING") {
-      //   return true;
-      // }
-    }
-    return false;
+  //   for (var iIndex = 0; iIndex < iNumberOfProcesses; iIndex++) {
+  //     /*check if the processes are equals*/
+  //     //aoProcesses[iIndex].productName == sProcess.productName
+  //     // if ((utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.productName) === true || utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.link) === true)
+  //     //   && aoProcesses[iIndex].operationType == sProcess.operationType && aoProcesses[iIndex].status === "RUNNING") {
+  //     //   return true;
+  //     // }
+  //   }
+  //   return false;
 
-  };
+  // };
 
   /**
    * Return the downlod Proc Type
