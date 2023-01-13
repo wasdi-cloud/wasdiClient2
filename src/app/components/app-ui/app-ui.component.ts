@@ -7,7 +7,7 @@ import {
   transition,
   trigger
 } from '@angular/animations';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 //import API services
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -74,12 +74,18 @@ export class AppUiComponent implements OnInit {
     this.fetchWorkspaces();
     if (this.processorName) {
       this.getProcessorDetails(this.processorName);
-    } else {
+    }
+    else if (this.oActivatedRoute.snapshot.params['processorName']) {
+      this.processorName = this.oActivatedRoute.snapshot.params['processorName'];
+      this.oConstantsService.setSelectedApplication(this.processorName);
+      this.getProcessorDetails(this.processorName);
+    }
+    else {
       console.log("Problem getting Processor Name")
     }
   }
 
-  constructor(private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router, private oWorkspaceService: WorkspaceService) { }
+  constructor(private oActivatedRoute: ActivatedRoute, private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router, private oWorkspaceService: WorkspaceService) { }
 
   /**
    * Change Active Tab
@@ -170,7 +176,7 @@ export class AppUiComponent implements OnInit {
       if (sWorkspaceId !== null) {
         this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(oResponse => {
           console.log(oResponse)
-          this.oConstantsService.setActiveWorkspace(oResponse); 
+          this.oConstantsService.setActiveWorkspace(oResponse);
           this.oRouter.navigateByUrl(`edit/${oResponse.workspaceId}`)
         })
       }
@@ -184,11 +190,11 @@ export class AppUiComponent implements OnInit {
   openWorkspace() {
     const { sNewWorkspaceName, sExistingWorkspace } = this.workspaceForm;
     let sWorkspaceName = this.workspaceForm.sExistingWorkspace;
-    let oSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === sWorkspaceName); 
-    
-    if(oSelectedWorkspace) {
+    let oSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === sWorkspaceName);
+
+    if (oSelectedWorkspace) {
       this.oWorkspaceService.getWorkspaceEditorViewModel(oSelectedWorkspace.workspaceId)?.subscribe(oResponse => {
-        this.oConstantsService.setActiveWorkspace(oResponse); 
+        this.oConstantsService.setActiveWorkspace(oResponse);
         this.oRouter.navigateByUrl(`edit/${oResponse.workspaceId}`)
       })
     }
@@ -200,6 +206,6 @@ export class AppUiComponent implements OnInit {
 
   marketplaceReturn() {
     this.changeActiveTab('help')
-    this.oRouter.navigateByUrl('marketplace')
+    this.oRouter.navigateByUrl(`${this.processorName}/appDetails`)
   }
 }
