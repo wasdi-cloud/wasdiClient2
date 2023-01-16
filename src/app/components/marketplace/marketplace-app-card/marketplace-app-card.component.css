@@ -7,3 +7,22 @@ a {
 h3 {
     color: #fff;
 }
+
+div.featured-img {
+    background-position: center;
+    background-size: cover; 
+    height: 150px;
+}
+
+div.card-body {
+    height: 15rem;
+}
+
+div.card-description {
+    height: 20%;
+    overflow: hidden;
+}
+
+span.publisher-name {
+    font-size: 14px;
+}

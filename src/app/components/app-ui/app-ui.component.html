@@ -1,32 +1,38 @@
 <app-header></app-header>
 <div class="toolbar-container d-flex flex-row justify-content-between pt-3 px-3">
-    <a (click)="marketplaceReturn()" class="btn btn-secondary col-auto">Back to the Future</a>
+    <a (click)="marketplaceReturn()" class="btn btn-secondary col-auto">{{'WAP.WAP_BACK' | translate}}</a>
 
-    <div class="workspace-options-container d-flex flex-row align-items-center col-auto gap-2">
-        <input type="text" name="" id="" class="form-control" placeholder="Create a new workspace">
-        <input class="form-control" type="text" name="" id="" placeholder="Search for a specific workspace">
-        <a class="btn btn-secondary form-control">RUN APP</a>
-    </div>
+    <form class="workspace-options-container d-flex flex-row align-items-center col-auto gap-2" name="workspaceForm"
+        #f="ngForm" (ngSubmit)="f.form && runApplication()">
+        <input type="text" name="newWorkspaceName" id="" class="form-control"
+            placeholder="{{'WAP.WAP_CREATE_WORKSPACE' | translate}}" [(ngModel)]="workspaceForm.sNewWorkspaceName">
+        <select class="form-select" name="existingWorkspace" [(ngModel)]="workspaceForm.sExistingWorkspace">
+            <option value="null" disabled="true" [selected]="true">{{'WAP.WAP_SELECT_WORKSPACE' | translate}}</option>
+            <option value="" *ngFor="let oWorkspace of m_aoExistingWorkspaces" value="{{oWorkspace.workspaceName}}">
+                {{oWorkspace.workspaceName}}</option>
+        </select>
+        <button type="submit" class="btn btn-secondary form-control">{{'WAP.WAP_RUN_APP' | translate}}</button>
+    </form>
 </div>
 <div class="app-info-container d-flex flex-row justify-content-between pt-3 px-3">
     <div class="">
         <h2>{{processorInformation.friendlyName}}</h2>
-        <p>DEV: DEV NAME</p>
+        <p>{{'WAP.WAP_PUBLISHED' | translate}}: {{processorInformation.publisher}}</p>
     </div>
     <div>
-        <p class="btn btn-secondary" (click)="toggleCollapse()">MORE INFO</p>
+        <p class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP.WAP_MORE_INFO' | translate }}</p>
     </div>
 </div>
 <div class="collapsible d-flex flex-row justify-content-between py-2 px-3" [@collapse]="isCollapsed">
     <div class="description-container">
-        <p>Description:</p>
+        <p>{{'WAP.WAP_DESCRIPTION2' | translate}}:</p>
         <p>{{processorInformation.processorDescription}}</p>
     </div>
     <div class="contact-container">
-        <p>Contact: <span>{{processorInformation.email ? processorInformation.email :
+        <p>{{'WAP.WAP_CONTACT' | translate}}: <span>{{processorInformation.email ? processorInformation.email :
                 processorInformation.publisher}}</span></p>
-        <p>Website: <span>{{processorInformation.link}}</span></p>
-        <p>Last Updated: <span>{{processorInformation.updateDate}}</span></p>
+        <p>{{'WAP.WAP_WEB' | translate}}: <span>{{processorInformation.link}}</span></p>
+        <p>{{'WAP.WAP_LAST_UPDATE' | translate}}: <span>{{processorInformation.updateDate}}</span></p>
     </div>
 
 </div>
@@ -49,10 +55,12 @@
     </div>
     <div class="control-panel col-4">
         <!-- PROCESSOR HELP TAB -->
-        <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown"></div>
+        <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="activeTab === 'help'? '': 'd-none' ">
+        </div>
 
         <!-- PROCESSOR HISTORY TABLE TAB -->
-        <!-- <div class="history-container table-wrapper-scroll scroll-bar">
+        <div class="history-container table-wrapper-scroll scroll-bar"
+            [ngClass]="activeTab === 'history'? '': 'd-none' ">
             <table class="history-table table">
                 <thead class="bg-primary" style="position: sticky;
                 top: 0;
@@ -71,7 +79,7 @@
                     </tr>
                 </tbody>
             </table>
-        </div> -->
+        </div>
 
         <!-- PROCESSOR JSON TAB -->
 

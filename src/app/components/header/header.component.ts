@@ -8,25 +8,21 @@ import { ConstantsService } from 'src/app/services/constants.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit{
-
+export class HeaderComponent implements OnInit {
   sActiveWorkspaceId: string | null = null;
   constructor(public oConstantsService: ConstantsService, public oRouter: Router, public translate: TranslateService) {
     //Register translation languages:
-    translate.addLangs(['en', 'fr', 'it', 'de', 'vi', 'id', 'ro'])
-
-    translate.setDefaultLang('en')
+    translate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
+    translate.setDefaultLang('en');
   }
-
-  
 
   ngOnInit(): void {
-      this.sActiveWorkspaceId = this.oConstantsService.getActiveWorkspace().workspaceId; 
+    this.sActiveWorkspaceId = this.oConstantsService.getActiveWorkspace().workspaceId;
   }
+
   logout() {
     this.oConstantsService.logOut();
-    this.oRouter.navigateByUrl("login")
-    console.log(document.cookie);
+    this.oRouter.navigateByUrl("login");
   }
 
 }

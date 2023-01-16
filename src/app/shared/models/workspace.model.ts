@@ -9,4 +9,5 @@ export interface Workspace {
     slaLink: string; 
     userId: string; 
     workspaceId: string; 
+    workspaceName?: string;
 }
