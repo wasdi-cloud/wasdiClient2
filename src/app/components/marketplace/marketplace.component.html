@@ -1,9 +1,44 @@
 <app-header></app-header>
-<h2>Space Market</h2>
-<div class="px-3">
-    toolbar
+<h2 class="px-3">Space Market</h2>
+<div class="app-search-container d-flex flex-row align-items-center justify-content-between mb-3 px-3">
+    <div class="filter-container d-flex flex-row align-items-center gap-1 col-6">
+        <h5 class="w-100">{{"MARKET.MARKET_FILTERS" | translate }}: </h5>
+        <select class="form-select" ng-model="publisherFilter" (change)="developerChanged($event)">
+            <option selected disabled hidden>{{"MARKET.MARKET_DEVELOPER" | translate}}</option>
+            <option value="all">Show All</option>
+            <option *ngFor="let publisher of publishers" [ngValue]="publisher">{{publisher.publisher}}</option>
+        </select>
+        <select name="" id="" class="form-select">
+            <option selected disabled hidden>{{"MARKET.MARKET_SUCCESS" | translate}}</option>
+            <option value="20">{{"MARKET.MARKET_ABOVE" | translate}} 20%</option>
+            <option value="40">{{"MARKET.MARKET_ABOVE" | translate}} 40%</option>
+            <option value="60">{{"MARKET.MARKET_ABOVE" | translate}} 60%</option>
+            <option value="80">{{"MARKET.MARKET_ABOVE" | translate}} 80%</option>
+        </select>
+        <select name="" id="" class="form-select">
+            <option value="mostUsed" selected>{{"MARKET.MARKET_MOST_USED" | translate}}</option>
+            <option value="leastUsed">{{"MARKET.MARKET_LEAST_USED" | translate}}</option>
+        </select>
+        <select name="" id="" class="form-select" (change)="ratingChanged($event)">
+            <option selected disabled hidden>Rating</option>
+            <option value="0">Show All</option>
+            <option value="1">1 Star and Above</option>
+            <option value="2">2 Stars and Above</option>
+            <option value="3">3 Stars and Above</option>
+            <option value="4">4 Stars and Above</option>
+            <option value="5">5 Stars Only</option>
+        </select>
+        <input type="text" name="" id="" class="form-control" placeholder="{{'MARKET.MARKET_MAX_PRICE' | translate}}" (change)="maxPriceChanged($event)">
+    </div>
+    <div class="col-2">
+        <input type="text" name="" id="" class="form-control" placeholder="{{'MARKET.MARKET_SEARCH_APP' | translate}}"
+            [(ngModel)]="searchWord" (ngModelChange)="searchApps()">
+    </div>
 </div>
-<div class="processor-cards-container col-12 d-flex flex-row flex-wrap justify-content-between gap-1 px-3">
-    <app-marketplace-app-card style="width: 23%" *ngFor="let processor of m_aoApplications"
-        [processor]="processor"></app-marketplace-app-card>
+
+
+<div class="processor-cards-container col-12 d-flex flex-row flex-wrap justify-content-between px-3">
+    <app-marketplace-app-card class="col-xs-12 col-md-6 col-lg-3 px-1"
+        *ngFor="let oProcessor of m_aoApplications | filter: searchWord"
+        [oProcessor]="oProcessor"></app-marketplace-app-card>
 </div>

@@ -1,5 +1,5 @@
 <li class="list-group-item list-group-item-action pb-2" (click)="showWorkspaceProperties(workspace)">
-    <div class="d-flex flex-row justify-content-between"style="cursor: pointer;">
+    <div class="d-flex flex-row justify-content-between" style="cursor: pointer;">
         <div class="d-flex flex-column gap-2">
             <p class="p-0 m-0">{{workspace.workspaceName}}</p>
             <div class="d-flex flex-row gap-3">
@@ -8,9 +8,8 @@
             </div>
         </div>
         <div class="button-panel d-flex flex-row gap-2">
-            <a class="btn btn-primary btn-rounded btn-sm" role="button"
-                (click)="openWorkspace(workspace)">Open</a>
-            <a class="btn btn-primary btn-rounded btn-sm" role="button">Delete</a>
+            <a class="btn btn-primary btn-rounded btn-sm" role="button" (click)="openWorkspace(workspace)">Open</a>
+            <a class="btn btn-primary btn-rounded btn-sm" role="button" (click)="deleteWorkspace(workspace.workspaceId)">Delete</a>
         </div>
     </div>
 </li>

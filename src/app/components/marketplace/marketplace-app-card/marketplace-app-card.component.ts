@@ -8,12 +8,21 @@ import { ConstantsService } from 'src/app/services/constants.service';
   styleUrls: ['./marketplace-app-card.component.css']
 })
 export class MarketplaceAppCardComponent {
-  @Input() processor!: any
+  @Input() oProcessor!: any
 
   constructor(private oRouter: Router, private oConstantsService: ConstantsService) {}
 
-  openProcessorDetails(processorName: string) {
-    this.oConstantsService.setSelectedApplication(processorName)
-    this.oRouter.navigateByUrl(`${processorName}/appDetails`)
+  openProcessorDetails(sProcessorName: string) {
+    this.oConstantsService.setSelectedApplication(sProcessorName)
+    this.oRouter.navigateByUrl(`${sProcessorName}/appDetails`)
+  }
+
+  getPrice(iPrice: number): string {
+    if(iPrice === 0) {
+      return "Free";
+    } else {
+      return `${iPrice}`
+    }
+
   }
 }

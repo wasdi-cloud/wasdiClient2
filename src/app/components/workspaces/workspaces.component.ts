@@ -6,6 +6,21 @@ import { ConfirmationDialogComponent } from 'src/app/shared/dialogs/confirmation
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
+export interface WorkspaceViewModel {
+  activeNode: boolean;
+  apiUrl: string;
+  cloudProvider: string;
+  creationDate: number;
+  lastEditDate: number;
+  name: string;
+  nodeCode: string;
+  processesCount: string;
+  sharedUsers: string[];
+  slaLink: string;
+  userId: string;
+  workspaceId: string;
+}
+
 @Component({
   selector: 'app-workspaces',
   templateUrl: './workspaces.component.html',
@@ -15,6 +30,8 @@ export class WorkspacesComponent implements OnInit {
 
   constructor(private oConstantsService: ConstantsService, private oDialog: MatDialog, private oWorkspaceService: WorkspaceService) { }
   workspaces: Workspace[] = []
+  activeWorkspace!: WorkspaceViewModel;
+  sharedUsers!: string[]; 
 
   ngOnInit(): void {
     this.fetchWorkspaceInfoList();
@@ -25,31 +42,19 @@ export class WorkspacesComponent implements OnInit {
     let oUser: User = this.oConstantsService.getUser();
     if (oUser !== {} as User) {
       this.oWorkspaceService.getWorkspacesInfoListByUser().subscribe(response => {
-        console.log(response)
         this.workspaces = response;
       })
     }
   }
 
-  // Dialog Box Logic:
-  openDialog() {
-    const dialogRef = this.oDialog.open(ConfirmationDialogComponent, {
-      data: {
-        message: "Are you sure you want to delete this?",
-        buttonText: {
-          ok: 'Save',
-          cancel: 'No'
-        }
-      }
-    });
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        console.log("Deleted"); 
-      }
-      else {
-        console.log("Not deleted");
-      }
+  onDeleteWorkspace(oWorkspace: Workspace) {
+    this.fetchWorkspaceInfoList(); 
+  }
+  
+  onShowWorkspace(oWorkspace: Workspace) {
+    this.oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
+      this.activeWorkspace = response
+      this.sharedUsers = response.sharedUsers
     })
   }
-
 }

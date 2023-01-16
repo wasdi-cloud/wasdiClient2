@@ -3,6 +3,29 @@ import { Injectable } from '@angular/core';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
 
+type Nullable<T> = T | null;
+
+export interface Help {
+  boolValue: boolean, 
+  intValue: Nullable<number>, 
+  doubleValue: Nullable<number>, 
+  stringValue: string
+}
+
+export interface UIResponse {
+  tabs: {
+    name: string, 
+    controls: {
+      label: string, 
+      maxArea: number, 
+      maxRatioSide: number, 
+      param: string, 
+      required: boolean, 
+      tooltip: string, 
+      type: string 
+    }
+  }[]
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -94,11 +117,10 @@ export class ProcessorService {
   /**
      * Get help of a porcessor
      * @param sProcessorName
-     * @param sJSON
      * @returns {*}
      */
-  getHelpFromProcessor(sProcessorName: string, sJSON: string) {
-    return this.oHttp.get(this.APIURL + '/processors/help?name=' + sProcessorName);
+  getHelpFromProcessor(sProcessorName: string) {
+    return this.oHttp.get<Help>(this.APIURL + '/processors/help?name=' + sProcessorName);
   };
 
 
@@ -337,7 +359,7 @@ export class ProcessorService {
   * @returns {*}
   */
   getProcessorUI(sProcessorName: string) {
-    return this.oHttp.get(this.APIURL + '/processors/ui?name=' + sProcessorName);
+    return this.oHttp.get<UIResponse>(this.APIURL + '/processors/ui?name=' + sProcessorName);
   }
 
   /**

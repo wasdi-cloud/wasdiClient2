@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -28,7 +29,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTree, MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from "@angular/material/icon";
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
+import { CdkTreeModule } from '@angular/cdk/tree';
 
 
 //Workspaces Page Components
@@ -40,6 +42,8 @@ import { SessionInjectorInterceptor } from './services/interceptors/session-inje
 //Import Services
 import { AuthService } from './services/auth/auth.service';
 import { ConstantsService } from './services/constants.service';
+
+import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/workspaces-map.component';
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
@@ -48,7 +52,10 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AppDetailsComponent } from './components/app-details/app-details/app-details.component';
 import { AppReviewsComponent } from './components/app-details/app-reviews/app-reviews.component';
 import { AppUiComponent } from './components/app-ui/app-ui.component';
+
+//Import custom pipes
 import { MarkdownPipe } from './shared/pipes/markdown.pipe';
+import { FilterPipe } from './shared/pipes/filter.pipe';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -65,6 +72,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WorkspacesComponent,
     LoginComponent,
     WorkspaceListItemComponent,
+    WorkspacesMapComponent,
     MarketplaceAppCardComponent,
     LanguageSwitchComponent,
     CourseDialogComponent,
@@ -73,7 +81,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AppDetailsComponent,
     AppReviewsComponent,
     AppUiComponent,
-    MarkdownPipe
+    MarkdownPipe,
+    FilterPipe
   ],
   imports: [
     AppRoutingModule,
@@ -81,6 +90,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    FormsModule, 
+    LeafletModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -94,7 +105,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatTreeModule,
     MatIconModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    CdkTreeModule
   ],
   providers: [
     AuthService,
