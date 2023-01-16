@@ -39,57 +39,55 @@
 <div class="controls-container d-flex flex-row px-3">
     <div class="side-menu col-2 bg-primary">
         <ul class="list-group">
+            <li class="list-group-item list-group-item-action list-group-item-primary" *ngFor="let oTab of m_aoTabs">{{oTab | uppercase}}</li>
             <li class="list-group-item list-group-item-action list-group-item-primary" (click)="changeActiveTab('help')"
-                [ngClass]="activeTab === 'help'? 'active': '' ">
+                [ngClass]="m_sActiveTab === 'help'? 'active': '' ">
                 HELP
             </li>
             <li class="list-group-item list-group-item-action list-group-item-primary"
-                (click)="changeActiveTab('history')" [ngClass]="activeTab === 'history'? 'active': '' ">
+                (click)="changeActiveTab('history')" [ngClass]="m_sActiveTab === 'history'? 'active': '' ">
                 HISTORY
             </li>
             <li class="list-group-item list-group-item-action list-group-item-primary"
-                (click)="changeActiveTab('json_params')" [ngClass]="activeTab === 'json_params'? 'active': '' ">
+                (click)="changeActiveTab('json_params')" [ngClass]="m_sActiveTab === 'json_params'? 'active': '' ">
                 JSON
             </li>
         </ul>
     </div>
     <div class="control-panel col-4">
         <!-- PROCESSOR HELP TAB -->
-        <<<<<<< HEAD <!-- <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown">
-    </div> -->
-    =======
-    <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="activeTab === 'help'? '': 'd-none' ">
-    </div>
-    >>>>>>> af900232a20a83fa333651cefc83d43774bd2212
+        <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
+        </div>
 
-    <!-- PROCESSOR HISTORY TABLE TAB -->
-    <div class="history-container table-wrapper-scroll scroll-bar" [ngClass]="activeTab === 'history'? '': 'd-none' ">
-        <table class="history-table table">
-            <thead class="bg-primary" style="position: sticky;
+        <!-- PROCESSOR HISTORY TABLE TAB -->
+        <div class="history-container table-wrapper-scroll scroll-bar"
+            [ngClass]="m_sActiveTab === 'history'? '': 'd-none' ">
+            <table class="history-table table">
+                <thead class="bg-primary" style="position: sticky;
                 top: 0;
                 z-index: 1;">
-                <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Workspace</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let historyLog of processorHistory">
-                    <td>{{historyLog.operationDate}}</td>
-                    <td>{{historyLog.status}}</td>
-                    <td>{{historyLog.workspaceName}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Workspace</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let historyLog of processorHistory">
+                        <td>{{historyLog.operationDate}}</td>
+                        <td>{{historyLog.status}}</td>
+                        <td>{{historyLog.workspaceName}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <!-- PROCESSOR JSON TAB -->
-    <div class="scroll-bar">
-        <textarea readonly style="font-family:'Courier New',serif;font-size: 16px;width: 100%;" rows="40"
-            placeholder="{{m_sJSONParam}}"></textarea>
-    </div>
+        <!-- PROCESSOR JSON TAB -->
+        <div class="scroll-bar">
+            <textarea readonly style="font-family:'Courier New',serif;font-size: 16px;width: 100%;" rows="40"
+                placeholder="{{m_sJSONParam}}"></textarea>
+        </div>
 
-</div>
-<div class="menu col-6 bg-dark"></div>
+    </div>
+    <div class="menu col-6 bg-dark"></div>
 </div>

@@ -54,9 +54,6 @@ export class AppUiComponent implements OnInit {
     sExistingWorkspace: null
   }
 
-  //Active Tab Element
-  activeTab: string = ""
-
   //Collapsible elements 
   isCollapsed: boolean = true;
 
@@ -71,6 +68,10 @@ export class AppUiComponent implements OnInit {
 
   //Array of names for the Tabs
   m_aoTabs: any[] = [];
+
+  //Active Tab Element
+  m_sActiveTab: string = ""
+
   //User's existing workspaces
   m_aoExistingWorkspaces: Workspace[] = [];
 
@@ -79,11 +80,13 @@ export class AppUiComponent implements OnInit {
     this.fetchWorkspaces();
     if (this.processorName) {
       this.getProcessorDetails(this.processorName);
+      this.getProcessorUI(this.processorName);
     }
     else if (this.oActivatedRoute.snapshot.params['processorName']) {
       this.processorName = this.oActivatedRoute.snapshot.params['processorName'];
       this.oConstantsService.setSelectedApplication(this.processorName);
       this.getProcessorDetails(this.processorName);
+      this.getProcessorUI(this.processorName);
     }
     else {
       console.log("Problem getting Processor Name")
@@ -93,11 +96,28 @@ export class AppUiComponent implements OnInit {
   constructor(private oActivatedRoute: ActivatedRoute, private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router, private oWorkspaceService: WorkspaceService) { }
 
   /**
+   * Retrieve Processor UI from WASDI server
+   */
+  getProcessorUI(sApplicationName: string) {
+    this.oProcessorService.getProcessorUI(sApplicationName).subscribe(oResponse => {
+      for (let iTabs = 0; iTabs < oResponse.tabs.length; iTabs++) {
+        let oTab = oResponse.tabs[iTabs];
+
+        this.m_aoTabs.push(oTab.name);
+
+        if (iTabs === 0) {
+          this.m_sActiveTab = oTab.name;
+        }
+      }
+    })
+  }
+
+  /**
    * Change Active Tab
    */
   changeActiveTab(sTab: string) {
-    if (this.activeTab !== sTab) {
-      this.activeTab = sTab;
+    if (this.m_sActiveTab !== sTab) {
+      this.m_sActiveTab = sTab;
     }
 
     if (sTab === 'help') {
@@ -148,10 +168,9 @@ export class AppUiComponent implements OnInit {
   }
 
   /**
-   * Run Application
+   * Run Application => IMPORTANT: PLACEHOLDER
    */
   runApplication() {
-    console.log(this.workspaceForm)
     if (this.workspaceForm.sNewWorkspaceName && this.workspaceForm.sExistingWorkspace) {
       console.log("Either select workspace or create new one");
       return
@@ -172,7 +191,6 @@ export class AppUiComponent implements OnInit {
     let oUser: User = this.oConstantsService.getUser();
     if (oUser !== {} as User) {
       this.oWorkspaceService.getWorkspacesInfoListByUser().subscribe(oResponse => {
-        console.log(oResponse)
         this.m_aoExistingWorkspaces = oResponse;
       })
     }
@@ -184,17 +202,14 @@ export class AppUiComponent implements OnInit {
   createWorkspace() {
     const { sNewWorkspaceName, sExistingWorkspace } = this.workspaceForm;
     let sWorkspaceName = this.workspaceForm.sNewWorkspaceName;
-    console.log(sWorkspaceName);
     this.oWorkspaceService.createWorkspace(sWorkspaceName).subscribe(oResponse => {
       let sWorkspaceId: string | null = oResponse.stringValue;
       if (sWorkspaceId !== null) {
         this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(oResponse => {
-          console.log(oResponse)
           this.oConstantsService.setActiveWorkspace(oResponse);
           this.oRouter.navigateByUrl(`edit/${oResponse.workspaceId}`)
         })
       }
-      console.log(sWorkspaceId)
     })
   }
 
@@ -217,39 +232,39 @@ export class AppUiComponent implements OnInit {
   /**
    * 
    */
-  createParams() {
-    // Output initialization
-    let oProcessorInput: any = {};
+  // createParams() {
+  //   // Output initialization
+  //   let oProcessorInput: any = {};
 
-    // For each tab
-    for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
-      // Get the name of the tab
-      let sTab = this.m_aoTabs[iTabs];
+  //   // For each tab
+  //   for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
+  //     // Get the name of the tab
+  //     let sTab = this.m_aoTabs[iTabs];
 
-      // For all the view elements of the tab
-      for (let iControls = 0; iControls < this.m_aoViewElements[sTab].length; iControls++) {
-        // Take the element
-        let oElement = this.m_aoViewElements[sTab][iControls];
+  //     // For all the view elements of the tab
+  //     for (let iControls = 0; iControls < this.m_aoViewElements[sTab].length; iControls++) {
+  //       // Take the element
+  //       let oElement = this.m_aoViewElements[sTab][iControls];
 
-        // Save the value to the output json
-        if (this.m_bRenderAsStrings && oElement.type != 'numeric') {
-          oProcessorInput[oElement.paramName] = oElement.getStringValue();
-        } else {
-          oProcessorInput[oElement.paramName] = oElement.getValue();
-        }
+  //       // Save the value to the output json
+  //       if (this.m_bRenderAsStrings && oElement.type != 'numeric') {
+  //         oProcessorInput[oElement.paramName] = oElement.getStringValue();
+  //       } else {
+  //         oProcessorInput[oElement.paramName] = oElement.getValue();
+  //       }
 
-      }
-    }
-    console.log(oProcessorInput)
-    return oProcessorInput
-  }
+  //     }
+  //   }
+  //   console.log(oProcessorInput)
+  //   return oProcessorInput
+  // }
 
   toggleCollapse() {
     this.isCollapsed = !this.isCollapsed;
   }
 
   marketplaceReturn() {
-    this.changeActiveTab('help')
+    this.changeActiveTab('')
     this.oRouter.navigateByUrl(`${this.processorName}/appDetails`)
   }
 }
