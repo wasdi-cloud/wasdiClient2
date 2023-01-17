@@ -57,6 +57,22 @@ import { AppUiComponent } from './components/app-ui/app-ui.component';
 import { MarkdownPipe } from './shared/pipes/markdown.pipe';
 import { FilterPipe } from './shared/pipes/filter.pipe';
 
+//Import Wap Components
+import { WapDateTimePickerComponent } from './components/WAP-components/wap-date-time-picker/wap-date-time-picker.component';
+import { WapDirective } from './directives/wap.directive';
+import { WapCheckBoxComponent } from './components/WAP-components/wap-check-box/wap-check-box.component';
+import { WapDropdownComponent } from './components/WAP-components/wap-dropdown/wap-dropdown.component';
+import { WapListBoxComponent } from './components/WAP-components/wap-list-box/wap-list-box.component';
+import { WapNumericBoxComponent } from './components/WAP-components/wap-numeric-box/wap-numeric-box.component';
+import { WapProductListComponent } from './components/WAP-components/wap-product-list/wap-product-list.component';
+import { WapProductsComboComponent } from './components/WAP-components/wap-products-combo/wap-products-combo.component';
+import { WapSearchEoImageComponent } from './components/WAP-components/wap-search-eo-image/wap-search-eo-image.component';
+import { WapSelectAreaComponent } from './components/WAP-components/wap-select-area/wap-select-area.component';
+import { WapSliderComponent } from './components/WAP-components/wap-slider/wap-slider.component';
+import { WapTableComponent } from './components/WAP-components/wap-table/wap-table.component';
+import { WapTextboxComponent } from './components/WAP-components/wap-textbox/wap-textbox.component';
+import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap-tooltip.component';
+
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -82,7 +98,21 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AppReviewsComponent,
     AppUiComponent,
     MarkdownPipe,
-    FilterPipe
+    FilterPipe,
+    WapDateTimePickerComponent,
+    WapDirective,
+    WapCheckBoxComponent,
+    WapDropdownComponent,
+    WapListBoxComponent,
+    WapNumericBoxComponent,
+    WapProductListComponent,
+    WapProductsComboComponent,
+    WapSearchEoImageComponent,
+    WapSelectAreaComponent,
+    WapSliderComponent,
+    WapTableComponent,
+    WapTextboxComponent,
+    WapTooltipComponent
   ],
   imports: [
     AppRoutingModule,
