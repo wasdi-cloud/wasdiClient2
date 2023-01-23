@@ -31,6 +31,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { CdkTreeModule } from '@angular/cdk/tree';
+import { MatSliderModule } from '@angular/material/slider';
 
 
 //Workspaces Page Components
@@ -72,6 +73,7 @@ import { WapSliderComponent } from './components/WAP-components/wap-slider/wap-s
 import { WapTableComponent } from './components/WAP-components/wap-table/wap-table.component';
 import { WapTextboxComponent } from './components/WAP-components/wap-textbox/wap-textbox.component';
 import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap-tooltip.component';
+import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -112,7 +114,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WapSliderComponent,
     WapTableComponent,
     WapTextboxComponent,
-    WapTooltipComponent
+    WapTooltipComponent,
+    WapDisplayComponent
   ],
   imports: [
     AppRoutingModule,
@@ -136,7 +139,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
-    CdkTreeModule
+    CdkTreeModule,
+    MatSliderModule
   ],
   providers: [
     AuthService,
