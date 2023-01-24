@@ -1,0 +1,16 @@
+<p>{{wapData.name}}</p>
+<div *ngFor="let oControl of getTabControls()">
+    <p>{{oControl.type}}</p>
+    <!-- <app-wap-check-box *ngIf="oControl.type === 'boolean'"></app-wap-check-box>
+    <app-wap-date-time-picker *ngIf="oControl.type === 'date'"></app-wap-date-time-picker>
+    <app-wap-dropdown *ngIf="oControl.type === 'dropdown'"></app-wap-dropdown>
+    <app-wap-list-box *ngIf="oControl.type === 'listbox'"></app-wap-list-box> -->
+    <app-wap-numeric-box *ngIf="oControl.type ==='numeric'"></app-wap-numeric-box>
+    <!-- <app-wap-product-list *ngIf="oControl.type ==='productlist'"></app-wap-product-list>
+    <app-wap-search-eo-image *ngIf="oControl.type ==='searcheoimage'"></app-wap-search-eo-image>
+    <app-wap-select-area *ngIf="oControl.type ==='bbox'"></app-wap-select-area>
+    <app-wap-slider *ngIf="oControl.type ==='slider'"></app-wap-slider>
+    <app-wap-table *ngIf="oControl.type ==='table'"></app-wap-table>
+    <app-wap-textbox *ngIf="oControl.type ==='textbox'"></app-wap-textbox>
+    <app-wap-tooltip *ngIf="oControl.type ==='tooltip'"></app-wap-tooltip> -->
+</div>
