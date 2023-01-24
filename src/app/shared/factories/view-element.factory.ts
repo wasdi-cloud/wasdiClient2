@@ -5,7 +5,6 @@ import { Checkbox, DateTimePicker, Dropdown, Hidden, Listbox, NumericBox, Produc
 export class ViewElementFactory {
     createViewElement(oControl) {
         let oViewElement;
-
         if (!oControl) {
             return oViewElement;
         }
@@ -140,9 +139,11 @@ export class ViewElementFactory {
         oViewElement.required = oControl.required;
         oViewElement.rowHeaders = oControl.row_headers;
         oViewElement.colHeaders = oControl.col_headers;
+        
+        return oViewElement
     }
 
-    getTablElements(oTab) {
+    getTabElements(oTab) {
         let aoTabElements: any[] = [];
 
         for (let iControl = 0; iControl < oTab.controls.length; iControl++) {
