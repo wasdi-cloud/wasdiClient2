@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import {
   AUTO_STYLE,
   animate,
@@ -17,6 +17,7 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 //Import models
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
+import { WapDirective } from 'src/app/directives/wap.directive';
 
 export interface application {
   buyed: boolean,
@@ -45,6 +46,7 @@ export interface application {
   ]
 })
 export class AppUiComponent implements OnInit {
+  @ViewChild(WapDirective, { static: true }) appWap!: WapDirective;
   //Processor Information
   processorName: string = this.oConstantsService.getSelectedApplication();
   processorInformation: any = {} as application;
@@ -65,6 +67,8 @@ export class AppUiComponent implements OnInit {
 
   //Processor JSON string
   m_sJSONParam = "{}";
+
+  m_aoViewElements: {}[] = []; 
 
   //Array of names for the Tabs
   m_aoTabs: any[] = [];
@@ -93,7 +97,7 @@ export class AppUiComponent implements OnInit {
     }
   }
 
-  constructor(private oActivatedRoute: ActivatedRoute, private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router, private oWorkspaceService: WorkspaceService) { }
+  constructor(private oActivatedRoute: ActivatedRoute, private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router, public oViewContainerRef: ViewContainerRef, private oWorkspaceService: WorkspaceService) { }
 
   /**
    * Retrieve Processor UI from WASDI server
@@ -103,7 +107,7 @@ export class AppUiComponent implements OnInit {
       for (let iTabs = 0; iTabs < oResponse.tabs.length; iTabs++) {
         let oTab = oResponse.tabs[iTabs];
 
-        this.m_aoTabs.push(oTab.name);
+        this.m_aoTabs.push(oTab);
 
         if (iTabs === 0) {
           this.m_sActiveTab = oTab.name;
@@ -115,7 +119,7 @@ export class AppUiComponent implements OnInit {
   /**
    * Change Active Tab
    */
-  changeActiveTab(sTab: string) {
+  changeActiveTab(sTab) {
     if (this.m_sActiveTab !== sTab) {
       this.m_sActiveTab = sTab;
     }

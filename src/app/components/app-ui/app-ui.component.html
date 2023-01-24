@@ -34,12 +34,15 @@
         <p>{{'WAP.WAP_WEB' | translate}}: <span>{{processorInformation.link}}</span></p>
         <p>{{'WAP.WAP_LAST_UPDATE' | translate}}: <span>{{processorInformation.updateDate}}</span></p>
     </div>
-
 </div>
 <div class="controls-container d-flex flex-row px-3">
     <div class="side-menu col-2 bg-primary">
         <ul class="list-group">
-            <li class="list-group-item list-group-item-action list-group-item-primary" *ngFor="let oTab of m_aoTabs">{{oTab | uppercase}}</li>
+            <li class="list-group-item list-group-item-action list-group-item-primary"
+                *ngFor="let oTab of m_aoTabs; let i = index" (click)='changeActiveTab(oTab.name)'
+                [ngClass]="m_sActiveTab === oTab.name ? 'active': '' ">
+                {{oTab.name | uppercase}}
+            </li>
             <li class="list-group-item list-group-item-action list-group-item-primary" (click)="changeActiveTab('help')"
                 [ngClass]="m_sActiveTab === 'help'? 'active': '' ">
                 HELP
@@ -55,6 +58,9 @@
         </ul>
     </div>
     <div class="control-panel col-4">
+        <app-wap-display *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' "
+            [wapData]="oTab"></app-wap-display>
+
         <!-- PROCESSOR HELP TAB -->
         <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
         </div>
@@ -81,13 +87,11 @@
                 </tbody>
             </table>
         </div>
-
         <!-- PROCESSOR JSON TAB -->
-        <div class="scroll-bar">
+        <div class="scroll-bar" [ngClass]="m_sActiveTab === 'json_params' ? '' : 'd-none'">
             <textarea readonly style="font-family:'Courier New',serif;font-size: 16px;width: 100%;" rows="40"
                 placeholder="{{m_sJSONParam}}"></textarea>
         </div>
-
     </div>
     <div class="menu col-6 bg-dark"></div>
 </div>
