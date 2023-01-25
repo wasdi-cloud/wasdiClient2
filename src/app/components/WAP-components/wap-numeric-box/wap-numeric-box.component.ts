@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-wap-numeric-box',
@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./wap-numeric-box.component.css']
 })
 export class WapNumericBoxComponent {
+  @Input() inputText!: string; 
+  @Output()inputTextChange = new EventEmitter<string>(); 
 
+  getUserInput(value: string) {
+    this.inputText = value; 
+    console.log(this.inputText)
+    this.inputTextChange.emit(this.inputText)
+  }
 }

@@ -59,7 +59,7 @@
     </div>
     <div class="control-panel col-4">
         <app-wap-display *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' "
-            [wapData]="oTab"></app-wap-display>
+            [wapData]="oTab" [renderAsStrings]="m_bRenderAsStrings"></app-wap-display>
 
         <!-- PROCESSOR HELP TAB -->
         <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
