@@ -5,7 +5,9 @@
     <app-wap-date-time-picker *ngIf="oControl.type === 'date'"></app-wap-date-time-picker>
     <app-wap-dropdown *ngIf="oControl.type === 'dropdown'"></app-wap-dropdown>
     <app-wap-list-box *ngIf="oControl.type === 'listbox'"></app-wap-list-box> -->
-    <app-wap-numeric-box *ngIf="oControl.type ==='numeric'"></app-wap-numeric-box>
+    <app-wap-numeric-box #numericBox *ngIf="oControl.type ==='numeric'"
+        [(inputText)]="oControl.m_sText" (getUserInput)="logOutput($event)"></app-wap-numeric-box>
+        {{oControl.m_sText}}
     <!-- <app-wap-product-list *ngIf="oControl.type ==='productlist'"></app-wap-product-list>
     <app-wap-search-eo-image *ngIf="oControl.type ==='searcheoimage'"></app-wap-search-eo-image>
     <app-wap-select-area *ngIf="oControl.type ==='bbox'"></app-wap-select-area>

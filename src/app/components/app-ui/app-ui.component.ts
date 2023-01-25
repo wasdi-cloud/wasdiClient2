@@ -18,6 +18,7 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { WapDirective } from 'src/app/directives/wap.directive';
+import { WapDisplayComponent } from './wap-display/wap-display.component';
 
 export interface application {
   buyed: boolean,
@@ -47,6 +48,7 @@ export interface application {
 })
 export class AppUiComponent implements OnInit {
   @ViewChild(WapDirective, { static: true }) appWap!: WapDirective;
+  @ViewChild(WapDisplayComponent) wapDisplayComponent: WapDisplayComponent;
   //Processor Information
   processorName: string = this.oConstantsService.getSelectedApplication();
   processorInformation: any = {} as application;
@@ -68,7 +70,10 @@ export class AppUiComponent implements OnInit {
   //Processor JSON string
   m_sJSONParam = "{}";
 
-  m_aoViewElements: {}[] = []; 
+  //Flag to know if all inputs must be rendered as strings or as objects
+  m_bRenderAsStrings: boolean = false;
+
+  m_aoViewElements: {}[] = [];
 
   //Array of names for the Tabs
   m_aoTabs: any[] = [];
@@ -104,6 +109,7 @@ export class AppUiComponent implements OnInit {
    */
   getProcessorUI(sApplicationName: string) {
     this.oProcessorService.getProcessorUI(sApplicationName).subscribe(oResponse => {
+      console.log(oResponse)
       for (let iTabs = 0; iTabs < oResponse.tabs.length; iTabs++) {
         let oTab = oResponse.tabs[iTabs];
 
@@ -113,6 +119,12 @@ export class AppUiComponent implements OnInit {
           this.m_sActiveTab = oTab.name;
         }
       }
+      if (oResponse.renderAsStrings) {
+        if (oResponse.renderAsStrings !== null || oResponse.renderAsStrings !== undefined) {
+          this.m_bRenderAsStrings = oResponse.renderAsStrings
+        }
+      }
+      console.log(this.m_bRenderAsStrings);
     })
   }
 
@@ -191,7 +203,6 @@ export class AppUiComponent implements OnInit {
    * Get user's workspaces
    */
   fetchWorkspaces() {
-    console.log('fetching workspaces');
     let oUser: User = this.oConstantsService.getUser();
     if (oUser !== {} as User) {
       this.oWorkspaceService.getWorkspacesInfoListByUser().subscribe(oResponse => {
@@ -270,5 +281,9 @@ export class AppUiComponent implements OnInit {
   marketplaceReturn() {
     this.changeActiveTab('')
     this.oRouter.navigateByUrl(`${this.processorName}/appDetails`)
+  }
+
+  checkParams() {
+    this.wapDisplayComponent.checkParams();
   }
 }

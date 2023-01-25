@@ -9,6 +9,7 @@ import { ViewElementFactory } from 'src/app/shared/factories/view-element.factor
 })
 export class WapDisplayComponent implements OnInit {
   @Input() wapData
+  @Input() renderAsStrings
 
   m_aoViewElements: any[];
 
@@ -16,6 +17,7 @@ export class WapDisplayComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.wapData);
+    console.log(this.renderAsStrings)
 
     this.m_aoViewElements = this.generateViewElements(this.wapData)
     console.log(this.m_aoViewElements)
@@ -28,8 +30,6 @@ export class WapDisplayComponent implements OnInit {
   getTabControls() {
     return this.m_aoViewElements;
   }
-
-
   /**
   * Generates the view elements of the Processor
   * @param oFormToGenerate JSON Object representing the Processor UI
@@ -41,4 +41,50 @@ export class WapDisplayComponent implements OnInit {
     //console.log(aoTabControls)
     return aoTabControls;
   }
+
+  //add asMessages as param
+  checkParams() {
+    console.log("checking params")
+    let bReturn: boolean = true;
+
+    let asMessages: string[] = [];
+
+    let sRequiredString: string = " is Required"
+
+    for (let iControls = 0; iControls < this.m_aoViewElements.length; iControls++) {
+      let oElement: any = this.m_aoViewElements[iControls];
+
+      if (oElement.required) {
+        if (this.renderAsStrings) {
+          let sStringValue = oElement.getStringValue();
+          console.log(sStringValue)
+          if (!sStringValue) {
+            let sMessage = oElement.label + sRequiredString;
+            asMessages.push(sMessage);
+          }
+        } else {
+          let oValue: any = oElement.getValue();
+
+
+          if (oValue === null || oValue === undefined) {
+            let sMessage = oElement.label + sRequiredString;
+            asMessages.push(sMessage);
+
+            bReturn = false;
+          }
+        }
+        if (typeof oElement.isValid === "function") {
+          if (!oElement.isValid(asMessages)) {
+            bReturn = false
+          }
+        }
+      }
+    }
+    console.log(bReturn)
+    return bReturn
+  }
+  logOutput(event: any) {
+    console.log(event)
+  }
 }
+
