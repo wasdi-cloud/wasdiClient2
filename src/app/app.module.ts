@@ -32,7 +32,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatSliderModule } from '@angular/material/slider';
-
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatInputModule } from '@angular/material/input';
 
 //Workspaces Page Components
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
@@ -123,7 +124,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FormsModule, 
+    FormsModule,
     LeafletModule,
     TranslateModule.forRoot({
       loader: {
@@ -140,7 +141,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatFormFieldModule,
     MatSelectModule,
     CdkTreeModule,
-    MatSliderModule
+    MatSliderModule,
+    MatAutocompleteModule,
+    MatInputModule
   ],
   providers: [
     AuthService,
