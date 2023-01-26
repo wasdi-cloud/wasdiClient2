@@ -11,14 +11,15 @@ import { map, startWith } from 'rxjs/operators';
 export class WapDropdownComponent implements OnInit {
   @Input() oControlInfo: any;
   @Input() inputOptions: any[];
-  @Output() inputOptionsChange = new EventEmitter<any>()
+  @Output() oControlInfoChange = new EventEmitter<any>()
   control = new FormControl('');
   filteredOptions: Observable<string[]>;
 
   inputNames: string[];
 
   ngOnInit() {
-    this.inputNames = this.inputOptions.map(option => {
+    console.log(this.oControlInfo)
+    this.inputNames = this.oControlInfo.asListValues.map(option => {
       return option.name
     })
     this.control.setValue(this.oControlInfo.sSelectedValues.name)
@@ -27,12 +28,18 @@ export class WapDropdownComponent implements OnInit {
       map(value => this._filter(value || '')),
     );
 
-    console.log(this.inputOptions);
   }
-
   private _filter(value: any) {
     const filterValue = value.toLowerCase();
 
     return this.inputNames.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  getSelectedOption(event: any) {
+    console.log(event.option.value)
+    this.oControlInfo.oSelectedValue.name = event.option.value
+
+    console.log(this.oControlInfo)
+    this.oControlInfoChange.emit(this.oControlInfo)
   }
 }
