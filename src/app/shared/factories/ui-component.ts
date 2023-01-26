@@ -195,6 +195,13 @@ export class NumericBox extends UIComponent {
         return true;
     }
 
+    getValue() {
+        return parseFloat(this.m_sText); 
+    }
+
+    getStringValue() {
+        return this.m_sText.toString(); 
+    }
 }
 
 export class ProductList extends UIComponent {
