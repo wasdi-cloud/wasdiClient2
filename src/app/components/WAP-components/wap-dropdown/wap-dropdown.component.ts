@@ -18,7 +18,6 @@ export class WapDropdownComponent implements OnInit {
   inputNames: string[];
 
   ngOnInit() {
-    console.log(this.oControlInfo)
     this.inputNames = this.oControlInfo.asListValues.map(option => {
       return option.name
     })
@@ -36,10 +35,7 @@ export class WapDropdownComponent implements OnInit {
   }
 
   getSelectedOption(event: any) {
-    console.log(event.option.value)
     this.oControlInfo.oSelectedValue.name = event.option.value
-
-    console.log(this.oControlInfo)
     this.oControlInfoChange.emit(this.oControlInfo)
   }
 }
