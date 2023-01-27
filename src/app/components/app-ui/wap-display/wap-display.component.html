@@ -1,8 +1,8 @@
 <p>{{wapData.name}}</p>
 <div *ngFor="let oControl of getTabControls(); let i=index">
     <p>{{oControl.type}}</p>
-    <!-- <app-wap-check-box *ngIf="oControl.type === 'boolean'"></app-wap-check-box>
-    <!-- <app-wap-date-time-picker *ngIf="oControl.type === 'date'"></app-wap-date-time-picker> -->
+    <!-- <app-wap-check-box *ngIf="oControl.type === 'boolean'"></app-wap-check-box> -->
+    <app-wap-date-time-picker *ngIf="oControl.type === 'date'" [(inputtedDate)]="oControl.m_sDate" (getDate)="logOutput($event)"></app-wap-date-time-picker>
     <app-wap-dropdown *ngIf="oControl.type === 'dropdown'" (inputOptions)="getTabControls()[i].asListValues"
         [(oControlInfo)]="getTabControls()[i]" (getSelectedOption)="logOutput($event)"></app-wap-dropdown>
     <!--<app-wap-list-box *ngIf="oControl.type === 'listbox'"></app-wap-list-box> -->
