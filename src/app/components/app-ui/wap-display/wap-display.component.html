@@ -35,7 +35,7 @@
     <!-- <app-wap-table *ngIf="oControl.type ==='table'"></app-wap-table> -->
 
     <!-- WAP Textbox -->
-    <!-- <app-wap-textbox *ngIf="oControl.type ==='textbox'"></app-wap-textbox> -->
+    <app-wap-textbox *ngIf="oControl.type ==='textbox'" [(oTextboxInfo)]="getTabControls()[i]"></app-wap-textbox>
 
     <!-- WAP Tooltip -->
     <!-- <app-wap-tooltip *ngIf="oControl.type ==='tooltip'"></app-wap-tooltip>  -->
