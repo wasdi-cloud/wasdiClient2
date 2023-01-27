@@ -1,4 +1,3 @@
-import { throwDialogContentAlreadyAttachedError } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
