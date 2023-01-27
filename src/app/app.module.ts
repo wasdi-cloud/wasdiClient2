@@ -34,6 +34,8 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerCancel, MatDatepickerModule } from '@angular/material/datepicker'
+import { MatNativeDateModule} from '@angular/material/core'
 
 //Workspaces Page Components
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
@@ -143,7 +145,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     CdkTreeModule,
     MatSliderModule,
     MatAutocompleteModule,
-    MatInputModule
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     AuthService,
@@ -154,7 +158,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       multi: true
     },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    JwtHelperService
+    JwtHelperService,
+    MatDatepickerModule, 
+    MatNativeDateModule
   ],
   bootstrap: [AppComponent],
   entryComponents: [ConfirmationDialogComponent],
