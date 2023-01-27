@@ -1,6 +1,6 @@
-<div class="listbox">
-    <input type="text" class="form-control">
-    <div class="list-group">
-        <a class="list-group-item">Option</a>
-    </div>
-</div>
+<mat-form-field appearance="fill">
+    <mat-label>Input Name</mat-label>
+    <mat-select multiple (selectionChange)="getSelections($event)">
+        <mat-option *ngFor="let sListElement of oListboxInput.aoElements" [value]="sListElement">{{sListElement}}</mat-option>
+    </mat-select>
+</mat-form-field>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-wap-list-box',
@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./wap-list-box.component.css']
 })
 export class WapListBoxComponent {
+  @Input() oListboxInput: any;
+  @Output() oListboxInputChange = new EventEmitter<any>();
 
+  getSelections(oEvent: any) {
+    this.oListboxInput.aoSelected = oEvent.value;
+    this.oListboxInputChange.emit(this.oListboxInput);
+  }
 }
