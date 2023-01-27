@@ -326,7 +326,7 @@ export class Slider extends UIComponent {
         return this.m_iValue;
     }
 
-    getStirngValue() {
+    getStringValue() {
         return String(this.m_iValue)
     }
 }
