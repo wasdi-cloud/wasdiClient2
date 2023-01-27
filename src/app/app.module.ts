@@ -34,7 +34,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerCancel, MatDatepickerModule } from '@angular/material/datepicker'
+import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule} from '@angular/material/core'
 
 //Workspaces Page Components
