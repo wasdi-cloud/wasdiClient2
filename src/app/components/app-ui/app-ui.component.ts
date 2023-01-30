@@ -84,6 +84,9 @@ export class AppUiComponent implements OnInit {
   //User's existing workspaces
   m_aoExistingWorkspaces: Workspace[] = [];
 
+  //Selected Workspace Name: 
+  m_sSelectedWorkspace: Workspace | undefined;
+
 
   ngOnInit(): void {
     this.fetchWorkspaces();
@@ -226,6 +229,16 @@ export class AppUiComponent implements OnInit {
         })
       }
     })
+  }
+
+  getSelectedWorkspaceId(event) {
+    this.m_sSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === event.target.value);
+
+    console.log(this.m_sSelectedWorkspace)
+    if(this.m_sSelectedWorkspace?.workspaceId === undefined) {
+      return 
+    }
+    return this.m_sSelectedWorkspace.workspaceId; 
   }
 
   /**

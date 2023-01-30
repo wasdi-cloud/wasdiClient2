@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+import { ProductService } from 'src/app/services/api/product.service';
 import { ViewElementFactory } from 'src/app/shared/factories/view-element.factory';
 
 @Component({
@@ -10,10 +11,14 @@ import { ViewElementFactory } from 'src/app/shared/factories/view-element.factor
 export class WapDisplayComponent implements OnInit {
   @Input() wapData
   @Input() renderAsStrings
+  @Input() workspaceId
 
   m_aoViewElements: any[];
 
-  constructor(private m_oProcessorService: ProcessorService) { }
+  m_aoProductsArray: any[];
+  m_asProductNames: string[];
+
+  constructor(private m_oProcessorService: ProcessorService, private m_oProductService: ProductService) { }
 
   ngOnInit() {
     console.log(this.wapData);
@@ -21,6 +26,10 @@ export class WapDisplayComponent implements OnInit {
 
     this.m_aoViewElements = this.generateViewElements(this.wapData)
     console.log(this.m_aoViewElements)
+  }
+
+  ngOnChanges() {
+    this.getWorkspaceProducts();
   }
   /**
      * Get the list of controls in a Tab
@@ -57,7 +66,7 @@ export class WapDisplayComponent implements OnInit {
       if (oElement.required) {
         if (this.renderAsStrings) {
           let sStringValue = oElement.getStringValue();
-          console.log(sStringValue)
+          console.log(`${oElement.type}: ${sStringValue}`)
           if (!sStringValue) {
             let sMessage = oElement.label + sRequiredString;
             asMessages.push(sMessage);
@@ -83,6 +92,30 @@ export class WapDisplayComponent implements OnInit {
     console.log(bReturn)
     return bReturn
   }
+
+  /**
+   * Get products for workspace and pass to ProductsCombo child
+   * 
+   */
+  getWorkspaceProducts(): any {
+    if (this.workspaceId === null || this.workspaceId === undefined) {
+      return this.m_aoProductsArray;
+
+    } else {
+      this.m_oProductService.getProductLightListByWorkspace(this.workspaceId).subscribe(oResponse => {
+        this.m_aoProductsArray = oResponse
+
+        return this.m_asProductNames = this.m_aoProductsArray.map(element => {
+          return element.name
+        });
+      })
+    }
+  }
+
+  /**
+   * Temporary Function to track WAP components 
+   * @param event 
+   */
   logOutput(event: any) {
     console.log(event)
   }
