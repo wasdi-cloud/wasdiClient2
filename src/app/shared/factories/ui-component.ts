@@ -248,11 +248,11 @@ export class ProductsCombo extends UIComponent {
     }
 
     getValue() {
-        return this.sSelectedValues.name;
+        return this.sSelectedValues;
     }
 
     getStringValue() {
-        return this.sSelectedValues.name;
+        return this.sSelectedValues;
     }
 }
 
