@@ -1,1 +1,7 @@
-<p>wap-products-combo works!</p>
+    <input type="text" placeholder="{{productsArray === undefined ? 'Select a Workspace from top form' : 'Select a Product'}}"
+        [matAutocomplete]="auto" class="form-control">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getUserInput($event)">
+        <mat-option *ngFor="let product of productsArray" [value]="product">
+            {{product}}
+        </mat-option>
+    </mat-autocomplete>

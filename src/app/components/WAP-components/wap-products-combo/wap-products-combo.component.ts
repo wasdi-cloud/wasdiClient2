@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 @Component({
@@ -8,10 +8,17 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 })
 export class WapProductsComboComponent {
   @Input() productsArray: string[];
+  @Input() oControlSelection: any; 
+  @Output() oControlSelectionChange = new EventEmitter<any>(); 
 
   constructor(private m_oWorkspaceService: WorkspaceService) { }
 
-  ngOnChanges() {
-   console.log(this.productsArray)
+
+  getUserInput(event) {
+    console.log(event.option.value)
+    let sUserInput = event.option.value; 
+    this.oControlSelection.sSelectedValues = sUserInput; 
+    
+    this.oControlSelectionChange.emit(this.oControlSelection); 
   }
 }
