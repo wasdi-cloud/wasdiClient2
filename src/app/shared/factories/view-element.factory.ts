@@ -123,10 +123,6 @@ export class ViewElementFactory {
                 }
             }
 
-            for (let sRowHeader = 0; sRowHeader < oControl.rows; sRowHeader++) {
-                const sElement = oControl.row_headers[sRowHeader];
-                oViewElement.aoTableVariables[1].push(sElement);
-            }
         } else {
             oViewElement = new Textbox();
         }
