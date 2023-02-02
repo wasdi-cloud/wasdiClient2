@@ -1,0 +1,79 @@
+div.products-container {
+  height: 50vh; 
+  overflow-y: scroll;
+  width: 35vw; 
+
+}
+h3.products-header {
+  width: 35vw;
+  z-index: 1; 
+}
+.btn {
+  padding: 0; 
+}
+.tree-invisible {
+  display: none;
+}
+.tree-nested-node {
+  padding-left: 30px;
+}
+
+mat-tree {
+  margin-left: 40px;
+}
+.mat-tree-node {
+  background-color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+}
+
+.mat-nested-tree-node {
+  top: -24px;
+}
+
+
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  
+}
+
+li {
+  padding-left: 40px;
+  border: 1px dotted grey;
+  border-width: 0 0 1px 1px;
+  position: relative;
+  top: -24px;
+}
+
+li.tree-container {
+  border-bottom: 0;
+}
+
+li.mat-tree-node,
+li div { 
+  margin: 0;
+  position: relative;
+  top: 24px; 
+}
+
+li ul {
+  border-top: 1px dotted grey;
+  margin-left: -40px;
+  padding-left: 53px;
+}
+
+.mat-nested-tree-node:last-child ul {
+  border-left: 1px solid white;
+  margin-left: -41px;
+}
+
+.mat-icon-button {
+  z-index: 100;
+}
