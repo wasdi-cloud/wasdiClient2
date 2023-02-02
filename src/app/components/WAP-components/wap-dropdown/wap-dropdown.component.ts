@@ -19,9 +19,10 @@ export class WapDropdownComponent implements OnInit {
 
   ngOnInit() {
     this.inputNames = this.oControlInfo.asListValues.map(option => {
+      console.log(option)
       return option.name
     })
-    this.control.setValue(this.oControlInfo.sSelectedValues.name)
+    this.control.setValue(this.oControlInfo.sSelectedValues)
     this.filteredOptions = this.control.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),

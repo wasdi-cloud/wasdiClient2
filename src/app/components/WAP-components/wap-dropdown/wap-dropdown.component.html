@@ -1,6 +1,6 @@
 <p>wap-dropdown works!</p>
 <form class="example-form">
-    <input type="text" placeholder="{{oControlInfo.sSelectedValues.name}}" [formControl]="control"
+    <input type="text" placeholder="{{oControlInfo.sSelectedValues}}" [formControl]="control"
         [matAutocomplete]="auto" class="form-control">
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getSelectedOption($event)">
         <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
