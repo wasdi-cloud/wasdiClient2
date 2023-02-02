@@ -21,11 +21,7 @@ export class WapDisplayComponent implements OnInit {
   constructor(private m_oProcessorService: ProcessorService, private m_oProductService: ProductService) { }
 
   ngOnInit() {
-    console.log(this.wapData);
-    console.log(this.renderAsStrings)
-
     this.m_aoViewElements = this.generateViewElements(this.wapData)
-    console.log(this.m_aoViewElements)
   }
 
   ngOnChanges() {
@@ -47,13 +43,11 @@ export class WapDisplayComponent implements OnInit {
   generateViewElements(oFormToGenerate) {
     let oFactory = new ViewElementFactory();
     let aoTabControls = oFactory.getTabElements(oFormToGenerate);
-    //console.log(aoTabControls)
     return aoTabControls;
   }
 
   //add asMessages as param
   checkParams() {
-    console.log("checking params")
     let bReturn: boolean = true;
 
     let asMessages: string[] = [];
@@ -66,10 +60,10 @@ export class WapDisplayComponent implements OnInit {
       if (oElement.required) {
         if (this.renderAsStrings) {
           let sStringValue = oElement.getStringValue();
-          console.log(`${oElement.type}: ${sStringValue}`)
           if (!sStringValue) {
             let sMessage = oElement.label + sRequiredString;
             asMessages.push(sMessage);
+            bReturn = false
           }
         } else {
           let oValue: any = oElement.getValue();
@@ -89,7 +83,6 @@ export class WapDisplayComponent implements OnInit {
         }
       }
     }
-    console.log(bReturn)
     return bReturn
   }
 
@@ -110,6 +103,20 @@ export class WapDisplayComponent implements OnInit {
         });
       })
     }
+  }
+
+  createParams() {
+    let oProcessorInput = {};
+    for (let iControls = 0; iControls < this.m_aoViewElements.length; iControls++) {
+      let oElement = this.m_aoViewElements[iControls];
+      //Save the value to the output JSON 
+      if (this.renderAsStrings && oElement.type !== 'numeric') {
+        oProcessorInput[oElement.paramName] = oElement.getStringValue()
+      } else {
+        oProcessorInput[oElement.paramName] = oElement.getValue();
+      }
+    }
+    return oProcessorInput;
   }
 
   /**
