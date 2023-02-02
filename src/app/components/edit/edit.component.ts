@@ -16,7 +16,7 @@ export class EditComponent implements OnInit {
   }
 
   activeWorkspace: Workspace = {} as Workspace;
-  productList: Product[] = [];
+  productList: Product[];
 
   ngOnInit(): void {
     this.activeWorkspace = this.oConstantsService.getActiveWorkspace();
