@@ -10,7 +10,6 @@ export class WapDateTimePickerComponent {
   @Output() inputtedDateChange = new EventEmitter<any>();
 
   getDate(event) {
-    console.log(event.value)
     this.inputtedDate = event.value; 
 
     this.inputtedDateChange.emit(this.inputtedDate); 
