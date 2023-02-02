@@ -13,6 +13,7 @@ export interface Help {
 }
 
 export interface UIResponse {
+  renderAsStrings: boolean,
   tabs: {
     name: string, 
     controls: {
@@ -43,7 +44,7 @@ export class ProcessorService {
    * @returns {*}
    */
   getProcessorsList() {
-    return this.oHttp.get(this.APIURL + this.m_sResource + "/getdeployed");
+    return this.oHttp.get<any>(this.APIURL + this.m_sResource + "/getdeployed");
   }
 
   /**
@@ -86,7 +87,7 @@ export class ProcessorService {
     let oActiveWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
     let sWorkspaceId: string;
     //Check that 
-    if (oActiveWorkspace.workspaceId) {
+    if (oActiveWorkspace.workspaceId !== null || oActiveWorkspace.workspaceId !== undefined) {
       sWorkspaceId = oActiveWorkspace.workspaceId;
     }
     else {

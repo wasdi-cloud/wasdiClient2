@@ -19,7 +19,7 @@ export class ProductService {
   };
 
   getProductLightListByWorkspace(sWorkspaceId: string) {
-    return this.oHttp.get(this.APIURL + '/product/bywslight?workspace=' + sWorkspaceId);
+    return this.oHttp.get<Product[]>(this.APIURL + '/product/bywslight?workspace=' + sWorkspaceId);
   };
 
   deleteProductFromWorkspace(sProductName: string, sWorkspaceId: string, bDeleteFile: boolean, bDeleteLayer: boolean) {
