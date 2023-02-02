@@ -46,7 +46,7 @@ export class WorkspaceService {
 
     let sRestPath = '/ws/create';
 
-    if (sName != "") {
+    if (sName !== "") {
       sRestPath = sRestPath + "?name=" + sName;
     }
 

@@ -6,7 +6,7 @@
         #f="ngForm" (ngSubmit)="f.form && runApplication()">
         <input type="text" name="newWorkspaceName" id="" class="form-control"
             placeholder="{{'WAP.WAP_CREATE_WORKSPACE' | translate}}" [(ngModel)]="workspaceForm.sNewWorkspaceName">
-        <select class="form-select" name="existingWorkspace" [(ngModel)]="workspaceForm.sExistingWorkspace">
+        <select class="form-select" name="existingWorkspace" [(ngModel)]="workspaceForm.sExistingWorkspace" (change)="getSelectedWorkspaceId($event)">
             <option value="null" disabled="true" [selected]="true">{{'WAP.WAP_SELECT_WORKSPACE' | translate}}</option>
             <option value="" *ngFor="let oWorkspace of m_aoExistingWorkspaces" value="{{oWorkspace.workspaceName}}">
                 {{oWorkspace.workspaceName}}</option>
@@ -59,7 +59,7 @@
     </div>
     <div class="control-panel col-4">
         <app-wap-display *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' "
-            [wapData]="oTab" [renderAsStrings]="m_bRenderAsStrings"></app-wap-display>
+            [wapData]="oTab" [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
 
         <!-- PROCESSOR HELP TAB -->
         <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import {
   AUTO_STYLE,
   animate,
@@ -48,9 +48,9 @@ export interface application {
 })
 export class AppUiComponent implements OnInit {
   @ViewChild(WapDirective, { static: true }) appWap!: WapDirective;
-  @ViewChild(WapDisplayComponent) wapDisplayComponent: WapDisplayComponent;
+  @ViewChildren(WapDisplayComponent) wapDisplayComponent: QueryList<WapDisplayComponent>;
   //Processor Information
-  processorName: string = this.oConstantsService.getSelectedApplication();
+  processorName: string = this.m_oConstantsService.getSelectedApplication();
   processorInformation: any = {} as application;
 
   workspaceForm: any = {
@@ -73,6 +73,7 @@ export class AppUiComponent implements OnInit {
   //Flag to know if all inputs must be rendered as strings or as objects
   m_bRenderAsStrings: boolean = false;
 
+  //Array of View Element Objects
   m_aoViewElements: {}[] = [];
 
   //Array of names for the Tabs
@@ -85,7 +86,7 @@ export class AppUiComponent implements OnInit {
   m_aoExistingWorkspaces: Workspace[] = [];
 
   //Selected Workspace Name: 
-  m_sSelectedWorkspace: Workspace | undefined;
+  m_oSelectedWorkspace: Workspace | null | undefined = null;
 
 
   ngOnInit(): void {
@@ -96,7 +97,7 @@ export class AppUiComponent implements OnInit {
     }
     else if (this.oActivatedRoute.snapshot.params['processorName']) {
       this.processorName = this.oActivatedRoute.snapshot.params['processorName'];
-      this.oConstantsService.setSelectedApplication(this.processorName);
+      this.m_oConstantsService.setSelectedApplication(this.processorName);
       this.getProcessorDetails(this.processorName);
       this.getProcessorUI(this.processorName);
     }
@@ -105,14 +106,13 @@ export class AppUiComponent implements OnInit {
     }
   }
 
-  constructor(private oActivatedRoute: ActivatedRoute, private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router, public oViewContainerRef: ViewContainerRef, private oWorkspaceService: WorkspaceService) { }
+  constructor(private oActivatedRoute: ActivatedRoute, private m_oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router, public oViewContainerRef: ViewContainerRef, private oWorkspaceService: WorkspaceService) { }
 
   /**
    * Retrieve Processor UI from WASDI server
    */
   getProcessorUI(sApplicationName: string) {
     this.oProcessorService.getProcessorUI(sApplicationName).subscribe(oResponse => {
-      console.log(oResponse)
       for (let iTabs = 0; iTabs < oResponse.tabs.length; iTabs++) {
         let oTab = oResponse.tabs[iTabs];
 
@@ -127,7 +127,6 @@ export class AppUiComponent implements OnInit {
           this.m_bRenderAsStrings = oResponse.renderAsStrings
         }
       }
-      console.log(this.m_bRenderAsStrings);
     })
   }
 
@@ -166,6 +165,7 @@ export class AppUiComponent implements OnInit {
       this.processorHistory = response
     })
   }
+
   /**
    * Get JSON parameters from the UI 
    */
@@ -179,7 +179,6 @@ export class AppUiComponent implements OnInit {
   /**
    * Get Processor details from server
    */
-
   getProcessorDetails(processorName: string) {
     return this.oProcessorService.getMarketplaceDetail(processorName).subscribe(response => {
       this.processorInformation = response;
@@ -187,26 +186,85 @@ export class AppUiComponent implements OnInit {
   }
 
   /**
-   * Run Application => IMPORTANT: PLACEHOLDER
+   * Run Application in either Selected Workspace or New Workspace
    */
   runApplication() {
+    console.log("run application")
+
+    let bCheck: boolean = this.checkParams();
+
+    if (!bCheck) {
+      console.log("Missing Inputs");
+      return;
+    }
+
     if (this.workspaceForm.sNewWorkspaceName && this.workspaceForm.sExistingWorkspace) {
       console.log("Either select workspace or create new one");
       return
     }
-    if (this.workspaceForm.sNewWorkspaceName) {
-      this.createWorkspace();
+    // let asMessages = [];
+    let oProcessorInput = this.createParams();
+    let oController = this;
+
+    let sApplicationName: string = this.m_oConstantsService.getSelectedApplication();
+
+    if (this.m_oSelectedWorkspace === null) {
+      const { sNewWorkspaceName, sExistingWorkspace } = this.workspaceForm;
+      let sWorkspaceName: string;
+      let sUserProvidedWorkspaceName: string = this.workspaceForm.sNewWorkspaceName;
+      if (sUserProvidedWorkspaceName) {
+        sWorkspaceName = this.workspaceForm.sNewWorkspaceName;
+      } else {
+        let oToday = new Date();
+        let sToday = oToday.toISOString();
+
+        sWorkspaceName = sApplicationName + "_" + sToday;
+      }
+      //ERROR MESSAGES: 
+      // let sOpenError = this.m_oTranslate.instant("MSG_MKT_WS_OPEN_ERROR");
+      // let sCreateError = this.m_oTranslate.instant("MSG_MKT_WS_CREATE_ERROR");
+
+      //Create a new Workspace
+      this.oWorkspaceService.createWorkspace(sWorkspaceName).subscribe(oResponse => {
+        let sWorkspaceId = oResponse.stringValue;
+
+        if (sWorkspaceId === null) {
+          console.log("error");
+          return;
+        }
+        this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(oResponse => {
+          if (oResponse === null || oResponse === undefined) {
+            console.log("error");
+          }
+          this.executeProcessorInWorkspace(oController, sApplicationName, oProcessorInput, oResponse);
+        })
+      })
+    } else {
+      this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, this.m_oSelectedWorkspace);
     }
-    if (this.workspaceForm.sExistingWorkspace) {
-      this.openWorkspace();
-    }
+  }
+
+  /**
+   * Executes the processor in the given workspace
+   * @param oController 
+   * @param sApplicationName 
+   * @param oProcessorInput 
+   * @param oWorkspace 
+   */
+  executeProcessorInWorkspace(oController, sApplicationName: string, oProcessorInput, oWorkspace) {
+    oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
+    oController.oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput)).subscribe(oResponse => {
+      if (oResponse) {
+        this.oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
+      }
+    })
   }
 
   /**
    * Get user's workspaces
    */
   fetchWorkspaces() {
-    let oUser: User = this.oConstantsService.getUser();
+    let oUser: User = this.m_oConstantsService.getUser();
     if (oUser !== {} as User) {
       this.oWorkspaceService.getWorkspacesInfoListByUser().subscribe(oResponse => {
         this.m_aoExistingWorkspaces = oResponse;
@@ -214,78 +272,41 @@ export class AppUiComponent implements OnInit {
     }
   }
 
-  /**
-   * Create a new workspace
-   */
-  createWorkspace() {
-    const { sNewWorkspaceName, sExistingWorkspace } = this.workspaceForm;
-    let sWorkspaceName = this.workspaceForm.sNewWorkspaceName;
-    this.oWorkspaceService.createWorkspace(sWorkspaceName).subscribe(oResponse => {
-      let sWorkspaceId: string | null = oResponse.stringValue;
-      if (sWorkspaceId !== null) {
-        this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(oResponse => {
-          this.oConstantsService.setActiveWorkspace(oResponse);
-          this.oRouter.navigateByUrl(`edit/${oResponse.workspaceId}`)
-        })
-      }
-    })
-  }
 
   getSelectedWorkspaceId(event) {
-    this.m_sSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === event.target.value);
+    this.m_oSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === event.target.value);
 
-    console.log(this.m_sSelectedWorkspace)
-    if(this.m_sSelectedWorkspace?.workspaceId === undefined) {
-      return 
+    if (this.m_oSelectedWorkspace?.workspaceId === undefined) {
+      return
     }
-    return this.m_sSelectedWorkspace.workspaceId; 
+    return this.m_oSelectedWorkspace.workspaceId;
   }
 
-  /**
-   * Open existing workspace
-   */
-  openWorkspace() {
-    const { sNewWorkspaceName, sExistingWorkspace } = this.workspaceForm;
-    let sWorkspaceName = this.workspaceForm.sExistingWorkspace;
-    let oSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === sWorkspaceName);
+  checkParams() {
+    let bIsValid: boolean = true;
 
-    if (oSelectedWorkspace) {
-      this.oWorkspaceService.getWorkspaceEditorViewModel(oSelectedWorkspace.workspaceId)?.subscribe(oResponse => {
-        this.oConstantsService.setActiveWorkspace(oResponse);
-        this.oRouter.navigateByUrl(`edit/${oResponse.workspaceId}`)
-      })
+    for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
+      if (!this.wapDisplayComponent.get(iTabs)?.checkParams()) {
+        bIsValid = false;
+      }
     }
+    return bIsValid;
   }
 
-  /**
-   * 
-   */
-  // createParams() {
-  //   // Output initialization
-  //   let oProcessorInput: any = {};
+  createParams() {
+    let oProcessorInput = {};
+    for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
+      let oParamsObj = this.wapDisplayComponent.get(iTabs)?.createParams();
 
-  //   // For each tab
-  //   for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
-  //     // Get the name of the tab
-  //     let sTab = this.m_aoTabs[iTabs];
+      if (oParamsObj !== undefined) {
+        Object.keys(oParamsObj).forEach(key => {
+          oProcessorInput[key] = oParamsObj?.[key]
+        });
+      }
 
-  //     // For all the view elements of the tab
-  //     for (let iControls = 0; iControls < this.m_aoViewElements[sTab].length; iControls++) {
-  //       // Take the element
-  //       let oElement = this.m_aoViewElements[sTab][iControls];
-
-  //       // Save the value to the output json
-  //       if (this.m_bRenderAsStrings && oElement.type != 'numeric') {
-  //         oProcessorInput[oElement.paramName] = oElement.getStringValue();
-  //       } else {
-  //         oProcessorInput[oElement.paramName] = oElement.getValue();
-  //       }
-
-  //     }
-  //   }
-  //   console.log(oProcessorInput)
-  //   return oProcessorInput
-  // }
+    }
+    return oProcessorInput;
+  }
 
   toggleCollapse() {
     this.isCollapsed = !this.isCollapsed;
@@ -296,7 +317,4 @@ export class AppUiComponent implements OnInit {
     this.oRouter.navigateByUrl(`${this.processorName}/appDetails`)
   }
 
-  checkParams() {
-    this.wapDisplayComponent.checkParams();
-  }
 }

@@ -92,7 +92,7 @@ export class ViewElementFactory {
             if (oControl.max) {
                 oViewElement.m_iMax = oControl.max;
             }
-            if (oControl.default) {
+            if (oControl.default >= 0) {
                 oViewElement.m_iValue = oControl.default;
             }
         } else if (oControl.type === "hidden") {
