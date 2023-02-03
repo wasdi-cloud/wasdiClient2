@@ -1,0 +1,17 @@
+a:link {
+    font-weight: bold;
+}
+
+a:hover {
+    background-color: #00903759;
+    border: 3px, solid, #009036;
+    border-radius: 4px;
+}
+
+.brand-logo {
+    width: 48px;
+}
+
+.navbar {
+    background-image: linear-gradient(180deg, #43516a8d, lightgray);
+}
