@@ -1,6 +1,8 @@
+import { Band } from "./band.model"
+
 export interface Product {
     bandsGroups: {
-        bands:[],
+        bands?:Band[],
         nodeName: string 
     }, 
     bbox: string, 

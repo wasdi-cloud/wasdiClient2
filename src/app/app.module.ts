@@ -36,6 +36,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule} from '@angular/material/core'
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 //Workspaces Page Components
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
@@ -77,6 +78,7 @@ import { WapTableComponent } from './components/WAP-components/wap-table/wap-tab
 import { WapTextboxComponent } from './components/WAP-components/wap-textbox/wap-textbox.component';
 import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap-tooltip.component';
 import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
+import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -118,7 +120,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WapTableComponent,
     WapTextboxComponent,
     WapTooltipComponent,
-    WapDisplayComponent
+    WapDisplayComponent,
+    EditToolbarComponent
   ],
   imports: [
     AppRoutingModule,
@@ -147,7 +150,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatAutocompleteModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule, 
+    MatCheckboxModule
   ],
   providers: [
     AuthService,
