@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as L from 'leaflet';
 
 @Component({
@@ -7,6 +7,8 @@ import * as L from 'leaflet';
   styleUrls: ['./wap-select-area.component.css']
 })
 export class WapSelectAreaComponent implements OnInit {
+  @Input() oMapInput; 
+  @Output() oMapInputChange = new EventEmitter; 
   oMap: any;
 
   ngOnInit() {
