@@ -1,9 +1,9 @@
-.collapsible {
-    overflow: hidden;
+div.toolbar-container {
+    background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0))
 }
 
-div.contact-container {
-    border-left: 1px solid white;
+.collapsible {
+    overflow: hidden;
 }
 
 div.controls-container {
