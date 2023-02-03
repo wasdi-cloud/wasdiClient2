@@ -1,6 +1,7 @@
 div.products-container {
   height: 50vh; 
   overflow-y: scroll;
+  overflow-x: hidden;
   width: 35vw; 
 
 }
@@ -15,7 +16,7 @@ h3.products-header {
   display: none;
 }
 .tree-nested-node {
-  padding-left: 30px;
+  padding-left: 1rem;
 }
 
 mat-tree {
