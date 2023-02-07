@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -131,6 +132,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     HttpClientModule,
     FormsModule,
     LeafletModule,
+    LeafletDrawModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
