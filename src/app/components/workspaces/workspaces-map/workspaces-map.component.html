@@ -1,1 +1,4 @@
-<div class="map h-100 p-0" #map id="map" style="width: 100%;"></div>
+<div class="map h-100 p-0" leaflet leafletDraw style="width: 100%" [leafletOptions]="options"
+    [leafletDrawOptions]="drawOptions" (leafletDrawCreated)="onDrawCreated($event)">
+    <div [leafletLayer]="drawnItems"></div>
+</div>
