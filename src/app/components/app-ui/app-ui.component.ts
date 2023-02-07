@@ -277,7 +277,7 @@ export class AppUiComponent implements OnInit {
     this.m_oSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === event.target.value);
 
     if (this.m_oSelectedWorkspace?.workspaceId === undefined) {
-      return
+      return false
     }
     return this.m_oSelectedWorkspace.workspaceId;
   }
