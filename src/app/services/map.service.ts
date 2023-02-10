@@ -1,21 +1,39 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConstantsService } from './constants.service';
 import Geocoder from 'leaflet-control-geocoder';
 import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
+import { latLng, Map, tileLayer, featureGroup } from 'leaflet';
 import * as L from "leaflet";
 
 @Injectable({
   providedIn: 'root'
 })
-export class MapService implements OnInit {
+export class MapService {
 
-  constructor(private m_oRouter: Router, private m_oConstantsService: ConstantsService) { }
 
-  APIURL = this.m_oConstantsService.getAPIURL();
+  constructor(private m_oRouter: Router, private m_oConstantsService: ConstantsService) {
+    this.initTilelayer();
+    this.m_oLayersControl = {
+      baseLayers: {
+        'Standard': this.m_oOSMBasic,
+        "OpenTopoMap": this.m_oOpenTopoMap,
+        "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
+        "EsriWorldImagery": this.m_oEsriWorldImagery,
+        "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
+      }
+    }
+    console.log(this.m_oLayersControl)
+    this.m_oOptions = {
+      layers: [
+        this.m_oOSMBasic
+      ],
+      zoom: 3,
+      center: latLng(0, 0),
+      edit: { featureGroup: this.m_oDrawnItems }
+    }
 
-  m_oDrawnItems = null;
-
+  }
   m_oOSMBasic: any;
   m_oOpenTopoMap: any;
   m_oEsriWorldStreetMap: any;
@@ -24,29 +42,30 @@ export class MapService implements OnInit {
 
   m_oLayersControl: any;
 
+  APIURL = this.m_oConstantsService.getAPIURL();
+
+  m_oDrawnItems: L.FeatureGroup = new L.FeatureGroup();
+
   m_oWasdiMap: any = null;
   //Actual Base Layer
   m_oActiveBaseLayer: any;
 
-  ngOnInit() {
-    //Initalize the tile layer
-    this.initTilelayer();
-    //Establish layers control 
-    this.m_oLayersControl = L.control.layers(
-      {
-        "Standard": this.m_oOSMBasic,
-        "OpenTopoMap": this.m_oOpenTopoMap,
-        "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
-        "EsriWorldImagery": this.m_oEsriWorldImagery,
-        "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
-      },
-      {},
-      {
-        'position': 'bottomright'
-      }
-    );
-    //Establish actual base layer
-    this.m_oActiveBaseLayer = this.m_oOSMBasic;
+  m_oOptions = {};
+  m_oDrawOptions: any = {
+    position: 'topleft',
+    draw: {
+      circle: true,
+      circleMarker: false,
+      marker: false,
+      polyline: false,
+      polygon: false,
+      rectangle: { showArea: false }
+    },
+    edit: {
+      featureGroup: new L.FeatureGroup,
+      edit: false,
+      remove: true
+    }
   }
   /**
    * Get the Map object
@@ -66,7 +85,7 @@ export class MapService implements OnInit {
       // this map option disables world wrapping. by default, it is false.
       //continuousWorld: false,
       // this option disables loading tiles outside of the world bounds.
-      noWrap: true
+      noWrap: false
     });
 
     this.m_oOpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
@@ -107,113 +126,115 @@ export class MapService implements OnInit {
    */
   initMap(sMapDiv) {
     let oMap = L.map(sMapDiv, {
-      keyboard: false,
-      layers: [this.m_oOSMBasic],
-      zoomControl: false
-    })
-    //L.control.mousePosition().addTo(oMap);
+      center: [0, 0],
+      zoom: 3
+    });
 
-    //scale control
-    L.control.scale({
-      position: "bottomright",
-      imperial: false
-    }).addTo(oMap);
+    this.m_oOSMBasic.addTo(oMap)
+
+    // L.control.scale({
+    //   position: "bottomright",
+    //   imperial: false
+    // }).addTo(oMap);
 
     //layers control
-    this.m_oLayersControl.addTo(oMap);
+    // this.m_oLayersControl.addTo(oMap);
 
     // center map
-    let southWest = L.latLng(0, 0),
-      northEast = L.latLng(0, 0),
-      oBoundaries = L.latLngBounds(southWest, northEast);
+    // let southWest = L.latLng(0, 0);
+    // let northEast = L.latLng(0, 0);
 
-    oMap.fitBounds(oBoundaries);
-    oMap.setZoom(3);
+    // let oBoundaries = L.latLngBounds(southWest, northEast);
+    // console.log(oBoundaries)
+
+    // oMap.fitBounds(oBoundaries);
+    // oMap.setZoom(3);
 
     // let oActiveBaseLayer = this.m_oActiveBaseLayer;
 
     //add event on base change
-    oMap.on('baselayerchange', function (e) {
-      // console.log(e);
-      //e.layer.bringToBack();
-      // oActiveBaseLayer = e;
-    });
+    // oMap.on('baselayerchange', function (e) {
+    //   // console.log(e);
+    //   // e.layer.bringToBack();
+    //   oActiveBaseLayer = e;
+    // });
 
     return oMap;
   }
 
-  initMapSingleton(sMapDiv) {
-    let oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution:
-        '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-      maxZoom: 18,
-      // this map option disables world wrapping. by default, it is false.
-      //continuousWorld: false,
-      // this option disables loading tiles outside of the world bounds.
-      //noWrap: true
-    });
+  // initMapSingleton(sMapDiv) {
+  //   let oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //     attribution:
+  //       '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+  //     maxZoom: 18,
+  //     // this map option disables world wrapping. by default, it is false.
+  //     //continuousWorld: false,
+  //     // this option disables loading tiles outside of the world bounds.
+  //     //noWrap: true
+  //   });
 
-    let oMap = L.map(sMapDiv, {
-      zoomControl: false,
-      layers: [oOSMBasic],
-      keyboard: false
-    });
+  //   let oMap = L.map(sMapDiv, {
+  //     zoomControl: false,
+  //     layers: [oOSMBasic],
+  //     keyboard: false
+  //   });
 
-    // coordinates in map find this plugin in lib folder
-    //L.control.mousePosition().addTo(oMap);
+  //   // coordinates in map find this plugin in lib folder
+  //   //L.control.mousePosition().addTo(oMap);
 
-    //scale control
-    L.control.scale({
-      position: "bottomright",
-      imperial: false
-    }).addTo(oMap);
+  //   //scale control
+  //   L.control.scale({
+  //     position: "bottomright",
+  //     imperial: false
+  //   }).addTo(oMap);
 
-    //layers control
-    let oLayersControl = L.control.layers(
-      {
-        "Standard": this.m_oOSMBasic,
-        "OpenTopoMap": this.m_oOpenTopoMap,
-        "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
-        "EsriWorldImagery": this.m_oEsriWorldImagery,
-        "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
-      },
-      {},
-      {
-        'position': 'bottomright'
-      }
-    );
-    oLayersControl.addTo(oMap);
+  //   //layers control
+  //   let oLayersControl = L.control.layers(
+  //     {
+  //       "Standard": this.m_oOSMBasic,
+  //       "OpenTopoMap": this.m_oOpenTopoMap,
+  //       "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
+  //       "EsriWorldImagery": this.m_oEsriWorldImagery,
+  //       "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
+  //     },
+  //     {},
+  //     {
+  //       'position': 'bottomright'
+  //     }
+  //   );
+  //   oLayersControl.addTo(oMap);
 
-    // center map
-    let southWest = L.latLng(0, 0),
-      northEast = L.latLng(0, 0),
-      oBoundaries = L.latLngBounds(southWest, northEast);
+  //   // center map
+  //   let southWest = L.latLng(0, 0),
+  //     northEast = L.latLng(0, 0),
+  //     oBoundaries = L.latLngBounds(southWest, northEast);
 
-    oMap.fitBounds(oBoundaries);
-    oMap.setZoom(3);
+  //   oMap.fitBounds(oBoundaries);
+  //   oMap.setZoom(3);
 
-    // let oActiveBaseLayer = oOSMBasic;
+  //   // let oActiveBaseLayer = oOSMBasic;
 
-    //add event on base change
-    oMap.on('baselayerchange', function (e) {
-      // console.log(e);
-      //e.layer.bringToBack();
-      // oActiveBaseLayer = e;
-    });
+  //   //add event on base change
+  //   oMap.on('baselayerchange', function (e) {
+  //     // console.log(e);
+  //     //e.layer.bringToBack();
+  //     // oActiveBaseLayer = e;
+  //   });
 
-    return oMap;
-  }
+  //   return oMap;
+  // }
+
+
   initMapWithDrawSearch(sMapDiv) {
     let oController = this;
 
     //Init Standard Map
-    this.initMap(sMapDiv);
+    let oMap = this.initMap(sMapDiv);
 
-    let aoDrawnItems = new L.FeatureGroup();
-    this.m_oDrawnItems = aoDrawnItems;
-    this.m_oWasdiMap.addLayer(aoDrawnItems);
+    let aoDrawnItems: L.FeatureGroup = featureGroup();
+    //this.m_oDrawnItems.addLayer(aoDrawnItems);
 
-    let oDrawOptions = {
+    let oDrawOptions: any = {
       position: 'topright',
       draw: {
         circle: false,
@@ -230,13 +251,11 @@ export class MapService implements OnInit {
       }
     }
 
-    // let oDrawControl = new L.Control.Draw(oDrawOptions)
-    // this.m_oWasdiMap.addControl(oDrawControl)
+    let oDrawControl = new L.Control.Draw(oDrawOptions)
+    console.log(oDrawControl)
+    oMap.addControl(oDrawControl)
 
-    /**
-     * Need to add custom control for adding bounding box manually
-     * line 279 in old client
-     */
+    return oMap
   }
 
   mapDrawEventDeletePolygon(oMap, oFunction, oController) {
@@ -250,12 +269,27 @@ export class MapService implements OnInit {
     return true;
   }
 
+  onDrawCreated(e: any) {
+    const { layerType, layer } = e;
+
+    console.log(layerType)
+    console.log(this.m_oDrawnItems)
+    if (layerType === "rectangle") {
+      const rectangleCoordinates = layer._bounds
+
+      let selectedCoordinate = new L.LatLngBounds(rectangleCoordinates._northEast, rectangleCoordinates._southWest)
+      let m_sSelectedBBox = selectedCoordinate.toBBoxString();
+      console.log(m_sSelectedBBox);
+    }
+    this.m_oDrawnItems.addLayer(layer);
+  }
+
   /**
    * Init map Editor
    * @param sMapDiv
    * @returns {boolean}
    */
-  initMapEdiitor(sMapDiv) {
+  initMapEditor(sMapDiv) {
     if (!sMapDiv) {
       return false;
     }
@@ -394,7 +428,7 @@ export class MapService implements OnInit {
     */
   addAllWorkspaceRectanglesOnMap(aoProducts, sColor) {
     if (!aoProducts) {
-      return;
+      return false;
     }
     if (!sColor) {
       sColor = "#ff7800";
@@ -409,6 +443,7 @@ export class MapService implements OnInit {
     catch (e) {
       console.log(e);
     }
+    return true;
   }
 
   isAlreadyDrawRectangle(aoProductBbox) {
@@ -491,8 +526,8 @@ export class MapService implements OnInit {
         console.log("on-mouse-leave-rectangle")
         //$rootScope.$broadcast('on-mouse-leave-rectangle', { rectangle: oRectangle });
       });
-      return oRectangle;
     }
+    return oRectangle;
   }
   /**
   * Add a rectangle shape on the map
@@ -584,6 +619,7 @@ export class MapService implements OnInit {
     catch (e) {
       console.log(e);
     }
+    return true;
   };
   /**
    * flyOnRectangle
@@ -616,6 +652,7 @@ export class MapService implements OnInit {
     catch (e) {
       console.log(e);
     }
+    return true;
   };
 
   /**
@@ -695,6 +732,7 @@ export class MapService implements OnInit {
     catch (e) {
       console.log(e);
     }
+    return true;
   };
 
   /**
