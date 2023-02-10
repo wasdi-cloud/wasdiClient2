@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -79,6 +80,7 @@ import { WapTextboxComponent } from './components/WAP-components/wap-textbox/wap
 import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap-tooltip.component';
 import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
 import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
+import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -121,7 +123,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WapTextboxComponent,
     WapTooltipComponent,
     WapDisplayComponent,
-    EditToolbarComponent
+    EditToolbarComponent,
+    PlanMapComponent
   ],
   imports: [
     AppRoutingModule,
@@ -131,6 +134,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     HttpClientModule,
     FormsModule,
     LeafletModule,
+    LeafletDrawModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

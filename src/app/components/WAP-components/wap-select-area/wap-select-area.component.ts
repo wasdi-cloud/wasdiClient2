@@ -1,23 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import * as L from 'leaflet';
+import { MapService } from 'src/app/services/map.service';
 
 @Component({
   selector: 'app-wap-select-area',
   templateUrl: './wap-select-area.component.html',
   styleUrls: ['./wap-select-area.component.css']
 })
-export class WapSelectAreaComponent implements OnInit {
-  @Input() oMapInput; 
-  @Output() oMapInputChange = new EventEmitter; 
-  oMap: any;
+export class WapSelectAreaComponent {
+  @Input() oMapInput;
+  @Output() oMapInputChange = new EventEmitter;
 
-  ngOnInit() {
-    this.oMap = L.map('map').setView([0, 0], 3);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.oMap);
-
-
-
-  }
+  constructor(public m_oMapService: MapService) { }
 }
