@@ -57,7 +57,7 @@
             </li>
         </ul>
     </div>
-    <div class="control-panel col-4">
+    <div class="control-panel overflow-scroll col-4">
         <app-wap-display *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' "
             [wapData]="oTab" [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
 
