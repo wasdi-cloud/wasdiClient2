@@ -7,5 +7,5 @@ import { MapService } from 'src/app/services/map.service';
   styleUrls: ['./plan-map.component.css']
 })
 export class PlanMapComponent {
-  constructor(private m_oMapService: MapService) { }
+  constructor(public m_oMapService: MapService) { }
 }
