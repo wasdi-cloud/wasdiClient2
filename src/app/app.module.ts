@@ -80,6 +80,7 @@ import { WapTextboxComponent } from './components/WAP-components/wap-textbox/wap
 import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap-tooltip.component';
 import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
 import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
+import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -122,7 +123,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WapTextboxComponent,
     WapTooltipComponent,
     WapDisplayComponent,
-    EditToolbarComponent
+    EditToolbarComponent,
+    PlanMapComponent
   ],
   imports: [
     AppRoutingModule,
