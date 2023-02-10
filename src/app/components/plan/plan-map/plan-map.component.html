@@ -1,1 +1,9 @@
-<p>plan-map works!</p>
+
+<div class="map-frame h-50">
+    <div leaflet leafletDraw class="h-100 w-50" id="map"            
+        [leafletOptions]="m_oMapService.m_oOptions"
+        [leafletLayersControl]="m_oMapService.m_oLayersControl" [leafletDrawOptions]="m_oMapService.m_oDrawOptions"
+        (leafletDrawCreated)="m_oMapService.onDrawCreated($event)">
+        <div [leafletLayer]="m_oMapService.m_oDrawnItems"></div>
+    </div>
+</div>
