@@ -34,23 +34,34 @@ export class MapService {
     }
 
   }
+
+  APIURL = this.m_oConstantsService.getAPIURL();
+  //Layers
   m_oOSMBasic: any;
   m_oOpenTopoMap: any;
   m_oEsriWorldStreetMap: any;
   m_oEsriWorldImagery: any;
   m_oNASAGIBSViirsEarthAtNight2012: any;
 
-  m_oLayersControl: any;
+  //Is the component toggle-albe to 3D map? 
+  m_bIsToggle: boolean;
 
-  APIURL = this.m_oConstantsService.getAPIURL();
+  //declare object for Layers Control options
+  m_oLayersControl: any;
 
   m_oDrawnItems: L.FeatureGroup = new L.FeatureGroup();
 
   m_oWasdiMap: any = null;
+
   //Actual Base Layer
   m_oActiveBaseLayer: any;
 
-  m_oOptions = {};
+  //Default Leaflet options
+  m_oOptions: any;
+
+  GeocoderControl = new Geocoder();
+
+  //Init options for leaflet-draw
   m_oDrawOptions: any = {
     position: 'topleft',
     draw: {
@@ -114,54 +125,58 @@ export class MapService {
    * Initalize WASDI Map
    */
   initWasdiMap(sMapDiv) {
-    if (this.m_oWasdiMap !== null) {
-      this.initTilelayer();
-    }
-    this.m_oWasdiMap = this.initMap(sMapDiv);
+    // if (this.m_oWasdiMap !== null) {
+    //   this.initTilelayer();
+    // }
+    // this.m_oWasdiMap = this.initMap(sMapDiv);
   }
 
   /**
    * Init the Map
    * @param sMapDiv 
    */
-  initMap(sMapDiv) {
-    let oMap = L.map(sMapDiv, {
-      center: [0, 0],
-      zoom: 3
-    });
+  // initMap(sMapDiv) {
+  //   let oMap = L.map(sMapDiv, {
+  //     center: [0, 0],
+  //     zoom: 3
+  //   });
 
-    this.m_oOSMBasic.addTo(oMap)
+  //   this.m_oOSMBasic.addTo(oMap)
 
-    // L.control.scale({
-    //   position: "bottomright",
-    //   imperial: false
-    // }).addTo(oMap);
+  // L.control.scale({
+  //   position: "bottomright",
+  //   imperial: false
+  // }).addTo(oMap);
 
-    //layers control
-    // this.m_oLayersControl.addTo(oMap);
+  //layers control
+  // this.m_oLayersControl.addTo(oMap);
 
-    // center map
-    // let southWest = L.latLng(0, 0);
-    // let northEast = L.latLng(0, 0);
+  // center map
+  // let southWest = L.latLng(0, 0);
+  // let northEast = L.latLng(0, 0);
 
-    // let oBoundaries = L.latLngBounds(southWest, northEast);
-    // console.log(oBoundaries)
+  // let oBoundaries = L.latLngBounds(southWest, northEast);
+  // console.log(oBoundaries)
 
-    // oMap.fitBounds(oBoundaries);
-    // oMap.setZoom(3);
+  // oMap.fitBounds(oBoundaries);
+  // oMap.setZoom(3);
 
-    // let oActiveBaseLayer = this.m_oActiveBaseLayer;
+  // let oActiveBaseLayer = this.m_oActiveBaseLayer;
 
-    //add event on base change
-    // oMap.on('baselayerchange', function (e) {
-    //   // console.log(e);
-    //   // e.layer.bringToBack();
-    //   oActiveBaseLayer = e;
-    // });
+  //add event on base change
+  // oMap.on('baselayerchange', function (e) {
+  //   // console.log(e);
+  //   // e.layer.bringToBack();
+  //   oActiveBaseLayer = e;
+  // });
 
-    return oMap;
-  }
+  //   return oMap;
+  // }
 
+  /**
+   * Init the Map Singleton
+   * @param sMapDiv 
+   */
   // initMapSingleton(sMapDiv) {
   //   let oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   //     attribution:
@@ -224,53 +239,60 @@ export class MapService {
   //   return oMap;
   // }
 
+  /**
+   * Init the Map with the drawing capabilities and search
+   * @param sMapDiv 
+   */
+  // initMapWithDrawSearch(sMapDiv) {
+  //   let oController = this;
 
-  initMapWithDrawSearch(sMapDiv) {
-    let oController = this;
+  //   //Init Standard Map
+  //   let oMap = this.initMap(sMapDiv);
 
-    //Init Standard Map
-    let oMap = this.initMap(sMapDiv);
+  //   let aoDrawnItems: L.FeatureGroup = featureGroup();
+  //   //this.m_oDrawnItems.addLayer(aoDrawnItems);
 
-    let aoDrawnItems: L.FeatureGroup = featureGroup();
-    //this.m_oDrawnItems.addLayer(aoDrawnItems);
+  //   let oDrawOptions: any = {
+  //     position: 'topright',
+  //     draw: {
+  //       circle: false,
+  //       circleMarker: false,
+  //       marker: false,
+  //       polyline: false,
+  //       polygon: false,
+  //       rectangle: { showArea: false }
+  //     },
+  //     edit: {
+  //       featureGroup: aoDrawnItems,
+  //       edit: false,
+  //       remove: false
+  //     }
+  //   }
 
-    let oDrawOptions: any = {
-      position: 'topright',
-      draw: {
-        circle: false,
-        circleMarker: false,
-        marker: false,
-        polyline: false,
-        polygon: false,
-        rectangle: { showArea: false }
-      },
-      edit: {
-        featureGroup: aoDrawnItems,
-        edit: false,
-        remove: false
-      }
-    }
+  //   let oDrawControl = new L.Control.Draw(oDrawOptions)
+  //   console.log(oDrawControl)
+  //   oMap.addControl(oDrawControl)
 
-    let oDrawControl = new L.Control.Draw(oDrawOptions)
-    console.log(oDrawControl)
-    oMap.addControl(oDrawControl)
+  //   return oMap
+  // }
 
-    return oMap
-  }
+  // mapDrawEventDeletePolygon(oMap, oFunction, oController) {
+  //   if (!oFunction || !oMap || !oController) {
+  //     return false;
+  //   }
 
-  mapDrawEventDeletePolygon(oMap, oFunction, oController) {
-    if (!oFunction || !oMap || !oController) {
-      return false;
-    }
+  //   oMap.on(L.Draw.Event.DELETED, function (event) {
+  //     oFunction(oController);
+  //   });
+  //   return true;
+  // }
 
-    oMap.on(L.Draw.Event.DELETED, function (event) {
-      oFunction(oController);
-    });
-    return true;
-  }
-
-  onDrawCreated(e: any) {
-    const { layerType, layer } = e;
+  /**
+   * Handler function for drawing rectangles/polygons/etc on map
+   * @param event
+   */
+  onDrawCreated(event: any) {
+    const { layerType, layer } = event;
 
     console.log(layerType)
     console.log(this.m_oDrawnItems)
@@ -283,7 +305,6 @@ export class MapService {
     }
     this.m_oDrawnItems.addLayer(layer);
   }
-
   /**
    * Init map Editor
    * @param sMapDiv
@@ -296,7 +317,6 @@ export class MapService {
     this.initWasdiMap(sMapDiv)
     return true;
   }
-  GeocoderControl = new Geocoder();
 
 
   /**
@@ -304,10 +324,9 @@ export class MapService {
     * @param opt if present, the search bar is placed on the bottom right corner of the map.
     * @references https://github.com/perliedman/leaflet-control-geocoder
     */
-  initGeoSearchPluginForOpenStreetMap(opt) {
-    this.GeocoderControl.on({
+  initGeoSearchPluginForOpenStreetMap() {
+    this.GeocoderControl.options.position = "bottomright"; 
 
-    }).addTo(this.m_oWasdiMap);
   }
   /**
    * Clear Map 
