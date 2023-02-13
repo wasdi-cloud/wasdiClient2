@@ -24,7 +24,6 @@ export class MapService {
         "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
       }
     }
-    console.log(this.m_oLayersControl)
     this.m_oOptions = {
       layers: [
         this.m_oOSMBasic
@@ -74,7 +73,7 @@ export class MapService {
       rectangle: { showArea: false }
     },
     edit: {
-      featureGroup: this.m_oDrawnItems,
+      featureGroup: new L.FeatureGroup,
       edit: false,
       remove: true
     }
@@ -122,6 +121,14 @@ export class MapService {
       //tilematrixset: 'GoogleMapsCompatible_Level'
     });
   }
+
+  /**
+   * Set Drawn Items
+   */
+  setDrawnItems() {
+    this.m_oDrawnItems = new L.FeatureGroup;
+  }
+
   /**
    * Initalize WASDI Map
    */
