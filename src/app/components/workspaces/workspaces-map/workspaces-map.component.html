@@ -1,9 +1,9 @@
 <div class="map-frame h-100" >
-    <div leaflet leafletDraw class="h-100 w-100" id="map"            
-        [leafletOptions]="m_oMapService.m_oOptions"
-        [leafletLayersControl]="m_oMapService.m_oLayersControl" [leafletDrawOptions]="m_oMapService.m_oDrawOptions"
+    <div leaflet leafletDraw class="h-100 w-100" id="map" 
+        [leafletOptions]="mapOptions"
+        [leafletLayersControl]="layersControl" [leafletDrawOptions]="drawOptions"
         (leafletDrawCreated)="m_oMapService.onDrawCreated($event)"
         (leafletMapReady)="onMapReady($event)">
-        <div [leafletLayer]="m_oMapService.m_oDrawnItems"></div>
+        <div [leafletLayer]="drawnItems"></div>
     </div>
 </div>
