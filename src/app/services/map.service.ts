@@ -12,7 +12,8 @@ import * as L from "leaflet";
 export class MapService {
 
 
-  constructor(private m_oRouter: Router, private m_oConstantsService: ConstantsService) {
+  constructor(private m_oConstantsService: ConstantsService) {
+
     this.initTilelayer();
     this.m_oLayersControl = {
       baseLayers: {
@@ -73,7 +74,7 @@ export class MapService {
       rectangle: { showArea: false }
     },
     edit: {
-      featureGroup: new L.FeatureGroup,
+      featureGroup: this.m_oDrawnItems,
       edit: false,
       remove: true
     }
@@ -325,7 +326,7 @@ export class MapService {
     * @references https://github.com/perliedman/leaflet-control-geocoder
     */
   initGeoSearchPluginForOpenStreetMap() {
-    this.GeocoderControl.options.position = "bottomright"; 
+    this.GeocoderControl.options.position = "bottomright";
 
   }
   /**
