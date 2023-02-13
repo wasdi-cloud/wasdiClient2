@@ -2,7 +2,7 @@
     <div leaflet leafletDraw class="h-100 w-100" id="map" 
         [leafletOptions]="mapOptions"
         [leafletLayersControl]="layersControl" [leafletDrawOptions]="drawOptions"
-        (leafletDrawCreated)="m_oMapService.onDrawCreated($event)"
+        (leafletDrawCreated)="onDrawCreated($event)"
         (leafletMapReady)="onMapReady($event)">
         <div [leafletLayer]="drawnItems"></div>
     </div>

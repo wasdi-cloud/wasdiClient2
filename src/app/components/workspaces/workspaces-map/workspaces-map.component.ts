@@ -33,5 +33,9 @@ export class WorkspacesMapComponent implements OnInit {
     this.searchControl.setPosition('bottomleft')
     this.searchControl.addTo(map);
   }
+
+  onDrawCreated(event) {
+    console.log('drawn in controller')
+  }
 }
 
