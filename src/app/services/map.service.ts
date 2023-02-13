@@ -65,12 +65,12 @@ export class MapService {
   m_oDrawOptions: any = {
     position: 'topleft',
     draw: {
-      circle: true,
-      circleMarker: false,
+      circle: false,
+      circlemarker: false,
       marker: false,
       polyline: false,
       polygon: false,
-      rectangle: { showArea: false }
+      rectangle: { shapeOptions: { color: "#4AFF00" }, showArea: false }
     },
     edit: {
       featureGroup: new L.FeatureGroup,
