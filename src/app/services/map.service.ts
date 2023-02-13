@@ -13,17 +13,7 @@ export class MapService {
 
 
   constructor(private m_oConstantsService: ConstantsService) {
-
     this.initTilelayer();
-    this.m_oLayersControl = {
-      baseLayers: {
-        'Standard': this.m_oOSMBasic,
-        "OpenTopoMap": this.m_oOpenTopoMap,
-        "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
-        "EsriWorldImagery": this.m_oEsriWorldImagery,
-        "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
-      }
-    }
     this.m_oOptions = {
       layers: [
         this.m_oOSMBasic
@@ -120,6 +110,16 @@ export class MapService {
       //time: '',
       //tilematrixset: 'GoogleMapsCompatible_Level'
     });
+
+    this.m_oLayersControl = {
+      baseLayers: {
+        'Standard': this.m_oOSMBasic,
+        "OpenTopoMap": this.m_oOpenTopoMap,
+        "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
+        "EsriWorldImagery": this.m_oEsriWorldImagery,
+        "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
+      }
+    }
   }
 
   /**
