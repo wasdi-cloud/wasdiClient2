@@ -77,6 +77,11 @@
         "WAP_RUN_APP": "Run App",
         "WAP_MORE_INFO": "More Info"
     },
+    "WAP_COMPONENTS": {
+        "WAP_SELECT_AREA_BASE": "The selected area exceeds the limits imposed for the application:",
+        "WAP_SELECT_AREA_OVER_AREA": "<br> - The area is too big",
+        "WAP_SELECT_AREA_OVER_SIDE": "<br> - The larger side selected is too big"
+    },
     "MARKET": {
         "MARKET_SEARCH_APP": "Search Apps",
         "MARKET_NAME": "NAME",
