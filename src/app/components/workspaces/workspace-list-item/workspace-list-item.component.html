@@ -7,9 +7,9 @@
                 <p class="secondary-info text-muted p-0 m-0">{{workspace.ownerUserId}}</p>
             </div>
         </div>
-        <div class="button-panel d-flex flex-row gap-2">
-            <a class="btn btn-primary btn-rounded btn-sm" role="button" (click)="openWorkspace(workspace)">Open</a>
-            <a class="btn btn-primary btn-rounded btn-sm" role="button" (click)="deleteWorkspace(workspace.workspaceId)">Delete</a>
+        <div class="button-panel d-flex flex-row gap-2 align-items-center">
+            <button class="btn btn-primary btn-rounded btn-sm" role="button" (click)="openWorkspace(workspace)">Open</button>
+            <button class="btn btn-primary btn-rounded btn-sm" role="button" (click)="deleteWorkspace(workspace.workspaceId)">Delete</button>
         </div>
     </div>
 </li>
