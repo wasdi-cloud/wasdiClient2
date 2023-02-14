@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -6,23 +6,27 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './confirmation-dialog.component.html',
   styleUrls: ['./confirmation-dialog.component.css']
 })
-export class ConfirmationDialogComponent {
-  message: string = "Are you sure?";
-  confirmButtonText = "Yes";
-  cancelButtonText = "Cancel";
+export class ConfirmationDialogComponent implements OnInit {
+  title: string;
+  message: string;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any, private dialogRef: MatDialogRef<any>) {
-    if (data) {
-      this.message = data.message || this.message;
-      if (data.buttonText) {
-        this.confirmButtonText = data.buttonText.ok || this.confirmButtonText;
-        this.cancelButtonText = data.buttonText.cancel || this.cancelButtonText;
-      }
-    }
+  constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ConfirmationDialogModel) {
+      this.title = data.title;
+      this.message = data.message;
+     }
 
+  ngOnInit() { }
+
+  onConfirm(): void {
+    this.dialogRef.close(true)
   }
 
-  onConfirmClick(): void {
-    this.dialogRef.close(true); 
+  onDismiss(): void {
+    this.dialogRef.close(false);
   }
+}
+
+export class ConfirmationDialogModel {
+  constructor(public title: string, public message: string) { }
 }

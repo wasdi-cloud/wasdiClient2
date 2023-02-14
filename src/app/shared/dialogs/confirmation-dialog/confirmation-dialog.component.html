@@ -1,11 +1,12 @@
 <div class="dialog">
-    <mat-dialog-content class="dialog-text">
-        <p>{{message}}</p>
-    </mat-dialog-content>
-
-    <mat-dialog-actions>
-        <button  mat-raised-button (click)="onConfirmClick()" tabindex="1">
-            {{confirmButtonText}}
-        </button>
-    </mat-dialog-actions>
+    <h1 class="dialog-text"mat-dialog-title>
+        {{title}}
+    </h1>
+    <div mat-dialog-content>
+        <p class="dialog-text">{{message}}</p>
+    </div>
+    <div mat-dialog-actions class="d-flex flex-row gap-1">
+        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">No</button>
+        <button class="btn btn-danger btn-sm" (click)="onConfirm()">Yes</button>
+    </div>
 </div>
