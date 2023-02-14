@@ -1,7 +1,6 @@
+<div>Map Select Area Container</div>
 <div class="map-frame" style="height: 400px">
-    <div>Map Select Area Container</div>
-    <div leaflet leafletDraw class="h-100 w-100" id="map"            
-        [leafletOptions]="m_oMapOptions"
+    <div leaflet leafletDraw class="h-100 w-100" id="" [leafletOptions]="m_oMapOptions"
         [leafletLayersControl]="m_oLayersControl" [leafletDrawOptions]="m_oDrawOptions"
         (leafletDrawCreated)="onDrawCreated($event)">
         <div [leafletLayer]="m_oDrawnItems"></div>

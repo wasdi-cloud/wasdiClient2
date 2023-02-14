@@ -24,10 +24,10 @@
     <app-wap-products-combo *ngIf="oControl.type==='productscombo'" [productsArray]="m_asProductNames" [(oControlSelection)]="getTabControls()[i]"></app-wap-products-combo>
 
     <!-- WAP Product List -->
-    <!-- <app-wap-product-list *ngIf="oControl.type ==='productlist'"></app-wap-product-list> -->
+    <app-wap-product-list *ngIf="oControl.type ==='productlist'"></app-wap-product-list>
 
     <!-- WAP Search EO Image -->
-    <!-- <app-wap-search-eo-image *ngIf="oControl.type ==='searcheoimage'"></app-wap-search-eo-image> -->
+    <app-wap-search-eo-image *ngIf="oControl.type ==='searcheoimage'"></app-wap-search-eo-image>
 
     <!-- WAP Select Area -->
     <app-wap-select-area *ngIf="oControl.type ==='bbox'" [(oMapInput)]="getTabControls()[i]"></app-wap-select-area>
