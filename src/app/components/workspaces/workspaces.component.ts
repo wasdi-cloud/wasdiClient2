@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ConfirmationDialogComponent } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -27,6 +28,8 @@ export interface WorkspaceViewModel {
   styleUrls: ['./workspaces.component.css']
 })
 export class WorkspacesComponent implements OnInit {
+  //Icons: 
+  faPlus = faPlus
 
   constructor(private oConstantsService: ConstantsService, private oDialog: MatDialog, private oWorkspaceService: WorkspaceService) { }
   workspaces: Workspace[] = []
@@ -45,6 +48,10 @@ export class WorkspacesComponent implements OnInit {
         this.workspaces = response;
       })
     }
+  }
+
+  clickAddWorkspace() {
+    console.log('Add workspace')
   }
 
   onDeleteWorkspace(oWorkspace: Workspace) {
