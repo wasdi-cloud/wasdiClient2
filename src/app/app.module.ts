@@ -27,7 +27,7 @@ import { ProductsListComponent } from './components/edit/products-list/products-
 //Angular Materials Imports 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatTree, MatTreeModule } from '@angular/material/tree';
+import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from "@angular/material/icon";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -38,6 +38,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule} from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
+
+//Import FontAwesome
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 //Workspaces Page Components
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
@@ -155,7 +158,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule, 
-    MatCheckboxModule
+    MatCheckboxModule,
+    FontAwesomeModule
   ],
   providers: [
     AuthService,
