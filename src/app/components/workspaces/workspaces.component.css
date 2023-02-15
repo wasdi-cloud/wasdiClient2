@@ -11,6 +11,10 @@ div.workspace-properties-container {
     height: 80vh;
 }
 
+div.workspace-globe-contaienr {
+    height: 80vh
+}
+
 div.workspaces-container,
 div.properties-container {
     height: 50%;
