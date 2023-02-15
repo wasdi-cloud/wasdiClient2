@@ -1,0 +1,9 @@
+.navbar {
+    background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0))
+}
+
+a:hover {
+    background-color: #00903759;
+    border: 3px, solid, #009036;
+    border-radius: 4px;
+}

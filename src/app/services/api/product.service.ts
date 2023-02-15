@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Product } from 'src/app/shared/models/product.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
 
@@ -14,11 +15,11 @@ export class ProductService {
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
 
   getProductListByWorkspace(sWorkspaceId: string) {
-    return this.oHttp.get(this.APIURL + '/product/byws?workspace=' + sWorkspaceId);
+    return this.oHttp.get<Product[]>(this.APIURL + '/product/byws?workspace=' + sWorkspaceId);
   };
 
   getProductLightListByWorkspace(sWorkspaceId: string) {
-    return this.oHttp.get(this.APIURL + '/product/bywslight?workspace=' + sWorkspaceId);
+    return this.oHttp.get<Product[]>(this.APIURL + '/product/bywslight?workspace=' + sWorkspaceId);
   };
 
   deleteProductFromWorkspace(sProductName: string, sWorkspaceId: string, bDeleteFile: boolean, bDeleteLayer: boolean) {

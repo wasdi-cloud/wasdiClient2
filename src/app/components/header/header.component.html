@@ -1,6 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid ">
-        <a class="navbar-brand" href="#">WASDI</a>
+        <a class="navbar-brand" href="#">
+            <img class="brand-logo" src="assets/images/wasdi_logo_header.png" alt="">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -8,24 +10,29 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto-sm ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/marketplace">Marketplace</a>
+                    <a class="nav-link" routerLink="/marketplace">{{'HEADER.MARKETPLACE_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/workspaces">Workspaces</a>
+                    <a class="nav-link" routerLink="/workspaces">{{'HEADER.WORKSPACE_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/plan">Plan</a>
+                    <a class="nav-link" routerLink="/plan">{{'HEADER.PLAN_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/search">Search</a>
+                    <a class="nav-link" routerLink="/search">{{'HEADER.SEARCH_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/edit">Edit</a>
+                    <a class="nav-link"  [ngClass]="{'disabled' : !sActiveWorkspaceId}"routerLink="/edit/{{sActiveWorkspaceId}}">{{'HEADER.EDIT_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/admin">Admin</a>
+                    <a class="nav-link" routerLink="/admin">{{'HEADER.ADMIN_BTN' | translate}}</a>
+                </li>
+                <app-language-switch></app-language-switch>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
                 </li>
             </ul>
+
 
         </div>
     </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
 
@@ -58,8 +58,10 @@ export class LoginComponent implements OnInit {
       oUser.type = data.type;
       oUser.grantedAuthorities = data.grantedAuthorities;
 
+      //set user and cookie
       this.oConstantsService.setUser(oUser);
-      this.router.navigateByUrl('/marketplace')
+      this.router.navigateByUrl('/marketplace');
+      this.oAuthService.saveToken(data.sessionId);
     }
   }
 }

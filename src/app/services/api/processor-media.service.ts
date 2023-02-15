@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Reviews } from 'src/app/shared/models/reviews.model';
 import { ConstantsService } from '../constants.service';
 
 @Injectable({
@@ -79,7 +80,7 @@ export class ProcessorMediaService {
    * @returns {*}
    */
   getProcessorReviews(sProcessorName: string, iPage: number, iItemsPerPage: number) {
-    return this.oHttp.get(this.APIURL + this.m_sResource + '/reviews/getlist?processorName=' + sProcessorName + '&page=' + iPage + "&itemsPerPage=" + iItemsPerPage);
+    return this.oHttp.get<Reviews>(this.APIURL + this.m_sResource + '/reviews/getlist?processorName=' + sProcessorName + '&page=' + iPage + "&itemsPerPage=" + iItemsPerPage);
   }
 
   /**

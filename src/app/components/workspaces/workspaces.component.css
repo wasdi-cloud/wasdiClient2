@@ -1,0 +1,18 @@
+div.workspaces-header {
+    background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0));
+}
+
+h4 {
+    color: #43516a;
+    font-weight: bolder;
+}
+
+div.workspace-properties-container {
+    height: 80vh;
+}
+
+div.workspaces-container,
+div.properties-container {
+    height: 50%;
+    width: 100%;
+}

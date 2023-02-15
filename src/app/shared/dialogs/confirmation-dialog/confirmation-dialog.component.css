@@ -1,0 +1,39 @@
+
+.dialog {
+    background-color: #07130b;
+
+    padding: 1.5em 2.5em;
+
+}
+
+.dialog-text {
+    color: #009036;
+}
+
+.dialog-content .dialog::before {
+    content: "";
+    width: 100%;
+    height: 30%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background:radial-gradient( ellipse, var(--bg) 0%, var(--off) 90% );
+    animation: scan 6.5s 1s infinite ease-in-out forwards;
+}
+.dialog-actions {
+    background-color: #07130b;
+}
+
+.dialog-content {
+    border-radius: 5px;
+    font-family: "Helvetica Neue", sans-serif;
+    background: #f0f0f0;
+    color: #444;
+    padding: 1em;
+    position: relative;
+    margin: 0 auto;
+    max-width: 100%;
+    width: 450px;
+    font-size: 1.1em;
+    line-height: 1.5em;
+}

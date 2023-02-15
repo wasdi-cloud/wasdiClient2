@@ -1,0 +1,30 @@
+div.toolbar-container {
+    background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0))
+}
+
+.collapsible {
+    overflow: hidden;
+}
+
+div.controls-container {
+    height: 70vh;
+}
+
+div.controls-container>div {
+    height: 100%;
+}
+
+ul.list-group {
+    border-radius: 0;
+}
+
+li.list-group-item {
+    cursor: pointer;
+}
+
+/* History Table */
+.scroll-bar {
+    position: relative;
+    height: 100%;
+    overflow: auto;
+}

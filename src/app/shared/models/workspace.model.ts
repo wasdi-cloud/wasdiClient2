@@ -3,14 +3,11 @@ export interface Workspace {
     apiUrl: string; 
     creationDate: number;
     lastEditDate: number; 
-    ownerUserId: string; 
+    name: string; 
     nodeCode: string; 
     sharedUsers: Array<string>; 
     slaLink: string; 
     userId: string; 
-    workspaceId: string;
-    workspaceName: string;
+    workspaceId: string; 
+    workspaceName?: string;
 }
-
-
-

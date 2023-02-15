@@ -1,47 +1,41 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { Map, Control, DomUtil, ZoomAnimEvent, Layer, MapOptions, tileLayer, latLng } from 'leaflet';
+import { Component, OnInit } from "@angular/core";
+import { latLng, Map, tileLayer, featureGroup } from "leaflet";
+import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
+import * as L from "leaflet";
+import { MapService } from "src/app/services/map.service";
+import Geocoder from "leaflet-control-geocoder";
 
 @Component({
   selector: 'app-workspaces-map',
   templateUrl: './workspaces-map.component.html',
   styleUrls: ['./workspaces-map.component.css']
 })
-export class WorkspacesMapComponent implements OnInit, OnDestroy {
-  @Output() map$: EventEmitter<Map> = new EventEmitter;
-  @Output() zoom$: EventEmitter<number> = new EventEmitter;
-  @Input() options: MapOptions = {
-    layers: [tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      opacity: 0.7,
-      maxZoom: 19,
-      detectRetina: true,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    })],
-    zoom: 3,
-    center: latLng(0, 0)
+export class WorkspacesMapComponent implements OnInit {
+  map: any;
+  searchControl: Geocoder = new Geocoder;
+  mapOptions: any;
+  layersControl: any;
+  drawOptions: any;
+  drawnItems: any;
+
+  constructor(public m_oMapService: MapService) { }
+
+  ngOnInit(): void {
+    console.log("init map")
+    this.m_oMapService.setDrawnItems();
+    this.mapOptions = this.m_oMapService.m_oOptions;
+    this.layersControl = this.m_oMapService.m_oLayersControl;
+    this.drawOptions = this.m_oMapService.m_oDrawOptions;
+    this.drawnItems = this.m_oMapService.m_oDrawnItems;
   }
 
-  public map!: Map;
-  public zoom!: number;
-
-  constructor() { }
-
-  ngOnInit(): void { 
+  onMapReady(map: L.Map) {
+    this.searchControl.setPosition('bottomleft')
+    this.searchControl.addTo(map);
   }
 
-  ngOnDestroy(): void {
-    this.map.clearAllEventListeners;
-    this.map.remove();
-  }
-
-  onMapReady(map: Map) {
-    this.map = map;
-    this.map$.emit(map);
-    this.zoom = map.getZoom();
-    this.zoom$.emit(this.zoom);
-  }
-
-  onMapZoomEnd(e: ZoomAnimEvent) {
-    this.zoom = e.target.getZoom();
-    this.zoom$.emit(this.zoom);
+  onDrawCreated(event) {
+    console.log('drawn in controller')
   }
 }
+

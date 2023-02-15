@@ -1,2 +1,64 @@
 <app-header></app-header>
-<p>marketplace works!</p>
+<main>
+    <div class="container-fluid gx-0">
+        <div class="box1">
+            <div class="container-fluid gx-0">
+                <div class="row gx-0 align-items-center">
+                    <div class="col-1">
+                        <h5 class="hbody-text">{{"MARKET.MARKET_FILTERS" | translate }}:</h5>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 align-self-center">
+                        <select class="form-select" ng-model="publisherFilter" (change)="developerChanged($event)">
+                            <option selected disabled hidden>{{"MARKET.MARKET_DEVELOPER" | translate}}</option>
+                            <option value="all">Show All</option>
+                            <option *ngFor="let publisher of publishers" [ngValue]="publisher">{{publisher.publisher}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 align-self-center">
+                        <select name="" id="" class="form-select">
+                            <option selected disabled hidden>{{"MARKET.MARKET_SUCCESS" | translate}}</option>
+                            <option value="20">{{"MARKET.MARKET_ABOVE" | translate}} 20%</option>
+                            <option value="40">{{"MARKET.MARKET_ABOVE" | translate}} 40%</option>
+                            <option value="60">{{"MARKET.MARKET_ABOVE" | translate}} 60%</option>
+                            <option value="80">{{"MARKET.MARKET_ABOVE" | translate}} 80%</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-1 col-sm-1 align-self-center">
+                        <select name="" id="" class="form-select">
+                            <option value="mostUsed" selected>{{"MARKET.MARKET_MOST_USED" | translate}}</option>
+                            <option value="leastUsed">{{"MARKET.MARKET_LEAST_USED" | translate}}</option>
+                        </select>
+
+                    </div>
+                    <div class="col-lg-1 col-sm-2 align-self-center">
+                        <select name="" id="" class="form-select" (change)="ratingChanged($event)">
+                            <option selected disabled hidden>Rating</option>
+                            <option value="0">Show All</option>
+                            <option value="1">1 Star and Above</option>
+                            <option value="2">2 Stars and Above</option>
+                            <option value="3">3 Stars and Above</option>
+                            <option value="4">4 Stars and Above</option>
+                            <option value="5">5 Stars Only</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-1 col-sm-2 align-self-center max-price">
+                        <input type="text" name="" id="" class="form-control form-label"
+                            placeholder="{{'MARKET.MARKET_MAX_PRICE' | translate}}" (change)="maxPriceChanged($event)">
+                    </div>
+                    <div class="col-2 search1 align-item-end search-container">
+                        <input type="text" name="" id="" class="form-label form-control align-self-center"
+                            placeholder="{{'MARKET.MARKET_SEARCH_APP' | translate}}" [(ngModel)]="searchWord"
+                            (ngModelChange)="searchApps()">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="processor-cards-container col-12 d-flex flex-row flex-wrap justify-content-start px-3">
+        <app-marketplace-app-card class="col-xs-12 col-md-6 col-lg-3 px-1"
+            *ngFor="let oProcessor of m_aoApplications | filter: searchWord"
+            [oProcessor]="oProcessor"></app-marketplace-app-card>
+    </div>
+</main>
