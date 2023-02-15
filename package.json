@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
     "@asymmetrik/ngx-leaflet": "^15.0.1",
+    "@nasaworldwind/worldwind": "^0.11.0",
     "@asymmetrik/ngx-leaflet-draw": "14.0.1",
     "@auth0/angular-jwt": "^5.1.2",
     "@fortawesome/angular-fontawesome": "^0.12.1",

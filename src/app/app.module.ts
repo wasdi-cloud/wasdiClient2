@@ -45,13 +45,16 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
 
 //Import Interceptor
-import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
+//mport { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
 
 //Import Services
 import { AuthService } from './services/auth/auth.service';
 import { ConstantsService } from './services/constants.service';
 
 import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/workspaces-map.component';
+
+import { WorkspacesWorldwindComponent } from './components/workspaces/workspaces-worldwind-map/workspaces-worldwind.component';
+
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
@@ -100,6 +103,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     LoginComponent,
     WorkspaceListItemComponent,
     WorkspacesMapComponent,
+    WorkspacesWorldwindComponent
     MarketplaceAppCardComponent,
     LanguageSwitchComponent,
     CourseDialogComponent,
