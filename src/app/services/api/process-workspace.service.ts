@@ -25,31 +25,27 @@ export class ProcessWorkspaceServiceService {
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
 
   /**
-        * Load the last 5 processes of a workspace
-        * @param sWorkSpaceId
-        */
-  // loadProcessesFromServer(sWorkSpaceId: string) {
-  //   let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
-  //   let sUrl = this.APIURL;
+    * Load the last 5 processes of a workspace
+    * @param sWorkSpaceId
+    */
+  loadProcessesFromServer(sWorkSpaceId: string) {
+    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
 
-  //   //WILL need to be refactors later
-  //   if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
-  //     sUrl = oWorkspace.apiUrl;
-  //   }
+    if (oWorkspace !== null && oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
+      sUrl = oWorkspace.apiUrl;
+    }
 
-  //   this.oHttp.get(sUrl + '/process/lastbyws?workspace=' + sWorkSpaceId).subscribe(response=> {
-  //     if (response) {
-  //       this.m_aoProcessesRunning = data.data
-  //     }
-  //   }) {
-  //     if (data.data) {
-  //       ;
-  //       this.updateProcessesBar();
-  //     }
-  //   // }, function (data, status) {
-  //   //   utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR IN LOAD PROCESSES");
-  //   // });
-  // };
+    this.oHttp.get<any>(sUrl + '/process/lastbyws?workspace=' + sWorkSpaceId).subscribe(response => {
+      if (response !== undefined) {
+        this.m_aoProcessesRunning = response
+        this.updateProcessesBar();
+      }
+    })
+    // }, function (data, status) {
+    //   // utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR IN LOAD PROCESSES");
+    // });
+  };
 
   /**
    * Get the paginated list of processes of a workspace
@@ -58,26 +54,26 @@ export class ProcessWorkspaceServiceService {
    * @param iEndIndex
    * @returns {*}
    */
-  getAllProcessesFromServer(sWorkSpaceId: string, iStartIndex: number, iEndIndex: number) {
-    var oWorkspace = this.oConstantsService.getActiveWorkspace();
-    var sUrl = this.APIURL;
+  // getAllProcessesFromServer(sWorkSpaceId: string, iStartIndex: number, iEndIndex: number) {
+  //   var oWorkspace = this.oConstantsService.getActiveWorkspace();
+  //   var sUrl = this.APIURL;
 
-    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
-      sUrl = oWorkspace.apiUrl;
-    }
+  //   if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+  //     sUrl = oWorkspace.apiUrl;
+  //   }
 
-    sUrl += '/process/byws?workspace=' + sWorkSpaceId;
+  //   sUrl += '/process/byws?workspace=' + sWorkSpaceId;
 
-    if (iStartIndex) {
-      sUrl += '&startindex=' + iStartIndex;
-    }
+  //   if (iStartIndex) {
+  //     sUrl += '&startindex=' + iStartIndex;
+  //   }
 
-    if (iEndIndex) {
-      sUrl += '&endindex=' + iEndIndex;
-    }
+  //   if (iEndIndex) {
+  //     sUrl += '&endindex=' + iEndIndex;
+  //   }
 
-    return this.oHttp.get(sUrl);
-  };
+  //   return this.oHttp.get(sUrl);
+  // };
 
   /**
    * Get the list of process workspace of this user for this application
