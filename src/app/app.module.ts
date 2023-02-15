@@ -45,7 +45,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
 
 //Import Interceptor
-//mport { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
+import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
 
 //Import Services
 import { AuthService } from './services/auth/auth.service';
@@ -103,7 +103,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     LoginComponent,
     WorkspaceListItemComponent,
     WorkspacesMapComponent,
-    WorkspacesWorldwindComponent
+    WorkspacesWorldwindComponent,
     MarketplaceAppCardComponent,
     LanguageSwitchComponent,
     CourseDialogComponent,
