@@ -16,4 +16,19 @@ export class GlobeService {
 
   constructor(private m_oConstantsService: ConstantsService) { }
 
+  removeAllEntities() {
+    let oGlobe = this.m_oWasdiGlobe; 
+    
+  }
+  addAllWorkspaceRectanglesOnMap(aoProducts) {
+    let oRectangle: any = null;
+    let aoArraySplit: any[] = [];
+    let aiInvertedArraySplit: any[] = [];
+
+    let aoTotalArray: any[] = [];
+
+    //Check if the products are present
+
+    //Clear Previous Entities
+  }
 }
