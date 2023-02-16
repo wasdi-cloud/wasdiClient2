@@ -1,12 +1,13 @@
 <app-header></app-header>
 <div class="toolbar-container d-flex flex-row justify-content-between pt-3 px-3">
-    <a (click)="marketplaceReturn()" class="btn btn-secondary col-auto">{{'WAP.WAP_BACK' | translate}}</a>
+    <a (click)="marketplaceReturn()" class="btn btn-success col-auto">{{'WAP.WAP_BACK' | translate}}</a>
 
     <form class="workspace-options-container d-flex flex-row align-items-center col-auto gap-2" name="workspaceForm"
         #f="ngForm" (ngSubmit)="f.form && runApplication()">
         <input type="text" name="newWorkspaceName" id="" class="form-control"
             placeholder="{{'WAP.WAP_CREATE_WORKSPACE' | translate}}" [(ngModel)]="workspaceForm.sNewWorkspaceName">
-        <select class="form-select" name="existingWorkspace" [(ngModel)]="workspaceForm.sExistingWorkspace" (change)="getSelectedWorkspaceId($event)">
+        <select class="form-select" name="existingWorkspace" [(ngModel)]="workspaceForm.sExistingWorkspace"
+            (change)="getSelectedWorkspaceId($event)">
             <option value="null" disabled="true" [selected]="true">{{'WAP.WAP_SELECT_WORKSPACE' | translate}}</option>
             <option value="" *ngFor="let oWorkspace of m_aoExistingWorkspaces" value="{{oWorkspace.workspaceName}}">
                 {{oWorkspace.workspaceName}}</option>
@@ -14,7 +15,7 @@
         <button type="submit" class="btn btn-secondary form-control">{{'WAP.WAP_RUN_APP' | translate}}</button>
     </form>
 </div>
-<div class="app-info-container d-flex flex-row justify-content-between pt-3 px-3">
+<div class="app-info-container d-flex flex-row justify-content-between pt-3 px-3" style="height:13vh">
     <div class="">
         <h2>{{processorInformation.friendlyName}}</h2>
         <p>{{'WAP.WAP_PUBLISHED' | translate}}: {{processorInformation.publisher}}</p>
@@ -35,63 +36,66 @@
         <p>{{'WAP.WAP_LAST_UPDATE' | translate}}: <span>{{processorInformation.updateDate}}</span></p>
     </div>
 </div>
-<div class="controls-container d-flex flex-row px-3">
-    <div class="side-menu col-2 bg-primary">
-        <ul class="list-group">
-            <li class="list-group-item list-group-item-action list-group-item-primary"
-                *ngFor="let oTab of m_aoTabs; let i = index" (click)='changeActiveTab(oTab.name)'
-                [ngClass]="m_sActiveTab === oTab.name ? 'active': '' ">
-                {{oTab.name | uppercase}}
-            </li>
-            <li class="list-group-item list-group-item-action list-group-item-primary" (click)="changeActiveTab('help')"
-                [ngClass]="m_sActiveTab === 'help'? 'active': '' ">
-                HELP
-            </li>
-            <li class="list-group-item list-group-item-action list-group-item-primary"
-                (click)="changeActiveTab('history')" [ngClass]="m_sActiveTab === 'history'? 'active': '' ">
-                HISTORY
-            </li>
-            <li class="list-group-item list-group-item-action list-group-item-primary"
-                (click)="changeActiveTab('json_params')" [ngClass]="m_sActiveTab === 'json_params'? 'active': '' ">
-                JSON
-            </li>
-        </ul>
-    </div>
-    <div class="control-panel overflow-scroll col-4">
-        <app-wap-display *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' "
-            [wapData]="oTab" [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
-
-        <!-- PROCESSOR HELP TAB -->
-        <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
+<div class="controls-container" style="height:67vh">
+    <div class="d-flex flex-row px-3">
+        <div class="side-menu col-3 bg-primary">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-action list-group-item-primary"
+                    *ngFor="let oTab of m_aoTabs; let i = index" (click)='changeActiveTab(oTab.name)'
+                    [ngClass]="m_sActiveTab === oTab.name ? 'active': '' ">
+                    {{oTab.name | uppercase}}
+                </li>
+                <li class="list-group-item list-group-item-action list-group-item-primary"
+                    (click)="changeActiveTab('help')" [ngClass]="m_sActiveTab === 'help'? 'active': '' ">
+                    HELP
+                </li>
+                <li class="list-group-item list-group-item-action list-group-item-primary"
+                    (click)="changeActiveTab('history')" [ngClass]="m_sActiveTab === 'history'? 'active': '' ">
+                    HISTORY
+                </li>
+                <li class="list-group-item list-group-item-action list-group-item-primary"
+                    (click)="changeActiveTab('json_params')" [ngClass]="m_sActiveTab === 'json_params'? 'active': '' ">
+                    JSON
+                </li>
+            </ul>
         </div>
+        <div class="control-panel overflow-scroll col-9">
+            <app-wap-display *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' "
+                [wapData]="oTab" [renderAsStrings]="m_bRenderAsStrings"
+                [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
 
-        <!-- PROCESSOR HISTORY TABLE TAB -->
-        <div class="history-container table-wrapper-scroll scroll-bar"
-            [ngClass]="m_sActiveTab === 'history'? '': 'd-none' ">
-            <table class="history-table table">
-                <thead class="bg-primary" style="position: sticky;
+            <!-- PROCESSOR HELP TAB -->
+            <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown"
+                [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
+            </div>
+
+            <!-- PROCESSOR HISTORY TABLE TAB -->
+            <div class="history-container table-wrapper-scroll scroll-bar"
+                [ngClass]="m_sActiveTab === 'history'? '': 'd-none' ">
+                <table class="history-table table">
+                    <thead class="bg-primary" style="position: sticky;
                 top: 0;
                 z-index: 1;">
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Workspace</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let historyLog of processorHistory">
-                        <td>{{historyLog.operationDate}}</td>
-                        <td>{{historyLog.status}}</td>
-                        <td>{{historyLog.workspaceName}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- PROCESSOR JSON TAB -->
-        <div class="scroll-bar" [ngClass]="m_sActiveTab === 'json_params' ? '' : 'd-none'">
-            <textarea readonly style="font-family:'Courier New',serif;font-size: 16px;width: 100%;" rows="40"
-                placeholder="{{m_sJSONParam}}"></textarea>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Workspace</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let historyLog of processorHistory">
+                            <td>{{historyLog.operationDate}}</td>
+                            <td>{{historyLog.status}}</td>
+                            <td>{{historyLog.workspaceName}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- PROCESSOR JSON TAB -->
+            <div class="scroll-bar" [ngClass]="m_sActiveTab === 'json_params' ? '' : 'd-none'">
+                <textarea readonly style="font-family:'Courier New',serif;font-size: 16px;width: 100%;" rows="40"
+                    placeholder="{{m_sJSONParam}}"></textarea>
+            </div>
         </div>
     </div>
-    <div class="menu col-6 bg-dark"></div>
 </div>
