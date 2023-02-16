@@ -41,7 +41,7 @@ export class FileBufferService {
   }
 
   publishBand(sUrl: string, sWorkspaceId: string, sBand: string) {
-    return this.oHttp.get(this.APIURL + '/filebuffer/publishband?fileUrl=' + encodeURIComponent(sUrl) + "&workspace=" + sWorkspaceId + '&band=' + sBand);
+    return this.oHttp.get<any>(this.APIURL + '/filebuffer/publishband?fileUrl=' + encodeURIComponent(sUrl) + "&workspace=" + sWorkspaceId + '&band=' + sBand);
   }
 
   getStyles() {
