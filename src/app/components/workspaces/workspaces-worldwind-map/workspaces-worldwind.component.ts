@@ -15,16 +15,12 @@ export class WorkspacesWorldwindComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     const wwd = new WorldWind.WorldWindow('scene');
-    var BMNGLayer = new WorldWind.BMNGLayer();
-    var starFieldLayer = new WorldWind.StarFieldLayer();
-    var atmosphereLayer = new WorldWind.AtmosphereLayer();
+    let BMNGLayer = new WorldWind.BMNGLayer();
+    let starFieldLayer = new WorldWind.StarFieldLayer();
+    let atmosphereLayer = new WorldWind.AtmosphereLayer();
 
     wwd.addLayer(BMNGLayer);
-    wwd.addLayer(starFieldLayer); 
-    wwd.addLayer(atmosphereLayer);
-    wwd.addLayer(new WorldWind.ViewControlsLayer(wwd));
-
-
-    wwd.redraw();
+    wwd.addLayer(starFieldLayer);
+    wwd.addLayer(atmosphereLayer); 
   }
 }
