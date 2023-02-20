@@ -1,5 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { of } from 'rxjs';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 
 @Component({
