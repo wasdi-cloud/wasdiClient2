@@ -87,6 +87,7 @@ import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display
 import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
 import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
 import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
+import { ProcessesBarComponent } from './components/edit/processes-bar/processes-bar.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -132,7 +133,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WapDisplayComponent,
     EditToolbarComponent,
     PlanMapComponent,
-    EditMapComponent
+    EditMapComponent,
+    ProcessesBarComponent
   ],
   imports: [
     AppRoutingModule,
