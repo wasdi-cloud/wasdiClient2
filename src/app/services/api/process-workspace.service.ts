@@ -28,7 +28,7 @@ export class ProcessWorkspaceServiceService {
     * Load the last 5 processes of a workspace
     * @param sWorkSpaceId
     */
-  loadProcessesFromServer(sWorkSpaceId: string) {
+  loadProcessesFromServer(sWorkspaceId: string) {
     let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
@@ -36,15 +36,7 @@ export class ProcessWorkspaceServiceService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    this.oHttp.get<any>(sUrl + '/process/lastbyws?workspace=' + sWorkSpaceId).subscribe(response => {
-      if (response !== undefined) {
-        this.m_aoProcessesRunning = response
-        this.updateProcessesBar();
-      }
-    })
-    // }, function (data, status) {
-    //   // utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR IN LOAD PROCESSES");
-    // });
+    return this.oHttp.get<any>(sUrl + '/process/lastbyws?workspace=' + sWorkspaceId)
   };
 
   /**
