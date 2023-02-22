@@ -17,7 +17,7 @@
         <input type="text" class="form-control" placeholder="Started">
         <button class="btn btn-dark">Apply</button>
     </div>
-    <table class="table table-dark table-striped">
+    <table class="table table-dark table-striped table-hover table-sm">
         <thead>
             <tr>
                 <th scope="col"></th>
@@ -33,5 +33,33 @@
                 <th scope="col"></th>
             </tr>
         </thead>
+        <tbody>
+            <tr *ngFor="let oProcess of m_aoProcessesRunning">
+                <td>
+                    <span>{{oProcess.status}}</span>
+                </td>
+                <td>
+                    {{oProcess.operationType}}
+                </td>
+                <td>
+                    {{oProcess.productName}}
+                </td>
+                <td>
+                    {{oProcess.userId}}
+                </td>
+                <td>
+                    {{oProcess.fileSize}}
+                </td>
+                <td>
+                    {{oProcess.operationDate}}
+                </td>
+                <td>
+                    {{oProcess.operationstartDate}}
+                </td>
+                <td>
+                    {{oProcess.progressPerc}}
+                </td>
+            </tr>
+        </tbody>
     </table>
 </div>
