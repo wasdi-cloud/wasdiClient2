@@ -1,15 +1,18 @@
 <app-header></app-header>
 <app-edit-toolbar></app-edit-toolbar>
 <main>
-    <div class="d-flex flex-row px-3 80-vh">
+    <div class="d-flex flex-row px-3 75-vh">
         <div class="productlist-navigation-container d-flex flex-column ">
             <app-products-list [productArray]="m_aoProducts"></app-products-list>
             <div style="height: 50%">
                 nav/layers
             </div>
         </div>
-        <div style="height: 80vh; width: 100%">
+        <div style="height: 75vh; width: 100%">
             <app-edit-map></app-edit-map>
         </div>
+    </div>
+    <div>
+        <app-processes-bar></app-processes-bar>
     </div>
 </main>
