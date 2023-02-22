@@ -37,6 +37,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule} from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet'; 
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -87,7 +88,7 @@ import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display
 import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
 import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
 import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
-import { ProcessesBarComponent } from './components/edit/processes-bar/processes-bar.component';
+import { ProcessesBarComponent, ProcessesBarContent } from './components/edit/processes-bar/processes-bar.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -134,7 +135,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditToolbarComponent,
     PlanMapComponent,
     EditMapComponent,
-    ProcessesBarComponent
+    ProcessesBarComponent, 
+    ProcessesBarContent
   ],
   imports: [
     AppRoutingModule,
@@ -165,6 +167,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatDatepickerModule,
     MatNativeDateModule, 
     MatCheckboxModule,
+    MatBottomSheetModule,
     FontAwesomeModule
   ],
   providers: [
@@ -181,7 +184,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatNativeDateModule
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmationDialogComponent],
+  entryComponents: [ConfirmationDialogComponent, ProcessesBarContent],
 
 })
 export class AppModule { }
