@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { ConfirmationDialogComponent } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
