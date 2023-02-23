@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import {
   AUTO_STYLE,
   animate,
@@ -13,6 +13,9 @@ import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent, ErrorDialogModel } from 'src/app/shared/dialogs/error-dialog/error-dialog.component';
 
 //Import models
 import { User } from 'src/app/shared/models/user.model';
@@ -49,6 +52,15 @@ export interface application {
 export class AppUiComponent implements OnInit {
   @ViewChild(WapDirective, { static: true }) appWap!: WapDirective;
   @ViewChildren(WapDisplayComponent) wapDisplayComponent: QueryList<WapDisplayComponent>;
+
+  constructor(
+    private m_oActivatedRoute: ActivatedRoute,
+    private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
+    private m_oProcessorService: ProcessorService,
+    private m_oProcessorWorkspaceService: ProcessWorkspaceServiceService,
+    private m_oRouter: Router,
+    private oWorkspaceService: WorkspaceService) { }
   //Processor Information
   processorName: string = this.m_oConstantsService.getSelectedApplication();
   processorInformation: any = {} as application;
@@ -88,6 +100,9 @@ export class AppUiComponent implements OnInit {
   //Selected Workspace Name: 
   m_oSelectedWorkspace: Workspace | null | undefined = null;
 
+  //Error Message
+  m_sMessage = "The following inputs are required:"
+
 
   ngOnInit(): void {
     this.fetchWorkspaces();
@@ -95,24 +110,26 @@ export class AppUiComponent implements OnInit {
       this.getProcessorDetails(this.processorName);
       this.getProcessorUI(this.processorName);
     }
-    else if (this.oActivatedRoute.snapshot.params['processorName']) {
-      this.processorName = this.oActivatedRoute.snapshot.params['processorName'];
+    else if (this.m_oActivatedRoute.snapshot.params['processorName']) {
+      this.processorName = this.m_oActivatedRoute.snapshot.params['processorName'];
       this.m_oConstantsService.setSelectedApplication(this.processorName);
       this.getProcessorDetails(this.processorName);
       this.getProcessorUI(this.processorName);
     }
     else {
-      console.log("Problem getting Processor Name")
+      let oDialogData = new ErrorDialogModel("Error!", "Problem retrieving Processor Name");
+      let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
+        maxWidth: '400px',
+        data: oDialogData
+      })
     }
   }
-
-  constructor(private oActivatedRoute: ActivatedRoute, private m_oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oProcessorWorkspaceService: ProcessWorkspaceServiceService, private oRouter: Router, public oViewContainerRef: ViewContainerRef, private oWorkspaceService: WorkspaceService) { }
 
   /**
    * Retrieve Processor UI from WASDI server
    */
   getProcessorUI(sApplicationName: string) {
-    this.oProcessorService.getProcessorUI(sApplicationName).subscribe(oResponse => {
+    this.m_oProcessorService.getProcessorUI(sApplicationName).subscribe(oResponse => {
       for (let iTabs = 0; iTabs < oResponse.tabs.length; iTabs++) {
         let oTab = oResponse.tabs[iTabs];
 
@@ -152,7 +169,7 @@ export class AppUiComponent implements OnInit {
    * Retrieve the Help HTML
    */
   getHelpFromProcessor(sProcessorName: string) {
-    this.oProcessorService.getHelpFromProcessor(sProcessorName).subscribe(response => {
+    this.m_oProcessorService.getHelpFromProcessor(sProcessorName).subscribe(response => {
       this.m_sHelpHtml = response.stringValue;
     })
   }
@@ -161,7 +178,7 @@ export class AppUiComponent implements OnInit {
    * Load the history of this user with this application
    */
   showHistory() {
-    this.oProcessorWorkspaceService.getProcessesByProcessor(this.processorName).subscribe(response => {
+    this.m_oProcessorWorkspaceService.getProcessesByProcessor(this.processorName).subscribe(response => {
       this.processorHistory = response
     })
   }
@@ -180,7 +197,7 @@ export class AppUiComponent implements OnInit {
    * Get Processor details from server
    */
   getProcessorDetails(processorName: string) {
-    return this.oProcessorService.getMarketplaceDetail(processorName).subscribe(response => {
+    return this.m_oProcessorService.getMarketplaceDetail(processorName).subscribe(response => {
       this.processorInformation = response;
     })
   }
@@ -194,7 +211,11 @@ export class AppUiComponent implements OnInit {
     let bCheck: boolean = this.checkParams();
 
     if (!bCheck) {
-      console.log("Missing Inputs");
+      let oDialogData = new ErrorDialogModel("Error Running Application", this.m_sMessage);
+      let dialogRef = this.m_oDialog.open(ErrorDialogComponent, {
+        maxWidth: "400px",
+        data: oDialogData
+      })
       return;
     }
 
@@ -229,12 +250,21 @@ export class AppUiComponent implements OnInit {
         let sWorkspaceId = oResponse.stringValue;
 
         if (sWorkspaceId === null) {
-          console.log("error");
+          let oDialogData = new ErrorDialogModel("Error!", "Problem creating workspace");
+          let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
+            maxWidth: '400px',
+            data: oDialogData
+          })
           return;
         }
         this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(response => {
           if (oResponse === null || oResponse === undefined) {
-            console.log("error");
+            let oDialogData = new ErrorDialogModel("Error!", "Problem creating workspace");
+            let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
+              maxWidth: '400px',
+              data: oDialogData
+            });
+            return
           }
           console.log(response)
           this.executeProcessorInWorkspace(oController, sApplicationName, oProcessorInput, response);
@@ -261,9 +291,9 @@ export class AppUiComponent implements OnInit {
   executeProcessorInWorkspace(oController, sApplicationName: string, oProcessorInput, oWorkspace) {
     console.log(oWorkspace)
     oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
-    oController.oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput)).subscribe(oResponse => {
+    oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput)).subscribe(oResponse => {
       if (oResponse) {
-        this.oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
+        this.m_oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
       }
     })
   }
@@ -293,11 +323,16 @@ export class AppUiComponent implements OnInit {
   checkParams() {
     let bIsValid: boolean = true;
 
+
+
+    let asMessages: string[] = [];
     for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
-      if (!this.wapDisplayComponent.get(iTabs)?.checkParams()) {
+      if (!this.wapDisplayComponent.get(iTabs)?.checkParams(asMessages)) {
         bIsValid = false;
+        this.m_sMessage = this.m_sMessage + asMessages[iTabs] + "\n";
       }
     }
+    console.log(this.m_sMessage)
     return bIsValid;
   }
 
@@ -322,7 +357,7 @@ export class AppUiComponent implements OnInit {
 
   marketplaceReturn() {
     this.changeActiveTab('')
-    this.oRouter.navigateByUrl(`${this.processorName}/appDetails`)
+    this.m_oRouter.navigateByUrl(`${this.processorName}/appDetails`)
   }
 
 }

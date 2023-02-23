@@ -46,12 +46,8 @@ export class WapDisplayComponent implements OnInit {
   }
 
   //add asMessages as param
-  checkParams() {
+  checkParams(asMessages: string[]) {
     let bReturn: boolean = true;
-
-    let asMessages: string[] = [];
-
-    let sRequiredString: string = " is Required"
 
     for (let iControls = 0; iControls < this.m_aoViewElements.length; iControls++) {
       let oElement: any = this.m_aoViewElements[iControls];
@@ -60,23 +56,23 @@ export class WapDisplayComponent implements OnInit {
         if (this.renderAsStrings) {
           let sStringValue = oElement.getStringValue();
           if (!sStringValue) {
-            let sMessage = oElement.label + sRequiredString;
+            let sMessage = oElement.label;
             asMessages.push(sMessage);
+            console.log(sMessage)
             bReturn = false
           }
         } else {
           let oValue: any = oElement.getValue();
-
-
           if (oValue === null || oValue === undefined) {
-            let sMessage = oElement.label + sRequiredString;
+            let sMessage = oElement.label;
             asMessages.push(sMessage);
-
+            
             bReturn = false;
           }
         }
         if (typeof oElement.isValid === "function") {
           if (!oElement.isValid(asMessages)) {
+            console.log(asMessages)
             bReturn = false
           }
         }

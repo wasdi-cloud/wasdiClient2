@@ -1,8 +1,11 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid ">
-        <a class="navbar-brand" href="#">
-            <img class="brand-logo" src="assets/images/wasdi_logo_header.png" alt="">
-        </a>
+        <div class="d-flex align-items-center">
+            <a class="navbar-brand" href="#">
+                <img class="brand-logo" src="assets/images/wasdi_logo_header.png" alt="" >
+            </a>
+            <input class="form-control new-workspace-name" type="text" *ngIf="m_bEditIsActive=== true" placeholder="{{m_oActiveWorkspace.workspaceName}}">
+        </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -22,7 +25,8 @@
                     <a class="nav-link" routerLink="/search">{{'HEADER.SEARCH_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"  [ngClass]="{'disabled' : !sActiveWorkspaceId}"routerLink="/edit/{{sActiveWorkspaceId}}">{{'HEADER.EDIT_BTN' | translate}}</a>
+                    <a class="nav-link" [ngClass]="{'disabled' : !sActiveWorkspaceId}"
+                        routerLink="/edit/{{sActiveWorkspaceId}}">{{'HEADER.EDIT_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/admin">{{'HEADER.ADMIN_BTN' | translate}}</a>
@@ -32,8 +36,6 @@
                     <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
                 </li>
             </ul>
-
-
         </div>
     </div>
 </nav>
