@@ -22,6 +22,7 @@ import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
 import { ConfirmationDialogComponent } from './shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ErrorDialogComponent } from './shared/dialogs/error-dialog/error-dialog.component';
 import { ProductsListComponent } from './components/edit/products-list/products-list.component';
 
 //Angular Materials Imports 
@@ -36,7 +37,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker'
-import { MatNativeDateModule} from '@angular/material/core'
+import { MatNativeDateModule } from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 //Import FontAwesome
@@ -105,6 +106,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     LanguageSwitchComponent,
     CourseDialogComponent,
     ConfirmationDialogComponent,
+    ErrorDialogComponent,
     ProductsListComponent,
     AppDetailsComponent,
     AppReviewsComponent,
@@ -157,7 +159,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatAutocompleteModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule, 
+    MatNativeDateModule,
     MatCheckboxModule,
     FontAwesomeModule
   ],
@@ -171,7 +173,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,
-    MatDatepickerModule, 
+    MatDatepickerModule,
     MatNativeDateModule
   ],
   bootstrap: [AppComponent],
