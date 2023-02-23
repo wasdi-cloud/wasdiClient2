@@ -2,10 +2,8 @@
     <h1 class="dialog-text" mat-dialog-title>
         {{m_sTitle}}
     </h1>
-    <div mat-dialog-content>
-        <p class="dialog-text">
-            {{m_sMessage}}
-        </p>
+    <div class="dialog-text" mat-dialog-content>
+        {{m_sMessage}}
     </div>
     <div class="d-flex flex-row">
         <button class="btn btn-secondary btn-sm" (click)="onDismiss()">
