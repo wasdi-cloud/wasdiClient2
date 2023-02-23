@@ -117,9 +117,9 @@ export class AppUiComponent implements OnInit {
       this.getProcessorUI(this.processorName);
     }
     else {
-      let oDialogData = new ErrorDialogModel("Error!", "Problem retrieving Processor Name"); 
-      let oDialogRef =this.m_oDialog.open(ErrorDialogComponent, {
-        maxWidth: '400px', 
+      let oDialogData = new ErrorDialogModel("Error!", "Problem retrieving Processor Name");
+      let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
+        maxWidth: '400px',
         data: oDialogData
       })
     }
@@ -250,12 +250,21 @@ export class AppUiComponent implements OnInit {
         let sWorkspaceId = oResponse.stringValue;
 
         if (sWorkspaceId === null) {
-          console.log("error");
+          let oDialogData = new ErrorDialogModel("Error!", "Problem creating workspace");
+          let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
+            maxWidth: '400px',
+            data: oDialogData
+          })
           return;
         }
         this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(oResponse => {
           if (oResponse === null || oResponse === undefined) {
-            console.log("error");
+            let oDialogData = new ErrorDialogModel("Error!", "Problem creating workspace");
+            let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
+              maxWidth: '400px',
+              data: oDialogData
+            });
+            return
           }
           this.executeProcessorInWorkspace(oController, sApplicationName, oProcessorInput, oResponse);
         })
