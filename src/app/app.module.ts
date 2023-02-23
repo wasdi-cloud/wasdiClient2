@@ -32,13 +32,13 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from "@angular/material/icon";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet'; 
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -54,6 +54,9 @@ import { AuthService } from './services/auth/auth.service';
 import { ConstantsService } from './services/constants.service';
 
 import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/workspaces-map.component';
+
+import { WorkspacesWorldwindComponent } from './components/workspaces/workspaces-worldwind-map/workspaces-worldwind.component';
+
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
@@ -85,6 +88,8 @@ import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap
 import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
 import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
 import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
+import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
+import { ProcessesBarComponent, ProcessesBarContent } from './components/edit/processes-bar/processes-bar.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -102,6 +107,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     LoginComponent,
     WorkspaceListItemComponent,
     WorkspacesMapComponent,
+    WorkspacesWorldwindComponent,
     MarketplaceAppCardComponent,
     LanguageSwitchComponent,
     CourseDialogComponent,
@@ -129,7 +135,10 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WapTooltipComponent,
     WapDisplayComponent,
     EditToolbarComponent,
-    PlanMapComponent
+    PlanMapComponent,
+    EditMapComponent,
+    ProcessesBarComponent, 
+    ProcessesBarContent
   ],
   imports: [
     AppRoutingModule,
@@ -154,13 +163,13 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
-    CdkTreeModule,
     MatSliderModule,
     MatAutocompleteModule,
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
+    MatBottomSheetModule,
     FontAwesomeModule
   ],
   providers: [
@@ -177,7 +186,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatNativeDateModule
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmationDialogComponent],
+  entryComponents: [ConfirmationDialogComponent, ProcessesBarContent],
 
 })
 export class AppModule { }

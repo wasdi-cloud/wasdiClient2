@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProductService } from 'src/app/services/api/product.service';
-import { ViewElementFactory } from 'src/app/shared/factories/view-element.factory';
+import { ViewElementFactory } from 'src/app/shared/wap-components/view-element.factory';
 
 @Component({
   selector: 'app-wap-display',
@@ -41,8 +41,7 @@ export class WapDisplayComponent implements OnInit {
   * @returns {[]} an object with a property for each tab. Each property is an array of the controls of the tab
   */
   generateViewElements(oFormToGenerate) {
-    let oFactory = new ViewElementFactory();
-    let aoTabControls = oFactory.getTabElements(oFormToGenerate);
+    let aoTabControls  = ViewElementFactory.getTabElements(oFormToGenerate);
     return aoTabControls;
   }
 

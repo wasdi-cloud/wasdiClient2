@@ -1,9 +1,22 @@
 import { Injectable } from "@angular/core";
-import { Checkbox, DateTimePicker, Dropdown, Hidden, Listbox, NumericBox, ProductList, ProductsCombo, SearchEOImage, SelectArea, Slider, Table, Textbox } from "./ui-component";
+
+import { Checkbox } from "./checkbox";
+import { DateTimePicker } from "./date-time-picker";
+import { Dropdown } from "./dropdown";
+import { Hidden } from "./hidden";
+import { Listbox } from "./listbox";
+import { NumericBox } from "./numeric-box";
+import { ProductList } from "./product-list";
+import { ProductsCombo } from "./products-combo";
+import { SearchEOImage } from "./search-eo-image";
+import { SelectArea } from "./select-area";
+import { Slider } from "./slider";
+import { Table } from "./table";
+import { Textbox } from "./textbox";
 
 @Injectable()
 export class ViewElementFactory {
-    createViewElement(oControl) {
+    public static createViewElement(oControl) {
         let oViewElement;
         if (!oControl) {
             return oViewElement;
@@ -135,16 +148,16 @@ export class ViewElementFactory {
         oViewElement.required = oControl.required;
         oViewElement.rowHeaders = oControl.row_headers;
         oViewElement.colHeaders = oControl.col_headers;
-        
+
         return oViewElement
     }
 
-    getTabElements(oTab) {
+    public static getTabElements(oTab) {
         let aoTabElements: any[] = [];
 
         for (let iControl = 0; iControl < oTab.controls.length; iControl++) {
             let oControl = oTab.controls[iControl];
-            let oViewElement = this.createViewElement(oControl);
+            let oViewElement = ViewElementFactory.createViewElement(oControl);
 
             aoTabElements.push(oViewElement);
         }

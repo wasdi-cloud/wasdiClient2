@@ -1,0 +1,5 @@
+<div class="map-frame h-100 w-100">
+    <div leaflet class="h-100 w-100" id="map" [leafletOptions]="mapOptions"
+        [leafletLayersControl]="layersControl" (leafletMapReady)="onMapReady($event)">
+    </div>
+</div>

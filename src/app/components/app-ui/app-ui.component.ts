@@ -257,7 +257,7 @@ export class AppUiComponent implements OnInit {
           })
           return;
         }
-        this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(oResponse => {
+        this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(response => {
           if (oResponse === null || oResponse === undefined) {
             let oDialogData = new ErrorDialogModel("Error!", "Problem creating workspace");
             let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
@@ -266,11 +266,18 @@ export class AppUiComponent implements OnInit {
             });
             return
           }
-          this.executeProcessorInWorkspace(oController, sApplicationName, oProcessorInput, oResponse);
+          console.log(response)
+          this.executeProcessorInWorkspace(oController, sApplicationName, oProcessorInput, response);
         })
       })
     } else {
-      this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, this.m_oSelectedWorkspace);
+      this.oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
+        if(oResponse) {
+          this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, oResponse);
+        }
+         
+      })
+     
     }
   }
 
@@ -282,6 +289,7 @@ export class AppUiComponent implements OnInit {
    * @param oWorkspace 
    */
   executeProcessorInWorkspace(oController, sApplicationName: string, oProcessorInput, oWorkspace) {
+    console.log(oWorkspace)
     oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
     oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput)).subscribe(oResponse => {
       if (oResponse) {

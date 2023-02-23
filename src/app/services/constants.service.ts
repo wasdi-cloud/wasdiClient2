@@ -81,7 +81,7 @@ export class ConstantsService {
   * @returns {boolean}
   */
   getIgnoreWorkspaceApiUrl() {
-    return this.m_bIgnoreWorkspaceApiUrl = true;
+    return this.m_bIgnoreWorkspaceApiUrl === true;
   }
 
   getSessionId() {

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { ConstantsService } from './constants.service';
 import Geocoder from 'leaflet-control-geocoder';
 import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';

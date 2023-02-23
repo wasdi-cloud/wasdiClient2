@@ -28,8 +28,17 @@ export class WorkspaceListItemComponent {
     return "N/A"
   }
   openWorkspace(oWorkspace: Workspace) {
-    this.setActiveWorkspace(oWorkspace);
-    this.oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`);
+    this.oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
+      if(!response) {
+        console.log("Error opening workspace")
+        return false;
+      } 
+      console.log(response)
+      this.setActiveWorkspace(response)
+      this.oRouter.navigateByUrl(`edit/${response.workspaceId}`);
+      return true; 
+    })
+    
   }
 
   deleteWorkspace(sWorkspaceId: string) {
