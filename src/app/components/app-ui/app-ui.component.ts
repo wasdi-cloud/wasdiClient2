@@ -117,7 +117,11 @@ export class AppUiComponent implements OnInit {
       this.getProcessorUI(this.processorName);
     }
     else {
-      console.log("Problem getting Processor Name")
+      let oDialogData = new ErrorDialogModel("Error!", "Problem retrieving Processor Name"); 
+      let oDialogRef =this.m_oDialog.open(ErrorDialogComponent, {
+        maxWidth: '400px', 
+        data: oDialogData
+      })
     }
   }
 
