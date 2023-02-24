@@ -46,26 +46,26 @@ export class ProcessWorkspaceServiceService {
    * @param iEndIndex
    * @returns {*}
    */
-  // getAllProcessesFromServer(sWorkSpaceId: string, iStartIndex: number, iEndIndex: number) {
-  //   var oWorkspace = this.oConstantsService.getActiveWorkspace();
-  //   var sUrl = this.APIURL;
+  getAllProcessesFromServer(sWorkSpaceId: string, iStartIndex: number, iEndIndex: number) {
+    var oWorkspace = this.oConstantsService.getActiveWorkspace();
+    var sUrl = this.APIURL;
 
-  //   if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
-  //     sUrl = oWorkspace.apiUrl;
-  //   }
+    if (oWorkspace !== null && oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
+      sUrl = oWorkspace.apiUrl;
+    }
 
-  //   sUrl += '/process/byws?workspace=' + sWorkSpaceId;
+    sUrl += '/process/byws?workspace=' + sWorkSpaceId;
 
-  //   if (iStartIndex) {
-  //     sUrl += '&startindex=' + iStartIndex;
-  //   }
+    if (iStartIndex) {
+      sUrl += '&startindex=' + iStartIndex;
+    }
 
-  //   if (iEndIndex) {
-  //     sUrl += '&endindex=' + iEndIndex;
-  //   }
+    if (iEndIndex) {
+      sUrl += '&endindex=' + iEndIndex;
+    }
 
-  //   return this.oHttp.get(sUrl);
-  // };
+    return this.oHttp.get<any>(sUrl);
+  };
 
   /**
    * Get the list of process workspace of this user for this application
