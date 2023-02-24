@@ -113,7 +113,7 @@ export class ProcessWorkspaceServiceService {
       sUrl += "&namePattern=" + sName;
     }
 
-    return this.oHttp.get(sUrl);
+    return this.oHttp.get<any[]>(sUrl);
   };
 
   /**
