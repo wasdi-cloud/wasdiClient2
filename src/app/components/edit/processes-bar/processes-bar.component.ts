@@ -208,4 +208,80 @@ export class ProcessesDialog {
 
     return sNumber;
   }
+
+  downloadProcessesFile() {
+    this.m_oProcessWorkspaceService.getAllProcessesFromServer(this.m_sActiveWorkspaceId, null, null).subscribe(oResponse => {
+      if (oResponse !== null) {
+        if (oResponse !== undefined) {
+          this.m_aoProcessesLogs = oResponse;
+
+          let file = this.generateLogFile();
+
+          let oLink = document.createElement('a');
+          oLink.href = file;
+
+          let sTimestamp = (new Date()).toISOString().replace(/[^0-9]/g, "_").slice(0, 19);
+
+          oLink.download = "processes_" + this.m_sActiveWorkspaceName + "_" + sTimestamp;
+
+          oLink.click();
+        }
+      }
+    })
+  }
+
+  generateFile(sText) {
+    let textFile = null;
+    let sType = 'text/csv';
+
+    let data = new Blob([sText], { type: sType });
+
+    textFile = window.URL.createObjectURL(data);
+
+    return textFile;
+  }
+
+  makeStringLogFile() {
+    if (!this.m_aoAllProcessesLogs) {
+      return null;
+    }
+    let iNumberOfProcessesLogs: number = this.m_aoAllProcessesLogs.length;
+    let sText: string = "";
+
+    sText += "Id,Product Name,Operation Type,User,Status,Progress,Operation date,Operation end date,File size" + "\r\n";
+
+    for (let iIndexProcessLog = 0; iIndexProcessLog < iNumberOfProcessesLogs; iIndexProcessLog++) {
+      let sOperationDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationStartDate;
+      let sFileSize = this.m_aoAllProcessesLogs[iIndexProcessLog].fileSize;
+      let sOperationEndDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationEndDate;
+      let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType;
+      let sPid = this.m_aoAllProcessesLogs[iIndexProcessLog].pid;
+      let sProductName = this.m_aoAllProcessesLogs[iIndexProcessLog].productName;
+      let sProgressPerc = this.m_aoAllProcessesLogs[iIndexProcessLog].progressPerc;
+      let sStatus = this.m_aoAllProcessesLogs[iIndexProcessLog].status;
+      let sUserId = this.m_aoAllProcessesLogs[iIndexProcessLog].userId;
+
+      sText += sPid + "," + sProductName + "," + sOperationType +
+        "," + sUserId + "," + sStatus + "," + sProgressPerc + "%" +
+        "," + sOperationDate + "," + sOperationEndDate + "," + sFileSize + "\r\n";
+    }
+    return sText;
+  }
+
+  generateLogFile() {
+    let sText = this.makeStringLogFile();
+    let oFile = this.generateFile(sText);
+    return oFile;
+  }
+
+  deleteProcess(oProcessInput) {
+    this.m_oProcessWorkspaceService.deleteProcess(oProcessInput);
+    return true;
+  }
+
+  getOperationDescription(oOperation) {
+    return //utilsConvertOperationToDescription(oOperation);
+  }
+
+  
 }
