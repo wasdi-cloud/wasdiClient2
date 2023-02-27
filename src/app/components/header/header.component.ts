@@ -24,7 +24,6 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.oActivatedRoute.snapshot.url[0].path === 'edit') {
-      console.log(this.sActiveWorkspaceId)
       this.m_bEditIsActive = true; 
     } else {
       this.m_bEditIsActive = false;
