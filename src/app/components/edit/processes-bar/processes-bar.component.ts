@@ -40,6 +40,15 @@ export class ProcessesBarContent {
   faRefresh = faRefresh;
   faList = faList;
 
+  //Filter inputs (form): 
+  m_oFilter: any = {
+    sStatus: "Status...",
+    sType: "Type...",
+    sDate: "",
+    sName: ""
+
+  };
+
   m_aoProcessesRunning: any[] = this.data;
 
   constructor(
@@ -62,8 +71,10 @@ export class ProcessesBarContent {
       console.log(oResult)
     })
   }
-
-
+  
+  formTest() {
+    console.log(this.m_oFilter)
+  }
 }
 
 @Component({
@@ -73,7 +84,7 @@ export class ProcessesBarContent {
 })
 export class ProcessesDialog {
   faFilter = faFilter
-  faXmark = faXmark; 
+  faXmark = faXmark;
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -99,7 +110,7 @@ export class ProcessesDialog {
   m_oFilter: any = {
     sStatus: "Status...",
     sType: "Type...",
-    sDate: "", 
+    sDate: "",
     sName: ""
 
   };
@@ -114,7 +125,7 @@ export class ProcessesDialog {
 
   getAllProcessesLogs() {
     if (!this.m_sActiveWorkspaceId) {
-      return false; 
+      return false;
     }
 
     this.m_bAreProcessesLoaded = false;
@@ -123,7 +134,7 @@ export class ProcessesDialog {
       if (oResponse) {
         this.m_aoProcessesLogs = this.m_aoProcessesLogs.concat(oResponse);
         console.log(this.m_aoProcessesLogs)
-        this.calculateNextListOfProcesses(); 
+        this.calculateNextListOfProcesses();
       } else {
         this.m_bIsLoadMoreBtnClickable = false;
       }
