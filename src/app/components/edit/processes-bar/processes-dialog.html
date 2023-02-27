@@ -9,7 +9,7 @@
     (ngSubmit)="f.form && this.applyFilters()" style="width: 80%">
     <h5>Search</h5>
     <select name="" id="" class="form-select" name="status" [(ngModel)]="m_oFilter.sStatus">
-      <option value="Status" disabled selected hidden>Status</option>
+      <option value="" disabled selected hidden>Status</option>
       <option value="None">Any</option>
       <option value="CREATED">Created</option>
       <option value="RUNNING">Running</option>
@@ -20,7 +20,7 @@
       <option value="STOPPED">Stopped</option>
     </select>
     <select class="form-select" name="type" [(ngModel)]="m_oFilter.sType">
-      <option value="Type" disabled selected hidden>Type</option>
+      <option value="" disabled selected hidden>Type</option>
       <option value="None">Any</option>
       <option value="RUNPROCESSOR">RUNPROCESSOR</option>
       <option value="RUNIDL">RUNIDL</option>
@@ -40,7 +40,7 @@
     <button type="submit" class="btn btn-success">
       Apply
     </button>
-    <button class="btn btn-dark">
+    <button class="btn btn-dark" (click)="resetFilter()">
       Reset
     </button>
   </form>

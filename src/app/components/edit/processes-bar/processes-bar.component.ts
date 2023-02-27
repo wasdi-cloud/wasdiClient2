@@ -1,10 +1,17 @@
-import { Component, Inject, Input, OnChanges } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { faArrowDown, faArrowUp, faDownload, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+
+export interface SearchFilter {
+  sStatus: string,
+  sType: string,
+  sDate: string,
+  sName: string
+}
 
 @Component({
   selector: 'app-processes-bar',
@@ -42,11 +49,10 @@ export class ProcessesBarContent {
 
   //Filter inputs (form): 
   m_oFilter: any = {
-    sStatus: "Status...",
-    sType: "Type...",
+    sStatus: "",
+    sType: "",
     sDate: "",
     sName: ""
-
   };
 
   m_aoProcessesRunning: any[] = this.data;
@@ -68,12 +74,24 @@ export class ProcessesBarContent {
     });
 
     oDialogRef.afterClosed().subscribe(oResult => {
-      console.log(oResult)
+
     })
   }
-  
-  formTest() {
-    console.log(this.m_oFilter)
+
+  resetFilter(event) {
+    this.m_oFilter = {
+      sStatus: "",
+      sType: "",
+      sDate: "",
+      sName: ""
+    }
+    event.preventDefault();
+  }
+
+  openDialogWithFilter(event: MouseEvent) {
+    const oDialogRef = this.m_oDialog.open(ProcessesDialog, {
+      data: { sDate: this.m_oFilter.sDate, sName: this.m_oFilter.sName, sStatus: this.m_oFilter.sStatus, sType: this.m_oFilter.sType }
+    });
   }
 }
 
@@ -90,14 +108,17 @@ export class ProcessesDialog {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oProcessorService: ProcessorService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceServiceService
+    private m_oProcessWorkspaceService: ProcessWorkspaceServiceService,
+    @Inject(MAT_DIALOG_DATA) public m_oFilter: SearchFilter,
   ) {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     if (this.m_oActiveWorkspace !== null && this.m_oActiveWorkspace !== undefined) {
       this.m_sActiveWorkspaceId = this.m_oActiveWorkspace.workspaceId;
       this.m_sActiveWorkspaceName = this.m_oActiveWorkspace.name;
     }
-
+    if(!this.m_oFilter) {
+      this.resetFilter(); 
+    }
     this.getAllProcessesLogs();
   }
 
@@ -106,15 +127,6 @@ export class ProcessesDialog {
   m_aoAllProcessesLogs: any[] = [];
   m_sFilterTable: string = "";
   m_bAreProcessesLoaded: boolean = false;
-
-  //Filter inputs (form): 
-  m_oFilter: any = {
-    sStatus: "Status",
-    sType: "Type",
-    sDate: "",
-    sName: ""
-
-  };
 
   m_iNumberOfProcessForRequest: number = 40;
   m_iFirstProcess = 0;
@@ -134,7 +146,6 @@ export class ProcessesDialog {
     this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
       if (oResponse) {
         this.m_aoProcessesLogs = this.m_aoProcessesLogs.concat(oResponse);
-        console.log(this.m_aoProcessesLogs)
         this.calculateNextListOfProcesses();
       } else {
         this.m_bIsLoadMoreBtnClickable = false;
@@ -150,9 +161,7 @@ export class ProcessesDialog {
 
   calculateNextListOfProcesses() {
     this.m_iFirstProcess += this.m_iNumberOfProcessForRequest;
-    console.log(this.m_iFirstProcess)
     this.m_iLastProcess += this.m_iNumberOfProcessForRequest;
-    console.log(this.m_iLastProcess)
   }
 
   resetCounters() {
@@ -309,10 +318,18 @@ export class ProcessesDialog {
   }
 
   applyFilters() {
-    this.resetCounters(); 
-    this.m_aoProcessesLogs = []; 
-    console.log(this.m_oFilter)
-    this.getAllProcessesLogs(); 
+    this.resetCounters();
+    this.m_aoProcessesLogs = [];
+    this.getAllProcessesLogs();
+  }
+
+  resetFilter() {
+    this.m_oFilter = {
+      sStatus: "",
+      sType: "",
+      sDate: "",
+      sName: ""
+    }
   }
 
 
