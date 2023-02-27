@@ -1,45 +1,47 @@
-<div class="bg-secondary text-light d-flex flex-row justify-content-between p-2">
+<div class="bg-secondary text-light d-flex flex-row justify-content-between align-items-center p-1">
   <h2>Workspace Processes List</h2>
-  <button class="btn btn-danger">Close</button>
+  <button class="btn fs-3">
+    <fa-icon [icon]="faXmark"></fa-icon>
+  </button>
 </div>
 <div class="d-flex flex-row gap-2 justify-content-between  p-2">
-  <div class="d-flex flex-row gap-2 align-items-center" style="width: 80%">
+  <form class="d-flex flex-row gap-2 align-items-center" name="m_oFilter" #f="ngForm"
+    (ngSubmit)="f.form && this.formTest()" style="width: 80%">
     <h5>Search</h5>
-    <select name="" id="" class="form-control">
-      <option value="">Any</option>
-      <option value="">Created</option>
-      <option value="">Running</option>
-      <option value="">Waiting</option>
-      <option value="">Ready</option>
-      <option value="">Done</option>
-      <option value="">Error</option>
-      <option value="">Stopped</option>
+    <select name="" id="" class="form-select" name="status" [(ngModel)]="m_oFilter.sStatus">
+      <option value="None">Any</option>
+      <option value="CREATED">Created</option>
+      <option value="RUNNING">Running</option>
+      <option value="WAITING">Waiting</option>
+      <option value="READY">Ready</option>
+      <option value="DONE">Done</option>
+      <option value="ERROR">Error</option>
+      <option value="STOPPED">Stopped</option>
     </select>
-    <select class="form-control">
-      <option value="">Any</option>
-      <option value="">RUNPROCESSOR</option>
-      <option value="">RUNIDL</option>
-      <option value="">RUNMATLAB</option>
-      <option value="">INGEST</option>
-      <option value="">DOWNLOAD</option>
-      <option value="">PUBLISHBAND</option>
-      <option value="">GRAPH</option>
-      <option value="">DEPLOYPROCESSOR</option>
-      <option value="">COPYTOSFTP</option>
-      <option value="">FTPUPLOAD</option>
-      <option value="">MOSAIC</option>
-      <option value="">MULTISUBSET</option>
+    <select class="form-select" name="type" [(ngModel)]="m_oFilter.sType">
+      <option value="None">Any</option>
+      <option value="RUNPROCESSOR">RUNPROCESSOR</option>
+      <option value="RUNIDL">RUNIDL</option>
+      <option value="RUNMATLAB">RUNMATLAB</option>
+      <option value="INGEST">INGEST</option>
+      <option value="DOWNLOAD">DOWNLOAD</option>
+      <option value="PUBLISHBAND">PUBLISHBAND</option>
+      <option value="GRAPH">GRAPH</option>
+      <option value="DEPLOYPROCESSOR">DEPLOYPROCESSOR</option>
+      <option value="COPYTOSFTP">COPYTOSFTP</option>
+      <option value="MOSAIC">MOSAIC</option>
+      <option value="MULTISUBSET">MULTISUBSET</option>
     </select>
-    <input type="text" class="form-control" placeholder="Name">
-    <input type="date" class="form-control" placeholder="Date">
+    <input type="text" class="form-control" name="name" placeholder="Name" [(ngModel)]="m_oFilter.sName">
+    <input type="date" class="form-control" name="date" placeholder="Date" [(ngModel)]="m_oFilter.sDate">
 
-    <button class="btn btn-success">
+    <button type="submit" class="btn btn-success">
       Apply
     </button>
     <button class="btn btn-dark">
       Reset
     </button>
-  </div>
+  </form>
   <div class="d-flex flex-row gap-2">
 
     <button class="btn btn-primary">
@@ -49,7 +51,7 @@
 </div>
 <!-- Scrollable table content -->
 <mat-dialog-content>
-  <table class="table table-ligjt table-striped table-hover table-sm" style="height: 500px; overflow: hidden;">
+  <table class="table table-ligjt table-striped table-hover table-sm">
     <thead>
       <tr>
         <th scope="col"></th>
@@ -61,8 +63,7 @@
         <th scope="col">Started</th>
         <th scope="col">Progress</th>
         <th scope="col">Duration</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
+
       </tr>
     </thead>
     <tbody>
@@ -76,10 +77,10 @@
         <td>
           {{oProcess.productName}}
         </td>
-        <td>
+        <td class="user-id">
           {{oProcess.userId}}
         </td>
-        <td>
+        <td class="file-size">
           {{oProcess.fileSize}}
         </td>
         <td>
@@ -91,10 +92,11 @@
         <td>
           {{oProcess.progressPerc}}
         </td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <button class="btn btn-primary" align="center">
+  <button class="btn btn-primary" (click)="getAllProcessesLogs()" [disabled]="!m_bIsLoadMoreBtnClickable">
     Load More
   </button>
 </mat-dialog-content>

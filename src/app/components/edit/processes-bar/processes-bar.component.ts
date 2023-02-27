@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnChanges } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
-import { faArrowDown, faArrowUp, faDownload, faFilter, faList, faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faDownload, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -68,10 +68,12 @@ export class ProcessesBarContent {
 
 @Component({
   selector: 'processes-dialog',
-  templateUrl: 'processes-dialog.html'
+  templateUrl: 'processes-dialog.html',
+  styleUrls: ['./processes-dialog.css']
 })
 export class ProcessesDialog {
   faFilter = faFilter
+  faXmark = faXmark; 
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -92,7 +94,15 @@ export class ProcessesDialog {
   m_aoAllProcessesLogs: any[] = [];
   m_sFilterTable: string = "";
   m_bAreProcessesLoaded: boolean = false;
-  m_oFilter: any = {};
+
+  //Filter inputs (form): 
+  m_oFilter: any = {
+    sStatus: "Status...",
+    sType: "Type...",
+    sDate: "", 
+    sName: ""
+
+  };
 
   m_iNumberOfProcessForRequest: number = 40;
   m_iFirstProcess = 0;
@@ -104,7 +114,7 @@ export class ProcessesDialog {
 
   getAllProcessesLogs() {
     if (!this.m_sActiveWorkspaceId) {
-      //return false; 
+      return false; 
     }
 
     this.m_bAreProcessesLoaded = false;
@@ -112,10 +122,11 @@ export class ProcessesDialog {
     this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.m_sStatus, this.m_oFilter.m_sType, this.m_oFilter.m_sDate, this.m_oFilter.m_sName).subscribe(oResponse => {
       if (oResponse) {
         this.m_aoProcessesLogs = this.m_aoProcessesLogs.concat(oResponse);
+        console.log(this.m_aoProcessesLogs)
+        this.calculateNextListOfProcesses(); 
       } else {
         this.m_bIsLoadMoreBtnClickable = false;
       }
-      console.log(oResponse)
       if (oResponse.length < this.m_iNumberOfProcessForRequest) {
         this.m_bIsLoadMoreBtnClickable = false;
       }
@@ -127,7 +138,9 @@ export class ProcessesDialog {
 
   calculateNextListOfProcesses() {
     this.m_iFirstProcess += this.m_iNumberOfProcessForRequest;
+    console.log(this.m_iFirstProcess)
     this.m_iLastProcess += this.m_iNumberOfProcessForRequest;
+    console.log(this.m_iLastProcess)
   }
 
   resetCounters() {
@@ -283,5 +296,8 @@ export class ProcessesDialog {
     return //utilsConvertOperationToDescription(oOperation);
   }
 
-  
+  formTest() {
+    console.log(this.m_oFilter)
+  }
+
 }
