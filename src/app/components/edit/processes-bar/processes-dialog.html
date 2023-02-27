@@ -1,14 +1,15 @@
 <div class="bg-secondary text-light d-flex flex-row justify-content-between align-items-center p-1">
   <h2>Workspace Processes List</h2>
-  <button class="btn fs-3">
+  <button class="btn fs-3" (click)="dismiss($event)">
     <fa-icon [icon]="faXmark"></fa-icon>
   </button>
 </div>
 <div class="d-flex flex-row gap-2 justify-content-between  p-2">
   <form class="d-flex flex-row gap-2 align-items-center" name="m_oFilter" #f="ngForm"
-    (ngSubmit)="f.form && this.formTest()" style="width: 80%">
+    (ngSubmit)="f.form && this.applyFilters()" style="width: 80%">
     <h5>Search</h5>
     <select name="" id="" class="form-select" name="status" [(ngModel)]="m_oFilter.sStatus">
+      <option value="Status" disabled selected hidden>Status</option>
       <option value="None">Any</option>
       <option value="CREATED">Created</option>
       <option value="RUNNING">Running</option>
@@ -19,6 +20,7 @@
       <option value="STOPPED">Stopped</option>
     </select>
     <select class="form-select" name="type" [(ngModel)]="m_oFilter.sType">
+      <option value="Type" disabled selected hidden>Type</option>
       <option value="None">Any</option>
       <option value="RUNPROCESSOR">RUNPROCESSOR</option>
       <option value="RUNIDL">RUNIDL</option>
@@ -33,7 +35,7 @@
       <option value="MULTISUBSET">MULTISUBSET</option>
     </select>
     <input type="text" class="form-control" name="name" placeholder="Name" [(ngModel)]="m_oFilter.sName">
-    <input type="date" class="form-control" name="date" placeholder="Date" [(ngModel)]="m_oFilter.sDate">
+    <input type="date" class="form-control" name="date" placeholder="Date" [(ngModel)]="m_oFilter.sDate" disabled="">
 
     <button type="submit" class="btn btn-success">
       Apply

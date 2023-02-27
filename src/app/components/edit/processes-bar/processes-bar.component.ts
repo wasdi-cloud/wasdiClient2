@@ -88,6 +88,7 @@ export class ProcessesDialog {
 
   constructor(
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
     private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceServiceService
   ) {
@@ -108,8 +109,8 @@ export class ProcessesDialog {
 
   //Filter inputs (form): 
   m_oFilter: any = {
-    sStatus: "Status...",
-    sType: "Type...",
+    sStatus: "Status",
+    sType: "Type",
     sDate: "",
     sName: ""
 
@@ -130,7 +131,7 @@ export class ProcessesDialog {
 
     this.m_bAreProcessesLoaded = false;
 
-    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.m_sStatus, this.m_oFilter.m_sType, this.m_oFilter.m_sDate, this.m_oFilter.m_sName).subscribe(oResponse => {
+    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
       if (oResponse) {
         this.m_aoProcessesLogs = this.m_aoProcessesLogs.concat(oResponse);
         console.log(this.m_aoProcessesLogs)
@@ -307,8 +308,17 @@ export class ProcessesDialog {
     return //utilsConvertOperationToDescription(oOperation);
   }
 
-  formTest() {
+  applyFilters() {
+    this.resetCounters(); 
+    this.m_aoProcessesLogs = []; 
     console.log(this.m_oFilter)
+    this.getAllProcessesLogs(); 
+  }
+
+
+  dismiss(event: MouseEvent): void {
+    this.m_oDialog.closeAll();
+    event.preventDefault();
   }
 
 }
