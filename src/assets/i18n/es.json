@@ -100,5 +100,9 @@
         "MARKET_FREE": "Gratis",
         "MARKET_START_PRICE": "desde €",
         "MARKET_LOAD_MORE": "CARGAR MÁS APLICACIONES DE ESPACIO"
+    },
+    "PAGE_NOT_FOUND": {
+        "MARKET_BTN": "¡Llévame al mercado!",
+        "NOT_FOUND": "Página no encontrada"
     }
 }

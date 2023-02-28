@@ -76,8 +76,8 @@
         "WAP_SELECT_WORKSPACE": "Pilih Ruang Kerja",
         "WAP_RUN_APP": "Jalankan Aplikasi",
         "WAP_MORE_INFO": "Info Lebih Lanjut"
-    }, 
-    "MARKET" : {
+    },
+    "MARKET": {
         "MARKET_SEARCH_APP": "Aplikasi Penelusuran",
         "MARKET_NAME": "NAMA",
         "MARKET_DATE": "TANGGAL",
@@ -99,5 +99,9 @@
         "MARKET_FREE": "Gratis",
         "MARKET_START_PRICE": "dari €",
         "MARKET_LOAD_MORE": "MUAT LEBIH BANYAK APLIKASI RUANG"
+    },
+    "PAGE_NOT_FOUND": {
+        "MARKET_BTN": "Bawa saya ke Pasar!",
+        "NOT_FOUND": "Halaman Tidak Ditemukan"
     }
 }

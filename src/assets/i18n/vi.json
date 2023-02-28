@@ -99,5 +99,9 @@
         "MARKET_FREE": "Miễn phí",
         "MARKET_START_PRICE": "từ €",
         "MARKET_LOAD_MORE": "TẢI THÊM ỨNG DỤNG KHÔNG GIAN"
+    },
+    "PAGE_NOT_FOUND": {
+        "MARKET_BTN": "Đưa tôi đến Chợ!",
+        "NOT_FOUND": "Không tìm thấy trang"
     }
 }

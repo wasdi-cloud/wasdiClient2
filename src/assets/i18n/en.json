@@ -104,5 +104,11 @@
         "MARKET_FREE": "Free",
         "MARKET_START_PRICE": "from €",
         "MARKET_LOAD_MORE": "LOAD MORE SPACE APPS"
+    },
+    "PAGE_NOT_FOUND" : {
+        "MARKET_BTN": "Take me to the Marketplace!", 
+        "NOT_FOUND": "Page Not Found"
     }
+
+
 }

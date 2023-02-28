@@ -99,5 +99,9 @@
         "MARKET_FREE": "Gratuit",
         "MARKET_START_PRICE": "de la €",
         "MARKET_LOAD_MORE": "ÎNCĂRCĂ MAI MULTE APLICAȚII SPATIALE"
+    },
+    "PAGE_NOT_FOUND": {
+        "MARKET_BTN": "Du-mă pe Piață!",
+        "NOT_FOUND": "Pagina nu a fost găsită"
     }
 }

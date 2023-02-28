@@ -99,5 +99,9 @@
         "MARKET_FREE": "Gratuit",
         "MARKET_START_PRICE": "à partir de €",
         "MARKET_LOAD_MORE": "CHARGER PLUS D'APPLICATIONS D'ESPACE"
+    },
+    "PAGE_NOT_FOUND": {
+        "MARKET_BTN": "Emmenez-moi sur la place de marché !",
+        "NOT_FOUND": "Page introuvable"
     }
 }

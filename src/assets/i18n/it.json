@@ -99,5 +99,9 @@
         "MARKET_FREE": "Gratis",
         "MARKET_START_PRICE": "da €",
         "MARKET_LOAD_MORE": "CARICA ALTRE APP SPAZIALI"
+    },
+    "PAGE_NOT_FOUND": {
+        "MARKET_BTN": "Portami al mercato!",
+        "NOT_FOUND": "Pagina non trovata"
     }
 }

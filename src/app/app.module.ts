@@ -21,6 +21,7 @@ import { PlanComponent } from './components/plan/plan.component';
 import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ConfirmationDialogComponent } from './shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ErrorDialogComponent } from './shared/dialogs/error-dialog/error-dialog.component';
 import { ProductsListComponent } from './components/edit/products-list/products-list.component';
@@ -91,6 +92,7 @@ import { PlanMapComponent } from './components/plan/plan-map/plan-map.component'
 import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
 import { ProcessesBarComponent, ProcessesBarContent, ProcessesDialog } from './components/edit/processes-bar/processes-bar.component';
 
+
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -138,8 +140,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     PlanMapComponent,
     EditMapComponent,
     ProcessesBarComponent,
-    ProcessesBarContent, 
-    ProcessesDialog
+    ProcessesBarContent,
+    ProcessesDialog, PageNotFoundComponent
   ],
   imports: [
     AppRoutingModule,

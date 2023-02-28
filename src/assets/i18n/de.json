@@ -99,5 +99,9 @@
         "MARKET_FREE": "Kostenlos",
         "MARKET_START_PRICE": "ab €",
         "MARKET_LOAD_MORE": "MEHR SPACE-APPS LADEN"
+    },
+    "PAGE_NOT_FOUND": {
+        "MARKET_BTN": "Bring mich zum Marktplatz!",
+        "NOT_FOUND": "Seite nicht gefunden"
     }
 }
