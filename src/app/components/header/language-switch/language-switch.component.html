@@ -1,10 +1,12 @@
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
-        aria-expanded="false">Language</a>
+        aria-expanded="false">
+    <fa-icon [icon]="faFlag"></fa-icon>
+    </a>
     <ul class="dropdown-menu">
         <li *ngFor="let language of translate.getLangs()">
             <a (click)="translateLanguageTo(language)
-                " class="dropdown-item">{{language | uppercase}}</a>
+                " class="dropdown-item">{{language | uppercase}} </a>
         </li>
     </ul>
 </li>
