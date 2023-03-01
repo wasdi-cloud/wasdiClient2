@@ -116,7 +116,7 @@ export class ConstantsService {
   }
 
   getUser() {
-    if (!this.m_oUser) {
+    if (Object.keys(this.m_oUser).length === 0) {
       let oUser = this.getCookie("oUser");
 
       if (oUser) {
@@ -202,9 +202,9 @@ export class ConstantsService {
     //     return JSON.parse(cookie.substring(name.length, cookie.length));
     //   }
     // }
-    if(!document.cookie) {
+    if (!document.cookie) {
       return ""
-    } 
+    }
     return JSON.parse(document.cookie.substring(6));
   }
 
@@ -300,5 +300,5 @@ export class ConstantsService {
     return localStorage.removeItem(sName);
   }
 
-  constructor() {}
+  constructor() { }
 }
