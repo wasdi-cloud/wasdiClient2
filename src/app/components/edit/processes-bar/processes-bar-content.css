@@ -1,0 +1,7 @@
+div.process-bar-header {
+    background-image: linear-gradient(180deg, #43516a8d, lightgray);
+}
+form.process-bar-filters { 
+    width: 100%; 
+    background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0))
+}
