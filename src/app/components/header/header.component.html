@@ -2,9 +2,10 @@
     <div class="container-fluid ">
         <div class="d-flex align-items-center">
             <a class="navbar-brand" href="#">
-                <img class="brand-logo" src="assets/images/wasdi_logo_header.png" alt="" >
+                <img class="brand-logo" src="assets/images/wasdi_logo_header.png" alt="">
             </a>
-            <input class="form-control new-workspace-name" type="text" *ngIf="m_bEditIsActive=== true" value="{{m_oActiveWorkspace.name}}">
+            <input class="form-control new-workspace-name" type="text" *ngIf="m_bEditIsActive=== true"
+                value="{{m_oActiveWorkspace.name}}">
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +33,16 @@
                     <a class="nav-link" routerLink="/admin">{{'HEADER.ADMIN_BTN' | translate}}</a>
                 </li>
                 <app-language-switch></app-language-switch>
+                <li class="nav-item">
+                    <a class="nav-link" (click)="openFeedbackDialog($event)">
+                        <fa-icon [icon]="faRocket"></fa-icon>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" (click)="openUserSettings($event)">
+                        <fa-icon [icon]="faUser"></fa-icon>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
                 </li>

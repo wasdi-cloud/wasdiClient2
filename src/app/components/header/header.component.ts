@@ -1,9 +1,11 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
-
+import { faUser, faRocket } from '@fortawesome/free-solid-svg-icons';
+import { MatDialog } from '@angular/material/dialog';
+import { UserSettingsDialogComponent } from './header-dialogs/user-settings-dialog/user-settings-dialog.component';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -12,9 +14,18 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 export class HeaderComponent implements OnInit {
   sActiveWorkspaceId: string | null = null;
   sActiveRoute: string;
-  m_bEditIsActive: boolean; 
-  m_oActiveWorkspace: Workspace
-  constructor(private oActivatedRoute: ActivatedRoute, public oConstantsService: ConstantsService, public oRouter: Router, public translate: TranslateService) {
+  m_bEditIsActive: boolean;
+  m_oActiveWorkspace: Workspace;
+  faUser = faUser;
+  faRocket = faRocket
+
+  constructor(
+    private oActivatedRoute: ActivatedRoute,
+    public oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
+    public oRouter: Router,
+    public translate: TranslateService
+  ) {
     //Register translation languages:
     translate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
     translate.setDefaultLang('en');
@@ -24,7 +35,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.oActivatedRoute.snapshot.url[0].path === 'edit') {
-      this.m_bEditIsActive = true; 
+      this.m_bEditIsActive = true;
     } else {
       this.m_bEditIsActive = false;
     }
@@ -34,6 +45,20 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.oConstantsService.logOut();
     this.oRouter.navigateByUrl("login");
+  }
+
+  openUserSettings(event: MouseEvent) {
+    console.log("Open User Settings")
+    const oDialogRef = this.m_oDialog.open(UserSettingsDialogComponent, {
+      height: '85vh', 
+      width: '60vw'
+    })
+    event.preventDefault();
+  }
+
+  openFeedbackDialog(event: MouseEvent) {
+    console.log("Open feedback dialog")
+    event.preventDefault();
   }
 
 }
