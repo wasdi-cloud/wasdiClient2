@@ -54,11 +54,12 @@ export class UserSettingsDialogComponent {
 
   changePassword() {
     let oJsonToSend = this.getPasswordsJSON();
+    console.log(oJsonToSend)
 
-    this.m_bEditingPassword = true;
-    this.m_oAuthService.changePassword(oJsonToSend).subscribe(oResponse => {
-      console.log(oResponse)
-    })
+    // this.m_bEditingPassword = true;
+    // this.m_oAuthService.changePassword(oJsonToSend).subscribe(oResponse => {
+    //   console.log(oResponse)
+    // })
   }
 
   changeUserInfo() {

@@ -42,20 +42,20 @@
     <h5 class="pb-2" style="border-bottom: 1px solid lightgrey">
         Change Password
     </h5>
-    <form class="d-flex flex-column gap-3" action="">
+    <form class="d-flex flex-column gap-3" name="m_oEditPassword" #f="ngForm">
         <div class="d-flex flew-row align-items-center gap-3">
             <label for="currentPassword" style="width: 15%">Current Password</label>
-            <input class="form-control" type="password" name="currentPassword">
+            <input class="form-control" type="password" name="currentPassword" [(ngModel)]="m_oEditPassword.currentPassword">
         </div>
 
         <div class="d-flex flew-row align-items-center gap-3">
             <label for="newPassword" style="width: 15%">New Password</label>
-            <input class="form-control" type="password" name="newPassword">
+            <input class="form-control" type="password" name="newPassword" [(ngModel)]="m_oEditPassword.newPassword">
         </div>
         <div class="d-flex flew-row align-items-center gap-3">
             <label for="newPasswordConfirm" style="width: 15%">Confirm New Password</label>
-            <input class="form-control" type="password" name="newPasswordConfirm">
+            <input class="form-control" type="password" name="newPasswordConfirm" [(ngModel)]="m_oEditPassword.newPasswordConfirm">
         </div>
-        <button class="btn btn-success align-self-end">Save Password</button>
+        <button class="btn btn-success align-self-end" (click)="changePassword()">Save Password</button>
     </form>
 </div>
