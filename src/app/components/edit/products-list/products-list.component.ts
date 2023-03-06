@@ -1,12 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { Product } from 'src/app/shared/models/product.model';
-import { Band } from 'src/app/shared/models/band.model';
 
 //Angular Material Imports:
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+
+import { faDownload, faShareAlt, faTrash, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { ProductService } from 'src/app/services/api/product.service';
 
 interface ProductNode extends Product {
   selected?: boolean;
@@ -20,12 +22,23 @@ interface ProductNode extends Product {
 })
 export class ProductsListComponent {
   @Input() productArray: Product[];
+
+  //font awesome icons
+  faDownload = faDownload;
+  faShare = faShareAlt;
+  faTrash = faTrash;
+  faInfoCircle = faInfoCircle;
+
   m_oActiveBand;
-  m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace()
+  m_oActiveWorkspace; 
   treeControl: NestedTreeControl<any>
   dataSource: MatTreeNestedDataSource<any>
 
-  constructor(private m_oFileBufferService: FileBufferService, private m_oConstantsService: ConstantsService) {
+  constructor(
+    private m_oConstantsService: ConstantsService,
+    private m_oFileBufferService: FileBufferService,
+    private m_oProductService: ProductService
+  ) {
     this.treeControl = new NestedTreeControl<any>(node => {
       if (node.bandsGroups) {
         return node.bandsGroups.bands
@@ -36,6 +49,7 @@ export class ProductsListComponent {
 
   ngOnChanges() {
     this.dataSource.data = this.productArray;
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace()
   }
 
   hasChild(_: number, node: Product) {
@@ -46,95 +60,32 @@ export class ProductsListComponent {
     }
   };
 
-  /**
-     * Get a list of bands for a product
-     * @param oProductItem
-     * @returns {Array}
-     */
-  // EditorController.prototype.getBandsForProduct = function (oProduct) {
-  //   var asBands = [];
+  deleteProduct(node: any) {
+    //Confirm Product Removal
+    let bDeleteLayer = true;
+    let bDeleteFile = true; 
 
-  //   var aoBands = oProduct.bandsGroups.bands;
+    //Get product from array
+    let oFoundProduct = this.productArray.find(oProduct => oProduct.fileName === node.fileName); 
 
-  //   var iBandCount = 0;
+    console.log(oFoundProduct);
+    console.log(this.m_oActiveWorkspace.workspaceId)
 
-  //   if (!utilsIsObjectNullOrUndefined(aoBands)) {
-  //     iBandCount = aoBands.length;
-  //   }
+    //Call m_oProductService.deleteProductFromWorkspace()
+    this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
+      if(oResponse.boolValue) {
+        
+      }
+      console.log(oResponse)
+    })
 
-  //   for (var i = 0; i < iBandCount; i++) {
-  //     var oBandItem = {};
-  //     oBandItem.name = aoBands[i].name;
-  //     oBandItem.productName = oProduct.name;
-  //     oBandItem.productIndex = oProduct.selfIndex;
-  //     oBandItem.height = aoBands[i].height;
-  //     oBandItem.width = aoBands[i].width;
+    //in subscription, 
 
-  //     if (!utilsIsObjectNullOrUndefined(aoBands[i].published)) {
-  //       oBandItem.published = aoBands[i].published;
-  //     } else {
-  //       if (utilsIsStrNullOrEmpty(aoBands[i].layerId)) oBandItem.published = false;
-  //       else oBandItem.published = true;
-  //     }
+    //if deletion successful, reload product tree
 
-  //     oBandItem.layerId = aoBands[i].layerId;
-  //     oBandItem.bVisibleNow = false;
-  //     oBandItem.bbox = oProduct.bbox;
-  //     oBandItem.geoserverBoundingBox = aoBands[i].geoserverBoundingBox;
-  //     oBandItem.geoserverUrl = aoBands[i].geoserverUrl;
+    //if deletion unsuccessful show dialog
 
-  //     asBands.push(oBandItem);
-  //   }
-
-  //   return asBands;
-  // };
-
-
-  /**
-   * Get the list of products for a Workspace
-   */
-  getProductListByWorkspace() {
-    // if (utilsIsObjectNullOrUndefined(oController.m_oActiveWorkspace)) return;
-
-    // this.m_oProductService.getProductListByWorkspace(oController.m_oActiveWorkspace.workspaceId).then(function (data, status) {
-
-    //   if (utilsIsObjectNullOrUndefined(data.data) == false) {
-
-    //     oController.m_aoProducts = []
-
-    //     //push all products
-    //     for (var iIndex = 0; iIndex < data.data.length; iIndex++) {
-
-    //       //check if friendly file name isn't null
-    //       if (utilsIsObjectNullOrUndefined(data.data[iIndex].productFriendlyName) == true) {
-    //         data.data[iIndex].productFriendlyName = data.data[iIndex].name;
-    //       }
-
-    //       // Add the product to the list
-    //       oController.m_aoProducts.push(data.data[iIndex]);
-    //     }
-
-    //     // i need to make the tree after the products are loaded
-    //     oController.m_oTree = oController.generateTree();
-    //     oController.m_bIsLoadingTree = false;
-
-    //     if (oController.m_b2DMapModeOn === false) {
-    //       oController.m_oMapService.addAllWorkspaceRectanglesOnMap(oController.m_aoProducts);
-    //       oController.m_oMapService.flyToWorkspaceBoundingBox(oController.m_aoProducts);
-
-    //     } else {
-    //       oController.m_oGlobeService.addAllWorkspaceRectanglesOnMap(oController.m_aoProducts);
-    //       oController.m_oGlobeService.flyToWorkspaceBoundingBox(oController.m_aoProducts);
-    //     }
-
-
-    //   }
-    // }, (function (data, status) {
-    //   var sMessage = this.m_oTranslate.instant("MSG_PRODUCT_LIST_ERROR")
-    //   utilsVexDialogAlertTop(sMessage);
-    // }));
-  };
-
+  }
 
   /**
      * OPEN BAND IMAGE

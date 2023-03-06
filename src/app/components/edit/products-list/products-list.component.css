@@ -1,5 +1,5 @@
 div.products-container {
-  height: 50vh; 
+  height: 35vh; 
   overflow-y: scroll;
   overflow-x: hidden;
   width: 35vw; 
@@ -19,9 +19,7 @@ h3.products-header {
   padding-left: 1rem;
 }
 
-mat-tree {
-  margin-left: 40px;
-}
+
 .mat-tree-node {
   background-color: #FFFFFF;
   font-size: 14px;
@@ -29,10 +27,13 @@ mat-tree {
   padding: 0;
 }
 
-.mat-nested-tree-node {
-  top: -24px;
+span.product-name {
+  display: block; 
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 12rem;
 }
-
 
 ul,
 li {
@@ -41,40 +42,6 @@ li {
   padding: 0;
 }
 
-ul {
-  
-}
-
-li {
-  padding-left: 40px;
-  border: 1px dotted grey;
-  border-width: 0 0 1px 1px;
-  position: relative;
-  top: -24px;
-}
-
 li.tree-container {
   border-bottom: 0;
-}
-
-li.mat-tree-node,
-li div { 
-  margin: 0;
-  position: relative;
-  top: 24px; 
-}
-
-li ul {
-  border-top: 1px dotted grey;
-  margin-left: -40px;
-  padding-left: 53px;
-}
-
-.mat-nested-tree-node:last-child ul {
-  border-left: 1px solid white;
-  margin-left: -41px;
-}
-
-.mat-icon-button {
-  z-index: 100;
 }
