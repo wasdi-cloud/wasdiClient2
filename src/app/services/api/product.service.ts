@@ -32,7 +32,7 @@ export class ProductService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get(sUrl + '/product/delete?name=' + sProductName + '&workspace=' + sWorkspaceId + '&deletefile=' + bDeleteFile + '&deletelayer=' + bDeleteLayer);
+    return this.oHttp.get<any>(sUrl + '/product/delete?name=' + sProductName + '&workspace=' + sWorkspaceId + '&deletefile=' + bDeleteFile + '&deletelayer=' + bDeleteLayer);
   };
 
   deleteProductListFromWorkspace(sProductNameList: string, sWorkspaceId: string, bDeleteFile: boolean, bDeleteLayer: boolean) {
