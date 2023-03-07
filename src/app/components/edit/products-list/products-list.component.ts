@@ -9,6 +9,7 @@ import { ConstantsService } from 'src/app/services/constants.service';
 
 import { faDownload, faShareAlt, faTrash, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { ProductService } from 'src/app/services/api/product.service';
+import { CatalogService } from 'src/app/services/api/catalog.service';
 
 interface ProductNode extends Product {
   selected?: boolean;
@@ -35,6 +36,7 @@ export class ProductsListComponent {
   dataSource: MatTreeNestedDataSource<any>
 
   constructor(
+    private m_oCatalogService: CatalogService, 
     private m_oConstantsService: ConstantsService,
     private m_oFileBufferService: FileBufferService,
     private m_oProductService: ProductService
@@ -59,6 +61,48 @@ export class ProductsListComponent {
       return !!node.bandsGroups.bands && node.bandsGroups.bands.length > 0
     }
   };
+
+  findProductByName(node) {
+    let oFoundProduct = this.productArray.find(oProduct => oProduct.fileName === node.fileName);
+    return oFoundProduct
+  }
+
+  /**
+   * Called from the Product list tree and executes a download of the product
+   * @param node 
+   */
+  downloadProduct(node: any) {
+    if(node.fileName) {
+      this.downloadProductByName(node.fileName)
+    }
+  }
+
+  /**
+   * Takes a file name and creates download file for the product
+   * @param sFileName 
+   * @returns boolean
+   */
+  downloadProductByName(sFileName: string) {
+    if(!sFileName) {
+      return false;
+    }
+    let sUrl: string; 
+    if(this.m_oConstantsService.getActiveWorkspace().apiUrl) {
+      sUrl = this.m_oConstantsService.getActiveWorkspace().apiUrl; 
+    }
+
+    this.m_oCatalogService.newDownloadByName(sFileName, this.m_oActiveWorkspace.workspaceId, sUrl).subscribe(blob=> {
+      
+      const a = document.createElement('a'); 
+      const objectUrl = URL.createObjectURL(blob);
+      a.href = objectUrl; 
+      a.download = sFileName; 
+      a.click(); 
+      URL.revokeObjectURL(objectUrl); 
+    
+    })
+    return true;
+  }
 
   deleteProduct(node: any) {
     //Confirm Product Removal

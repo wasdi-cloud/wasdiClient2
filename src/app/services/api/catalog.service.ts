@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ConstantsService } from '../constants.service';
 
 @Injectable({
@@ -27,7 +28,7 @@ export class CatalogService {
     window.location.href = sAPIUrl + "/catalog/downloadbyname" + urlParams;
   };
 
-  newDownloadByName(sFileName: string, sWorkspace: string, sUrl: string) {
+  newDownloadByName(sFileName: string, sWorkspace: string, sUrl: string): Observable<Blob> {
     var urlParams = "?" + "token=" + this.oConstantsService.getSessionId();
     urlParams = urlParams + "&" + "filename=" + sFileName + "&workspace=" + sWorkspace;
 
@@ -41,7 +42,7 @@ export class CatalogService {
       }
     }
 
-    return this.oHttp.get(sAPIUrl + "/catalog/downloadbyname" + urlParams, { responseType: 'arraybuffer' });
+    return this.oHttp.get(sAPIUrl + "/catalog/downloadbyname" + urlParams, { responseType: 'blob'});
   };
 
   ingestFile(sSelectedFile: string, sWorkspace: string) {
