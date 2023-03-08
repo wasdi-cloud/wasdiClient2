@@ -92,6 +92,7 @@ import { PlanMapComponent } from './components/plan/plan-map/plan-map.component'
 import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
 import { ProcessesBarComponent, ProcessesBarContent, ProcessesDialog } from './components/edit/processes-bar/processes-bar.component';
 import { UserSettingsDialogComponent } from './components/header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
+import { ProductPropertiesDialogComponent } from './components/edit/products-list/product-properties-dialog/product-properties-dialog.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -142,7 +143,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditMapComponent,
     ProcessesBarComponent,
     ProcessesBarContent,
-    ProcessesDialog, PageNotFoundComponent, UserSettingsDialogComponent
+    ProcessesDialog, PageNotFoundComponent, UserSettingsDialogComponent, ProductPropertiesDialogComponent
   ],
   imports: [
     AppRoutingModule,
