@@ -41,7 +41,7 @@ export class StyleService {
 
   // Get Style list by user
   getStylesByUser() {
-    return this.oHttp.get(this.APIURL + '/styles/getbyuser');
+    return this.oHttp.get<any>(this.APIURL + '/styles/getbyuser');
   };
 
   // Download style file --> sUrl was set to null 
