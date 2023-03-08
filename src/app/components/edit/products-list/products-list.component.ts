@@ -10,6 +10,8 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { faDownload, faShareAlt, faTrash, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { ProductService } from 'src/app/services/api/product.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
 
 interface ProductNode extends Product {
   selected?: boolean;
@@ -38,6 +40,7 @@ export class ProductsListComponent {
   constructor(
     private m_oCatalogService: CatalogService, 
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog, 
     private m_oFileBufferService: FileBufferService,
     private m_oProductService: ProductService
   ) {
@@ -102,6 +105,13 @@ export class ProductsListComponent {
     
     })
     return true;
+  }
+
+  openProductProperties(event: MouseEvent) {
+    const oDialogRef = this.m_oDialog.open(ProductPropertiesDialogComponent, {
+      height: '85vh', 
+      width: '60vw'
+    })
   }
 
   deleteProduct(node: any) {
