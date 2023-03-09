@@ -2,10 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConstantsService } from '../constants.service';
 
+import { HttpResponse as defaultResponse} from 'src/app/shared/models/http-response.model';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ConsoleService {
+
   APIURL: string = this.oConstantsService.getAPIURL();
   m_bIgnoreWorkspaceApiUrl: boolean = this.oConstantsService.getIgnoreWorkspaceApiUrl();
   m_sResource: string = "/console";
@@ -26,7 +29,9 @@ export class ConsoleService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    // return this.oHttp.post(sUrl + this.m_sResource + '/create?workspaceId=' + sWorkspaceId);
+
+
+    return this.oHttp.post<defaultResponse>(sUrl + this.m_sResource + '/create?workspaceId=' + sWorkspaceId, {});
   };
 
   /**
