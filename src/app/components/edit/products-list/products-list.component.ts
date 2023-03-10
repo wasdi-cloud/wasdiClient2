@@ -7,7 +7,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 
-import { faDownload, faShareAlt, faTrash, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope } from '@fortawesome/free-solid-svg-icons';
 import { ProductService } from 'src/app/services/api/product.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -31,16 +31,19 @@ export class ProductsListComponent {
   faShare = faShareAlt;
   faTrash = faTrash;
   faInfoCircle = faInfoCircle;
+  faGlobe = faGlobeEurope;
+  faMap = faMap;
+  //searchFilter: Subject<string> = new 
 
   m_oActiveBand;
-  m_oActiveWorkspace; 
+  m_oActiveWorkspace;
   treeControl: NestedTreeControl<any>
   dataSource: MatTreeNestedDataSource<any>
 
   constructor(
-    private m_oCatalogService: CatalogService, 
+    private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog, 
+    private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
     private m_oProductService: ProductService
   ) {
@@ -75,7 +78,7 @@ export class ProductsListComponent {
    * @param node 
    */
   downloadProduct(node: any) {
-    if(node.fileName) {
+    if (node.fileName) {
       this.downloadProductByName(node.fileName)
     }
   }
@@ -86,30 +89,28 @@ export class ProductsListComponent {
    * @returns boolean
    */
   downloadProductByName(sFileName: string) {
-    if(!sFileName) {
+    if (!sFileName) {
       return false;
     }
-    let sUrl: string; 
-    if(this.m_oConstantsService.getActiveWorkspace().apiUrl) {
-      sUrl = this.m_oConstantsService.getActiveWorkspace().apiUrl; 
+    let sUrl: string;
+    if (this.m_oConstantsService.getActiveWorkspace().apiUrl) {
+      sUrl = this.m_oConstantsService.getActiveWorkspace().apiUrl;
     }
 
-    this.m_oCatalogService.newDownloadByName(sFileName, this.m_oActiveWorkspace.workspaceId, sUrl).subscribe(blob=> {
-      
-      const a = document.createElement('a'); 
+    this.m_oCatalogService.newDownloadByName(sFileName, this.m_oActiveWorkspace.workspaceId, sUrl).subscribe(blob => {
+      const a = document.createElement('a');
       const objectUrl = URL.createObjectURL(blob);
-      a.href = objectUrl; 
-      a.download = sFileName; 
-      a.click(); 
-      URL.revokeObjectURL(objectUrl); 
-    
+      a.href = objectUrl;
+      a.download = sFileName;
+      a.click();
+      URL.revokeObjectURL(objectUrl);
     })
     return true;
   }
 
   openProductProperties(event: MouseEvent) {
     const oDialogRef = this.m_oDialog.open(ProductPropertiesDialogComponent, {
-      height: '85vh', 
+      height: '85vh',
       width: '60vw'
     })
   }
@@ -117,18 +118,18 @@ export class ProductsListComponent {
   deleteProduct(node: any) {
     //Confirm Product Removal
     let bDeleteLayer = true;
-    let bDeleteFile = true; 
+    let bDeleteFile = true;
 
     //Get product from array
-    let oFoundProduct = this.productArray.find(oProduct => oProduct.fileName === node.fileName); 
+    let oFoundProduct = this.productArray.find(oProduct => oProduct.fileName === node.fileName);
 
     console.log(oFoundProduct);
     console.log(this.m_oActiveWorkspace.workspaceId)
 
     //Call m_oProductService.deleteProductFromWorkspace()
     this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
-      if(oResponse.boolValue) {
-        
+      if (oResponse.boolValue) {
+
       }
       console.log(oResponse)
     })
@@ -146,13 +147,10 @@ export class ProductsListComponent {
      * Called from the tree to open a band
      * @param oBand
      */
-  openBandImage(oBand, index) {
+  openBandImage(oBand) {
     let sFileName = this.productArray[oBand];
     let bAlreadyPublished = oBand.published;
 
-    console.log(sFileName)
-    console.log(index)
-    console.log(oBand)
 
     // this.m_oActiveBand = oBand;
 
