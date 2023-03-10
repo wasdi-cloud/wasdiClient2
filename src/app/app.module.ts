@@ -41,6 +41,8 @@ import { MatNativeDateModule } from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
+import { CdkTreeModule } from '@angular/cdk/tree';
+
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -93,6 +95,7 @@ import { EditMapComponent } from './components/edit/edit-map/edit-map.component'
 import { ProcessesBarComponent, ProcessesBarContent, ProcessesDialog } from './components/edit/processes-bar/processes-bar.component';
 import { UserSettingsDialogComponent } from './components/header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
 import { ProductPropertiesDialogComponent } from './components/edit/products-list/product-properties-dialog/product-properties-dialog.component';
+import { NavLayersComponent } from './components/edit/nav-layers/nav-layers.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -143,7 +146,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditMapComponent,
     ProcessesBarComponent,
     ProcessesBarContent,
-    ProcessesDialog, PageNotFoundComponent, UserSettingsDialogComponent, ProductPropertiesDialogComponent
+    ProcessesDialog, PageNotFoundComponent, UserSettingsDialogComponent, ProductPropertiesDialogComponent, NavLayersComponent
   ],
   imports: [
     AppRoutingModule,
@@ -175,7 +178,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatNativeDateModule,
     MatCheckboxModule,
     MatBottomSheetModule,
-    FontAwesomeModule
+    FontAwesomeModule, 
+
   ],
   providers: [
     AuthService,
