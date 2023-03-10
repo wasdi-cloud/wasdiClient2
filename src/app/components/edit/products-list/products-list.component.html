@@ -1,6 +1,6 @@
 <div style="height: 100%">
     <h3 class="products-header bg-dark text-light sticky">Products</h3>
-    <input matInput class="form-control" (input)="filterChanged($event)" placeholder="Seach Prodcuts">
+    <input matInput class="form-control" placeholder="Seach Prodcuts">
 
     <div class="products-container d-flex flex-column gap-3" style="height:83%">
 
@@ -61,8 +61,7 @@
                                 <button class="btn"><fa-icon [icon]="faTrash" title="Delete Product"
                                         (click)="deleteProduct(node)"></fa-icon></button>
                             </div>
-                            <div class="d-flex flex-row gap-2 mr-2" *ngIf="!node.bandsGroups"
-                                (click)="getParent(node)">
+                            <div class="d-flex flex-row gap-2 mr-2" *ngIf="!node.bandsGroups"git >
                                 <button class="btn">
                                     <fa-icon [icon]="faMap" title="Show on 2D Map"></fa-icon>
                                 </button>
