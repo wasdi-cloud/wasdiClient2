@@ -1,0 +1,11 @@
+div.parent {
+    height: 100%; 
+}
+div.nav-layers-bar {
+    position: absolute;
+    bottom: 0;
+}
+
+li.nav-item {
+    cursor: pointer;
+}

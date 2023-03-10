@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-nav-layers',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class NavLayersComponent {
 
+  faX = faX; 
+  m_bShowContent: boolean = false; 
+
+  constructor() {
+    
+  }
 }
