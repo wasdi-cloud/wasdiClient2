@@ -3,7 +3,8 @@ import { Band } from "./band.model"
 export interface Product {
     bandsGroups: {
         bands?:Band[],
-        nodeName: string 
+        nodeName: string, 
+        id?: number;
     }, 
     bbox: string, 
     description: string, 

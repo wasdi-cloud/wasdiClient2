@@ -6,4 +6,5 @@ export interface Band {
     name: string, 
     published: boolean, 
     width: number
+    nodeIndex?: number;
 }
