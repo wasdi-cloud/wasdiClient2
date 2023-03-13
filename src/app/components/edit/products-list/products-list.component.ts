@@ -12,11 +12,9 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
-
-interface ProductNode extends Product {
-  selected?: boolean;
-  indeterminate?: boolean;
-}
+import { MapService } from 'src/app/services/map.service';
+import * as L from "leaflet"
+import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
 
 @Component({
   selector: 'app-products-list',
@@ -25,6 +23,7 @@ interface ProductNode extends Product {
 })
 export class ProductsListComponent {
   @Input() productArray: Product[];
+  @Input() map: any;
 
   //font awesome icons
   faDownload = faDownload;
@@ -39,13 +38,17 @@ export class ProductsListComponent {
   m_oActiveWorkspace;
   treeControl: NestedTreeControl<any>
   dataSource: MatTreeNestedDataSource<any>
+  m_aoDisplayBands: any[];
+  m_oDisplayMap: L.Map | null;
 
   constructor(
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
-    private m_oProductService: ProductService
+    private m_oMapService: MapService,
+    private m_oProductService: ProductService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceServiceService
   ) {
     this.treeControl = new NestedTreeControl<any>(node => {
       if (node.bandsGroups) {
@@ -64,6 +67,12 @@ export class ProductsListComponent {
     if (!node.bandsGroups) {
       return !!node
     } else {
+      //Add id to child nodes (bands)
+      if (node.bandsGroups.bands) {
+        node.bandsGroups.bands.forEach(band => {
+          band.nodeIndex = _
+        })
+      }
       return !!node.bandsGroups.bands && node.bandsGroups.bands.length > 0
     }
   };
@@ -148,47 +157,88 @@ export class ProductsListComponent {
      * @param oBand
      */
   openBandImage(oBand) {
-    let sFileName = this.productArray[oBand];
+    let sFileName = this.productArray[oBand.nodeIndex].fileName;
     let bAlreadyPublished = oBand.published;
+    this.m_oActiveBand = oBand;
+
+    console.log(oBand.name)
+    console.log(this.m_oActiveWorkspace.workspaceId)
+
+    this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
+      console.log(oResponse);
 
 
-    // this.m_oActiveBand = oBand;
+      if (oResponse.messageCode === "PUBLISHBAND") {
+        // Already published: we already have the View Model
+        this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
+      } else {
+        this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+      }
 
-    // // Geographical Mode On: geoserver publish band
-    // this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(response=> {
+    })
+  }
 
-    //   if (!bAlreadyPublished) {
-    //     // var oDialog = utilsVexDialogAlertBottomRightCorner('PUBLISHING BAND ' + oBand.name);
-    //     // utilsVexCloseDialogAfter(4000, oDialog);
-    //     console.log("Already published")
-    //   }
+  receivedPublishBandMessage(oMessage: any, oActiveBand: any) {
+    let oPublishedBand = oMessage.payload;
+    if (oPublishedBand === null || oPublishedBand === undefined) {
+      console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
+      return false;
+    }
 
-    //   // if (this.m_aoVisibleBands.length === 0) {
-    //   //   this.setActiveTab(1);
-    //   // }
 
-    //   if (!response && response.messageResult !== "KO" && response.messageResult) {
-    //     /*if the band was published*/
+    oActiveBand.bbox = oPublishedBand.bbox;
+    oActiveBand.geoserverBoundingBox = oPublishedBand.geoserverBoundingBox;
+    oActiveBand.geoserverUrl = oPublishedBand.geoserverUrl;
+    oActiveBand.layerId = oPublishedBand.layerId;
+    oActiveBand.published = true;
+    oActiveBand.showLegend = false;
 
-    //     if (response.messageCode === "PUBLISHBAND") {
-    //       // Already published: we already have the View Model
-    //       //this.receivedPublishBandMessage(data.data);
-    //     } else {
-    //       //this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
-    //       // It is publishing: we will receive Rabbit Message
-    //       //if (data.data.messageCode !== "WAITFORRABBIT") this.setTreeNodeAsDeselected(oBand.productName + "_" + oBand.name);
-    //     }
 
-    //   } else {
-    //     // var sMessage = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
-    //     // utilsVexDialogAlertTop(sMessage + oBand.name);
-    //     //this.setTreeNodeAsDeselected(oBand.productName + "_" + oBand.name);
-    //   }
-    // // }, (function (data, status) {
-    // //   console.log('publish band error');
-    // //   // var sMessage = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
-    // //   // utilsVexDialogAlertTop(sMessage);
-    // //   this.setTreeNodeAsDeselected(oBand.productName + "_" + oBand.name);
-    // });
-  };
+    let sColor = "#000";
+    let sGeoserverBBox = oActiveBand.geoserverBoundingBox;
+    this.productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, oActiveBand.bbox, oActiveBand.layerId);
+    //if we are in 2D put it on the map
+    this.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
+    if (typeof oPublishedBand === undefined) {
+      console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
+      return false;
+    }
+
+    oActiveBand.opacity = 100;
+
+
+    return true;
+  }
+
+  productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, asBbox, sLayerId) {
+    if (this.m_oMapService.isProductGeoreferenced(asBbox, sGeoserverBBox) === false) {
+      let oRectangleBoundingBoxMap: L.Rectangle = this.m_oMapService.addRectangleByGeoserverBoundingBox(sGeoserverBBox, sColor, this.m_oMapService.getMap());
+
+      if (oRectangleBoundingBoxMap) {
+        oRectangleBoundingBoxMap.options.attribution = "wasdi:" + sLayerId;
+      }
+    }
+  }
+
+  addLayerMap2DByServer(sLayerId, sServer) {
+    if (sLayerId == null) {
+      return false;
+    }
+    if (sServer == null) {
+      sServer = this.m_oConstantsService.getWmsUrlGeoserver();
+    }
+
+    let oMap = this.m_oMapService.getMap();
+
+    let wmsLayer = L.tileLayer.wms(sServer, {
+      layers: sLayerId,
+      format: 'image/png',
+      transparent: true,
+      noWrap: true
+    });
+    wmsLayer.setZIndex(1000);
+    wmsLayer.addTo(oMap);
+    return true;
+
+  }
 }

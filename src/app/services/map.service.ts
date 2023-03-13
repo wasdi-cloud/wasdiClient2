@@ -10,7 +10,6 @@ import * as L from "leaflet";
 })
 export class MapService {
 
-
   constructor(private m_oConstantsService: ConstantsService) {
     this.initTilelayer();
     this.m_oOptions = {
@@ -25,6 +24,8 @@ export class MapService {
   }
 
   APIURL = this.m_oConstantsService.getAPIURL();
+
+
   //Layers
   m_oOSMBasic: any;
   m_oOpenTopoMap: any;
@@ -66,6 +67,9 @@ export class MapService {
       edit: false,
       remove: true
     }
+  }
+  setMap(oMap: any) {
+    this.m_oWasdiMap = oMap;
   }
   /**
    * Get the Map object
@@ -880,29 +884,23 @@ export class MapService {
     return aiInvertedArraySplit;
   };
 
-  addRectangleByGeoserverBoundingBox(geoserverBoundingBox, sColor) {
-    try {
-      if (!geoserverBoundingBox) {
-        console.log("MapService.addRectangleByGeoserverBoundingBox: geoserverBoundingBox is null or empty ");
-        return false;
-      }
-      if (!sColor || sColor === "") {
-        sColor = "#ff7800";
-      }
-      geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
-      let oBounds = JSON.parse(geoserverBoundingBox);
-      //Zoom on layer
-      // let corner1 = L.latLng(oBounds.maxy, oBounds.maxx),
-      //     corner2 = L.latLng(oBounds.miny, oBounds.minx),
-      //     bounds = L.latLngBounds(corner1, corner2);
-      let bounds: L.LatLngBoundsExpression = [[oBounds.maxy, oBounds.maxx], [oBounds.miny, oBounds.minx]];
-      let oRectangle = L.rectangle(bounds, { color: sColor, weight: 2 }).addTo(this.m_oWasdiMap);
+  addRectangleByGeoserverBoundingBox(geoserverBoundingBox, sColor, oMap) {
+    if (!geoserverBoundingBox) {
+      console.log("MapService.addRectangleByGeoserverBoundingBox: geoserverBoundingBox is null or empty ");
+    }
+    if (!sColor || sColor === "") {
+      sColor = "#ff7800";
+    }
 
-      return oRectangle
-    }
-    catch (e) {
-      console.log(e);
-    }
-    return null;
+    console.log(geoserverBoundingBox)
+    geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
+    let oBounds = JSON.parse(geoserverBoundingBox);
+    //Zoom on layer
+    let corner1 = L.latLng(oBounds.maxy, oBounds.maxx);
+    let corner2 = L.latLng(oBounds.miny, oBounds.minx);
+    let bounds: L.LatLngBoundsExpression = L.latLngBounds(corner1, corner2);
+    let oRectangle = L.rectangle(bounds, { color: sColor, weight: 2 }).addTo(oMap);
+
+    return oRectangle
   }
 }
