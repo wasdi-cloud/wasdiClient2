@@ -117,8 +117,11 @@ export class ProductsListComponent {
     return true;
   }
 
-  openProductProperties(event: MouseEvent) {
+  openProductProperties(event: MouseEvent, node: any) {
     const oDialogRef = this.m_oDialog.open(ProductPropertiesDialogComponent, {
+      data: {
+        product: node
+      },
       height: '85vh',
       width: '60vw'
     })
