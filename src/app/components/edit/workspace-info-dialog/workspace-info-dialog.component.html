@@ -1,30 +1,45 @@
 <h1 mat-dialog-title>Workspace Details</h1>
 
-<div mat-dialog-content>
-    <div>
-        Owner:
-    </div>
-    <div>
-        Node:
-    </div>
-    <div>
-        Last Update:
-    </div>
-    <div>
-        Workspace Id:
-    </div>
-    <div>
-        Total Files:
-    </div>
-    <div>
-        Processes Executed:
-    </div>
-    <div>
-        Workspace Shared With:
-    </div>
+<div mat-dialog-content class="d-flex flex-row">
+    <div class="d-flex flex-column gap-3">
+        <div>
+            Owner: <span class="text-secondary">{{m_oWorkspace.userId}}</span>
+        </div>
+        <div>
+            Node:<span class="text-secondary">{{m_oWorkspace.nodeCode}}</span>
+        </div>
 
+        <div>
+            Created:<span class="text-secondary">{{m_oWorkspace.creationDate}}</span>
+        </div>
+        <div>
+            Last Update:<span class="text-secondary">{{m_oWorkspace.lastEditDate}}</span>
+        </div>
+        <div>
+            Workspace Id:<span class="text-secondary">{{m_oWorkspace.workspaceId}}</span>
+        </div>
+
+        <!-- <div>
+        Processes Executed:<span class="text-secondary">{{m_oWorkspace.processesCount}}</span>
+    </div> -->
+        <div>
+            Workspace Shared With:
+            <ul>
+                <li *ngFor="let oSharedUser of m_oWorkspace.sharedUsers">
+                    {{oSharedUser}}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <form #nodeCodeForm="ngForm" id="nodeCodeForm" (ngSubmit)="saveNodeCode()">
+            <select class="form-contorl" name="m_sCurrentNode" [(ngModel)]="m_sCurrentNode" id="">
+                <option *ngFor="let oNode of m_asNodeCodes" value={{oNode}} [selected]="oNode === m_oWorkspace.nodeCode">{{oNode}}</option>
+            </select>
+        </form>
+    </div>
 </div>
-<div mat-dialog-actions class="d-flex flex-row justify-content-end gap-3">
-    <button class="btn btn-primary" mat-button>Apply</button>
+<div mat-dialog-actions class="d-flex flex-row justify-content-end gap-2">
+    <button class="btn btn-primary" form="nodeCodeForm" mat-button>Apply</button>
     <button class="btn btn-secondary" mat-button mat-dialog-close>Close</button>
 </div>

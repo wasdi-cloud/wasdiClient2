@@ -1,57 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
+import { faSearch, faRefresh, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { MatDialog } from '@angular/material/dialog';
+import { WorkspaceInfoDialogComponent } from '../workspace-info-dialog/workspace-info-dialog.component';
 @Component({
   selector: 'app-edit-toolbar',
   templateUrl: './edit-toolbar.component.html',
   styleUrls: ['./edit-toolbar.component.css']
 })
-export class EditToolbarComponent {
-  m_oActiveWorkspace: Workspace;
+export class EditToolbarComponent implements OnInit {
+  //Font Awesome Icons: 
+  faSearch = faSearch;
+  faRefresh = faRefresh;
+  faInfo = faInfoCircle;
+
+  @Input() m_oActiveWorkspace: Workspace;
 
   constructor(
     private m_oConsoleService: ConsoleService,
-    private m_oConstantsService: ConstantsService
-  ) { 
-    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace(); 
+    private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog
+  ) { }
+
+  ngOnInit() { }
+
+  openWorkspaceInfo(event: MouseEvent) {
+    let oDialogRef = this.m_oDialog.open(WorkspaceInfoDialogComponent, {
+      width: '60vw',
+      data: this.m_oActiveWorkspace
+    });
   }
-
-
-
-  filterRecursive(sFilterText: string, aoProductsArray: any[], sProperty: string) {
-    let filteredData;
-
-    function copy(o: any) {
-      return Object.assign({}, o);
-    }
-
-    if (sFilterText) {
-      sFilterText = sFilterText.toLowerCase();
-
-      filteredData = aoProductsArray.map(copy).filter(function x(y) {
-        if (y[sProperty].toLowerCase().includes(sFilterText)) {
-          return true;
-        }
-
-        if (y.children) {
-          return (y.children = y.children.map(copy).filter(x)).length;
-        }
-      });
-    } else {
-      filteredData = aoProductsArray;
-    }
-    return filteredData;
-  }
-
-  applyFilter(filterText: string) {
-    console.log(filterText)
-  }
-
   openJupyterNotebookPage(event: MouseEvent) {
     event.preventDefault
-    this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse =>{
+    this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
       window.open(oResponse.stringValue, "_blank")
     })
   }

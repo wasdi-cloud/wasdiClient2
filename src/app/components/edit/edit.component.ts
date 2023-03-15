@@ -86,6 +86,8 @@ export class EditComponent implements OnInit {
           this.m_oActiveWorkspace = oResponse
           this.m_oConstantsService.setActiveWorkspace(this.m_oActiveWorkspace);
 
+          console.log(this.m_oActiveWorkspace)
+
           //Workspace is now defined => Load Processes
           this.getProcesses()
         })
