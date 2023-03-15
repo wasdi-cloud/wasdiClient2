@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
@@ -18,6 +18,9 @@ export class EditToolbarComponent implements OnInit {
   faInfo = faInfoCircle;
 
   @Input() m_oActiveWorkspace: Workspace;
+  @Output() m_sSearchString = new EventEmitter();
+
+  m_sFilterText: string;
 
   constructor(
     private m_oConsoleService: ConsoleService,
@@ -38,5 +41,16 @@ export class EditToolbarComponent implements OnInit {
     this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
       window.open(oResponse.stringValue, "_blank")
     })
+  }
+
+  getFilterText() {
+
+    if (this.m_sFilterText === undefined || this.m_sFilterText === null) {
+      this.m_sFilterText = "";
+      console.log(this.m_sFilterText)
+    }
+    console.log(this.m_sFilterText)
+    this.m_sSearchString.emit(this.m_sFilterText);
+    return this.m_sFilterText;
   }
 }

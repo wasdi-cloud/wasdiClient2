@@ -24,6 +24,7 @@ import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-wor
 export class ProductsListComponent {
   @Input() productArray: Product[];
   @Input() map: any;
+  @Input() m_sSearchString: string;
 
   //font awesome icons
   faDownload = faDownload;
@@ -59,8 +60,22 @@ export class ProductsListComponent {
   }
 
   ngOnChanges() {
-    this.dataSource.data = this.productArray;
+    this.filterProducts();
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace()
+  }
+
+  filterProducts() {
+    if (this.m_sSearchString) {
+      let filteredProducts = []
+      this.productArray.forEach(oProduct => {
+        if (oProduct.fileName.indexOf(this.m_sSearchString) !== -1) {
+          filteredProducts.push(oProduct)
+        }
+      })
+      this.dataSource.data = filteredProducts
+    } else {
+      this.dataSource.data = this.productArray;
+    }
   }
 
   hasChild(_: number, node: Product) {

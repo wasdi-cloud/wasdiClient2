@@ -67,6 +67,7 @@ export class EditComponent implements OnInit {
   //Array for Processes
   m_aoProcessesRunning: any[] = []
 
+  m_sSearchString: string;
 
   ngOnInit(): void {
     //Initalize the map
@@ -116,5 +117,9 @@ export class EditComponent implements OnInit {
     this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_sWorkspaceId).subscribe(response => {
       this.m_aoProcessesRunning = response;
     })
+  }
+
+  getSearchString(event: string) {
+    this.m_sSearchString = event;
   }
 }

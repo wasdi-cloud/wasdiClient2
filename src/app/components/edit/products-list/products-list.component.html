@@ -1,14 +1,9 @@
 <div style="height: 100%">
     <h3 class="products-header bg-dark text-light sticky">Products</h3>
-    <input matInput class="form-control" placeholder="Seach Prodcuts">
-
     <div class="products-container d-flex flex-column gap-3" style="height:83%">
-
         <div *ngIf="productArray === undefined || productArray.length === 0">
             <p>No Products</p>
         </div>
-
-
         <div *ngIf="productArray">
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
                 <mat-nested-tree-node *matTreeNodeDef="let node">
