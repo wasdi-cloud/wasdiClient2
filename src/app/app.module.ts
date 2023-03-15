@@ -96,6 +96,7 @@ import { ProcessesBarComponent, ProcessesBarContent, ProcessesDialog } from './c
 import { UserSettingsDialogComponent } from './components/header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
 import { ProductPropertiesDialogComponent } from './components/edit/products-list/product-properties-dialog/product-properties-dialog.component';
 import { NavLayersComponent } from './components/edit/nav-layers/nav-layers.component';
+import { WorkspaceInfoDialogComponent } from './components/edit/workspace-info-dialog/workspace-info-dialog.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -146,7 +147,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditMapComponent,
     ProcessesBarComponent,
     ProcessesBarContent,
-    ProcessesDialog, PageNotFoundComponent, UserSettingsDialogComponent, ProductPropertiesDialogComponent, NavLayersComponent
+    ProcessesDialog, PageNotFoundComponent, UserSettingsDialogComponent, ProductPropertiesDialogComponent, NavLayersComponent, WorkspaceInfoDialogComponent
   ],
   imports: [
     AppRoutingModule,
