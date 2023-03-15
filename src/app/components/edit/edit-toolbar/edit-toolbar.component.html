@@ -6,7 +6,7 @@
             <fa-icon [icon]="faSearch"></fa-icon>
         </button>
         <button class="btn btn-outline-secondary">
-            <fa-icon [icon]="faRefresh"></fa-icon>
+            <fa-icon [icon]="faRefresh" (click)="resetFilterText($event)"></fa-icon>
         </button>
         <button class="btn btn-outline-secondary" (click)="openWorkspaceInfo($event)">
             <fa-icon [icon]="faInfo"></fa-icon>

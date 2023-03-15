@@ -44,13 +44,17 @@ export class EditToolbarComponent implements OnInit {
   }
 
   getFilterText() {
-
-    if (this.m_sFilterText === undefined || this.m_sFilterText === null) {
+        if (this.m_sFilterText === undefined || this.m_sFilterText === null) {
       this.m_sFilterText = "";
       console.log(this.m_sFilterText)
     }
     console.log(this.m_sFilterText)
     this.m_sSearchString.emit(this.m_sFilterText);
-    return this.m_sFilterText;
+  }
+
+  resetFilterText(event) {
+    event.preventDefault();
+    this.m_sFilterText = undefined;
+    this.m_sSearchString.emit("");
   }
 }
