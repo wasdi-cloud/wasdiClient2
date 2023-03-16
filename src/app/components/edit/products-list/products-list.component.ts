@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from 'src/app/shared/models/product.model';
 
 //Angular Material Imports:
@@ -7,7 +7,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 
-import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { ProductService } from 'src/app/services/api/product.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,15 +25,18 @@ export class ProductsListComponent {
   @Input() productArray: Product[];
   @Input() map: any;
   @Input() m_sSearchString: string;
+  @Output() m_aoVisibleBandsOutput = new EventEmitter();
 
-  //font awesome icons
+  //font awesome icons: 
+  faCircleCheck = faCircleCheck;
+  faCircleX = faCircleXmark;
   faDownload = faDownload;
   faShare = faShareAlt;
   faTrash = faTrash;
   faInfoCircle = faInfoCircle;
   faGlobe = faGlobeEurope;
   faMap = faMap;
-  //searchFilter: Subject<string> = new 
+
 
   m_oActiveBand;
   m_oActiveWorkspace;
@@ -41,6 +44,8 @@ export class ProductsListComponent {
   dataSource: MatTreeNestedDataSource<any>
   m_aoDisplayBands: any[];
   m_oDisplayMap: L.Map | null;
+  m_aoVisibleBands: any[] = [];
+
 
   constructor(
     private m_oCatalogService: CatalogService,
@@ -169,6 +174,16 @@ export class ProductsListComponent {
 
   }
 
+  setBandImage(oBand) {
+    this.m_oActiveBand = oBand;
+    if (this.m_aoVisibleBands.indexOf(this.m_oActiveBand) !== -1) {
+      this.removeBandImage(oBand)
+    } else {
+      this.openBandImage(oBand);
+    }
+
+  }
+
   /**
      * OPEN BAND IMAGE
      * Called from the tree to open a band
@@ -177,23 +192,62 @@ export class ProductsListComponent {
   openBandImage(oBand) {
     let sFileName = this.productArray[oBand.nodeIndex].fileName;
     let bAlreadyPublished = oBand.published;
-    this.m_oActiveBand = oBand;
-
-    console.log(oBand.name)
-    console.log(this.m_oActiveWorkspace.workspaceId)
 
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
-      console.log(oResponse);
-
-
       if (oResponse.messageCode === "PUBLISHBAND") {
+        this.m_aoVisibleBands.push(this.m_oActiveBand);
+        this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
         // Already published: we already have the View Model
         this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
       } else {
         this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
       }
-
     })
+
+  }
+
+  removeBandImageFromVisibleList(oBand) {
+    let iVisibleBandCount = 0;
+
+    if (this.m_aoVisibleBands.length > 0) {
+      iVisibleBandCount = this.m_aoVisibleBands.length;
+    }
+    for (let iIndex = 0; iIndex < iVisibleBandCount;) {
+      if (this.m_aoVisibleBands[iIndex].productName == oBand.productName && this.m_aoVisibleBands[iIndex].name == oBand.name) {
+        this.m_aoVisibleBands.splice(iIndex, 1);
+        this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
+        iVisibleBandCount--;
+      } else {
+        iIndex++;
+      }
+    }
+  }
+
+  removeBandImage(oBand) {
+    if (!oBand) {
+      console.log("Error in removing band image");
+      return false;
+    }
+    this.m_oActiveBand = null;
+    let sLayerId = 'wasdi:' + oBand.layerId;
+
+    //if(this.m_b2DMapModeOn) {}
+
+    let oMap2D = this.m_oMapService.getMap()
+    oMap2D.eachLayer(layer => {
+      let sMapLayer = layer.options.layers;
+      let sMapLayer2 = "wasdi:" + layer.options.layers;
+
+      if (sLayerId && sMapLayer === sLayerId) {
+        oMap2D.removeLayer(layer);
+      }
+      if (sLayerId && sMapLayer2 === sLayerId) {
+        oMap2D.removeLayer(layer);
+      }
+    })
+
+    this.removeBandImageFromVisibleList(oBand)
+    return true;
   }
 
   receivedPublishBandMessage(oMessage: any, oActiveBand: any) {
