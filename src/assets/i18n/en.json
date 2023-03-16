@@ -1,5 +1,7 @@
 {
     "EDIT": {
+        "LAYERS": "Layers", 
+        "NAV": "Navigation", 
         "PROCESSES_BAR_WAITING": "Waiting",
         "PROCESSES_BAR_RUNNING": "Running",
         "PROCESSES_BAR_REFRESH": "Refresh Processes",
