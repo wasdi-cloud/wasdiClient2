@@ -11,6 +11,6 @@ export class NodeService {
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
 
   getNodesList() {
-    return this.oHttp.get(this.APIURL + '/node/allnodes');
+    return this.oHttp.get<any[]>(this.APIURL + '/node/allnodes');
   };
 }

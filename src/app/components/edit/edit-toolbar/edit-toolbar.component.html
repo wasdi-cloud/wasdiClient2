@@ -1,9 +1,16 @@
 <nav class="navbar navbar-expand-lg d-flex flex-row justify-content-between px-3">
-    <form class="d-flex gap-2">
-        <input class="form-control me-2" type="search" placeholder="Product Filter" aria-label="Search"  (keyup)="applyFilter($event.target['value'])">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-        <button class="btn btn-outline-success" type="submit">Btn</button>
-        <button class="btn btn-outline-success" type="submit">Btn</button>
+    <form class="d-flex gap-2" #filterTextForm="ngForm" (ngSubmit)="getFilterText()">
+        <input class="form-control me-2" type="search" placeholder="Product Filter" aria-label="Search"
+            name="m_sFilterText" [(ngModel)]="m_sFilterText">
+        <button class="btn btn-outline-primary" type="submit">
+            <fa-icon [icon]="faSearch"></fa-icon>
+        </button>
+        <button class="btn btn-outline-secondary">
+            <fa-icon [icon]="faRefresh" (click)="resetFilterText($event)"></fa-icon>
+        </button>
+        <button class="btn btn-outline-secondary" (click)="openWorkspaceInfo($event)">
+            <fa-icon [icon]="faInfo"></fa-icon>
+        </button>
     </form>
     <ul class="navbar-nav">
         <li class="nav-item">

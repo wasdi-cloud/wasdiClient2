@@ -9,7 +9,6 @@ import Geocoder from 'leaflet-control-geocoder';
   styleUrls: ['./edit-map.component.css']
 })
 export class EditMapComponent implements OnInit {
-  map: any;
   searchControl: Geocoder = new Geocoder;
   mapOptions: any;
   layersControl: any;
@@ -24,6 +23,7 @@ export class EditMapComponent implements OnInit {
   onMapReady(map: L.Map) {
     this.searchControl.setPosition('bottomleft')
     this.searchControl.addTo(map);
+    this.m_oMapService.setMap(map);
   }
 
 }

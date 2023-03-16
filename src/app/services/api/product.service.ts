@@ -11,6 +11,9 @@ export class ProductService {
 
   APIURL: string = this.oConstantsService.getAPIURL();
   m_bIgnoreWorkspaceApiUrl: boolean = this.oConstantsService.getIgnoreWorkspaceApiUrl();
+  httpOptions = {
+    observe: 'response'
+  }
 
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
 
@@ -51,8 +54,8 @@ export class ProductService {
     return this.oHttp.post(sUrl + '/product/deletelist?workspace=' + sWorkspaceId + '&deletefile=' + bDeleteFile + '&deletelayer=' + bDeleteLayer, sProductNameList);
   };
 
-  updateProduct(oProductViewModel: object, workspaceId: string) {
-    return this.oHttp.post(this.APIURL + '/product/update?workspace=' + workspaceId, oProductViewModel);
+  updateProduct(oProductViewModel: any, workspaceId: string) {
+    return this.oHttp.post<any>(this.APIURL + '/product/update?workspace=' + workspaceId, oProductViewModel, { observe: 'response' });
   };
 
   getProductMetadata(sProductName: string, sWorkspace: string) {

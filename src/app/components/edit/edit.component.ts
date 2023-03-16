@@ -67,6 +67,7 @@ export class EditComponent implements OnInit {
   //Array for Processes
   m_aoProcessesRunning: any[] = []
 
+  m_sSearchString: string;
 
   ngOnInit(): void {
     //Initalize the map
@@ -85,6 +86,8 @@ export class EditComponent implements OnInit {
         this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.m_sWorkspaceId).subscribe(oResponse => {
           this.m_oActiveWorkspace = oResponse
           this.m_oConstantsService.setActiveWorkspace(this.m_oActiveWorkspace);
+
+          console.log(this.m_oActiveWorkspace)
 
           //Workspace is now defined => Load Processes
           this.getProcesses()
@@ -114,5 +117,9 @@ export class EditComponent implements OnInit {
     this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_sWorkspaceId).subscribe(response => {
       this.m_aoProcessesRunning = response;
     })
+  }
+
+  getSearchString(event: string) {
+    this.m_sSearchString = event;
   }
 }
