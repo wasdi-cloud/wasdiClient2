@@ -84,10 +84,8 @@ export class EditComponent implements OnInit {
         //Assign and set new workspace id
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
         this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.m_sWorkspaceId).subscribe(oResponse => {
-          this.m_oActiveWorkspace = oResponse
-          this.m_oConstantsService.setActiveWorkspace(this.m_oActiveWorkspace);
-
-          console.log(this.m_oActiveWorkspace)
+          this.m_oConstantsService.setActiveWorkspace(oResponse);
+          this.m_oActiveWorkspace = oResponse; 
 
           //Workspace is now defined => Load Processes
           this.getProcesses()
@@ -98,6 +96,7 @@ export class EditComponent implements OnInit {
       }
     } else {
       //If workspace is defined => Load Processes
+      this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace(); 
       this.getProcesses()
     }
 
