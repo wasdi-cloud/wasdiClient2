@@ -40,8 +40,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-
-import { CdkTreeModule } from '@angular/cdk/tree';
+import { MatTooltipModule } from '@angular/material/tooltip'
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -179,8 +178,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatNativeDateModule,
     MatCheckboxModule,
     MatBottomSheetModule,
-    FontAwesomeModule, 
-
+    MatTooltipModule,
+    FontAwesomeModule,
   ],
   providers: [
     AuthService,
