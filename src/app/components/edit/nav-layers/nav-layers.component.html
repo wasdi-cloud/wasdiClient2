@@ -1,21 +1,50 @@
 <div class="parent">
-    <div class="nav-layer-bar  px-2 bg-secondary d-flex align-items-center justify-content-between">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link text-light">
-                    Navigation
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-light">
-                    Layers
-                </a>
+    <ul class="nav nav-tabs bg-secondary pt-1 px-1" style="width: 100%;">
+        <li class="nav-item">
+            <a class="nav-link" (click)="setActiveTab('nav')"
+                ngClass="{{m_sActiveTab === 'nav' ? 'active text-dark' : 'text-light'}}">
+                {{'EDIT.NAV' | translate}}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)="setActiveTab('layers')"
+                ngClass="{{m_sActiveTab === 'layers' ? 'active text-dark' : 'text-light'}}">
+                {{'EDIT.LAYERS' | translate}}
+            </a>
+        </li>
+    </ul>
+    <fa-icon class="toggle-btn text-light" [icon]="faX"> </fa-icon>
+    <!-- Navigation and Layers content -->
+    <div *ngIf="m_sActiveTab === 'nav'">
+        nav
+    </div>
+    <div *ngIf="m_sActiveTab === 'layers'">
+        <ul class="list-group">
+            <li *ngFor="let oBand of m_aoVisibleBands" class="list-group-item d-flex flex-row align-items-center justify-content-between">
+                <div>
+                    <div>
+                        {{m_aoProducts[oBand.nodeIndex].name}}
+                    </div>
+                    <div>
+                        {{oBand.name}}
+                    </div>
+                </div>
+                <div class="d-flex flex-row">
+                    <mat-slider [min]="0" [max]="100" [discrete]="thumbLabel">
+                        <input matSliderThumb (change)="getOpacity($event)">
+                    </mat-slider>
+                    <button class="btn">
+                        <fa-icon [icon]="faExpand"></fa-icon>
+                    </button>
+                    <button class="btn">
+                        <fa-icon [icon]="faList"></fa-icon>
+                    </button>
+                    <button class="btn text-danger" (click)="removeBandImage()">
+                        <fa-icon [icon]="faX"></fa-icon>
+                    </button>
+                </div>
             </li>
         </ul>
-        <fa-icon class="toggle-btn text-light" [icon]="faX"> </fa-icon>
     </div>
-    <!-- Navigation and Layers content -->
-    <div class="nav-layers-content">
-        NAV NAV NAV
-    </div>
+    
 </div>

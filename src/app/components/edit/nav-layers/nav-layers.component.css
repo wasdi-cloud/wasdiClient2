@@ -9,3 +9,7 @@ div.nav-layers-bar {
 li.nav-item {
     cursor: pointer;
 }
+
+label {
+    font-size: 10px;
+}
