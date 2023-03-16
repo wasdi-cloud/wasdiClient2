@@ -1,8 +1,8 @@
 <div style="height: 100%">
-    <h3 class="products-header bg-dark text-light sticky">Products</h3>
+    <h3 class="products-header bg-secondary text-light sticky">{{'EDIT.PRODUCTS_TREE' | translate}}</h3>
     <div class="products-container d-flex flex-column gap-3" style="height:83%">
         <div *ngIf="productArray === undefined || productArray.length === 0">
-            <p>No Products</p>
+            <p>{{'EDIT.PRODUCTS_TREE_NO_PRODUCTS' | translate}}</p>
         </div>
         <div *ngIf="productArray">
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
@@ -22,13 +22,20 @@
                             </div>
 
                             <div class="d-flex flex-row gap-2 mr-2" *ngIf="node.bandsGroups">
-                                <button class="btn"><fa-icon [icon]="faDownload" title="Download Product"
-                                        (click)="downloadProduct(node)"></fa-icon></button>
-                                <button class="btn"><fa-icon [icon]="faShare" title="Share Product"></fa-icon></button>
-                                <button class="btn"><fa-icon [icon]="faInfoCircle" title="Properties"
-                                        (click)="openProductProperties($event, node)"></fa-icon></button>
-                                <button class="btn"><fa-icon [icon]="faTrash" title="Delete Product"
-                                        (click)="deleteProduct(node)"></fa-icon></button>
+                                <button class="btn" matTooltip="{{'EDIT.PRODUCTS_TREE_DOWNLOAD' | translate}}">
+                                    <fa-icon [icon]="faDownload" (click)="downloadProduct(node)"></fa-icon>
+                                </button>
+                                <button class="btn" matTooltip="{{'EDIT.PRODUCTS_TREE_SHARE' | translate}}">
+                                    <fa-icon [icon]="faShare" title="Share Product"></fa-icon>
+                                </button>
+                                <button class="btn" matTooltip="{{'EDIT.PRODUCTS_TREE_INFO' | translate}}">
+                                    <fa-icon [icon]="faInfoCircle" title="Properties"
+                                        (click)="openProductProperties($event, node)"></fa-icon>
+                                </button>
+                                <button class="btn" matTooltip="{{'EDIT.PRODUCTS_TREE_DELETE' | translate}}">
+                                    <fa-icon [icon]="faTrash" title="Delete Product"
+                                        (click)="deleteProduct(node)"></fa-icon>
+                                </button>
                             </div>
                         </div>
                     </li>
@@ -48,12 +55,16 @@
                                     node.name}}</span>
                             </div>
                             <div class="d-flex flex-row gap-2 mr-2" *ngIf="node.bandsGroups">
-                                <button class="btn"><fa-icon [icon]="faDownload" title="Download Product"
+                                <button class="btn" matTooltip="{{'EDIT.PRODUCTS_TREE_DOWNLOAD' | translate}}"><fa-icon
+                                        [icon]="faDownload" title="Download Product"
                                         (click)="downloadProduct(node)"></fa-icon></button>
-                                <button class="btn"><fa-icon [icon]="faShare" title="Share Product"></fa-icon></button>
-                                <button class="btn"><fa-icon [icon]="faInfoCircle" title="Properties"
+                                <button class="btn" matTooltip="{{'EDIT.PRODUCTS_TREE_SHARE' | translate}}"><fa-icon
+                                        [icon]="faShare" title="Share Product"></fa-icon></button>
+                                <button class="btn" matTooltip="{{'EDIT.PRODUCTS_TREE_INFO' | translate}}"><fa-icon
+                                        [icon]="faInfoCircle" title="Properties"
                                         (click)="openProductProperties($event, node)"></fa-icon></button>
-                                <button class="btn"><fa-icon [icon]="faTrash" title="Delete Product"
+                                <button class="btn" matTooltip="{{'EDIT.PRODUCTS_TREE_DELETE' | translate}}"><fa-icon
+                                        [icon]="faTrash" title="Delete Product"
                                         (click)="deleteProduct(node)"></fa-icon></button>
                             </div>
                             <div class="d-flex flex-row gap-2 mr-2" *ngIf="!node.bandsGroups">

@@ -21,6 +21,7 @@
         "PRODUCTS_FILTER_APPLY": "Apply Filter",
         "PRODUCTS_FILTER_RESET": "Reset Filter",
         "PRODUCTS_TREE": "Products",
+        "PRODUCTS_TREE_NO_PRODUCTS": "No Products", 
         "PRODUCTS_TREE_DOWNLOAD": "Download Product",
         "PRODUCTS_TREE_SHARE": "Share Product",
         "PRODUCTS_TREE_INFO": "Open Product Properties",
