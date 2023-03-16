@@ -69,6 +69,8 @@ export class EditComponent implements OnInit {
 
   m_sSearchString: string;
 
+  m_aoVisibleBands
+
   ngOnInit(): void {
     //Initalize the map
 
@@ -120,5 +122,9 @@ export class EditComponent implements OnInit {
 
   getSearchString(event: string) {
     this.m_sSearchString = event;
+  }
+
+  getVisibleBands(event: any) {
+    this.m_aoVisibleBands = event;
   }
 }
