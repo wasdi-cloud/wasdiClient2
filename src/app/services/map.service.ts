@@ -135,54 +135,56 @@ export class MapService {
   /**
    * Initalize WASDI Map
    */
-  initWasdiMap(sMapDiv) {
-    // if (this.m_oWasdiMap !== null) {
-    //   this.initTilelayer();
-    // }
-    // this.m_oWasdiMap = this.initMap(sMapDiv);
+  initWasdiMap(sMapDiv: string) {
+    if (this.m_oWasdiMap !== null) {
+      this.initTilelayer();
+    }
+    this.m_oWasdiMap = this.initMap(sMapDiv);
   }
 
   /**
    * Init the Map
    * @param sMapDiv 
    */
-  // initMap(sMapDiv) {
-  //   let oMap = L.map(sMapDiv, {
-  //     center: [0, 0],
-  //     zoom: 3
-  //   });
+  initMap(sMapDiv) {
+    let oMap = L.map(sMapDiv, {
+      center: [0, 0],
+      zoom: 3
+    });
 
-  //   this.m_oOSMBasic.addTo(oMap)
+    this.m_oOSMBasic.addTo(oMap)
 
-  // L.control.scale({
-  //   position: "bottomright",
-  //   imperial: false
-  // }).addTo(oMap);
+    L.control.scale({
+      position: "bottomright",
+      imperial: false
+    }).addTo(oMap);
 
-  //layers control
-  // this.m_oLayersControl.addTo(oMap);
+    //layers control
+    // this.m_oLayersControl.addTo(oMap);
+    // oMap.layersControl = this.m_oLayersControl; 
 
-  // center map
-  // let southWest = L.latLng(0, 0);
-  // let northEast = L.latLng(0, 0);
+    // center map
+    let southWest = L.latLng(0, 0);
+    let northEast = L.latLng(0, 0);
 
-  // let oBoundaries = L.latLngBounds(southWest, northEast);
-  // console.log(oBoundaries)
+    let oBoundaries = L.latLngBounds(southWest, northEast);
+    console.log(oBoundaries)
 
-  // oMap.fitBounds(oBoundaries);
-  // oMap.setZoom(3);
+    oMap.fitBounds(oBoundaries);
+    oMap.setZoom(3);
 
-  // let oActiveBaseLayer = this.m_oActiveBaseLayer;
+    let oActiveBaseLayer = this.m_oActiveBaseLayer;
 
-  //add event on base change
-  // oMap.on('baselayerchange', function (e) {
-  //   // console.log(e);
-  //   // e.layer.bringToBack();
-  //   oActiveBaseLayer = e;
-  // });
+    //add event on base change
+    oMap.on('baselayerchange', function (e) {
+      // console.log(e);
+      // e.layer.bringToBack();
+      oActiveBaseLayer = e;
+    });
 
-  //   return oMap;
-  // }
+    console.log(oMap)
+    return oMap;
+  }
 
   /**
    * Init the Map Singleton
@@ -342,10 +344,11 @@ export class MapService {
   /**
    * Clear Map 
    */
-  clearMap() {
+  clearMap(sMapDiv: string) {
+    console.log(this.m_oWasdiMap)
     if (this.m_oWasdiMap) {
       this.m_oWasdiMap.remove();
-      this.m_oWasdiMap = null;
+      this.initWasdiMap(sMapDiv)
     }
   }
 
