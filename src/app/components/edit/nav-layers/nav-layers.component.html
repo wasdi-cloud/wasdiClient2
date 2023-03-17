@@ -34,7 +34,7 @@
                     <mat-slider [min]="0" [max]="100"  discrete >
                         <input matSliderThumb [ngModel]="opacityVal" (input)="setOpacity($event, oBand.layerId)">
                     </mat-slider>
-                    <button class="btn">
+                    <button class="btn" (click)="zoomOnBandImage(oBand.geoserverBoundingBox)">
                         <fa-icon [icon]="faExpand"></fa-icon>
                     </button>
                     <button class="btn">

@@ -97,4 +97,9 @@ export class NavLayersComponent implements OnChanges {
     this.removeBandImageFromVisibleList(oBand)
     return true;
   }
+
+  zoomOnBandImage(geoserverBoundindBox) {
+    console.log(geoserverBoundindBox)
+    this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(geoserverBoundindBox); 
+  }
 }

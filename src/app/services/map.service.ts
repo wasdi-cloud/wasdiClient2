@@ -733,7 +733,7 @@ export class MapService {
         corner2 = L.latLng(oBounds.miny, oBounds.minx),
         bounds = L.latLngBounds(corner1, corner2);
 
-      this.m_oWasdiMap.flyToBounds(bounds, { maxZoom: 5 });
+      this.m_oWasdiMap.flyToBounds(bounds, { maxZoom: 8 });
     }
     catch (e) {
       console.log(e);
