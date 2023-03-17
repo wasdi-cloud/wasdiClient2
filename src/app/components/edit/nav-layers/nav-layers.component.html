@@ -20,7 +20,8 @@
     </div>
     <div *ngIf="m_sActiveTab === 'layers'">
         <ul class="list-group">
-            <li *ngFor="let oBand of m_aoVisibleBands" class="list-group-item d-flex flex-row align-items-center justify-content-between">
+            <li *ngFor="let oBand of m_aoVisibleBands"
+                class="list-group-item d-flex flex-row align-items-center justify-content-between">
                 <div>
                     <div>
                         {{m_aoProducts[oBand.nodeIndex].name}}
@@ -30,8 +31,8 @@
                     </div>
                 </div>
                 <div class="d-flex flex-row">
-                    <mat-slider [min]="0" [max]="100" [discrete]="thumbLabel">
-                        <input matSliderThumb (change)="getOpacity($event)">
+                    <mat-slider [min]="0" [max]="100"  discrete >
+                        <input matSliderThumb [ngModel]="opacityVal" (input)="setOpacity($event, oBand.layerId)">
                     </mat-slider>
                     <button class="btn">
                         <fa-icon [icon]="faExpand"></fa-icon>
@@ -46,5 +47,5 @@
             </li>
         </ul>
     </div>
-    
+
 </div>
