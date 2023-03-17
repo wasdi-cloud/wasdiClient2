@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
 import { MapService } from 'src/app/services/map.service';
 declare const L: any;
@@ -20,8 +20,10 @@ export class NavLayersComponent implements OnChanges {
   @Input() m_b2DMapModeOn: boolean;
   @Input() m_aoVisibleBands
   @Input() m_aoProducts: any[] = [];
+  @Output() m_aoVisibleBandsChange = new EventEmitter(); 
 
   m_sActiveTab: string = 'nav';
+  m_oActiveBand: any; 
   m_iOpacity: string;
   thumbLabel = true;
 
@@ -34,14 +36,9 @@ export class NavLayersComponent implements OnChanges {
       this.setActiveTab('layers');
     }
   }
-  
+
   setActiveTab(sTabName: string) {
     this.m_sActiveTab = sTabName;
-  }
-
-  //takes oBand
-  removeBandImage() {
-
   }
 
   setOpacity(event, sLayerId) {
@@ -55,5 +52,49 @@ export class NavLayersComponent implements OnChanges {
         layer.setOpacity(fPercentage);
       }
     });
+  }
+
+  removeBandImageFromVisibleList(oBand) {
+    let iVisibleBandCount = 0;
+
+    if (this.m_aoVisibleBands.length > 0) {
+      iVisibleBandCount = this.m_aoVisibleBands.length;
+    }
+    for (let iIndex = 0; iIndex < iVisibleBandCount;) {
+      if (this.m_aoVisibleBands[iIndex].productName == oBand.productName && this.m_aoVisibleBands[iIndex].name == oBand.name) {
+        this.m_aoVisibleBands.splice(iIndex, 1);
+        this.m_aoVisibleBandsChange.emit(this.m_aoVisibleBands);
+        iVisibleBandCount--;
+      } else {
+        iIndex++;
+      }
+    }
+  }
+
+  removeBandImage(oBand) {
+    if (!oBand) {
+      console.log("Error in removing band image");
+      return false;
+    }
+    this.m_oActiveBand = null;
+    let sLayerId = 'wasdi:' + oBand.layerId;
+
+    //if(this.m_b2DMapModeOn) {}
+
+    let oMap2D = this.m_oMapService.getMap()
+    oMap2D.eachLayer(layer => {
+      let sMapLayer = layer.options.layers;
+      let sMapLayer2 = "wasdi:" + layer.options.layers;
+
+      if (sLayerId && sMapLayer === sLayerId) {
+        oMap2D.removeLayer(layer);
+      }
+      if (sLayerId && sMapLayer2 === sLayerId) {
+        oMap2D.removeLayer(layer);
+      }
+    })
+
+    this.removeBandImageFromVisibleList(oBand)
+    return true;
   }
 }
