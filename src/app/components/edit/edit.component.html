@@ -3,12 +3,12 @@
     (m_sSearchString)="getSearchString($event)"></app-edit-toolbar>
 <main>
     <div class="d-flex flex-row px-3">
-        <div class="productlist-navigation-container d-flex flex-column " style="height: 75vh">
+        <div class="productlist-navigation-container d-flex flex-column " style="height: 70vh">
             <div style="height: 50%;">
                 <app-products-list [productArray]="m_aoProducts"
                     [m_sSearchString]="m_sSearchString" (m_aoVisibleBandsOutput)="getVisibleBands($event)"></app-products-list>
             </div>
-            <div>
+            <div style="height: 50%">
                 <app-nav-layers [m_aoVisibleBands]="m_aoVisibleBands" [m_aoVisibleBands]="m_aoVisibleBands" [m_aoProducts]="m_aoProducts"></app-nav-layers>
             </div>
         </div>

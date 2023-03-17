@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
+import { ConstantsService } from 'src/app/services/constants.service';
 import { MapService } from 'src/app/services/map.service';
+import { Band } from 'src/app/shared/models/band.model';
 declare const L: any;
 
 @Component({
@@ -20,14 +22,14 @@ export class NavLayersComponent implements OnChanges {
   @Input() m_b2DMapModeOn: boolean;
   @Input() m_aoVisibleBands
   @Input() m_aoProducts: any[] = [];
-  @Output() m_aoVisibleBandsChange = new EventEmitter(); 
+  @Output() m_aoVisibleBandsChange = new EventEmitter();
 
   m_sActiveTab: string = 'nav';
-  m_oActiveBand: any; 
+  m_oActiveBand: any;
   m_iOpacity: string;
-  thumbLabel = true;
 
   constructor(
+    private m_oConstantsService: ConstantsService,
     private m_oMapService: MapService
   ) { }
 
@@ -100,6 +102,35 @@ export class NavLayersComponent implements OnChanges {
 
   zoomOnBandImage(geoserverBoundindBox) {
     console.log(geoserverBoundindBox)
-    this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(geoserverBoundindBox); 
+    this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(geoserverBoundindBox);
+  }
+
+  showLayerLegend(oBand) {
+    oBand.showLegend = !oBand.showLegend;
+    oBand.legendUrl = this.getBandLegendUrl(oBand);
+  }
+
+  getBandLegendUrl(oBand: Band) {
+    if (oBand === null) {
+      return "";
+    }
+
+    let sGeoserverUrl = oBand.geoserverUrl;
+
+    if (!sGeoserverUrl) {
+      sGeoserverUrl = this.m_oConstantsService.getWmsUrlGeoserver();
+    }
+
+    if (sGeoserverUrl.endsWith("?")) {
+      sGeoserverUrl = sGeoserverUrl.replace("ows?", "wms?");
+    } else {
+      sGeoserverUrl = sGeoserverUrl.replace("ows", "wms?");
+    }
+
+    sGeoserverUrl = sGeoserverUrl + "request=GetLegendGraphic&format=image/png&WIDTH=12&HEIGHT=12&legend_options=fontAntiAliasing:true;fontSize:10&LEGEND_OPTIONS=forceRule:True&LAYER=";
+    sGeoserverUrl = sGeoserverUrl + "wasdi:" + oBand.layerId;
+
+    console.log(sGeoserverUrl);
+    return sGeoserverUrl;
   }
 }
