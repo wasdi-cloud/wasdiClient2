@@ -51,6 +51,12 @@
                                     </mat-icon>
                                 </button>
                                 <mat-checkbox color="success" *ngIf="node.bandsGroups"></mat-checkbox>
+                                <div *ngIf="!node.bandsGroups" style="margin-right: 1rem; ">
+                                    <fa-icon class="text-danger" *ngIf="m_aoVisibleBands.indexOf(node) === -1"
+                                        [icon]="faCircleX"></fa-icon>
+                                    <fa-icon class="btn text-success" *ngIf="m_aoVisibleBands.indexOf(node) !== -1"
+                                        [icon]="faCircleCheck"></fa-icon>
+                                </div>
                                 <span class="product-name">{{node.productFriendlyName ? node.productFriendlyName :
                                     node.name}}</span>
                             </div>
@@ -68,13 +74,13 @@
                                         (click)="deleteProduct(node)"></fa-icon></button>
                             </div>
                             <div class="d-flex flex-row gap-2 mr-2" *ngIf="!node.bandsGroups">
-                                <button class="btn">
+                                <span>
                                     <fa-icon [icon]="faMap" title="Show on 2D Map"
-                                        (click)="openBandImage(node)"></fa-icon>
-                                </button>
-                                <button class="btn">
+                                        (click)="setBandImage(node)"></fa-icon>
+                                </span>
+                                <span>
                                     <fa-icon [icon]="faGlobe" title="Shown on 3D Map"></fa-icon>
-                                </button>
+                                </span>
                             </div>
 
                         </div>

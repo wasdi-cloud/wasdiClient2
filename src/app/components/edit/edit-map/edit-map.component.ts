@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import * as L from "leaflet";
 import { MapService } from 'src/app/services/map.service';
 import Geocoder from 'leaflet-control-geocoder';
@@ -12,6 +12,7 @@ export class EditMapComponent implements OnInit {
   searchControl: Geocoder = new Geocoder;
   mapOptions: any;
   layersControl: any;
+  editMap: L.Map
 
   constructor(private m_oMapService: MapService) { }
 
@@ -21,9 +22,9 @@ export class EditMapComponent implements OnInit {
   }
 
   onMapReady(map: L.Map) {
+    this.editMap = map; 
     this.searchControl.setPosition('bottomleft')
     this.searchControl.addTo(map);
     this.m_oMapService.setMap(map);
   }
-
 }
