@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
 import { MapService } from 'src/app/services/map.service';
+declare const L: any;
 
 @Component({
   selector: 'app-nav-layers',
@@ -12,6 +13,9 @@ export class NavLayersComponent implements OnChanges {
   faExpand = faExpand;
   faList = faList;
   faX = faX;
+
+  //Set opacity to 100% by default
+  opacityVal = 100;
 
   @Input() m_b2DMapModeOn: boolean;
   @Input() m_aoVisibleBands
@@ -30,12 +34,9 @@ export class NavLayersComponent implements OnChanges {
       this.setActiveTab('layers');
     }
   }
+  
   setActiveTab(sTabName: string) {
     this.m_sActiveTab = sTabName;
-  }
-
-  getOpacity(event) {
-    console.log(event.srcElement.value)
   }
 
   //takes oBand
@@ -43,4 +44,16 @@ export class NavLayersComponent implements OnChanges {
 
   }
 
+  setOpacity(event, sLayerId) {
+    let iOpacity = event.srcElement.value;
+    let oMap = this.m_oMapService.getMap();
+    let fPercentage = iOpacity / 100;
+
+    oMap.eachLayer(function (layer) {
+      if (layer.options.layers == ("wasdi:" + sLayerId) || layer.options.layers == sLayerId) {
+        console.log(layer.options.opacity)
+        layer.setOpacity(fPercentage);
+      }
+    });
+  }
 }
