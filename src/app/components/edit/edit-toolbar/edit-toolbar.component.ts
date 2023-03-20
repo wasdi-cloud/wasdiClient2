@@ -6,6 +6,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import { faSearch, faRefresh, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkspaceInfoDialogComponent } from '../workspace-info-dialog/workspace-info-dialog.component';
+import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 @Component({
   selector: 'app-edit-toolbar',
   templateUrl: './edit-toolbar.component.html',
@@ -44,7 +45,7 @@ export class EditToolbarComponent implements OnInit {
   }
 
   getFilterText() {
-        if (this.m_sFilterText === undefined || this.m_sFilterText === null) {
+    if (this.m_sFilterText === undefined || this.m_sFilterText === null) {
       this.m_sFilterText = "";
       console.log(this.m_sFilterText)
     }
@@ -56,5 +57,14 @@ export class EditToolbarComponent implements OnInit {
     event.preventDefault();
     this.m_sFilterText = undefined;
     this.m_sSearchString.emit("");
+  }
+
+  openShareDialog(event) {
+    event.preventDefault();
+    let dialogData = new ShareDialogModel("workspace", this.m_oActiveWorkspace)
+    let dialogRef = this.m_oDialog.open(ShareDialogComponent, {
+      width: '50vw',
+      data: dialogData
+    });
   }
 }
