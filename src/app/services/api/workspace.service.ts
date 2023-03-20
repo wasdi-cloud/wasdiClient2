@@ -73,7 +73,7 @@ export class WorkspaceService {
   };
 
   putShareWorkspace(sWorkspaceId: string, sUserId: string) {
-    // return this.oHttp.put(this.APIURL + '/ws/share/add?workspace=' + sWorkspaceId + "&userId=" + sUserId);
+    return this.oHttp.put<oConfirmation>(this.APIURL + '/ws/share/add?workspace=' + sWorkspaceId + "&userId=" + sUserId, {});
   };
 
   getUsersBySharedWorkspace(sWorkspaceId: string) {
@@ -81,6 +81,6 @@ export class WorkspaceService {
   };
 
   deleteUserSharedWorkspace(sWorkspaceId: string, sUserId: string) {
-    return this.oHttp.delete(this.APIURL + '/ws/share/delete?workspace=' + sWorkspaceId + "&userId=" + sUserId);
+    return this.oHttp.delete<oConfirmation>(this.APIURL + '/ws/share/delete?workspace=' + sWorkspaceId + "&userId=" + sUserId);
   };
 }
