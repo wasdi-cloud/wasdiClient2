@@ -1,14 +1,12 @@
 <div class="dialog">
-    <h1 class="dialog-text" mat-dialog-title>Sharing and Access</h1>
-    <div mat-dialog-content>
-        <p class="dialog-text">Give access to another WASDI user:</p>
-        <div>
-            <label for="">Search by WASDI Email Address</label>
-            <input type="email">
-            <button class="btn btn-success">Give Access</button>
-        </div>
-
-        <p class="dialog-text">Users that Currently have Access to [RESOURCE]</p>
-        
+    <div class="px-4 pt-3 text-secondary d-flex flex-row justify-content-between align-items-center">
+        <h4>Sharing and Access</h4>
+        <button class="btn" (click)="onDismiss()">
+            <fa-icon [icon]="faX"></fa-icon>
+        </button>
+    </div>
+    <app-share-ui [resource]="resource" [resourceType]="type"></app-share-ui>
+    <div class="px-4 py-3 d-flex flex-row justify-content-end">
+        <button class="btn btn-secondary" (click)="onDismiss()">Close</button>
     </div>
 </div>

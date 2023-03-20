@@ -1,0 +1,35 @@
+<div mat-dialog-content class="d-flex flex-column justify-content-between gap-3">
+    <!-- User Search and Add form -->
+    <div>
+        <h6 class="dialog-text">
+
+            Give access to another WASDI user:
+        </h6>
+        <div class="d-flex flex-row align-items-center justify-content-between">
+            <div style="width: 80%">
+                <input class="form-control" type="email" placeholder="Search by WASDI Email Address"
+                    [(ngModel)]="m_sUserIdSearch">
+            </div>
+            <button class="btn btn-success" (click)="onAddEnabledUser()"><fa-icon [icon]="faUserPlus"></fa-icon> Give
+                Access</button>
+        </div>
+    </div>
+
+    <!-- User Permissions display -->
+    <div>
+        <p class="dialog-text">
+            Users that currently have access to <span class="text-success">{{resource.name}}</span>:
+        </p>
+        <ul class="list-group">
+            <li class="list-group-item d-flex flex-row align-items-center justify-content-between"
+                *ngFor="let oUser of m_aoSharedUsers">
+                <span>
+                    {{oUser.userId}}
+                </span>
+                <button class="btn btn-sm btn-danger" (click)="onRemoveEnabledUser(oUser.userId)"><fa-icon
+                        [icon]="faTrashCan"></fa-icon> Remove</button>
+            </li>
+        </ul>
+    </div>
+
+</div>
