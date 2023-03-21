@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { oConfirmation } from './workspace.service';
 import { ConstantsService } from '../constants.service';
 
 @Injectable({
@@ -73,18 +74,18 @@ export class StyleService {
   // Add sharing
   addStyleSharing(sStyleId: string, sUserId: string) {
     //Requires an argument for the body
-    // return this.oHttp.put(this.APIURL + '/styles/share/add?styleId=' + sStyleId + '&userId=' + sUserId);
+    return this.oHttp.put<oConfirmation>(this.APIURL + '/styles/share/add?styleId=' + sStyleId + '&userId=' + sUserId, {});
   }
 
   // Remove sharing
   removeStyleSharing(sStyleId: string, sUserId: string) {
-    return this.oHttp.delete(this.APIURL + '/styles/share/delete?styleId=' + sStyleId + '&userId=' + sUserId);
+    return this.oHttp.delete<oConfirmation>(this.APIURL + '/styles/share/delete?styleId=' + sStyleId + '&userId=' + sUserId);
 
   }
 
   // Get style xml
   getStyleXml(sStyleId: string) {
-   return this.oHttp.get(this.APIURL + '/styles/getxml?styleId=' + sStyleId, { responseType: "text" });
+    return this.oHttp.get(this.APIURL + '/styles/getxml?styleId=' + sStyleId, { responseType: "text" });
   }
 
   // Update style xml

@@ -18,7 +18,7 @@ export interface WorkspaceViewModel {
   workspaceId: string;
 }
 
-interface oConfirmation {
+export interface oConfirmation {
   boolValue: boolean | null,
   doubleValue: number | null,
   intValue: number | null,
