@@ -7,6 +7,7 @@ import { faSearch, faRefresh, faInfoCircle } from '@fortawesome/free-solid-svg-i
 import { MatDialog } from '@angular/material/dialog';
 import { WorkspaceInfoDialogComponent } from '../workspace-info-dialog/workspace-info-dialog.component';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
+import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
 @Component({
   selector: 'app-edit-toolbar',
   templateUrl: './edit-toolbar.component.html',
@@ -37,12 +38,7 @@ export class EditToolbarComponent implements OnInit {
       data: this.m_oActiveWorkspace
     });
   }
-  openJupyterNotebookPage(event: MouseEvent) {
-    event.preventDefault
-    this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
-      window.open(oResponse.stringValue, "_blank")
-    })
-  }
+
 
   getFilterText() {
     if (this.m_sFilterText === undefined || this.m_sFilterText === null) {
@@ -59,7 +55,38 @@ export class EditToolbarComponent implements OnInit {
     this.m_sSearchString.emit("");
   }
 
-  openShareDialog(event) {
+  /**
+   * Secondary Toolbar Options
+   */
+
+  openAppsDialog(event: MouseEvent) {
+    event.preventDefault();
+  }
+
+  openNewAppDialog(event: MouseEvent) {
+    event.preventDefault();
+  }
+
+  openWorkflowsDialog(event: MouseEvent) {
+    event.preventDefault();
+  }
+
+  openJupyterNotebookPage(event: MouseEvent) {
+    event.preventDefault
+    this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
+      window.open(oResponse.stringValue, "_blank")
+    })
+  }
+
+  openStylesDialog(event: MouseEvent) {
+    event.preventDefault();
+    let dialogRef = this.m_oDialog.open(StylesDialogComponent, {
+      height: '80vh', 
+      width: '80vw'
+    })
+  }
+
+  openShareDialog(event: MouseEvent) {
     event.preventDefault();
     let dialogData = new ShareDialogModel("workspace", this.m_oActiveWorkspace)
     let dialogRef = this.m_oDialog.open(ShareDialogComponent, {
