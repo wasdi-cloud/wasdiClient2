@@ -1,0 +1,71 @@
+<div style="height: 100%" class="dialog d-flex flex-column justify-content-between">
+    <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between px-4 pt-3 pb-2">
+        <h4 class="dialog-text">Edit Style</h4>
+        <fa-icon [icon]="faX"></fa-icon>
+    </div>
+
+    <ul class="nav nav-tabs d-flex flex-row mt-2 mx-2">
+        <li class="nav-item">
+            <a href="" class="nav-link" (click)="setActiveTab('editStyle', $event)"
+                ngClass="{{m_sActiveTab === 'editStyle' ? 'active' : ''}}">
+                Edit Style
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="" class="nav-link" (click)="setActiveTab('editXml', $event)"
+                ngClass="{{m_sActiveTab === 'editXml' ? 'active' : ''}}">
+                Edit XML
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="" class="nav-link" (click)="setActiveTab('share', $event)"
+                ngClass="{{m_sActiveTab === 'share' ? 'active' : ''}}">
+                Share
+            </a>
+        </li>
+    </ul>
+    <div *ngIf="m_sActiveTab === 'editStyle'" mat-dialog-content>
+        <form action="" class="d-flex flex-row px-3 gap-3" style="width: 100%">
+            <div class="form-col-1 d-flex flex-column gap-3" style="width: 50%">
+                <div>
+                    <label class="form-label" for="name">
+                        Name:
+                    </label>
+                    <input class="form-control" id="name" name="name" type="text">
+                </div>
+                <div>
+                    <label class="form-label" for="description">Description:</label>
+                    <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+                </div>
+                <div>
+                    <mat-checkbox [color]="'primary'">Set Styles as Public</mat-checkbox>
+                </div>
+            </div>
+            <div class="form-col-2" style="width: 50%">
+
+                <label for="formFileLg" class="form-label">Choose XML Style to Upload</label>
+                <input class="form-control" id="formFileLg" type="file">
+
+            </div>
+
+        </form>
+    </div>
+
+    <div *ngIf="m_sActiveTab === 'editXml'" mat-dialog-content>
+        <p class="text-success">Style XML:</p>
+        <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
+        <button class="btn btn-success">
+            Apply
+        </button>
+    </div>
+
+    <div *ngIf="m_sActiveTab === 'share'" mat-dialog-content>
+        <app-share-ui [resourceType]="'style'" [resource]="m_oStyle"></app-share-ui>
+    </div>
+    <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
+        <button class="btn btn-secondary btn-sm">
+            Close
+        </button>
+    </div>
+</div>

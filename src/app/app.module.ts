@@ -99,6 +99,7 @@ import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap
 import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
 import { ShareUiComponent } from './shared/dialogs/share-dialog/share-ui/share-ui.component';
 import { StylesDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
+import { EditStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/edit-style-dialog/edit-style-dialog.component';
 
 
 
@@ -156,7 +157,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProductPropertiesDialogComponent, 
     NavLayersComponent, 
     WorkspaceInfoDialogComponent, 
-    ShareDialogComponent, ShareUiComponent, StylesDialogComponent
+    ShareDialogComponent, ShareUiComponent, StylesDialogComponent, EditStyleDialogComponent
   ],
   imports: [
     AppRoutingModule,
