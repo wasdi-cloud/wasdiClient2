@@ -128,7 +128,7 @@ export class ConstantsService {
     return this.m_oUser;
   }
 
-  getUserId() {
+  getUserId(): string {
     if (!this.m_oUser) {
       return "";
     }

@@ -1,0 +1,10 @@
+div.style-cards-container {
+    height: 80%; 
+    overflow-y: scroll;
+}
+p.title {
+    font-size: 0.8rem;
+}
+p.style-description {
+    font-size: 0.8rem;
+}

@@ -84,7 +84,7 @@ export class StyleService {
 
   // Get style xml
   getStyleXml(sStyleId: string) {
-    return this.oHttp.get(this.APIURL + '/styles/getxml?styleId=' + sStyleId);
+   return this.oHttp.get(this.APIURL + '/styles/getxml?styleId=' + sStyleId, { responseType: "text" });
   }
 
   // Update style xml
