@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { StyleService } from 'src/app/services/api/style.service';
 
 import { faEdit, faDownload, faPaintBrush, faX } from '@fortawesome/free-solid-svg-icons';
+import { EditStyleDialogComponent } from '../edit-style-dialog/edit-style-dialog.component';
 
 interface Style {
   description: string,
@@ -57,6 +58,7 @@ export class StylesDialogComponent implements OnInit {
 
   constructor(
     public m_oDialogRef: MatDialogRef<StylesDialogComponent>,
+    private m_oDialog: MatDialog,
     private m_oConstantsService: ConstantsService,
     private m_oStyleService: StyleService
   ) {
@@ -99,8 +101,12 @@ export class StylesDialogComponent implements OnInit {
     }
   }
 
-  openStyleEditDialog() {
-    console.log("OPEN")
+  openStyleEditDialog(oStyle) {
+    let oDialog = this.m_oDialog.open(EditStyleDialogComponent, {
+      height: '80vh', 
+      width: '80vw', 
+      data: oStyle
+    });
   }
 }
 
