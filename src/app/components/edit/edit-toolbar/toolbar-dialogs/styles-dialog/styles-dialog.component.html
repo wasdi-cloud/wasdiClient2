@@ -1,7 +1,10 @@
 <div class="dialog d-flex flex-column justify-content-between" style="height: 100%;">
     <div class="dialog-header d-flex flex-row justify-content-between px-4 pt-3 pb-2 bg-secondary text-light">
         <h4 class="dialog-text">Styles</h4>
-        <fa-icon [icon]="faX"></fa-icon>
+        <button class="btn" (click)="onDismiss()">
+            <fa-icon [icon]="faX"></fa-icon>
+        </button>
+
     </div>
     <div class="dialog-content d-flex flex-row justify-content-between px-4 py-2 gap-3" style="height: 80%">
         <div class="styles-container" style="width: 50%">
@@ -10,17 +13,18 @@
                     <a class="nav-link active">Styles List</a>
                 </li>
                 <li class="nav-item">
-                    <button class="btn btn-success">
-                        Add Style
+                    <button class="btn btn-success" (click)="openNewStyleDialog()">
+                        <fa-icon [icon]="faPlus"></fa-icon> Add Style
                     </button>
                 </li>
             </ul>
             <input class="form-control my-3" type="text" placeholder="Search by Style Name">
             <div class="style-cards-container d-flex flex-row flex-wrap justify-content-start gap-1" style="width:100%">
-                <div *ngFor="let oStyle of m_aoStyleList" class="card d-flex flex-column gap-3 p-2" style="cursor: pointer; width: 32%"
-                    (click)="selectActiveStyle(oStyle)">
+                <div *ngFor="let oStyle of m_aoStyleList" class="card d-flex flex-column gap-3 p-2"
+                    style="cursor: pointer; width: 32%" (click)="selectActiveStyle(oStyle)">
                     <div style="height: 30px">
-                        <div *ngIf="oStyle.sharedWithMe || oStyle.userId === m_sActiveUserId" class="card-toolbar d-flex flex-row justify-content-end">
+                        <div *ngIf="oStyle.sharedWithMe || oStyle.userId === m_sActiveUserId"
+                            class="card-toolbar d-flex flex-row justify-content-end">
                             <button class="btn btn-sm">
                                 <fa-icon [icon]="faDownload"></fa-icon>
                             </button>
@@ -61,13 +65,14 @@
 
                 <div class="style-xml-container d-flex flex-column">
                     <span class="text-success">Style XML:</span>
-                    <textarea readonly class="form-control" name="m_asStyleXml" rows="10" placeholder="{{m_asStyleXml}}"></textarea>
+                    <textarea readonly class="form-control" name="m_asStyleXml" rows="10"
+                        placeholder="{{m_asStyleXml}}"></textarea>
                 </div>
             </div>
         </div>
     </div>
     <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
-        <button class="btn btn-secondary">
+        <button class="btn btn-secondary" (click)="onDismiss()">
             Close
         </button>
     </div>

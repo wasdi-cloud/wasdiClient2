@@ -4,8 +4,9 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dial
 import { ConstantsService } from 'src/app/services/constants.service';
 import { StyleService } from 'src/app/services/api/style.service';
 
-import { faEdit, faDownload, faPaintBrush, faX } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faDownload, faPaintBrush, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import { EditStyleDialogComponent } from '../edit-style-dialog/edit-style-dialog.component';
+import { NewStyleDialogComponent } from '../new-style-dialog/new-style-dialog.component';
 
 interface Style {
   description: string,
@@ -26,6 +27,7 @@ export class StylesDialogComponent implements OnInit {
   faDownload = faDownload;
   faEdit = faEdit;
   faPaintBrush = faPaintBrush;
+  faPlus = faPlus;
   faX = faX;
 
   m_sActiveUserId: string; 
@@ -107,6 +109,13 @@ export class StylesDialogComponent implements OnInit {
       width: '80vw', 
       data: oStyle
     });
+  }
+
+  openNewStyleDialog() {
+    let oDialog = this.m_oDialog.open(NewStyleDialogComponent, {
+      height: '80vh', 
+      width: '50vw'
+    })
   }
 }
 
