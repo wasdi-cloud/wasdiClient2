@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { oConfirmation } from './workspace.service';
 import { ConstantsService } from '../constants.service';
 
 @Injectable({
@@ -12,15 +13,15 @@ export class StyleService {
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
 
   //REFACTOR oOptions: 
-  // m_oOptions = {
-  //   transformRequest: angular.identity,
-  //   headers: { 'Content-Type': undefined }
-  // };
+  m_oOptions = {
+    //transformRequest: angular.identity,
+    headers: { 'Content-Type': undefined }
+  };
 
   // Upload a style by file
   uploadFile(sName: string, sDescription: string, oBody: object, bIsPublic: boolean) {
-    // return this.oHttp.post(this.APIURL + '/styles/uploadfile?' + "name=" + sName +
-    //     "&description=" + sDescription + "&public=" + bIsPublic, oBody, this.m_oOptions);
+    return this.oHttp.post<oConfirmation>(this.APIURL + '/styles/uploadfile?' + "name=" + sName +
+      "&description=" + sDescription + "&public=" + bIsPublic, oBody, { });
   };
 
   // Update style xml file
@@ -51,14 +52,13 @@ export class StyleService {
 
     let sAPIUrl = this.APIURL;
 
-    //This will not work in TypeScript
-    // if (typeof sUrl !== "undefined") {
-    //   if (sUrl !== null) {
-    //     if (sUrl !== "") {
-    //       sAPIUrl = sUrl;
-    //     }
-    //   }
-    // }
+    if (typeof sUrl !== "undefined") {
+      if (sUrl !== null) {
+        if (sUrl !== "") {
+          sAPIUrl = sUrl;
+        }
+      }
+    }
 
     window.location.href = sAPIUrl + "/styles/download" + urlParams;
   };
@@ -73,18 +73,18 @@ export class StyleService {
   // Add sharing
   addStyleSharing(sStyleId: string, sUserId: string) {
     //Requires an argument for the body
-    // return this.oHttp.put(this.APIURL + '/styles/share/add?styleId=' + sStyleId + '&userId=' + sUserId);
+    return this.oHttp.put<oConfirmation>(this.APIURL + '/styles/share/add?styleId=' + sStyleId + '&userId=' + sUserId, {});
   }
 
   // Remove sharing
   removeStyleSharing(sStyleId: string, sUserId: string) {
-    return this.oHttp.delete(this.APIURL + '/styles/share/delete?styleId=' + sStyleId + '&userId=' + sUserId);
+    return this.oHttp.delete<oConfirmation>(this.APIURL + '/styles/share/delete?styleId=' + sStyleId + '&userId=' + sUserId);
 
   }
 
   // Get style xml
   getStyleXml(sStyleId: string) {
-    return this.oHttp.get(this.APIURL + '/styles/getxml?styleId=' + sStyleId);
+    return this.oHttp.get(this.APIURL + '/styles/getxml?styleId=' + sStyleId, { responseType: "text" });
   }
 
   // Update style xml

@@ -98,6 +98,9 @@ import { WapTextboxComponent } from './components/WAP-components/wap-textbox/wap
 import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap-tooltip.component';
 import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
 import { ShareUiComponent } from './shared/dialogs/share-dialog/share-ui/share-ui.component';
+import { StylesDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
+import { EditStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/edit-style-dialog/edit-style-dialog.component';
+import { NewStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-style-dialog/new-style-dialog.component';
 
 
 
@@ -155,7 +158,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProductPropertiesDialogComponent, 
     NavLayersComponent, 
     WorkspaceInfoDialogComponent, 
-    ShareDialogComponent, ShareUiComponent
+    ShareDialogComponent, ShareUiComponent, StylesDialogComponent, EditStyleDialogComponent, NewStyleDialogComponent
   ],
   imports: [
     AppRoutingModule,

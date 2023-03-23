@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faUserPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { StyleService } from 'src/app/services/api/style.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 @Component({
   selector: 'app-share-ui',
@@ -17,9 +19,9 @@ export class ShareUiComponent implements OnInit {
   @Input() resource: any;
   @Input() resourceType: string;
 
-  constructor(private m_oWorkspaceService: WorkspaceService) {
-
-  }
+  constructor(
+    private m_oStyleService: StyleService,
+    private m_oWorkspaceService: WorkspaceService) { }
 
   ngOnInit() {
     console.log(this.resource)
@@ -37,7 +39,13 @@ export class ShareUiComponent implements OnInit {
         })
       }
 
-      if (this.resourceType === 'style') { }
+      if (this.resourceType === 'style') {
+        this.m_oStyleService.getUsersBySharedStyle(this.resource.styleId).subscribe(oResponse => {
+          if (oResponse) {
+            this.m_aoSharedUsers = oResponse;
+          }
+        })
+      }
 
       if (this.resourceType === 'workflow') { }
 
@@ -56,7 +64,14 @@ export class ShareUiComponent implements OnInit {
         })
       }
 
-      if (this.resourceType === 'style') { }
+      if (this.resourceType === 'style') {
+        this.m_oStyleService.addStyleSharing(this.resource.styleId, this.m_sUserIdSearch).subscribe(oResponse => {
+          console.log(oResponse);
+          if (oResponse.stringValue === "Done") {
+            this.getEnabledUsers();
+          }
+        })
+      }
 
       if (this.resourceType === 'workflow') { }
 
@@ -74,7 +89,14 @@ export class ShareUiComponent implements OnInit {
         })
       }
 
-      if (this.resourceType === 'style') { }
+      if (this.resourceType === 'style') {
+        this.m_oStyleService.removeStyleSharing(this.resource.styleId, sUserId).subscribe(oResponse => {
+          console.log(oResponse)
+          if(oResponse.stringValue === "Done") {
+            this.getEnabledUsers(); 
+          }
+        })
+      }
 
       if (this.resourceType === 'workflow') { }
 

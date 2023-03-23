@@ -1,0 +1,39 @@
+<div style="height: 100%" class="dialog d-flex flex-column justify-content-between">
+    <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between px-4 pt-3 pb-2">
+        <h4 class="dialog-text">Add New Style</h4>
+        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
+    </div>
+    <div mat-dialog-content>
+        <form #f="ngForm" name="m_oNewStyle" (ngSubmit)="f.form && onUploadStyle()">
+            <div class="form-col-1 d-flex flex-column gap-3">
+                <div>
+                    <label class="form-label" for="name">
+                        Name:
+                    </label>
+                    <input class="form-control" id="name" name="m_sStyleName" type="text" [(ngModel)]="m_oNewStyle.sStyleName">
+                </div>
+                <div>
+                    <label class="form-label" for="description">Description:</label>
+                    <textarea class="form-control" name="m_sStyleDescription" id="description" cols="30" rows="5" [(ngModel)]="m_oNewStyle.sStyleDescription"></textarea>
+                </div>
+                <div>
+                    <mat-checkbox [color]="'primary'" name="bStyleIsPublic" [(ngModel)]="m_oNewStyle.bStyleIsPublic">Set Styles as Public</mat-checkbox>
+                </div>
+                <div>
+                    <label for="formFileLg" class="form-label">
+                        Choose XML Style to Upload
+                    </label>
+                    <input (change)="onFileSelect($event.target)" class="form-control" name="m_oFile" type="file" [(ngModel)]="m_oNewStyle.sFileName">
+                </div>
+                <button type="submit" class="btn btn-success align-self-end">
+                    Add Style
+                </button>
+            </div>
+        </form>
+    </div>
+    <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
+        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">
+            Close
+        </button>
+    </div>
+</div>
