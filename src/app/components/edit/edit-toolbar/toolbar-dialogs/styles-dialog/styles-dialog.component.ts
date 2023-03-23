@@ -30,6 +30,8 @@ export class StylesDialogComponent implements OnInit {
   faPlus = faPlus;
   faX = faX;
 
+  m_bDisplayInfo: boolean = false;
+
   m_sActiveUserId: string;
 
   m_sFileName: string = "";
@@ -99,6 +101,7 @@ export class StylesDialogComponent implements OnInit {
     if (this.m_oConstantsService.getUserId() === sUserId) {
       this.m_oStyleService.getStyleXml(sStyleId).subscribe(oResponse => {
         this.m_asStyleXml = oResponse;
+        this.m_bDisplayInfo = true;
       })
     }
   }
@@ -130,6 +133,13 @@ export class StylesDialogComponent implements OnInit {
 
     this.m_oStyleService.downloadStyle(sStyleId, sUrl);
     return true;
+  }
+
+  deleteStyle(sStyleId: string) {
+    this.m_oStyleService.deleteStyle(sStyleId).subscribe(oResponse => {
+      this.getStylesByUser();
+      this.m_bDisplayInfo = false;
+    });
   }
 }
 

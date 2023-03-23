@@ -31,7 +31,7 @@
                             <button class="btn btn-sm" (click)="openStyleEditDialog(oStyle)">
                                 <fa-icon [icon]="faEdit"></fa-icon>
                             </button>
-                            <button class="btn btn-sm text-danger">
+                            <button class="btn btn-sm text-danger" (click)="deleteStyle(oStyle.styleId)">
                                 <fa-icon [icon]="faX"></fa-icon>
                             </button>
                         </div>
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="info-container card border border-success rounded-1" style="width: 50%;">
-            <div *ngIf="m_oSelectedStyle.name" class="px-4 py-4 d-flex flex-column gap-2">
+            <div *ngIf="m_oSelectedStyle.name && m_bDisplayInfo" class="px-4 py-4 d-flex flex-column gap-2">
                 <h4>{{m_oSelectedStyle.name}}</h4>
                 <div class="main-style-info d-flex flex-row justify-content-between">
 
