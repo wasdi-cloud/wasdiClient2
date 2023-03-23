@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -14,18 +14,24 @@ export class EditStyleDialogComponent {
   m_oStyle: any;
 
   m_oEditStyleForm = {} as {
-    sName: string, 
-    sDescription: string, 
-    bIsPublic: boolean, 
-    
+    sName: string,
+    sDescription: string,
+    bIsPublic: boolean,
+
   }
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any) {
+  constructor(
+    private m_oDialogRef: MatDialogRef<EditStyleDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: any) {
     this.m_oStyle = data;
   }
 
   setActiveTab(sTabName: string, event: MouseEvent) {
     event.preventDefault()
     this.m_sActiveTab = sTabName;
+  }
+
+  onDismiss() {
+    this.m_oDialogRef.close();
   }
 }
