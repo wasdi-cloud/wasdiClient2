@@ -1,0 +1,28 @@
+div.dialog {
+    height: 100%;
+}
+
+div.dialog-content {
+    height: 90%;
+}
+
+div.dialog-col-1 {
+    width: 50%;
+}
+
+div.workflow-cards-container {
+    overflow-y: scroll;
+    height: 80%;
+    width: 100%;
+}
+
+div.card {
+    cursor: pointer;
+    height: 40%;
+    width: 48%;
+}
+
+div.info-container {
+    width: 50%;
+    height: 100%;
+}
