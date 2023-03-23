@@ -18,10 +18,13 @@
                     </button>
                 </li>
             </ul>
-            <input class="form-control my-3" type="text" placeholder="Search by Style Name">
-            <div class="style-cards-container d-flex flex-row flex-wrap justify-content-start gap-1" style="width:100%">
-                <div *ngFor="let oStyle of m_aoStyleList" class="card d-flex flex-column gap-3 p-2"
-                    style="cursor: pointer; width: 32%" (click)="selectActiveStyle(oStyle)">
+            <input class="form-control my-3" type="text" placeholder="Search by Style Name"
+            [(ngModel)]="m_sSearchString" (ngModelChange)="filterStyles()">
+            <div class=" style-cards-container d-flex flex-row flex-wrap justify-content-start gap-1"
+                style="width:100%">
+                <div *ngFor="let oStyle of m_aoStyleList | filter: m_sSearchString"
+                    class="card d-flex flex-column gap-3 p-2 align-self-start" style="cursor: pointer; height: 50%; width: 32%"
+                    (click)="selectActiveStyle(oStyle)">
                     <div style="height: 30px">
                         <div *ngIf="oStyle.sharedWithMe || oStyle.userId === m_sActiveUserId"
                             class="card-toolbar d-flex flex-row justify-content-end">

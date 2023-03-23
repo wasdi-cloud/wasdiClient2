@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { StyleService } from 'src/app/services/api/style.service';
@@ -31,6 +31,7 @@ export class StylesDialogComponent implements OnInit {
   faX = faX;
 
   m_bDisplayInfo: boolean = false;
+  m_sSearchString!: string;
 
   m_sActiveUserId: string;
 
@@ -68,12 +69,18 @@ export class StylesDialogComponent implements OnInit {
   ) {
     this.m_sActiveUserId = m_oConstantsService.getUserId()
     this.getStylesByUser();
+    console.log(this.m_aoStyleList)
   }
 
   ngOnInit() { }
 
   onDismiss(): void {
     this.m_oDialogRef.close();
+  }
+
+  filterStyles() {
+   
+    return this.m_aoStyleList.filter(oStyle => oStyle.name.includes(this.m_sSearchString));
   }
 
   getStylesByUser() {
@@ -89,7 +96,7 @@ export class StylesDialogComponent implements OnInit {
   selectActiveStyle(oStyle: Style) {
     this.m_oSelectedStyle = oStyle;
     this.m_asStyleXml = "";
-
+    this.m_bDisplayInfo = true;
     if (oStyle) {
       if (oStyle.styleId) {
         this.getStyleXml(oStyle.styleId, oStyle.userId);
@@ -101,7 +108,7 @@ export class StylesDialogComponent implements OnInit {
     if (this.m_oConstantsService.getUserId() === sUserId) {
       this.m_oStyleService.getStyleXml(sStyleId).subscribe(oResponse => {
         this.m_asStyleXml = oResponse;
-        this.m_bDisplayInfo = true;
+
       })
     }
   }
