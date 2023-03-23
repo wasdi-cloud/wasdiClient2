@@ -13,15 +13,15 @@ export class StyleService {
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
 
   //REFACTOR oOptions: 
-  // m_oOptions = {
-  //   transformRequest: angular.identity,
-  //   headers: { 'Content-Type': undefined }
-  // };
+  m_oOptions = {
+    //transformRequest: angular.identity,
+    headers: { 'Content-Type': undefined }
+  };
 
   // Upload a style by file
   uploadFile(sName: string, sDescription: string, oBody: object, bIsPublic: boolean) {
-    // return this.oHttp.post(this.APIURL + '/styles/uploadfile?' + "name=" + sName +
-    //     "&description=" + sDescription + "&public=" + bIsPublic, oBody, this.m_oOptions);
+    return this.oHttp.post<oConfirmation>(this.APIURL + '/styles/uploadfile?' + "name=" + sName +
+      "&description=" + sDescription + "&public=" + bIsPublic, oBody, { });
   };
 
   // Update style xml file
