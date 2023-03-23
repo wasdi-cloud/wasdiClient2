@@ -25,7 +25,7 @@
                     <div style="height: 30px">
                         <div *ngIf="oStyle.sharedWithMe || oStyle.userId === m_sActiveUserId"
                             class="card-toolbar d-flex flex-row justify-content-end">
-                            <button class="btn btn-sm">
+                            <button class="btn btn-sm" (click)="downloadStyle(oStyle.styleId)">
                                 <fa-icon [icon]="faDownload"></fa-icon>
                             </button>
                             <button class="btn btn-sm" (click)="openStyleEditDialog(oStyle)">

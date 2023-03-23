@@ -30,7 +30,7 @@ export class StylesDialogComponent implements OnInit {
   faPlus = faPlus;
   faX = faX;
 
-  m_sActiveUserId: string; 
+  m_sActiveUserId: string;
 
   m_sFileName: string = "";
   m_oFile: any = null;
@@ -105,17 +105,31 @@ export class StylesDialogComponent implements OnInit {
 
   openStyleEditDialog(oStyle) {
     let oDialog = this.m_oDialog.open(EditStyleDialogComponent, {
-      height: '80vh', 
-      width: '80vw', 
+      height: '80vh',
+      width: '80vw',
       data: oStyle
     });
   }
 
   openNewStyleDialog() {
     let oDialog = this.m_oDialog.open(NewStyleDialogComponent, {
-      height: '80vh', 
+      height: '80vh',
       width: '50vw'
     })
+  }
+
+  downloadStyle(sStyleId: string) {
+    if (!sStyleId) {
+      return false;
+    }
+
+    let sUrl: string;
+    if (this.m_oConstantsService.getActiveWorkspace().apiUrl) {
+      sUrl = this.m_oConstantsService.getActiveWorkspace().apiUrl;
+    }
+
+    this.m_oStyleService.downloadStyle(sStyleId, sUrl);
+    return true;
   }
 }
 

@@ -52,14 +52,13 @@ export class StyleService {
 
     let sAPIUrl = this.APIURL;
 
-    //This will not work in TypeScript
-    // if (typeof sUrl !== "undefined") {
-    //   if (sUrl !== null) {
-    //     if (sUrl !== "") {
-    //       sAPIUrl = sUrl;
-    //     }
-    //   }
-    // }
+    if (typeof sUrl !== "undefined") {
+      if (sUrl !== null) {
+        if (sUrl !== "") {
+          sAPIUrl = sUrl;
+        }
+      }
+    }
 
     window.location.href = sAPIUrl + "/styles/download" + urlParams;
   };
