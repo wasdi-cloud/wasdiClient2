@@ -3,7 +3,7 @@ import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
-import { faSearch, faRefresh, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faRefresh, faInfoCircle, faRocket, faPlusSquare, faGears, faCloudUpload, faPaintBrush, faShareNodes, faLaptopCode } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkspaceInfoDialogComponent } from '../workspace-info-dialog/workspace-info-dialog.component';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
@@ -18,6 +18,13 @@ export class EditToolbarComponent implements OnInit {
   faSearch = faSearch;
   faRefresh = faRefresh;
   faInfo = faInfoCircle;
+  faRocket = faRocket;
+  faPlus = faPlusSquare;
+  faGears = faGears;
+  faUpload = faCloudUpload;
+  faComputer = faLaptopCode;
+  faStyles = faPaintBrush;
+  faShare = faShareNodes;
 
   @Input() m_oActiveWorkspace: Workspace;
   @Output() m_sSearchString = new EventEmitter();
@@ -81,7 +88,7 @@ export class EditToolbarComponent implements OnInit {
   openStylesDialog(event: MouseEvent) {
     event.preventDefault();
     let dialogRef = this.m_oDialog.open(StylesDialogComponent, {
-      height: '80vh', 
+      height: '80vh',
       width: '80vw'
     })
   }
