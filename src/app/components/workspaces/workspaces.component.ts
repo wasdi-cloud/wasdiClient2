@@ -5,6 +5,7 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
+import { NewWorkspaceDialogComponent } from './new-workspace-dialog/new-workspace-dialog.component';
 
 export interface WorkspaceViewModel {
   activeNode: boolean;
@@ -30,7 +31,7 @@ export class WorkspacesComponent implements OnInit {
   //Icons: 
   faPlus = faPlus
 
-  constructor(private oConstantsService: ConstantsService, private oDialog: MatDialog, private oWorkspaceService: WorkspaceService) { }
+  constructor(private oConstantsService: ConstantsService, private m_oDialog: MatDialog, private oWorkspaceService: WorkspaceService) { }
   workspaces: Workspace[] = []
   activeWorkspace!: WorkspaceViewModel;
   sharedUsers!: string[]; 
@@ -49,10 +50,6 @@ export class WorkspacesComponent implements OnInit {
     }
   }
 
-  clickAddWorkspace() {
-    console.log('Add workspace')
-  }
-
   onDeleteWorkspace(oWorkspace: Workspace) {
     this.fetchWorkspaceInfoList(); 
   }
@@ -62,5 +59,9 @@ export class WorkspacesComponent implements OnInit {
       this.activeWorkspace = response
       this.sharedUsers = response.sharedUsers
     })
+  }
+
+  openNewWorkspaceDialog() {
+    let oDialogRef = this.m_oDialog.open(NewWorkspaceDialogComponent)
   }
 }
