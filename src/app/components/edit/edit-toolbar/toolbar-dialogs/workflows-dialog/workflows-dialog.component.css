@@ -3,7 +3,7 @@ div.dialog {
 }
 
 div.dialog-content {
-    height: 90%;
+    height: 80%;
 }
 
 div.dialog-col-1 {
@@ -25,4 +25,7 @@ div.card {
 div.info-container {
     width: 50%;
     height: 100%;
+}
+a.nav-link {
+    cursor: pointer; 
 }

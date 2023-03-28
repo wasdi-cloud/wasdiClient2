@@ -11,12 +11,14 @@
             <ul class="nav nav-tabs d-flex flex-row justify-content-between">
                 <div class="d-flex flex-row">
                     <li class="nav-item">
-                        <a href="" class="nav-link active">
+                        <a class="nav-link" [ngClass]="m_sActiveTab === 'execute' ? 'active': ''"
+                            (click)="setActiveTab('execute')">
                             Execute
                         </a>
                     </li>
-                    <li href="" class="nav-item">
-                        <a class="nav-link">
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="m_sActiveTab === 'batch' ? 'active': ''"
+                            (click)="setActiveTab('batch')">
                             Batch Processing
                         </a>
                     </li>
@@ -29,9 +31,9 @@
             </ul>
             <input type="text" class="form-control my-2" placeholder="Filter Workflows by Name">
             <div class="workflow-cards-container d-flex flex-row flex-wrap justify-content-start gap-1">
-                <div class="card d-flex flex-column gap-3 p-2 align-self-start">
+                <div class="card d-flex flex-column gap-3 p-2 align-self-start" *ngFor="let oWorkflow of m_aoWorkflows">
                     <div class="card-toolbar d-flex flex-row justify-content-end" style="height: 30px">
-                        <div>
+                        <div *ngIf="isWorkflowOwner(oWorkflow)">
                             <button class="btn">
                                 <fa-icon [icon]="faDownload"></fa-icon>
                             </button>
@@ -47,8 +49,8 @@
                         <h2 class="text-center">
                             <fa-icon [icon]="faLaptop"></fa-icon>
                         </h2>
-                        <p class="text-success pb-0 mb-0 title">WORKFLOW NAME</p>
-                        <p class="style-description pb-0 mb-0">WORKFLOW DESCRIPTION</p>
+                        <p class="text-success pb-0 mb-0 title">{{oWorkflow.name}}</p>
+                        <p class="style-description pb-0 mb-0">{{oWorkflow.description}}</p>
                     </div>
                 </div>
             </div>
@@ -70,7 +72,8 @@
 
                 <div class="style-xml-container d-flex flex-row align-items-center gap-2">
                     <span class="text-success">Read:</span>
-                    <input type="text" class="form-control" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="auto">
+                    <input type="text" class="form-control" placeholder="Pick one" aria-label="Number" matInput
+                        [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete">
                         <mat-option>
 
