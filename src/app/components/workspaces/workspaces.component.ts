@@ -62,6 +62,8 @@ export class WorkspacesComponent implements OnInit {
   }
 
   openNewWorkspaceDialog() {
-    let oDialogRef = this.m_oDialog.open(NewWorkspaceDialogComponent)
+    let oDialogRef = this.m_oDialog.open(NewWorkspaceDialogComponent, {
+      width: '30vw'
+    })
   }
 }

@@ -1,1 +1,13 @@
-
+<div class="dialog">
+    <h1 class="dialog-text" mat-dialog-title>
+        New Workspace
+    </h1>
+    <div class="m-2" mat-dialog-content>
+        <label class="form-label" for="">Enter workspace name: </label>
+        <input class="form-control my-2" type="text" name="m_sWorkspaceName" placeholder="Workspace Name" [(ngModel)]="m_sWorkspaceName"> 
+    </div>
+    <div mat-dialog-actions class="d-flex flex-row gap-1 justify-content-end">
+        <button class="btn btn-success btn-sm" (click)="onCreateWorkspace()">Create Workspace</button>
+        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">Cancel</button>
+    </div>
+</div>
