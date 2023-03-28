@@ -103,5 +103,20 @@
     "PAGE_NOT_FOUND": {
         "MARKET_BTN": "Du-mă pe Piață!",
         "NOT_FOUND": "Pagina nu a fost găsită"
+    },
+    "WORKSPACES": {
+        "HEADER": "Spații de lucru", 
+        "ADD_WORKSPACE": "Adăugați spațiu de lucru",
+        "LIST_BTN_OPEN": "Deschide",
+        "LIST_BTN_DELETE": "Șterge",
+        "PROPERTIES": "Proprietăți",
+        "PROPERTIES_OWNER": "Proprietar",
+        "PROPERTIES_CLOUD": "Nor",
+        "PROPERTIES_NODE_CODE": "Codul nodului",
+        "PROPERTIES_PRODUCTS": "Produse",
+        "PROPERTIES_NAME": "Nume",
+        "PROPERTIES_WORKSPACE_ID": "Idul spațiului de lucru",
+        "PROPERTIES_PROCESSES_EXECUTED": "Procese executate",
+        "PROPERTIES_SHARED": "Partajat cu"
     }
 }

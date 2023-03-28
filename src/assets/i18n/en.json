@@ -157,5 +157,20 @@
         "WAP_SELECT_AREA_BASE": "The selected area exceeds the limits imposed for the application:",
         "WAP_SELECT_AREA_OVER_AREA": "<br> - The area is too big",
         "WAP_SELECT_AREA_OVER_SIDE": "<br> - The larger side selected is too big"
+    }, 
+    "WORKSPACES": {
+        "HEADER": "Workspaces", 
+        "ADD_WORKSPACE":"Add Workspace",
+        "LIST_BTN_OPEN": "Open", 
+        "LIST_BTN_DELETE": "Delete",
+        "PROPERTIES": "Properties",
+        "PROPERTIES_OWNER": "Owner",
+        "PROPERTIES_CLOUD": "Cloud",
+        "PROPERTIES_NODE_CODE": "Node Code", 
+        "PROPERTIES_PRODUCTS": "Products", 
+        "PROPERTIES_NAME": "Name", 
+        "PROPERTIES_WORKSPACE_ID": "Workspace Id", 
+        "PROPERTIES_PROCESSES_EXECUTED": "Processes Executed", 
+        "PROPERTIES_SHARED": "Shared With"
     }
 }

@@ -103,5 +103,20 @@
     "PAGE_NOT_FOUND": {
         "MARKET_BTN": "Bring mich zum Marktplatz!",
         "NOT_FOUND": "Seite nicht gefunden"
+    },
+    "WORKSPACES": {
+        "HEADER": "Arbeitsbereiche",
+        "ADD_WORKSPACE": "Arbeitsbereich hinzufügen",
+        "LIST_BTN_OPEN": "Öffnen",
+        "LIST_BTN_DELETE": "Löschen",
+        "PROPERTIES": "Eigenschaften",
+        "PROPERTIES_OWNER": "Eigentümer",
+        "PROPERTIES_CLOUD": "Wolke",
+        "PROPERTIES_NODE_CODE": "Knotencode",
+        "PROPERTIES_PRODUCTS": "Produkte",
+        "PROPERTIES_NAME": "Name",
+        "PROPERTIES_WORKSPACE_ID": "Arbeitsbereich-ID",
+        "PROPERTIES_PROCESSES_EXECUTED": "Ausgeführte Prozesse",
+        "PROPERTIES_SHARED": "Geteilt mit"
     }
 }

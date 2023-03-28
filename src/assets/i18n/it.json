@@ -103,5 +103,20 @@
     "PAGE_NOT_FOUND": {
         "MARKET_BTN": "Portami al mercato!",
         "NOT_FOUND": "Pagina non trovata"
+    },
+    "WORKSPACES": {
+        "HEADER": "Aree di lavoro",
+        "ADD_WORKSPACE": "Aggiungi spazio di lavoro",
+        "LIST_BTN_OPEN": "Apri",
+        "LIST_BTN_DELETE": "Elimina",
+        "PROPERTIES": "Proprietà",
+        "PROPERTIES_OWNER": "Proprietario",
+        "PROPERTIES_CLOUD": "Nuvola",
+        "PROPERTIES_NODE_CODE": "Codice nodo",
+        "PROPERTIES_PRODUCTS": "Prodotti",
+        "PROPERTIES_NAME": "Nome",
+        "PROPERTIES_WORKSPACE_ID": "ID area di lavoro",
+        "PROPERTIES_PROCESSES_EXECUTED": "Processi eseguiti",
+        "PROPERTIES_SHARED": "Condiviso con"
     }
 }

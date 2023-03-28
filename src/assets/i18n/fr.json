@@ -103,5 +103,20 @@
     "PAGE_NOT_FOUND": {
         "MARKET_BTN": "Emmenez-moi sur la place de marché !",
         "NOT_FOUND": "Page introuvable"
+    },
+    "WORKSPACES": {
+        "HEADER": "Espaces de travail",
+        "ADD_WORKSPACE": "Ajouter un espace de travail",
+        "LIST_BTN_OPEN": "Ouvrir",
+        "LIST_BTN_DELETE": "Supprimer",
+        "PROPERTIES": "Propriétés",
+        "PROPERTIES_OWNER": "Propriétaire",
+        "PROPERTIES_CLOUD": "Nuage",
+        "PROPERTIES_NODE_CODE": "Code nœud",
+        "PROPERTIES_PRODUCTS": "Produits",
+        "PROPERTIES_NAME": "Nom",
+        "PROPERTIES_WORKSPACE_ID": "Identifiant de l'espace de travail",
+        "PROPERTIES_PROCESSES_EXECUTED": "Processus exécutés",
+        "PROPERTIES_SHARED": "Partagé avec"
     }
 }

@@ -103,5 +103,20 @@
     "PAGE_NOT_FOUND": {
         "MARKET_BTN": "Bawa saya ke Pasar!",
         "NOT_FOUND": "Halaman Tidak Ditemukan"
+    },
+    "WORKSPACES": {
+        "HEADER": "Ruang kerja",
+        "ADD_WORKSPACE": "Tambah Ruang Kerja",
+        "LIST_BTN_OPEN": "Buka",
+        "LIST_BTN_DELETE": "Hapus",
+        "PROPERTIES": "Properti",
+        "PROPERTIES_OWNER": "Pemilik",
+        "PROPERTIES_CLOUD": "Awan",
+        "PROPERTIES_NODE_CODE": "Kode Simpul",
+        "PROPERTIES_PRODUCTS": "Produk",
+        "PROPERTIES_NAME": "Nama",
+        "PROPERTIES_WORKSPACE_ID": "Id Ruang Kerja",
+        "PROPERTIES_PROCESSES_EXECUTED": "Proses Dijalankan",
+        "PROPERTIES_SHARED": "Dibagikan Dengan"
     }
 }

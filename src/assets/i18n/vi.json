@@ -103,5 +103,20 @@
     "PAGE_NOT_FOUND": {
         "MARKET_BTN": "Đưa tôi đến Chợ!",
         "NOT_FOUND": "Không tìm thấy trang"
+    },
+    "WORKSPACES": {
+        "HEADER": "Không gian làm việc",
+        "ADD_WORKSPACE": "Thêm không gian làm việc",
+        "LIST_BTN_OPEN": "Mở",
+        "LIST_BTN_DELETE": "Xóa",
+        "PROPERTIES": "Thuộc tính",
+        "PROPERTIES_OWNER": "Chủ sở hữu",
+        "PROPERTIES_CLOUD": "Đám mây",
+        "PROPERTIES_NODE_CODE": "Mã nút",
+        "PROPERTIES_PRODUCTS": "Sản phẩm",
+        "PROPERTIES_NAME": "Tên",
+        "PROPERTIES_WORKSPACE_ID": "Id vùng làm việc",
+        "PROPERTIES_PROCESSES_EXECUTED": "Quy trình đã thực hiện",
+        "PROPERTIES_SHARED": "Được chia sẻ với"
     }
 }
