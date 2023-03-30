@@ -6,7 +6,7 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { NewWorkspaceDialogComponent } from './new-workspace-dialog/new-workspace-dialog.component';
-
+import { CesiumService } from 'src/app/shared/cesium.service';
 export interface WorkspaceViewModel {
   activeNode: boolean;
   apiUrl: string;
@@ -31,13 +31,15 @@ export class WorkspacesComponent implements OnInit {
   //Icons: 
   faPlus = faPlus
 
-  constructor(private oConstantsService: ConstantsService, private m_oDialog: MatDialog, private oWorkspaceService: WorkspaceService) { }
+  constructor(private cesium: CesiumService, private oConstantsService: ConstantsService, private m_oDialog: MatDialog, private oWorkspaceService: WorkspaceService) { }
   workspaces: Workspace[] = []
   activeWorkspace!: WorkspaceViewModel;
-  sharedUsers!: string[]; 
+  sharedUsers!: string[];
 
   ngOnInit(): void {
     this.fetchWorkspaceInfoList();
+    this.cesium.plotPoints("cesium");
+
   }
   fetchWorkspaceInfoList() {
     console.log("fetching workspaces")
@@ -51,9 +53,9 @@ export class WorkspacesComponent implements OnInit {
   }
 
   onDeleteWorkspace(oWorkspace: Workspace) {
-    this.fetchWorkspaceInfoList(); 
+    this.fetchWorkspaceInfoList();
   }
-  
+
   onShowWorkspace(oWorkspace: Workspace) {
     this.oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
       this.activeWorkspace = response
