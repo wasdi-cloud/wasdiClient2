@@ -28,12 +28,14 @@
               "src/styles.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css", 
               "./node_modules/leaflet/dist/leaflet.css",
-              "./node_modules/leaflet-draw/dist/leaflet.draw.css"
+              "./node_modules/leaflet-draw/dist/leaflet.draw.css",
+              "src/assets/Cesium/Widgets/widgets.css"
             ],
             "scripts": [
               "./node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "node_modules/leaflet/dist/leaflet.js"
+              "node_modules/leaflet/dist/leaflet.js",
+              "src/assets/Cesium/Cesium.js"
             ]
           },
           "configurations": {

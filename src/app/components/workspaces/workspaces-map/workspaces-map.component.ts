@@ -3,6 +3,7 @@ import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
 import * as L from "leaflet";
 import { MapService } from "src/app/services/map.service";
 import Geocoder from "leaflet-control-geocoder";
+import { CesiumService } from "src/app/shared/cesium.service";
 
 @Component({
   selector: 'app-workspaces-map',
@@ -26,8 +27,8 @@ export class WorkspacesMapComponent implements OnInit {
     this.layersControl = this.m_oMapService.m_oLayersControl;
     this.drawOptions = this.m_oMapService.m_oDrawOptions;
     this.drawnItems = this.m_oMapService.m_oDrawnItems;
-  }
 
+  }
   onMapReady(map: L.Map) {
     this.searchControl.setPosition('bottomleft')
     this.searchControl.addTo(map);
@@ -36,5 +37,7 @@ export class WorkspacesMapComponent implements OnInit {
   onDrawCreated(event) {
     console.log('drawn in controller')
   }
+
+
 }
 
