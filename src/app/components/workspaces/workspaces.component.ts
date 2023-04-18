@@ -7,6 +7,7 @@ import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { NewWorkspaceDialogComponent } from './new-workspace-dialog/new-workspace-dialog.component';
 import { CesiumService } from 'src/app/shared/cesium.service';
+import { GlobeService } from 'src/app/services/globe.service';
 export interface WorkspaceViewModel {
   activeNode: boolean;
   apiUrl: string;
@@ -31,14 +32,14 @@ export class WorkspacesComponent implements OnInit {
   //Icons: 
   faPlus = faPlus
 
-  constructor(private cesium: CesiumService, private oConstantsService: ConstantsService, private m_oDialog: MatDialog, private oWorkspaceService: WorkspaceService) { }
+  constructor(private m_oGlobeService: GlobeService, private oConstantsService: ConstantsService, private m_oDialog: MatDialog, private oWorkspaceService: WorkspaceService) { }
   workspaces: Workspace[] = []
   activeWorkspace!: WorkspaceViewModel;
   sharedUsers!: string[];
 
   ngOnInit(): void {
     this.fetchWorkspaceInfoList();
-    this.cesium.plotPoints("cesium");
+    this.m_oGlobeService.initRotateGlobe('CesiumContainer3'); 
 
   }
   fetchWorkspaceInfoList() {
