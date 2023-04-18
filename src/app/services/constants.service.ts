@@ -23,7 +23,6 @@ export class ConstantsService {
 
   WMSURL: string = environment.wmsUrl;
 
-  //IMPORTANT QUESTION HERE -> Check notes
   m_bIgnoreWorkspaceApiUrl: boolean = false;
 
   m_oUser: User = {} as User;
@@ -192,20 +191,29 @@ export class ConstantsService {
   }
 
   getCookie(cookieName: string) {
-    // let name: string = cookieName + "=";
-    // let cookieArray: Array<string> = document.cookie.split(";");
 
-    // for (let index: number = 0; index < cookieArray.length; index++) {
-    //   let cookie: string = cookieArray[index];
+    try {
+      let sName: string = cookieName + "=";
+      let aCookieArray: Array<string> = document.cookie.split(";");
 
-    //   while (cookie.charAt(0) === ' ') {
-    //     return JSON.parse(cookie.substring(name.length, cookie.length));
-    //   }
-    // }
-    if (!document.cookie) {
-      return ""
+      for (let index: number = 0; index < aCookieArray.length; index++) {
+        let cookie: string = aCookieArray[index];
+
+        while (cookie.charAt(0) === ' ') {
+          return JSON.parse(cookie.substring(sName.length, cookie.length));
+        }
+      }
+      if (!document.cookie) {
+        return ""
+      }
+
+      console.log(document.cookie);
+      return JSON.parse(document.cookie.substring(6));
+    } catch (sError) {
+      console.log(`${document.cookie} ${sError}`)
     }
-    return JSON.parse(document.cookie.substring(6));
+
+    
   }
 
   deleteCookie(cookieName: string) {
