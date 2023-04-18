@@ -211,6 +211,7 @@ export class ConstantsService {
       return JSON.parse(document.cookie.substring(6));
     } catch (sError) {
       console.log(`${document.cookie} ${sError}`)
+      return ""; 
     }
 
     
