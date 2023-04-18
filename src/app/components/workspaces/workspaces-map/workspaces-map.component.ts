@@ -3,7 +3,7 @@ import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
 import * as L from "leaflet";
 import { MapService } from "src/app/services/map.service";
 import Geocoder from "leaflet-control-geocoder";
-import { CesiumService } from "src/app/shared/cesium.service";
+
 
 @Component({
   selector: 'app-workspaces-map',
