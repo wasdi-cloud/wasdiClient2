@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { faBook, faPlus, faShareNodes, faUpload, faX } from '@fortawesome/free-solid-svg-icons';
+import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
+import { ConstantsService } from 'src/app/services/constants.service';
 
 @Component({
   selector: 'app-params-library-dialog',
@@ -6,5 +10,84 @@ import { Component } from '@angular/core';
   styleUrls: ['./params-library-dialog.component.css']
 })
 export class ParamsLibraryDialogComponent {
+  //Font Awesome Icons: 
+  faBook = faBook;
+  faShare = faShareNodes;
+  faUpload = faUpload;
+  faX = faX;
+  faPlus = faPlus;
 
+  m_oSelectedProcessor: any;
+  m_sProcessorId: string = "";
+  m_sActiveUserId: string = "";
+
+  m_aoParamsTemplates: any = [];
+  m_sInputTemplateId: string = "";
+
+  m_bIsLoading: boolean = false;
+  m_sSearchString: string = "";
+
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private m_oConstantsService: ConstantsService,
+    private m_oDialogRef: MatDialogRef<ParamsLibraryDialogComponent>,
+    private m_oProcessorParametersTemplateService: ProcessorParamsTemplateService,
+  ) {
+    this.m_oSelectedProcessor = data;
+    this.m_sProcessorId = this.m_oSelectedProcessor.processorId; 
+    this.m_sActiveUserId = this.m_oConstantsService.getUserId();
+    console.log(this.m_oSelectedProcessor);
+    this.getProcessorParametersTemplateList(this.m_sProcessorId); 
+  }
+
+  /**
+     * Get the list of processor parameters templates for the current user and the current processor.
+     * @param sProcessorId
+     * @returns {boolean}
+     */
+  getProcessorParametersTemplateList(sProcessorId: string) {
+    if(!sProcessorId) {
+      return false;
+    }
+    this.m_oProcessorParametersTemplateService.getProcessorParametersTemplatesListByProcessor(sProcessorId).subscribe(oResponse => {
+      console.log(oResponse); 
+      if(oResponse) {
+        this.m_aoParamsTemplates = oResponse; 
+      }
+    })
+    return true;
+  }
+
+  applyProcessorParams(sTemplateId: string) {
+
+  }
+
+  viewProcessorParams(oTemplate: any) {
+
+  }
+
+  deleteProcessorParams(oTemplate: any) {
+
+  }
+
+  saveTemplate() {
+
+  }
+
+  openShareDialog() {
+
+  }
+
+  formatJSON() {
+
+  }
+
+  addProcessorParams() {
+
+  }
+
+  onDismiss() {
+    this.m_oDialogRef.close();
+  }
 }

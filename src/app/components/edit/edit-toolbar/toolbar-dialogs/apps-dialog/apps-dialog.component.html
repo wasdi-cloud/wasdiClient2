@@ -20,7 +20,7 @@
                     <div style="height: 30px">
                         <div *ngIf="oProcessor.sharedWithMe || oProcessor.publisher === m_sActiveUserId"
                             class="card-toolbar d-flex flex-row justify-content-end">
-                            <button class="btn btn-sm" (click)="openParametersDialog($event)">
+                            <button class="btn btn-sm" (click)="openParametersDialog($event, oProcessor)">
                                 <fa-icon [icon]="faBook"></fa-icon>
                             </button>
                             <button class="btn btn-sm" (click)="downloadProcessor($event, oProcessor)">
