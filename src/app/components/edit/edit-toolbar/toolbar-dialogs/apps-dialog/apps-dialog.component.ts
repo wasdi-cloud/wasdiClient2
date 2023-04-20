@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { faBook, faDownload, faEdit, faPaintBrush, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
 
 @Component({
   selector: 'app-apps-dialog',
@@ -32,6 +33,7 @@ export class AppsDialogComponent {
 
 
   constructor(
+    private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
     private m_oProcessorService: ProcessorService,
     private m_oProductService: ProductService,
@@ -56,7 +58,20 @@ export class AppsDialogComponent {
   }
 
   openParametersDialog(oEvent: MouseEvent) {
-    oEvent.preventDefault(); 
+    oEvent.preventDefault();
+    let oDialog = this.m_oDialog.open(ParamsLibraryDialogComponent, {
+      height: '80vh',
+      width: '80vw'
+    })
+  }
+
+  downloadProcessor(oEvent: MouseEvent, oProcessor: any) {
+    oEvent.preventDefault();
+    if(!oProcessor) {
+      return false;
+    }
+
+    return this.m_oProcessorService.downloadProcessor(oProcessor.processorId); 
   }
 
   setDefaultImages(aoProcessorList) {
