@@ -60,7 +60,6 @@ export class AppsDialogComponent {
       if (oResponse) {
         this.m_aoProcessorList = this.setDefaultImages(oResponse);
         this.m_bIsLoadingProcessorList = false;
-        console.log(this.m_aoProcessorList);
       } else {
         //ERROR DIALOG
       }
@@ -101,8 +100,6 @@ export class AppsDialogComponent {
     } else {
       this.m_sMyJsonString = "";
     }
-
-    console.log(this.m_sMyJsonString);
   }
 
   openParametersDialog(oEvent: MouseEvent) {
@@ -167,11 +164,55 @@ export class AppsDialogComponent {
   }
 
   runProcessor() {
+    console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
 
+    let sJSON = this.m_sMyJsonString;
+
+    let sStringJSON = "";
+
+    if (typeof sJSON !== "string") {
+      sStringJSON = JSON.stringify(sJSON);
+    } else {
+      sStringJSON = sJSON;
+    }
+
+    try {
+      JSON.parse(sStringJSON);
+    } catch (oError) {
+      let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
+
+      console.log(sErrorMessage);
+    }
+
+    this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
+      console.log(oResponse)
+
+      this.m_oDialogRef.close();
+    })
   }
 
   openHelp() {
+    this.m_oProcessorService.getHelpFromProcessor(this.m_oSelectedProcessor.processorName).subscribe(oResponse => {
+      if (oResponse.stringValue) {
+        let sHelpMessage = oResponse.stringValue;
+        if (sHelpMessage) {
+          try {
+            let oHelp = JSON.parse(sHelpMessage);
 
+            sHelpMessage = oHelp.help
+          } catch (oError) {
+            sHelpMessage = oResponse.stringValue;
+          }
+        } else {
+          sHelpMessage = "";
+        }
+        //If the message is empty from the server or is null
+        if (sHelpMessage === "") {
+          sHelpMessage = "There isn't any help message."
+        }
+
+      }
+    })
   }
 
   onDismiss() {

@@ -59,11 +59,11 @@
                 <div class="buttons-container d-flex flex-row justify-content-between">
                     <button class="btn btn-secondary" (click)="formatJSON()">Format JSON</button>
                     <div class="d-flex gap-3">
-                        <button class="btn btn-success">
+                        <button class="btn btn-success" (click)="runProcessor()">
                             <fa-icon [icon]="faRun"></fa-icon>
                             Run
                         </button>
-                        <button class="btn btn-secondary">
+                        <button class="btn btn-secondary" (click)="openHelp()">
                             <fa-icon [icon]="faHelp"></fa-icon>
                             Help
                         </button>
