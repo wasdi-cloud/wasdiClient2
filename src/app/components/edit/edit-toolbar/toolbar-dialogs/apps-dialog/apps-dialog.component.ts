@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { faBook, faDownload, faEdit, faPaintBrush, faPlay, faPlus, faQuestionCircle, faX } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faDownload, faEdit, faPaintBrush, faPlay, faPlus, faQuestionCircle, faRocket, faX } from '@fortawesome/free-solid-svg-icons';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
@@ -24,6 +24,7 @@ export class AppsDialogComponent {
   faBook = faBook;
   faRun = faPlay;
   faHelp = faQuestionCircle;
+  faRocket = faRocket;
 
   m_sActiveUserId: string = ""
   m_aoWorkspaceList: any[] = [];
@@ -101,7 +102,7 @@ export class AppsDialogComponent {
       this.m_sMyJsonString = "";
     }
 
-    console.log(this.m_sMyJsonString); 
+    console.log(this.m_sMyJsonString);
   }
 
   openParametersDialog(oEvent: MouseEvent) {
@@ -159,6 +160,18 @@ export class AppsDialogComponent {
       this.m_bIsLoadingProcessorList = false;
     });
     return true;
+  }
+
+  formatJSON() {
+    this.m_sMyJsonString = JSON.stringify(JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')), null, 2);
+  }
+
+  runProcessor() {
+
+  }
+
+  openHelp() {
+
   }
 
   onDismiss() {

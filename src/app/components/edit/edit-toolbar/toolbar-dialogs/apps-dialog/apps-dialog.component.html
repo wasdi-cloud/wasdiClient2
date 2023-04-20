@@ -1,6 +1,6 @@
 <div class="dialog d-flex flex-column justify-content-between" style="height: 100%">
     <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between px-4 pt-3 pb-2">
-        <h4 class="dialog-text">WASDI Apps</h4>
+        <h4 class="dialog-text"><fa-icon [icon]="faRocket"></fa-icon> WASDI Apps</h4>
         <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
     </div>
     <div class="dialog-content d-flex flex-row justify-content-between px-4 py-2 gap-3" style="height: 80%">
@@ -53,11 +53,11 @@
                     <h5>JSON Editor</h5>
                 </div>
                 <div class="style-xml-container d-flex flex-column">
-                    <textarea readonly class="form-control" name="m_asStyleXml" rows="15"
-                        placeholder='{{m_sMyJsonString !== "" ? m_sMyJsonString:"{}"}}'></textarea>
+                    <textarea class="form-control" name="m_asStyleXml" rows="15" [(ngModel)]="m_sMyJsonString"
+                        placeholder="{}"></textarea>
                 </div>
                 <div class="buttons-container d-flex flex-row justify-content-between">
-                    <button class="btn btn-secondary">Format JSON</button>
+                    <button class="btn btn-secondary" (click)="formatJSON()">Format JSON</button>
                     <div class="d-flex gap-3">
                         <button class="btn btn-success">
                             <fa-icon [icon]="faRun"></fa-icon>
