@@ -132,7 +132,7 @@ export class AppsDialogComponent {
       return false;
     }
 
-    let sConfirmOwner = `Are you sure you want to delete this ${oProcessor.processorName}?`;
+    let sConfirmOwner = `Are you sure you want to delete ${oProcessor.processorName}?`;
     let sConfirmShared = `Are you sure you want to remove your permissions from ${oProcessor.processorName}?`
 
     let oDialogData: ConfirmationDialogModel;
