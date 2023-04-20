@@ -29,7 +29,7 @@
                             <button class="btn btn-sm" (click)="downloadProcessor($event, oProcessor)">
                                 <fa-icon [icon]="faDownload"></fa-icon>
                             </button>
-                            <button class="btn btn-sm">
+                            <button class="btn btn-sm" (click)="openEditProcessorDialog($event, oProcessor)">
                                 <fa-icon [icon]="faEdit"></fa-icon>
                             </button>
                             <button class="btn btn-sm text-danger">

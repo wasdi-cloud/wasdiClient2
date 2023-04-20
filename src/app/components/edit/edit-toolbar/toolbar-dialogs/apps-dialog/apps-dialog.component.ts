@@ -5,6 +5,7 @@ import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
+import { EditProcessorDialogComponent } from './edit-processor-dialog/edit-processor-dialog.component';
 
 @Component({
   selector: 'app-apps-dialog',
@@ -57,23 +58,6 @@ export class AppsDialogComponent {
     });
   }
 
-  openParametersDialog(oEvent: MouseEvent) {
-    oEvent.preventDefault();
-    let oDialog = this.m_oDialog.open(ParamsLibraryDialogComponent, {
-      height: '80vh',
-      width: '80vw'
-    })
-  }
-
-  downloadProcessor(oEvent: MouseEvent, oProcessor: any) {
-    oEvent.preventDefault();
-    if(!oProcessor) {
-      return false;
-    }
-
-    return this.m_oProcessorService.downloadProcessor(oProcessor.processorId); 
-  }
-
   setDefaultImages(aoProcessorList) {
     if (!aoProcessorList) {
       return aoProcessorList;
@@ -89,6 +73,31 @@ export class AppsDialogComponent {
     }
     return aoProcessorList;
   }
+
+  openParametersDialog(oEvent: MouseEvent) {
+    oEvent.preventDefault();
+    let oDialog = this.m_oDialog.open(ParamsLibraryDialogComponent, {
+      height: '80vh',
+      width: '80vw'
+    })
+  }
+
+  downloadProcessor(oEvent: MouseEvent, oProcessor: any) {
+    oEvent.preventDefault();
+    if (!oProcessor) {
+      return false;
+    }
+
+    return this.m_oProcessorService.downloadProcessor(oProcessor.processorId);
+  }
+
+  openEditProcessorDialog(oEvent: MouseEvent, oProcessor: any) {
+    let oDialog = this.m_oDialog.open(EditProcessorDialogComponent, {
+      height: '80vh',
+      width: '80vw'
+    })
+  }
+
 
   onDismiss() {
     this.m_oDialogRef.close();

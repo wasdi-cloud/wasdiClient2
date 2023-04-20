@@ -104,6 +104,7 @@ import { NewStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-
 import { NewWorkspaceDialogComponent } from './components/workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { AppsDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/apps-dialog.component';
 import { ParamsLibraryDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/params-library-dialog/params-library-dialog.component';
+import { EditProcessorDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/edit-processor-dialog/edit-processor-dialog.component';
 
 
 
@@ -161,7 +162,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProductPropertiesDialogComponent, 
     NavLayersComponent, 
     WorkspaceInfoDialogComponent, 
-    ShareDialogComponent, ShareUiComponent, StylesDialogComponent, EditStyleDialogComponent, NewStyleDialogComponent, NewWorkspaceDialogComponent, AppsDialogComponent, ParamsLibraryDialogComponent
+    ShareDialogComponent, ShareUiComponent, StylesDialogComponent, EditStyleDialogComponent, NewStyleDialogComponent, NewWorkspaceDialogComponent, AppsDialogComponent, ParamsLibraryDialogComponent, EditProcessorDialogComponent
   ],
   imports: [
     AppRoutingModule,
