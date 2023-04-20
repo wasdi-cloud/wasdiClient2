@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { faBook, faDownload, faEdit, faPaintBrush, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faDownload, faEdit, faPaintBrush, faPlay, faPlus, faQuestionCircle, faX } from '@fortawesome/free-solid-svg-icons';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
@@ -22,6 +22,8 @@ export class AppsDialogComponent {
   faPlus = faPlus;
   faPaintBrush = faPaintBrush;
   faBook = faBook;
+  faRun = faPlay;
+  faHelp = faQuestionCircle;
 
   m_sActiveUserId: string = ""
   m_aoWorkspaceList: any[] = [];
@@ -34,17 +36,18 @@ export class AppsDialogComponent {
   m_sJson: any = {};
   m_sMyJsonString: string = "";
   m_sSearchString = ""
+  m_oSelectedProcessor: any;
 
 
   constructor(
-    private m_oConstantsService: ConstantsService, 
+    private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
     private m_oProcessorService: ProcessorService,
     private m_oProductService: ProductService,
     private m_oWorkspaceService: WorkspaceService,
   ) {
-    this.m_sActiveUserId = this.m_oConstantsService.getUserId(); 
+    this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.getProcessorsList();
 
   }
@@ -77,6 +80,28 @@ export class AppsDialogComponent {
       }
     }
     return aoProcessorList;
+  }
+
+  selectProcessor(oProcessor) {
+    this.m_oSelectedProcessor = oProcessor;
+
+    if (oProcessor.paramsSample) {
+      this.m_sMyJsonString = decodeURIComponent(oProcessor.paramsSample);
+
+      try {
+        let oParsed = JSON.parse(this.m_sMyJsonString);
+
+        let sPrettyPrint = JSON.stringify(oParsed, null, 2);
+
+        this.m_sMyJsonString = sPrettyPrint;
+      } catch (oError) {
+
+      }
+    } else {
+      this.m_sMyJsonString = "";
+    }
+
+    console.log(this.m_sMyJsonString); 
   }
 
   openParametersDialog(oEvent: MouseEvent) {
@@ -135,7 +160,6 @@ export class AppsDialogComponent {
     });
     return true;
   }
-
 
   onDismiss() {
     this.m_oDialogRef.close();

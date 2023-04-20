@@ -7,22 +7,19 @@
         <div class="styles-container" style="width: 50%">
             <ul class="nav nav-tabs d-flex flex-row justify-content-between">
                 <li class="nav-item">
-                    <a class="nav-link active">Styles List</a>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-success">
-                        <fa-icon [icon]="faPlus"></fa-icon> Add Style
-                    </button>
+                    <a class="nav-link active">Processors List</a>
                 </li>
             </ul>
-            <input class="form-control my-3" type="text" placeholder="Search by Style Name"
+            <input class="form-control my-3" type="text" placeholder="Search by Processor Name"
                 [(ngModel)]="m_sSearchString">
             <div class=" processor-cards-container d-flex flex-row flex-wrap justify-content-start gap-1"
                 style="width:100%">
                 <div *ngFor="let oProcessor of m_aoProcessorList | filter: m_sSearchString"
-                    class="card d-flex flex-column gap-3 p-2 " style="cursor: pointer; height: 15rem;  width: 32%">
+                    class="card d-flex flex-column gap-3 p-2 " style="cursor: pointer; height: 15rem;  width: 32%"
+                    (click)="selectProcessor(oProcessor)">
                     <div style="height: 30px">
-                        <div *ngIf="oProcessor.sharedWithMe || oProcessor.publisher === m_sActiveUserId" class="card-toolbar d-flex flex-row justify-content-end">
+                        <div *ngIf="oProcessor.sharedWithMe || oProcessor.publisher === m_sActiveUserId"
+                            class="card-toolbar d-flex flex-row justify-content-end">
                             <button class="btn btn-sm" (click)="openParametersDialog($event)">
                                 <fa-icon [icon]="faBook"></fa-icon>
                             </button>
@@ -49,28 +46,31 @@
 
             </div>
         </div>
-        <!-- <div class="info-container card border border-success rounded-1" style="width: 50%;">
-            <div *ngIf="m_oSelectedStyle.name && m_bDisplayInfo" class="px-4 py-4 d-flex flex-column gap-2">
-                <h4>{{m_oSelectedStyle.name}}</h4>
-                <div class="main-style-info d-flex flex-row justify-content-between">
-
-                    <div class="style-description">
-                        <span class="text-success">Description:</span>
-                        <p>{{m_oSelectedStyle.description}}</p>
-                    </div>
-                    <div>
-                        <span class="text-success">Owner:</span>
-                        <p>{{m_oSelectedStyle.userId}}</p>
-                    </div>
+        <div class="info-container card border border-success rounded-1" style="width: 50%;">
+            <div class="px-4 py-4 d-flex flex-column gap-2">
+                <div class="info-header d-flex flex-row justify-content-between">
+                    <h4></h4>
+                    <h5>JSON Editor</h5>
                 </div>
-
                 <div class="style-xml-container d-flex flex-column">
-                    <span class="text-success">Style XML:</span>
-                    <textarea readonly class="form-control" name="m_asStyleXml" rows="10"
-                        placeholder="{{m_asStyleXml}}"></textarea>
+                    <textarea readonly class="form-control" name="m_asStyleXml" rows="15"
+                        placeholder='{{m_sMyJsonString !== "" ? m_sMyJsonString:"{}"}}'></textarea>
+                </div>
+                <div class="buttons-container d-flex flex-row justify-content-between">
+                    <button class="btn btn-secondary">Format JSON</button>
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-success">
+                            <fa-icon [icon]="faRun"></fa-icon>
+                            Run
+                        </button>
+                        <button class="btn btn-secondary">
+                            <fa-icon [icon]="faHelp"></fa-icon>
+                            Help
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
     <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
         <button class="btn btn-secondary" (click)="onDismiss()">
