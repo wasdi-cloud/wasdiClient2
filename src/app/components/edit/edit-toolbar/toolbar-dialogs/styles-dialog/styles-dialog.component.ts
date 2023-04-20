@@ -5,8 +5,8 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { StyleService } from 'src/app/services/api/style.service';
 
 import { faEdit, faDownload, faPaintBrush, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
-import { EditStyleDialogComponent } from '../edit-style-dialog/edit-style-dialog.component';
-import { NewStyleDialogComponent } from '../new-style-dialog/new-style-dialog.component';
+import { EditStyleDialogComponent } from './edit-style-dialog/edit-style-dialog.component';
+import { NewStyleDialogComponent } from './new-style-dialog/new-style-dialog.component';
 
 interface Style {
   description: string,
@@ -79,7 +79,6 @@ export class StylesDialogComponent implements OnInit {
   }
 
   filterStyles() {
-   
     return this.m_aoStyleList.filter(oStyle => oStyle.name.includes(this.m_sSearchString));
   }
 
