@@ -28,13 +28,15 @@
                     <div style="height: 30px">
                         <div *ngIf="oTemplate.userId === m_sActiveUserId"
                             class="card-toolbar d-flex flex-row justify-content-end">
-                            <button class="btn btn-sm" (click)="applyProcessorParams(oTemplate.templateId)">
+                            <button class="btn btn-sm" (click)="applyProcessorParams(oTemplate.templateId)"
+                                title="Apply Parameters">
                                 <fa-icon [icon]="faUpload"></fa-icon>
                             </button>
-                            <button class="btn btn-sm" (click)="openShareDialog()">
+                            <button class="btn btn-sm" (click)="openShareDialog()" title="Share Parameters">
                                 <fa-icon [icon]="faShare"></fa-icon>
                             </button>
-                            <button class="btn btn-sm text-danger" (click)="deleteProcessorParams(oTemplate)">
+                            <button class="btn btn-sm text-danger" (click)="deleteProcessorParams(oTemplate)"
+                                title="Delete Parameters">
                                 <fa-icon [icon]="faX"></fa-icon>
                             </button>
                         </div>
