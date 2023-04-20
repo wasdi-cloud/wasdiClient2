@@ -22,7 +22,7 @@
                 <div *ngFor="let oProcessor of m_aoProcessorList | filter: m_sSearchString"
                     class="card d-flex flex-column gap-3 p-2 " style="cursor: pointer; height: 15rem;  width: 32%">
                     <div style="height: 30px">
-                        <div *ngIf="oProcessor.sharedWithMe " class="card-toolbar d-flex flex-row justify-content-end">
+                        <div *ngIf="oProcessor.sharedWithMe || oProcessor.publisher === m_sActiveUserId" class="card-toolbar d-flex flex-row justify-content-end">
                             <button class="btn btn-sm" (click)="openParametersDialog($event)">
                                 <fa-icon [icon]="faBook"></fa-icon>
                             </button>
@@ -32,7 +32,7 @@
                             <button class="btn btn-sm" (click)="openEditProcessorDialog($event, oProcessor)">
                                 <fa-icon [icon]="faEdit"></fa-icon>
                             </button>
-                            <button class="btn btn-sm text-danger">
+                            <button class="btn btn-sm text-danger" (click)="removeProcessor($event, oProcessor)">
                                 <fa-icon [icon]="faX"></fa-icon>
                             </button>
                         </div>

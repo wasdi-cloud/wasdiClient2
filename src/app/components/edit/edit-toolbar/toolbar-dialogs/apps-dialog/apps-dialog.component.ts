@@ -6,6 +6,8 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
 import { EditProcessorDialogComponent } from './edit-processor-dialog/edit-processor-dialog.component';
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ConstantsService } from 'src/app/services/constants.service';
 
 @Component({
   selector: 'app-apps-dialog',
@@ -21,6 +23,7 @@ export class AppsDialogComponent {
   faPaintBrush = faPaintBrush;
   faBook = faBook;
 
+  m_sActiveUserId: string = ""
   m_aoWorkspaceList: any[] = [];
   m_aWorkspacesName: any[] = [];
   m_aoSelectedWorkspaces: any[] = [];
@@ -34,12 +37,14 @@ export class AppsDialogComponent {
 
 
   constructor(
+    private m_oConstantsService: ConstantsService, 
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
     private m_oProcessorService: ProcessorService,
     private m_oProductService: ProductService,
     private m_oWorkspaceService: WorkspaceService,
   ) {
+    this.m_sActiveUserId = this.m_oConstantsService.getUserId(); 
     this.getProcessorsList();
 
   }
@@ -96,6 +101,39 @@ export class AppsDialogComponent {
       height: '80vh',
       width: '80vw'
     })
+  }
+
+  removeProcessor(oEvent: MouseEvent, oProcessor: any) {
+    if (!oProcessor) {
+      return false;
+    }
+
+    let sConfirmOwner = `Are you sure you want to delete this ${oProcessor.processorName}?`;
+    let sConfirmShared = `Are you sure you want to remove your permissions from ${oProcessor.processorName}?`
+
+    let oDialogData: ConfirmationDialogModel;
+    if (oProcessor.sharedWithMe) {
+      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmShared)
+    } else {
+      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmOwner)
+    }
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: oDialogData
+    })
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      this.m_bIsLoadingProcessorList = true
+      if (oDialogResult === true) {
+        this.m_oProcessorService.deleteProcessor(oProcessor.processorId).subscribe(oResponse => {
+          this.m_bIsLoadingProcessorList = true;
+          this.getProcessorsList();
+        });
+      }
+      this.m_bIsLoadingProcessorList = false;
+    });
+    return true;
   }
 
 
