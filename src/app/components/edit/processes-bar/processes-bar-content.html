@@ -1,4 +1,4 @@
-<div style="height: 45vh; width: 100%;">
+<div style="height: 52vh; width: 100%;">
     <div class="process-bar-header d-flex flex-row gap-3 align-items-center justify-content-between px-2">
         <div>
             <button class="btn fs-3">
@@ -21,8 +21,8 @@
         </div>
     </div>
 
-    <form class="process-bar-filters d-flex flex-row gap-2 align-items-center justify-cotent-start p-2" name="m_oFilter" #f="ngForm"
-        (ngSubmit)="f.form && this.openDialogWithFilter($event)">
+    <form class="process-bar-filters d-flex flex-row gap-2 align-items-center justify-cotent-start p-2" name="m_oFilter"
+        #f="ngForm" (ngSubmit)="f.form && this.openDialogWithFilter($event)">
         <h5>Search</h5>
         <select name="" id="" class="form-select" name="status" [(ngModel)]="m_oFilter.sStatus">
             <option value="" disabled selected hidden>Status</option>
@@ -104,4 +104,7 @@
             </tr>
         </tbody>
     </table>
+    <div class="text-center">
+        <button class="btn btn-primary" (click)="openProcessesModal($event)">Load More</button>
+    </div>
 </div>
