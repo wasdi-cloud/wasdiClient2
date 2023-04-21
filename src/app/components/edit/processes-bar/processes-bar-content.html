@@ -71,8 +71,8 @@
                 <th scope="col">Created</th>
                 <th scope="col">Started</th>
                 <th scope="col">Progress</th>
-
-
+                <th scope="col">Duration</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -96,10 +96,24 @@
                     {{oProcess.operationDate}}
                 </td>
                 <td>
-                    {{oProcess.operationstartDate}}
+                    {{oProcess.operationStartDate}}
                 </td>
                 <td>
-                    {{oProcess.progressPerc}}
+                    <div class="progress-bar bg-success text-light active" role="progressbar"
+                        [attr.aria-valuenow]="oProcess.progressPerc" [style.width]="oProcess.progressPerc+'%'"
+                        aria-valuemin="0" aria-valuemax="100">
+                        {{oProcess.progressPerc}}
+                    </div>
+                </td>
+                <td>00:00:00</td>
+                <td class="d-flex flex-row gap-3">
+                    <a class="">
+                        <fa-icon [icon]="faFile"></fa-icon>
+                    </a>
+                    <a class="">
+                        <fa-icon [icon]="faDatabase"></fa-icon>
+                    </a>
+
                 </td>
             </tr>
         </tbody>

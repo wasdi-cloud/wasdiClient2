@@ -1,7 +1,7 @@
 import { Component, Inject, Input } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { faArrowDown, faArrowUp, faDownload, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -46,6 +46,8 @@ export class ProcessesBarContent {
   faDownload = faDownload;
   faRefresh = faRefresh;
   faList = faList;
+  faFile = faFile;
+  faDatabase = faDatabase;
 
   //Filter inputs (form): 
   m_oFilter: any = {
@@ -61,7 +63,9 @@ export class ProcessesBarContent {
     private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
     private m_oDialog: MatDialog
-  ) { }
+  ) {
+    console.log(this.m_aoProcessesRunning);
+   }
 
   dismiss(event: MouseEvent): void {
     this.m_oBottomSheetRef.dismiss();
