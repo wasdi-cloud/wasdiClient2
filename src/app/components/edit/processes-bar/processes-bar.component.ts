@@ -55,7 +55,7 @@ export class ProcessesBarContent {
     sName: ""
   };
 
-  m_aoProcessesRunning: any[] = this.data;
+  m_aoProcessesRunning: any[] = this.data.reverse();
 
   constructor(
     private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarComponent>,
