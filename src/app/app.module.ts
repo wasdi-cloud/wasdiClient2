@@ -104,6 +104,7 @@ import { NewStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-
 import { NewWorkspaceDialogComponent } from './components/workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { PayloadDialogComponent } from './components/edit/payload-dialog/payload-dialog.component';
 
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -194,6 +195,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatBottomSheetModule,
     MatTooltipModule,
     FontAwesomeModule,
+    ClipboardModule
   ],
   providers: [
     AuthService,

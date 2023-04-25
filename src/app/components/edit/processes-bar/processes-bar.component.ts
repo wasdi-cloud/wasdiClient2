@@ -5,6 +5,7 @@ import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFilter, faLis
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
 
 export interface SearchFilter {
   sStatus: string,
@@ -197,7 +198,7 @@ export class ProcessesBarContent {
     // return oDate;
     return sTimeSpan;
   }
-  
+
   renderTwoDigitNumber(iNumber: number) {
     let sNumber = "00";
 
@@ -211,6 +212,19 @@ export class ProcessesBarContent {
 
     return sNumber;
   }
+
+  openPayloadDialog(oProcess: any) {
+    let oDialogRef = this.m_oDialog.open(PayloadDialogComponent, {
+      height: '65vh',
+      width: '50vw',
+      data: { process: oProcess }
+    })
+  }
+
+  openLogsDialog() {
+
+  }
+
   openProcessesModal(event: MouseEvent): void {
     const oDialogRef = this.m_oDialog.open(ProcessesDialog, {
       height: '80vh',

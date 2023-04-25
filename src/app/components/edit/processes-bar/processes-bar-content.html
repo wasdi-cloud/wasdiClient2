@@ -110,7 +110,7 @@
                     <a class="" title="Logs">
                         <fa-icon [icon]="faFile"></fa-icon>
                     </a>
-                    <a class="" title="Payload">
+                    <a class="text-dark" title="Payload" *ngIf="oProcess.payload" (click)="openPayloadDialog(oProcess)">
                         <fa-icon [icon]="faDatabase"></fa-icon>
                     </a>
 
