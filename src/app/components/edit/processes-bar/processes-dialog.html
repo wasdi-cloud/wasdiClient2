@@ -46,7 +46,7 @@
   </form>
   <div class="d-flex flex-row gap-2">
 
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" (click)="downloadProcessesFile()">
       Download
     </button>
   </div>
@@ -69,7 +69,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let oProcess of m_aoProcessesLogs">
+      <tr *ngFor="let oProcess of m_aoAllProcessesLogs">
         <td>
           <span>{{oProcess.status}}</span>
         </td>

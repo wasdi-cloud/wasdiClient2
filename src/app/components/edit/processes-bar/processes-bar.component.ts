@@ -63,15 +63,14 @@ export class ProcessesBarContent {
 
   m_aoProcessesRunning: any[] = this.data.processes.reverse();
   m_oActiveWorkspace: any = this.data.workspace;
+  m_aoAllProcessesLogs: any = [];
 
   constructor(
     private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
     private m_oDialog: MatDialog,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
-  ) {
-    console.log(this.m_aoProcessesRunning);
-  }
+  ) { }
 
   refreshProcesses(event: MouseEvent) {
     event.preventDefault;
@@ -83,8 +82,66 @@ export class ProcessesBarContent {
     })
   }
 
-  downloadOperations(event: MouseEvent) {
-    event.preventDefault;
+  downloadProcessesFile() {
+    this.m_oProcessWorkspaceService.getAllProcessesFromServer(this.m_oActiveWorkspace.workspaceId, null, null).subscribe(oResponse => {
+
+      this.m_aoAllProcessesLogs = oResponse;
+      let file = this.generateLogFile();
+
+      let oLink = document.createElement('a');
+      oLink.href = file;
+
+      let sTimestamp = (new Date()).toISOString().replace(/[^0-9]/g, "_").slice(0, 19);
+
+      oLink.download = "processes_" + this.m_oActiveWorkspace.name + "_" + sTimestamp;
+
+      oLink.click();
+
+    })
+  }
+
+  generateFile(sText) {
+    let textFile = null;
+    let sType = 'text/csv';
+
+    let data = new Blob([sText], { type: sType });
+
+    textFile = window.URL.createObjectURL(data);
+
+    return textFile;
+  }
+
+  makeStringLogFile() {
+    if (!this.m_aoAllProcessesLogs) {
+      return null;
+    }
+    let iNumberOfProcessesLogs: number = this.m_aoAllProcessesLogs.length;
+    let sText: string = "";
+
+    sText += "Id,Product Name,Operation Type,User,Status,Progress,Operation date,Operation end date,File size" + "\r\n";
+
+    for (let iIndexProcessLog = 0; iIndexProcessLog < iNumberOfProcessesLogs; iIndexProcessLog++) {
+      let sOperationDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationStartDate;
+      let sFileSize = this.m_aoAllProcessesLogs[iIndexProcessLog].fileSize;
+      let sOperationEndDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationEndDate;
+      let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType;
+      let sPid = this.m_aoAllProcessesLogs[iIndexProcessLog].pid;
+      let sProductName = this.m_aoAllProcessesLogs[iIndexProcessLog].productName;
+      let sProgressPerc = this.m_aoAllProcessesLogs[iIndexProcessLog].progressPerc;
+      let sStatus = this.m_aoAllProcessesLogs[iIndexProcessLog].status;
+      let sUserId = this.m_aoAllProcessesLogs[iIndexProcessLog].userId;
+
+      sText += sPid + "," + sProductName + "," + sOperationType +
+        "," + sUserId + "," + sStatus + "," + sProgressPerc + "%" +
+        "," + sOperationDate + "," + sOperationEndDate + "," + sFileSize + "\r\n";
+    }
+    return sText;
+  }
+
+  generateLogFile() {
+    let sText = this.makeStringLogFile();
+    let oFile = this.generateFile(sText);
+    return oFile;
   }
 
   openProcessesModal(event: MouseEvent): void {
@@ -149,7 +206,7 @@ export class ProcessesDialog {
   }
 
   m_bHasError: boolean = false;
-  m_aoProcessesLogs: any[] = [];
+  Allm_aoProcessesLogs: any[] = [];
   m_aoAllProcessesLogs: any[] = [];
   m_sFilterTable: string = "";
   m_bAreProcessesLoaded: boolean = false;
@@ -171,7 +228,7 @@ export class ProcessesDialog {
 
     this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
       if (oResponse) {
-        this.m_aoProcessesLogs = this.m_aoProcessesLogs.concat(oResponse);
+        this.m_aoAllProcessesLogs = this.m_aoAllProcessesLogs.concat(oResponse);
         this.calculateNextListOfProcesses();
       } else {
         this.m_bIsLoadMoreBtnClickable = false;
@@ -248,10 +305,10 @@ export class ProcessesDialog {
     let sTimeSpan = this.renderTwoDigitNumber(iHours) + ":" + this.renderTwoDigitNumber(iMinutes) + ":" + this.renderTwoDigitNumber(iSeconds);
 
 
-    //var oDate = new Date(1970, 0, 1);
-    //oDate.setSeconds(0 + iSecondsTimeSpan);
+    // var oDate = new Date(1970, 0, 1);
+    // oDate.setSeconds(0 + iSecondsTimeSpan);
 
-    //return oDate;
+    // return oDate;
     return sTimeSpan;
   };
 
@@ -271,22 +328,19 @@ export class ProcessesDialog {
 
   downloadProcessesFile() {
     this.m_oProcessWorkspaceService.getAllProcessesFromServer(this.m_sActiveWorkspaceId, null, null).subscribe(oResponse => {
-      if (oResponse !== null) {
-        if (oResponse !== undefined) {
-          this.m_aoProcessesLogs = oResponse;
 
-          let file = this.generateLogFile();
+      this.m_aoAllProcessesLogs = oResponse;
+      let file = this.generateLogFile();
 
-          let oLink = document.createElement('a');
-          oLink.href = file;
+      let oLink = document.createElement('a');
+      oLink.href = file;
 
-          let sTimestamp = (new Date()).toISOString().replace(/[^0-9]/g, "_").slice(0, 19);
+      let sTimestamp = (new Date()).toISOString().replace(/[^0-9]/g, "_").slice(0, 19);
 
-          oLink.download = "processes_" + this.m_sActiveWorkspaceName + "_" + sTimestamp;
+      oLink.download = "processes_" + this.m_sActiveWorkspaceName + "_" + sTimestamp;
 
-          oLink.click();
-        }
-      }
+      oLink.click();
+
     })
   }
 
@@ -345,7 +399,7 @@ export class ProcessesDialog {
 
   applyFilters() {
     this.resetCounters();
-    this.m_aoProcessesLogs = [];
+    this.m_aoAllProcessesLogs = [];
     this.getAllProcessesLogs();
   }
 
