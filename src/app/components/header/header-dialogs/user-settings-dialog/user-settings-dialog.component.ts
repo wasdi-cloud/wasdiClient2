@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
@@ -31,7 +31,7 @@ export class UserSettingsDialogComponent {
     private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oProcessWorkspaceService: ProcessWorkspaceServiceService
+    private m_oProcessWorkspaceService: ProcessWorkspaceService
   ) {
     this.m_oUser = this.m_oConstantsService.getUser();
     this.m_oEditUser = {

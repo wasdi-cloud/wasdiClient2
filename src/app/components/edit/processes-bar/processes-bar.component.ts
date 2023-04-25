@@ -2,7 +2,7 @@ import { Component, Inject, Input } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 
@@ -62,14 +62,18 @@ export class ProcessesBarContent {
   constructor(
     private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
-    private m_oDialog: MatDialog
+    private m_oDialog: MatDialog,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
   ) {
     console.log(this.m_aoProcessesRunning);
-   }
+  }
 
-  dismiss(event: MouseEvent): void {
-    this.m_oBottomSheetRef.dismiss();
-    event.preventDefault();
+  refreshProcesses(event: MouseEvent) {
+    event.preventDefault;
+  }
+
+  downloadOperations(event: MouseEvent) {
+    event.preventDefault;
   }
 
   openProcessesModal(event: MouseEvent): void {
@@ -82,6 +86,12 @@ export class ProcessesBarContent {
     })
   }
 
+  openDialogWithFilter(event: MouseEvent) {
+    const oDialogRef = this.m_oDialog.open(ProcessesDialog, {
+      data: { sDate: this.m_oFilter.sDate, sName: this.m_oFilter.sName, sStatus: this.m_oFilter.sStatus, sType: this.m_oFilter.sType }
+    });
+  }
+
   resetFilter(event) {
     this.m_oFilter = {
       sStatus: "",
@@ -92,11 +102,12 @@ export class ProcessesBarContent {
     event.preventDefault();
   }
 
-  openDialogWithFilter(event: MouseEvent) {
-    const oDialogRef = this.m_oDialog.open(ProcessesDialog, {
-      data: { sDate: this.m_oFilter.sDate, sName: this.m_oFilter.sName, sStatus: this.m_oFilter.sStatus, sType: this.m_oFilter.sType }
-    });
+
+  dismiss(event: MouseEvent): void {
+    this.m_oBottomSheetRef.dismiss();
+    event.preventDefault();
   }
+
 }
 
 @Component({
@@ -112,7 +123,7 @@ export class ProcessesDialog {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oProcessorService: ProcessorService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceServiceService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
     @Inject(MAT_DIALOG_DATA) public m_oFilter: SearchFilter,
   ) {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
@@ -120,8 +131,8 @@ export class ProcessesDialog {
       this.m_sActiveWorkspaceId = this.m_oActiveWorkspace.workspaceId;
       this.m_sActiveWorkspaceName = this.m_oActiveWorkspace.name;
     }
-    if(!this.m_oFilter) {
-      this.resetFilter(); 
+    if (!this.m_oFilter) {
+      this.resetFilter();
     }
     this.getAllProcessesLogs();
   }

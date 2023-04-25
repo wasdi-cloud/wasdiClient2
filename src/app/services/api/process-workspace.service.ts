@@ -9,7 +9,7 @@ export interface Process {
 @Injectable({
   providedIn: 'root'
 })
-export class ProcessWorkspaceServiceService {
+export class ProcessWorkspaceService{
 
   m_aoProcessesRunning: Array<Process> = [];
   m_aoProcessesStopped: Array<Process> = [];

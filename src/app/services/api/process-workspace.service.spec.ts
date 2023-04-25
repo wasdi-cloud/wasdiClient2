@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ProcessWorkspaceServiceService } from './process-workspace.service';
+import { ProcessWorkspaceService } from './process-workspace.service';
 
-describe('ProcessWorkspaceServiceService', () => {
-  let service: ProcessWorkspaceServiceService;
+describe('ProcessWorkspaceService', () => {
+  let service: ProcessWorkspaceService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ProcessWorkspaceServiceService);
+    service = TestBed.inject(ProcessWorkspaceService);
   });
 
   it('should be created', () => {

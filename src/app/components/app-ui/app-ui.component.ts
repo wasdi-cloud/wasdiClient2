@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 //import API services
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -58,7 +58,7 @@ export class AppUiComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oProcessorService: ProcessorService,
-    private m_oProcessorWorkspaceService: ProcessWorkspaceServiceService,
+    private m_oProcessorWorkspaceService: ProcessWorkspaceService,
     private m_oRouter: Router,
     private oWorkspaceService: WorkspaceService) { }
   //Processor Information
@@ -272,12 +272,12 @@ export class AppUiComponent implements OnInit {
       })
     } else {
       this.oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
-        if(oResponse) {
+        if (oResponse) {
           this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, oResponse);
         }
-         
+
       })
-     
+
     }
   }
 

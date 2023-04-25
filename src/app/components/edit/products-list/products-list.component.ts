@@ -14,7 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
 import { MapService } from 'src/app/services/map.service';
 import * as L from "leaflet"
-import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 
 @Component({
   selector: 'app-products-list',
@@ -54,7 +54,7 @@ export class ProductsListComponent {
     private m_oFileBufferService: FileBufferService,
     private m_oMapService: MapService,
     private m_oProductService: ProductService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceServiceService
+    private m_oProcessWorkspaceService: ProcessWorkspaceService
   ) {
     this.treeControl = new NestedTreeControl<any>(node => {
       if (node.bandsGroups) {

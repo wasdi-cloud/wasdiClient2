@@ -3,7 +3,7 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { Product } from 'src/app/shared/models/product.model';
-import { ProcessWorkspaceServiceService } from 'src/app/services/api/process-workspace.service';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { MapService } from 'src/app/services/map.service';
@@ -29,7 +29,7 @@ export class EditComponent implements OnInit {
     private m_oMapService: MapService,
     private m_oProductService: ProductService,
     private m_oProcessorService: ProcessorService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceServiceService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRouter: Router,
     private m_oTranslateService: TranslateService,
     private m_oWorkspaceService: WorkspaceService) {
