@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProcessorLogsDialogComponent } from './process-logs-dialog.component';
+import { ProcessLogsDialogComponent } from './process-logs-dialog.component';
 
-describe('ProcessorLogsDialogComponent', () => {
-  let component: ProcessorLogsDialogComponent;
-  let fixture: ComponentFixture<ProcessorLogsDialogComponent>;
+describe('ProcessLogsDialogComponent', () => {
+  let component: ProcessLogsDialogComponent;
+  let fixture: ComponentFixture<ProcessLogsDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProcessorLogsDialogComponent ]
+      declarations: [ ProcessLogsDialogComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProcessorLogsDialogComponent);
+    fixture = TestBed.createComponent(ProcessLogsDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

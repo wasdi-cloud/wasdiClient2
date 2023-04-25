@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-processor-logs-dialog',
-  templateUrl: './processor-logs-dialog.component.html',
-  styleUrls: ['./processor-logs-dialog.component.css']
+  selector: 'app-process-logs-dialog',
+  templateUrl: './process-logs-dialog.component.html',
+  styleUrls: ['./process-logs-dialog.component.css']
 })
-export class ProcessorLogsDialogComponent {
+export class ProcessLogsDialogComponent {
 
 }

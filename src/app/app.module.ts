@@ -104,8 +104,8 @@ import { NewStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-
 import { NewWorkspaceDialogComponent } from './components/workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { PayloadDialogComponent } from './components/edit/payload-dialog/payload-dialog.component';
 
-import {ClipboardModule} from '@angular/cdk/clipboard';
-import { ProcessorLogsDialogComponent } from './components/edit/process-logs-dialog/process-logs-dialog.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { ProcessLogsDialogComponent } from './components/edit/process-logs-dialog/process-logs-dialog.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -156,13 +156,13 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditMapComponent,
     ProcessesBarComponent,
     ProcessesBarContent,
-    ProcessesDialog, 
-    PageNotFoundComponent, 
-    UserSettingsDialogComponent, 
-    ProductPropertiesDialogComponent, 
-    NavLayersComponent, 
-    WorkspaceInfoDialogComponent, 
-    ShareDialogComponent, ShareUiComponent, StylesDialogComponent, EditStyleDialogComponent, NewStyleDialogComponent, NewWorkspaceDialogComponent, PayloadDialogComponent, ProcessorLogsDialogComponent
+    ProcessesDialog,
+    PageNotFoundComponent,
+    UserSettingsDialogComponent,
+    ProductPropertiesDialogComponent,
+    NavLayersComponent,
+    WorkspaceInfoDialogComponent,
+    ShareDialogComponent, ShareUiComponent, StylesDialogComponent, EditStyleDialogComponent, NewStyleDialogComponent, NewWorkspaceDialogComponent, PayloadDialogComponent, ProcessLogsDialogComponent
   ],
   imports: [
     AppRoutingModule,
