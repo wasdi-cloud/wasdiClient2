@@ -23,6 +23,7 @@ export class ProcessesBarComponent {
   faArrowUp = faArrowUp;
 
   @Input() m_aoProcessesRunning: any[] = [];
+  @Input() m_oActiveWorkspace: any = {};
   m_iNumberOfProcesses: number = 0;
   m_iWaitingProcesses: number = 0;
   m_oLastProcesses: any = null;
@@ -31,7 +32,10 @@ export class ProcessesBarComponent {
 
   openProcessesBar(): void {
     this._bottomSheet.open(ProcessesBarContent, {
-      data: this.m_aoProcessesRunning
+      data: {
+        processes: this.m_aoProcessesRunning,
+        workspace: this.m_oActiveWorkspace
+      }
     })
   }
 }
@@ -57,7 +61,8 @@ export class ProcessesBarContent {
     sName: ""
   };
 
-  m_aoProcessesRunning: any[] = this.data.reverse();
+  m_aoProcessesRunning: any[] = this.data.processes.reverse();
+  m_oActiveWorkspace: any = this.data.workspace;
 
   constructor(
     private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarComponent>,
@@ -70,6 +75,12 @@ export class ProcessesBarContent {
 
   refreshProcesses(event: MouseEvent) {
     event.preventDefault;
+    this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
+      if (oResponse.length !== 0) {
+        console.log(oResponse);
+        this.m_aoProcessesRunning = oResponse.reverse();
+      }
+    })
   }
 
   downloadOperations(event: MouseEvent) {
