@@ -85,6 +85,10 @@ export class ProcessLogsDialogComponent {
     return true;
   }
 
+  refreshLogs() {
+    this.getLogsCount(this.m_oProcess.processObjId); 
+  }
+
   downloadLogFile() {
     this.m_oProcessorService.getPaginatedLogs(this.m_oProcess.processObjId, null, null).subscribe(oResponse => {
       if (!oResponse) {
@@ -136,7 +140,7 @@ export class ProcessLogsDialogComponent {
     }
 
     return sText;
-  };
+  }
 
   dismiss() {
     this.m_oDialog.closeAll();

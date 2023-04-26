@@ -224,7 +224,7 @@ export class ProcessesBarContent {
 
   openLogsDialog(oProcess: any) {
     let oDialogRef = this.m_oDialog.open(ProcessLogsDialogComponent, {
-      height: '65vh',
+      height: '70vh',
       width: '70vw',
       data: { process: oProcess }
     })
