@@ -15,7 +15,7 @@
             <div>Name: <span>{{m_oProcess.productName}}</span></div>
             <div>Status: <span>{{m_oProcess.status}}</span></div>
         </div>
-        <button class="btn btn-success">
+        <button class="btn btn-success" (click)="downloadLogFile()">
             <fa-icon [icon]="faDownload"></fa-icon>
             Download
         </button>

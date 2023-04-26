@@ -19,7 +19,7 @@ export class ProcessLogsDialogComponent {
   //Member values
   m_oProcess = this.data.process;
   m_aoLogs: any = [];
-  m_aoAllLogs: any[] = [];
+  m_aoAllLogs: any = [];
   m_sSearch: string = "";
   m_bSortReverse: boolean = true;
   m_sSortByColumn: string = "Date";
@@ -84,6 +84,59 @@ export class ProcessLogsDialogComponent {
     });
     return true;
   }
+
+  downloadLogFile() {
+    this.m_oProcessorService.getPaginatedLogs(this.m_oProcess.processObjId, null, null).subscribe(oResponse => {
+      if (!oResponse) {
+        return false;
+      }
+      this.m_aoAllLogs = oResponse;
+      let oFile = this.generateLogFile();
+      let oLink = document.createElement('a');
+
+      console.log(oFile)
+
+      oLink.href = oFile;
+      oLink.download = 'processorLog';
+      oLink.click();
+      return true;
+    })
+  }
+
+  generateLogFile() {
+    let sText = this.makeStringLogFile();
+    let oFile = this.generateFile(sText);
+
+    return oFile;
+  }
+
+  generateFile(sText: string) {
+    let sType = 'text/plain';
+    let textFile = null;
+    let data = new Blob([sText], { type: sType });
+    if (textFile !== null) {
+      window.URL.revokeObjectURL(textFile);
+    }
+
+    textFile = window.URL.createObjectURL(data);
+    return textFile;
+  }
+
+  makeStringLogFile() {
+    if (!this.m_aoAllLogs) {
+      return null;
+    }
+    let iNumberOfProcessesLogs = this.m_aoAllLogs.length;
+    let sText = "";
+    for (let i = 0; i < iNumberOfProcessesLogs; i++) {
+      let sLogDate = this.m_aoAllLogs[i].logDate;
+      let sLogRow = this.m_aoAllLogs[i].logRow;
+
+      sText += sLogDate + "; " + sLogRow + "\r\n";
+    }
+
+    return sText;
+  };
 
   dismiss() {
     this.m_oDialog.closeAll();
