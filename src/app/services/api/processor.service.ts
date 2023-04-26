@@ -6,24 +6,24 @@ import { ConstantsService } from '../constants.service';
 type Nullable<T> = T | null;
 
 export interface Help {
-  boolValue: boolean, 
-  intValue: Nullable<number>, 
-  doubleValue: Nullable<number>, 
+  boolValue: boolean,
+  intValue: Nullable<number>,
+  doubleValue: Nullable<number>,
   stringValue: string
 }
 
 export interface UIResponse {
   renderAsStrings: boolean,
   tabs: {
-    name: string, 
+    name: string,
     controls: {
-      label: string, 
-      maxArea: number, 
-      maxRatioSide: number, 
-      param: string, 
-      required: boolean, 
-      tooltip: string, 
-      type: string 
+      label: string,
+      maxArea: number,
+      maxRatioSide: number,
+      param: string,
+      required: boolean,
+      tooltip: string,
+      type: string
     }
   }[]
 }
@@ -185,9 +185,9 @@ export class ProcessorService {
      * @param iEndRow
      * @returns {*}
      */
-  getPaginatedLogs(oProcessId: object, iStartRow: number, iEndRow: number) {
-    var oWorkspace = this.oConstantsService.getActiveWorkspace();
-    var sUrl = this.APIURL;
+  getPaginatedLogs(oProcessId: object, iStartRow: number | string, iEndRow: number | string) {
+    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
 
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;

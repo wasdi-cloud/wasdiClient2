@@ -162,7 +162,14 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProductPropertiesDialogComponent,
     NavLayersComponent,
     WorkspaceInfoDialogComponent,
-    ShareDialogComponent, ShareUiComponent, StylesDialogComponent, EditStyleDialogComponent, NewStyleDialogComponent, NewWorkspaceDialogComponent, PayloadDialogComponent, ProcessLogsDialogComponent
+    ShareDialogComponent,
+    ShareUiComponent,
+    StylesDialogComponent,
+    EditStyleDialogComponent,
+    NewStyleDialogComponent,
+    NewWorkspaceDialogComponent,
+    PayloadDialogComponent,
+    ProcessLogsDialogComponent
   ],
   imports: [
     AppRoutingModule,

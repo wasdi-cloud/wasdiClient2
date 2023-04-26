@@ -6,6 +6,7 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
+import { ProcessLogsDialogComponent } from '../process-logs-dialog/process-logs-dialog.component';
 
 export interface SearchFilter {
   sStatus: string,
@@ -221,8 +222,12 @@ export class ProcessesBarContent {
     })
   }
 
-  openLogsDialog() {
-
+  openLogsDialog(oProcess: any) {
+    let oDialogRef = this.m_oDialog.open(ProcessLogsDialogComponent, {
+      height: '65vh',
+      width: '70vw',
+      data: { process: oProcess }
+    })
   }
 
   openProcessesModal(event: MouseEvent): void {

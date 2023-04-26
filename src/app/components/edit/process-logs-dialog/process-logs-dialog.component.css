@@ -1,0 +1,7 @@
+label.form-label {
+    white-space: nowrap;
+}
+
+th.date-cell {
+    width: 15rem;
+}
