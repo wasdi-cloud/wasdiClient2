@@ -1,7 +1,7 @@
 import { Component, Inject, Input } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFileDownload, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -272,6 +272,8 @@ export class ProcessesBarContent {
 export class ProcessesDialog {
   faFilter = faFilter
   faXmark = faXmark;
+  faFile = faFile;
+  faDatabase = faDatabase;
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -343,7 +345,7 @@ export class ProcessesDialog {
      * @param oProcess The process Object (see ProcessWorkspaceViewModel.java)
      * @returns {string} String of duration in HH:MM:SS format
      */
-  getProcessDuration(oProcess: any) {
+  getDuration(oProcess: any) {
 
     if (!oProcess.operationStartDate.endsWith("Z")) {
       oProcess.operationStartDate += "Z";
@@ -398,6 +400,13 @@ export class ProcessesDialog {
     return sTimeSpan;
   };
 
+  openLogsDialog(oProcess) {
+
+  }
+
+  openPayloadDialog(oProcess) {
+
+  }
   renderTwoDigitNumber(iNumber: number) {
     let sNumber = "00";
 

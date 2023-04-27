@@ -53,7 +53,7 @@
 </div>
 <!-- Scrollable table content -->
 <mat-dialog-content>
-  <table class="table table-ligjt table-striped table-hover table-sm">
+  <table class="table table-ligjt table-striped table-hover">
     <thead>
       <tr>
         <th scope="col"></th>
@@ -65,37 +65,50 @@
         <th scope="col">Started</th>
         <th scope="col">Progress</th>
         <th scope="col">Duration</th>
-
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let oProcess of m_aoAllProcessesLogs">
         <td>
           <span>{{oProcess.status}}</span>
-        </td>
-        <td>
+      </td>
+      <td title={{oProcess.operationType}}>
           {{oProcess.operationType}}
-        </td>
-        <td>
+      </td>
+      <td title={{oProcess.productName}}>
           {{oProcess.productName}}
-        </td>
-        <td class="user-id">
+      </td>
+      <td title={{oProcess.userId}}>
           {{oProcess.userId}}
-        </td>
-        <td class="file-size">
+      </td>
+      <td>
           {{oProcess.fileSize}}
-        </td>
-        <td>
+      </td>
+      <td>
           {{oProcess.operationDate}}
-        </td>
-        <td>
-          {{oProcess.operationstartDate}}
-        </td>
-        <td>
-          {{oProcess.progressPerc}}
-        </td>
-        <td></td>
-      </tr>
+      </td>
+      <td>
+          {{oProcess.operationStartDate}}
+      </td>
+      <td>
+          <div class="progress-bar bg-success text-light active" role="progressbar"
+              [attr.aria-valuenow]="oProcess.progressPerc" [style.width]="oProcess.progressPerc+'%'"
+              aria-valuemin="0" aria-valuemax="100">
+              {{oProcess.progressPerc}}
+          </div>
+      </td>
+      <td>{{getDuration(oProcess)}}</td>
+      <td class="d-flex flex-row gap-3">
+          <a class="" title="Logs" (click)="openLogsDialog(oProcess)">
+              <fa-icon [icon]="faFile"></fa-icon>
+          </a>
+          <a class="text-dark" title="Payload" *ngIf="oProcess.payload" (click)="openPayloadDialog(oProcess)">
+              <fa-icon [icon]="faDatabase"></fa-icon>
+          </a>
+
+      </td>
+  </tr>
     </tbody>
   </table>
   <button class="btn btn-primary" (click)="getAllProcessesLogs()" [disabled]="!m_bIsLoadMoreBtnClickable">

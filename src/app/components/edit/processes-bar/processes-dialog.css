@@ -11,7 +11,13 @@ div.dialog-header>h3 {
 }
 
 table {
-    table-layout: fixed;
-    word-wrap: break-word;
-    font-size: 0.8rem;
+    
+}
+
+td {
+    cursor: default;
+    max-width: 10rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
