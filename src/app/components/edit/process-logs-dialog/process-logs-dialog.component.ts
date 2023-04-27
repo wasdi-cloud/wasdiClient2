@@ -65,6 +65,10 @@ export class ProcessLogsDialogComponent {
     return true;
   }
 
+  handlePagination(event) {
+
+  }
+
   getPaginatedLogs(oProcessId, iStartRow: number | string, iEndRow: number | string) {
     if (!oProcessId) {
       return false;
@@ -79,14 +83,14 @@ export class ProcessLogsDialogComponent {
     this.m_oProcessorService.getPaginatedLogs(oProcessId, iStartRow, iEndRow).subscribe(oResponse => {
       if (oResponse) {
         this.m_aoLogs = oResponse;
-        console.log(this.m_aoLogs);
+        this.m_aoLogs.reverse();
       }
     });
     return true;
   }
 
   refreshLogs() {
-    this.getLogsCount(this.m_oProcess.processObjId); 
+    this.getLogsCount(this.m_oProcess.processObjId);
   }
 
   downloadLogFile() {
@@ -95,14 +99,15 @@ export class ProcessLogsDialogComponent {
         return false;
       }
       this.m_aoAllLogs = oResponse;
-      let oFile = this.generateLogFile();
-      let oLink = document.createElement('a');
+      console.log(this.m_aoAllLogs);
+      // let oFile = this.generateLogFile();
+      // let oLink = document.createElement('a');
 
-      console.log(oFile)
+      // console.log(oFile)
 
-      oLink.href = oFile;
-      oLink.download = 'processorLog';
-      oLink.click();
+      // oLink.href = oFile;
+      // oLink.download = 'processorLog';
+      // oLink.click();
       return true;
     })
   }
