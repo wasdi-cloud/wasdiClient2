@@ -50,6 +50,7 @@ import { MatNativeDateModule } from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatTooltipModule } from '@angular/material/tooltip'
+import { MatPaginatorModule } from '@angular/material/paginator'
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -203,7 +204,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatBottomSheetModule,
     MatTooltipModule,
     FontAwesomeModule,
-    ClipboardModule
+    ClipboardModule, 
+    MatPaginatorModule
   ],
   providers: [
     AuthService,
