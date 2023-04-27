@@ -207,14 +207,12 @@ export class ConstantsService {
         return ""
       }
 
-      console.log(document.cookie);
       return JSON.parse(document.cookie.substring(6));
     } catch (sError) {
       console.log(`${document.cookie} ${sError}`)
-      return ""; 
+      return "";
     }
 
-    
   }
 
   deleteCookie(cookieName: string) {
