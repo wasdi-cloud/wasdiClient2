@@ -192,11 +192,12 @@ export class ProductsListComponent {
   openBandImage(oBand) {
     let sFileName = this.productArray[oBand.nodeIndex].fileName;
     let bAlreadyPublished = oBand.published;
-
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
       if (oResponse.messageCode === "PUBLISHBAND") {
+        console.log(oResponse.payload.geoserverBoundingBox)
         this.m_aoVisibleBands.push(this.m_oActiveBand);
         this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
+        this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
         // Already published: we already have the View Model
         this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
       } else {
