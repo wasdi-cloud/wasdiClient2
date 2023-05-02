@@ -3,6 +3,8 @@ import { faUserPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { StyleService } from 'src/app/services/api/style.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
+import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
 @Component({
   selector: 'app-share-ui',
   templateUrl: './share-ui.component.html',
@@ -20,12 +22,11 @@ export class ShareUiComponent implements OnInit {
   @Input() resourceType: string;
 
   constructor(
+    private m_oAdminDashboardService: AdminDashboardService,
     private m_oStyleService: StyleService,
     private m_oWorkspaceService: WorkspaceService) { }
 
   ngOnInit() {
-    console.log(this.resource)
-    console.log(this.resourceType)
     this.getEnabledUsers()
   }
 
@@ -41,6 +42,14 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'style') {
         this.m_oStyleService.getUsersBySharedStyle(this.resource.styleId).subscribe(oResponse => {
+          if (oResponse) {
+            this.m_aoSharedUsers = oResponse;
+          }
+        })
+      }
+
+      if (this.resourceType === 'PROCESSORPARAMETERSTEMPLATE') {
+        this.m_oAdminDashboardService.findResourcePermissions(this.resourceType, this.resource.templateId, "").subscribe(oResponse => {
           if (oResponse) {
             this.m_aoSharedUsers = oResponse;
           }
@@ -73,6 +82,12 @@ export class ShareUiComponent implements OnInit {
         })
       }
 
+      if (this.resourceType === 'PROCESSORPARAMETERSTEMPLATE') {
+        this.m_oAdminDashboardService.addResourcePermission(this.resourceType, this.resource.templateId, this.m_sUserIdSearch).subscribe(oResponse => {
+          this.getEnabledUsers();
+        })
+      }
+
       if (this.resourceType === 'workflow') { }
 
       if (this.resourceType === 'processor') { }
@@ -92,9 +107,15 @@ export class ShareUiComponent implements OnInit {
       if (this.resourceType === 'style') {
         this.m_oStyleService.removeStyleSharing(this.resource.styleId, sUserId).subscribe(oResponse => {
           console.log(oResponse)
-          if(oResponse.stringValue === "Done") {
-            this.getEnabledUsers(); 
+          if (oResponse.stringValue === "Done") {
+            this.getEnabledUsers();
           }
+        })
+      }
+
+      if (this.resourceType === 'PROCESSORPARAMETERSTEMPLATE') {
+        this.m_oAdminDashboardService.removeResourcePermission(this.resourceType, this.resource.templateId, sUserId).subscribe(oResponse => {
+          this.getEnabledUsers();
         })
       }
 
