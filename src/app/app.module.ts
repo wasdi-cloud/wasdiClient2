@@ -107,6 +107,7 @@ import { PayloadDialogComponent } from './components/edit/payload-dialog/payload
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ProcessLogsDialogComponent } from './components/edit/process-logs-dialog/process-logs-dialog.component';
+import { ImportDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -170,7 +171,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     NewStyleDialogComponent,
     NewWorkspaceDialogComponent,
     PayloadDialogComponent,
-    ProcessLogsDialogComponent
+    ProcessLogsDialogComponent,
+    ImportDialogComponent
   ],
   imports: [
     AppRoutingModule,

@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { WorkspaceInfoDialogComponent } from '../workspace-info-dialog/workspace-info-dialog.component';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
+import { ImportDialogComponent } from './toolbar-dialogs/import-dialog/import-dialog.component';
 @Component({
   selector: 'app-edit-toolbar',
   templateUrl: './edit-toolbar.component.html',
@@ -78,6 +79,12 @@ export class EditToolbarComponent implements OnInit {
     event.preventDefault();
   }
 
+  openImportDialog(event: MouseEvent) {
+     let oDialog = this.m_oDialog.open(ImportDialogComponent, {
+      height: '40vh', 
+      width: '50vw'
+     })
+  }
   openJupyterNotebookPage(event: MouseEvent) {
     event.preventDefault
     this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
