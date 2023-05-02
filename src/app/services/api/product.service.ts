@@ -72,22 +72,19 @@ export class ProductService {
 
   uploadFile(sWorkspaceInput: string, oBody: object, sName: string, sStyle: string) {
 
-    var oWorkspace = this.oConstantsService.getActiveWorkspace();
-    var sUrl = this.APIURL;
+    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
 
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
-    var oOptions = {
-      //transformRequest: angular.identity,
-      // headers: {'Content-Type': 'multipart/form-data'}
-      headers: { 'Content-Type': undefined }
-    };
+    var oOptions = {};
 
     sUrl = sUrl + '/product/uploadfile?workspace=' + sWorkspaceInput + '&name=' + sName;
     if (sStyle) {
       sUrl = sUrl + '&style=' + sStyle;
     }
-    //return this.oHttp.post(sUrl, oBody, oOptions);
+
+    return this.oHttp.post(sUrl, oBody, oOptions);
   };
 }
