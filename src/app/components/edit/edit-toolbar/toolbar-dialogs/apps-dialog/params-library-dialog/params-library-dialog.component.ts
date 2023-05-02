@@ -1,9 +1,10 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { faBook, faPlus, faShareNodes, faUpload, faX } from '@fortawesome/free-solid-svg-icons';
 import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 
 @Component({
   selector: 'app-params-library-dialog',
@@ -32,6 +33,7 @@ export class ParamsLibraryDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<ParamsLibraryDialogComponent>,
     private m_oProcessorParametersTemplateService: ProcessorParamsTemplateService,
   ) {
@@ -91,8 +93,13 @@ export class ParamsLibraryDialogComponent {
 
   }
 
-  openShareDialog() {
-
+  openShareDialog(oTemplate: any) {
+    let dialogData = new ShareDialogModel("PROCESSORPARAMETERSTEMPLATE", oTemplate);
+    console.log(dialogData);
+    let dialogRef = this.m_oDialog.open(ShareDialogComponent, {
+      width: '50vw',
+      data: dialogData
+    })
   }
 
   formatJSON() {
