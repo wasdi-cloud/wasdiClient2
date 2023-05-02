@@ -29,10 +29,8 @@ export class NewStyleDialogComponent {
   //Get file info when the form is updated
   onFileSelect(input: any) {
     if (input.files && input.files[0]) {
-
       this.m_oFile = new FormData();
       this.m_oFile.append('file', input.files[0])
-      console.log(this.m_oFile)
     }
   }
 
