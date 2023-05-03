@@ -27,7 +27,8 @@ export class ParamsLibraryDialogComponent {
   m_sInputTemplateId: string = "";
   m_bIsLoading: boolean = false;
   m_sSearchString: string = "";
-  
+  m_bEditMode: boolean = false;
+
   m_oSelectedTemplate: any = {} as {
     creationDate: string;
     description: string;
@@ -39,7 +40,7 @@ export class ParamsLibraryDialogComponent {
     userId: string;
   };
 
-  m_sParametersString: string; 
+  m_sParametersString: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -49,9 +50,9 @@ export class ParamsLibraryDialogComponent {
     private m_oProcessorParametersTemplateService: ProcessorParamsTemplateService,
   ) {
     this.m_oSelectedProcessor = data;
+    console.log(this.m_oSelectedProcessor);
     this.m_sProcessorId = this.m_oSelectedProcessor.processorId;
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
-    console.log(this.m_oSelectedProcessor);
     this.getProcessorParametersTemplateList(this.m_sProcessorId);
   }
 
@@ -81,10 +82,9 @@ export class ParamsLibraryDialogComponent {
     if (oTemplate) {
       this.m_oProcessorParametersTemplateService.getProcessorParametersTemplate(oTemplate.templateId).subscribe(oResponse => {
         if (oResponse) {
-          this.m_oSelectedTemplate = oResponse;  
-          console.log(oResponse)
-          this.m_sParametersString = decodeURIComponent(this.m_oSelectedTemplate.jsonParameters); 
-        
+          this.m_oSelectedTemplate = oResponse;
+          this.m_sParametersString = decodeURIComponent(this.m_oSelectedTemplate.jsonParameters);
+          this.m_bEditMode = false;
         }
       })
 
@@ -123,12 +123,29 @@ export class ParamsLibraryDialogComponent {
     })
   }
 
-  formatJSON() {
+  editMode() {
+    this.m_bEditMode = !this.m_bEditMode;
+  }
 
+
+  formatJSON() {
+    this.m_sParametersString = JSON.stringify(JSON.parse(this.m_sParametersString.replaceAll("'", '"')), null, 2);
   }
 
   addProcessorParams() {
-
+    //Prepare inputs for new information: 
+    this.m_oSelectedTemplate = {
+      creationDate: "",
+      description: "",
+      jsonParameters: "",
+      name: "",
+      processorId: "",
+      templateId: "",
+      updateDate: "",
+      userId: ""
+    };
+    this.m_sParametersString = ""
+    this.m_bEditMode = true;
   }
 
   onDismiss() {

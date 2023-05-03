@@ -53,7 +53,7 @@
             </div>
         </div>
         <div class="info-container card border border-success rounded-1">
-            <div class="px-4 py-4 d-flex flex-column gap-2" *ngIf="m_oSelectedTemplate.name">
+            <div class="px-4 py-4 d-flex flex-column gap-2" *ngIf="m_oSelectedTemplate.name || m_bEditMode">
                 <div class="info-header d-flex flex-row align-items-center justify-content-between">
                     <h4>{{m_oSelectedProcessor.processorName}}</h4>
                     <div>
@@ -67,9 +67,8 @@
                         <label class="text-success" for="creationDate">
                             Template Name:
                         </label>
-                        <input type="text" class="form-control form-control-sm date-input"
-                            [readonly]="!m_bEditMode ?  '' : null" [(ngModel)]="m_oSelectedTemplate.name"
-                            [disabled]="!m_bEditMode ?  '' : null">
+                        <input type="text" class="form-control form-control-sm" [readonly]="!m_bEditMode ?  '' : null"
+                            [(ngModel)]="m_oSelectedTemplate.name" [disabled]="!m_bEditMode ?  '' : null">
                     </div>
                     <div class="template-description">
                         <span class="text-success">Description:</span>
@@ -102,7 +101,7 @@
                         name="templateParams" rows="7" placeholder="{}" [(ngModel)]="m_sParametersString"
                         [disabled]="!m_bEditMode ?  '' : null"></textarea>
                 </div>
-                <div class="d-flex flex-row justify-content-end gap-2">
+                <div class="d-flex flex-row justify-content-end gap-2" *ngIf="!m_bEditMode">
                     <button class="btn btn-secondary" (click)="openShareDialog(m_oSelectedTemplate)">
                         Share
                     </button>
@@ -112,6 +111,10 @@
                     <button class="btn btn-success">
                         Apply
                     </button>
+                </div>
+                <div class="d-flex flex-row justify-content-between gap-2" *ngIf="m_bEditMode">
+                    <button class="btn btn-secondary" (click)="formatJSON()">Format JSON</button>
+                    <button class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
