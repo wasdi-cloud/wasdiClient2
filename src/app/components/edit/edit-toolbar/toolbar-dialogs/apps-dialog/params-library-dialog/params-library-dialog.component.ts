@@ -20,13 +20,16 @@ export class ParamsLibraryDialogComponent {
   faPlus = faPlus;
 
   m_oSelectedProcessor: any;
+
+
   m_sProcessorId: string = "";
   m_sActiveUserId: string = "";
+  m_sInputTemplateId: string = "";
+  m_sSearchString: string = "";
 
   m_aoParamsTemplates: any = [];
-  m_sInputTemplateId: string = "";
+
   m_bIsLoading: boolean = false;
-  m_sSearchString: string = "";
   m_bEditMode: boolean = false;
 
   m_oSelectedTemplate: any = {} as {
@@ -40,6 +43,8 @@ export class ParamsLibraryDialogComponent {
     userId: string;
   };
 
+  m_oProcessorParametersTemplate: any = {};
+
   m_sParametersString: string;
 
   constructor(
@@ -50,7 +55,6 @@ export class ParamsLibraryDialogComponent {
     private m_oProcessorParametersTemplateService: ProcessorParamsTemplateService,
   ) {
     this.m_oSelectedProcessor = data;
-    console.log(this.m_oSelectedProcessor);
     this.m_sProcessorId = this.m_oSelectedProcessor.processorId;
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.getProcessorParametersTemplateList(this.m_sProcessorId);
@@ -66,7 +70,6 @@ export class ParamsLibraryDialogComponent {
       return false;
     }
     this.m_oProcessorParametersTemplateService.getProcessorParametersTemplatesListByProcessor(sProcessorId).subscribe(oResponse => {
-      console.log(oResponse);
       if (oResponse) {
         this.m_aoParamsTemplates = oResponse;
       }
@@ -75,7 +78,17 @@ export class ParamsLibraryDialogComponent {
   }
 
   applyProcessorParams(sTemplateId: string) {
+    if (!sTemplateId) {
+      return false;
+    }
 
+    this.m_oProcessorParametersTemplateService.getProcessorParametersTemplate(sTemplateId).subscribe(oResponse => {
+      if (oResponse) {
+        let oTemplate = oResponse;
+        this.m_oDialogRef.close(oTemplate)
+      }
+    })
+    return true;
   }
 
   viewProcessorParams(oTemplate: any) {
@@ -111,7 +124,29 @@ export class ParamsLibraryDialogComponent {
   }
 
   saveTemplate() {
+    try {
 
+      let sJSONPayload = this.m_oSelectedTemplate.jsonParameters;
+      JSON.parse(sJSONPayload);
+
+    } catch (error) {
+      //ADD ERROR DIALOG
+      console.log("error in parsing the JSON payload");
+      return false;
+    }
+
+    this.m_oSelectedProcessor.jsonParameters = encodeURI(this.m_oSelectedTemplate.jsonParameters);
+
+    this.m_bIsLoading = true;
+    if (this.m_oSelectedTemplate.templateId) {
+      this.m_oProcessorParametersTemplateService.updateProcessorParameterTemplate(this.m_oSelectedTemplate).subscribe(oResponse => {
+        console.log(oResponse)
+        if (oResponse) {
+          this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
+        }
+      })
+    }
+    return true;
   }
 
   openShareDialog(oTemplate: any) {
@@ -126,7 +161,6 @@ export class ParamsLibraryDialogComponent {
   editMode() {
     this.m_bEditMode = !this.m_bEditMode;
   }
-
 
   formatJSON() {
     this.m_sParametersString = JSON.stringify(JSON.parse(this.m_sParametersString.replaceAll("'", '"')), null, 2);

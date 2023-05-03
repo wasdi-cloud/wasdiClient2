@@ -108,13 +108,13 @@
                     <button class="btn btn-secondary" (click)="editMode()">
                         Edit
                     </button>
-                    <button class="btn btn-success">
+                    <button class="btn btn-success" (click)="applyProcessorParams(m_oSelectedTemplate.templateId)">
                         Apply
                     </button>
                 </div>
                 <div class="d-flex flex-row justify-content-between gap-2" *ngIf="m_bEditMode">
                     <button class="btn btn-secondary" (click)="formatJSON()">Format JSON</button>
-                    <button class="btn btn-success">Save</button>
+                    <button class="btn btn-success" (click)="saveTemplate()">Save</button>
                 </div>
             </div>
         </div>

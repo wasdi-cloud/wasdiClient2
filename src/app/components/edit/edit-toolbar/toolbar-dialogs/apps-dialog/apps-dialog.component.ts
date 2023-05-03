@@ -109,6 +109,10 @@ export class AppsDialogComponent {
       width: '80vw',
       data: oProcessor
     })
+
+    oDialog.afterClosed().subscribe(oResult => {
+      this.m_sMyJsonString = decodeURIComponent(oResult.jsonParameters)
+    })
   }
 
   downloadProcessor(oEvent: MouseEvent, oProcessor: any) {
