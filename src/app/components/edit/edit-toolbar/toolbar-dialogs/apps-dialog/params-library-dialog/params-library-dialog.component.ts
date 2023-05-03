@@ -25,10 +25,21 @@ export class ParamsLibraryDialogComponent {
 
   m_aoParamsTemplates: any = [];
   m_sInputTemplateId: string = "";
-
   m_bIsLoading: boolean = false;
   m_sSearchString: string = "";
+  
+  m_oSelectedTemplate: any = {} as {
+    creationDate: string;
+    description: string;
+    jsonParameters: string;
+    name: string;
+    processorId: string;
+    templateId: string;
+    updateDate: string;
+    userId: string;
+  };
 
+  m_sParametersString: string; 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -67,7 +78,17 @@ export class ParamsLibraryDialogComponent {
   }
 
   viewProcessorParams(oTemplate: any) {
+    if (oTemplate) {
+      this.m_oProcessorParametersTemplateService.getProcessorParametersTemplate(oTemplate.templateId).subscribe(oResponse => {
+        if (oResponse) {
+          this.m_oSelectedTemplate = oResponse;  
+          console.log(oResponse)
+          this.m_sParametersString = decodeURIComponent(this.m_oSelectedTemplate.jsonParameters); 
+        
+        }
+      })
 
+    }
   }
 
   deleteProcessorParams(oTemplate: any) {

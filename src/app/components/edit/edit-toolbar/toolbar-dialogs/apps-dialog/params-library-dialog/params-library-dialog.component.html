@@ -54,29 +54,49 @@
             </div>
         </div>
         <div class="info-container card border border-success rounded-1" style="width: 50%;">
-            <!-- <div *ngIf="m_oSelectedStyle.name && m_bDisplayInfo" class="px-4 py-4 d-flex flex-column gap-2">
-                <h4>{{m_oSelectedStyle.name}}</h4>
-                <div class="main-style-info d-flex flex-row justify-content-between">
-
+            <div class="px-4 py-4 d-flex flex-column gap-2" *ngIf="m_oSelectedTemplate.name">
+                <h4 style=" height: 2rem">{{m_oSelectedTemplate.name}}</h4>
+                <div class="main-style-info d-flex flex-row justify-content-between" style="height: 5rem">
                     <div class="style-description">
                         <span class="text-success">Description:</span>
-                        <p>{{m_oSelectedStyle.description}}</p>
+                        <p>{{m_oSelectedTemplate.description}}</p>
                     </div>
-                    <div>
-                        <span class="text-success">Owner:</span>
-                        <p>{{m_oSelectedStyle.userId}}</p>
+                </div>
+                <div class="d-flex flex-row justify-content-between">
+                    <div class="">
+                        <label class="text-success" for="creationDate">
+                            Creation Date:
+                        </label>
+                        <input type="text" class="form-control date-input" readonly
+                            [(ngModel)]="m_oSelectedTemplate.creationDate">
+                    </div>
+                    <div class="">
+                        <label class="text-success" for="creationDate">
+                            Update Date:
+                        </label>
+                        <input type="text" class="form-control date-input" readonly
+                            [(ngModel)]="m_oSelectedTemplate.updateDate">
                     </div>
                 </div>
 
-                <div class="style-xml-container d-flex flex-column">
-                    <span class="text-success">Style XML:</span>
-                    <textarea readonly class="form-control" name="m_asStyleXml" rows="10"
-                        placeholder="{{m_asStyleXml}}"></textarea>
+                <div class="d-flex flex-column">
+                    <span class="text-success">Parameters:</span>
+                    <textarea readonly class="form-control parameters-input" name="m_asStyleXml" rows="7"
+                        placeholder="{}" [(ngModel)]="m_sParametersString"></textarea>
+                </div>
+                <div class="d-flex flex-row justify-content-end gap-2">
+                    <button class="btn btn-secondary" (click)="openShareDialog(m_oSelectedTemplate)">
+                        Share
+                    </button>
+                    <button class="btn btn-secondary">
+                        Edit
+                    </button>
+                    <button class="btn btn-success">
+                        Apply
+                    </button>
                 </div>
             </div>
-        </div> -->
         </div>
-
     </div>
     <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
         <button class="btn btn-secondary" (click)="onDismiss()">
