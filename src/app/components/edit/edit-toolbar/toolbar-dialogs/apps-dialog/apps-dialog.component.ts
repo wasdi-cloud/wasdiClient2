@@ -106,7 +106,7 @@ export class AppsDialogComponent {
     oEvent.preventDefault();
     let oDialog = this.m_oDialog.open(ParamsLibraryDialogComponent, {
       height: '80vh',
-      width: '80vw', 
+      width: '80vw',
       data: oProcessor
     })
   }
