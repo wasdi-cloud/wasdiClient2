@@ -1,4 +1,4 @@
-<div class="dialog d-flex flex-column justify-content-between" style="height: 100%;">
+<div class="dialog d-flex flex-column justify-content-between">
     <div class="dialog-header d-flex flex-row justify-content-between px-4 pt-3 pb-2 bg-secondary text-light">
         <h4 class="dialog-text"><fa-icon [icon]="faBook"></fa-icon> App Params Library</h4>
         <button class="btn" (click)="onDismiss()">
@@ -6,26 +6,25 @@
         </button>
 
     </div>
-    <div class="dialog-content d-flex flex-row justify-content-between px-4 py-2 gap-3" style="height: 80%">
-        <div class="params-container" style="width: 50%">
+    <div class="dialog-content d-flex flex-row justify-content-between px-4 py-2 gap-3">
+        <div class="params-container">
             <ul class="nav nav-tabs d-flex flex-row justify-content-between">
                 <li class="nav-item">
                     <a class="nav-link active">Parameters List</a>
                 </li>
                 <li class="nav-item">
                     <button class="btn btn-success" (click)="addProcessorParams()">
-                        <fa-icon [icon]="faPlus"></fa-icon> Add Parameters
+                        <fa-icon [icon]="faPlus"></fa-icon> Add Template
                     </button>
                 </li>
             </ul>
             <input class="form-control my-3" type="text" placeholder="Search by Parameters Name"
                 [(ngModel)]="m_sSearchString">
-            <div class=" params-cards-container d-flex flex-row flex-wrap justify-content-start gap-1"
-                style="width:100%">
+            <div class="params-cards-container d-flex flex-row flex-wrap justify-content-start gap-1">
                 <div *ngFor="let oTemplate of m_aoParamsTemplates | filter: m_sSearchString"
-                    class="card d-flex flex-column gap-3 p-2 align-self-start"
-                    style="cursor: pointer; height: 50%; width: 32%" (click)="viewProcessorParams(oTemplate)">
-                    <div style="height: 30px">
+                    class="template-card card d-flex flex-column gap-3 p-2 align-self-start"
+                    (click)="viewProcessorParams(oTemplate)">
+                    <div class="card-buttons-container">
                         <div *ngIf="oTemplate.userId === m_sActiveUserId"
                             class="card-toolbar d-flex flex-row justify-content-end">
                             <button class="btn btn-sm" (click)="applyProcessorParams(oTemplate.templateId)"
@@ -53,42 +52,61 @@
 
             </div>
         </div>
-        <div class="info-container card border border-success rounded-1" style="width: 50%;">
+        <div class="info-container card border border-success rounded-1">
             <div class="px-4 py-4 d-flex flex-column gap-2" *ngIf="m_oSelectedTemplate.name">
-                <h4 style=" height: 2rem">{{m_oSelectedTemplate.name}}</h4>
-                <div class="main-style-info d-flex flex-row justify-content-between" style="height: 5rem">
-                    <div class="style-description">
+                <div class="info-header d-flex flex-row align-items-center justify-content-between">
+                    <h4>{{m_oSelectedProcessor.processorName}}</h4>
+                    <div>
+                        <span class="text-success">Publisher: </span><span>{{m_oSelectedProcessor.publisher}}</span>
+                    </div>
+
+                </div>
+
+                <div class="main-params-info d-flex flex-column justify-content-between">
+                    <div class="template-name">
+                        <label class="text-success" for="creationDate">
+                            Template Name:
+                        </label>
+                        <input type="text" class="form-control form-control-sm date-input"
+                            [readonly]="!m_bEditMode ?  '' : null" [(ngModel)]="m_oSelectedTemplate.name"
+                            [disabled]="!m_bEditMode ?  '' : null">
+                    </div>
+                    <div class="template-description">
                         <span class="text-success">Description:</span>
-                        <p>{{m_oSelectedTemplate.description}}</p>
+                        <textarea [readonly]="!m_bEditMode ?  '' : null" class="form-control form-control-sm" rows=""
+                            [(ngModel)]="m_oSelectedTemplate.description"
+                            [disabled]="!m_bEditMode ?  '' : null"></textarea>
                     </div>
                 </div>
+                <!-- Date Inputs -->
                 <div class="d-flex flex-row justify-content-between">
                     <div class="">
                         <label class="text-success" for="creationDate">
                             Creation Date:
                         </label>
-                        <input type="text" class="form-control date-input" readonly
+                        <input type="text" class="form-control form-control-sm date-input" readonly disabled
                             [(ngModel)]="m_oSelectedTemplate.creationDate">
                     </div>
                     <div class="">
                         <label class="text-success" for="creationDate">
                             Update Date:
                         </label>
-                        <input type="text" class="form-control date-input" readonly
+                        <input type="text" class="form-control form-control-sm date-input" readonly disabled
                             [(ngModel)]="m_oSelectedTemplate.updateDate">
                     </div>
                 </div>
 
                 <div class="d-flex flex-column">
                     <span class="text-success">Parameters:</span>
-                    <textarea readonly class="form-control parameters-input" name="m_asStyleXml" rows="7"
-                        placeholder="{}" [(ngModel)]="m_sParametersString"></textarea>
+                    <textarea [readonly]="!m_bEditMode ?  '' : null" class="form-control form-control-sm"
+                        name="templateParams" rows="7" placeholder="{}" [(ngModel)]="m_sParametersString"
+                        [disabled]="!m_bEditMode ?  '' : null"></textarea>
                 </div>
                 <div class="d-flex flex-row justify-content-end gap-2">
                     <button class="btn btn-secondary" (click)="openShareDialog(m_oSelectedTemplate)">
                         Share
                     </button>
-                    <button class="btn btn-secondary">
+                    <button class="btn btn-secondary" (click)="editMode()">
                         Edit
                     </button>
                     <button class="btn btn-success">

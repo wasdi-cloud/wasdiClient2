@@ -1,7 +1,43 @@
+div.dialog {
+    height: 100%;
+}
+
+div.dialog-content {
+    height: 80%;
+}
+
+div.params-container,
+div.info-container {
+    width: 50%;
+}
+
+div.params-cards-container {
+    width: 100%;
+}
+
+div.template-card {
+    cursor: pointer;
+    height: 50%;
+    width: 32%;
+}
+
+div.card-buttons-container {
+    height: 30px;
+}
+
+div.main-params-info {
+    height: 8rem
+}
+
+div.info-header {
+    height: 2rem;
+}
+
 input.date-input {
     cursor: not-allowed;
 }
 
-textarea.parameters-input {
-    cursor: not-allowed;
+div.info-container {
+    overflow: hidden;
+    overflow-y: scroll;
 }
