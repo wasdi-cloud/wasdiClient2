@@ -111,7 +111,9 @@ export class AppsDialogComponent {
     })
 
     oDialog.afterClosed().subscribe(oResult => {
-      this.m_sMyJsonString = decodeURIComponent(oResult.jsonParameters)
+      if (oResult) {
+        this.m_sMyJsonString = decodeURIComponent(oResult.jsonParameters)
+      }
     })
   }
 
