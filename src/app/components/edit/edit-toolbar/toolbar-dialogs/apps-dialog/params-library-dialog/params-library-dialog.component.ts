@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { faBook, faPlus, faShareNodes, faUpload, faX } from '@fortawesome/free-solid-svg-icons';
 import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 
 @Component({
@@ -155,13 +155,28 @@ export class ParamsLibraryDialogComponent {
     let sConfirmOwner = `Are you sure you want to delete ${oTemplate.name}?`;
     let sConfirmShared = `Are you sure you want to remove your permissions from ${oTemplate.name}`;
 
-    let oDialogData = ConfirmationDialogModel;
+    let oDialogData: ConfirmationDialogModel;
 
     if (oTemplate.sharedWithMe) {
-      oTemplate = new ConfirmationDialogModel("Confirm Removal", sConfirmShared)
+      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmShared)
     } else {
-      oTemplate = new ConfirmationDialogModel("Confirm Removal", sConfirmOwner)
+      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmOwner)
     }
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: oDialogData
+    });
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if(oDialogResult === true) {
+        this.m_oProcessorParametersTemplateService.deleteProcessorParameterTemplate(oTemplate.templateId).subscribe(oResponse => {
+          this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId); 
+          this.m_bEditMode = false; 
+          this.m_oProcessorParametersTemplate = null; 
+        })
+      }
+    })
 
     return true;
   }
@@ -184,7 +199,7 @@ export class ParamsLibraryDialogComponent {
     this.m_bIsLoading = true;
     if (this.m_oProcessorParametersTemplate.templateId) {
       this.m_oProcessorParametersTemplateService.updateProcessorParameterTemplate(this.m_oProcessorParametersTemplate).subscribe(oResponse => {
-       
+
         this.getProcessorParametersTemplateList(this.m_oProcessorParametersTemplate.processorId);
       })
     } else {
