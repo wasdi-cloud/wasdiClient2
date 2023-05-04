@@ -105,6 +105,7 @@ import { NewWorkspaceDialogComponent } from './components/workspaces/new-workspa
 import { AppsDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/apps-dialog.component';
 import { ParamsLibraryDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/params-library-dialog/params-library-dialog.component';
 import { NewAppDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
+import { ProcessorTabContentComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-content/processor-tab-content.component';
 
 
 
@@ -170,7 +171,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     NewWorkspaceDialogComponent, 
     AppsDialogComponent, 
     ParamsLibraryDialogComponent, 
-    NewAppDialogComponent
+    NewAppDialogComponent, ProcessorTabContentComponent
   ],
   imports: [
     AppRoutingModule,
