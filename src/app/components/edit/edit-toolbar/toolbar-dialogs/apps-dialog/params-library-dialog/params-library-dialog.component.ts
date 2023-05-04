@@ -28,6 +28,7 @@ export class ParamsLibraryDialogComponent {
   m_sSearchString: string = "";
 
   m_aoParamsTemplates: any = [];
+  m_aoParamsTemplatesMap: any[] = [];
 
   m_bIsLoading: boolean = false;
   m_bEditMode: boolean = false;
@@ -43,7 +44,12 @@ export class ParamsLibraryDialogComponent {
     userId: string;
   };
 
-  m_oProcessorParametersTemplate: any = {};
+  m_oProcessorParametersTemplate: any = {} as {
+    processorId: string,
+    jsonParameters: string,
+    name: string,
+    description: string
+  };
 
   m_sParametersString: string;
 
@@ -72,6 +78,7 @@ export class ParamsLibraryDialogComponent {
     this.m_oProcessorParametersTemplateService.getProcessorParametersTemplatesListByProcessor(sProcessorId).subscribe(oResponse => {
       if (oResponse) {
         this.m_aoParamsTemplates = oResponse;
+        this.m_oProcessorParametersTemplate.jsonParameters = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters)
       }
     })
     return true;
@@ -96,12 +103,48 @@ export class ParamsLibraryDialogComponent {
       this.m_oProcessorParametersTemplateService.getProcessorParametersTemplate(oTemplate.templateId).subscribe(oResponse => {
         if (oResponse) {
           this.m_oSelectedTemplate = oResponse;
-          this.m_sParametersString = decodeURIComponent(this.m_oSelectedTemplate.jsonParameters);
+          this.m_oProcessorParametersTemplate = oResponse;
+          this.m_oProcessorParametersTemplate.jsonParameters = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters);
           this.m_bEditMode = false;
         }
       })
 
     }
+  }
+
+  editProcessorParametersTemplate(oTemplate) {
+    if (!this.m_oProcessorParametersTemplate) {
+      return false;
+    }
+    if (!oTemplate) {
+      return false;
+    }
+
+    this.m_bEditMode = true;
+    console.log(oTemplate)
+    this.m_oProcessorParametersTemplateService.getProcessorParametersTemplate(oTemplate.templateId).subscribe(oResponse => {
+      if (oResponse) {
+        this.m_oProcessorParametersTemplate = oResponse;
+        try {
+          let sJSONPayload = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters);
+          let oParsed = JSON.parse(sJSONPayload);
+          let sPrettyPrint = JSON.stringify(oParsed, null, 2);
+          this.m_oProcessorParametersTemplate.jsonParameters = sPrettyPrint;
+          this.m_bIsLoading = false;
+        } catch (error) {
+          console.log(error);
+          this.m_bIsLoading = false;
+        }
+      } else {
+        //ERROR DIALOG
+        console.log("Error loading processor parameters template detail");
+        this.m_bIsLoading = false;
+      }
+
+
+    })
+
+    return true;
   }
 
   deleteProcessorParams(oTemplate: any) {
@@ -125,9 +168,10 @@ export class ParamsLibraryDialogComponent {
 
   saveTemplate() {
     try {
-
-      let sJSONPayload = this.m_oSelectedTemplate.jsonParameters;
+      console.log(this.m_oProcessorParametersTemplate.jsonParameters);
+      let sJSONPayload = this.m_oProcessorParametersTemplate.jsonParameters
       JSON.parse(sJSONPayload);
+
 
     } catch (error) {
       //ADD ERROR DIALOG
@@ -135,17 +179,26 @@ export class ParamsLibraryDialogComponent {
       return false;
     }
 
-    this.m_oSelectedProcessor.jsonParameters = encodeURI(this.m_oSelectedTemplate.jsonParameters);
+    this.m_oProcessorParametersTemplate.jsonParameters = encodeURI(this.m_oProcessorParametersTemplate.jsonParameters);
 
     this.m_bIsLoading = true;
-    if (this.m_oSelectedTemplate.templateId) {
-      this.m_oProcessorParametersTemplateService.updateProcessorParameterTemplate(this.m_oSelectedTemplate).subscribe(oResponse => {
-        console.log(oResponse)
-        if (oResponse) {
-          this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
-        }
+    if (this.m_oProcessorParametersTemplate.templateId) {
+      this.m_oProcessorParametersTemplateService.updateProcessorParameterTemplate(this.m_oProcessorParametersTemplate).subscribe(oResponse => {
+       
+        this.getProcessorParametersTemplateList(this.m_oProcessorParametersTemplate.processorId);
+      })
+    } else {
+      console.log(this.m_oProcessorParametersTemplate);
+      this.m_oProcessorParametersTemplateService.addProcessorParameterTemplate(this.m_oProcessorParametersTemplate).subscribe(oResponse => {
+        this.getProcessorParametersTemplateList(this.m_sProcessorId);
+        this.m_bEditMode = false;
+        this.m_oProcessorParametersTemplate = null;
+
+        this.m_bIsLoading = false;
       })
     }
+
+    this.m_bEditMode = false;
     return true;
   }
 
@@ -156,10 +209,6 @@ export class ParamsLibraryDialogComponent {
       width: '50vw',
       data: dialogData
     })
-  }
-
-  editMode() {
-    this.m_bEditMode = !this.m_bEditMode;
   }
 
   formatJSON() {
