@@ -8,6 +8,7 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 import { EditProcessorDialogComponent } from './edit-processor-dialog/edit-processor-dialog.component';
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
 
 @Component({
   selector: 'app-apps-dialog',
@@ -127,7 +128,7 @@ export class AppsDialogComponent {
   }
 
   openEditProcessorDialog(oEvent: MouseEvent, oProcessor: any) {
-    let oDialog = this.m_oDialog.open(EditProcessorDialogComponent, {
+    let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
       height: '80vh',
       width: '80vw'
     })
