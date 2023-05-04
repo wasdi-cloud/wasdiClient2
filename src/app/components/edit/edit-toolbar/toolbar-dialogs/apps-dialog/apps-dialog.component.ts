@@ -5,7 +5,6 @@ import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
-import { EditProcessorDialogComponent } from './edit-processor-dialog/edit-processor-dialog.component';
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
