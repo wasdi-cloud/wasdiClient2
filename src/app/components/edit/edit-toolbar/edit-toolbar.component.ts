@@ -9,6 +9,7 @@ import { WorkspaceInfoDialogComponent } from '../workspace-info-dialog/workspace
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
 import { AppsDialogComponent } from './toolbar-dialogs/apps-dialog/apps-dialog.component';
+import { NewAppDialogComponent } from './toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 @Component({
   selector: 'app-edit-toolbar',
   templateUrl: './edit-toolbar.component.html',
@@ -77,6 +78,10 @@ export class EditToolbarComponent implements OnInit {
 
   openNewAppDialog(oEvent: MouseEvent) {
     oEvent.preventDefault();
+    let dialogRef = this.m_oDialog.open(NewAppDialogComponent, {
+      height: '80vh', 
+      width: '80vw'
+    })
 
   }
 
