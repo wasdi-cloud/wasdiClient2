@@ -79,8 +79,9 @@ export class EditToolbarComponent implements OnInit {
   openNewAppDialog(oEvent: MouseEvent) {
     oEvent.preventDefault();
     let dialogRef = this.m_oDialog.open(NewAppDialogComponent, {
-      height: '80vh', 
-      width: '80vw'
+      height: '80vh',
+      width: '80vw',
+      data: { editMode: false }
     })
 
   }

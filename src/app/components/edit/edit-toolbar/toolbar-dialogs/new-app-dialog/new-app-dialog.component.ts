@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 @Component({
@@ -18,11 +18,15 @@ export class NewAppDialogComponent {
 
   m_sActiveTab = "PROCESSOR"
 
-  constructor(private m_oConstantsService: ConstantsService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+    private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oProcessorService: ProcessorService,
-    private m_oWorkspaceService: WorkspaceService) { }
+    private m_oWorkspaceService: WorkspaceService) { 
+      this.m_bEditMode = data.editMode;
+      console.log(this.m_bEditMode); 
+    }
 
   changeActiveTab(sTabName: string) {
     if (sTabName) {

@@ -129,7 +129,8 @@ export class AppsDialogComponent {
   openEditProcessorDialog(oEvent: MouseEvent, oProcessor: any) {
     let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
       height: '80vh',
-      width: '80vw'
+      width: '80vw',
+      data: { editMode: true }
     })
   }
 

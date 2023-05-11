@@ -9,15 +9,15 @@
                 <a class="nav-link" aria-current="page" (click)="changeActiveTab('PROCESSOR')"
                     ngClass="{{m_sActiveTab === 'PROCESSOR' ? 'active' : ''}}">Processor</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="m_bEditMode === true">
                 <a class="nav-link" (click)="changeActiveTab('STORE')"
                     ngClass="{{m_sActiveTab === 'STORE' ? 'active' : ''}}">Store</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="m_bEditMode === true">
                 <a class="nav-link" (click)="changeActiveTab('MEDIA')"
                     ngClass="{{m_sActiveTab === 'MEDIA' ? 'active' : ''}}">Media</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="m_bEditMode === true">
                 <a class="nav-link" (click)="changeActiveTab('SHARE')"
                     ngClass="{{m_sActiveTab === 'SHARE' ? 'active' : ''}}">Share</a>
             </li>
@@ -31,7 +31,8 @@
         <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR'"></app-processor-tab-content>
         <app-share-ui [resourceType]="'processor'" [resource]="" *ngIf="m_sActiveTab === 'SHARE'"></app-share-ui>
     </div>
-    <div class="dialog-footer p-2 d-flex flex-row justify-content-end">
-        <button class="btn btn-secondary">Close</button>
+    <div class="dialog-footer p-2 d-flex flex-row justify-content-end gap-2">
+        <button class="btn btn-success">Apply</button>
+        <button class="btn btn-secondary" (click)="onDismiss()">Close</button>
     </div>
 </div>
