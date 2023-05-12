@@ -28,11 +28,11 @@
         </ul>
     </div>
     <div class="tab-content-container p-3" style="height: 75%;">
-        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR'"></app-processor-tab-content>
+        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR'" [m_bEditMode]="m_bEditMode"></app-processor-tab-content>
         <app-share-ui [resourceType]="'processor'" [resource]="" *ngIf="m_sActiveTab === 'SHARE'"></app-share-ui>
     </div>
     <div class="dialog-footer p-2 d-flex flex-row justify-content-end gap-2">
-        <button class="btn btn-success">Apply</button>
+       
         <button class="btn btn-secondary" (click)="onDismiss()">Close</button>
     </div>
 </div>

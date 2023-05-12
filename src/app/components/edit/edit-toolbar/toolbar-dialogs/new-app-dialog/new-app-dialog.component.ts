@@ -14,7 +14,7 @@ export class NewAppDialogComponent {
   faRocket = faRocket;
   faX = faXmark;
 
-  m_bEditMode = false; 
+  m_bEditMode; 
 
   m_sActiveTab = "PROCESSOR"
 
