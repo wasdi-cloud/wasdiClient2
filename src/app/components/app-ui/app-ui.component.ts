@@ -323,13 +323,11 @@ export class AppUiComponent implements OnInit {
   checkParams() {
     let bIsValid: boolean = true;
 
-
-
     let asMessages: string[] = [];
     for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
       if (!this.wapDisplayComponent.get(iTabs)?.checkParams(asMessages)) {
         bIsValid = false;
-        this.m_sMessage = this.m_sMessage + asMessages[iTabs] + "\n";
+        this.m_sMessage = this.m_sMessage + asMessages + "\n";
       }
     }
     console.log(this.m_sMessage)
