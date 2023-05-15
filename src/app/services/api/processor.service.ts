@@ -137,14 +137,10 @@ export class ProcessorService {
      * @param oBody
      * @returns {*}
      */
-  // uploadProcessor(sWorkspaceId: string, sName: string, sVersion: string, sDescription: string, sType: string, sJsonSample: string, sPublic: string, oBody: object) {
+  uploadProcessor(sWorkspaceId: string, sName: string, sVersion: string, sDescription: string, sType: string, sJsonSample: string, sPublic: string, oBody: object) {
 
-  //   let oOptions = {
-  //     setHeaders: { 'Content-Type': undefined }
-  //   };
-
-  //   return this.oHttp.post(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic), oBody, oOptions);
-  // };
+    return this.oHttp.post(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic), oBody);
+  };
 
   /**
      * Get processors logs

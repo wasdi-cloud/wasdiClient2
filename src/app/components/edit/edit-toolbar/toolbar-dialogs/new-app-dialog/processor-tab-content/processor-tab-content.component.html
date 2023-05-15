@@ -1,12 +1,21 @@
 <div class="form d-flex flex-row justify-content-between align-items-center">
-    <div style="width: 65%">
+    <div class="d-flex flex-column gap-2" style="width: 65%">
         <div>
             <label for="name">Name:</label>
             <input class="form-control" type="text">
         </div>
         <div>
             <label for="type">Type:</label>
-            <input class="form-control" type="text">
+            <input class="form-control" type="text" name="type" [matAutocomplete]="auto"
+                placeholder="{{m_bEditMode?  m_oSelectedType.name : 'Select Programming Language'}}">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let oProcessorType of m_aoProcessorTypes" [value]="oProcessorType.name">
+                    {{oProcessorType.name}}
+                </mat-option>
+            </mat-autocomplete>
+        </div>
+        <div class="">
+            <input type="file" name="" id="">
         </div>
     </div>
     <div class="d-flex flex-row gap-2">
@@ -14,14 +23,9 @@
         <button class="btn btn-secondary">Update Library</button>
         <button class="btn btn-secondary">Re-Deploy</button>
     </div>
-
-
-</div>
-<div class="">
-    <input type="file" name="" id="">
 </div>
 
-<div class="advanced-info d-flex flex-row gap-2">
+<div class="advanced-info d-flex flex-row gap-2 mt-3">
     <div style="width: 50%">
         <label for="description">Description:</label>
         <textarea class="form-control" name="" id="" rows="5"></textarea>
@@ -35,6 +39,7 @@
     </div>
     <div style="width: 50%">
         <label for="jsonSample">JSON Sample:</label>
-        <textarea class="form-control" name="jsonSample" id=""rows="10"></textarea>
+        <textarea class="form-control" name="jsonSample" id="" rows="10"></textarea>
     </div>
 </div>
+<button class="btn btn-success" (click)="deployProcessor()">Deploy Processor</button>
