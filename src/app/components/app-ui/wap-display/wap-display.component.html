@@ -1,5 +1,6 @@
 <p>{{wapData.name}}</p>
-<div *ngFor="let oControl of getTabControls(); let i=index">
+<div class="d-flex flex-column" *ngFor="let oControl of getTabControls(); let i=index">
+    <label for="oControl">{{oControl.label}}</label>
     <!-- WAP Checkbox -->
     <app-wap-check-box *ngIf="oControl.type === 'boolean'" [(oCheckboxDetails)]="getTabControls()[i]"
         (getOutput)="logOutput($event)"></app-wap-check-box>

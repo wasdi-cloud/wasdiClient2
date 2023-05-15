@@ -1,5 +1,4 @@
 <form>
-    <label for="">{{oControlInfo.label}}</label>
     <input type="text" [formControl]="control" [matAutocomplete]="auto"  
         class="form-control">
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getSelectedOption($event)">
