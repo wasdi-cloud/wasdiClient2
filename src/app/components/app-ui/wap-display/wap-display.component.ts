@@ -41,7 +41,7 @@ export class WapDisplayComponent implements OnInit {
   * @returns {[]} an object with a property for each tab. Each property is an array of the controls of the tab
   */
   generateViewElements(oFormToGenerate) {
-    let aoTabControls  = ViewElementFactory.getTabElements(oFormToGenerate);
+    let aoTabControls = ViewElementFactory.getTabElements(oFormToGenerate);
     return aoTabControls;
   }
 
@@ -55,10 +55,12 @@ export class WapDisplayComponent implements OnInit {
       if (oElement.required) {
         if (this.renderAsStrings) {
           let sStringValue = oElement.getStringValue();
+          if(oElement.sSelectedValues) {
+            sStringValue = oElement.sSelectedValues.name;
+          }
           if (!sStringValue) {
             let sMessage = oElement.label;
             asMessages.push(sMessage);
-            console.log(sMessage)
             bReturn = false
           }
         } else {
@@ -66,13 +68,12 @@ export class WapDisplayComponent implements OnInit {
           if (oValue === null || oValue === undefined) {
             let sMessage = oElement.label;
             asMessages.push(sMessage);
-            
+
             bReturn = false;
           }
         }
         if (typeof oElement.isValid === "function") {
           if (!oElement.isValid(asMessages)) {
-            console.log(asMessages)
             bReturn = false
           }
         }

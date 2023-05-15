@@ -45,7 +45,6 @@ export class WapSelectAreaComponent implements OnInit {
 
     //If not valid after check
     if (!this.m_bIsValid) {
-      console.log(this.m_oDrawOptions)
       //set layer color
       event.layer.options.color = "#FF0000"
 
@@ -83,12 +82,9 @@ export class WapSelectAreaComponent implements OnInit {
     */
 
     let latlngs = layer.getLatLngs();
-    console.log(latlngs)
-
     // height and width respectively
     let oSide: number[] = [this.getDistance(latlngs[0][0], latlngs[0][1]), this.getDistance(latlngs[0][1], latlngs[0][2])];
 
-    console.log(oSide)
 
     let fMaxSide = Math.max(...oSide);
 
@@ -96,12 +92,9 @@ export class WapSelectAreaComponent implements OnInit {
 
     // first element is the array itself to be passed
     let fArea = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 1000000;
-    console.log(fArea)
-    console.log(this.oMapInput.maxArea)
 
     if (fArea > this.oMapInput.maxArea && this.oMapInput.maxArea !== 0) {
       // sErrorMessage = sErrorMessage.concat(this.m_oTranslateService.getTranslation());
-      console.log("area")
       this.m_bIsValid = false;
     }
 

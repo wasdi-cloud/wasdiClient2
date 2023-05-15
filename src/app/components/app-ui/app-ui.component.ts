@@ -266,7 +266,6 @@ export class AppUiComponent implements OnInit {
             });
             return
           }
-          console.log(response)
           this.executeProcessorInWorkspace(oController, sApplicationName, oProcessorInput, response);
         })
       })
@@ -289,7 +288,6 @@ export class AppUiComponent implements OnInit {
    * @param oWorkspace 
    */
   executeProcessorInWorkspace(oController, sApplicationName: string, oProcessorInput, oWorkspace) {
-    console.log(oWorkspace)
     oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
     oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput)).subscribe(oResponse => {
       if (oResponse) {
@@ -324,13 +322,13 @@ export class AppUiComponent implements OnInit {
     let bIsValid: boolean = true;
 
     let asMessages: string[] = [];
+    this.m_sMessage = "The following inputs are required: "
     for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
       if (!this.wapDisplayComponent.get(iTabs)?.checkParams(asMessages)) {
         bIsValid = false;
         this.m_sMessage = this.m_sMessage + asMessages + "\n";
       }
     }
-    console.log(this.m_sMessage)
     return bIsValid;
   }
 
