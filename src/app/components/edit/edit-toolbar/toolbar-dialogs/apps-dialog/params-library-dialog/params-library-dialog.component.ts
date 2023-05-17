@@ -64,6 +64,9 @@ export class ParamsLibraryDialogComponent {
     this.m_sProcessorId = this.m_oSelectedProcessor.processorId;
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.getProcessorParametersTemplateList(this.m_sProcessorId);
+    if (this.m_oProcessorParametersTemplate.description === undefined) {
+      this.m_oProcessorParametersTemplate.description = "{}";
+    }
   }
 
   /**
@@ -169,11 +172,11 @@ export class ParamsLibraryDialogComponent {
     });
 
     oDialogRef.afterClosed().subscribe(oDialogResult => {
-      if(oDialogResult === true) {
+      if (oDialogResult === true) {
         this.m_oProcessorParametersTemplateService.deleteProcessorParameterTemplate(oTemplate.templateId).subscribe(oResponse => {
-          this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId); 
-          this.m_bEditMode = false; 
-          this.m_oProcessorParametersTemplate = null; 
+          this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
+          this.m_bEditMode = false;
+          this.m_oProcessorParametersTemplate = null;
         })
       }
     })
