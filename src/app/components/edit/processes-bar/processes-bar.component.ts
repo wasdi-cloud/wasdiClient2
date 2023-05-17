@@ -401,11 +401,19 @@ export class ProcessesDialog {
   };
 
   openLogsDialog(oProcess) {
-
+    let oDialogRef = this.m_oDialog.open(ProcessLogsDialogComponent, {
+      height: '80vh',
+      width: '70vw',
+      data: { process: oProcess }
+    })
   }
 
   openPayloadDialog(oProcess) {
-
+    let oDialogRef = this.m_oDialog.open(PayloadDialogComponent, {
+      height: '65vh',
+      width: '50vw',
+      data: { process: oProcess }
+    })
   }
   renderTwoDigitNumber(iNumber: number) {
     let sNumber = "00";
