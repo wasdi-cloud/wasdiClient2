@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConstantsService } from '../constants.service';
-
+import { HttpResponse as DefaultResponse } from 'src/app/shared/models/http-response.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -38,9 +38,9 @@ export class AdminDashboardService {
   };
 
 
-  // addResourcePermission (sResourceType: string, sResourceId: string, sUserId: string) {
-  //   return this.oHttp.post(this.APIURL + '/admin/resourcePermissions?resourceType=' + sResourceType + "&resourceId=" + sResourceId + "&userId=" + sUserId);
-  // };
+  addResourcePermission(sResourceType: string, sResourceId: string, sUserId: string) {
+    return this.oHttp.post<DefaultResponse>(this.APIURL + '/admin/resourcePermissions?resourceType=' + sResourceType + "&resourceId=" + sResourceId + "&userId=" + sUserId, {});
+  };
 
   removeResourcePermission(sResourceType: string, sResourceId: string, sUserId: string) {
     return this.oHttp.delete(this.APIURL + '/admin/resourcePermissions?resourceType=' + sResourceType + "&resourceId=" + sResourceId + "&userId=" + sUserId);

@@ -9,6 +9,9 @@ import { WorkspaceInfoDialogComponent } from '../workspace-info-dialog/workspace
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
 import { ImportDialogComponent } from './toolbar-dialogs/import-dialog/import-dialog.component';
+import { AppsDialogComponent } from './toolbar-dialogs/apps-dialog/apps-dialog.component';
+import { NewAppDialogComponent } from './toolbar-dialogs/new-app-dialog/new-app-dialog.component';
+
 @Component({
   selector: 'app-edit-toolbar',
   templateUrl: './edit-toolbar.component.html',
@@ -67,16 +70,26 @@ export class EditToolbarComponent implements OnInit {
    * Secondary Toolbar Options
    */
 
-  openAppsDialog(event: MouseEvent) {
-    event.preventDefault();
+  openAppsDialog(oEvent: MouseEvent) {
+    oEvent.preventDefault();
+    let dialogRef = this.m_oDialog.open(AppsDialogComponent, {
+      height: '80vh',
+      width: '80vw'
+    })
   }
 
-  openNewAppDialog(event: MouseEvent) {
-    event.preventDefault();
+  openNewAppDialog(oEvent: MouseEvent) {
+    oEvent.preventDefault();
+    let dialogRef = this.m_oDialog.open(NewAppDialogComponent, {
+      height: '80vh',
+      width: '80vw',
+      data: { editMode: false }
+    })
+
   }
 
-  openWorkflowsDialog(event: MouseEvent) {
-    event.preventDefault();
+  openWorkflowsDialog(oEvent: MouseEvent) {
+    oEvent.preventDefault();
   }
 
   openImportDialog(event: MouseEvent) {
@@ -85,15 +98,16 @@ export class EditToolbarComponent implements OnInit {
       width: '50vw'
      })
   }
-  openJupyterNotebookPage(event: MouseEvent) {
-    event.preventDefault
+
+  openJupyterNotebookPage(oEvent: MouseEvent) {
+    oEvent.preventDefault
     this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
       window.open(oResponse.stringValue, "_blank")
     })
   }
 
-  openStylesDialog(event: MouseEvent) {
-    event.preventDefault();
+  openStylesDialog(oEvent: MouseEvent) {
+    oEvent.preventDefault();
     let dialogRef = this.m_oDialog.open(StylesDialogComponent, {
       height: '80vh',
       width: '80vw'

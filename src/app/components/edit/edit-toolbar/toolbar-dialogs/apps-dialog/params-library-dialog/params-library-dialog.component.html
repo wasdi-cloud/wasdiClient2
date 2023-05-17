@@ -1,0 +1,128 @@
+<div class="dialog d-flex flex-column justify-content-between">
+    <div class="dialog-header d-flex flex-row justify-content-between px-4 pt-3 pb-2 bg-secondary text-light">
+        <h4 class="dialog-text"><fa-icon [icon]="faBook"></fa-icon> App Params Library</h4>
+        <button class="btn" (click)="onDismiss()">
+            <fa-icon [icon]="faX"></fa-icon>
+        </button>
+
+    </div>
+    <div class="dialog-content d-flex flex-row justify-content-between px-4 py-2 gap-3">
+        <div class="params-container">
+            <ul class="nav nav-tabs d-flex flex-row justify-content-between">
+                <li class="nav-item">
+                    <a class="nav-link active">Parameters List</a>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-success" (click)="addProcessorParams()">
+                        <fa-icon [icon]="faPlus"></fa-icon> Add Template
+                    </button>
+                </li>
+            </ul>
+            <input class="form-control my-3" type="text" placeholder="Search by Parameters Name"
+                [(ngModel)]="m_sSearchString">
+            <div class="params-cards-container d-flex flex-row flex-wrap justify-content-start gap-1">
+                <div *ngFor="let oTemplate of m_aoParamsTemplates | filter: m_sSearchString"
+                    class="template-card card d-flex flex-column gap-3 p-2 align-self-start"
+                    (click)="viewProcessorParams(oTemplate)">
+                    <div class="card-buttons-container">
+                        <div *ngIf="oTemplate.userId === m_sActiveUserId"
+                            class="card-toolbar d-flex flex-row justify-content-end">
+                            <button class="btn btn-sm" (click)="applyProcessorParams(oTemplate.templateId)"
+                                title="Apply Parameters">
+                                <fa-icon [icon]="faUpload"></fa-icon>
+                            </button>
+                            <button class="btn btn-sm" (click)="openShareDialog(oTemplate)" title="Share Parameters">
+                                <fa-icon [icon]="faShare"></fa-icon>
+                            </button>
+                            <button class="btn btn-sm text-danger" (click)="deleteProcessorParams(oTemplate)"
+                                title="Delete Parameters">
+                                <fa-icon [icon]="faX"></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cardbody" height="7rem">
+                        <h2 class="text-center">
+                            <fa-icon [icon]="faBook"></fa-icon>
+                        </h2>
+                        <p class="text-success title">{{oTemplate.name}}</p>
+                        <p class="params-description">{{oTemplate.description}}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="info-container card border border-success rounded-1">
+            <div class="px-4 py-4 d-flex flex-column gap-2" *ngIf="m_bEditMode || m_oProcessorParametersTemplate">
+                <div class="info-header d-flex flex-row align-items-center justify-content-between">
+                    <h4>{{m_oSelectedProcessor.processorName}}</h4>
+                    <div>
+                        <span class="text-success">Publisher: </span><span>{{m_oSelectedProcessor.publisher}}</span>
+                    </div>
+
+                </div>
+
+                <div class="main-params-info d-flex flex-column justify-content-between">
+                    <div class="template-name">
+                        <label class="text-success" for="creationDate">
+                            Template Name:
+                        </label>
+                        <input type="text" class="form-control form-control-sm" [readonly]="!m_bEditMode ?  '' : null"
+                            [(ngModel)]="m_oProcessorParametersTemplate.name" [disabled]="!m_bEditMode ?  '' : null">
+                    </div>
+                    <div class="template-description">
+                        <span class="text-success">Description:</span>
+                        <textarea [readonly]="!m_bEditMode ?  '' : null" class="form-control form-control-sm" rows=""
+                            [(ngModel)]="m_oProcessorParametersTemplate.description"
+                            [disabled]="!m_bEditMode ?  '' : null"></textarea>
+                    </div>
+                </div>
+                <!-- Date Inputs -->
+                <div class="d-flex flex-row justify-content-between">
+                    <div class="">
+                        <label class="text-success" for="creationDate">
+                            Creation Date:
+                        </label>
+                        <input type="text" class="form-control form-control-sm date-input" readonly disabled
+                            [(ngModel)]="m_oSelectedTemplate.creationDate">
+                    </div>
+                    <div class="">
+                        <label class="text-success" for="creationDate">
+                            Update Date:
+                        </label>
+                        <input type="text" class="form-control form-control-sm date-input" readonly disabled
+                            [(ngModel)]="m_oSelectedTemplate.updateDate">
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column">
+                    <span class="text-success">Parameters:</span>
+                    <textarea [readonly]="!m_bEditMode ?  '' : null" class="form-control form-control-sm"
+                        name="templateParams" rows="7" placeholder="{}"
+                        [(ngModel)]="m_oProcessorParametersTemplate.jsonParameters"
+                        [disabled]="!m_bEditMode ?  '' : null"></textarea>
+                </div>
+                <div class="d-flex flex-row justify-content-end gap-2" *ngIf="!m_bEditMode">
+                    <button class="btn btn-secondary" (click)="openShareDialog(m_oSelectedTemplate)">
+                        Share
+                    </button>
+                    <button class="btn btn-secondary" (click)="editProcessorParametersTemplate(m_oSelectedTemplate)">
+                        Edit
+                    </button>
+                    <button class="btn btn-success" (click)="applyProcessorParams(m_oSelectedTemplate.templateId)">
+                        Apply
+                    </button>
+                </div>
+                <div class="d-flex flex-row justify-content-between gap-2" *ngIf="m_bEditMode">
+                    <button class="btn btn-secondary" (click)="formatJSON()">Format JSON</button>
+                    <button class="btn btn-success" (click)="saveTemplate()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
+        <button class="btn btn-secondary" (click)="onDismiss()">
+            Close
+        </button>
+    </div>
+</div>

@@ -100,10 +100,15 @@ import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap
 import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
 import { ShareUiComponent } from './shared/dialogs/share-dialog/share-ui/share-ui.component';
 import { StylesDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
-import { EditStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/edit-style-dialog/edit-style-dialog.component';
-import { NewStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-style-dialog/new-style-dialog.component';
+import { EditStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/edit-style-dialog/edit-style-dialog.component';
+import { NewStyleDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/new-style-dialog/new-style-dialog.component';
 import { NewWorkspaceDialogComponent } from './components/workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { PayloadDialogComponent } from './components/edit/payload-dialog/payload-dialog.component';
+import { AppsDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/apps-dialog.component';
+import { ParamsLibraryDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/params-library-dialog/params-library-dialog.component';
+import { NewAppDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
+import { ProcessorTabContentComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-content/processor-tab-content.component';
+
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ProcessLogsDialogComponent } from './components/edit/process-logs-dialog/process-logs-dialog.component';
@@ -172,7 +177,11 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     NewWorkspaceDialogComponent,
     PayloadDialogComponent,
     ProcessLogsDialogComponent,
-    ImportDialogComponent
+    ImportDialogComponent,
+    AppsDialogComponent, 
+    ParamsLibraryDialogComponent, 
+    NewAppDialogComponent, 
+    ProcessorTabContentComponent
   ],
   imports: [
     AppRoutingModule,

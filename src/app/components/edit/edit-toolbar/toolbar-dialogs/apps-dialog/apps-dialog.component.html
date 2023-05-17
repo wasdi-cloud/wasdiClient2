@@ -1,0 +1,79 @@
+<div class="dialog d-flex flex-column justify-content-between" style="height: 100%">
+    <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between px-4 pt-3 pb-2">
+        <h4 class="dialog-text"><fa-icon [icon]="faRocket"></fa-icon> WASDI Apps</h4>
+        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
+    </div>
+    <div class="dialog-content d-flex flex-row justify-content-between px-4 py-2 gap-3" style="height: 80%">
+        <div class="styles-container" style="width: 50%">
+            <ul class="nav nav-tabs d-flex flex-row justify-content-between">
+                <li class="nav-item">
+                    <a class="nav-link active">Processors List</a>
+                </li>
+            </ul>
+            <input class="form-control my-3" type="text" placeholder="Search by Processor Name"
+                [(ngModel)]="m_sSearchString">
+            <div class=" processor-cards-container d-flex flex-row flex-wrap justify-content-start gap-1"
+                style="width:100%">
+                <div *ngFor="let oProcessor of m_aoProcessorList | filter: m_sSearchString"
+                    class="card d-flex flex-column gap-3 p-2 " style="cursor: pointer; height: 15rem;  width: 32%"
+                    (click)="selectProcessor(oProcessor)">
+                    <div style="height: 30px">
+                        <div *ngIf="oProcessor.sharedWithMe || oProcessor.publisher === m_sActiveUserId"
+                            class="card-toolbar d-flex flex-row justify-content-end">
+                            <button class="btn btn-sm" (click)="openParametersDialog($event, oProcessor)">
+                                <fa-icon [icon]="faBook"></fa-icon>
+                            </button>
+                            <button class="btn btn-sm" (click)="downloadProcessor($event, oProcessor)">
+                                <fa-icon [icon]="faDownload"></fa-icon>
+                            </button>
+                            <button class="btn btn-sm" (click)="openEditProcessorDialog($event, oProcessor)">
+                                <fa-icon [icon]="faEdit"></fa-icon>
+                            </button>
+                            <button class="btn btn-sm text-danger" (click)="removeProcessor($event, oProcessor)">
+                                <fa-icon [icon]="faX"></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cardbody" height="7rem">
+                        <h2 class="text-center">
+                            <fa-icon [icon]="faPaintBrush"></fa-icon>
+                        </h2>
+                        <p class="text-success title">{{oProcessor.processorName}}</p>
+                        <p class="processor-description">{{oProcessor.processorDescription}}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="info-container card border border-success rounded-1" style="width: 50%;">
+            <div class="px-4 py-4 d-flex flex-column gap-2">
+                <div class="info-header d-flex flex-row justify-content-between">
+                    <h5>JSON Editor</h5>
+                </div>
+                <div class="style-xml-container d-flex flex-column">
+                    <textarea class="form-control" name="m_asStyleXml" rows="15" [(ngModel)]="m_sMyJsonString"
+                        placeholder="{}"></textarea>
+                </div>
+                <div class="buttons-container d-flex flex-row justify-content-between">
+                    <button class="btn btn-secondary" (click)="formatJSON()">Format JSON</button>
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-success" (click)="runProcessor()">
+                            <fa-icon [icon]="faRun"></fa-icon>
+                            Run
+                        </button>
+                        <button class="btn btn-secondary" (click)="openHelp()">
+                            <fa-icon [icon]="faHelp"></fa-icon>
+                            Help
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
+        <button class="btn btn-secondary" (click)="onDismiss()">
+            Close
+        </button>
+    </div>
+</div>
