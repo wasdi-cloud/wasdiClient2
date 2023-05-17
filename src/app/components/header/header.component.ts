@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserSettingsDialogComponent } from './header-dialogs/user-settings-dialog/user-settings-dialog.component';
 import { User } from 'src/app/shared/models/user.model';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
+import { WorkspaceService } from 'src/app/services/api/workspace.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -31,33 +32,38 @@ export class HeaderComponent implements OnInit {
   faArrowLeft = faArrowLeft;
 
   constructor(
-    private oActivatedRoute: ActivatedRoute,
-    public oConstantsService: ConstantsService,
+    private m_oActivatedRoute: ActivatedRoute,
+    public m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
     public oRouter: Router,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private m_oWorkspaceService: WorkspaceService,
   ) {
     //Register translation languages:
     translate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
     translate.setDefaultLang('en');
-    this.sActiveWorkspaceId = this.oConstantsService.getActiveWorkspace().workspaceId;
-    this.m_oActiveWorkspace = this.oConstantsService.getActiveWorkspace()
-    this.m_oUser = this.oConstantsService.getUser();
+    this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace()
+    this.m_oUser = this.m_oConstantsService.getUser();
     console.log(this.m_oUser)
   }
 
   ngOnInit(): void {
-    if (this.oActivatedRoute.snapshot.url[0].path === 'edit') {
+    if (this.m_oActivatedRoute.snapshot.url[0].path === 'edit') {
       this.m_bEditIsActive = true;
+      this.sActiveWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId'];
+      this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+      this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.sActiveWorkspaceId).subscribe(oResponse => {
+        this.m_oActiveWorkspace = oResponse;
+      });
     } else {
       this.m_bEditIsActive = false;
     }
-
   }
 
   logout() {
-    this.oConstantsService.logOut();
+    this.m_oConstantsService.logOut();
     this.oRouter.navigateByUrl("login");
   }
 
@@ -81,8 +87,8 @@ export class HeaderComponent implements OnInit {
         console.log("feedback sent")
         return true;
       } else {
-        console.log("error sending feedback"); 
-        return false; 
+        console.log("error sending feedback");
+        return false;
       }
     });
     return true;
