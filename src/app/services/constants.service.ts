@@ -206,10 +206,9 @@ export class ConstantsService {
       if (!document.cookie) {
         return ""
       }
-
       return JSON.parse(document.cookie.substring(6));
     } catch (sError) {
-      console.log(`${document.cookie} ${sError}`)
+      console.log(`${document.cookie} and ${sError}`)
       return "";
     }
 

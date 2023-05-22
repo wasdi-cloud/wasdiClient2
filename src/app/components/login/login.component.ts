@@ -39,7 +39,6 @@ export class LoginComponent implements OnInit {
     this.m_oConstantsService.setUser({} as User);
     this.m_oAuthService.legacyLogin(oLoginInfo).subscribe((oResponse => {
       this.callbackLogin(oResponse, this)
-      console.log(this.m_oConstantsService.getSessionId())
     }))
   }
 

@@ -46,7 +46,6 @@ export class HeaderComponent implements OnInit {
     this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace()
     this.m_oUser = this.m_oConstantsService.getUser();
-    console.log(this.m_oUser)
   }
 
   ngOnInit(): void {
