@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faPlus, faStop } from '@fortawesome/free-solid-svg-icons';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
@@ -31,6 +31,8 @@ export interface WorkspaceViewModel {
 export class WorkspacesComponent implements OnInit {
   //Icons: 
   faPlus = faPlus
+  faPlay = faPlay;
+  faStop = faStop;
 
   constructor(private m_oGlobeService: GlobeService, private oConstantsService: ConstantsService, private m_oDialog: MatDialog, private oWorkspaceService: WorkspaceService) { }
   workspaces: Workspace[] = []
@@ -39,9 +41,10 @@ export class WorkspacesComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchWorkspaceInfoList();
-    this.m_oGlobeService.initRotateGlobe('CesiumContainer3'); 
+    this.m_oGlobeService.initRotateGlobe('CesiumContainer3');
 
   }
+
   fetchWorkspaceInfoList() {
     console.log("fetching workspaces")
 
@@ -68,5 +71,13 @@ export class WorkspacesComponent implements OnInit {
     let oDialogRef = this.m_oDialog.open(NewWorkspaceDialogComponent, {
       width: '30vw'
     })
+  }
+
+  stopGlobeRotation() {
+    this.m_oGlobeService.stopRotationGlobe();
+  }
+
+  startGlobeRotation() {
+    this.m_oGlobeService.startRotationGlobe(3); 
   }
 }

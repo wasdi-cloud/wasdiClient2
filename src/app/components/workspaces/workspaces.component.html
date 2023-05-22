@@ -40,6 +40,26 @@
 
     <div class="workspace-globe-container col-7">
         <div style="height:80vh;" id="CesiumContainer3"></div>
+        <div class="toolbar-right-bottom" style="z-index: 999; display: block;
+        position: absolute;
+        right: 40px;
+        bottom: 10px;">
+            <div class="checkbox" style="background: white; padding: 5px">
+                <label>
+                    <input type="checkbox" ng-model="value" ng-init="value = true"
+                        ng-click="m_oController.deleteSentinel1a(value)" />
+                    Show Satellites
+                </label>
+            </div>
+            <div class="btn-group" role="group" aria-label="...">
+                <button type="button" class="btn btn-success" (click)="stopGlobeRotation()">
+                    <fa-icon [icon]="faStop"></fa-icon>
+                </button>
+                <button type="button" class="btn btn-success" (click)="startGlobeRotation()">
+                    <fa-icon [icon]="faPlay"></fa-icon>
+                </button>
+            </div>
+        </div>
         <!-- <app-workspaces-worldwind></app-workspaces-worldwind> -->
     </div>
 </div>
