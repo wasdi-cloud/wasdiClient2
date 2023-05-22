@@ -73,8 +73,13 @@ export class ProductsListComponent {
     if (this.m_sSearchString) {
       let filteredProducts = []
       this.productArray.forEach(oProduct => {
-        if (oProduct.fileName.indexOf(this.m_sSearchString) !== -1) {
+        if (oProduct.fileName.indexOf(this.m_sSearchString) !== -1 || oProduct.name.indexOf(this.m_sSearchString) !== -1) {
           filteredProducts.push(oProduct)
+        }
+        if (oProduct.productFriendlyName) {
+          if (oProduct.productFriendlyName.indexOf(this.m_sSearchString) !== -1) {
+            filteredProducts.push(oProduct)
+          }
         }
       })
       this.dataSource.data = filteredProducts
