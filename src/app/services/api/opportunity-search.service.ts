@@ -26,7 +26,7 @@ export class OpportunitySearchService {
   }
 
   getTrackSatellite(sNameInput: string) {
-    return this.oHttp.get(this.APIURL + '/searchorbit/track/' + sNameInput);
+    return this.oHttp.get<any>(this.APIURL + '/searchorbit/track/' + sNameInput);
   }
 
   getUpdatedTrackSatellite(sNameInput: string) {
