@@ -9,7 +9,10 @@ import { NewWorkspaceDialogComponent } from './new-workspace-dialog/new-workspac
 import { CesiumService } from 'src/app/shared/cesium.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
-import Utils from 'src/app/lib/utils/WasdiJSUtils';
+import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+declare let Cesium: any;
+
 export interface WorkspaceViewModel {
   activeNode: boolean;
   apiUrl: string;
@@ -39,10 +42,12 @@ export class WorkspacesComponent implements OnInit {
   workspaces: Workspace[] = []
   activeWorkspace!: WorkspaceViewModel;
   sharedUsers!: string[];
-  m_aoSatelliateInputTracks: any[];
-  m_aoSatellitePositions: any[];
+  setInterval: any;
+  m_aoSatelliateInputTracks: any[] = [];
+  m_aoSatellitePositions: any[] = [];
   m_oFakePosition: any = null;
   m_oUfoPointer: any;
+  m_aoSateliteInputTraks: any[] = [];
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -56,6 +61,18 @@ export class WorkspacesComponent implements OnInit {
     this.fetchWorkspaceInfoList();
     this.m_oGlobeService.initRotateGlobe('CesiumContainer3');
     this.getTrackSatellite();
+
+    this.setInterval = setInterval(() => {
+      this.updateSatellitesPositions();
+    }, 15000)
+
+  }
+
+  ngOnDestroy(): void {
+    //Destroy Interval after closing: 
+    if (this.setInterval) {
+      clearInterval(this.setInterval);
+    }
   }
 
   fetchWorkspaceInfoList() {
@@ -107,7 +124,6 @@ export class WorkspacesComponent implements OnInit {
 
       this.m_oOpportunitySearchService.getTrackSatellite(this.m_aoSatelliateInputTracks[iSat].name).subscribe(oResponse => {
         if (oResponse) {
-          console.log(oResponse)
           for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliateInputTracks.length; iOriginalSat++) {
             if (this.m_aoSatelliateInputTracks[iOriginalSat].name === oResponse.code) {
               oActualSat = this.m_aoSatelliateInputTracks[iOriginalSat];
@@ -119,7 +135,7 @@ export class WorkspacesComponent implements OnInit {
           sDescription += "\n";
           sDescription += oResponse.currentTime;
 
-          let oActualPosition = this.m_oGlobeService.drawPointWithImage(Utils.utilsProjectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.currentPosition), oActualSat.icon, sDescription, oActualSat.label, 32, 32);
+          let oActualPosition = this.m_oGlobeService.drawPointWithImage(WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.currentPosition), oActualSat.icon, sDescription, oActualSat.label, 32, 32);
           this.m_aoSatellitePositions.push(oActualPosition);
 
           if (this.m_oFakePosition === null) {
@@ -129,12 +145,12 @@ export class WorkspacesComponent implements OnInit {
 
               this.m_oFakePosition = oResponse.lastPositions[iFakeIndex];
 
-              var aoUfoPosition = Utils.utilsProjectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
+              var aoUfoPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
               aoUfoPosition[2] = aoUfoPosition[2] * 4;
               this.m_oUfoPointer = this.m_oGlobeService.drawPointWithImage(aoUfoPosition, "assets/icons/alien.svg", "U.F.O.", "?");
 
               iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
-              var aoMoonPosition = Utils.utilsProjectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
+              var aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
               //aoMoonPosition [0] = 0.0;
               //aoMoonPosition[1] = 0.0;
               aoMoonPosition[2] = 384400000;
@@ -150,6 +166,64 @@ export class WorkspacesComponent implements OnInit {
   }
 
   updateSatellitesPositions() {
-    
+    if (!this.m_aoSatellitePositions) {
+      return false;
+    }
+
+    this.m_aoSatelliateInputTracks = this.m_oGlobeService.getSatelliteTrackInputList();
+
+    this.updatePosition();
+
+    return true;
+  }
+
+  updatePosition() {
+    let sSatellites: string = "";
+    for (let iSat = 0; iSat < this.m_aoSatelliateInputTracks.length; iSat++) {
+      sSatellites += this.m_aoSatelliateInputTracks[iSat].name + "-";
+    }
+
+    this.m_oOpportunitySearchService.getUpdatedTrackSatellite(sSatellites).subscribe(
+      oResponse => {
+        if (!FadeoutUtils.isObjectNullOrUndefined(oResponse)) {
+          for (let iSatellites = 0; iSatellites < oResponse.length; iSatellites++) {
+            let oActualDataByServer = oResponse[iSatellites];
+
+            let iIndexActualSatellitePosition = this.getIndexActualSatellitePositions(oResponse[iSatellites].code);
+
+            if (iIndexActualSatellitePosition >= 0) {
+              let oSatellite = this.m_aoSatellitePositions[iIndexActualSatellitePosition];
+              let aPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oActualDataByServer.currentPosition);
+              let oCesiumBoundaries = Cesium.Cartesian3.fromDegrees(aPosition[0], aPosition[1], aPosition[2]);
+              this.m_oGlobeService.updateEntityPosition(oSatellite, oCesiumBoundaries);
+            }
+          }
+        }
+      }
+    )
+  }
+  getIndexActualSatellitePositions(sCode: string) {
+    for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliateInputTracks.length; iOriginalSat++) {
+      if (this.m_aoSateliteInputTraks[iOriginalSat].name !== undefined && this.m_aoSateliteInputTraks[iOriginalSat].name === sCode) {
+        return iOriginalSat;
+      }
+    }
+    return -1;
+  }
+
+  deleteSentinel1a(oValue: any) {
+    if (oValue) {
+      this.getTrackSatellite();
+    } else {
+      for (var i = 0; i < this.m_aoSatellitePositions.length; i++) {
+        this.m_oGlobeService.removeEntity(this.m_aoSatellitePositions[i]);
+      }
+
+      this.m_oGlobeService.removeEntity(this.m_oUfoPointer);
+      this.m_oUfoPointer = null;
+      this.m_oFakePosition = null;
+
+      this.m_aoSatellitePositions = [];
+    }
   }
 }
