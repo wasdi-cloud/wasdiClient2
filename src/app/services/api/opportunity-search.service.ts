@@ -30,7 +30,7 @@ export class OpportunitySearchService {
   }
 
   getUpdatedTrackSatellite(sNameInput: string) {
-    return this.oHttp.get(this.APIURL + '/searchorbit/updatetrack/' + sNameInput);
+    return this.oHttp.get<any>(this.APIURL + '/searchorbit/updatetrack/' + sNameInput);
   }
 
 }
