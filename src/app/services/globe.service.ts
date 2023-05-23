@@ -377,7 +377,7 @@ export class GlobeService {
     return oGlowingLine;
   }
 
-  drawPointWithImage = function (aPositionInput: any[], sImageInput: string, sName: string, sDescription: string, iWidth: number, iHeight: number) {
+  drawPointWithImage = function (aPositionInput: any[], sImageInput: string, sName: string, sDescription: string, iWidth?: number, iHeight?: number) {
     if (!aPositionInput) {
       return null;
     }
