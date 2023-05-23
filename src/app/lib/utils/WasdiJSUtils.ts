@@ -1,5 +1,5 @@
-export default class Utils {
-    static utilsProjectConvertCurrentPositionFromServerInCesiumDegrees(sInput: string) {
+export default class WasdiUtils {
+    static projectConvertCurrentPositionFromServerInCesiumDegrees(sInput: string) {
         if(!sInput) {
             return []; 
         }
