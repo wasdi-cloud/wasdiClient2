@@ -207,9 +207,12 @@ export class WorkspacesComponent implements OnInit {
 
   getIndexActualSatellitePositions(sCode: string) {
     for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliateInputTracks.length; iOriginalSat++) {
-      if (this.m_aoSateliteInputTraks[iOriginalSat].name !== undefined && this.m_aoSateliteInputTraks[iOriginalSat].name === sCode) {
-        return iOriginalSat;
+      if (this.m_aoSateliteInputTraks[iOriginalSat]) {
+        if (this.m_aoSateliteInputTraks[iOriginalSat].name === sCode) {
+          return iOriginalSat;
+        }
       }
+
     }
     return -1;
   }
