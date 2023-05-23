@@ -46,8 +46,7 @@
         bottom: 10px;">
             <div class="checkbox" style="background: white; padding: 5px">
                 <label>
-                    <input type="checkbox" ng-model="value" ng-init="value = true"
-                        ng-click="m_oController.deleteSentinel1a(value)" />
+                    <mat-checkbox [(ngModel)]="m_bShowSatellites" (click)=" deleteSentinel1a()"></mat-checkbox>
                     Show Satellites
                 </label>
             </div>

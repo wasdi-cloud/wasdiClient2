@@ -43,6 +43,7 @@ export class WorkspacesComponent implements OnInit {
   activeWorkspace!: WorkspaceViewModel;
   sharedUsers!: string[];
   setInterval: any;
+  m_bShowSatellites: boolean;
   m_aoSatelliateInputTracks: any[] = [];
   m_aoSatellitePositions: any[] = [];
   m_oFakePosition: any = null;
@@ -61,6 +62,7 @@ export class WorkspacesComponent implements OnInit {
     this.fetchWorkspaceInfoList();
     this.m_oGlobeService.initRotateGlobe('CesiumContainer3');
     this.getTrackSatellite();
+    this.m_bShowSatellites = true;
 
     this.setInterval = setInterval(() => {
       this.updateSatellitesPositions();
@@ -202,6 +204,7 @@ export class WorkspacesComponent implements OnInit {
       }
     )
   }
+
   getIndexActualSatellitePositions(sCode: string) {
     for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliateInputTracks.length; iOriginalSat++) {
       if (this.m_aoSateliteInputTraks[iOriginalSat].name !== undefined && this.m_aoSateliteInputTraks[iOriginalSat].name === sCode) {
@@ -211,8 +214,8 @@ export class WorkspacesComponent implements OnInit {
     return -1;
   }
 
-  deleteSentinel1a(oValue: any) {
-    if (oValue) {
+  deleteSentinel1a() {
+    if (this.m_bShowSatellites) {
       this.getTrackSatellite();
     } else {
       for (var i = 0; i < this.m_aoSatellitePositions.length; i++) {
@@ -226,4 +229,5 @@ export class WorkspacesComponent implements OnInit {
       this.m_aoSatellitePositions = [];
     }
   }
+
 }
