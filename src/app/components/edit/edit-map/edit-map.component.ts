@@ -39,17 +39,12 @@ export class EditMapComponent implements OnInit {
     this.m_oGlobeService.initGlobe('CesiumContainerEdit');
   }
 
-  ngOnDestroy(): void {
-    this.m_oMapService.clearMap('editMap');
-  }
-
   onMapReady(map: L.Map) {
-    console.log(map)
     this.editMap = map
-    //this.searchControl.setPosition('bottomleft');
-    //this.searchControl.addTo(this.editMap);
+    this.searchControl.setPosition('bottomleft');
+    this.searchControl.addTo(this.editMap);
     this.m_oMapService.setMap(this.editMap);
-    console.log(this.editMap)
+
 
   }
 
@@ -61,7 +56,6 @@ export class EditMapComponent implements OnInit {
       this.m_oGlobeService.initGlobe('CesiumContainerEdit');
     }
     if (this.m_b2DMapModeOn === true) {
- 
 
     }
   }

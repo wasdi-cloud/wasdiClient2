@@ -172,8 +172,6 @@ export class MapService {
       // e.layer.bringToBack();
       oActiveBaseLayer = e;
     });
-
-    console.log(oMap)
     return oMap;
   }
 
@@ -336,7 +334,6 @@ export class MapService {
    * Clear Map 
    */
   clearMap(sMapDiv: string) {
-    console.log(this.m_oWasdiMap)
     if (this.m_oWasdiMap) {
       this.m_oWasdiMap.remove();
       this.initWasdiMap(sMapDiv)
@@ -631,15 +628,12 @@ export class MapService {
       if (aoProducts.length == 0) { return false; }
 
       let aoBounds = [];
-      console.log(aoProducts)
+
       for (let iProducts = 0; iProducts < aoProducts.length; iProducts++) {
         let oProduct = aoProducts[iProducts];
         let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
-        console.log(aoProductBounds)
         aoBounds = aoBounds.concat(aoProductBounds);
-
       }
-      console.log(aoBounds)
       this.m_oWasdiMap.flyToBounds([aoBounds]);
       return true;
     }
