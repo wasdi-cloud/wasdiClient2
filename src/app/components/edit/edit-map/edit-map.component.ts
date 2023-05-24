@@ -1,7 +1,9 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as L from "leaflet";
 import { MapService } from 'src/app/services/map.service';
+import { GlobeService } from 'src/app/services/globe.service';
 import Geocoder from 'leaflet-control-geocoder';
+import { faGlobeAfrica, faHome, faInfoCircle, faLocationArrow, faMap, faNavicon } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-edit-map',
@@ -9,22 +11,55 @@ import Geocoder from 'leaflet-control-geocoder';
   styleUrls: ['./edit-map.component.css']
 })
 export class EditMapComponent implements OnInit {
+  //Font Awesome Imports
+  faHome = faHome;
+  faArrow = faLocationArrow;
+  faNavicon = faNavicon;
+  faInfo = faInfoCircle;
+  faGlobe = faGlobeAfrica;
+  faMap = faMap;
+
   searchControl: Geocoder = new Geocoder;
   mapOptions: any;
   layersControl: any;
-  editMap: L.Map
+  editMap: L.Map;
+  layersControlOptions = { position: 'bottomleft' }
+  m_b2DMapModeOn = true;
 
-  constructor(private m_oMapService: MapService) { }
+  constructor(
+    private m_oGlobeService: GlobeService,
+    private m_oMapService: MapService) { }
 
   ngOnInit(): void {
     this.mapOptions = this.m_oMapService.m_oOptions;
+    this.mapOptions.zoomControl = false;
     this.layersControl = this.m_oMapService.m_oLayersControl;
+    this.m_oGlobeService.initGlobe('CesiumContainerEdit');
+  }
+
+  ngOnDestroy(): void {
+    this.m_oMapService.clearMap('editMap');
   }
 
   onMapReady(map: L.Map) {
-    this.editMap = map; 
-    this.searchControl.setPosition('bottomleft')
-    this.searchControl.addTo(map);
-    this.m_oMapService.setMap(map);
+    console.log(map)
+    this.editMap = this.m_oMapService.getMap();
+    //this.searchControl.setPosition('bottomleft');
+    //this.searchControl.addTo(this.editMap);
+    this.m_oMapService.setMap(this.editMap);
+
+  }
+
+  switch2D3DMode() {
+    this.m_b2DMapModeOn = !this.m_b2DMapModeOn;
+
+    if (this.m_b2DMapModeOn === false) {
+      this.m_oGlobeService.clearGlobe();
+      this.m_oGlobeService.initGlobe('CesiumContainerEdit');
+    }
+    if (this.m_b2DMapModeOn === true) {
+      this.m_oMapService.clearMap('editMap');
+
+    }
   }
 }

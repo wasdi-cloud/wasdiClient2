@@ -6,7 +6,6 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { NewWorkspaceDialogComponent } from './new-workspace-dialog/new-workspace-dialog.component';
-import { CesiumService } from 'src/app/shared/cesium.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
