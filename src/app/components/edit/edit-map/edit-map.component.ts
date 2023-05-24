@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as L from "leaflet";
 import { MapService } from 'src/app/services/map.service';
 import { GlobeService } from 'src/app/services/globe.service';
@@ -26,6 +26,8 @@ export class EditMapComponent implements OnInit {
   layersControlOptions = { position: 'bottomleft' }
   m_b2DMapModeOn = true;
 
+  @Input() m_aoProducts: any[] = [];
+
   constructor(
     private m_oGlobeService: GlobeService,
     private m_oMapService: MapService) { }
@@ -43,10 +45,11 @@ export class EditMapComponent implements OnInit {
 
   onMapReady(map: L.Map) {
     console.log(map)
-    this.editMap = this.m_oMapService.getMap();
+    this.editMap = map
     //this.searchControl.setPosition('bottomleft');
     //this.searchControl.addTo(this.editMap);
     this.m_oMapService.setMap(this.editMap);
+    console.log(this.editMap)
 
   }
 
@@ -58,8 +61,16 @@ export class EditMapComponent implements OnInit {
       this.m_oGlobeService.initGlobe('CesiumContainerEdit');
     }
     if (this.m_b2DMapModeOn === true) {
-      this.m_oMapService.clearMap('editMap');
+ 
 
+    }
+  }
+
+  goWorkspaceHome() {
+    if (this.m_b2DMapModeOn) {
+      this.m_oMapService.flyToWorkspaceBoundingBox(this.m_aoProducts);
+    } else {
+      this.m_oGlobeService.flyToWorkspaceBoundingBox(this.m_aoProducts);
     }
   }
 }

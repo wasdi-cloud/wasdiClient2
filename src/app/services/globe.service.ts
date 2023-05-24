@@ -580,7 +580,7 @@ export class GlobeService {
       for (let iIndex = 0; iIndex < aoTotalArray.length - 1; iIndex = iIndex + 2) {
         aoBounds.push(new Cesium.Cartographic.fromDegrees(aoTotalArray[iIndex + 1], aoTotalArray[iIndex]));
       }
-
+      console.log(aoBounds)
       let oWSRectangle = Cesium.Rectangle.fromCartographicArray(aoBounds);
       let oWSCenter = Cesium.Rectangle.center(oWSRectangle);
 
