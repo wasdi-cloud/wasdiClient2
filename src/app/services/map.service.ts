@@ -438,7 +438,7 @@ export class MapService {
     let aoReturnValues = [];
     let iIndexReturnValues = 0;
     for (let iBoundaryIndex = 0; iBoundaryIndex < iNumberOfBoundaries; iBoundaryIndex++) {
-      if (iBoundaryIndex % 2 !== 0) {
+      if (iBoundaryIndex % 2 === 0) {
         aoReturnValues[iIndexReturnValues] = [asBoundaries[iBoundaryIndex], asBoundaries[iBoundaryIndex + 1]];
         iIndexReturnValues++;
       }
@@ -625,18 +625,21 @@ export class MapService {
 
 
   flyToWorkspaceBoundingBox(aoProducts) {
+
     try {
       if (!aoProducts) { return false; }
       if (aoProducts.length == 0) { return false; }
 
       let aoBounds = [];
-
+      console.log(aoProducts)
       for (let iProducts = 0; iProducts < aoProducts.length; iProducts++) {
         let oProduct = aoProducts[iProducts];
         let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
+        console.log(aoProductBounds)
         aoBounds = aoBounds.concat(aoProductBounds);
-      }
 
+      }
+      console.log(aoBounds)
       this.m_oWasdiMap.flyToBounds([aoBounds]);
       return true;
     }
