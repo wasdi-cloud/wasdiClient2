@@ -1,5 +1,35 @@
-<div class="map-frame h-100 w-100">
-    <div leaflet class="h-100 w-100" id="editMap" [leafletOptions]="mapOptions"
-        [leafletLayersControl]="layersControl" (leafletMapReady)="onMapReady($event)">
+<div class="map-frame h-100 w-100" style="position: relative">
+    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups to control Map settings" style="z-index: 999; display: block;
+    position: absolute;
+    left: 10px;
+    top: 10px;">
+        <div class="btn-group me-2" role="group" aria-label="First group">
+            <button type="button" class="btn btn-secondary" (click)="switch2D3DMode()">
+                <span *ngIf="m_b2DMapModeOn === false">
+                    <fa-icon [icon]="faMap"></fa-icon>
+                </span>
+                <span *ngIf="m_b2DMapModeOn === true">
+                    <fa-icon [icon]="faGlobe"></fa-icon>
+                </span>
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="goWorkspaceHome()">
+                <fa-icon [icon]="faHome"></fa-icon>
+            </button>
+            <button type="button" class="btn btn-secondary">
+                <fa-icon [icon]="faArrow"></fa-icon>
+            </button>
+            <button type="button" class="btn btn-secondary">
+                <fa-icon [icon]="faNavicon"></fa-icon>
+            </button>
+            <button type="button" class="btn btn-secondary">
+                <fa-icon [icon]="faInfo"></fa-icon>
+            </button>
+        </div>
     </div>
+    <div [hidden]="m_b2DMapModeOn === false" leaflet class="h-100 w-100" style="height:80vh;" id="editMap"
+        [leafletOptions]="mapOptions" [leafletLayersControl]="layersControl"
+        [leafletLayersControlOptions]=" layersControlOptions " (leafletMapReady)="onMapReady($event)">
+    </div>
+    <div [hidden]="m_b2DMapModeOn === true" class="h-100 w-100" style="height:80vh;" id="CesiumContainerEdit"></div>
+
 </div>
