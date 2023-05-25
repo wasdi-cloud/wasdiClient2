@@ -87,7 +87,7 @@ export class EditComponent implements OnInit {
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
         this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.m_sWorkspaceId).subscribe(oResponse => {
           this.m_oConstantsService.setActiveWorkspace(oResponse);
-          this.m_oActiveWorkspace = oResponse; 
+          this.m_oActiveWorkspace = oResponse;
 
           //Workspace is now defined => Load Processes
           this.getProcesses()
@@ -98,7 +98,7 @@ export class EditComponent implements OnInit {
       }
     } else {
       //If workspace is defined => Load Processes
-      this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace(); 
+      this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
       this.getProcesses()
     }
 
@@ -126,5 +126,9 @@ export class EditComponent implements OnInit {
 
   getVisibleBands(event: any) {
     this.m_aoVisibleBands = event;
+  }
+
+  getMapMode(event: any) {
+    this.m_b2DMapModeOn = event;
   }
 }

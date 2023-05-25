@@ -34,6 +34,7 @@ export class NavLayersComponent implements OnChanges {
   ) { }
 
   ngOnChanges(): void {
+    console.log(this.m_b2DMapModeOn);
     if (this.m_aoVisibleBands !== undefined) {
       this.setActiveTab('layers');
     }

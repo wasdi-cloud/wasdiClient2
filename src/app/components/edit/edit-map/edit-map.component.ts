@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import * as L from "leaflet";
 import { MapService } from 'src/app/services/map.service';
 import { GlobeService } from 'src/app/services/globe.service';
@@ -27,6 +27,7 @@ export class EditMapComponent implements OnInit {
   m_b2DMapModeOn = true;
 
   @Input() m_aoProducts: any[] = [];
+  @Output() m_b2DMapModeOutput = new EventEmitter();
 
   constructor(
     private m_oGlobeService: GlobeService,
@@ -52,11 +53,12 @@ export class EditMapComponent implements OnInit {
     this.m_b2DMapModeOn = !this.m_b2DMapModeOn;
 
     if (this.m_b2DMapModeOn === false) {
+      this.m_b2DMapModeOutput.emit(false);
       this.m_oGlobeService.clearGlobe();
       this.m_oGlobeService.initGlobe('CesiumContainerEdit');
     }
     if (this.m_b2DMapModeOn === true) {
-
+      this.m_b2DMapModeOutput.emit(true);
     }
   }
 
