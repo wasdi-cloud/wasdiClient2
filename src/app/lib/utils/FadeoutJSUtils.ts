@@ -203,7 +203,7 @@ export default class FadeoutUtils {
      * @returns {boolean}
      */
 
-    static utilsIsInteger(oInput) {
+    static utilsIsInteger(oInput: any) {
         if (this.utilsIsANumber(oInput) == false)
             return false;
         return oInput % 1 === 0;
@@ -212,6 +212,7 @@ export default class FadeoutUtils {
     static utilsIsOdd(iNum: number) {
         return (iNum % 2) == 1;
     }
+
     /*************** LOCAL STORAGE UTILS ********************/
     //TODO TEST LOCAL STORAGE FUNCTIONS
     /**
@@ -241,7 +242,7 @@ export default class FadeoutUtils {
      * @param sValue
      * @returns {boolean}
      */
-    static utilsSetItemLocalStorage(sName, sValue) {
+    static utilsSetItemLocalStorage(sName: string, sValue: string) {
         if (this.utilsIsStrNullOrEmpty(sName))
             return false
         localStorage.setItem(sName, sValue);
@@ -256,7 +257,7 @@ export default class FadeoutUtils {
      * @param sName
      * @returns {boolean}
      */
-    static utilsGetItemInLocalStorage(sName) {
+    static utilsGetItemInLocalStorage(sName: string) {
         if (this.utilsIsStrNullOrEmpty(sName))
             return false;
         //retrieve
@@ -270,7 +271,7 @@ export default class FadeoutUtils {
      * @param sName
      * @returns {boolean}
      */
-    static utilsRemoveLocalStorageItem(sName) {
+    static utilsRemoveLocalStorageItem(sName: string) {
         if (this.utilsIsStrNullOrEmpty(sName))
             return false;
         localStorage.removeItem(sName);
@@ -288,7 +289,7 @@ export default class FadeoutUtils {
      * @param sValue
      * @param exdays
      */
-    static utilsSetCookie(sName, sValue, exdays: number) {
+    static utilsSetCookie(sName: string, sValue: string, exdays: number) {
         let d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         let iExpires = "expires=" + d.toUTCString();
@@ -300,11 +301,11 @@ export default class FadeoutUtils {
     //get by w3school.com
     /**
      *
-     * @param cname
+     * @param sName
      * @returns {*}Whoops! Lost connection to undefined
      */
-    static utilsGetCookie(cname) {
-        let name = cname + "=";
+    static utilsGetCookie(sName: string) {
+        let name = sName + "=";
         let ca = document.cookie.split(';');
         for (let i = 0; i < ca.length; i++) {
             let c = ca[i];
@@ -318,6 +319,7 @@ export default class FadeoutUtils {
         }
         return "";
     }
+
     /************************ TIMESTAMP ************************/
     static utilsGetTimeStamp() {
         // return (new Date().getTime());
@@ -331,7 +333,7 @@ export default class FadeoutUtils {
         return datetime;
     }
 
-    static utilsSleep(milliseconds) {
+    static utilsSleep(milliseconds: number) {
         let start = new Date().getTime();
         for (let i = 0; i < 1e7; i++) {
             if ((new Date().getTime() - start) > milliseconds) {
@@ -350,7 +352,7 @@ export default class FadeoutUtils {
         }
     }
 
-    static utilsMakeFile(sText, textFile, sType) {
+    static utilsMakeFile(sText: string, textFile, sType: string) {
 
         let data = new Blob([sText], { type: sType });
 
@@ -437,12 +439,12 @@ export default class FadeoutUtils {
     }
 
     //CHECK IF FEBRUARY HAS 29 DAYS
-    static utilsLeapYear(year) {
+    static utilsLeapYear(year: number) {
         return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
     }
 
     //from 1 to iValue
-    static utilsGenerateArrayWithFirstNIntValue(iStartingValue, iEndValue) {
+    static utilsGenerateArrayWithFirstNIntValue(iStartingValue: number, iEndValue: number) {
         if (this.utilsIsObjectNullOrUndefined(iEndValue) === true || (this.utilsIsInteger(iEndValue) === false)) {
             return null;
         }
@@ -462,7 +464,7 @@ export default class FadeoutUtils {
     }
 
 
-    static utilsGetMidPoint(iPointAX, iPointAY, iPointBX, iPointBY) {
+    static utilsGetMidPoint(iPointAX: number, iPointAY: number, iPointBX: number, iPointBY: number) {
         if (this.utilsIsANumber(iPointAX) === false || this.utilsIsANumber(iPointAY) === false || this.utilsIsANumber(iPointBX) === false || this.utilsIsANumber(iPointBY) === false) {
             return null;
         }
@@ -476,7 +478,7 @@ export default class FadeoutUtils {
         }
     }
 
-    static utilsCalculateDistanceBetweenTwoPoints(x1, y1, x2, y2) {
+    static utilsCalculateDistanceBetweenTwoPoints(x1: number, y1: number, x2: number, y2: number) {
         // let a = x1 - x2;
         // let b = y1 - y2;
 
@@ -507,7 +509,7 @@ export default class FadeoutUtils {
      * @param pointBRectangleY
      * @returns {boolean}
      */
-    static utilsIsPointInsideSquare(x, y, pointARectangleX, pointARectangleY, pointBRectangleX, pointBRectangleY) {
+    static utilsIsPointInsideSquare(x: number, y: number, pointARectangleX: number, pointARectangleY: number, pointBRectangleX: number, pointBRectangleY: number) {
         let x1 = Math.min(pointARectangleX, pointBRectangleX);
         let x2 = Math.max(pointARectangleX, pointBRectangleX);
         let y1 = Math.min(pointARectangleY, pointBRectangleY);
@@ -567,7 +569,7 @@ export default class FadeoutUtils {
     }
 
 
-    static utilsSearchTree(element, matchingTitle, sPropertyIdNodeName, sChildrenNodeName) {
+    static utilsSearchTree(element, matchingTitle, sPropertyIdNodeName: string, sChildrenNodeName: string) {
         if (this.utilsIsStrNullOrEmpty(sPropertyIdNodeName) === true) {
             throw "utilsSearchTree static sPropertyIdNodeName is null or undefined";
         }
