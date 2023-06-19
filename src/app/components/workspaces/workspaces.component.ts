@@ -186,7 +186,7 @@ export class WorkspacesComponent implements OnInit {
 
     this.m_oOpportunitySearchService.getUpdatedTrackSatellite(sSatellites).subscribe(
       oResponse => {
-        if (!FadeoutUtils.isObjectNullOrUndefined(oResponse)) {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           for (let iSatellites = 0; iSatellites < oResponse.length; iSatellites++) {
             let oActualDataByServer = oResponse[iSatellites];
 
