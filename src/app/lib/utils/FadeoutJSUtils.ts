@@ -290,10 +290,10 @@ export default class FadeoutUtils {
      * @param exdays
      */
     static utilsSetCookie(sName: string, sValue: string, exdays: number) {
-        let d = new Date();
-        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-        let iExpires = "expires=" + d.toUTCString();
-        ////FOR OBJECT ELEMENT I ADD cvalue=JSON.stringify(cvalue);
+        let date = new Date();
+        date.setTime(date.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        let iExpires = "expires=" + date.toUTCString();
+        ////FOR OBJECT ELEMENT iIndex ADD cvalue=JSON.stringify(cvalue);
         //cvalue=JSON.stringify(cvalue);
         document.cookie = sName + "=" + sValue + ";" + iExpires + ";path=/";
     }
@@ -306,15 +306,15 @@ export default class FadeoutUtils {
      */
     static utilsGetCookie(sName: string) {
         let name = sName + "=";
-        let ca = document.cookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
+        let aCookieInfo = document.cookie.split(';');
+        for (let iIndex = 0; iIndex < aCookieInfo.length; iIndex++) {
+            let sCookie = aCookieInfo[iIndex];
+            while (sCookie.charAt(0) == ' ') {
+                sCookie = sCookie
             }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-                //return JSON.parse(c.substring(name.length,c.length));//FOR OBJECT ELEMENT I ADD JSON.parse()
+            if (sCookie.indexOf(name) == 0) {
+                return sCookie.substring(name.length, sCookie.length);
+                //return JSON.parse(c.substring(name.length,c.length));//FOR OBJECT ELEMENT iIndex ADD JSON.parse()
             }
         }
         return "";
@@ -335,7 +335,7 @@ export default class FadeoutUtils {
 
     static utilsSleep(milliseconds: number) {
         let start = new Date().getTime();
-        for (let i = 0; i < 1e7; i++) {
+        for (let iIndex = 0; iIndex < 1e7; iIndex++) {
             if ((new Date().getTime() - start) > milliseconds) {
                 break;
             }
@@ -579,10 +579,10 @@ export default class FadeoutUtils {
         if (element[sPropertyIdNodeName] == matchingTitle) {
             return element;
         } else if (element[sChildrenNodeName] != null) {
-            let i;
+            let iIndex;
             let result = null;
-            for (i = 0; result == null && i < element[sChildrenNodeName].length; i++) {
-                result = this.utilsSearchTree(element[sChildrenNodeName][i], matchingTitle, sPropertyIdNodeName, sChildrenNodeName);
+            for (iIndex = 0; result == null && iIndex < element[sChildrenNodeName].length; iIndex++) {
+                result = this.utilsSearchTree(element[sChildrenNodeName][iIndex], matchingTitle, sPropertyIdNodeName, sChildrenNodeName);
             }
             return result;
         }
