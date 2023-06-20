@@ -29,8 +29,8 @@
                     <a class="nav-link" [ngClass]="{'disabled' : !sActiveWorkspaceId}"
                         routerLink="/edit/{{sActiveWorkspaceId}}">{{'HEADER.EDIT_BTN' | translate}}</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/admin">{{'HEADER.ADMIN_BTN' | translate}}</a>
+                <li class="nav-item" >
+                    <a *ngIf="m_oUser.role !== 'USER'" class="nav-link" routerLink="/admin">{{'HEADER.ADMIN_BTN' | translate}}</a>
                 </li>
                 <app-language-switch></app-language-switch>
                 <li class="nav-item">
@@ -80,10 +80,11 @@
             <label for="">
                 <h6>Tell us more:</h6>
             </label>
-            <textarea class="form-control" name="message" id="" cols="30" rows="10" [(ngModel)]="m_oFeedback.message"></textarea>
+            <textarea class="form-control" name="message" id="" cols="30" rows="10"
+                [(ngModel)]="m_oFeedback.message"></textarea>
             <div class="btn-container d-flex flex-row gap-2 mt-5 justify-content-end">
                 <a class="btn btn-secondary" href="https://discord.gg/JYuNhPaZbE" target="_blank">Live
-                        Support</a>
+                    Support</a>
                 <button class="btn btn-success" type="submit">Send</button>
 
             </div>
