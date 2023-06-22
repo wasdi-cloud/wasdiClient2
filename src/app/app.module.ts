@@ -113,6 +113,8 @@ import { ProcessorTabContentComponent } from './components/edit/edit-toolbar/too
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ProcessLogsDialogComponent } from './components/edit/process-logs-dialog/process-logs-dialog.component';
 import { ImportDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
+import { RxStompService } from './services/rx-stomp.service';
+import { rxStompServiceFactory } from './shared/factories/rx-stomp-service-factory';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -229,7 +231,11 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    {
+      provide: RxStompService, 
+      useFactory: rxStompServiceFactory, 
+    }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ConfirmationDialogComponent, ProcessesBarContent],
