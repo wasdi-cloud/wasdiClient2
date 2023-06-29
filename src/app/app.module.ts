@@ -115,7 +115,7 @@ import { ProcessLogsDialogComponent } from './components/edit/process-logs-dialo
 import { ImportDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
 import { RxStompService } from './services/rx-stomp.service';
 import { rxStompServiceFactory } from './shared/factories/rx-stomp-service-factory';
-
+import { RabbitStompService } from './services/rabbit-stomp.service';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -180,9 +180,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     PayloadDialogComponent,
     ProcessLogsDialogComponent,
     ImportDialogComponent,
-    AppsDialogComponent, 
-    ParamsLibraryDialogComponent, 
-    NewAppDialogComponent, 
+    AppsDialogComponent,
+    ParamsLibraryDialogComponent,
+    NewAppDialogComponent,
     ProcessorTabContentComponent
   ],
   imports: [
@@ -217,7 +217,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatBottomSheetModule,
     MatTooltipModule,
     FontAwesomeModule,
-    ClipboardModule, 
+    ClipboardModule,
     MatPaginatorModule
   ],
   providers: [
@@ -233,9 +233,10 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatDatepickerModule,
     MatNativeDateModule,
     {
-      provide: RxStompService, 
-      useFactory: rxStompServiceFactory, 
-    }
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+    },
+    { provide: RabbitStompService }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ConfirmationDialogComponent, ProcessesBarContent],
