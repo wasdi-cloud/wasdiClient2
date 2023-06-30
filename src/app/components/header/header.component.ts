@@ -9,6 +9,8 @@ import { UserSettingsDialogComponent } from './header-dialogs/user-settings-dial
 import { User } from 'src/app/shared/models/user.model';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -36,6 +38,7 @@ export class HeaderComponent implements OnInit {
     public m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
+    private m_oRabbitStompService: RabbitStompService, 
     public oRouter: Router,
     public translate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
@@ -59,6 +62,8 @@ export class HeaderComponent implements OnInit {
     } else {
       this.m_bEditIsActive = false;
     }
+
+    this.m_oRabbitStompService.initWebStomp();
   }
 
   logout() {
