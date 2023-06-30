@@ -4,15 +4,15 @@ import { ProcessWorkspaceService } from './api/process-workspace.service';
 import { RabbitConnectionState } from '../shared/models/RabbitConnectionState';
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 import { myRxStompConfig } from '../my-rx-stomp.config';
-
+// Declare SockJS and Stomp
+declare var SockJS;
+declare var Stomp;
 @Injectable({
   providedIn: 'root'
 })
 export class RabbitStompService {
 
-  constructor(private m_oConstantsService: ConstantsService, private m_oProcessWorkspaceService: ProcessWorkspaceService) {
-    this.initWebStomp();
-  }
+  constructor(private m_oConstantsService: ConstantsService, private m_oProcessWorkspaceService: ProcessWorkspaceService) { }
 
   // Translate.m_oTranslate = oTranslate;
 
@@ -74,7 +74,7 @@ export class RabbitStompService {
 
   waitServiceIsReady() {
     if (this.m_oServiceReadyPromise == null) {
-      this.m_oServiceReadyPromise = this.m_oServiceReadyDeferred.promise;
+      this.m_oServiceReadyPromise = this.m_oServiceReadyDeferred;
     }
     return this.m_oServiceReadyPromise;
   }
@@ -130,11 +130,11 @@ export class RabbitStompService {
     //msgHlp.notifyRabbitConnectionStateChange(connectionState);
   }
 
-  isReadyState = function () {
+  isReadyState() {
     return (((FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oWebSocket) === false) && (this.m_oWebSocket.readyState === WebSocket.OPEN)) ? true : false);
   }
 
-  subscribe = function (workspaceId) {
+  subscribe(workspaceId) {
 
     this.unsubscribe();
 
@@ -205,62 +205,63 @@ export class RabbitStompService {
     }
   };
 
-  unsubscribe = function () {
+  unsubscribe() {
     if (this.m_oSubscription) {
       this.m_sWorkspaceId = "";
       this.m_oSubscription.unsubscribe();
     }
   };
 
-  getConnectionState = function () {
-    return this.m_iConnectionState;
+  getConnectionState() {
+    //return this.m_iConnectionState;
   }
 
 
-  initWebStomp = function () {
+  initWebStomp() {
     let _this = this;
 
-    //this.m_oServiceReadyDeferred = $q.defer();
+    this.m_oServiceReadyDeferred = new Promise(() => {});
 
     // Web Socket to receive workspace messages
     let oWebSocket = new WebSocket(this.m_oConstantsService.getStompUrl());
-    //let oWebSocket = new SockJS(this.m_oConstantsService.getStompUrl());
-    //this.m_oClient = Stomp.over(oWebSocket);
-    // this.myRxStompConfig.heartbeatOutgoing = 20000;
-    // this.myRxStompConfig.heartbeatIncoming = 20000;
-    // this.m_oClient.debug = null;
+    //let oWebSocket = new WebSocket(this.m_oConstantsService.getStompUrl());
+    this.m_oClient = Stomp.over(oWebSocket);
+    this.m_oClient.heartbeat.outgoing = 20000;
+    this.m_oClient.heartbeat.incoming = 20000;
+    this.m_oClient.debug = null;
 
     /**
      * Callback of the Rabbit On Connect
      */
-    // let on_connect = function () {
-    //   console.log('RabbitStompService: Web Stomp connected');
+    let on_connect = function () {
+      console.log('RabbitStompService: Web Stomp connected');
 
-    //   //_this.notifyConnectionStateChange(RabbitConnectionState.Connected);
-    //   _this.m_oRabbitReconnectAttemptCount = 0;
+      //_this.notifyConnectionStateChange(RabbitConnectionState.Connected);
+      _this.m_oRabbitReconnectAttemptCount = 0;
 
-    //   //CHECK IF the session is valid
-    //   let oSessionId = _this.m_oConstantsService.getSessionId();
+      //CHECK IF the session is valid
+      let oSessionId = _this.m_oConstantsService.getSessionId();
 
-    //   if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSessionId)) {
-    //     console.log("RabbitStompService: Error session id Null in on_connect");
-    //     return false;
-    //   }
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSessionId)) {
+        console.log("RabbitStompService: Error session id Null in on_connect");
+        return false;
+      }
 
-    //   _this.m_oServiceReadyDeferred.resolve(true);
+      //_this.m_oServiceReadyDeferred.resolve(true);
 
-    //   // Is this a re-connection?
-    //   if (_this.m_oReconnectTimerPromise != null) {
+      // Is this a re-connection?
+      if (_this.m_oReconnectTimerPromise != null) {
 
-    //     // Yes it is: clear the timer
-    //     _this.m_oInterval.cancel(_this.m_oReconnectTimerPromise);
-    //     _this.m_oReconnectTimerPromise = null;
+        // Yes it is: clear the timer
+        //_this.m_oInterval.cancel(_this.m_oReconnectTimerPromise);
+        _this.m_oReconnectTimerPromise = null;
 
-    //     if (_this.m_sWorkspaceId !== "") {
-    //       _this.subscribe(_this.m_sWorkspaceId);
-    //     }
-    //   }
-    // };
+        if (_this.m_sWorkspaceId !== "") {
+          _this.subscribe(_this.m_sWorkspaceId);
+        }
+      }
+      return true;
+    };
 
 
     /**
@@ -287,16 +288,16 @@ export class RabbitStompService {
         if (_this.m_oReconnectTimerPromise == null) {
           // Try to Reconnect
           _this.m_oRabbitReconnectAttemptCount = 0;
-          _this.m_oReconnectTimerPromise = _this.m_oInterval(_this.m_oRabbitReconnect, 5000);
+          //_this.m_oReconnectTimerPromise = _this.m_oInterval(_this.m_oRabbitReconnect, 5000);
         }
       }
     };
 
     // Keep local reference to the callbacks to use it in the reconnection callback
-   // this.m_oOn_Connect = on_connect;
+    this.m_oOn_Connect = on_connect;
     this.m_oOn_Error = on_error;
     this.m_oWebSocket = oWebSocket;
-    // Call back for rabbit reconnection
+    //Call back for rabbit reconnection
     let rabbit_reconnect = function () {
 
       _this.m_oRabbitReconnectAttemptCount++;
@@ -304,8 +305,8 @@ export class RabbitStompService {
 
       // Connect again
       _this.m_oWebSocket = new WebSocket(_this.m_oConstantsService.getStompUrl());
-      //_this.oWebSocket = new SockJS(_this.m_oConstantsService.getStompUrl());
-      // _this.m_oClient = Stomp.over(_this.m_oWebSocket);
+      // _this.oWebSocket = new SockJS(_this.m_oConstantsService.getStompUrl());
+      _this.m_oClient = Stomp.over(_this.m_oWebSocket);
       _this.m_oClient.heartbeat.outgoing = 20000;
       _this.m_oClient.heartbeat.incoming = 20000;
       _this.m_oClient.debug = null;
@@ -315,7 +316,7 @@ export class RabbitStompService {
 
     this.m_oRabbitReconnect = rabbit_reconnect;
     //connect to the queue
-    // this.m_oClient.connect(_this.m_oConstantsService.getRabbitUser(), _this.m_oConstantsService.getRabbitPassword(), on_connect, on_error, '/');
+    this.m_oClient.connect(_this.m_oConstantsService.getRabbitUser(), _this.m_oConstantsService.getRabbitPassword(), on_connect, on_error, '/');
 
     return true;
   };
