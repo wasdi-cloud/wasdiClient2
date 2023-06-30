@@ -12,6 +12,8 @@ import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-edit',
@@ -30,6 +32,7 @@ export class EditComponent implements OnInit {
     private m_oProductService: ProductService,
     private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oRabbitStompService: RabbitStompService,
     private m_oRouter: Router,
     private m_oTranslateService: TranslateService,
     private m_oWorkspaceService: WorkspaceService) {
@@ -69,18 +72,12 @@ export class EditComponent implements OnInit {
 
   m_sSearchString: string;
 
-  m_aoVisibleBands
+  m_aoVisibleBands;
 
   ngOnInit(): void {
-    //Initalize the map
-
-    //add the GeoSearch Plugin Bar
-
-    //Initalize the globe
-
 
     //What to do if workspace undefined: 
-    if (!this.m_sWorkspaceId) {
+    if (!this.m_oActiveWorkspace) {
       //Check route for workspace id
       if (this.m_oActivatedRoute.snapshot.params['workspaceId']) {
         //Assign and set new workspace id
@@ -88,6 +85,7 @@ export class EditComponent implements OnInit {
         this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.m_sWorkspaceId).subscribe(oResponse => {
           this.m_oConstantsService.setActiveWorkspace(oResponse);
           this.m_oActiveWorkspace = oResponse;
+          this.subscribeToRabbit();
 
           //Workspace is now defined => Load Processes
           this.getProcesses()
@@ -99,18 +97,17 @@ export class EditComponent implements OnInit {
     } else {
       //If workspace is defined => Load Processes
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-      this.getProcesses()
+      this.getProcesses();
+      this.subscribeToRabbit();
     }
 
     //load Products
     this.getProductList();
-
   }
 
   getProductList() {
     this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe(response => {
       this.m_aoProducts = response
-      console.log(this.m_aoProducts)
     })
   }
 
@@ -130,5 +127,17 @@ export class EditComponent implements OnInit {
 
   getMapMode(event: any) {
     this.m_b2DMapModeOn = event;
+  }
+
+  subscribeToRabbit() {
+    console.log("Subscribing")
+    console.log(FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace))
+    console.log(this.m_oActiveWorkspace)
+    if (this.m_oRabbitStompService.isSubscrbed() === false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
+      console.log("entered")
+
+      console.log('EditorController: Web Stomp is ready --> subscribe');
+      this.m_oRabbitStompService.subscribe(this.m_oActiveWorkspace.workspaceId);
+    }
   }
 }
