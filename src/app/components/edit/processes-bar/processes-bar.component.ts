@@ -1,12 +1,13 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFileDownload, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFileDownload, faFilter, faList, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
 import { ProcessLogsDialogComponent } from '../process-logs-dialog/process-logs-dialog.component';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 
 export interface SearchFilter {
   sStatus: string,
@@ -20,17 +21,24 @@ export interface SearchFilter {
   templateUrl: './processes-bar.component.html',
   styleUrls: ['./processes-bar.component.css']
 })
-export class ProcessesBarComponent {
+export class ProcessesBarComponent implements OnInit {
   //Fontawesome Icon Declarations
   faArrowUp = faArrowUp;
+  faPlug = faPlug; 
 
   @Input() m_aoProcessesRunning: any[] = [];
   @Input() m_oActiveWorkspace: any = {};
   m_iNumberOfProcesses: number = 0;
   m_iWaitingProcesses: number = 0;
   m_oLastProcesses: any = null;
+  m_iIsWebsocketConnected: number; 
 
-  constructor(private _bottomSheet: MatBottomSheet) { }
+  constructor(private _bottomSheet: MatBottomSheet, private m_oRabbitStompService: RabbitStompService) { }
+  
+  ngOnInit() {
+    console.log(`Rabbit is Connected?: ${this.m_oRabbitStompService.getConnectionState()}`)
+    this.m_iIsWebsocketConnected = this.m_oRabbitStompService.getConnectionState();
+  }
 
   openProcessesBar(): void {
     this._bottomSheet.open(ProcessesBarContent, {
