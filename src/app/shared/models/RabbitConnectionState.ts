@@ -1,6 +1,6 @@
-export function RabbitConnectionState() {
-    RabbitConnectionState[RabbitConnectionState["Init"] = 0] = "Init";
-    RabbitConnectionState[RabbitConnectionState["Connected"] = 1] = "Connected";
-    RabbitConnectionState[RabbitConnectionState["Lost"] = 2] = "Lost";
+export enum RabbitConnectionState
+{
+    Init = 0,
+    Connected = 1,
+    Lost = 2
 }
-

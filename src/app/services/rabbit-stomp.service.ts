@@ -67,6 +67,8 @@ export class RabbitStompService {
 
   m_sWorkspaceId = "";
 
+  m_iConnectionState = RabbitConnectionState.Init; 
+
 
   // Use defer/promise to keep trace when service is ready to perform any operation
   m_oServiceReadyDeferred = null;
@@ -126,6 +128,7 @@ export class RabbitStompService {
 
   notifyConnectionStateChange = function (connectionState) {
     this.m_iConnectionState = connectionState;
+    console.log(this.m_iConnectionState);
     //let msgHlp = MessageHelper.getInstance($rootScope);
     //msgHlp.notifyRabbitConnectionStateChange(connectionState);
   }
@@ -213,7 +216,7 @@ export class RabbitStompService {
   };
 
   getConnectionState() {
-    //return this.m_iConnectionState;
+    return this.m_iConnectionState;
   }
 
 
@@ -236,7 +239,7 @@ export class RabbitStompService {
     let on_connect = function () {
       console.log('RabbitStompService: Web Stomp connected');
 
-      //_this.notifyConnectionStateChange(RabbitConnectionState.Connected);
+      _this.notifyConnectionStateChange(RabbitConnectionState.Connected);
       _this.m_oRabbitReconnectAttemptCount = 0;
 
       //CHECK IF the session is valid
