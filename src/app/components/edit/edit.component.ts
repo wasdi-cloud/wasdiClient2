@@ -130,12 +130,7 @@ export class EditComponent implements OnInit {
   }
 
   subscribeToRabbit() {
-    console.log("Subscribing")
-    console.log(FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace))
-    console.log(this.m_oActiveWorkspace)
     if (this.m_oRabbitStompService.isSubscrbed() === false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
-      console.log("entered")
-
       console.log('EditorController: Web Stomp is ready --> subscribe');
       this.m_oRabbitStompService.subscribe(this.m_oActiveWorkspace.workspaceId);
     }
