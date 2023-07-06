@@ -15,20 +15,20 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.m_oRabbitStompService.initWebStomp();
-    this.updateConnectionState("meow");
+    this.updateConnectionState("");
   }
 
   updateConnectionState(forceNotification) {
-    if(forceNotification === null || forceNotification === undefined) {
-      forceNotification = false; 
+    if (forceNotification === null || forceNotification === undefined) {
+      forceNotification = false;
     }
-    let connectionState = this.m_oRabbitStompService.getConnectionState();
-    // if(connectionState == 1) {
-    //     this.m_bIsRabbitConnected = true;
-    // }
-    // else
-    // {
-    //     this.m_bIsRabbitConnected = false;
-    // }
+    this.m_oRabbitStompService.getConnectionState().subscribe(iConnectionState => {
+      if (iConnectionState == 1) {
+        this.m_bIsRabbitConnected = true;
+      }
+      else {
+        this.m_bIsRabbitConnected = false;
+      }
+    });
   }
 }

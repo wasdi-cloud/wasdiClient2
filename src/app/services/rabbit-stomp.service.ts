@@ -3,7 +3,8 @@ import { ConstantsService } from './constants.service';
 import { ProcessWorkspaceService } from './api/process-workspace.service';
 import { RabbitConnectionState } from '../shared/models/RabbitConnectionState';
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
-import { myRxStompConfig } from '../my-rx-stomp.config';
+import { BehaviorSubject } from 'rxjs';
+
 // Declare SockJS and Stomp
 declare var SockJS;
 declare var Stomp;
@@ -67,7 +68,8 @@ export class RabbitStompService {
 
   m_sWorkspaceId = "";
 
-  m_iConnectionState = RabbitConnectionState.Init; 
+  m_iConnectionState = new BehaviorSubject<number>(RabbitConnectionState.Init);
+  _m_iConnectionState$ = this.m_iConnectionState.asObservable();
 
 
   // Use defer/promise to keep trace when service is ready to perform any operation
@@ -126,12 +128,17 @@ export class RabbitStompService {
     return !FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sWorkspaceId);
   }
 
-  notifyConnectionStateChange = function (connectionState) {
-    this.m_iConnectionState = connectionState;
-    console.log(this.m_iConnectionState);
+  notifyConnectionStateChange(connectionState: number) {
+    return this.m_iConnectionState.next(connectionState);
     //let msgHlp = MessageHelper.getInstance($rootScope);
     //msgHlp.notifyRabbitConnectionStateChange(connectionState);
   }
+
+
+  getConnectionState() {
+    return this._m_iConnectionState$;
+  }
+
 
   isReadyState() {
     return (((FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oWebSocket) === false) && (this.m_oWebSocket.readyState === WebSocket.OPEN)) ? true : false);
@@ -160,7 +167,6 @@ export class RabbitStompService {
           // Check parsed object
           if (oMessageResult == null) {
             console.log("RabbitStompService: there was an error parsing result in JSON. Message lost")
-            //return;
           }
 
           // Get the Active Workspace Id
@@ -190,7 +196,9 @@ export class RabbitStompService {
           }
 
           //Reject the message if it is for another workspace
-          // if (oMessageResult.workspaceId != sActiveWorkspaceId) return false;
+          if (oMessageResult.workspaceId != sActiveWorkspaceId) {
+            //return false;
+          }
 
           // Check if the callback is hooked
           if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oThisService.m_fMessageCallBack)) {
@@ -215,15 +223,12 @@ export class RabbitStompService {
     }
   };
 
-  getConnectionState() {
-    return this.m_iConnectionState;
-  }
 
 
   initWebStomp() {
     let _this = this;
 
-    this.m_oServiceReadyDeferred = new Promise(() => {});
+    this.m_oServiceReadyDeferred = new Promise(() => { });
 
     // Web Socket to receive workspace messages
     let oWebSocket = new WebSocket(this.m_oConstantsService.getStompUrl());
@@ -286,7 +291,7 @@ export class RabbitStompService {
       if (sMessage == "LOST_CONNECTION" || sMessage.includes("Whoops! Lost connection to")) {
         console.log('RabbitStompService: Web Socket Connection Lost');
 
-        //_this.notifyConnectionStateChange(RabbitConnectionState.Lost);
+        _this.notifyConnectionStateChange(RabbitConnectionState.Lost);
 
         if (_this.m_oReconnectTimerPromise == null) {
           // Try to Reconnect
@@ -308,7 +313,7 @@ export class RabbitStompService {
 
       // Connect again
       _this.m_oWebSocket = new WebSocket(_this.m_oConstantsService.getStompUrl());
-      // _this.oWebSocket = new SockJS(_this.m_oConstantsService.getStompUrl());
+      //_this.oWebSocket = new SockJS(_this.m_oConstantsService.getStompUrl());
       _this.m_oClient = Stomp.over(_this.m_oWebSocket);
       _this.m_oClient.heartbeat.outgoing = 20000;
       _this.m_oClient.heartbeat.incoming = 20000;
