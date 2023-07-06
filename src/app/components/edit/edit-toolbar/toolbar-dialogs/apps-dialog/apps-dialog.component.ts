@@ -8,6 +8,7 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 
 @Component({
   selector: 'app-apps-dialog',
@@ -45,6 +46,7 @@ export class AppsDialogComponent {
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
     private m_oProcessorService: ProcessorService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService, 
     private m_oProductService: ProductService,
     private m_oWorkspaceService: WorkspaceService,
   ) {
@@ -193,8 +195,6 @@ export class AppsDialogComponent {
     }
 
     this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
-      console.log(oResponse)
-
       this.m_oDialogRef.close();
     })
   }

@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnInit } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFileDownload, faFilter, faList, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -24,26 +24,25 @@ export interface SearchFilter {
 export class ProcessesBarComponent implements OnInit {
   //Fontawesome Icon Declarations
   faArrowUp = faArrowUp;
-  faPlug = faPlug; 
+  faPlug = faPlug;
 
   @Input() m_aoProcessesRunning: any[] = [];
   @Input() m_oActiveWorkspace: any = {};
   m_iNumberOfProcesses: number = 0;
   m_iWaitingProcesses: number = 0;
   m_oLastProcesses: any = null;
-  m_iIsWebsocketConnected: number; 
+  m_iIsWebsocketConnected: any;
 
-  constructor(private _bottomSheet: MatBottomSheet, private m_oRabbitStompService: RabbitStompService) { }
-  
+  constructor(private _bottomSheet: MatBottomSheet, private m_oProcessWorkspaceService: ProcessWorkspaceService, private m_oRabbitStompService: RabbitStompService) { }
+
   ngOnInit() {
     console.log(`Rabbit is Connected?: ${this.m_oRabbitStompService.getConnectionState()}`)
-    this.m_iIsWebsocketConnected = this.m_oRabbitStompService.getConnectionState();
+    this.m_iIsWebsocketConnected = this.m_oRabbitStompService.getConnectionState().subscribe();
   }
 
   openProcessesBar(): void {
     this._bottomSheet.open(ProcessesBarContent, {
       data: {
-        processes: this.m_aoProcessesRunning,
         workspace: this.m_oActiveWorkspace
       }
     })
@@ -55,7 +54,7 @@ export class ProcessesBarComponent implements OnInit {
   templateUrl: 'processes-bar-content.html',
   styleUrls: ['./processes-bar-content.css']
 })
-export class ProcessesBarContent {
+export class ProcessesBarContent implements OnInit {
   faArrowDown = faArrowDown;
   faDownload = faDownload;
   faRefresh = faRefresh;
@@ -71,7 +70,7 @@ export class ProcessesBarContent {
     sName: ""
   };
 
-  m_aoProcessesRunning: any[] = this.data.processes.reverse();
+  m_aoProcessesRunning: any[] = [];
   m_oActiveWorkspace: any = this.data.workspace;
   m_aoAllProcessesLogs: any = [];
 
@@ -82,14 +81,16 @@ export class ProcessesBarContent {
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
   ) { }
 
+  ngOnInit(): void {
+    this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+    this.m_oProcessWorkspaceService.getProcessesRunning().subscribe(aoProcesses => {
+      this.m_aoProcessesRunning = aoProcesses;
+    })
+  }
+
   refreshProcesses(event: MouseEvent) {
     event.preventDefault;
-    this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
-      if (oResponse.length !== 0) {
-        console.log(oResponse);
-        this.m_aoProcessesRunning = oResponse.reverse();
-      }
-    })
+    this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
   }
 
   downloadProcessesFile() {
@@ -302,7 +303,7 @@ export class ProcessesDialog {
   }
 
   m_bHasError: boolean = false;
-  Allm_aoProcessesLogs: any[] = [];
+  m_aoProcessesLogs: any[] = [];
   m_aoAllProcessesLogs: any[] = [];
   m_sFilterTable: string = "";
   m_bAreProcessesLoaded: boolean = false;

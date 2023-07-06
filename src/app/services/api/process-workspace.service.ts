@@ -2,17 +2,37 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 export interface Process {
-
+  fileSize: string,
+  lastChangeDate: string,
+  operationDate: string
+  operationEndDate: string
+  operationStartDate: string
+  operationSubType: string
+  operationType: string
+  payload: any
+  pid: number
+  processObjId: string
+  productName: string
+  progressPerc: number
+  status: string
+  userId: string
+  workspaceId: string
 }
 @Injectable({
   providedIn: 'root'
 })
-export class ProcessWorkspaceService{
+export class ProcessWorkspaceService {
 
-  m_aoProcessesRunning: Array<Process> = [];
+  m_aoProcessesRunning: BehaviorSubject<Process[]> = new BehaviorSubject<Process[]>([]);
+  _m_aoProcessesRunning$ = this.m_aoProcessesRunning.asObservable();
   m_aoProcessesStopped: Array<Process> = [];
+
+  updateProcessBarMsg: BehaviorSubject<string> = new BehaviorSubject<string>("Intial Status");
+  updatePrcoessBarMsg$ = this.updateProcessBarMsg.asObservable();
 
   //Days
   COOKIE_EXPIRE_TIME_DAYS: number = 1;
@@ -36,8 +56,31 @@ export class ProcessWorkspaceService{
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get<any>(sUrl + '/process/lastbyws?workspace=' + sWorkspaceId)
+    return this.oHttp.get<any>(sUrl + '/process/lastbyws?workspace=' + sWorkspaceId).subscribe(oResponse => {
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+        // this.m_aoProcessesRunning = oResponse; 
+        this.setProcessesRunning(oResponse.reverse());
+        this.updateProcessesBar("m_aoProcessesRunning:updated");
+      }
+    });
   };
+
+  /**
+   * Set Processes Running
+   * @param aoPrcoesses 
+   * @returns 
+   */
+  setProcessesRunning(aoPrcoesses: Process[]) {
+    return this.m_aoProcessesRunning.next(aoPrcoesses);
+  }
+
+  /**
+   * Return m_aoProcessesRunning
+   * 
+   */
+  getProcessesRunning(): Observable<Process[]> {
+    return this._m_aoProcessesRunning$;
+  }
 
   /**
    * Get the paginated list of processes of a workspace
@@ -158,9 +201,10 @@ export class ProcessWorkspaceService{
   /**
    * Triggers the update of the WASDI process bar
    */
-  updateProcessesBar = function () {
+  updateProcessesBar(sMessage: string) {
     //send a message to RootController for update the bar of processes
     // $rootScope.$broadcast('m_aoProcessesRunning:updated', true);
+    this.updateProcessBarMsg.next(sMessage);
   };
 
   /**
