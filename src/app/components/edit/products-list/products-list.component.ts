@@ -61,7 +61,7 @@ export class ProductsListComponent {
     private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
     private m_oMapService: MapService,
-    private m_oNotificationDisplayService: NotificationDisplayService, 
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
   ) {
@@ -207,8 +207,8 @@ export class ProductsListComponent {
     let sFileName = this.productArray[oBand.nodeIndex].fileName;
     let bAlreadyPublished = oBand.published;
 
-    let sNotificationMsg = "PUBLISHING BAND"; 
-    this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom", "notificationStyle")
+    let sNotificationMsg = "PUBLISHING BAND";
+    this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
 
     // let oNotificationRef = this.m_oSnackbar.open();
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
