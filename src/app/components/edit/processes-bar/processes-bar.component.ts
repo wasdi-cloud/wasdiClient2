@@ -36,8 +36,10 @@ export class ProcessesBarComponent implements OnInit {
   constructor(private _bottomSheet: MatBottomSheet, private m_oProcessWorkspaceService: ProcessWorkspaceService, private m_oRabbitStompService: RabbitStompService) { }
 
   ngOnInit() {
-    console.log(`Rabbit is Connected?: ${this.m_oRabbitStompService.getConnectionState()}`)
-    this.m_iIsWebsocketConnected = this.m_oRabbitStompService.getConnectionState().subscribe();
+    this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
+      this.m_iIsWebsocketConnected = oResponse; 
+    });
+ 
   }
 
   openProcessesBar(): void {
