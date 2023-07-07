@@ -116,6 +116,7 @@ import { ImportDialogComponent } from './components/edit/edit-toolbar/toolbar-di
 import { RxStompService } from './services/rx-stomp.service';
 import { rxStompServiceFactory } from './shared/factories/rx-stomp-service-factory';
 import { RabbitStompService } from './services/rabbit-stomp.service';
+import { NotificationDialogComponent } from './shared/dialogs/notification-dialog/notification-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -183,7 +184,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AppsDialogComponent,
     ParamsLibraryDialogComponent,
     NewAppDialogComponent,
-    ProcessorTabContentComponent
+    ProcessorTabContentComponent,
+    NotificationDialogComponent
   ],
   imports: [
     AppRoutingModule,
