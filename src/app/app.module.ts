@@ -49,8 +49,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MatTooltipModule } from '@angular/material/tooltip'
-import { MatPaginatorModule } from '@angular/material/paginator'
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -116,7 +117,6 @@ import { ImportDialogComponent } from './components/edit/edit-toolbar/toolbar-di
 import { RxStompService } from './services/rx-stomp.service';
 import { rxStompServiceFactory } from './shared/factories/rx-stomp-service-factory';
 import { RabbitStompService } from './services/rabbit-stomp.service';
-import { NotificationDialogComponent } from './shared/dialogs/notification-dialog/notification-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -184,8 +184,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AppsDialogComponent,
     ParamsLibraryDialogComponent,
     NewAppDialogComponent,
-    ProcessorTabContentComponent,
-    NotificationDialogComponent
+    ProcessorTabContentComponent
   ],
   imports: [
     AppRoutingModule,
@@ -220,7 +219,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatTooltipModule,
     FontAwesomeModule,
     ClipboardModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSnackBarModule
   ],
   providers: [
     AuthService,

@@ -2,19 +2,28 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from 'src/app/shared/models/product.model';
 
 //Angular Material Imports:
-import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { FileBufferService } from 'src/app/services/api/file-buffer.service';
-import { ConstantsService } from 'src/app/services/constants.service';
-
-import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { ProductService } from 'src/app/services/api/product.service';
-import { CatalogService } from 'src/app/services/api/catalog.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { NestedTreeControl } from '@angular/cdk/tree';
+
+//Service Imports:
+import { CatalogService } from 'src/app/services/api/catalog.service';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { MapService } from 'src/app/services/map.service';
-import * as L from "leaflet"
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
+import { ProductService } from 'src/app/services/api/product.service';
+
+//Font Awesome Icons:
+import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+
+//Component Imports: 
+import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
+
+//Leaflet Declaration:
+import * as L from "leaflet";
 
 @Component({
   selector: 'app-products-list',
@@ -37,7 +46,6 @@ export class ProductsListComponent {
   faGlobe = faGlobeEurope;
   faMap = faMap;
 
-
   m_oActiveBand;
   m_oActiveWorkspace;
   treeControl: NestedTreeControl<any>
@@ -53,8 +61,9 @@ export class ProductsListComponent {
     private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
     private m_oMapService: MapService,
+    private m_oNotificationDisplayService: NotificationDisplayService, 
     private m_oProductService: ProductService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
   ) {
     this.treeControl = new NestedTreeControl<any>(node => {
       if (node.bandsGroups) {
@@ -190,13 +199,18 @@ export class ProductsListComponent {
   }
 
   /**
-     * OPEN BAND IMAGE
-     * Called from the tree to open a band
-     * @param oBand
-     */
+   * OPEN BAND IMAGE
+   * Called from the tree to open a band
+   * @param oBand
+   */
   openBandImage(oBand) {
     let sFileName = this.productArray[oBand.nodeIndex].fileName;
     let bAlreadyPublished = oBand.published;
+
+    let sNotificationMsg = "PUBLISHING BAND"; 
+    this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom", "notificationStyle")
+
+    // let oNotificationRef = this.m_oSnackbar.open();
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
       if (oResponse.messageCode === "PUBLISHBAND") {
         console.log(oResponse.payload.geoserverBoundingBox)
