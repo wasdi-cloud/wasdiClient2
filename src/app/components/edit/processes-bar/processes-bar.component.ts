@@ -1,12 +1,18 @@
 import { Component, Inject, Input, OnChanges, OnInit } from '@angular/core';
+
+//Angular Material Imports: 
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+//Font Awesome Imports: 
 import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFileDownload, faFilter, faList, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { ProcessorService } from 'src/app/services/api/processor.service';
+
+//Service Imports: 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
+import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProcessLogsDialogComponent } from '../process-logs-dialog/process-logs-dialog.component';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 
 export interface SearchFilter {
@@ -26,7 +32,7 @@ export class ProcessesBarComponent implements OnInit {
   faArrowUp = faArrowUp;
   faPlug = faPlug;
 
-  @Input() m_aoProcessesRunning: any[] = [];
+  m_aoProcessesRunning: any[] = [];
   @Input() m_oActiveWorkspace: any = {};
   m_iNumberOfProcesses: number = 0;
   m_iWaitingProcesses: number = 0;
@@ -289,7 +295,6 @@ export class ProcessesDialog {
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     @Inject(MAT_DIALOG_DATA) public m_oFilter: SearchFilter,
   ) {
