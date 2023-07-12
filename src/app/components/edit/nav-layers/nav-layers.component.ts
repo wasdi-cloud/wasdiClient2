@@ -64,7 +64,7 @@ export class NavLayersComponent implements OnChanges {
       iVisibleBandCount = this.m_aoVisibleBands.length;
     }
     for (let iIndex = 0; iIndex < iVisibleBandCount;) {
-      if (this.m_aoVisibleBands[iIndex].productName == oBand.productName && this.m_aoVisibleBands[iIndex].name == oBand.name) {
+      if (this.m_aoVisibleBands[iIndex].layerId == oBand.layerId && this.m_aoVisibleBands[iIndex].name == oBand.name) {
         this.m_aoVisibleBands.splice(iIndex, 1);
         this.m_aoVisibleBandsChange.emit(this.m_aoVisibleBands);
         iVisibleBandCount--;
