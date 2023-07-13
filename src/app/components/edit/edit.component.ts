@@ -75,6 +75,7 @@ export class EditComponent implements OnInit, OnDestroy {
           this.m_oConstantsService.setActiveWorkspace(oResponse);
           this.m_oActiveWorkspace = oResponse;
           this.subscribeToRabbit();
+          this.getProductList();
         })
       } else {
         //If unable to identify workspace, re-route to workspaces tab
