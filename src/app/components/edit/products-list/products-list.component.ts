@@ -24,6 +24,7 @@ import { ProductPropertiesDialogComponent } from './product-properties-dialog/pr
 
 //Leaflet Declaration:
 import * as L from "leaflet";
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-products-list',
@@ -206,21 +207,44 @@ export class ProductsListComponent {
   openBandImage(oBand) {
     let sFileName = this.productArray[oBand.nodeIndex].fileName;
     let bAlreadyPublished = oBand.published;
+    this.m_oActiveBand = oBand;
 
-    let sNotificationMsg = "PUBLISHING BAND";
-    this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
 
-    // let oNotificationRef = this.m_oSnackbar.open();
+    console.log(oBand)
+
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
-      if (oResponse.messageCode === "PUBLISHBAND") {
-        console.log(oResponse.payload.geoserverBoundingBox)
+      console.log(oResponse);
+      if (!bAlreadyPublished) {
+        let sNotificationMsg = "PUBLISHING BAND";
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
+      }
+
+      if (this.m_aoVisibleBands.length === 0) {
+
+      }
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
+        //If the Band is already published: 
+        if (oResponse.messageCode === "PUBLISHBAND") {
+          console.log(oResponse.payload.geoserverBoundingBox);
+          this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
+        } else {
+          this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+        }
         this.m_aoVisibleBands.push(this.m_oActiveBand);
         this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
         this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
-        // Already published: we already have the View Model
-        this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
       } else {
-        this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+        // var sMessage = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
+        // utilsVexDialogAlertTop(sMessage + oBand.name);
+        // oController.setTreeNodeAsDeselected(oBand.productName + "_" + oBand.name);
+        let sNotificationMsg = "ERROR PUBLISHING BAND";
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
+
+
+      }
+      //It is publishing; we will receieve a Rabbit Message
+      if (oResponse.messageCode === "WAITFORRABBIT") {
+        console.log("WAITING FOR RABBIT");
       }
     })
 
