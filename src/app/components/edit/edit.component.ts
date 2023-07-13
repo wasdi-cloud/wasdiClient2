@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 //Service Imports: 
@@ -19,7 +19,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, OnDestroy {
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,
@@ -88,6 +88,10 @@ export class EditComponent implements OnInit {
 
     //load Products
     this.getProductList();
+  }
+
+  ngOnDestroy(): void {
+      this.m_oRabbitStompService.unsubscribe(); 
   }
 
   getProductList() {

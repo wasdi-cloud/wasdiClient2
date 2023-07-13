@@ -83,7 +83,7 @@ export class RabbitStompService {
     return this.m_oServiceReadyPromise;
   }
 
-  setMessageCallback(fCallback) {
+  setMessageCallback(fCallback: any) {
     this.m_fMessageCallBack = fCallback;
   }
 
@@ -146,7 +146,7 @@ export class RabbitStompService {
 
   subscribe(workspaceId) {
 
-    this.unsubscribe();
+    //this.unsubscribe();
 
     this.m_sWorkspaceId = workspaceId;
 
