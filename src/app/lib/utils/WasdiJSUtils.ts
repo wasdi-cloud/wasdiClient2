@@ -1,6 +1,9 @@
 import FadeoutUtils from "./FadeoutJSUtils";
 
 export default class WasdiUtils {
+
+    
+
     static utilsProjectConvertJSONFromServerInOptions(oJSONInput) {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oJSONInput) == true)
             return null;
@@ -137,12 +140,15 @@ export default class WasdiUtils {
             let oAudio = new Audio('assets/audio/message.wav');
             oAudio.play();
 
+            return sUserMessage; 
+
+            //this.m_oNotificationDisplayService
             // Give the short message
             //Add new Dialog engine
             // let oDialog = FadeoutUtils.utilsVexDialogAlertBottomRightCorner(sUserMessage);
             // FadeoutUtils.utilsVexCloseDialogAfter(6000, oDialog);
         }
-
+        return false; 
     }
 
     static utilsProjectConvertPositionsSatelliteFromServerInCesiumArray(aaArrayInput: any[]) {
