@@ -74,7 +74,7 @@ export class ImportDialogComponent {
     if (input.files && input.files[0]) {
       this.m_sFileName = input.files[0].name
       this.m_oFile = new FormData();
-      this.m_oFile.append('file', input.files[0])
+      this.m_oFile.append('file', input.files[0]);
     }
   }
 
@@ -101,26 +101,27 @@ export class ImportDialogComponent {
       sStyle = this.m_oStyle;
     }
 
-    var oBody = new FormData();
-    oBody.append('file', this.m_oFile[0]);
-
-    this.m_oProductService.uploadFile(this.m_sWorkspaceId, oBody, this.m_sFileName, sStyle).subscribe(oResponse => {
-      if (oResponse.status !== 200) {
-        let sErrorMsg: string = "GURU MEDITATION<br>ERROR IN UPLOADING FILE"
-        this.m_oNotificationDisplayService.openSnackBar(sErrorMsg, "Close", "right", "bottom");
-      } else {
-        let sMessage: string = "FILE UPLOADED";
-        this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
-        this.onDismiss();
-      }
-      this.cleanDragAndDrop();
-      this.m_bIsUploading = false;
-    }, oError => {
-      let sErrorMessage: string = "ERROR IN UPLOADING FILE";
-      this.m_bIsUploading = false;
-      this.cleanDragAndDrop();
-      this.m_oNotificationDisplayService.openSnackBar(sErrorMessage, "Close", "right", "bottom");
-    })
+    this.m_oProductService.uploadFile(this.m_sWorkspaceId, this.m_oFile, this.m_sFileName, sStyle).subscribe(
+      {
+        next: (oResponse) => {
+          if (oResponse.status !== 200) {
+            let sErrorMsg: string = "GURU MEDITATION<br>ERROR IN UPLOADING FILE"
+            this.m_oNotificationDisplayService.openSnackBar(sErrorMsg, "Close", "right", "bottom");
+          } else {
+            let sMessage: string = "FILE UPLOADED";
+            this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+            this.onDismiss();
+          }
+          this.cleanDragAndDrop();
+          this.m_bIsUploading = false;
+        },
+        error: (oError) => {
+          let sErrorMessage: string = "ERROR IN UPLOADING FILE";
+          this.m_bIsUploading = false;
+          this.cleanDragAndDrop();
+          this.m_oNotificationDisplayService.openSnackBar(sErrorMessage, "Close", "right", "bottom");
+        }
+      });
     return true
   }
 
