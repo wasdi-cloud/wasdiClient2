@@ -1,7 +1,11 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+//Model Imports
 import { Product } from 'src/app/shared/models/product.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
+
+//Service Imports
 import { ConstantsService } from '../constants.service';
 
 @Injectable({
@@ -75,16 +79,15 @@ export class ProductService {
     let oWorkspace = this.oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
-    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+    if (oWorkspace !== null && oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
-    var oOptions = {};
 
     sUrl = sUrl + '/product/uploadfile?workspace=' + sWorkspaceInput + '&name=' + sName;
     if (sStyle) {
       sUrl = sUrl + '&style=' + sStyle;
     }
 
-    return this.oHttp.post(sUrl, oBody, oOptions);
+    return this.oHttp.post<any>(sUrl, oBody, {  observe: 'response' });
   };
 }
