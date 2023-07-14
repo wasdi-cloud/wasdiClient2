@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
+
+//Service Imports
 import { ConstantsService } from './constants.service';
+import { NotificationDisplayService } from './notification-display.service';
 import { ProcessWorkspaceService } from './api/process-workspace.service';
+
+//Rabbit Connection State Model Import:
 import { RabbitConnectionState } from '../shared/models/RabbitConnectionState';
-import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
+
+//RxJS Import: 
 import { BehaviorSubject } from 'rxjs';
 
+//Utilities Import:
+import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 // Declare SockJS and Stomp
 declare var SockJS;
 declare var Stomp;
@@ -13,7 +21,10 @@ declare var Stomp;
 })
 export class RabbitStompService {
 
-  constructor(private m_oConstantsService: ConstantsService, private m_oProcessWorkspaceService: ProcessWorkspaceService) { }
+  constructor(
+    private m_oConstantsService: ConstantsService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService) { }
 
   // Translate.m_oTranslate = oTranslate;
 
