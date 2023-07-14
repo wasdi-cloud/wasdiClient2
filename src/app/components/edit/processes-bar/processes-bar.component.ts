@@ -9,11 +9,14 @@ import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFi
 
 //Service Imports: 
 import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProcessLogsDialogComponent } from '../process-logs-dialog/process-logs-dialog.component';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 
 export interface SearchFilter {
   sStatus: string,
@@ -39,13 +42,75 @@ export class ProcessesBarComponent implements OnInit {
   m_oLastProcesses: any = null;
   m_iIsWebsocketConnected: any;
 
-  constructor(private _bottomSheet: MatBottomSheet, private m_oProcessWorkspaceService: ProcessWorkspaceService, private m_oRabbitStompService: RabbitStompService) { }
+  constructor(private _bottomSheet: MatBottomSheet, private m_oNotificationDisplayService: NotificationDisplayService, private m_oProcessWorkspaceService: ProcessWorkspaceService, private m_oRabbitStompService: RabbitStompService) { }
 
   ngOnInit() {
     this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
-      this.m_iIsWebsocketConnected = oResponse; 
+      this.m_iIsWebsocketConnected = oResponse;
     });
- 
+    this.m_oRabbitStompService.setMessageCallback(this.recievedRabbitMessage);
+  }
+
+  recievedRabbitMessage(oMessage: any) {
+    if (oMessage === null) {
+      return false;
+    }
+
+    if (oMessage.oMessageResult === "KO") {
+      let sOperation = "null";
+      if (!FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.messageCode)) {
+        sOperation = oMessage.messageCode;
+      }
+
+      let sErrorDescription: string = "";
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) {
+        sErrorDescription = oMessage.payload;
+      }
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) {
+        sErrorDescription = "<br>" + sErrorDescription;
+      }
+
+      //ALERT DIALOG
+      // let oDialog = utilsVexDialogAlertTop(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription);
+      // utilsVexCloseDialogAfter(10000, oDialog);
+      if (oMessage.messageCode == "PUBLISHBAND") {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
+          }
+          //Deselect Node Name? 
+          //var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
+          // this.setTreeNodeAsDeselected(sNodeName);
+        }
+      }
+      return true;
+    }
+    // Switch the Code
+    switch (oMessage.messageCode) {
+      case "PUBLISH":
+        this.m_oRabbitStompService.receivedPublishMessage(oMessage);
+        break;
+      case "PUBLISHBAND":
+        this.m_oRabbitStompService.receivedPublishBandMessage(oMessage);
+        break;
+      case "DOWNLOAD":
+      case "GRAPH":
+      case "INGEST":
+      case "MOSAIC":
+      case "SUBSET":
+      case "MULTISUBSET":
+      case "RASTERGEOMETRICRESAMPLE":
+      case "REGRID":
+        //this.receivedNewProductMessage(oMessage);
+        break;
+      case "DELETE":
+        break;
+
+    }
+    let sNotificationMsg = WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage);
+    if (sNotificationMsg !== false) {
+      this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "bottom", "right");
+    }
+    return true;
   }
 
   openProcessesBar(): void {

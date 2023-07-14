@@ -13,9 +13,11 @@ import { BehaviorSubject } from 'rxjs';
 
 //Utilities Import:
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
+
 // Declare SockJS and Stomp
 declare var SockJS;
 declare var Stomp;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -340,5 +342,44 @@ export class RabbitStompService {
     return true;
   };
 
+  receivedNewProductMessage(oMessage: any) {
+    let sMessage: string = "PRODUCT ADDED";
+
+    console.log(sMessage);
+  }
+
+
+  /**
+   * Handler of the "Publish" message
+   * @param oMessage 
+   */
+  receivedPublishMessage(oMessage: any) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage)) {
+      return false;
+    }
+
+    if (oMessage.messageResult === "KO") {
+      let sMessage = "ERROR PUBLISHING";
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Handler of the "PUBLISHBAND" message
+   * @param oMessage
+   */
+  receivedPublishBandMessage(oMessage) {
+    let oPublishedBand = oMessage.payload;
+
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPublishedBand)) {
+      console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
+      return false;
+    }
+
+    //OLD CODE: TREE NODE and Publish band -> Publish band exectued in "Product List Component"
+    return true;
+  }
 
 }
