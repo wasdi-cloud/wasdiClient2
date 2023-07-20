@@ -17,6 +17,7 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface SearchFilter {
   sStatus: string,
@@ -42,7 +43,7 @@ export class ProcessesBarComponent implements OnInit {
   m_oLastProcesses: any = null;
   m_iIsWebsocketConnected: any;
 
-  constructor(private _bottomSheet: MatBottomSheet, private m_oNotificationDisplayService: NotificationDisplayService, private m_oProcessWorkspaceService: ProcessWorkspaceService, private m_oRabbitStompService: RabbitStompService) { }
+  constructor(private _bottomSheet: MatBottomSheet, private m_oNotificationDisplayService: NotificationDisplayService, private m_oProcessWorkspaceService: ProcessWorkspaceService, private m_oRabbitStompService: RabbitStompService, private m_oTranslateService: TranslateService) { }
 
   ngOnInit() {
     this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
@@ -52,6 +53,7 @@ export class ProcessesBarComponent implements OnInit {
   }
 
   recievedRabbitMessage(oMessage: any) {
+    let oController = this;
     if (oMessage === null) {
       return false;
     }
@@ -100,7 +102,7 @@ export class ProcessesBarComponent implements OnInit {
       case "MULTISUBSET":
       case "RASTERGEOMETRICRESAMPLE":
       case "REGRID":
-        //this.receivedNewProductMessage(oMessage);
+        oController.receivedNewProductMessage(oMessage);
         break;
       case "DELETE":
         break;
@@ -111,6 +113,16 @@ export class ProcessesBarComponent implements OnInit {
       this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "bottom", "right");
     }
     return true;
+  }
+
+  receivedNewProductMessage(oMessage: any) {
+    let sMessage: string;
+    this.m_oTranslateService.get('NOTIFICATION.MSG_EDIT_PRODUCT_ADDED').subscribe((sResult: string) => {
+      console.log(sResult);
+      sMessage = sResult;
+
+      let oNotification = this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close");
+    });
   }
 
   openProcessesBar(): void {
