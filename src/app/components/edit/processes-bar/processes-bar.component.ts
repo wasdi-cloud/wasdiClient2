@@ -1,12 +1,23 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnInit } from '@angular/core';
+
+//Angular Material Imports: 
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFileDownload, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { ProcessorService } from 'src/app/services/api/processor.service';
+
+//Font Awesome Imports: 
+import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFileDownload, faFilter, faList, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
+
+//Service Imports: 
 import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
+import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProcessLogsDialogComponent } from '../process-logs-dialog/process-logs-dialog.component';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface SearchFilter {
   sStatus: string,
@@ -20,22 +31,103 @@ export interface SearchFilter {
   templateUrl: './processes-bar.component.html',
   styleUrls: ['./processes-bar.component.css']
 })
-export class ProcessesBarComponent {
+export class ProcessesBarComponent implements OnInit {
   //Fontawesome Icon Declarations
   faArrowUp = faArrowUp;
+  faPlug = faPlug;
 
-  @Input() m_aoProcessesRunning: any[] = [];
+  m_aoProcessesRunning: any[] = [];
   @Input() m_oActiveWorkspace: any = {};
   m_iNumberOfProcesses: number = 0;
   m_iWaitingProcesses: number = 0;
   m_oLastProcesses: any = null;
+  m_iIsWebsocketConnected: any;
 
-  constructor(private _bottomSheet: MatBottomSheet) { }
+  constructor(private _bottomSheet: MatBottomSheet, private m_oNotificationDisplayService: NotificationDisplayService, private m_oProcessWorkspaceService: ProcessWorkspaceService, private m_oRabbitStompService: RabbitStompService, private m_oTranslateService: TranslateService) { }
+
+  ngOnInit() {
+    this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
+      this.m_iIsWebsocketConnected = oResponse;
+    });
+    this.m_oRabbitStompService.setMessageCallback(this.recievedRabbitMessage);
+  }
+
+  recievedRabbitMessage(oMessage: any) {
+    let oController = this;
+    if (oMessage === null) {
+      return false;
+    }
+
+    if (oMessage.oMessageResult === "KO") {
+      let sOperation = "null";
+      if (!FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.messageCode)) {
+        sOperation = oMessage.messageCode;
+      }
+
+      let sErrorDescription: string = "";
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) {
+        sErrorDescription = oMessage.payload;
+      }
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) {
+        sErrorDescription = "<br>" + sErrorDescription;
+      }
+
+      //ALERT DIALOG
+      // let oDialog = utilsVexDialogAlertTop(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription);
+      // utilsVexCloseDialogAfter(10000, oDialog);
+      if (oMessage.messageCode == "PUBLISHBAND") {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
+          }
+          //Deselect Node Name? 
+          //var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
+          // this.setTreeNodeAsDeselected(sNodeName);
+        }
+      }
+      return true;
+    }
+    // Switch the Code
+    switch (oMessage.messageCode) {
+      case "PUBLISH":
+        this.m_oRabbitStompService.receivedPublishMessage(oMessage);
+        break;
+      case "PUBLISHBAND":
+        this.m_oRabbitStompService.receivedPublishBandMessage(oMessage);
+        break;
+      case "DOWNLOAD":
+      case "GRAPH":
+      case "INGEST":
+      case "MOSAIC":
+      case "SUBSET":
+      case "MULTISUBSET":
+      case "RASTERGEOMETRICRESAMPLE":
+      case "REGRID":
+        oController.receivedNewProductMessage(oMessage);
+        break;
+      case "DELETE":
+        break;
+
+    }
+    let sNotificationMsg = WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage);
+    if (sNotificationMsg !== false) {
+      this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "bottom", "right");
+    }
+    return true;
+  }
+
+  receivedNewProductMessage(oMessage: any) {
+    let sMessage: string;
+    this.m_oTranslateService.get('NOTIFICATION.MSG_EDIT_PRODUCT_ADDED').subscribe((sResult: string) => {
+      console.log(sResult);
+      sMessage = sResult;
+
+      let oNotification = this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close");
+    });
+  }
 
   openProcessesBar(): void {
     this._bottomSheet.open(ProcessesBarContent, {
       data: {
-        processes: this.m_aoProcessesRunning,
         workspace: this.m_oActiveWorkspace
       }
     })
@@ -47,7 +139,7 @@ export class ProcessesBarComponent {
   templateUrl: 'processes-bar-content.html',
   styleUrls: ['./processes-bar-content.css']
 })
-export class ProcessesBarContent {
+export class ProcessesBarContent implements OnInit {
   faArrowDown = faArrowDown;
   faDownload = faDownload;
   faRefresh = faRefresh;
@@ -63,7 +155,7 @@ export class ProcessesBarContent {
     sName: ""
   };
 
-  m_aoProcessesRunning: any[] = this.data.processes.reverse();
+  m_aoProcessesRunning: any[] = [];
   m_oActiveWorkspace: any = this.data.workspace;
   m_aoAllProcessesLogs: any = [];
 
@@ -74,14 +166,16 @@ export class ProcessesBarContent {
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
   ) { }
 
+  ngOnInit(): void {
+    this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+    this.m_oProcessWorkspaceService.getProcessesRunning().subscribe(aoProcesses => {
+      this.m_aoProcessesRunning = aoProcesses;
+    })
+  }
+
   refreshProcesses(event: MouseEvent) {
     event.preventDefault;
-    this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
-      if (oResponse.length !== 0) {
-        console.log(oResponse);
-        this.m_aoProcessesRunning = oResponse.reverse();
-      }
-    })
+    this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
   }
 
   downloadProcessesFile() {
@@ -278,7 +372,6 @@ export class ProcessesDialog {
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     @Inject(MAT_DIALOG_DATA) public m_oFilter: SearchFilter,
   ) {
@@ -294,7 +387,7 @@ export class ProcessesDialog {
   }
 
   m_bHasError: boolean = false;
-  Allm_aoProcessesLogs: any[] = [];
+  m_aoProcessesLogs: any[] = [];
   m_aoAllProcessesLogs: any[] = [];
   m_sFilterTable: string = "";
   m_bAreProcessesLoaded: boolean = false;

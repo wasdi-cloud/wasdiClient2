@@ -9,6 +9,7 @@ import { UserSettingsDialogComponent } from './header-dialogs/user-settings-dial
 import { User } from 'src/app/shared/models/user.model';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

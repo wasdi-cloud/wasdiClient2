@@ -1,40 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+//Service Imports: 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ProductService } from 'src/app/services/api/product.service';
-import { Workspace } from 'src/app/shared/models/workspace.model';
-import { Product } from 'src/app/shared/models/product.model';
-import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { MapService } from 'src/app/services/map.service';
-import { GlobeService } from 'src/app/services/globe.service';
-import { FileBufferService } from 'src/app/services/api/file-buffer.service';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ProcessorService } from 'src/app/services/api/processor.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { WorkspaceService } from 'src/app/services/api/workspace.service';
+
+//Model Imports: 
+import { Product } from 'src/app/shared/models/product.model';
+
+//Utilities Imports: 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, OnDestroy {
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,
-    private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
-    private m_oFileBufferService: FileBufferService,
-    private m_oGlobeService: GlobeService,
-    private m_oMapService: MapService,
     private m_oProductService: ProductService,
-    private m_oProcessorService: ProcessorService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oRabbitStompService: RabbitStompService,
     private m_oRouter: Router,
     private m_oTranslateService: TranslateService,
-    private m_oWorkspaceService: WorkspaceService) {
-
-  }
+    private m_oWorkspaceService: WorkspaceService) { }
   //Map Status: 2D (true) or 3D (false): 
   m_b2DMapModeOn: boolean = true;
   //Has first zoom on band been done? 
@@ -45,7 +39,6 @@ export class EditComponent implements OnInit {
   m_bIsFilteredTree: false;
 
   m_bTreeIsLoading: boolean = true;
-
 
   //Array of Products in Workspace
   m_aoProducts: Product[];
@@ -69,18 +62,11 @@ export class EditComponent implements OnInit {
 
   m_sSearchString: string;
 
-  m_aoVisibleBands
+  m_aoVisibleBands;
 
   ngOnInit(): void {
-    //Initalize the map
-
-    //add the GeoSearch Plugin Bar
-
-    //Initalize the globe
-
-
     //What to do if workspace undefined: 
-    if (!this.m_sWorkspaceId) {
+    if (!this.m_oActiveWorkspace) {
       //Check route for workspace id
       if (this.m_oActivatedRoute.snapshot.params['workspaceId']) {
         //Assign and set new workspace id
@@ -88,9 +74,8 @@ export class EditComponent implements OnInit {
         this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.m_sWorkspaceId).subscribe(oResponse => {
           this.m_oConstantsService.setActiveWorkspace(oResponse);
           this.m_oActiveWorkspace = oResponse;
-
-          //Workspace is now defined => Load Processes
-          this.getProcesses()
+          this.subscribeToRabbit();
+          this.getProductList();
         })
       } else {
         //If unable to identify workspace, re-route to workspaces tab
@@ -99,26 +84,23 @@ export class EditComponent implements OnInit {
     } else {
       //If workspace is defined => Load Processes
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-      this.getProcesses()
+      this.subscribeToRabbit();
     }
 
     //load Products
     this.getProductList();
+  }
 
+  ngOnDestroy(): void {
+      this.m_oRabbitStompService.unsubscribe(); 
   }
 
   getProductList() {
     this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe(response => {
       this.m_aoProducts = response
-      console.log(this.m_aoProducts)
     })
   }
 
-  getProcesses() {
-    this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_sWorkspaceId).subscribe(response => {
-      this.m_aoProcessesRunning = response;
-    })
-  }
 
   getSearchString(event: string) {
     this.m_sSearchString = event;
@@ -130,5 +112,16 @@ export class EditComponent implements OnInit {
 
   getMapMode(event: any) {
     this.m_b2DMapModeOn = event;
+  }
+
+  getProductListUpdate(event: any) {
+    this.getProductList(); 
+  }
+
+  subscribeToRabbit() {
+    if (this.m_oRabbitStompService.isSubscrbed() === false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
+      console.log('EditorController: Web Stomp is ready --> subscribe');
+      this.m_oRabbitStompService.subscribe(this.m_oActiveWorkspace.workspaceId);
+    }
   }
 }

@@ -2,19 +2,30 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from 'src/app/shared/models/product.model';
 
 //Angular Material Imports:
-import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { FileBufferService } from 'src/app/services/api/file-buffer.service';
-import { ConstantsService } from 'src/app/services/constants.service';
-
-import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { ProductService } from 'src/app/services/api/product.service';
-import { CatalogService } from 'src/app/services/api/catalog.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { NestedTreeControl } from '@angular/cdk/tree';
+
+//Service Imports:
+import { CatalogService } from 'src/app/services/api/catalog.service';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { MapService } from 'src/app/services/map.service';
-import * as L from "leaflet"
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
+import { ProductService } from 'src/app/services/api/product.service';
+
+//Font Awesome Icons:
+import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+
+//Component Imports: 
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
+
+//Leaflet Declaration:
+import * as L from "leaflet";
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-products-list',
@@ -23,6 +34,7 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 })
 export class ProductsListComponent {
   @Input() productArray: Product[];
+  @Output() productArrayOutput = new EventEmitter();
   @Input() map: any;
   @Input() m_sSearchString: string;
   @Output() m_aoVisibleBandsOutput = new EventEmitter();
@@ -36,7 +48,6 @@ export class ProductsListComponent {
   faInfoCircle = faInfoCircle;
   faGlobe = faGlobeEurope;
   faMap = faMap;
-
 
   m_oActiveBand;
   m_oActiveWorkspace;
@@ -53,8 +64,9 @@ export class ProductsListComponent {
     private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
     private m_oMapService: MapService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
   ) {
     this.treeControl = new NestedTreeControl<any>(node => {
       if (node.bandsGroups) {
@@ -153,23 +165,40 @@ export class ProductsListComponent {
   }
 
   deleteProduct(node: any) {
-    //Confirm Product Removal
+
     let bDeleteLayer = true;
     let bDeleteFile = true;
 
     //Get product from array
     let oFoundProduct = this.productArray.find(oProduct => oProduct.fileName === node.fileName);
+    let sMessage = "Are you sure you wish to delete " + oFoundProduct.name;
 
-    console.log(oFoundProduct);
-    console.log(this.m_oActiveWorkspace.workspaceId)
+    let dialogData = new ConfirmationDialogModel("Confirm Deletion", sMessage);
 
-    //Call m_oProductService.deleteProductFromWorkspace()
-    this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
-      if (oResponse.boolValue) {
-
-      }
-      console.log(oResponse)
+    //Open confirmation dialog for Product Removal
+    let dialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData
     })
+
+    dialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === false) {
+        return false;
+      } else {
+        //Call m_oProductService.deleteProductFromWorkspace()
+        this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
+          if (oResponse.boolValue) {
+            console.log(this.productArray)
+            this.productArrayOutput.emit(this.productArray);
+            return true;
+          }
+          return false
+        });
+        return true;
+      }
+    })
+
+
 
     //in subscription, 
 
@@ -190,23 +219,51 @@ export class ProductsListComponent {
   }
 
   /**
-     * OPEN BAND IMAGE
-     * Called from the tree to open a band
-     * @param oBand
-     */
+   * OPEN BAND IMAGE
+   * Called from the tree to open a band
+   * @param oBand
+   */
   openBandImage(oBand) {
     let sFileName = this.productArray[oBand.nodeIndex].fileName;
     let bAlreadyPublished = oBand.published;
+    this.m_oActiveBand = oBand;
+
+
+    console.log(oBand)
+
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
-      if (oResponse.messageCode === "PUBLISHBAND") {
-        console.log(oResponse.payload.geoserverBoundingBox)
+      console.log(oResponse);
+      if (!bAlreadyPublished) {
+        let sNotificationMsg = "PUBLISHING BAND";
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
+      }
+
+      if (this.m_aoVisibleBands.length === 0) {
+
+      }
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
+        //If the Band is already published: 
+        if (oResponse.messageCode === "PUBLISHBAND") {
+          console.log(oResponse.payload.geoserverBoundingBox);
+          this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
+        } else {
+          this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+        }
         this.m_aoVisibleBands.push(this.m_oActiveBand);
         this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
         this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
-        // Already published: we already have the View Model
-        this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
       } else {
-        this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+        // var sMessage = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
+        // utilsVexDialogAlertTop(sMessage + oBand.name);
+        // oController.setTreeNodeAsDeselected(oBand.productName + "_" + oBand.name);
+        let sNotificationMsg = "ERROR PUBLISHING BAND";
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
+
+
+      }
+      //It is publishing; we will receieve a Rabbit Message
+      if (oResponse.messageCode === "WAITFORRABBIT") {
+        console.log("WAITING FOR RABBIT");
       }
     })
 

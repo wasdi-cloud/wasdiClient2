@@ -5,11 +5,13 @@
     <div class="d-flex flex-row px-3">
         <div class="productlist-navigation-container d-flex flex-column " style="height: 70vh">
             <div style="height: 50%;">
-                <app-products-list [productArray]="m_aoProducts"
-                    [m_sSearchString]="m_sSearchString" (m_aoVisibleBandsOutput)="getVisibleBands($event)"></app-products-list>
+                <app-products-list [productArray]="m_aoProducts" [m_sSearchString]="m_sSearchString"
+                    (m_aoVisibleBandsOutput)="getVisibleBands($event)" 
+                    (productArrayOutput)="getProductListUpdate($event)"></app-products-list>
             </div>
             <div style="height: 50%">
-                <app-nav-layers [m_aoVisibleBands]="m_aoVisibleBands" [m_aoVisibleBands]="m_aoVisibleBands" [m_aoProducts]="m_aoProducts" [m_b2DMapModeOn]="m_b2DMapModeOn"></app-nav-layers>
+                <app-nav-layers [m_aoVisibleBands]="m_aoVisibleBands" [m_aoVisibleBands]="m_aoVisibleBands"
+                    [m_aoProducts]="m_aoProducts" [m_b2DMapModeOn]="m_b2DMapModeOn"></app-nav-layers>
             </div>
         </div>
         <div style="height: 75vh; width: 100%">
@@ -17,6 +19,6 @@
         </div>
     </div>
     <div>
-        <app-processes-bar [m_aoProcessesRunning]="m_aoProcessesRunning" [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>
+        <app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>
     </div>
 </main>

@@ -49,8 +49,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MatTooltipModule } from '@angular/material/tooltip'
-import { MatPaginatorModule } from '@angular/material/paginator'
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -113,7 +114,9 @@ import { ProcessorTabContentComponent } from './components/edit/edit-toolbar/too
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ProcessLogsDialogComponent } from './components/edit/process-logs-dialog/process-logs-dialog.component';
 import { ImportDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
-
+import { RxStompService } from './services/rx-stomp.service';
+import { rxStompServiceFactory } from './shared/factories/rx-stomp-service-factory';
+import { RabbitStompService } from './services/rabbit-stomp.service';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -178,9 +181,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     PayloadDialogComponent,
     ProcessLogsDialogComponent,
     ImportDialogComponent,
-    AppsDialogComponent, 
-    ParamsLibraryDialogComponent, 
-    NewAppDialogComponent, 
+    AppsDialogComponent,
+    ParamsLibraryDialogComponent,
+    NewAppDialogComponent,
     ProcessorTabContentComponent
   ],
   imports: [
@@ -215,8 +218,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatBottomSheetModule,
     MatTooltipModule,
     FontAwesomeModule,
-    ClipboardModule, 
-    MatPaginatorModule
+    ClipboardModule,
+    MatPaginatorModule,
+    MatSnackBarModule
   ],
   providers: [
     AuthService,
@@ -229,7 +233,12 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+    },
+    { provide: RabbitStompService }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ConfirmationDialogComponent, ProcessesBarContent],

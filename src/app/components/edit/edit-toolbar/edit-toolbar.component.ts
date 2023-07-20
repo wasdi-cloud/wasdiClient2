@@ -11,6 +11,8 @@ import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-di
 import { ImportDialogComponent } from './toolbar-dialogs/import-dialog/import-dialog.component';
 import { AppsDialogComponent } from './toolbar-dialogs/apps-dialog/apps-dialog.component';
 import { NewAppDialogComponent } from './toolbar-dialogs/new-app-dialog/new-app-dialog.component';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-edit-toolbar',
@@ -33,15 +35,24 @@ export class EditToolbarComponent implements OnInit {
   @Input() m_oActiveWorkspace: Workspace;
   @Output() m_sSearchString = new EventEmitter();
 
+  m_bNotebookIsReady: boolean = false;
   m_sFilterText: string;
+
+  m_iHookIndex;
 
   constructor(
     private m_oConsoleService: ConsoleService,
     private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog
+    private m_oDialog: MatDialog,
+    private m_oRabbitStompService: RabbitStompService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    //RabbitStomp service call 
+    this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("LAUNCHJUPYTERNOTEBOOK",
+      this,
+      this.rabbitMessageHook, true)
+  }
 
   openWorkspaceInfo(event: MouseEvent) {
     let oDialogRef = this.m_oDialog.open(WorkspaceInfoDialogComponent, {
@@ -90,16 +101,31 @@ export class EditToolbarComponent implements OnInit {
   }
 
   openImportDialog(event: MouseEvent) {
-     let oDialog = this.m_oDialog.open(ImportDialogComponent, {
-      height: '40vh', 
+    let oDialog = this.m_oDialog.open(ImportDialogComponent, {
+      height: '40vh',
       width: '50vw'
-     })
+    })
   }
 
   openJupyterNotebookPage(oEvent: MouseEvent) {
     oEvent.preventDefault
     this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
-      window.open(oResponse.stringValue, "_blank")
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
+        console.log(oResponse)
+        if (oResponse.stringValue.includes("http")) {
+          window.open(oResponse.stringValue, '_blank');
+        }
+      } else {
+        let sMessage = "WASDI is preparing your notebook."
+
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.stringValue) === false) {
+            sMessage = sMessage + "<BR>" + oResponse.stringValue;
+          }
+        }
+        this.m_bNotebookIsReady = true;
+        console.log(sMessage);
+      }
     })
   }
 
@@ -118,5 +144,9 @@ export class EditToolbarComponent implements OnInit {
       width: '50vw',
       data: dialogData
     });
+  }
+
+  rabbitMessageHook(oRabbitMessage, oController) {
+
   }
 }

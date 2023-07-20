@@ -1,13 +1,26 @@
 import { Component } from '@angular/core';
+
+//Angular Materials Modules: 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { faBook, faDownload, faEdit, faPaintBrush, faPlay, faPlus, faQuestionCircle, faRocket, faX } from '@fortawesome/free-solid-svg-icons';
+
+//Service Imports:
+import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
-import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
+
+//Font Awesome Icons: 
+import { faBook, faDownload, faEdit, faPaintBrush, faPlay, faPlus, faQuestionCircle, faRocket, faX } from '@fortawesome/free-solid-svg-icons';
+
+//Components Imports:
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
-import { ConstantsService } from 'src/app/services/constants.service';
 import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
+import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
+
+//Fadeout Utilities Import: 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-apps-dialog',
@@ -16,15 +29,15 @@ import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.componen
 })
 export class AppsDialogComponent {
   //Font Awesome Icon Imports
-  faX = faX;
+  faBook = faBook;
   faDownload = faDownload;
   faEdit = faEdit;
-  faPlus = faPlus;
-  faPaintBrush = faPaintBrush;
-  faBook = faBook;
-  faRun = faPlay;
   faHelp = faQuestionCircle;
+  faPaintBrush = faPaintBrush;
+  faPlus = faPlus;
   faRocket = faRocket;
+  faRun = faPlay;
+  faX = faX;
 
   m_sActiveUserId: string = ""
   m_aoWorkspaceList: any[] = [];
@@ -44,7 +57,9 @@ export class AppsDialogComponent {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oProductService: ProductService,
     private m_oWorkspaceService: WorkspaceService,
   ) {
@@ -53,6 +68,9 @@ export class AppsDialogComponent {
 
   }
 
+  /**
+   * Get the list of processors from the server
+   */
   getProcessorsList() {
     this.m_bIsLoadingProcessorList = true;
 
@@ -66,13 +84,18 @@ export class AppsDialogComponent {
     });
   }
 
+  /**
+   * If the processor has a default image, set as image - otherwise use default image
+   * @param aoProcessorList 
+   * @returns 
+   */
   setDefaultImages(aoProcessorList) {
     if (!aoProcessorList) {
       return aoProcessorList;
     }
 
     let sDefaultImage = "";
-    let iNumberOfProcessors = aoProcessorList.lenght;
+    let iNumberOfProcessors = aoProcessorList.length;
 
     for (let iIndexProcessor = 0; iIndexProcessor < iNumberOfProcessors; iIndexProcessor++) {
       if (!aoProcessorList.imgLink) {
@@ -82,6 +105,10 @@ export class AppsDialogComponent {
     return aoProcessorList;
   }
 
+  /**
+   * Set selected processor as active processor
+   * @param oProcessor 
+   */
   selectProcessor(oProcessor) {
     this.m_oSelectedProcessor = oProcessor;
 
@@ -102,6 +129,11 @@ export class AppsDialogComponent {
     }
   }
 
+  /**
+   * Open the Processor Parameters Dialog
+   * @param oEvent 
+   * @param oProcessor 
+   */
   openParametersDialog(oEvent: MouseEvent, oProcessor) {
     oEvent.preventDefault();
     let oDialog = this.m_oDialog.open(ParamsLibraryDialogComponent, {
@@ -117,6 +149,12 @@ export class AppsDialogComponent {
     })
   }
 
+  /**
+   * Download the Processor file
+   * @param oEvent 
+   * @param oProcessor 
+   * @returns 
+   */
   downloadProcessor(oEvent: MouseEvent, oProcessor: any) {
     oEvent.preventDefault();
     if (!oProcessor) {
@@ -126,6 +164,11 @@ export class AppsDialogComponent {
     return this.m_oProcessorService.downloadProcessor(oProcessor.processorId);
   }
 
+  /**
+   * Open Processor Editing Dialog
+   * @param oEvent 
+   * @param oProcessor 
+   */
   openEditProcessorDialog(oEvent: MouseEvent, oProcessor: any) {
     let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
       height: '80vh',
@@ -134,6 +177,12 @@ export class AppsDialogComponent {
     })
   }
 
+  /**
+   * Either Delete the processor or remove user permissions
+   * @param oEvent 
+   * @param oProcessor 
+   * @returns 
+   */
   removeProcessor(oEvent: MouseEvent, oProcessor: any) {
     if (!oProcessor) {
       return false;
@@ -167,10 +216,16 @@ export class AppsDialogComponent {
     return true;
   }
 
+  /**
+   * Format the JSON textbox
+   */
   formatJSON() {
     this.m_sMyJsonString = JSON.stringify(JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')), null, 2);
   }
 
+  /**
+   * Execute the processor in the active workspace
+   */
   runProcessor() {
     console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
 
@@ -193,12 +248,17 @@ export class AppsDialogComponent {
     }
 
     this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
-      console.log(oResponse)
-
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+        let sNotificationMsg = "PROCESSOR SCHEDULED";
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
+      }
       this.m_oDialogRef.close();
     })
   }
 
+  /**
+   * Open the help dialog
+   */
   openHelp() {
     this.m_oProcessorService.getHelpFromProcessor(this.m_oSelectedProcessor.processorName).subscribe(oResponse => {
       if (oResponse.stringValue) {
@@ -223,6 +283,9 @@ export class AppsDialogComponent {
     })
   }
 
+  /**
+   * Close the Apps Dialog
+   */
   onDismiss() {
     this.m_oDialogRef.close();
   }
