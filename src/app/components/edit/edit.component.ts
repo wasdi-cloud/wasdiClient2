@@ -114,6 +114,10 @@ export class EditComponent implements OnInit, OnDestroy {
     this.m_b2DMapModeOn = event;
   }
 
+  getProductListUpdate(event: any) {
+    this.getProductList(); 
+  }
+
   subscribeToRabbit() {
     if (this.m_oRabbitStompService.isSubscrbed() === false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
       console.log('EditorController: Web Stomp is ready --> subscribe');

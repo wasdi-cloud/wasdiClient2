@@ -20,6 +20,7 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
 //Component Imports: 
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
 
 //Leaflet Declaration:
@@ -33,6 +34,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 })
 export class ProductsListComponent {
   @Input() productArray: Product[];
+  @Output() productArrayOutput = new EventEmitter();
   @Input() map: any;
   @Input() m_sSearchString: string;
   @Output() m_aoVisibleBandsOutput = new EventEmitter();
@@ -163,23 +165,40 @@ export class ProductsListComponent {
   }
 
   deleteProduct(node: any) {
-    //Confirm Product Removal
+
     let bDeleteLayer = true;
     let bDeleteFile = true;
 
     //Get product from array
     let oFoundProduct = this.productArray.find(oProduct => oProduct.fileName === node.fileName);
+    let sMessage = "Are you sure you wish to delete " + oFoundProduct.name;
 
-    console.log(oFoundProduct);
-    console.log(this.m_oActiveWorkspace.workspaceId)
+    let dialogData = new ConfirmationDialogModel("Confirm Deletion", sMessage);
 
-    //Call m_oProductService.deleteProductFromWorkspace()
-    this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
-      if (oResponse.boolValue) {
-
-      }
-      console.log(oResponse)
+    //Open confirmation dialog for Product Removal
+    let dialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData
     })
+
+    dialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === false) {
+        return false;
+      } else {
+        //Call m_oProductService.deleteProductFromWorkspace()
+        this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
+          if (oResponse.boolValue) {
+            console.log(this.productArray)
+            this.productArrayOutput.emit(this.productArray);
+            return true;
+          }
+          return false
+        });
+        return true;
+      }
+    })
+
+
 
     //in subscription, 
 
