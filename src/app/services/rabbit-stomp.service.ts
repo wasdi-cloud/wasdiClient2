@@ -309,7 +309,7 @@ export class RabbitStompService {
         if (_this.m_oReconnectTimerPromise == null) {
           // Try to Reconnect
           _this.m_oRabbitReconnectAttemptCount = 0;
-          //_this.m_oReconnectTimerPromise = _this.m_oInterval(_this.m_oRabbitReconnect, 5000);
+          _this.m_oReconnectTimerPromise = setInterval(_this.m_oRabbitReconnect, 5000);
         }
       }
     };
