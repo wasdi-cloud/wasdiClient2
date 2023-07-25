@@ -14,7 +14,7 @@ export class NewAppDialogComponent {
   faRocket = faRocket;
   faX = faXmark;
 
-  m_bEditMode; 
+  m_bEditMode: boolean;
 
   m_sActiveTab = "PROCESSOR"
 
@@ -23,10 +23,9 @@ export class NewAppDialogComponent {
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oProcessorService: ProcessorService,
-    private m_oWorkspaceService: WorkspaceService) { 
-      this.m_bEditMode = data.editMode;
-      console.log(this.m_bEditMode); 
-    }
+    private m_oWorkspaceService: WorkspaceService) {
+    this.m_bEditMode = data.editMode;
+  }
 
   changeActiveTab(sTabName: string) {
     if (sTabName) {

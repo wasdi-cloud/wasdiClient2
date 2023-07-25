@@ -1,9 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
+
+//Service Imports:
+import { ConstantsService } from 'src/app/services/constants.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
-import { ConstantsService } from 'src/app/services/constants.service';
+
+//Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 @Component({
@@ -82,15 +86,20 @@ export class ProcessorTabContentComponent implements OnInit {
    */
   m_sProcessorId: string = "";
 
+  /**
+   * Selected File
+   */
+  m_oSelectedFile: any = null;
+
   m_aoProcessorTypes = [
-    { name: "Python 3.x Pip 2", id: "python_pip_2" },
-    { name: "Python 3.x Pip One Shot", id: "pip_oneshot" },
+    { name: "Python 3.7 Pip", id: "ubuntu_python37_snap" },
+    // { name: "Python 3.x Pip 2", id: "python_pip_2" },
+    // { name: "Python 3.x Pip One Shot", id: "pip_oneshot" },
     { name: "IDL 3.7.2", id: "ubuntu_idl372" },
     { name: "OCTAVE 6.x", id: "octave" },
     { name: "Python 3.x Conda", id: "conda" },
     { name: "C# .NET Core", id: "csharp" },
-    { name: "OGC Application Package", id: "eoepca" },
-    { name: "Python 3.7 Pip", id: "ubuntu_python37_snap" }
+    { name: "OGC Application Package", id: "eoepca" }
   ];
 
   m_aoProcessorTypesMap = this.m_aoProcessorTypes.map(oProcessorType => {
@@ -137,7 +146,8 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.m_aoProcessorTypes)
+    //Set the active workspace from the constants service
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
   /**
@@ -175,36 +185,101 @@ export class ProcessorTabContentComponent implements OnInit {
    * @param oSelectedFile
    * @returns {boolean}
    */
-  postProcessor(oController: any, oSelectedFile: any) {
-    if (!oSelectedFile) {
+  // postProcessor(oController: any, oSelectedFile: any) {
+  //   if (!oSelectedFile) {
+  //     return false;
+  //   }
+
+  //   let sType = this.m_oSelectedType.id;
+  //   let sPublic = "1";
+  //   if (this.m_bIsPublic === false) {
+  //     sPublic = "0";
+  //   }
+
+  //   let oBody = new FormData();
+  //   oBody.append('file', this.m_oFile[0]);
+
+  //   if (sType === "ubuntu_python_snap" || sType === "ubuntu_python37_snap") {
+  //     this.m_sName = this.m_sName.toLowerCase();
+  //   }
+
+  //   let sName = encodeURIComponent(this.m_sName);
+  //   let sDescription = encodeURIComponent(this.m_sDescription);
+
+  //   this.m_oProcessorService.uploadProcessor(this.m_oActiveWorkspace.workspaceId, sName, this.m_sVersion, sDescription, sType, this.m_sJSONSample, sPublic, oBody).subscribe(oResponse => {
+  //     console.log(oResponse);
+  //   })
+
+  //   return true;
+  // }
+
+
+  deployProcessor() {
+    if (!this.m_oSelectedFile) {
       return false;
     }
 
-    let sType = this.m_oSelectedType.id;
-    let sPublic = "1";
+    let sType: string = this.m_oSelectedType.id;
+
+    let sIsPublic = "1";
     if (this.m_bIsPublic === false) {
-      sPublic = "0";
+      sIsPublic = "0";
     }
 
-    let oBody = new FormData();
-    oBody.append('file', this.m_oFile[0]);
+    // let oBody = new FormData();
+    // oBody.append("file", this.m_oSelectedFile);
 
     if (sType === "ubuntu_python_snap" || sType === "ubuntu_python37_snap") {
       this.m_sName = this.m_sName.toLowerCase();
     }
 
-    let sName = encodeURIComponent(this.m_sName); 
-    let sDescription = encodeURIComponent(this.m_sDescription); 
+    let sName = encodeURIComponent(this.m_sName);
+    let sDescription = encodeURIComponent(this.m_sDescription);
 
-    this.m_oProcessorService.uploadProcessor(this.m_oActiveWorkspace.workspaceId, sName, this.m_sVersion, sDescription, sType, this.m_sJSONSample, sPublic, oBody).subscribe(oResponse =>{ 
-      console.log(oResponse); 
+    console.log(sName);
+    console.log(sDescription);
+    console.log(this.m_oSelectedFile);
+    console.log(this.m_oActiveWorkspace.workspaceId)
+
+    this.m_oProcessorService.uploadProcessor(this.m_oActiveWorkspace.workspaceId, sName, this.m_sVersion, sDescription, sType, this.m_sJSONSample, sIsPublic, this.m_oSelectedFile).subscribe({
+      next: oResponse => {
+        console.log(oResponse);
+        let sMessage: string;
+        if (oResponse.boolValue === true) {
+          sMessage = "Processor Uploaded - it will be deployed shortly";
+        } else {
+          sMessage = "Error uploading processor";
+
+          if (!oResponse.stringValue) {
+            sMessage = `Error Code: ${oResponse.intValue}`;
+          } else {
+            sMessage += oResponse.stringValue;
+          }
+          //ADD ALERT NOTIFICATION
+          console.log(sMessage);
+        }
+      },
+      error: oError => {
+        //ADD ERROR NOTIFICATION 
+        console.log("There was an error in deploying the processor");
+      }
     })
-
     return true;
   }
 
+  setSelectedType(event: any) {
+    this.m_aoProcessorTypes.forEach(oType => {
+      if (oType.name === event.option.value) {
+        this.m_oSelectedType = oType;
+      }
+    });
+    console.log(this.m_oSelectedType);
+  }
 
-  deployProcessor() {
-
+  onFileSelect(input: any) {
+    if (input.files && input.files[0]) {
+      this.m_oSelectedFile = new FormData();
+      this.m_oSelectedFile.append('file', input.files[0]);
+    }
   }
 }

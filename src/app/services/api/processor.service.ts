@@ -5,10 +5,10 @@ import { ConstantsService } from '../constants.service';
 
 type Nullable<T> = T | null;
 
-export interface Help {
-  boolValue: boolean,
-  intValue: Nullable<number>,
-  doubleValue: Nullable<number>,
+export interface Response {
+  boolValue: boolean, 
+  intValue: Nullable<number>, 
+  doubleValue: Nullable<number>, 
   stringValue: string
 }
 
@@ -121,7 +121,7 @@ export class ProcessorService {
      * @returns {*}
      */
   getHelpFromProcessor(sProcessorName: string) {
-    return this.oHttp.get<Help>(this.APIURL + '/processors/help?name=' + sProcessorName);
+    return this.oHttp.get<Response>(this.APIURL + '/processors/help?name=' + sProcessorName);
   };
 
 
@@ -139,7 +139,7 @@ export class ProcessorService {
      */
   uploadProcessor(sWorkspaceId: string, sName: string, sVersion: string, sDescription: string, sType: string, sJsonSample: string, sPublic: string, oBody: object) {
 
-    return this.oHttp.post(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic), oBody);
+    return this.oHttp.post<Response>(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic), oBody);
   };
 
   /**
