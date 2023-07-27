@@ -1,51 +1,52 @@
 <div class="d-flex flex-row gap-2" style="width: 100%;">
 
     <div class="ui-btns-container d-flex flex-column gap-1">
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('tab')">
             Tab
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('renderAsStrings')">
             Render As Strings
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('textbox')">
             Textbox
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('numeric')">
             Numeric Field
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('dropdown')">
             Dropdown
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('bbox')">
             Select Area
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('slider')">
             Number Slider
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('date')">
             Date
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('boolean')">
             Boolean
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('productscombo')">
             Product Combo Box
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('searcheoimage')">
             Search EO Images
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('listbox')">
             List Box
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('hidden')">
             Hidden Field
         </button>
-        <button class="btn btn-secondary btn-sm">
+        <button class="btn btn-secondary btn-sm" (click)="addUIElement('table')">
             Table
         </button>
     </div>
     <div class="JSON-container d-flex flex-column gap-1" style="height: 100%; width: 100%;">
-        <textarea class="form-control" name="" id="" cols="30" style="height: 30rem; width: 100%;"></textarea>
-        <button class="btn btn-success btn-sm align-self-end">Format JSON</button>
+        <textarea insertable-text-area="" class="form-control" name="" id="" cols="30" style="height: 30rem; width: 100%;"
+            [(ngModel)]="m_sProcessorUI" (ngModelChange)="m_bUIChanged = true"></textarea>
+        <button class="btn btn-success btn-sm align-self-end" (click)="formatJSON()">Format JSON</button>
     </div>
 </div>
