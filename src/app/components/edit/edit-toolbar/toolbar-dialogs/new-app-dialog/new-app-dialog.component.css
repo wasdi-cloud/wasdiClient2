@@ -1,3 +1,7 @@
 a.nav-link {
     cursor: pointer;
 }
+
+div.tab-content-container {
+    overflow-y: scroll;
+}
