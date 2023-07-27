@@ -1,4 +1,5 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-processor-tab-ui',
@@ -6,6 +7,9 @@ import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
   styleUrls: ['./processor-tab-ui.component.css']
 })
 export class ProcessorTabUiComponent implements OnInit, OnChanges {
+  //Declare name for appui id
+  public readonly appui = "appui";
+
   m_bUIChanged: boolean = false;
   m_sProcessorUI: string = "{}";
 
@@ -21,6 +25,11 @@ export class ProcessorTabUiComponent implements OnInit, OnChanges {
     }
   }
 
+
+  /**
+   * Create JSON snippet based on text input and add to textarea
+   * @param sElementType 
+   */
   addUIElement(sElementType: string) {
     let sTextToInsert = "";
 
@@ -70,10 +79,29 @@ export class ProcessorTabUiComponent implements OnInit, OnChanges {
     } else if (sElementType === "table") {
       sTextToInsert = '\n\t{\n\t\t"param": "PARAM_NAME",\n\t\t"type": "table",\n\t\t"label": "description",\n\t\t"required": false,\n\t\t"tooltip":"",\n\t\t"rows":"",\n\t\t"columns":"",\n\t\t"row_headers":[],\n\t\t"col_headers":[]\n\t},'
     }
-    console.log(sTextToInsert);
+
+    //Handle textarea insertion
+    this.insetText(sTextToInsert);
+    
     this.m_bUIChanged = true;
   }
 
+  /**
+   * Handle text insertion into UI JSON Textbox
+   * @param sText 
+   */
+  insetText(sText: string) {
+    const oTextarea = document.querySelector<HTMLTextAreaElement>(
+      `#${this.appui}`);
+
+    if (oTextarea) {
+      oTextarea.setRangeText(sText, oTextarea.selectionStart, oTextarea.selectionEnd, 'end');
+    }
+  }
+
+  /**
+   * Format JSON 
+   */
   formatJSON() {
     let oController = this;
     let sStringParsed = ""
