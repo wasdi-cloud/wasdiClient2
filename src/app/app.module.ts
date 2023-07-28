@@ -118,6 +118,7 @@ import { RxStompService } from './services/rx-stomp.service';
 import { rxStompServiceFactory } from './shared/factories/rx-stomp-service-factory';
 import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ProcessorTabUiComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-ui/processor-tab-ui.component';
+import { ProcessorTabStoreComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-store/processor-tab-store.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -186,7 +187,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ParamsLibraryDialogComponent,
     NewAppDialogComponent,
     ProcessorTabContentComponent,
-    ProcessorTabUiComponent
+    ProcessorTabUiComponent,
+    ProcessorTabStoreComponent
   ],
   imports: [
     AppRoutingModule,
