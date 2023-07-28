@@ -16,7 +16,8 @@ export class NewAppDialogComponent {
 
   m_bEditMode: boolean;
 
-  m_sActiveTab = "PROCESSOR"
+  m_sActiveTab = "PROCESSOR"; 
+  m_oProcessor: any; 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private m_oConstantsService: ConstantsService,
@@ -25,6 +26,9 @@ export class NewAppDialogComponent {
     private m_oProcessorService: ProcessorService,
     private m_oWorkspaceService: WorkspaceService) {
     this.m_bEditMode = data.editMode;
+    if(data.oProcessor) {
+      this.m_oProcessor = data.oProcessor;
+    }
   }
 
   changeActiveTab(sTabName: string) {

@@ -173,7 +173,8 @@ export class AppsDialogComponent {
     let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
       height: '80vh',
       width: '80vw',
-      data: { editMode: true }
+      data: { editMode: true,
+      oProcessor: oProcessor }
     })
   }
 

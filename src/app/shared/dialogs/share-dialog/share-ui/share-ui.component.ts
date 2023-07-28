@@ -5,6 +5,8 @@ import { StyleService } from 'src/app/services/api/style.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
 import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
+import { ProcessorService } from 'src/app/services/api/processor.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
   selector: 'app-share-ui',
   templateUrl: './share-ui.component.html',
@@ -23,11 +25,12 @@ export class ShareUiComponent implements OnInit {
 
   constructor(
     private m_oAdminDashboardService: AdminDashboardService,
+    private m_oProcessorService: ProcessorService,
     private m_oStyleService: StyleService,
     private m_oWorkspaceService: WorkspaceService) { }
 
   ngOnInit() {
-    this.getEnabledUsers()
+    this.getEnabledUsers();
   }
 
   getEnabledUsers() {
@@ -58,7 +61,14 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'workflow') { }
 
-      if (this.resourceType === 'processor') { }
+      if (this.resourceType === 'processor') {
+        this.m_oProcessorService.getUsersBySharedProcessor(this.resource.processorId).subscribe(oResponse => {
+          console.log(oResponse)
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+            this.m_aoSharedUsers = oResponse;
+          }
+        })
+      }
     }
   }
 
@@ -90,11 +100,23 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'workflow') { }
 
-      if (this.resourceType === 'processor') { }
+      if (this.resourceType === 'processor') {
+        this.m_oProcessorService.putShareProcessor(this.resource.processorId, this.m_sUserIdSearch).subscribe(oResponse => {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+            if (oResponse.boolValue) {
+              console.log("Sharing Saved");
+              this.getEnabledUsers();
+            }
+          }
+        })
+      }
     }
   }
 
   onRemoveEnabledUser(sUserId: string) {
+
+    //Remove whitespace from email 
+    FadeoutUtils.utilsRemoveSpaces(sUserId);
     if (this.resourceType && this.resource) {
       if (this.resourceType === 'workspace') {
         this.m_oWorkspaceService.deleteUserSharedWorkspace(this.resource.workspaceId, sUserId).subscribe(oResponse => {
@@ -121,7 +143,18 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'workflow') { }
 
-      if (this.resourceType === 'processor') { }
+      if (this.resourceType === 'processor') {
+        this.m_oProcessorService.deleteUserSharedProcessor(this.resource.processorId, sUserId).subscribe({
+            next: (oResponse) => {
+              this.getEnabledUsers(); 
+            },
+            error: (oError) => {
+              console.log("ERROR IN REMOVING USER")
+
+            }
+          }
+        )
+      }
     }
   }
 }
