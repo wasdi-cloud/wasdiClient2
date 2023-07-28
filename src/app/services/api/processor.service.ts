@@ -6,9 +6,9 @@ import { ConstantsService } from '../constants.service';
 type Nullable<T> = T | null;
 
 export interface Response {
-  boolValue: boolean, 
-  intValue: Nullable<number>, 
-  doubleValue: Nullable<number>, 
+  boolValue: boolean,
+  intValue: Nullable<number>,
+  doubleValue: Nullable<number>,
   stringValue: string
 }
 
@@ -256,7 +256,8 @@ export class ProcessorService {
        */
   //REQUIRES BODY ARGUMENT HERE
   putShareProcessor(sProcessorId: string, sUserId: string) {
-    // return this.oHttp.put(this.APIURL + '/processors/share/add?processorId=' + sProcessorId + "&userId=" + sUserId);
+    let oBody = {};
+    return this.oHttp.put<Response>(this.APIURL + '/processors/share/add?processorId=' + sProcessorId + "&userId=" + sUserId, oBody);
   };
 
   /**
