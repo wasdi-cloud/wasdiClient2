@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 type Nullable<T> = T | null;
 
@@ -32,11 +33,11 @@ export interface UIResponse {
 })
 export class ProcessorService {
   APIURL: string;
-  m_bIgnoreWorkspaceApiUrl: boolean = this.oConstantsService.getIgnoreWorkspaceApiUrl();
+  m_bIgnoreWorkspaceApiUrl: boolean = this.m_oConstantsService.getIgnoreWorkspaceApiUrl();
   m_sResource: string = "/processors";
 
-  constructor(private oHttp: HttpClient, private oConstantsService: ConstantsService) {
-    this.APIURL = oConstantsService.getAPIURL();
+  constructor(private m_oHttp: HttpClient, private m_oConstantsService: ConstantsService) {
+    this.APIURL = m_oConstantsService.getAPIURL();
   }
 
   /**
@@ -44,7 +45,7 @@ export class ProcessorService {
    * @returns {*}
    */
   getProcessorsList() {
-    return this.oHttp.get<any>(this.APIURL + this.m_sResource + "/getdeployed");
+    return this.m_oHttp.get<any>(this.APIURL + this.m_sResource + "/getdeployed");
   }
 
   /**
@@ -54,7 +55,7 @@ export class ProcessorService {
      * @returns {*}
      */
   getDeployedProcessor(sProcessorId: string) {
-    return this.oHttp.get(this.APIURL + this.m_sResource + "/getprocessor?processorId=" + sProcessorId)
+    return this.m_oHttp.get(this.APIURL + this.m_sResource + "/getprocessor?processorId=" + sProcessorId)
   }
 
   /**
@@ -63,7 +64,7 @@ export class ProcessorService {
     * @returns {*}
     */
   getMarketplaceList(oFilter: object) {
-    return this.oHttp.post(this.APIURL + '/processors/getmarketlist', oFilter);
+    return this.m_oHttp.post(this.APIURL + '/processors/getmarketlist', oFilter);
   };
 
   /**
@@ -72,7 +73,7 @@ export class ProcessorService {
       * @returns {*}
       */
   getMarketplaceDetail(sApplication: string) {
-    return this.oHttp.get<any>(this.APIURL + '/processors/getmarketdetail?processorname=' + sApplication);
+    return this.m_oHttp.get<any>(this.APIURL + '/processors/getmarketdetail?processorname=' + sApplication);
   };
 
   /**
@@ -84,7 +85,7 @@ export class ProcessorService {
   runProcessor(sProcessorName: string, sJSON: string) {
     let sEncodedJSON: string = encodeURI(sJSON);
     //Get active workspace
-    let oActiveWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oActiveWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     let sWorkspaceId: string;
     //Check that 
     if (oActiveWorkspace.workspaceId !== null || oActiveWorkspace.workspaceId !== undefined) {
@@ -93,7 +94,7 @@ export class ProcessorService {
     else {
       sWorkspaceId = "-";
     }
-    return this.oHttp.post(this.APIURL + '/processors/run?name=' + sProcessorName + '&workspace=' + sWorkspaceId, sEncodedJSON);
+    return this.m_oHttp.post(this.APIURL + '/processors/run?name=' + sProcessorName + '&workspace=' + sWorkspaceId, sEncodedJSON);
   };
 
   /**
@@ -103,7 +104,7 @@ export class ProcessorService {
     */
   deleteProcessor(sProcessorId: string) {
 
-    let oActiveWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oActiveWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     let sWorkspaceId: string;
 
     if (oActiveWorkspace.workspaceId) {
@@ -112,7 +113,7 @@ export class ProcessorService {
     else {
       sWorkspaceId = "-";
     }
-    return this.oHttp.get(this.APIURL + '/processors/delete?processorId=' + sProcessorId + '&workspace=' + sWorkspaceId);
+    return this.m_oHttp.get(this.APIURL + '/processors/delete?processorId=' + sProcessorId + '&workspace=' + sWorkspaceId);
   };
 
   /**
@@ -121,7 +122,7 @@ export class ProcessorService {
      * @returns {*}
      */
   getHelpFromProcessor(sProcessorName: string) {
-    return this.oHttp.get<Response>(this.APIURL + '/processors/help?name=' + sProcessorName);
+    return this.m_oHttp.get<Response>(this.APIURL + '/processors/help?name=' + sProcessorName);
   };
 
 
@@ -139,7 +140,7 @@ export class ProcessorService {
      */
   uploadProcessor(sWorkspaceId: string, sName: string, sVersion: string, sDescription: string, sType: string, sJsonSample: string, sPublic: string, oBody: object) {
 
-    return this.oHttp.post<Response>(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic), oBody);
+    return this.m_oHttp.post<Response>(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic), oBody);
   };
 
   /**
@@ -148,14 +149,14 @@ export class ProcessorService {
      * @returns {*}
      */
   getProcessorLogs(oProcessId: object) {
-    var oWorkspace = this.oConstantsService.getActiveWorkspace();
+    var oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     var sUrl = this.APIURL;
 
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get(sUrl + '/processors/logs/list?processworkspace=' + oProcessId);
+    return this.m_oHttp.get(sUrl + '/processors/logs/list?processworkspace=' + oProcessId);
   };
 
   /**
@@ -164,14 +165,14 @@ export class ProcessorService {
  * @returns {*}
  */
   getLogsCount(oProcessId: object) {
-    var oWorkspace = this.oConstantsService.getActiveWorkspace();
+    var oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     var sUrl = this.APIURL;
 
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get(sUrl + this.m_sResource + '/logs/count?processworkspace=' + oProcessId);
+    return this.m_oHttp.get(sUrl + this.m_sResource + '/logs/count?processworkspace=' + oProcessId);
   };
 
   /**
@@ -182,7 +183,7 @@ export class ProcessorService {
      * @returns {*}
      */
   getPaginatedLogs(oProcessId: object, iStartRow: number | string, iEndRow: number | string) {
-    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
@@ -199,7 +200,7 @@ export class ProcessorService {
       sUrl += '&endrow=' + iEndRow;
     }
 
-    return this.oHttp.get(sUrl);
+    return this.m_oHttp.get(sUrl);
   };
   /**
      * Update a processor
@@ -210,7 +211,7 @@ export class ProcessorService {
      */
   updateProcessor(sProcessorId: string, oBody: object) {
 
-    return this.oHttp.post(this.APIURL + '/processors/update?processorId=' + encodeURI(sProcessorId), oBody);
+    return this.m_oHttp.post(this.APIURL + '/processors/update?processorId=' + encodeURI(sProcessorId), oBody);
   };
   /**
     * Update the details of a processor
@@ -220,7 +221,7 @@ export class ProcessorService {
     * @returns {*}
     */
   updateProcessorDetails(sProcessorId: string, oBody: object) {
-    return this.oHttp.post(this.APIURL + '/processors/updatedetails?processorId=' + encodeURI(sProcessorId), oBody);
+    return this.m_oHttp.post(this.APIURL + '/processors/updatedetails?processorId=' + encodeURI(sProcessorId), oBody);
   };
 
   /**
@@ -230,24 +231,21 @@ export class ProcessorService {
      * @param oBody
      * @returns {*}
      */
-  //    updateProcessorFiles (sFileName: string, sProcessorId: string, oBody: ) {
+  updateProcessorFiles(sFileName: string, sProcessorId: string, oBody: any) {
 
-  //     var oOptions = {
-  //         transformRequest: angular.identity,
-  //         headers: {'Content-Type': undefined}
-  //     };
 
-  //     var sWorkspaceId = this.m_oConstantsService.getActiveWorkspace();
+    let oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    let sWorkspaceId;
 
-  //     if (utilsIsObjectNullOrUndefined(sWorkspaceId) == false) {
-  //         sWorkspaceId = sWorkspaceId.workspaceId;
-  //     }
-  //     else {
-  //         sWorkspaceId = "-";
-  //     }        
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sWorkspaceId) == false) {
+      sWorkspaceId = oActiveWorkspace.workspaceId;
+    }
+    else {
+      sWorkspaceId = "-";
+    }
 
-  //     return this.m_oHttp.post(this.APIURL + '/processors/updatefiles?workspace=' + encodeURI(sWorkspaceId) + '&processorId=' + encodeURI(sProcessorId) + '&file='+encodeURI(sFileName),oBody ,oOptions);
-  // };
+    return this.m_oHttp.post(this.APIURL + '/processors/updatefiles?workspace=' + encodeURI(sWorkspaceId) + '&processorId=' + encodeURI(sProcessorId) + '&file=' + encodeURI(sFileName), oBody, { observe: 'response' });
+  };
   /**
        * Share a processor
        * @param sProcessorId
@@ -257,7 +255,7 @@ export class ProcessorService {
   //REQUIRES BODY ARGUMENT HERE
   putShareProcessor(sProcessorId: string, sUserId: string) {
     let oBody = {};
-    return this.oHttp.put<Response>(this.APIURL + '/processors/share/add?processorId=' + sProcessorId + "&userId=" + sUserId, oBody);
+    return this.m_oHttp.put<Response>(this.APIURL + '/processors/share/add?processorId=' + sProcessorId + "&userId=" + sUserId, oBody);
   };
 
   /**
@@ -266,7 +264,7 @@ export class ProcessorService {
   * @returns {*}
   */
   getUsersBySharedProcessor(sProcessorId: string) {
-    return this.oHttp.get(this.APIURL + '/processors/share/byprocessor?processorId=' + sProcessorId);
+    return this.m_oHttp.get(this.APIURL + '/processors/share/byprocessor?processorId=' + sProcessorId);
   };
 
 /**
@@ -275,7 +273,7 @@ export class ProcessorService {
 * @param sUserId
 * @returns {*}
 */deleteUserSharedProcessor(sProcessorId: string, sUserId: string) {
-    return this.oHttp.delete(this.APIURL + '/processors/share/delete?processorId=' + sProcessorId + "&userId=" + sUserId);
+    return this.m_oHttp.delete(this.APIURL + '/processors/share/delete?processorId=' + sProcessorId + "&userId=" + sUserId);
   };
 
   /**
@@ -285,14 +283,14 @@ export class ProcessorService {
     */
   redeployProcessor(sProcessorId: string) {
 
-    var oWorkspace = this.oConstantsService.getActiveWorkspace();
+    var oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     var sWorkspaceId = "-";
 
     if (oWorkspace) {
       sWorkspaceId = oWorkspace.workspaceId;
     }
 
-    return this.oHttp.get(this.APIURL + '/processors/redeploy?processorId=' + sProcessorId + "&workspace=" + sWorkspaceId);
+    return this.m_oHttp.get(this.APIURL + '/processors/redeploy?processorId=' + sProcessorId + "&workspace=" + sWorkspaceId);
   };
 
   /**
@@ -302,14 +300,14 @@ export class ProcessorService {
    */
   forceLibUpdate(sProcessorId: string) {
 
-    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     let sWorkspaceId = "-";
 
     if (oWorkspace) {
       sWorkspaceId = oWorkspace.workspaceId;
     }
 
-    return this.oHttp.get(this.APIURL + '/processors/libupdate?processorId=' + sProcessorId + "&workspace=" + sWorkspaceId);
+    return this.m_oHttp.get(this.APIURL + '/processors/libupdate?processorId=' + sProcessorId + "&workspace=" + sWorkspaceId);
   };
   /**
          * Force environment Update
@@ -319,14 +317,14 @@ export class ProcessorService {
          */
   forceEnvUpdate(sProcessorId: string, sEnvUpdCommand: string) {
 
-    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     let sWorkspaceId = "-";
 
     if (oWorkspace) {
       sWorkspaceId = oWorkspace.workspaceId;
     }
 
-    return this.oHttp.get(this.APIURL + '/processors/environmentupdate?processorId=' + sProcessorId + "&workspace=" + sWorkspaceId + "&updateCommand=" + sEnvUpdCommand);
+    return this.m_oHttp.get(this.APIURL + '/processors/environmentupdate?processorId=' + sProcessorId + "&workspace=" + sWorkspaceId + "&updateCommand=" + sEnvUpdCommand);
   };
 
   /**
@@ -335,7 +333,7 @@ export class ProcessorService {
   * @param sUrl
   */
   downloadProcessor(sProcessorId: string, sUrl: string = "") {
-    let urlParams = "?" + "token=" + this.oConstantsService.getSessionId();
+    let urlParams = "?" + "token=" + this.m_oConstantsService.getSessionId();
     urlParams = urlParams + "&" + "processorId=" + sProcessorId;
 
     var sAPIUrl = this.APIURL;
@@ -357,7 +355,7 @@ export class ProcessorService {
   * @returns {*}
   */
   getProcessorUI(sProcessorName: string) {
-    return this.oHttp.get<UIResponse>(this.APIURL + '/processors/ui?name=' + sProcessorName);
+    return this.m_oHttp.get<UIResponse>(this.APIURL + '/processors/ui?name=' + sProcessorName);
   }
 
   /**
@@ -367,6 +365,6 @@ export class ProcessorService {
   * @returns {*}
   */
   saveProcessorUI(sProcessorName: string, sProcessorUI: string) {
-    return this.oHttp.post(this.APIURL + '/processors/saveui?name=' + sProcessorName, sProcessorUI);
+    return this.m_oHttp.post(this.APIURL + '/processors/saveui?name=' + sProcessorName, sProcessorUI);
   }
 }

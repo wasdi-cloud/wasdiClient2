@@ -20,7 +20,7 @@ export class ProductService {
   }
 
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
-
+ 
   getProductListByWorkspace(sWorkspaceId: string) {
     return this.oHttp.get<Product[]>(this.APIURL + '/product/byws?workspace=' + sWorkspaceId);
   };

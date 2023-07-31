@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faD, faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProcessorService } from 'src/app/services/api/processor.service';
@@ -194,7 +194,8 @@ export class NewAppDialogComponent implements OnInit {
         sJSONSample: this.m_sJSONSample,
         iMinuteTimeout: this.m_iMinuteTimeout,
         bIsPublic: this.m_bPublic,
-        oSelectedFile: this.m_oSelectedFile
+        oSelectedFile: this.m_oSelectedFile,
+        sSelectedFileName: ""
       }),
 
       //Nested Form Builder for STORE tab: 
@@ -287,6 +288,8 @@ export class NewAppDialogComponent implements OnInit {
     console.log(this.m_oProcessorForm);
     console.log(this.m_oInputProcessor);
 
+    console.log(this.m_oProcessorForm)
+
     //Update the processor and the processor details
     this.m_oProcessorService.updateProcessor(this.m_oInputProcessor.processorId, this.m_oInputProcessor).subscribe({
       next: oResponse => {
@@ -305,6 +308,21 @@ export class NewAppDialogComponent implements OnInit {
         console.log(oError);
       }
     });
+
+    // //Check if there was also a file uploaded:
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === false) {
+      let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value
+      let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value
+
+      this.m_oProcessorService.updateProcessorFiles(sFileName, this.m_oInputProcessor.processorId, oSelectedFile).subscribe({
+        next: oResponse => {
+          console.log(oResponse)
+        },
+        error: oError => {
+          console.log(oError)
+        }
+      })
+    }
 
     //Check if the UI JSON Param was changed: 
     // if (this.m_bUIChanged) {

@@ -22,12 +22,7 @@ export class ProcessorTabContentComponent implements OnInit {
     * Active Workspace
     */
   m_oActiveWorkspace: Workspace;
-
-  /**
-    * User Uploaded Zip file
-    */
-  m_oFile: any = null;
-
+  
   /**
     * Processor Name
     */
@@ -92,6 +87,11 @@ export class ProcessorTabContentComponent implements OnInit {
    * Selected File
    */
   m_oSelectedFile: any = null;
+
+  /**
+   * Selected File Name
+   */
+  m_sSelectedFileName: string; 
 
   @Input() m_oProcessorBasicInfo: FormGroup; 
 
@@ -219,68 +219,6 @@ export class ProcessorTabContentComponent implements OnInit {
   //   return true;
   // }
 
-
-  /**
-   * Update an existing processor
-   */
-  deployProcessor() {
-    if (!this.m_oSelectedFile) {
-      return false;
-    }
-
-    let sType: string = this.m_oSelectedType.id;
-
-    let sIsPublic = "1";
-    if (this.m_bIsPublic === false) {
-      sIsPublic = "0";
-    }
-
-    // let oBody = new FormData();
-    // oBody.append("file", this.m_oSelectedFile);
-
-    if (sType === "ubuntu_python_snap" || sType === "ubuntu_python37_snap") {
-      this.m_sName = this.m_sName.toLowerCase();
-    }
-
-    let sName = encodeURIComponent(this.m_sName);
-    let sDescription = encodeURIComponent(this.m_sDescription);
-
-    console.log(sName);
-    console.log(sDescription);
-    console.log(this.m_oSelectedFile);
-    console.log(this.m_oActiveWorkspace.workspaceId)
-
-    this.m_oProcessorService.uploadProcessor(this.m_oActiveWorkspace.workspaceId, sName, this.m_sVersion, sDescription, sType, this.m_sJSONSample, sIsPublic, this.m_oSelectedFile).subscribe({
-      next: oResponse => {
-        console.log(oResponse);
-        let sMessage: string;
-        if (oResponse.boolValue === true) {
-          sMessage = "Processor Uploaded - it will be deployed shortly";
-        } else {
-          sMessage = "Error uploading processor";
-
-          if (!oResponse.stringValue) {
-            sMessage = `Error Code: ${oResponse.intValue}`;
-          } else {
-            sMessage += oResponse.stringValue;
-          }
-          //ADD ALERT NOTIFICATION
-          console.log(sMessage);
-        }
-      },
-      error: oError => {
-        //ADD ERROR NOTIFICATION 
-        console.log("There was an error in deploying the processor");
-      }
-    })
-
-    //Is there also a new file to upload? 
-    if(FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedFile) === false) {
-      
-    }
-    return true;
-  }
-
   setSelectedType(event: any) {
     this.m_aoProcessorTypes.forEach(oType => {
       if (oType.name === event.option.value) {
@@ -292,8 +230,14 @@ export class ProcessorTabContentComponent implements OnInit {
 
   onFileSelect(input: any) {
     if (input.files && input.files[0]) {
+      this.m_sSelectedFileName = input.files[0].name; 
       this.m_oSelectedFile = new FormData();
       this.m_oSelectedFile.append('file', input.files[0]);
+
+      this.m_oProcessorBasicInfo.patchValue({
+        oSelectedFile: this.m_oSelectedFile, 
+        sSelectedFileName: this.m_sSelectedFileName
+      })
     }
   }
 }
