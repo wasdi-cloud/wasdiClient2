@@ -72,7 +72,7 @@ export class ProcessorService {
       * @returns {*}
       */
   getMarketplaceDetail(sApplication: string) {
-    return this.oHttp.get(this.APIURL + '/processors/getmarketdetail?processorname=' + sApplication);
+    return this.oHttp.get<any>(this.APIURL + '/processors/getmarketdetail?processorname=' + sApplication);
   };
 
   /**
