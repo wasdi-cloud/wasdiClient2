@@ -174,7 +174,7 @@ export class AppsDialogComponent {
       height: '80vh',
       width: '80vw',
       data: { editMode: true,
-      oProcessor: oProcessor }
+      inputProcessor: oProcessor }
     })
   }
 
