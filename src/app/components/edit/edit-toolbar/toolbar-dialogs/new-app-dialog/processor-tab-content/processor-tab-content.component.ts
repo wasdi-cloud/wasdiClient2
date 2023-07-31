@@ -9,6 +9,8 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -91,6 +93,8 @@ export class ProcessorTabContentComponent implements OnInit {
    */
   m_oSelectedFile: any = null;
 
+  @Input() m_oProcessorBasicInfo: FormGroup; 
+
   m_aoProcessorTypes = [
     { name: "Python 3.7 Pip", id: "ubuntu_python37_snap" },
     // { name: "Python 3.x Pip 2", id: "python_pip_2" },
@@ -148,6 +152,8 @@ export class ProcessorTabContentComponent implements OnInit {
   ngOnInit(): void {
     //Set the active workspace from the constants service
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+
+    console.log(this.m_oProcessorBasicInfo)
   }
 
   /**
@@ -214,6 +220,9 @@ export class ProcessorTabContentComponent implements OnInit {
   // }
 
 
+  /**
+   * Update an existing processor
+   */
   deployProcessor() {
     if (!this.m_oSelectedFile) {
       return false;
@@ -264,6 +273,11 @@ export class ProcessorTabContentComponent implements OnInit {
         console.log("There was an error in deploying the processor");
       }
     })
+
+    //Is there also a new file to upload? 
+    if(FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedFile) === false) {
+      
+    }
     return true;
   }
 
