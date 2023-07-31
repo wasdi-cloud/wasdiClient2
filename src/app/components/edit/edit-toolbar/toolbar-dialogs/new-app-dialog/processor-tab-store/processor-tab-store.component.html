@@ -1,1 +1,44 @@
-<p>processor-tab-store works!</p>
+<div class="" style="width: 100%;">
+    <div class="d-flex flex-row gap-2 pb-1">
+        <div class="flex-fill">
+            <label for="friendlyName">Friendly Name:</label>
+            <input class="form-control" type="text">
+        </div>
+        <div class="flex-fill">
+            <label for="processorLink">Processor Link:</label>
+            <input class="form-control" type="text">
+        </div>
+        <div class="flex-fill">
+            <label for="email">Email Address:</label>
+            <input class="form-control" type="text">
+        </div>
+    </div>
+    <div class="d-flex flex-row gap-2 align-items-center py-1">
+        <div class="">
+            <label for="onDemandPrice">On Demand Price:</label>
+            <input class="form-control" type="text">
+        </div>
+        <div class="">
+            <label for="subscriptionPrice">Subscription Price:</label>
+            <input class="form-control" type="text">
+        </div>
+        <mat-checkbox [color]="'success'">Show Application App Store</mat-checkbox>
+    </div>
+    <div class="d-flex flex-row gap-2 align-items-center py-1">
+        <div>
+            <label for="longDescription">Long Description</label>
+            <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label for="categories">Cateogries</mat-label>
+                <mat-select multiple>
+                    <mat-option *ngFor="let sCategory of m_aoCategories">
+                        {{sCategory}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+    </div>
+</div>
