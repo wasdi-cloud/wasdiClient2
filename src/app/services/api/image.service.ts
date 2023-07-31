@@ -24,7 +24,7 @@ export class ImageService {
   * @param oBody
   * @returns {*}
   */
-  uploadProcessorLogo = function (sProcessorId, oBody) {
+  uploadProcessorLogo(sProcessorId, oBody) {
 
     let oOptions = {
 
@@ -40,7 +40,7 @@ export class ImageService {
    * @param oBody
    * @returns {*}
    */
-  uploadProcessorImage = function (sProcessorId, oBody) {
+  uploadProcessorImage(sProcessorId, oBody) {
 
     let oOptions = {
 
@@ -56,7 +56,7 @@ export class ImageService {
    * @param sImage
    * @returns {*}
    */
-  removeProcessorImage = function (sProcessorName, sImage) {
+  removeProcessorImage(sProcessorName, sImage) {
     return this.m_oHttp.delete(this.APIURL + this.m_sResource + '/delete?collection=processors&folder=' + encodeURI(sProcessorName) + "&name=" + sImage);
   };
 
@@ -68,7 +68,7 @@ export class ImageService {
    * @param {*} sImageBaseUrl Url to access the image
    * @returns Url with the token parameter added
    */
-  getImageLink = function (sImageBaseUrl) {
+  getImageLink(sImageBaseUrl) {
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sImageBaseUrl)) return sImageBaseUrl;
 
     if (this.m_oConstantsService != null) {
@@ -93,9 +93,10 @@ export class ImageService {
    * @param {*} oProcessor 
    * @returns 
    */
-  updateProcessorLogoImageUrl = function (oProcessor) {
-    if (oProcessor == null) return "";
-
+  updateProcessorLogoImageUrl(oProcessor) {
+    if (oProcessor == null) {
+      return "";
+    }
     //FADEOUT UTILS ADD
     if (!FadeoutUtils.utilsIsStrNullOrEmpty(oProcessor.logo)) {
       let sUrl = this.getImageLink(oProcessor.logo);
@@ -107,9 +108,10 @@ export class ImageService {
         oProcessor.images[iImage] = this.getImageLink(oProcessor.images[iImage]);
       }
     }
+    return true; 
   }
 
-  getImageNameFromUrl = function (sUrl) {
+  getImageNameFromUrl(sUrl) {
 
     try {
       let asSplit = sUrl.split('&')
