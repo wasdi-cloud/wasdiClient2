@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 //Service Imports:
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -9,8 +10,6 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -22,7 +21,7 @@ export class ProcessorTabContentComponent implements OnInit {
     * Active Workspace
     */
   m_oActiveWorkspace: Workspace;
-  
+
   /**
     * Processor Name
     */
@@ -91,9 +90,9 @@ export class ProcessorTabContentComponent implements OnInit {
   /**
    * Selected File Name
    */
-  m_sSelectedFileName: string; 
+  m_sSelectedFileName: string;
 
-  @Input() m_oProcessorBasicInfo: FormGroup; 
+  @Input() m_oProcessorBasicInfo: FormGroup;
 
   m_aoProcessorTypes = [
     { name: "Python 3.7 Pip", id: "ubuntu_python37_snap" },
@@ -110,36 +109,6 @@ export class ProcessorTabContentComponent implements OnInit {
     return oProcessorType.name;
   })
 
-  /**
-  * View Model with the Processor Detailed Info.
-  * Is fetched and saved with different APIs
-  * @type {{processorDescription: string, updateDate: number, images: [], imgLink: string, ondemandPrice: number, link: string, score: number, processorId: string, publisher: string, buyed: boolean, processorName: string, categories: [], isMine: boolean, friendlyName: string, email: string, subscriptionPrice: number}}
-  */
-  m_oProcessorDetails = {
-    processorId: "",
-    processorName: "",
-    processorDescription: "",
-    imgLink: "",
-    publisher: "",
-    score: 0.0,
-    friendlyName: "",
-    link: "",
-    email: "",
-    ondemandPrice: 0.0,
-    subscriptionPrice: 0.0,
-    updateDate: 0,
-    categories: [],
-    images: [],
-    isMine: true,
-    buyed: false,
-    longDescription: "",
-    showInStore: false,
-    maxImages: 6,
-    reviewsCount: 0,
-    purchased: 0, // NOTE: at the moment here is the count of run on the main server
-    totalRuns: 0, // NOTE: not set at the moment
-    userRuns: 0, // NOTE: not set at the moment
-  };
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -152,8 +121,7 @@ export class ProcessorTabContentComponent implements OnInit {
   ngOnInit(): void {
     //Set the active workspace from the constants service
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-
-    console.log(this.m_oProcessorBasicInfo)
+    this.displayProcessorType();
   }
 
   /**
@@ -222,22 +190,36 @@ export class ProcessorTabContentComponent implements OnInit {
   setSelectedType(event: any) {
     this.m_aoProcessorTypes.forEach(oType => {
       if (oType.name === event.option.value) {
-        this.m_oSelectedType = oType;
+        this.m_oProcessorBasicInfo.patchValue({
+          oType: oType.id
+        })
       }
     });
-    console.log(this.m_oSelectedType);
+    console.log(this.m_oProcessorBasicInfo.get('oType').value);
   }
 
   onFileSelect(input: any) {
     if (input.files && input.files[0]) {
-      this.m_sSelectedFileName = input.files[0].name; 
+      this.m_sSelectedFileName = input.files[0].name;
       this.m_oSelectedFile = new FormData();
       this.m_oSelectedFile.append('file', input.files[0]);
 
       this.m_oProcessorBasicInfo.patchValue({
-        oSelectedFile: this.m_oSelectedFile, 
+        oSelectedFile: this.m_oSelectedFile,
         sSelectedFileName: this.m_sSelectedFileName
       })
     }
+  }
+
+  /**
+   * Get the correct processor type
+   */
+  displayProcessorType() {
+   this.m_aoProcessorTypes.forEach(oType => {
+    if (oType.id === this.m_oProcessorBasicInfo.get('oType').value) {
+      this.m_sTypeNameOnly = oType.name; 
+      this.m_sTypeIdOnly = oType.id; 
+    }
+   })
   }
 }
