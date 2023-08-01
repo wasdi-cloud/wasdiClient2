@@ -44,7 +44,31 @@ export class NewAppDialogComponent implements OnInit {
   /**
    * Processor Inputted from opening dialog
    */
-  m_oInputProcessor: any = null;
+  m_oInputProcessor: {
+    imgLink: string,
+    isPublic: string,
+    minuteTimeout: number,
+    paramsSample: string,
+    processorDescription: string,
+    processorId: string,
+    processorName: string,
+    processorVersion: string,
+    publisher: string,
+    sharedWithMe: boolean,
+    type: string
+  } = {
+      imgLink: "",
+      isPublic: "0",
+      minuteTimeout: 180,
+      paramsSample: "",
+      processorDescription: "",
+      processorId: "",
+      processorName: "",
+      processorVersion: "1",
+      publisher: "",
+      sharedWithMe: false,
+      type: ""
+    };
 
   /**
    * Creation for new form builder
@@ -147,7 +171,6 @@ export class NewAppDialogComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oFormBuilder: FormBuilder,
     private m_oProcessorMediaService: ProcessorMediaService,
@@ -162,6 +185,8 @@ export class NewAppDialogComponent implements OnInit {
     //If oProcessor assigned in data, Input Processor = oProcessor:
     if (this.data.inputProcessor && this.m_bEditMode) {
       this.m_oInputProcessor = this.data.inputProcessor;
+
+      console.log(this.m_oInputProcessor);
 
       //Assign Input data to model: 
       this.m_sName = this.m_oInputProcessor.processorName;
@@ -183,8 +208,12 @@ export class NewAppDialogComponent implements OnInit {
     }
     //Create form builder with nested elements to pass to tabs: 
     this.initializeFormBuilder();
+
   }
 
+  /**
+   * Initalize the form builder with nested form groups for Processor Base Content and Store tabs
+   */
   initializeFormBuilder() {
     this.m_oProcessorForm = this.m_oFormBuilder.group({
 
@@ -225,8 +254,10 @@ export class NewAppDialogComponent implements OnInit {
     }
   }
 
-
-
+  /**
+   * Get Marketplace details - set m_oProcessorDetails view model
+   * @param sProcessorName 
+   */
   getMarketplaceDetails(sProcessorName: string) {
     this.m_oProcessorService.getMarketplaceDetail(sProcessorName).subscribe({
       next: oResponse => {
@@ -245,6 +276,10 @@ export class NewAppDialogComponent implements OnInit {
     })
   }
 
+  /**
+   * Change active tab on user interaction
+   * @param sTabName 
+   */
   changeActiveTab(sTabName: string) {
     if (sTabName) {
       this.m_sActiveTab = sTabName;
@@ -256,10 +291,10 @@ export class NewAppDialogComponent implements OnInit {
    */
   setInputProcessorValues() {
     //Is processor public? 
-    if (this.m_bPublic === false) {
-      this.m_oInputProcessor.isPublic = 0;
+    if (this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value === false) {
+      this.m_oInputProcessor.isPublic = "0";
     } else {
-      this.m_oInputProcessor.isPublic = 1;
+      this.m_oInputProcessor.isPublic = "1";
     }
     //Set processor name: 
     this.m_oInputProcessor.processorName = this.m_oProcessorForm.get('processorBasicInfo.sProcessorName').value;
@@ -268,7 +303,10 @@ export class NewAppDialogComponent implements OnInit {
     this.m_oInputProcessor.processorDescription = this.m_oProcessorForm.get('processorBasicInfo.sShortDescription').value;
 
     //Set JSON Parameters: 
-    this.m_oInputProcessor.paramsSample = encodeURI(this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value);
+    if(this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value) {
+      this.m_oInputProcessor.paramsSample = encodeURI(this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value);
+    } 
+    
 
     //Set time out (in minutes): 
     this.m_oInputProcessor.minuteTimeout = this.m_oProcessorForm.get('processorBasicInfo.iMinuteTimeout').value;
@@ -277,21 +315,28 @@ export class NewAppDialogComponent implements OnInit {
     this.m_oProcessorDetails.processorDescription = this.m_oProcessorForm.get('processorBasicInfo.sShortDescription').value;
 
     //Version is fixed at 1 and hidden from the form - do not set
+
+    //Set processor details: 
+    this.m_oProcessorDetails.friendlyName = this.m_oProcessorForm.get('processorStoreInfo.sFriendlyName').value; 
+    this.m_oProcessorDetails.link = this.m_oProcessorForm.get('processorStoreInfo.sLink').value; 
+    this.m_oProcessorDetails.email = this.m_oProcessorForm.get('processorStoreInfo.sEmail').value; 
+    this.m_oProcessorDetails.ondemandPrice = this.m_oProcessorForm.get('processorStoreInfo.iOnDemandPrice').value; 
+    this.m_oProcessorDetails.showInStore = this.m_oProcessorForm.get('processorStoreInfo.bShowInStore').value; 
+    this.m_oProcessorDetails.processorDescription = this.m_oProcessorForm.get('processorStoreInfo.sLongDescription').value; 
   }
 
+  /**
+   * Update an Existing Processor
+   */
   updateProcessor() {
     this.setInputProcessorValues();
 
-    console.log(this.m_oProcessorForm);
-    console.log(this.m_oInputProcessor);
-
-    console.log(this.m_oProcessorForm)
-
+    console.log(this.m_oProcessorDetails);
     //Update the processor and the processor details
     this.m_oProcessorService.updateProcessor(this.m_oInputProcessor.processorId, this.m_oInputProcessor).subscribe({
       next: oResponse => {
         console.log(oResponse);
-        this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oInputProcessor).subscribe({
+        this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oProcessorDetails).subscribe({
           next: oResponse => {
             console.log(oResponse);
             console.log("processor data updated");
@@ -332,6 +377,48 @@ export class NewAppDialogComponent implements OnInit {
     //     }
     //   })
     // }
+
+  }
+
+  /**
+   * Deploy a New Processor
+   */
+  postNewProcessor() {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === true) {
+      this.m_oAlertDialog.openDialog(4000, "Please add a .zip file containing your processor");
+      return false;
+    }
+
+    this.setInputProcessorValues();
+    let sType = this.m_oProcessorForm.get('processorBasicInfo.oType').value;
+
+    console.log(sType);
+
+    if (sType === "ubuntu_python_snap" || sType === "ubuntu_python37_snap") {
+      this.m_oInputProcessor.processorName = this.m_oInputProcessor.processorName.toLowerCase();
+    }
+
+    let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value
+    let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value
+
+    this.m_oProcessorService.uploadProcessor(
+      this.m_oActiveWorkspace.workspaceId, 
+      this.m_oInputProcessor.processorName, 
+      this.m_oInputProcessor.processorVersion, 
+      this.m_oInputProcessor.processorDescription, 
+      sType, 
+      this.m_oInputProcessor.paramsSample, 
+      this.m_oInputProcessor.isPublic,
+      oSelectedFile).subscribe({
+      next: oResponse => {
+        
+      },
+      error: oError => {
+        console.log(oError)
+      }
+    })
+
+    return true;
 
   }
 

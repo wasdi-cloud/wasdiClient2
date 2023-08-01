@@ -1,33 +1,34 @@
-<div class="" style="width: 100%;">
+<div class="" style="width: 100%;" [formGroup]="m_oProecessorStoreInfo">
     <div class="d-flex flex-row gap-2 pb-1">
         <div class="flex-fill">
             <label for="friendlyName">Friendly Name:</label>
-            <input class="form-control" type="text">
+            <input class="form-control" type="text" formControlName="sFriendlyName">
         </div>
         <div class="flex-fill">
             <label for="processorLink">Processor Link:</label>
-            <input class="form-control" type="text">
+            <input class="form-control" type="text" formControlName="sLink">
         </div>
         <div class="flex-fill">
             <label for="email">Email Address:</label>
-            <input class="form-control" type="text">
+            <input class="form-control" type="text" formControlName="sEmail">
         </div>
     </div>
     <div class="d-flex flex-row gap-2 align-items-center py-1">
         <div class="">
             <label for="onDemandPrice">On Demand Price:</label>
-            <input class="form-control" type="text">
+            <input class="form-control" type="number" formControlName="iOnDemandPrice">
         </div>
         <div class="">
             <label for="subscriptionPrice">Subscription Price:</label>
-            <input class="form-control" type="text">
+            <input class="form-control" type="number" formControlName="iSubscriptionPrice">
         </div>
-        <mat-checkbox [color]="'success'">Show Application App Store</mat-checkbox>
+        <mat-checkbox [color]="'success'" formControlName="bShowInStore">Show Application App Store</mat-checkbox>
     </div>
     <div class="d-flex flex-row gap-2 align-items-center py-1">
         <div>
             <label for="longDescription">Long Description</label>
-            <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
+            <textarea class="form-control" name="" id="" cols="30" rows="10"
+                formControlName="sLongDescription"></textarea>
         </div>
         <div>
             <mat-form-field>
