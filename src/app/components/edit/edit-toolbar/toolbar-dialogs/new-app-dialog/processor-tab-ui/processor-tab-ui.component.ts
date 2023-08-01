@@ -1,4 +1,5 @@
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnInit, Input } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { faL } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -6,25 +7,23 @@ import { faL } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './processor-tab-ui.component.html',
   styleUrls: ['./processor-tab-ui.component.css']
 })
-export class ProcessorTabUiComponent implements OnInit, OnChanges {
+export class ProcessorTabUiComponent implements OnInit {
   //Declare name for appui id
   public readonly appui = "appui";
 
   m_bUIChanged: boolean = false;
   m_sProcessorUI: string = "{}";
+  m_sJSONSample: string;
+  @Input() m_oProcessor?: any;
+  @Input() m_oProcessorUIInfo: FormGroup;
 
   constructor() { }
 
   ngOnInit(): void {
 
+    console.log(this.m_oProcessorUIInfo)
+
   }
-
-  ngOnChanges(): void {
-    if (this.m_bUIChanged) {
-
-    }
-  }
-
 
   /**
    * Create JSON snippet based on text input and add to textarea
@@ -82,8 +81,10 @@ export class ProcessorTabUiComponent implements OnInit, OnChanges {
 
     //Handle textarea insertion
     this.insetText(sTextToInsert);
-    
-    this.m_bUIChanged = true;
+
+    this.m_oProcessorUIInfo.patchValue({
+      bUIChanged: false
+    });
   }
 
   /**

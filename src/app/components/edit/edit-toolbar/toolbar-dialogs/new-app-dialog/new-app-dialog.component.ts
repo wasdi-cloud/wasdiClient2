@@ -173,10 +173,7 @@ export class NewAppDialogComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oFormBuilder: FormBuilder,
-    private m_oProcessorMediaService: ProcessorMediaService,
-    private m_oProcessorService: ProcessorService,
-    private m_oProductService: ProductService,
-    private m_oWorkspaceService: WorkspaceService) { }
+    private m_oProcessorService: ProcessorService) { }
 
   ngOnInit(): void {
     //Edit Mode assigned when opening dialog:
@@ -185,8 +182,6 @@ export class NewAppDialogComponent implements OnInit {
     //If oProcessor assigned in data, Input Processor = oProcessor:
     if (this.data.inputProcessor && this.m_bEditMode) {
       this.m_oInputProcessor = this.data.inputProcessor;
-
-      console.log(this.m_oInputProcessor);
 
       //Assign Input data to model: 
       this.m_sName = this.m_oInputProcessor.processorName;
@@ -205,10 +200,13 @@ export class NewAppDialogComponent implements OnInit {
 
       //Get Marketplace Details: 
       this.getMarketplaceDetails(this.m_sName);
-    }
-    //Create form builder with nested elements to pass to tabs: 
-    this.initializeFormBuilder();
+      this.initializeFormBuilder();
+      this.getProcessorUI(this.m_sName);
 
+    } else {
+      //Create form builder with nested elements to pass to tabs: 
+      this.initializeFormBuilder();
+    }
   }
 
   /**
@@ -242,16 +240,15 @@ export class NewAppDialogComponent implements OnInit {
         bShowInStore: false,
         sLongDescription: "",
         aoCategories: []
+      }),
+
+      //Nested Form Builder for UI tab: 
+      processorUIInfo: this.m_oFormBuilder.group({
+        sProcessorUI: "",
+        bUIChanged: false
       })
     });
 
-    if (this.m_oInputProcessor) {
-      this.m_oProcessorForm.patchValue({
-        processorBasicInfo: {
-          oType: this.m_oInputProcessor.type
-        }
-      });
-    }
   }
 
   /**
@@ -272,6 +269,24 @@ export class NewAppDialogComponent implements OnInit {
       },
       error: oError => {
         console.log(oError);
+      }
+    })
+  }
+
+  getProcessorUI(sProcessorName: string) {
+    this.m_oProcessorService.getProcessorUI(sProcessorName).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          this.m_sProcessorUI = JSON.stringify(oResponse, undefined, 4);
+          this.m_oProcessorForm.patchValue({
+            processorUIInfo: {
+              sProcessorUI: this.m_sProcessorUI
+            }
+          })
+        }
+      },
+      error: oError => {
+        console.log("Error getting processor UI")
       }
     })
   }
@@ -303,10 +318,10 @@ export class NewAppDialogComponent implements OnInit {
     this.m_oInputProcessor.processorDescription = this.m_oProcessorForm.get('processorBasicInfo.sShortDescription').value;
 
     //Set JSON Parameters: 
-    if(this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value) {
+    if (this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value) {
       this.m_oInputProcessor.paramsSample = encodeURI(this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value);
-    } 
-    
+    }
+
 
     //Set time out (in minutes): 
     this.m_oInputProcessor.minuteTimeout = this.m_oProcessorForm.get('processorBasicInfo.iMinuteTimeout').value;
@@ -317,12 +332,29 @@ export class NewAppDialogComponent implements OnInit {
     //Version is fixed at 1 and hidden from the form - do not set
 
     //Set processor details: 
-    this.m_oProcessorDetails.friendlyName = this.m_oProcessorForm.get('processorStoreInfo.sFriendlyName').value; 
-    this.m_oProcessorDetails.link = this.m_oProcessorForm.get('processorStoreInfo.sLink').value; 
-    this.m_oProcessorDetails.email = this.m_oProcessorForm.get('processorStoreInfo.sEmail').value; 
-    this.m_oProcessorDetails.ondemandPrice = this.m_oProcessorForm.get('processorStoreInfo.iOnDemandPrice').value; 
-    this.m_oProcessorDetails.showInStore = this.m_oProcessorForm.get('processorStoreInfo.bShowInStore').value; 
-    this.m_oProcessorDetails.processorDescription = this.m_oProcessorForm.get('processorStoreInfo.sLongDescription').value; 
+    this.m_oProcessorDetails.friendlyName = this.m_oProcessorForm.get('processorStoreInfo.sFriendlyName').value;
+    this.m_oProcessorDetails.link = this.m_oProcessorForm.get('processorStoreInfo.sLink').value;
+    this.m_oProcessorDetails.email = this.m_oProcessorForm.get('processorStoreInfo.sEmail').value;
+    this.m_oProcessorDetails.ondemandPrice = this.m_oProcessorForm.get('processorStoreInfo.iOnDemandPrice').value;
+    this.m_oProcessorDetails.showInStore = this.m_oProcessorForm.get('processorStoreInfo.bShowInStore').value;
+    this.m_oProcessorDetails.processorDescription = this.m_oProcessorForm.get('processorStoreInfo.sLongDescription').value;
+  }
+
+  /**
+   * Function to handle getting and checking JSON input from UI tab:
+   * @param sProcessorUI
+   * @returns {boolean | any}
+   */
+  checkUIInput(sProcessorUI: string) {
+    try {
+      let oParsedJSONObject = JSON.parse(sProcessorUI);
+      if (oParsedJSONObject && typeof oParsedJSONObject === "object") {
+        return oParsedJSONObject;
+      }
+
+    } catch (error) {
+      console.log("error when parsing JSON");
+    }
   }
 
   /**
@@ -335,7 +367,6 @@ export class NewAppDialogComponent implements OnInit {
     //Update the processor and the processor details
     this.m_oProcessorService.updateProcessor(this.m_oInputProcessor.processorId, this.m_oInputProcessor).subscribe({
       next: oResponse => {
-        console.log(oResponse);
         this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oProcessorDetails).subscribe({
           next: oResponse => {
             console.log(oResponse);
@@ -367,17 +398,27 @@ export class NewAppDialogComponent implements OnInit {
     }
 
     //Check if the UI JSON Param was changed: 
-    // if (this.m_bUIChanged) {
-    //   this.m_oProcessorService.saveProcessorUI(this.m_oInputProcessor.processorName, this.m_sProcessorUI).subscribe({
-    //     next: oResponse => {
-    //       console.log(oResponse); 
-    //     },
-    //     error: oError => {
-    //       console.log(oError);
-    //     }
-    //   })
-    // }
+    // if (this.m_oProcessorForm.get('processorUIInfo.bUIChanged').value === true) {
 
+    //If user has interacted with the Processor UI Textarea:
+    if (this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').touched === true) {
+      //Try parse JSON on UI Input
+      if (this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value)) {
+        this.m_sProcessorUI = this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value);
+
+        //If parse JSON is successful -> update the processor UI
+        this.m_oProcessorService.saveProcessorUI(this.m_oInputProcessor.processorName, this.m_sProcessorUI).subscribe({
+          next: oResponse => {
+            console.log(oResponse);
+            console.log("JSON Updated")
+          },
+          error: oError => {
+            console.log(oError);
+          }
+        })
+      }
+
+    }
   }
 
   /**
@@ -402,21 +443,21 @@ export class NewAppDialogComponent implements OnInit {
     let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value
 
     this.m_oProcessorService.uploadProcessor(
-      this.m_oActiveWorkspace.workspaceId, 
-      this.m_oInputProcessor.processorName, 
-      this.m_oInputProcessor.processorVersion, 
-      this.m_oInputProcessor.processorDescription, 
-      sType, 
-      this.m_oInputProcessor.paramsSample, 
+      this.m_oActiveWorkspace.workspaceId,
+      this.m_oInputProcessor.processorName,
+      this.m_oInputProcessor.processorVersion,
+      this.m_oInputProcessor.processorDescription,
+      sType,
+      this.m_oInputProcessor.paramsSample,
       this.m_oInputProcessor.isPublic,
       oSelectedFile).subscribe({
-      next: oResponse => {
-        
-      },
-      error: oError => {
-        console.log(oError)
-      }
-    })
+        next: oResponse => {
+
+        },
+        error: oError => {
+          console.log(oError)
+        }
+      })
 
     return true;
 
