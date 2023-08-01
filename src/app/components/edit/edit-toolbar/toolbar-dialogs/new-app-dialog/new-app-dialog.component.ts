@@ -1,14 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { faD, faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { ProductService } from 'src/app/services/api/product.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 @Component({
   selector: 'app-new-app-dialog',
   templateUrl: './new-app-dialog.component.html',
@@ -144,6 +145,7 @@ export class NewAppDialogComponent implements OnInit {
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
@@ -188,7 +190,10 @@ export class NewAppDialogComponent implements OnInit {
 
       //Nested Form Builder for the PROCESSOR tab:
       processorBasicInfo: this.m_oFormBuilder.group({
-        sProcessorName: this.m_sName,
+        sProcessorName: new FormControl({
+          value: this.m_sName,
+          disabled: this.m_bEditMode
+        }),
         oType: '',
         sShortDescription: this.m_sDescription,
         sJSONSample: this.m_sJSONSample,
@@ -216,7 +221,7 @@ export class NewAppDialogComponent implements OnInit {
         processorBasicInfo: {
           oType: this.m_oInputProcessor.type
         }
-      })
+      });
     }
   }
 
@@ -244,14 +249,6 @@ export class NewAppDialogComponent implements OnInit {
     if (sTabName) {
       this.m_sActiveTab = sTabName;
     }
-  }
-
-  forceEnvironmentUpdate() {
-
-  }
-
-  forceProcessorRefresh() {
-
   }
 
   /**

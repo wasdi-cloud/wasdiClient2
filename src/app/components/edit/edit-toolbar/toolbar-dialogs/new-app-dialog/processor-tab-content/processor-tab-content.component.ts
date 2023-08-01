@@ -2,14 +2,19 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 //Service Imports:
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProductService } from 'src/app/services/api/product.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
+
+//Fadeout Utilities Import: 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -80,7 +85,7 @@ export class ProcessorTabContentComponent implements OnInit {
   /**
    * Processor Id
    */
-  m_sProcessorId: string = "";
+  @Input() m_sProcessorId?: string = "";
 
   /**
    * Selected File
@@ -111,7 +116,9 @@ export class ProcessorTabContentComponent implements OnInit {
 
 
   constructor(
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
+    private m_oNotificationService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService,
     private m_oProductService: ProductService,
@@ -215,11 +222,28 @@ export class ProcessorTabContentComponent implements OnInit {
    * Get the correct processor type
    */
   displayProcessorType() {
-   this.m_aoProcessorTypes.forEach(oType => {
-    if (oType.id === this.m_oProcessorBasicInfo.get('oType').value) {
-      this.m_sTypeNameOnly = oType.name; 
-      this.m_sTypeIdOnly = oType.id; 
+    this.m_aoProcessorTypes.forEach(oType => {
+      if (oType.id === this.m_oProcessorBasicInfo.get('oType').value) {
+        this.m_sTypeNameOnly = oType.name;
+        this.m_sTypeIdOnly = oType.id;
+      }
+    })
+  }
+
+  forceProcessorRefresh(sProcessorId: string) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId)) {
+      return false;
     }
-   })
+
+    this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
+      next: oResponse => {
+        this.m_oNotificationService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
+      },
+      error: oError => {
+        this.m_oAlertDialog.openDialog(4000, "Error in Refreshing Processor")
+      }
+
+    })
+    return true;
   }
 }

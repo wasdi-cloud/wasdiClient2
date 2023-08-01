@@ -29,8 +29,9 @@
     </div>
     <div class="tab-content-container p-3" style="height: 75%;">
         <!-- Default Page - Processor Information -->
-        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR'"
-            [m_bEditMode]="m_bEditMode" [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')" ></app-processor-tab-content>
+        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR'" [m_bEditMode]="m_bEditMode"
+            [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')"
+            [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''"></app-processor-tab-content>
         <!-- Processor Store Options -->
         <app-processor-tab-store *ngIf="m_sActiveTab==='STORE'"></app-processor-tab-store>
         <!-- Processor Media Options -->
@@ -38,7 +39,8 @@
         <!-- Processor UI JSON file -->
         <app-processor-tab-ui *ngIf="m_sActiveTab==='UI'" [m_oProcessor]="m_oInputProcessor"></app-processor-tab-ui>
         <!-- Processor Share Options -->
-        <app-share-ui *ngIf="m_sActiveTab === 'SHARE'" [resourceType]="'processor'" [resource]="m_oInputProcessor"></app-share-ui>
+        <app-share-ui *ngIf="m_sActiveTab === 'SHARE'" [resourceType]="'processor'"
+            [resource]="m_oInputProcessor"></app-share-ui>
     </div>
     <div mat-dialog-actions class="border dialog-footer p-1 d-flex flex-row justify-content-end justify-self-end gap-2">
         <button class="btn btn-success" (click)="updateProcessor()">Apply</button>

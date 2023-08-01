@@ -3,8 +3,7 @@
         <div class="d-flex flex-column gap-2" style="width: 65%">
             <div>
                 <label for="name">Name:</label>
-                <input class="form-control" type="text" formControlName="sProcessorName"
-                    [readOnly]="m_bEditMode === true" [disabled]="m_bEditMode=== true">
+                <input class="form-control" type="text" formControlName="sProcessorName">
             </div>
             <div>
                 <label for="type">Type:</label>
@@ -25,7 +24,7 @@
         <div class="d-flex flex-row gap-2" *ngIf="m_bEditMode">
             <button class="btn btn-secondary">Package Manager</button>
             <button class="btn btn-secondary">Update Library</button>
-            <button class="btn btn-secondary">Re-Deploy</button>
+            <button class="btn btn-secondary" (click)="forceProcessorRefresh(m_sProcessorId)">Re-Deploy</button>
         </div>
     </div>
 
