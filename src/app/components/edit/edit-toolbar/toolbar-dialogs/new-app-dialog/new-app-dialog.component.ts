@@ -166,8 +166,6 @@ export class NewAppDialogComponent implements OnInit {
     userRuns: 0, // NOTE: not set at the moment
   };
 
-
-
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,

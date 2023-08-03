@@ -121,6 +121,7 @@ import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ProcessorTabUiComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-ui/processor-tab-ui.component';
 import { ProcessorTabStoreComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-store/processor-tab-store.component';
 import { ProcessorTabMediaComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-media/processor-tab-media.component';
+import { PackageManagerComponent } from './components/dialogs/package-manager/package-manager.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -191,7 +192,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProcessorTabContentComponent,
     ProcessorTabUiComponent,
     ProcessorTabStoreComponent,
-    ProcessorTabMediaComponent
+    ProcessorTabMediaComponent,
+    PackageManagerComponent
   ],
   imports: [
     AppRoutingModule,
