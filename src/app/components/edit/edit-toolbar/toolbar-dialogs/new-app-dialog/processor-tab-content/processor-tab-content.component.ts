@@ -160,40 +160,6 @@ export class ProcessorTabContentComponent implements OnInit {
     return false;
   };
 
-  /**
-   * Utility method to Create a NEW processor
-   * @param oController
-   * @param oSelectedFile
-   * @returns {boolean}
-   */
-  // postProcessor(oController: any, oSelectedFile: any) {
-  //   if (!oSelectedFile) {
-  //     return false;
-  //   }
-
-  //   let sType = this.m_oSelectedType.id;
-  //   let sPublic = "1";
-  //   if (this.m_bIsPublic === false) {
-  //     sPublic = "0";
-  //   }
-
-  //   let oBody = new FormData();
-  //   oBody.append('file', this.m_oFile[0]);
-
-  //   if (sType === "ubuntu_python_snap" || sType === "ubuntu_python37_snap") {
-  //     this.m_sName = this.m_sName.toLowerCase();
-  //   }
-
-  //   let sName = encodeURIComponent(this.m_sName);
-  //   let sDescription = encodeURIComponent(this.m_sDescription);
-
-  //   this.m_oProcessorService.uploadProcessor(this.m_oActiveWorkspace.workspaceId, sName, this.m_sVersion, sDescription, sType, this.m_sJSONSample, sPublic, oBody).subscribe(oResponse => {
-  //     console.log(oResponse);
-  //   })
-
-  //   return true;
-  // }
-
   setSelectedType(event: any) {
     this.m_aoProcessorTypes.forEach(oType => {
       if (oType.name === event.option.value) {
@@ -245,5 +211,12 @@ export class ProcessorTabContentComponent implements OnInit {
 
     })
     return true;
+  }
+  
+  /**
+   * Open Package Manager Dialog
+   */
+  openPackageManager() {
+    console.log("Open Package Manager")
   }
 }
