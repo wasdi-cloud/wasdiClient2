@@ -46,7 +46,7 @@ export class CatalogService {
   };
 
   ingestFile(sSelectedFile: string, sWorkspace: string) {
-    //return this.oHttp.put(this.APIURL + '/catalog/upload/ingest?file=' + sSelectedFile + '&workspace=' + sWorkspace);
+    return this.oHttp.put(this.APIURL + '/catalog/upload/ingest?file=' + sSelectedFile + '&workspace=' + sWorkspace, {});
   };
 
   uploadFTPFile(oFtpTransferFile: object, sWorkspaceId: string) {
