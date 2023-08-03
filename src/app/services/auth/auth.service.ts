@@ -33,10 +33,10 @@ export class AuthService {
     'end_session_endpoint': this.oConstantsService.getAUTHURL() + "/protocol/openid-connect/logout"
   }
 
-  public isAuthenticated(): boolean { 
-    const token = localStorage.getItem('refresh_token'); 
+  public isAuthenticated(): boolean {
+    const token = localStorage.getItem('refresh_token');
 
-    return !this.oJwtHelper.isTokenExpired(token); 
+    return !this.oJwtHelper.isTokenExpired(token);
   }
   //Get token Object
   getTokenObject() {
@@ -94,38 +94,38 @@ export class AuthService {
     * @param sIdInput
     * @returns {null|*}
     */
-  // deleteAccountUpload(sIdInput: string) {
-  //   if (!sIdInput) {
-  //     return null;
-  //   }
+  deleteAccountUpload(sIdInput: string) {
+    if (!sIdInput) {
+      return null;
+    }
 
-  //   let oWorkspace = this.oConstantsService.getActiveWorkspace();
-  //   let sUrl = this.APIURL;
-  //   if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
-  //     sUrl = oWorkspace.apiUrl;
-  //   }
-  //   return null
-  //   //return this.oHttp.delete(sUrl + '/auth/upload/removeaccount', sIdInput);
-  // };
+    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
+    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+      sUrl = oWorkspace.apiUrl;
+    }
+    //TODO: TEST how to add this as delete
+    //return this.oHttp.delete(sUrl + '/auth/upload/removeaccount', sIdInput);
+  };
 
   /**
    * Update SFTP Account Password
    * @param sEmailInput
    * @returns {null|*}
    */
-  // updatePasswordUpload(sEmailInput: string) {
-  //   //check that this is an EMAIL - not truthy expression
-  //   if (sEmailInput)
-  //     return null;
+  updatePasswordUpload(sEmailInput: string) {
+    //check that this is an EMAIL - not truthy expression
+    if (sEmailInput)
+      return null;
 
-  //   let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
-  //   let sUrl: string = this.APIURL;
-  //   if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
-  //     sUrl = oWorkspace.apiUrl;
-  //   }
+    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let sUrl: string = this.APIURL;
+    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+      sUrl = oWorkspace.apiUrl;
+    }
 
-  //   return this.oHttp.post(sUrl + '/auth/upload/updatepassword', sEmailInput);
-  // };
+    return this.oHttp.post<any>(sUrl + '/auth/upload/updatepassword', sEmailInput);
+  };
 
   /**
    * Test if the sftp account exists

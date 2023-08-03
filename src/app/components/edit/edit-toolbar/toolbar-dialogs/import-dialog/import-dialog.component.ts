@@ -31,15 +31,29 @@ export class ImportDialogComponent {
   faX = faX;
 
   m_sActiveTab: string = "upload"
+
   m_oUser: User = this.m_oConstantsService.getUser();
+
   m_bIsLoading: boolean = false;
   m_bIsUploading: boolean = false;
+
   m_sWorkspaceId: string = this.m_oConstantsService.getActiveWorkspace().workspaceId;
   m_oStyle: string = "";
+
+  m_asStyles: Array<string> = [];
   m_aoStylesMap: any = [];
-  oControl;
   m_oFile: any;
   m_sFileName: string = "";
+
+  m_aoListOfFiles: any = [];
+  m_sEmailNewPassword: string = "";
+  m_sEmailNewUser: string = "";
+
+  m_bIsVisibleLoadIcon: boolean = false;
+  m_aoSelectedFiles: Array<any> = [];
+
+  m_bIsAccountCreated: boolean = false;
+
 
   constructor(
     private m_oAuthService: AuthService,
@@ -51,6 +65,7 @@ export class ImportDialogComponent {
     private m_oStyleService: StyleService) {
 
     this.getStyles();
+    this.isCreatedAccountUpload();
   }
 
   changeActiveTab(sTabName: string) {
@@ -110,15 +125,15 @@ export class ImportDialogComponent {
           } else {
             let sMessage: string = "FILE UPLOADED";
             this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+            //Clean Drag and Drop
             this.onDismiss();
           }
-          this.cleanDragAndDrop();
           this.m_bIsUploading = false;
         },
         error: (oError) => {
           let sErrorMessage: string = "ERROR IN UPLOADING FILE";
           this.m_bIsUploading = false;
-          this.cleanDragAndDrop();
+          //Clean Drag and Drop
           this.m_oNotificationDisplayService.openSnackBar(sErrorMessage, "Close", "right", "bottom");
         }
       });
@@ -127,40 +142,146 @@ export class ImportDialogComponent {
 
   /********************* SFTP ********************/
   deleteStfpAccount() {
-
+    //ADD FADEOUT UTILS:
+    if (!this.m_oUser || !this.m_oUser.userId) {
+      return false;
+    }
+    this.m_bIsVisibleLoadIcon = true;
+    this.m_oAuthService.deleteAccountUpload(this.m_oUser.userId).subscribe({
+      next: oResponse => {
+        if (oResponse !== null && oResponse !== undefined) {
+          this.isCreatedAccountUpload();
+          this.m_bIsVisibleLoadIcon = false;
+        }
+      },
+      error: oError => {
+        //ADD ERROR DIALOG
+        console.log(oError);
+        console.log("Import Dialog Controller:  error during delete account");
+        this.m_bIsVisibleLoadIcon = false;
+      }
+    })
+    return true;
   }
 
-  updateStfpAccount() {
+  updateStfpPassword() {
+    //FADEOUT UTILS OBJECT NULL 
+    if (!this.m_sEmailNewPassword || !this.m_sEmailNewPassword) {
+      return false;
+    }
 
+    this.m_bIsVisibleLoadIcon = true;
+    this.m_oAuthService.updatePasswordUpload(this.m_sEmailNewPassword).subscribe({
+      next: oResponse => {
+        if (oResponse) {
+          this.m_bIsVisibleLoadIcon = false;
+        }
+      },
+      error: oError => {
+        if (oError) {
+          console.log("Import Dialog Controller:  error during creation new password");
+        }
+        this.m_bIsVisibleLoadIcon = false;
+      }
+    })
+    return true;
   }
 
   createAccountUpload() {
-
+    //ADD FADEOUT UTILS OBJECT NULL | STRING NULL | CHECK IS EMAIL
+    if (!this.m_sEmailNewUser) {
+      return false;
+    }
+    this.m_bIsVisibleLoadIcon;
+    this.m_oAuthService.createAccountUpload(this.m_sEmailNewUser).subscribe({
+      next: oResponse => {
+        if (oResponse !== null && oResponse !== undefined) {
+          this.isCreatedAccountUpload();
+        } else {
+          //CREATE ALERT DIALOG
+          //ERROR SERVER WAS NOT ABLE TO CREATE AN ACCOUNT.
+        }
+      },
+      error: oError => {
+        //CREATE ALERT DIALOG
+        //SERVER ERROR
+        this.m_bIsVisibleLoadIcon = false;
+      }
+    });
+    return true;
   }
 
   isCreatedAccountUpload() {
-
+    this.m_oAuthService.isCreatedAccountUpload().subscribe({
+      next: oResponse => {
+        if (oResponse !== null && oResponse !== undefined) {
+          this.m_bIsAccountCreated = false;
+        } else {
+          this.m_bIsAccountCreated = true;
+          this.getListsFiles();
+        }
+      },
+      error: oError => {
+        if (oError) {
+          console.log("Import Dialog Controller: : error during check if the account is created");
+        }
+      }
+    })
   }
 
   getListsFiles() {
-
+    this.m_oAuthService.getListFilesUpload().subscribe({
+      next: oResponse => {
+        if (oResponse !== null && oResponse !== undefined) {
+          this.m_aoListOfFiles = oResponse;
+        }
+      },
+      error: oError => {
+        if (oError) {
+          console.log("Import Dialog Controller: : error during get-list");
+        }
+      }
+    })
   }
 
   isAccountCreated() {
-
+    if(this.m_bIsAccountCreated) {
+      return true;
+    } 
+    return false;
   }
 
   ingestAllSelectedFiles() {
+    let iSelectedFilesLength = this.m_aoSelectedFiles.length; 
 
+    for(let iSelectedFileIndex = 0; iSelectedFileIndex < iSelectedFilesLength; iSelectedFileIndex++) {
+      if(this.ingestFile(this.m_aoSelectedFiles[iSelectedFileIndex]) === false) {
+        console.log("Problem Ingesting file at index:" + iSelectedFileIndex);
+      }
+    }
   }
 
-  ingestFile() {
-
+  ingestFile(oSelectedFile: any) {
+    //FADEOUT UTILS: 
+    if(!oSelectedFile) {
+      return false;
+    }
+    this.m_oCatalogService.ingestFile(oSelectedFile, this.m_oConstantsService.getActiveWorkspace().workspaceId).subscribe({
+      next: oResponse => {
+        if(oResponse)
+            {
+                console.log("SftpUploadController error during ingest file");
+                //TODO: ADD ALERT DIALOG
+                console.log("GURU MEDITATION<br>INGESTION ERROR FILE:<br>" + oSelectedFile);
+            }
+      }, 
+      error: oError => {
+        console.log(oError); 
+      }
+    });
+    return true;
   }
 
-  cleanDragAndDrop() {
-    this.m_oFile = null;
-  }
   onDismiss() {
     this.m_oDialogRef.close();
   }
