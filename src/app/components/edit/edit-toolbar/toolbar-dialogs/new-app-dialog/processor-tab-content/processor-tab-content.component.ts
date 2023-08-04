@@ -4,11 +4,8 @@ import { FormGroup } from '@angular/forms';
 //Service Imports:
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
-import { ProductService } from 'src/app/services/api/product.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Angular Material Import: 
 import { MatDialog } from '@angular/material/dialog';
@@ -123,10 +120,7 @@ export class ProcessorTabContentComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog, 
     private m_oNotificationService: NotificationDisplayService,
-    private m_oProcessorMediaService: ProcessorMediaService,
-    private m_oProcessorService: ProcessorService,
-    private m_oProductService: ProductService,
-    private m_oWorkspaceService: WorkspaceService) {
+    private m_oProcessorService: ProcessorService) {
   }
 
   ngOnInit(): void {
@@ -223,7 +217,11 @@ export class ProcessorTabContentComponent implements OnInit {
   openPackageManager() {
     let oDialog = this.m_oDialog.open(PackageManagerComponent, {
       height: '90vh', 
-      width: '90vw'
+      width: '90vw', 
+      data: {
+        sProcessorId: this.m_sProcessorId,
+        oWorkspace: this.m_oActiveWorkspace
+      }
     }); 
   }
 }
