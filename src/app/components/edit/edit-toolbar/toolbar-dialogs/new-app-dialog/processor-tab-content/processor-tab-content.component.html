@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="d-flex flex-row gap-2" *ngIf="m_bEditMode">
-            <button class="btn btn-secondary">Package Manager</button>
+            <button class="btn btn-secondary" (click)="openPackageManager()">Package Manager</button>
             <button class="btn btn-secondary">Update Library</button>
             <button class="btn btn-secondary" (click)="forceProcessorRefresh(m_sProcessorId)">Re-Deploy</button>
         </div>

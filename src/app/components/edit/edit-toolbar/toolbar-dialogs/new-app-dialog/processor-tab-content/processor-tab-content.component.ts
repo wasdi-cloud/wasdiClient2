@@ -10,11 +10,14 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
+//Angular Material Import: 
+import { MatDialog } from '@angular/material/dialog';
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -118,6 +121,7 @@ export class ProcessorTabContentComponent implements OnInit {
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog, 
     private m_oNotificationService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService,
@@ -217,6 +221,9 @@ export class ProcessorTabContentComponent implements OnInit {
    * Open Package Manager Dialog
    */
   openPackageManager() {
-    console.log("Open Package Manager")
+    let oDialog = this.m_oDialog.open(PackageManagerComponent, {
+      height: '90vh', 
+      width: '90vw'
+    }); 
   }
 }

@@ -1,15 +1,23 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { ConstantsService } from 'src/app/services/constants.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ProcessorService } from 'src/app/services/api/processor.service';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { ProductService } from 'src/app/services/api/product.service';
-import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
-import { Workspace } from 'src/app/shared/models/workspace.model';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
+//Service Imports:
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { ProcessorService } from 'src/app/services/api/processor.service';
+
+//Font Awesome Icon Imports:
+import { faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
+
+//Angular Materials Imports:
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+//Model Imports:
+import { Workspace } from 'src/app/shared/models/workspace.model';
+
+//Fadeout Utilities Import: 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
 @Component({
   selector: 'app-new-app-dialog',
   templateUrl: './new-app-dialog.component.html',
@@ -166,7 +174,8 @@ export class NewAppDialogComponent implements OnInit {
     userRuns: 0, // NOTE: not set at the moment
   };
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
