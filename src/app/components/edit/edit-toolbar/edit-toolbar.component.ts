@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
@@ -19,7 +19,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   templateUrl: './edit-toolbar.component.html',
   styleUrls: ['./edit-toolbar.component.css']
 })
-export class EditToolbarComponent implements OnInit {
+export class EditToolbarComponent implements OnInit, OnDestroy {
   //Font Awesome Icons: 
   faSearch = faSearch;
   faRefresh = faRefresh;
@@ -52,6 +52,10 @@ export class EditToolbarComponent implements OnInit {
     this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("LAUNCHJUPYTERNOTEBOOK",
       this,
       this.rabbitMessageHook, true)
+  }
+
+  ngOnDestroy(): void {
+      this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex); 
   }
 
   openWorkspaceInfo(event: MouseEvent) {
