@@ -1,0 +1,12 @@
+div.dialog-content {
+    width: 100%;
+}
+
+div.table-container {
+    max-height: 32rem;
+    overflow-y: auto;
+}
+thead.table-header {
+    position: sticky;
+    top: 0;
+}

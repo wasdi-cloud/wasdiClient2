@@ -6,8 +6,52 @@
         </h4>
         <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
     </div>
+    <div class="dialog-content p-2 flex-fill" *ngIf="m_bIsLoading === false">
+        <div class="content-header">
+            <h3>{{m_sProcessorName}} Packages - <span class="text-success">{{m_sPackageManagerName}}
+                    {{m_sPackageManagerVersion}}</span></h3>
 
+            <div class="d-flex flex-row justify-content-between pb-2">
+                <form action="" class="d-flex flex-row gap-1 flex-fill">
+                    <div class="input-field w-25">
+                        <input class="form-control" type="text" name="" id="" placeholder="Package Name">
+                    </div>
+                    <button class="btn btn-secondary">Add Package</button>
+                    <button class="btn btn-secondary" (click)="updateLibraryList(m_sProcessorId)">Refresh List</button>
+                </form>
+                <div class="input-field w-30">
+                    <input class="form-control" type="text" name="" id="" placeholder="Search Packages">
+                </div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="table table-light table-striped table-hover">
+                <thead class="table-header">
+                    <tr>
+                        <th scope="col">Package Name</th>
+                        <th scope="col">Current Version</th>
+                        <th scope="col">Latest Version</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oPackage of m_aoPackages">
+                        <td>{{oPackage.packageName}}</td>
+                        <td>{{oPackage.currentVersion}}</td>
+                        <td>{{oPackage.latestVersion? oPackage.latestVersion : oPackage.currentVersion}}</td>
+                        <td>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dialog-content text-center d-flex flex-column align-items-center justify-content-center" *ngIf="m_bIsLoading === true">
+        <h2>Updating Packages - Please Wait...</h2>
+        <mat-progress-spinner  [color]="'primary'" [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
     <div mat-dialog-actions class="border dialog-footer p-1 d-flex flex-row justify-content-end">
-        <button class="btn btn-secondary">Close</button>
+        <button class="btn btn-secondary" (click)="onDismiss()">Close</button>
     </div>
 </div>

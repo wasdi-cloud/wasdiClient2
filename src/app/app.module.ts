@@ -53,6 +53,7 @@ import { MatTooltipModule } from '@angular/material/tooltip'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -227,10 +228,11 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatBottomSheetModule,
     MatTooltipModule,
     FontAwesomeModule,
-    ClipboardModule, 
-    MatPaginatorModule, 
-    MatSnackBarModule, 
-    MatListModule
+    ClipboardModule,
+    MatPaginatorModule,
+    MatSnackBarModule,
+    MatListModule, 
+    MatProgressSpinnerModule
   ],
   providers: [
     AuthService,
