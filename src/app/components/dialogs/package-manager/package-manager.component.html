@@ -38,9 +38,9 @@
                     <tr *ngFor="let oPackage of m_aoPackages">
                         <td>{{oPackage.packageName}}</td>
                         <td>{{oPackage.currentVersion}}</td>
-                        <td>{{oPackage.latestVersion? oPackage.latestVersion : oPackage.currentVersion}}</td>
+                        <td ngClass="{{oPackage.latestVersion? 'text-danger' : 'text-success'}}">{{oPackage.latestVersion? oPackage.latestVersion : oPackage.currentVersion}}</td>
                         <td class="d-flex gap-1">
-                            <button matTooltip="Update Package" class="btn btn-success btn-sm">
+                            <button matTooltip="Update Package" class="btn btn-success btn-sm" [disabled]="oPackage.latestVersion === null" (click)="updatePackage(m_sProcessorId, oPackage.packageName, oPackage.latestVersion)">
                                 <fa-icon [icon]="faArrowUp"></fa-icon>
                             </button>
                             <button matTooltip="Remove Package" class="btn btn-secondary btn-sm" (click)="removeLibrary(m_sProcessorId, oPackage.packageName)">

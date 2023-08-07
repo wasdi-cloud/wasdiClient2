@@ -115,16 +115,16 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
     });
 
     oDialogRef.afterClosed().subscribe(oDialogResult => {
-      if(oDialogResult === true) {
+      if (oDialogResult === true) {
         this.m_oPackageManagerService.deleteLibrary(sProcessorId, sPackageName).subscribe({
           next: oResponse => {
             this.m_bIsLoading = true;
-          }, 
+          },
           error: oError => {
-            console.log("error removing package"); 
+            console.log("error removing package");
           }
         })
-        
+
       }
     })
   }
@@ -152,8 +152,29 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   /**
    * Update a single package (library): 
    */
-  updateLibrary() {
+  updatePackage(sProcessorId: string, sPackageName: string, sPackageLatestVersion: string) {
+    let sConfirmationMessage = `Are you sure you wish to update ${sPackageName}?`
 
+    let oDialogData: ConfirmationDialogModel;
+    oDialogData = new ConfirmationDialogModel("Confirm Upgrade", sConfirmationMessage);
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: oDialogData
+    });
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.m_oPackageManagerService.upgradeLibrary(sProcessorId, sPackageName, sPackageLatestVersion).subscribe({
+          next: oResponse => {
+            this.m_bIsLoading = true;
+          },
+          error: oError => {
+            console.log(`Error upgrading ${sPackageName}`);
+          }
+        })
+      }
+    })
   }
 
   rabbitMessageHook(oRabbitMessage, oController) {
