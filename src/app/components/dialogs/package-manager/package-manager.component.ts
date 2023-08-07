@@ -1,10 +1,19 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { faFile, faFolder, faX } from '@fortawesome/free-solid-svg-icons';
-import { Subscription } from 'rxjs';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
+//Service Imports:
 import { PackageManagerService } from 'src/app/services/api/package-manager.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+
+//Mat Dialog Imports:
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+
+//Font Awesome Imports:
+import { faArrowUp, faFolder, faTrashCan, faX } from '@fortawesome/free-solid-svg-icons';
+
+//Utilities Imports:
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+
 @Component({
   selector: 'app-package-manager',
   templateUrl: './package-manager.component.html',
@@ -12,6 +21,8 @@ import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 })
 export class PackageManagerComponent implements OnInit, OnDestroy {
   //Font Awesome Imports:
+  faArrowUp = faArrowUp;
+  faTrashcan = faTrashCan;
   faFolder = faFolder;
   faX = faX;
 
@@ -31,6 +42,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   //SORTING
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
+    private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<PackageManagerComponent>,
     private m_oPackageManagerService: PackageManagerService,
     private m_oRabbitStompService: RabbitStompService) { }
@@ -90,7 +102,32 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   /**
    * Remove a Package (library): 
    */
-  removeLibrary() { }
+  removeLibrary(sProcessorId: string, sPackageName: string) {
+    console.log(sPackageName);
+    let sConfirmationMessage = `Are you sure you want to remove ${sPackageName}?`;
+
+    let oDialogData: ConfirmationDialogModel;
+    oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmationMessage);
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: oDialogData
+    });
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if(oDialogResult === true) {
+        this.m_oPackageManagerService.deleteLibrary(sProcessorId, sPackageName).subscribe({
+          next: oResponse => {
+            this.m_bIsLoading = true;
+          }, 
+          error: oError => {
+            console.log("error removing package"); 
+          }
+        })
+        
+      }
+    })
+  }
 
   /**
    * Add a Package (library): 

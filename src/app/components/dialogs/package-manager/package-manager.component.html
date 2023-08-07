@@ -39,8 +39,13 @@
                         <td>{{oPackage.packageName}}</td>
                         <td>{{oPackage.currentVersion}}</td>
                         <td>{{oPackage.latestVersion? oPackage.latestVersion : oPackage.currentVersion}}</td>
-                        <td>
-
+                        <td class="d-flex gap-1">
+                            <button matTooltip="Update Package" class="btn btn-success btn-sm">
+                                <fa-icon [icon]="faArrowUp"></fa-icon>
+                            </button>
+                            <button matTooltip="Remove Package" class="btn btn-secondary btn-sm" (click)="removeLibrary(m_sProcessorId, oPackage.packageName)">
+                                <fa-icon [icon]="faTrashcan"></fa-icon>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
