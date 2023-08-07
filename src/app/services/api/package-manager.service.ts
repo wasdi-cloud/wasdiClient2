@@ -16,15 +16,15 @@ export class PackageManagerService {
   /**
    * Fetch Package Manager Info
    */
-  getPackageManagerInfo(sWorkspaceName: string) {
-    return this.oHttp.get(this.APIURL + this.m_sResource + "/managerVersion?name=" + sWorkspaceName)
+  getPackageManagerInfo(sProcessorName: string) {
+    return this.oHttp.get<any>(this.APIURL + this.m_sResource + "/managerVersion?name=" + sProcessorName)
   };
 
   /**
    * Return list of packages
    */
-  getPackagesList(sWorkspaceName: string) {
-    return this.oHttp.get(this.APIURL + this.m_sResource + "/listPackages?name=" + sWorkspaceName);
+  getPackagesList(sProcessorName: string) {
+    return this.oHttp.get<any>(this.APIURL + this.m_sResource + "/listPackages?name=" + sProcessorName);
   };
 
   /**
