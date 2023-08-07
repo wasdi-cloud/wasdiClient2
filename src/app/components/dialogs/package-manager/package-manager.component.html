@@ -12,11 +12,13 @@
                     {{m_sPackageManagerVersion}}</span></h3>
 
             <div class="d-flex flex-row justify-content-between pb-2">
-                <form action="" class="d-flex flex-row gap-1 flex-fill">
+                <form #f="ngForm" (ngSubmit)="f.form && addLibrary(m_sProcessorId, m_sPackageToAdd)" action="" class="d-flex flex-row gap-1 flex-fill">
                     <div class="input-field w-25">
-                        <input class="form-control" type="text" name="" id="" placeholder="Package Name">
+                        <input class="form-control" type="text" name="m_sPackageToAdd" id="" placeholder="Package Name"
+                            [(ngModel)]="m_sPackageToAdd">
                     </div>
-                    <button class="btn btn-secondary">Add Package</button>
+                    <button class="btn btn-secondary" type="submit">Add
+                        Package</button>
                     <button class="btn btn-secondary" (click)="updateLibraryList(m_sProcessorId)">Refresh List</button>
                 </form>
                 <div class="input-field w-30">
@@ -38,12 +40,16 @@
                     <tr *ngFor="let oPackage of m_aoPackages">
                         <td>{{oPackage.packageName}}</td>
                         <td>{{oPackage.currentVersion}}</td>
-                        <td ngClass="{{oPackage.latestVersion? 'text-danger' : 'text-success'}}">{{oPackage.latestVersion? oPackage.latestVersion : oPackage.currentVersion}}</td>
+                        <td ngClass="{{oPackage.latestVersion? 'text-danger' : 'text-success'}}">
+                            {{oPackage.latestVersion? oPackage.latestVersion : oPackage.currentVersion}}</td>
                         <td class="d-flex gap-1">
-                            <button matTooltip="Update Package" class="btn btn-success btn-sm" [disabled]="oPackage.latestVersion === null" (click)="updatePackage(m_sProcessorId, oPackage.packageName, oPackage.latestVersion)">
+                            <button matTooltip="Update Package" class="btn btn-success btn-sm"
+                                [disabled]="oPackage.latestVersion === null"
+                                (click)="updatePackage(m_sProcessorId, oPackage.packageName, oPackage.latestVersion)">
                                 <fa-icon [icon]="faArrowUp"></fa-icon>
                             </button>
-                            <button matTooltip="Remove Package" class="btn btn-secondary btn-sm" (click)="removeLibrary(m_sProcessorId, oPackage.packageName)">
+                            <button matTooltip="Remove Package" class="btn btn-secondary btn-sm"
+                                (click)="removeLibrary(m_sProcessorId, oPackage.packageName)">
                                 <fa-icon [icon]="faTrashcan"></fa-icon>
                             </button>
                         </td>
@@ -52,9 +58,10 @@
             </table>
         </div>
     </div>
-    <div class="dialog-content text-center d-flex flex-column align-items-center justify-content-center" *ngIf="m_bIsLoading === true">
+    <div class="dialog-content text-center d-flex flex-column align-items-center justify-content-center"
+        *ngIf="m_bIsLoading === true">
         <h2>Updating Packages - Please Wait...</h2>
-        <mat-progress-spinner  [color]="'primary'" [mode]="'indeterminate'" ></mat-progress-spinner>
+        <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
     </div>
     <div mat-dialog-actions class="border dialog-footer p-1 d-flex flex-row justify-content-end">
         <button class="btn btn-secondary" (click)="onDismiss()">Close</button>

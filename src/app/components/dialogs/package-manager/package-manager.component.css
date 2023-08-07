@@ -7,6 +7,8 @@ div.table-container {
     overflow-y: auto;
 }
 thead.table-header {
+    opacity: 100%;
     position: sticky;
     top: 0;
+    z-index: 999;
 }

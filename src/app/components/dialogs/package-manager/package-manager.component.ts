@@ -37,6 +37,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   m_sPackageManagerName = "";
   m_sPackageManagerVersion = "";
   m_sPackageName: string = "";
+  m_sPackageToAdd: string; 
 
   m_iHookIndex: number;
   //SORTING
@@ -132,7 +133,68 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   /**
    * Add a Package (library): 
    */
-  addLibrary() { }
+  addLibrary(sProcessorId: string, sPackageName: string) {
+    let aPackageInfo = sPackageName.split("==");
+
+    let aPackageInfoTrimmed = aPackageInfo.map((sElement) => {
+      return sElement.replace(/["]+/g, "");
+    });
+
+    let sPackageInfoName = aPackageInfoTrimmed[0];
+    let sPackageInfoVersion = "";
+    let sAddCommand = "";
+    if (aPackageInfoTrimmed[1]) {
+      sPackageInfoVersion = aPackageInfoTrimmed[1];
+    }
+
+    let sConfirmationMessage = `Are you sure you wish to add ${sPackageInfoName}?`;
+    let oDialogData: ConfirmationDialogModel;
+
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sPackageInfoVersion) === false) {
+      sAddCommand = sPackageInfoName + "/" + sPackageInfoVersion;
+      oDialogData = new ConfirmationDialogModel("Confrim Addition", sConfirmationMessage);
+
+      let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+        maxWidth: "400px",
+        data: oDialogData
+      });
+
+      oDialogRef.afterClosed().subscribe(oDialogResult => {
+        this.m_sPackageToAdd = "";
+        if (oDialogResult === true) {
+
+          this.m_oPackageManagerService.addLibrary(sProcessorId, sAddCommand).subscribe({
+            next: oResponse => {
+              this.m_bIsLoading = true;
+            },
+            error: oError => {
+              console.log("Error uploading your package");
+            }
+          })
+
+        }
+      })
+    } else {
+      oDialogData = new ConfirmationDialogModel("Confirm Addition", sConfirmationMessage); 
+
+      let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+        maxWidth: "400px", 
+        data: oDialogData
+      }); 
+
+      oDialogRef.afterClosed().subscribe(oDialogResult => {
+        this.m_sPackageToAdd = "";
+        if(oDialogResult === true) {
+          this.m_oPackageManagerService.addLibrary(sProcessorId, sPackageName).subscribe({
+            next: oResponse => {
+              this.m_bIsLoading = true;
+            }, 
+            error: oError => {}
+          })
+        }
+      })
+    }
+  }
 
   /**
    * Update the List of Packages:
