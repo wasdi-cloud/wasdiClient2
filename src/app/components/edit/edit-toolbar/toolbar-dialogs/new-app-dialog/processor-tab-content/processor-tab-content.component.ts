@@ -88,6 +88,11 @@ export class ProcessorTabContentComponent implements OnInit {
   @Input() m_sProcessorId?: string = "";
 
   /**
+   * Processor Name
+   */
+  @Input() m_sProcessorName?: string = ""; 
+
+  /**
    * Selected File
    */
   m_oSelectedFile: any = null;
@@ -220,7 +225,7 @@ export class ProcessorTabContentComponent implements OnInit {
       width: '90vw', 
       data: {
         sProcessorId: this.m_sProcessorId,
-        oWorkspace: this.m_oActiveWorkspace
+        sProcessorName: this.m_sProcessorName
       }
     }); 
   }
