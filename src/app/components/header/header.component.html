@@ -18,26 +18,49 @@
                         {{'HEADER.MARKETPLACE_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/workspaces"><fa-icon
-                            [icon]="faFloppyDisk"></fa-icon> {{'HEADER.WORKSPACE_BTN' | translate}}</a>
+                    <a class="nav-link" routerLink="/workspaces"><fa-icon [icon]="faFloppyDisk"></fa-icon>
+                        {{'HEADER.WORKSPACE_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/plan"><fa-icon
-                            [icon]="faCalendar"></fa-icon> {{'HEADER.PLAN_BTN' | translate}}</a>
+                    <a class="nav-link" routerLink="/plan"><fa-icon [icon]="faCalendar"></fa-icon> {{'HEADER.PLAN_BTN' |
+                        translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/search"><fa-icon
-                            [icon]="faMagnifyingGlass"></fa-icon> {{'HEADER.SEARCH_BTN' | translate}}</a>
+                    <a class="nav-link" routerLink="/search"><fa-icon [icon]="faMagnifyingGlass"></fa-icon>
+                        {{'HEADER.SEARCH_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" [ngClass]="{'disabled' : !sActiveWorkspaceId}"
-                        routerLink="/edit/{{sActiveWorkspaceId}}"><fa-icon
-                            [icon]="faGlobe"></fa-icon> {{'HEADER.EDIT_BTN' | translate}}</a>
+                        routerLink="/edit/{{sActiveWorkspaceId}}"><fa-icon [icon]="faGlobe"></fa-icon>
+                        {{'HEADER.EDIT_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
                     <a *ngIf="m_oUser.role !== 'USER'" class="nav-link" routerLink="/admin"><fa-icon
                             [icon]="faGears"></fa-icon> {{'HEADER.ADMIN_BTN' |
                         translate}}</a>
+
+                </li>
+
+                <li class="nav-item dropdown-center">
+                    <a href="" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">Project:
+                        {{m_oSelectedProject.name}}</a>
+                    <ul class="dropdown-menu">
+                        <li style="cursor:pointer;" class="dropdown-item" *ngFor="let oProject of m_aoUserProjectsMap" (click)="setActiveProject(oProject)">
+                            {{oProject.name}}</li>
+                    </ul>
+                </li>
+                <!-- Account Type: -->
+                <li class="nav-item">
+                    <!-- User with brand new WASDI Account -->
+                    <a class="nav-link" href=""
+                        *ngIf="m_sUserAccount !== 'FREE' && m_sUserAccount !== 'PROFESSIONAL' && m_sUserAccount !==  'STANDARD'">PURCHASE
+                        SUBSCRIPTION</a>
+                    <a class="nav-link" href="" *ngIf="m_sUserAccount === 'FREE'">FREE</a>
+                    <a class="nav-link" href="" *ngIf="m_sUserAccount === 'PROFESSIONAL'"><fa-icon
+                            [icon]="faStar"></fa-icon> PRO</a>
+                    <a class="nav-link" href="" *ngIf="m_sUserAccount === 'STANDARD'"><fa-icon
+                            [icon]="faCertificate"></fa-icon> STND</a>
                 </li>
                 <app-language-switch></app-language-switch>
                 <li class="nav-item dropdown">
@@ -45,13 +68,16 @@
                         <fa-icon [icon]="faUser"></fa-icon>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a href="" class="dropdown-item" (click)="openUserSettings($event)"><fa-icon [icon]="faGauge"></fa-icon> User Dashboard</a></li>
-                        <li><a href="" class="dropdown-item"><fa-icon [icon]="faDocumentation"></fa-icon> Documentation</a></li>
+                        <li><a href="" class="dropdown-item" (click)="openUserSettings($event)"><fa-icon
+                                    [icon]="faGauge"></fa-icon> User Dashboard</a></li>
+                        <li><a href="" class="dropdown-item"><fa-icon [icon]="faDocumentation"></fa-icon>
+                                Documentation</a></li>
                         <li><a href="" class="dropdown-item" data-bs-toggle="offcanvas"
                                 data-bs-target="#feedbackOffcanvas" aria-controls="feedbackOffcanvas"><fa-icon
                                     [icon]="faComment"></fa-icon> Send
                                 Feedback</a></li>
-                        <a class="dropdown-item" routerLink="" (click)="logout()"><fa-icon [icon]="faLogout"></fa-icon> Logout</a>
+                        <a class="dropdown-item" routerLink="" (click)="logout()"><fa-icon [icon]="faLogout"></fa-icon>
+                            Logout</a>
                     </ul>
                 </li>
             </ul>
