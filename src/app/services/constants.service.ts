@@ -41,6 +41,15 @@ export class ConstantsService {
 
   m_oSelectedComment: object = {};
 
+  m_aoActiveSubscriptions: Array<any> = [];
+
+  m_aoUserProjects: Array<any> = [];
+
+  m_oActiveProject: any = null;
+
+  m_sAccountType: string = "";
+
+  constructor() { }
 
   // isMobile() {
   //   if (navigator.userAgent.match((/Android)/i)) ||
@@ -217,6 +226,57 @@ export class ConstantsService {
   deleteCookie(cookieName: string) {
     this.setCookie(cookieName, "", -1000);
   }
+
+  /*------------- SUBSCRIPTIONS --------------*/
+  
+  /**
+   * Return array of user's active subscriptions
+   * @returns  {aoSubscriptions}
+   */
+  getActiveSubscriptions() {
+    return this.m_aoActiveSubscriptions;
+  }
+
+  /**
+   * Set the user's active subscriptions
+   * @param {sActiveSubscriptions}
+   */
+  setActiveSubscriptions(asSubscriptions) {
+    this.m_aoActiveSubscriptions = asSubscriptions;
+  }
+
+  /**
+    * Return the array of user's active projects
+    * @returns {aoProjects}
+    */
+  getUserProjects() {
+    return this.m_aoUserProjects;
+  }
+
+  /**
+    * Set the user projects array
+    * @param {*} aoProjects 
+    */
+  setUserProjects(aoProjects) {
+    this.m_aoUserProjects = aoProjects;
+  }
+
+  /**
+   * Set the user's active project
+   * @param {*} oProject
+   */
+  setActiveProject(oProject) {
+    this.m_oActiveProject = oProject
+  }
+
+  /**
+   * Returns the user's active project
+   */
+  getActiveProject() {
+    return this.m_oActiveProject;
+  }
+
+
   /**************************************************/
 
   /**
@@ -306,5 +366,5 @@ export class ConstantsService {
     return localStorage.removeItem(sName);
   }
 
-  constructor() { }
+
 }
