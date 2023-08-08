@@ -133,7 +133,6 @@ export class HeaderComponent implements OnInit {
 
     this.m_oProjectService.getValidProjectsListByUser().subscribe({
       next: oResponse => {
-        console.log(oResponse)
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoUserProjects = oResponse;
 
@@ -164,7 +163,6 @@ export class HeaderComponent implements OnInit {
             this.m_oSelectedProject = this.m_aoUserProjectsMap[0];
           }
           this.m_bLoadingProjects = false;
-          console.log(this.m_oSelectedProject);
         } else {
           this.m_oAlertDialog.openDialog(4000, "Error in getting your projects");
           this.m_bLoadingProjects = false;
@@ -175,8 +173,6 @@ export class HeaderComponent implements OnInit {
       error: oError => {
         let sErrorMessage = "Error in getting your projects";
         this.m_oProject = oFirstProjectElement;
-
-
         this.m_oAlertDialog.openDialog(4000, sErrorMessage);
       }
     })
@@ -185,11 +181,9 @@ export class HeaderComponent implements OnInit {
   }
 
   setActiveProject(oProject: any) {
-    console.log(oProject);
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProject) === false) {
       this.m_oProjectService.changeActiveProject(oProject.projectId).subscribe({
         next: oResponse => {
-          console.log(oResponse)
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
             this.m_oNotificationDisplayService.openSnackBar("Active Project Changed", "Close", "right", "bottom");
 
