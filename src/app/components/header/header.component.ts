@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
-import { faUser, faComment, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faComment, faArrowLeft, faBook, faSpaceShuttle, faFloppyDisk, faCalendar, faMagnifyingGlass, faGlobe, faGears, faRocket, faUserAstronaut, faGauge, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { UserSettingsDialogComponent } from './header-dialogs/user-settings-dialog/user-settings-dialog.component';
 import { User } from 'src/app/shared/models/user.model';
@@ -28,9 +28,18 @@ export class HeaderComponent implements OnInit {
   } = { title: null, message: null }
 
   //Font Awesome Icons
-  faUser = faUser;
+  faUser = faUserAstronaut;
   faComment = faComment
   faArrowLeft = faArrowLeft;
+  faDocumentation = faBook; 
+  faSpaceShip = faRocket; 
+  faFloppyDisk = faFloppyDisk; 
+  faCalendar = faCalendar; 
+  faMagnifyingGlass = faMagnifyingGlass; 
+  faGlobe = faGlobe; 
+  faGears = faGears; 
+  faGauge = faGauge; 
+  faLogout = faArrowRightFromBracket; 
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,

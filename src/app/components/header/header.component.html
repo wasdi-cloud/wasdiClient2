@@ -14,43 +14,52 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto-sm ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/marketplace">{{'HEADER.MARKETPLACE_BTN' | translate}}</a>
+                    <a class="nav-link" routerLink="/marketplace"><fa-icon [icon]="faSpaceShip"></fa-icon>
+                        {{'HEADER.MARKETPLACE_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/workspaces">{{'HEADER.WORKSPACE_BTN' | translate}}</a>
+                    <a class="nav-link" routerLink="/workspaces"><fa-icon
+                            [icon]="faFloppyDisk"></fa-icon> {{'HEADER.WORKSPACE_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/plan">{{'HEADER.PLAN_BTN' | translate}}</a>
+                    <a class="nav-link" routerLink="/plan"><fa-icon
+                            [icon]="faCalendar"></fa-icon> {{'HEADER.PLAN_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/search">{{'HEADER.SEARCH_BTN' | translate}}</a>
+                    <a class="nav-link" routerLink="/search"><fa-icon
+                            [icon]="faMagnifyingGlass"></fa-icon> {{'HEADER.SEARCH_BTN' | translate}}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" [ngClass]="{'disabled' : !sActiveWorkspaceId}"
-                        routerLink="/edit/{{sActiveWorkspaceId}}">{{'HEADER.EDIT_BTN' | translate}}</a>
+                        routerLink="/edit/{{sActiveWorkspaceId}}"><fa-icon
+                            [icon]="faGlobe"></fa-icon> {{'HEADER.EDIT_BTN' | translate}}</a>
                 </li>
-                <li class="nav-item" >
-                    <a *ngIf="m_oUser.role !== 'USER'" class="nav-link" routerLink="/admin">{{'HEADER.ADMIN_BTN' | translate}}</a>
+                <li class="nav-item">
+                    <a *ngIf="m_oUser.role !== 'USER'" class="nav-link" routerLink="/admin"><fa-icon
+                            [icon]="faGears"></fa-icon> {{'HEADER.ADMIN_BTN' |
+                        translate}}</a>
                 </li>
                 <app-language-switch></app-language-switch>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="offcanvas" data-bs-target="#feedbackOffcanvas"
-                        aria-controls="feedbackOffcanvas">
-                        <fa-icon [icon]="faComment"></fa-icon>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" (click)="openUserSettings($event)">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
                         <fa-icon [icon]="faUser"></fa-icon>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a href="" class="dropdown-item" (click)="openUserSettings($event)"><fa-icon [icon]="faGauge"></fa-icon> User Dashboard</a></li>
+                        <li><a href="" class="dropdown-item"><fa-icon [icon]="faDocumentation"></fa-icon> Documentation</a></li>
+                        <li><a href="" class="dropdown-item" data-bs-toggle="offcanvas"
+                                data-bs-target="#feedbackOffcanvas" aria-controls="feedbackOffcanvas"><fa-icon
+                                    [icon]="faComment"></fa-icon> Send
+                                Feedback</a></li>
+                        <a class="dropdown-item" routerLink="" (click)="logout()"><fa-icon [icon]="faLogout"></fa-icon> Logout</a>
+                    </ul>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
+
 
 <!-- Feedback Form OffCanvas -->
 <div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
