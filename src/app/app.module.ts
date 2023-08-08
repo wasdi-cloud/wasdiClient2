@@ -121,6 +121,10 @@ import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ProcessorTabUiComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-ui/processor-tab-ui.component';
 import { ProcessorTabStoreComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-store/processor-tab-store.component';
 import { ProcessorTabMediaComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-media/processor-tab-media.component';
+import { SubscriptionsDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/subscriptions-display/subscriptions-display.component';
+import { OrganizationsDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/organizations-display/organizations-display.component';
+import { PurchaseHistoryDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/purchase-history-display/purchase-history-display.component';
+import { EmailPreferencesDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/email-preferences-display/email-preferences-display.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -191,7 +195,11 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProcessorTabContentComponent,
     ProcessorTabUiComponent,
     ProcessorTabStoreComponent,
-    ProcessorTabMediaComponent
+    ProcessorTabMediaComponent,
+    SubscriptionsDisplayComponent,
+    OrganizationsDisplayComponent,
+    PurchaseHistoryDisplayComponent,
+    EmailPreferencesDisplayComponent
   ],
   imports: [
     AppRoutingModule,
