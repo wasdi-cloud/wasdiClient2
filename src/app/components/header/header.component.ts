@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit {
     console.log("Open User Settings")
     const oDialogRef = this.m_oDialog.open(UserSettingsDialogComponent, {
       height: '85vh',
-      width: '60vw'
+      width: '80vw'
     })
     event.preventDefault();
   }
