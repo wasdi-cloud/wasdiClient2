@@ -76,14 +76,18 @@ export class HeaderComponent implements OnInit {
     //Register translation languages:
     translate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
     translate.setDefaultLang('en');
-    this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace()
-    this.m_oUser = this.m_oConstantsService.getUser();
-    this.initializeProjectsInfo();
-    this.getAccountType();
   }
 
   ngOnInit(): void {
+    this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    this.m_oUser = this.m_oConstantsService.getUser();
+    if (this.m_oUser) {
+
+      this.initializeProjectsInfo();
+      this.getAccountType();
+    }
+
     if (this.m_oActivatedRoute.snapshot.url[0].path === 'edit') {
       this.m_bEditIsActive = true;
       this.sActiveWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId'];
