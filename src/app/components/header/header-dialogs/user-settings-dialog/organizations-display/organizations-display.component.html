@@ -23,7 +23,7 @@
                         (click)="openNewOrganizationDialog(true, oOrganization.adminRole, oOrganization)"><fa-icon
                             [icon]="faInfo"></fa-icon></button>
                     <button class="btn btn-danger" matTooltip="Remove Organization" matTooltipShowDelay="500"
-                        (click)="removeOrganization()"><fa-icon [icon]="faX"></fa-icon></button>
+                        (click)="removeOrganization(oOrganization)"><fa-icon [icon]="faX"></fa-icon></button>
                 </td>
             </tr>
         </tbody>
