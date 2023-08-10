@@ -9,6 +9,7 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { faUserPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { SubscriptionService } from 'src/app/services/api/subscription.service';
 @Component({
   selector: 'app-share-ui',
   templateUrl: './share-ui.component.html',
@@ -30,6 +31,7 @@ export class ShareUiComponent implements OnInit {
     private m_oOrganizationsService: OrganizationsService,
     private m_oProcessorService: ProcessorService,
     private m_oStyleService: StyleService,
+    private m_oSubscriptionService: SubscriptionService,
     private m_oWorkspaceService: WorkspaceService) { }
 
   ngOnInit() {
@@ -75,6 +77,15 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === "organization") {
         this.m_oOrganizationsService.getUsersBySharedOrganization(this.resource.organizationId).subscribe({
+          next: oResponse => {
+            this.m_aoSharedUsers = oResponse;
+          },
+          error: oError => { }
+        })
+      }
+
+      if (this.resourceType === "subscription") {
+        this.m_oSubscriptionService.getUsersBySharedSubscription(this.resource.subscriptionId).subscribe({
           next: oResponse => {
             this.m_aoSharedUsers = oResponse;
           },
@@ -136,6 +147,18 @@ export class ShareUiComponent implements OnInit {
           error: oError => { }
         })
       }
+
+      if (this.resourceType === 'subscription') {
+        this.m_oSubscriptionService.addSubscriptionSharing(this.resource.subscriptionId, this.m_sUserIdSearch).subscribe({
+          next: oResponse => {
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.message === "Done") {
+              console.log("Sharing Saved");
+              this.getEnabledUsers();
+            }
+          },
+          error: oError => { }
+        })
+      }
     }
   }
 
@@ -186,12 +209,22 @@ export class ShareUiComponent implements OnInit {
     if (this.resourceType === 'organization') {
       this.m_oOrganizationsService.removeOrganizationSharing(this.resource.organizationId, sUserId).subscribe({
         next: oResponse => {
-          console.log("Sharing successful");
+          console.log("Removal Successful");
           this.getEnabledUsers();
         },
         error: oError => {
           console.log("Error in Removing User");
         }
+      })
+    }
+
+    if (this.resourceType === 'subscription') {
+      this.m_oSubscriptionService.removeSubscriptionSharing(this.resource.subscriptionId, sUserId).subscribe({
+        next: oResponse => {
+          console.log("Removal Successful");
+          this.getEnabledUsers();
+        },
+        error: oError => { }
       })
     }
   }

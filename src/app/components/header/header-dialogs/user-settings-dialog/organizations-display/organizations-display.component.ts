@@ -8,9 +8,9 @@ import { OrganizationsService } from 'src/app/services/api/organizations.service
 //Components Imports:
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { EditOrganizationDialogComponent } from 'src/app/dialogs/edit-organization-dialog/edit-organization-dialog.component';
-
+import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 //Font Awesome Imports
-import { faInfoCircle, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faPlus, faUsers, faX } from '@fortawesome/free-solid-svg-icons';
 
 //Angular Materials Imports:
 import { MatDialog } from '@angular/material/dialog';
@@ -26,6 +26,7 @@ export class OrganizationsDisplayComponent implements OnInit {
   faPlus = faPlus;
   faInfo = faInfoCircle;
   faX = faX;
+  faUsers = faUsers; 
 
   m_aoOrganizations: Array<any> = [];
 
@@ -100,6 +101,12 @@ export class OrganizationsDisplayComponent implements OnInit {
 
   }
 
-  openOrganizationDetailsDialog() { }
+  openOrganizationShareDialog(oOrganization) {
+    let dialogData = new ShareDialogModel("organization", oOrganization)
+    let dialogRef = this.m_oDialog.open(ShareDialogComponent, {
+      width: '50vw',
+      data: dialogData
+    });
+  }
 
 }
