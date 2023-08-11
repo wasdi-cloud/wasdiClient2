@@ -125,7 +125,6 @@ import { SubscriptionsDisplayComponent } from './components/header/header-dialog
 import { OrganizationsDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/organizations-display/organizations-display.component';
 import { PurchaseHistoryDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/purchase-history-display/purchase-history-display.component';
 import { EmailPreferencesDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/email-preferences-display/email-preferences-display.component';
-import { SubscriptionUsersDialogComponent } from './dialogs/subscription-users-dialog/subscription-users-dialog.component';
 import { SubscriptionProjectsDialogComponent } from './dialogs/subscription-projects-dialog/subscription-projects-dialog.component';
 import { EditSubscriptionDialogComponent } from './dialogs/edit-subscription-dialog/edit-subscription-dialog.component';
 import { EditOrganizationDialogComponent } from './dialogs/edit-organization-dialog/edit-organization-dialog.component';
@@ -205,7 +204,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     OrganizationsDisplayComponent,
     PurchaseHistoryDisplayComponent,
     EmailPreferencesDisplayComponent,
-    SubscriptionUsersDialogComponent,
     SubscriptionProjectsDialogComponent,
     EditSubscriptionDialogComponent,
     EditOrganizationDialogComponent,
