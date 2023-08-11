@@ -50,7 +50,7 @@ export class ProjectService {
   };
 
   deleteProject(sProjectId: string) {
-    return this.m_oHttp.delete(this.APIURL + '/projects/delete?project=' + sProjectId);
+    return this.m_oHttp.delete(this.APIURL + '/projects/delete?project=' + sProjectId, { observe: 'response' });
   };
 
 };

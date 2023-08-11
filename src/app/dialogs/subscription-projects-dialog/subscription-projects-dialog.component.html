@@ -31,7 +31,7 @@
                             (click)="openProjectInfoDialog(true, m_oSubscription, oProject)">
                             <fa-icon [icon]="faEdit"></fa-icon>
                         </button>
-                        <button class="btn btn-sm btn-danger">
+                        <button class="btn btn-sm btn-danger" (click)="removeProject(oProject)">
                             <fa-icon [icon]="faX"></fa-icon>
                         </button>
                     </td>

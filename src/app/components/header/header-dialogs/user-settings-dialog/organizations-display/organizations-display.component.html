@@ -19,6 +19,9 @@
                 <td>{{oOrganization.name}}</td>
                 <td>{{oOrganization.ownerUserId}}</td>
                 <td class="d-flex gap-2">
+                    <button class="btn btn-secondary" *ngIf="oOrganization.adminRole" (click)="openOrganizationShareDialog(oOrganization)">
+                        <fa-icon [icon]="faUsers"></fa-icon>
+                    </button>
                     <button class="btn btn-secondary" matTooltip="View Organization Details" matTooltipShowDelay="500"
                         (click)="openNewOrganizationDialog(true, oOrganization.adminRole, oOrganization)"><fa-icon
                             [icon]="faInfo"></fa-icon></button>
