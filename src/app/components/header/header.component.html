@@ -46,21 +46,23 @@
                         aria-expanded="false">Project:
                         {{m_oSelectedProject.name}}</a>
                     <ul class="dropdown-menu">
-                        <li style="cursor:pointer;" class="dropdown-item" *ngFor="let oProject of m_aoUserProjectsMap" (click)="setActiveProject(oProject)">
+                        <li style="cursor:pointer;" class="dropdown-item" *ngFor="let oProject of m_aoUserProjectsMap"
+                            (click)="setActiveProject(oProject)">
                             {{oProject.name}}</li>
                     </ul>
                 </li>
                 <!-- Account Type: -->
                 <li class="nav-item">
                     <!-- User with brand new WASDI Account -->
-                    <a class="nav-link" href=""
+                    <a class="nav-link" routerLink="/subscriptions" href=""
                         *ngIf="m_sUserAccount !== 'FREE' && m_sUserAccount !== 'PROFESSIONAL' && m_sUserAccount !==  'STANDARD'">PURCHASE
                         SUBSCRIPTION</a>
-                    <a class="nav-link" href="" *ngIf="m_sUserAccount === 'FREE'">FREE</a>
-                    <a class="nav-link" href="" *ngIf="m_sUserAccount === 'PROFESSIONAL'"><fa-icon
-                            [icon]="faStar"></fa-icon> PRO</a>
-                    <a class="nav-link" href="" *ngIf="m_sUserAccount === 'STANDARD'"><fa-icon
-                            [icon]="faCertificate"></fa-icon> STND</a>
+                    <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
+                        *ngIf="m_sUserAccount === 'FREE'">FREE</a>
+                    <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
+                        *ngIf="m_sUserAccount === 'PROFESSIONAL'"><fa-icon [icon]="faStar"></fa-icon> PRO</a>
+                    <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
+                        *ngIf="m_sUserAccount === 'STANDARD'"><fa-icon [icon]="faCertificate"></fa-icon> STND</a>
                 </li>
                 <app-language-switch></app-language-switch>
                 <li class="nav-item dropdown">

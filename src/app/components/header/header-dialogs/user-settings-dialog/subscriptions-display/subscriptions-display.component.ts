@@ -7,10 +7,11 @@ import { SubscriptionService } from 'src/app/services/api/subscription.service';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { faBriefcase, faEdit, faEye, faTrashCan, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditSubscriptionDialogComponent } from 'src/app/dialogs/edit-subscription-dialog/edit-subscription-dialog.component';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { SubscriptionProjectsDialogComponent } from 'src/app/dialogs/subscription-projects-dialog/subscription-projects-dialog.component';
+import { UserSettingsDialogComponent } from '../user-settings-dialog.component';
 
 @Component({
   selector: 'app-subscriptions-display',
@@ -35,6 +36,7 @@ export class SubscriptionsDisplayComponent implements OnInit {
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oDialogRef: MatDialogRef<UserSettingsDialogComponent>,
     private m_oOrganizationsService: OrganizationsService,
     private m_oProjectService: ProjectService,
     private m_oSubscriptionService: SubscriptionService
@@ -85,4 +87,8 @@ export class SubscriptionsDisplayComponent implements OnInit {
   }
 
   deleteSubscription() { }
+
+  onDismiss(){ 
+    this.m_oDialogRef.close();
+  }
 }
