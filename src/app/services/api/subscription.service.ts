@@ -56,7 +56,7 @@ export class SubscriptionService {
 
   // Get Subscription Types list
   getSubscriptionTypes() {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/types');
+    return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/types', { observe: 'response' });
   };
 
   // Get Stripe payment url by subscription id

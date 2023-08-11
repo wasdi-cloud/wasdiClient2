@@ -11,6 +11,7 @@ import { MarketplaceComponent } from './components/marketplace/marketplace.compo
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { PlanComponent } from './components/plan/plan.component';
 import { SearchComponent } from './components/search/search.component';
+import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 
 //import auth guard
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'plan', component: PlanComponent, canActivate: [AuthGuard] },
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
+  { path: 'subscriptions', component: SubscriptionsPurchaseComponent, canActivate: [AuthGuard] },
   { path: 'workspaces', component: WorkspacesComponent, canActivate: [AuthGuard] },
   { path: ':processorName/appDetails', component: AppDetailsComponent, canActivate: [AuthGuard] },
   { path: ':processorName/appui', component: AppUiComponent, canActivate: [AuthGuard] },
