@@ -29,7 +29,7 @@
                             (click)="openSharedUsersDialog(oSubscription)">
                             <fa-icon [icon]="faUsers"></fa-icon>
                         </button>
-                        <button class="btn btn-secondary btn-sm" (click)="openProjectsDialog(oSubscription.adminRole)">
+                        <button class="btn btn-secondary btn-sm" (click)="openProjectsDialog(oSubscription.adminRole, oSubscription)">
                             <fa-icon [icon]="faBriefcase"></fa-icon>
                         </button>
                         <button class="btn btn-secondary btn-sm" *ngIf="oSubscription.adminRole === true"

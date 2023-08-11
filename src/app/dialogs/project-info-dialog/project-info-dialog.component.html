@@ -1,0 +1,33 @@
+<div class="dialog d-flex flex-column justify-content-between h-100">
+    <div class="px-4 pt-3 text-secondary align-items-center d-flex flex-row justify-content-between">
+        <h4>Manage Project</h4>
+        <button class="btn" (click)="onDismiss()">
+            <fa-icon [icon]="faX"></fa-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <h6 *ngIf="m_bEditMode === true">Edit <span class="text-success">{{m_oProject.name}}</span></h6>
+        <h6 *ngIf="m_bEditMode=== false">Create Project for <span class="text-success">{{m_oSubscription.name}}</span>
+        </h6>
+
+        <div class="d-flex flex-column gap-2">
+            <div>
+                <label for="">Name</label>
+                <input type="text" class="form-control" [(ngModel)]="m_oEditProject.name">
+            </div>
+            <div>
+                <label for="">Description</label>
+                <input type="text" class="form-control" [(ngModel)]="m_oEditProject.description">
+            </div>
+            <div>
+                <label for="">Subscription</label>
+                <input type="text" class="form-control" placeholder="{{m_oSubscription.name}}" readonly>
+            </div>
+            <div>
+                <mat-checkbox [color]="'success'" [(ngModel)]="m_oEditProject.activeProject">Set Active
+                    Project</mat-checkbox>
+            </div>
+            <button class="btn btn-success align-self-center" (click)="saveProject()">Save</button>
+        </div>
+    </div>
+</div>

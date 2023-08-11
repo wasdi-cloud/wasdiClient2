@@ -129,6 +129,7 @@ import { SubscriptionUsersDialogComponent } from './dialogs/subscription-users-d
 import { SubscriptionProjectsDialogComponent } from './dialogs/subscription-projects-dialog/subscription-projects-dialog.component';
 import { EditSubscriptionDialogComponent } from './dialogs/edit-subscription-dialog/edit-subscription-dialog.component';
 import { EditOrganizationDialogComponent } from './dialogs/edit-organization-dialog/edit-organization-dialog.component';
+import { ProjectInfoDialogComponent } from './dialogs/project-info-dialog/project-info-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -207,7 +208,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SubscriptionUsersDialogComponent,
     SubscriptionProjectsDialogComponent,
     EditSubscriptionDialogComponent,
-    EditOrganizationDialogComponent
+    EditOrganizationDialogComponent,
+    ProjectInfoDialogComponent
   ],
   imports: [
     AppRoutingModule,

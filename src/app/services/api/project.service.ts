@@ -22,7 +22,7 @@ export class ProjectService {
   };
 
   getProjectsListBySubscription(sSubscriptionId: string) {
-    return this.m_oHttp.get(this.APIURL + '/projects/bysubscription?subscription=' + sSubscriptionId);
+    return this.m_oHttp.get<any>(this.APIURL + '/projects/bysubscription?subscription=' + sSubscriptionId);
   };
 
   getProjectById(sProjectId: string) {
@@ -38,11 +38,11 @@ export class ProjectService {
   };
 
   createProject(oProject: any) {
-    return this.m_oHttp.post(this.APIURL + '/projects/add', oProject);
+    return this.m_oHttp.post<any>(this.APIURL + '/projects/add', oProject, { observe: 'response' });
   };
 
   updateProject(oProject: any) {
-    return this.m_oHttp.put(this.APIURL + '/projects/update', oProject);
+    return this.m_oHttp.put<any>(this.APIURL + '/projects/update', oProject, { observe: 'response' });
   };
 
   changeActiveProject(sProjectId: string) {

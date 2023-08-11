@@ -12,7 +12,7 @@ export class SubscriptionService {
   constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient) { }
 
   getSubscriptionsListByUser() {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/byuser');
+    return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/byuser');
   };
 
   getSubscriptionById(sSubscriptionId: string) {
@@ -46,7 +46,7 @@ export class SubscriptionService {
 
   // Add sharing
   addSubscriptionSharing(sSubscriptionId: string, sUserId: string) {
-    return this.m_oHttp.post(this.APIURL + '/subscriptions/share/add?subscription=' + sSubscriptionId + '&userId=' + sUserId, {});
+    return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/share/add?subscription=' + sSubscriptionId + '&userId=' + sUserId, {});
   }
 
   // Remove sharing
