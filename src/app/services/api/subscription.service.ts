@@ -16,7 +16,7 @@ export class SubscriptionService {
   };
 
   getSubscriptionById(sSubscriptionId: string) {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/byId?subscription=' + sSubscriptionId);
+    return this.m_oHttp.get(this.APIURL + '/subscriptions/byId?subscription=' + sSubscriptionId, {observe: 'response'});
   };
 
   saveSubscription(oSubscription) {
@@ -28,11 +28,11 @@ export class SubscriptionService {
   };
 
   createSubscription(oSubscription) {
-    return this.m_oHttp.post(this.APIURL + '/subscriptions/add', oSubscription);
+    return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/add', oSubscription);
   };
 
   updateSubscription(oSubscription) {
-    return this.m_oHttp.put(this.APIURL + '/subscriptions/update', oSubscription);
+    return this.m_oHttp.put<any>(this.APIURL + '/subscriptions/update', oSubscription);
   };
 
   deleteSubscription(sSubscriptionId: string) {
@@ -61,6 +61,6 @@ export class SubscriptionService {
 
   // Get Stripe payment url by subscription id
   getStripePaymentUrl(sSubscriptionId: string, sWorkspaceId: string) {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/stripe/paymentUrl?subscription=' + sSubscriptionId + '&workspace=' + sWorkspaceId);
+    return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/stripe/paymentUrl?subscription=' + sSubscriptionId + '&workspace=' + sWorkspaceId);
   }
 }
