@@ -76,11 +76,13 @@ export class SubscriptionsDisplayComponent implements OnInit {
     })
   }
 
-  openEditSubscriptionDialog(bIsOwner: boolean) {
+  openEditSubscriptionDialog(oSubscription: any, bIsOwner: boolean) {
     let oDialogRef = this.m_oDialog.open(EditSubscriptionDialogComponent, {
       height: '80vh', 
       width: '50vw', 
       data: {
+        subscription: oSubscription,
+        editMode: true,
         isOwner: bIsOwner
       }
     })

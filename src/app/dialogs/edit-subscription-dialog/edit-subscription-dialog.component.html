@@ -1,0 +1,60 @@
+<div class="dialog d-flex flex-column justify-content-between align-items-center">
+    <div class="d-flex flex-row justify-content-between bg-secondary px-2" style="width: 100%;">
+        <h4 *ngIf="m_oEditSubscription.subscriptionId == null">
+            Buy Subscription</h4>
+        <h4 *ngIf="m_oEditSubscription.subscriptionId != null && m_bEditMode">
+            Edit Subscription</h4>
+        <h4 *ngIf="m_oEditSubscription.subscriptionId != null && !m_bEditMode">
+            Subscription (Readonly)</h4>
+    </div>
+    <div class="w-100 d-flex flex-column gap-2 p-3" action="">
+        <div>
+            <label for="">Name</label>
+            <input class="form-control" type="text" [(ngModel)]="m_oEditSubscription.name">
+        </div>
+        <div>
+            <label for="">Description</label>
+            <input class="form-control" type="text" [(ngModel)]="m_oEditSubscription.description">
+        </div>
+        <div>
+            <label for="">Purchase Date</label>
+            <input class="form-control" type="date" name="" id="">
+        </div>
+        <div>
+            <label for="">Start Date</label>
+            <input class="form-control" type="date" name="" id="">
+        </div>
+        <div>
+            <label for="">End Date</label>
+            <input class="form-control" type="date" name="" id="">
+        </div>
+        <div>
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let oOrganization of m_oUserOrganizations">{{oOrganization.name}}</mat-option>
+            </mat-autocomplete>
+        </div>
+    </div>
+    <div class="row border-top mt-5" ng-if="m_oController.m_bEditMode && !m_oController.m_bIsPaid">
+        <div class="p-5">
+            <h4>Order Summary</h4>
+            <ul class="list-group">
+                <li class="list-group-item d-flex flex-row justify-content-between">
+                    <p>Subtotal:</p>
+                    <p>€ {{m_oEditSubscription.price}}</p>
+                </li>
+                <!-- <li class="list-group-item d-flex flex-row justify-content-between">
+                    <p>VAT:</p>
+                    <p>€ 0</p>
+                </li> -->
+                <li class="list-group-item d-flex flex-row justify-content-between" style="font-size: 1.5em">
+                    <p>Total:</p>
+                    <p>€ {{m_oEditSubscription.price}}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-end gap-3">
+        <button class="btn btn-secondary" (click)="onDismiss()">Cancel</button>
+        <button class="btn btn-success">Save</button>
+    </div>
+</div>
