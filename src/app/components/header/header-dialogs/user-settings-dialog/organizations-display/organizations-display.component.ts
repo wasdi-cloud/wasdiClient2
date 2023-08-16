@@ -61,7 +61,7 @@ export class OrganizationsDisplayComponent implements OnInit {
       next: oResponse => {
         console.log(oResponse);
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          this.m_aoOrganizations = oResponse;
+          this.m_aoOrganizations = oResponse.body;
         }
       },
       error: oError => { }

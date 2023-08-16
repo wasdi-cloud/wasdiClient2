@@ -16,7 +16,7 @@ export class SubscriptionService {
   };
 
   getSubscriptionById(sSubscriptionId: string) {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/byId?subscription=' + sSubscriptionId, {observe: 'response'});
+    return this.m_oHttp.get(this.APIURL + '/subscriptions/byId?subscription=' + sSubscriptionId, { observe: 'response' });
   };
 
   saveSubscription(oSubscription) {
@@ -28,11 +28,11 @@ export class SubscriptionService {
   };
 
   createSubscription(oSubscription) {
-    return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/add', oSubscription);
+    return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/add', oSubscription, { observe: "response" });
   };
 
   updateSubscription(oSubscription) {
-    return this.m_oHttp.put<any>(this.APIURL + '/subscriptions/update', oSubscription);
+    return this.m_oHttp.put<any>(this.APIURL + '/subscriptions/update', oSubscription, { observe: "response" });
   };
 
   deleteSubscription(sSubscriptionId: string) {

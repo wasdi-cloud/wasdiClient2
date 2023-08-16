@@ -12,7 +12,7 @@ export class OrganizationsService {
   constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient) { }
 
   getOrganizationsListByUser() {
-    return this.m_oHttp.get<any>(this.APIURL + '/organizations/byuser');
+    return this.m_oHttp.get<any>(this.APIURL + '/organizations/byuser', { observe: "response" });
   };
 
   getOrganizationById(sOrganizationId: string) {
