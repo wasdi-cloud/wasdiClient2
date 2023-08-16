@@ -38,8 +38,8 @@ export class SubscriptionsPurchaseComponent implements OnInit {
       price: price
     };
     this.m_oDialog.open(EditSubscriptionDialogComponent, {
-      height: '80vh', 
-      width: '50vw', 
+      maxHeight: '80vh',
+      width: '50vw',
       data: {
         subscription: oNewSubscription,
         editMode: true
@@ -53,7 +53,6 @@ export class SubscriptionsPurchaseComponent implements OnInit {
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.status === 200) {
           this.m_aoTypes = oResponse.body;
-          console.log(this.m_aoTypes)
         }
       },
       error: oError => { }
