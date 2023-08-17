@@ -35,8 +35,8 @@
                 <div class="card d-flex flex-column gap-3 p-2 align-self-start"
                     *ngFor="let oWorkflow of m_aoWorkflows | filter: m_sFilterString">
                     <div class="card-toolbar d-flex flex-row justify-content-end" style="height: 30px">
-                        <div *ngIf="isWorkflowOwner(oWorkflow)">
-                            <button class="btn">
+                        <div *ngIf="isWorkflowOwner(oWorkflow) || oWorkflow.sharedWithMe === true">
+                            <button class="btn" (click)="downloadWorkflow(oWorkflow)">
                                 <fa-icon [icon]="faDownload"></fa-icon>
                             </button>
                             <button class="btn">

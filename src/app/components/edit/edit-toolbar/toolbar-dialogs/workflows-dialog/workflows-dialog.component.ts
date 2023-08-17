@@ -65,6 +65,7 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_oWorkflowService.getWorkflowsByUser().subscribe({
       next: oResponse => {
         if (oResponse.body) {
+          console.log(oResponse.body)
           this.m_aoWorkflows = oResponse.body
         }
       },
@@ -114,7 +115,13 @@ export class WorkflowsDialogComponent implements OnInit {
     return true
   }
 
-  downloadWorkflow() { }
+  downloadWorkflow(oWorkflow) {
+    if (!oWorkflow) {
+      return false;
+    }
+    this.m_oWorkflowService.downloadWorkflow(oWorkflow.workflowId);
+    return true;
+  }
 
   runWorkflowPerProducts() { }
 
