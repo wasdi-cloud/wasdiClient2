@@ -9,6 +9,7 @@ import { WorkspaceInfoDialogComponent } from '../workspace-info-dialog/workspace
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
 import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/workflows-dialog.component';
+import { Product } from 'src/app/shared/models/product.model';
 
 @Component({
   selector: 'app-edit-toolbar',
@@ -22,6 +23,7 @@ export class EditToolbarComponent implements OnInit {
   faInfo = faInfoCircle;
 
   @Input() m_oActiveWorkspace: Workspace;
+  @Input() m_aoProducts: Product[];
   @Output() m_sSearchString = new EventEmitter();
 
   m_sFilterText: string;
@@ -73,7 +75,10 @@ export class EditToolbarComponent implements OnInit {
     event.preventDefault();
     let dialogRef = this.m_oDialog.open(WorkflowsDialogComponent, {
       height: '80vh',
-      width: '80vw'
+      width: '80vw', 
+      data: {
+        products: this.m_aoProducts
+      }
     })
   }
 

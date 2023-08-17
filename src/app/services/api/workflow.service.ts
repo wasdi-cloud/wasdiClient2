@@ -43,12 +43,12 @@ export class WorkflowService {
 
   // Delete workflow
   deleteWorkflow(sWorkflowId: string) {
-    return this.oHttp.get(this.APIURL + '/workflows/delete?workflowId=' + sWorkflowId);
+    return this.oHttp.get(this.APIURL + '/workflows/delete?workflowId=' + sWorkflowId, { observe: 'response' });
   };
 
   // Get Workflow list by user
   getWorkflowsByUser() {
-    return this.oHttp.get(this.APIURL + '/workflows/getbyuser');
+    return this.oHttp.get<any>(this.APIURL + '/workflows/getbyuser', { observe: 'response' });
   };
 
   // Download workflow file
