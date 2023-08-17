@@ -33,7 +33,8 @@
                 [(ngModel)]="m_sFilterString">
             <div class="workflow-cards-container d-flex flex-row flex-wrap justify-content-start gap-1">
                 <div class="card d-flex flex-column gap-3 p-2 align-self-start"
-                    *ngFor="let oWorkflow of m_aoWorkflows | filter: m_sFilterString">
+                    *ngFor="let oWorkflow of m_aoWorkflows | filter: m_sFilterString"
+                    (click)="setSelectedWorkflow(oWorkflow)">
                     <div class="card-toolbar d-flex flex-row justify-content-end" style="height: 30px">
                         <div *ngIf="isWorkflowOwner(oWorkflow) || oWorkflow.sharedWithMe === true">
                             <button class="btn" (click)="downloadWorkflow(oWorkflow)">
@@ -59,16 +60,16 @@
         </div>
         <div class="info-container card border border-success rounded-1">
             <div class="px-4 py-4 d-flex flex-column gap-2">
-                <h4>WORKFLOW TITLE</h4>
+                <h4>{{m_oSelectedWorkflow.name}}</h4>
                 <div class="main-style-info d-flex flex-row justify-content-between">
 
                     <div class="style-description">
                         <span class="text-success">Description:</span>
-                        <p>WORKFLOW DESCRIPTION</p>
+                        <p>{{m_oSelectedWorkflow.description}}</p>
                     </div>
                     <div>
                         <span class="text-success">Owner:</span>
-                        <p>WORKFLOW OWNER</p>
+                        <p>{{m_oSelectedWorkflow.userId}}</p>
                     </div>
                 </div>
 

@@ -4,6 +4,7 @@ import { faDownload, faEdit, faLaptopCode, faPlus, faX } from '@fortawesome/free
 import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { Workflow } from 'src/app/shared/models/workflow.model';
 @Component({
   selector: 'app-workflows-dialog',
   templateUrl: './workflows-dialog.component.html',
@@ -26,7 +27,7 @@ export class WorkflowsDialogComponent implements OnInit {
   m_bIsUploadingWorkflow: boolean = false;
   m_bIsLoadingWorkdlow: boolean = false;
 
-  m_oSelectedWorkflow: any = null;
+  m_oSelectedWorkflow: Workflow = {} as Workflow;
   m_oSelectedMultiInputWorkflow: any = null;
   m_oWAPProudct: any = null;
 
@@ -85,7 +86,9 @@ export class WorkflowsDialogComponent implements OnInit {
     return false;
   }
 
-  setSelectedWorkflow() { }
+  setSelectedWorkflow(oWorkflow) {
+    this.m_oSelectedWorkflow = oWorkflow;
+  }
 
   openEditWorkflowDialog() { }
 
