@@ -19,6 +19,7 @@ export class WorkflowsDialogComponent {
   m_sUserId: string;
 
   m_sActiveTab: string = 'execute'
+  m_sFilterString: string = "";
 
   m_aoWorkflows: any;
   constructor(
@@ -35,17 +36,16 @@ export class WorkflowsDialogComponent {
   }
 
   isWorkflowOwner(oWorkflow) {
-    if(!oWorkflow || !this.m_sUserId) {
-      
+    if (!oWorkflow || !this.m_sUserId) {
+
       return false;
     }
 
-    if(this.m_sUserId === oWorkflow.userId) {
-      console.log(oWorkflow)
-      return true; 
+    if (this.m_sUserId === oWorkflow.userId) {
+      return true;
     }
 
-    return false; 
+    return false;
   }
 
   getWorkflows() {
