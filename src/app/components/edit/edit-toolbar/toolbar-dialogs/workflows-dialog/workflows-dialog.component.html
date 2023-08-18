@@ -73,15 +73,25 @@
                     </div>
                 </div>
 
-                <div class="style-xml-container d-flex flex-row align-items-center gap-2">
-                    <span class="text-success">Read:</span>
-                    <input type="text" class="form-control" placeholder="Pick one" aria-label="Number" matInput
-                        [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete">
-                        <mat-option>
-
+                <div class="style-xml-container d-flex flex-column gap-1">
+                    <label class="text-success form-label">Read:</label>
+                    <mat-select *ngIf="m_sActiveTab === 'batch'" class="form-control"
+                        [formControl]="m_oSelectedMultiInputWorkflow" multiple>
+                        <mat-option *ngFor="let oProduct of m_aoProducts" [value]="oProduct">
+                            {{oProduct.name}}
                         </mat-option>
-                    </mat-autocomplete>
+                    </mat-select>
+                    <mat-select *ngIf="m_sActiveTab === 'execute'" class="form-control"
+                        [formControl]="m_oSelectedMultiInputWorkflow">
+                        <mat-option *ngFor="let oProduct of m_aoProducts" [value]="oProduct">
+                            {{oProduct.name}}
+                        </mat-option>
+                    </mat-select>
+                    <!-- <button class="btn btn-success" (click)="runMultiInputWorkflow()">Run</button> -->
+                    <button *ngIf="m_sActiveTab === 'execute'" class="btn btn-success"
+                        (click)="runMultiInputWorkflow()">Run</button>
+                    <button *ngIf="m_sActiveTab === 'batch'" class="btn btn-success"
+                        (click)="runWorkflowPerProducts()">Run</button>
                 </div>
             </div>
         </div>

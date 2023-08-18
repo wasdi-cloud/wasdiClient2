@@ -5,6 +5,9 @@ import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { Workflow } from 'src/app/shared/models/workflow.model';
+import { Product } from 'src/app/shared/models/product.model';
+import { FormControl } from '@angular/forms';
+
 @Component({
   selector: 'app-workflows-dialog',
   templateUrl: './workflows-dialog.component.html',
@@ -126,13 +129,53 @@ export class WorkflowsDialogComponent implements OnInit {
     return true;
   }
 
+  /**
+   * Execute processing on single product input 
+  */
+  runMultiInputWorkflow() { }
+
+  /**
+   * Execute processing on multiple product input
+  */
   runWorkflowPerProducts() { }
 
-  runMultiInputWorkflow() {
+  getObjectExecuteGraph(sWorkflowId: string, sName: string, sDescription: string, asInputNodeNames: Array<string>, asInputFileNames: Array<string>, asOutputNodeNames: Array<string>, asOutputFileNames: Array<string>) {
+    if (this.areOkDataExecuteGraph(sWorkflowId, sName, asInputNodeNames, asInputFileNames) === false) {
+      return null;
+    }
+    var oExecuteGraph = this.getEmptyObjectExecuteGraph();
+    oExecuteGraph.workflowId = sWorkflowId;
+    oExecuteGraph.name = sName;
+    oExecuteGraph.description = sDescription;
+    oExecuteGraph.inputNodeNames = asInputNodeNames;
+    oExecuteGraph.inputFileNames = asInputFileNames;
+    oExecuteGraph.outputNodeNames = asOutputNodeNames;
+    oExecuteGraph.outputFileNames = asOutputFileNames;
 
+    return oExecuteGraph;
   }
 
-  getObjectExecuteGraph(sWorkflowId: string, sName: string, sDescription: string, asInputNodeName: Array<string>, asInputFileNames: Array<string>,) { }
+  areOkDataExecuteGraph(sWorkflowId: string, sName: string, asInputNodeNames: Array<string>, asInputFileNames: Array<string>) {
+    let bReturnValue: boolean = true;
+
+    if (!sWorkflowId || !sName || !asInputNodeNames || !asInputFileNames) {
+      bReturnValue = false;
+    }
+
+    return bReturnValue;
+  }
+
+  getEmptyObjectExecuteGraph() {
+    return {
+      workflowId: "",
+      name: "",
+      description: "",
+      inputNodeNames: [],
+      inputFileNames: [],
+      outputNodeNames: [],
+      outputFileNames: []
+    }
+  }
 
   onDismiss() {
     this.m_oMatDialogRef.close()
