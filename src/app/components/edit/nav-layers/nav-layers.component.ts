@@ -1,6 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, AfterViewInit, Output, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
+import { Map } from 'leaflet';
+import Geocoder from 'leaflet-control-geocoder';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { GlobeService } from 'src/app/services/globe.service';
 import { MapService } from 'src/app/services/map.service';
 import { Band } from 'src/app/shared/models/band.model';
 declare const L: any;
@@ -10,7 +13,7 @@ declare const L: any;
   templateUrl: './nav-layers.component.html',
   styleUrls: ['./nav-layers.component.css']
 })
-export class NavLayersComponent implements OnChanges {
+export class NavLayersComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   //Font Awesome Icons:
   faExpand = faExpand;
   faList = faList;
@@ -23,21 +26,55 @@ export class NavLayersComponent implements OnChanges {
   @Input() m_aoVisibleBands
   @Input() m_aoProducts: any[] = [];
   @Output() m_aoVisibleBandsChange = new EventEmitter();
+  @ViewChild('navMap') navMapElement: Map;
 
   m_sActiveTab: string = 'nav';
   m_oActiveBand: any;
   m_iOpacity: string;
 
+  mapOptions: any;
+  navMap: L.Map;
+  layersControl: any;
+  layersControlOptions: any = { position: 'bottomleft' };
+
+
   constructor(
     private m_oConstantsService: ConstantsService,
+    private m_oGlobeService: GlobeService,
     private m_oMapService: MapService
   ) { }
 
+  ngOnInit(): void { }
+
+  ngAfterViewInit(): void {
+    this.m_oGlobeService.initGlobe('cesiumContainer2');
+  }
+
   ngOnChanges(): void {
-    console.log(this.m_b2DMapModeOn);
+    this.onMapReady(this.navMapElement);
     if (this.m_aoVisibleBands !== undefined) {
       this.setActiveTab('layers');
     }
+    if (this.m_b2DMapModeOn === true) {
+
+      if (this.m_oGlobeService.getGlobe()) {
+        this.m_oGlobeService.getGlobe().destroy();
+      }
+      this.m_oGlobeService.initGlobe('cesiumContainer2');
+    } else {
+    }
+  }
+
+  ngOnDestroy(): void {}
+
+  get options() {
+    return this.m_oMapService.m_oOptions;
+  }
+
+  onMapReady(map: L.Map) {
+    this.navMap = map;
+    this.navMap.setView(new L.LatLng(40.737, -73.923), 8);
+    this.m_oMapService.setMap(this.navMap);
   }
 
   setActiveTab(sTabName: string) {

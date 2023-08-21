@@ -14,12 +14,22 @@
         </li>
     </ul>
     <!-- Navigation and Layers content -->
-    <div *ngIf="m_sActiveTab === 'nav'">
-        nav
+    <div class="map-container-panel" *ngIf="m_sActiveTab === 'nav'" style="height: 100%">
+        <div [hidden]="m_b2DMapModeOn === false" class="h-100 w-100" id="cesiumContainer2"></div>
+
+        <div [hidden]="m_b2DMapModeOn === true" style="height: 100%">
+            <div leaflet class="h-100 w-100" id="navMap" 
+            
+                (leafletMapReady)="onMapReady($event)">
+            </div>
+        </div>
+
+
     </div>
     <div class="layers-tab" *ngIf="m_sActiveTab === 'layers'">
         <ul class="list-group pt-3">
-            <li *ngFor="let oBand of m_aoVisibleBands" style="width: 100%;" class="list-group-item d-flex flex-column py-3">
+            <li *ngFor="let oBand of m_aoVisibleBands" style="width: 100%;"
+                class="list-group-item d-flex flex-column py-3">
                 <div class="d-flex flex-row align-items-center justify-content-between">
                     <div>
                         <span class="product-name">
@@ -30,7 +40,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row">
-                        <mat-slider [min]="0" [max]="100" discrete >
+                        <mat-slider [min]="0" [max]="100" discrete>
                             <input matSliderThumb [ngModel]="opacityVal" (input)="setOpacity($event, oBand.layerId)">
                         </mat-slider>
                         <button class="btn" (click)="zoomOnBandImage(oBand.geoserverBoundingBox)">
@@ -45,7 +55,7 @@
                     </div>
                 </div>
                 <div *ngIf="oBand.showLegend">
-                    <img src="{{oBand.legendUrl}}"/>
+                    <img src="{{oBand.legendUrl}}" />
                 </div>
             </li>
         </ul>
