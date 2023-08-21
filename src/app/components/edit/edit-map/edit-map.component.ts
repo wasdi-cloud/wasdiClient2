@@ -1,10 +1,11 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import * as L from "leaflet";
+import { Map } from 'leaflet';
 import { MapService } from 'src/app/services/map.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import Geocoder from 'leaflet-control-geocoder';
 import { faGlobeAfrica, faHome, faInfoCircle, faLocationArrow, faMap, faNavicon } from '@fortawesome/free-solid-svg-icons';
-
+import { latLng } from 'leaflet';
 @Component({
   selector: 'app-edit-map',
   templateUrl: './edit-map.component.html',
@@ -28,24 +29,39 @@ export class EditMapComponent implements OnInit {
 
   @Input() m_aoProducts: any[] = [];
   @Output() m_b2DMapModeOutput = new EventEmitter();
+  @ViewChild('editMap') editMapContainer: Map;
 
   constructor(
     private m_oGlobeService: GlobeService,
-    private m_oMapService: MapService) { }
+    private m_oMapService: MapService) {}
 
+  ngAfterViewInit() { }
   ngOnInit(): void {
-    this.mapOptions = this.m_oMapService.m_oOptions;
-    this.mapOptions.zoomControl = false;
+    //this.mapOptions.zoomControl = false;
     this.layersControl = this.m_oMapService.m_oLayersControl;
-    this.m_oGlobeService.initGlobe('CesiumContainerEdit');
+
+  }
+
+  get options() {
+    return {
+     layers:[ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+        maxZoom: 18,
+        // this map option disables world wrapping. by default, it is false.
+       // continuousWorld: false,
+        // this option disables loading tiles outside of the world bounds.
+        noWrap: false
+      })], 
+      zoom: 3,
+      center: latLng(0, 0)
+    };
   }
 
   onMapReady(map: L.Map) {
-    this.editMap = map
+    this.editMap = map;
     this.searchControl.setPosition('bottomleft');
     this.searchControl.addTo(this.editMap);
     this.m_oMapService.setMap(this.editMap);
-
 
   }
 
