@@ -7,6 +7,7 @@ import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/sh
 import { Workflow } from 'src/app/shared/models/workflow.model';
 import { Product } from 'src/app/shared/models/product.model';
 import { FormControl } from '@angular/forms';
+import { EditWorkflowDialogComponent } from './edit-workflow-dialog/edit-workflow-dialog.component';
 
 @Component({
   selector: 'app-workflows-dialog',
@@ -95,7 +96,16 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_oSelectedWorkflow = oWorkflow;
   }
 
-  openEditWorkflowDialog() { }
+  openEditWorkflowDialog(oWorkflow) {
+    let oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
+      height: '70vh',
+      width: '70vw',
+      data: {
+        editMode: true, 
+        workflow: oWorkflow
+      }
+    })
+  }
 
   removeWorkflow(oWorkflow) {
     if (!oWorkflow) {
@@ -158,7 +168,7 @@ export class WorkflowsDialogComponent implements OnInit {
       aoSingleInputFiles.push(this.m_oSelectedWorkflow.inputFileNames[iSelectedProductIndex]);
 
       let oSnapWorkflowViewModel = this.getObjectExecuteGraph(this.m_oSelectedWorkflow)
-      if(oSnapWorkflowViewModel) {
+      if (oSnapWorkflowViewModel) {
         this.executeGraphFromWorkflowId(this.m_sWorkspaceId, oSnapWorkflowViewModel);
       } else {
         console.log("Error in executing workflow");

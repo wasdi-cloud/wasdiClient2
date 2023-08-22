@@ -78,12 +78,12 @@ export class WorkflowService {
 
   // Add sharing
   addWorkflowSharing(sWorkflowId: string, sUserId: string) {
-    // return this.oHttp.put(this.APIURL + '/workflows/share/add?workflowId=' + sWorkflowId + '&userId=' + sUserId);
+    return this.oHttp.put<any>(this.APIURL + '/workflows/share/add?workflowId=' + sWorkflowId + '&userId=' + sUserId, {});
   }
 
   // Remove sharing
   removeWorkflowSharing(sWorkflowId: string, sUserId: string) {
-    return this.oHttp.delete(this.APIURL + '/workflows/share/delete?workflowId=' + sWorkflowId + '&userId=' + sUserId);
+    return this.oHttp.delete<any>(this.APIURL + '/workflows/share/delete?workflowId=' + sWorkflowId + '&userId=' + sUserId);
 
   }
 

@@ -40,7 +40,7 @@
                             <button class="btn" (click)="downloadWorkflow(oWorkflow)">
                                 <fa-icon [icon]="faDownload"></fa-icon>
                             </button>
-                            <button class="btn">
+                            <button class="btn" (click)="openEditWorkflowDialog(oWorkflow)">
                                 <fa-icon [icon]="faEdit"></fa-icon>
                             </button>
                             <button class="btn text-danger" (click)="removeWorkflow(oWorkflow)">

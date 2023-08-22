@@ -3,6 +3,7 @@ import { faUserPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { StyleService } from 'src/app/services/api/style.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { WorkflowService } from 'src/app/services/api/workflow.service';
 @Component({
   selector: 'app-share-ui',
   templateUrl: './share-ui.component.html',
@@ -21,11 +22,10 @@ export class ShareUiComponent implements OnInit {
 
   constructor(
     private m_oStyleService: StyleService,
+    private m_oWorkflowService: WorkflowService,
     private m_oWorkspaceService: WorkspaceService) { }
 
   ngOnInit() {
-    console.log(this.resource)
-    console.log(this.resourceType)
     this.getEnabledUsers()
   }
 
@@ -47,7 +47,16 @@ export class ShareUiComponent implements OnInit {
         })
       }
 
-      if (this.resourceType === 'workflow') { }
+      if (this.resourceType === 'workflow') {
+        this.m_oWorkflowService.getUsersBySharedWorkflow(this.resource.workflowId).subscribe({
+          next: oResponse => {
+            if (oResponse) {
+              this.m_aoSharedUsers = oResponse;
+            }
+          },
+          error: oError => { }
+        })
+      }
 
       if (this.resourceType === 'processor') { }
     }
@@ -57,7 +66,6 @@ export class ShareUiComponent implements OnInit {
     if (this.resourceType && this.resource && this.m_sUserIdSearch.length !== 0) {
       if (this.resourceType === 'workspace') {
         this.m_oWorkspaceService.putShareWorkspace(this.resource.workspaceId, this.m_sUserIdSearch).subscribe(oResponse => {
-          console.log(oResponse)
           if (oResponse.stringValue === "Done") {
             this.getEnabledUsers();
           }
@@ -66,14 +74,22 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'style') {
         this.m_oStyleService.addStyleSharing(this.resource.styleId, this.m_sUserIdSearch).subscribe(oResponse => {
-          console.log(oResponse);
           if (oResponse.stringValue === "Done") {
             this.getEnabledUsers();
           }
         })
       }
 
-      if (this.resourceType === 'workflow') { }
+      if (this.resourceType === 'workflow') {
+        this.m_oWorkflowService.addWorkflowSharing(this.resource.workflowId, this.m_sUserIdSearch).subscribe({
+          next: oResponse => {
+            if (oResponse.boolValue === true) {
+              this.getEnabledUsers();
+            }
+          },
+          error: oError => { }
+        })
+      }
 
       if (this.resourceType === 'processor') { }
     }
@@ -91,14 +107,24 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'style') {
         this.m_oStyleService.removeStyleSharing(this.resource.styleId, sUserId).subscribe(oResponse => {
-          console.log(oResponse)
-          if(oResponse.stringValue === "Done") {
-            this.getEnabledUsers(); 
+          if (oResponse.stringValue === "Done") {
+            this.getEnabledUsers();
           }
         })
       }
 
-      if (this.resourceType === 'workflow') { }
+      if (this.resourceType === 'workflow') {
+        this.m_oWorkflowService.removeWorkflowSharing(this.resource.workflowId, sUserId).subscribe({
+          next: oResponse => { 
+            if(oResponse.stringValue === 'Unauthorized') {
+              console.log("You do not have the permissions to remove this user"); 
+            } else {
+              this.getEnabledUsers();
+            }
+          },
+          error: oError => { }
+        })
+      }
 
       if (this.resourceType === 'processor') { }
     }
