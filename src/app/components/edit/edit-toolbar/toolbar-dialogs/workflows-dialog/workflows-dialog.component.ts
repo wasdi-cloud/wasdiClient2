@@ -33,6 +33,8 @@ export class WorkflowsDialogComponent implements OnInit {
   m_oSelectedWorkflow: Workflow = {} as Workflow;
   m_oSelectedMultiInputWorkflow: any = null;
   m_oWAPProudct: any = null;
+  m_oSelectedProduct: Product;
+  m_aoSelectedProducts: Array<Product>;
 
   m_oWorkflowFileData = {} as {
     workflowName: "",
@@ -96,7 +98,6 @@ export class WorkflowsDialogComponent implements OnInit {
   openEditWorkflowDialog() { }
 
   removeWorkflow(oWorkflow) {
-
     if (!oWorkflow) {
       return false;
     }
@@ -130,28 +131,58 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   /**
-   * Execute processing on single product input 
+   * Execute processing on single product input (Previously: runMultiInputWorkflow)
   */
-  runMultiInputWorkflow() { }
+  runSingleInputWorkflow() {
+    // this.addProductInputInNode();  
+    let oSnapWorkflowViewModel = this.getObjectExecuteGraph(this.m_oSelectedWorkflow);
+    console.log(oSnapWorkflowViewModel);
+    if (!oSnapWorkflowViewModel) {
+      console.log("Error in executing workflow");
+      return false
+    } else {
+      this.executeGraphFromWorkflowId(this.m_sWorkspaceId, oSnapWorkflowViewModel);
+      return true;
+    }
+
+  }
 
   /**
-   * Execute processing on multiple product input
+   * Execute processing on multiple product input (Previously: runWorkflowPerProducts)
   */
-  runWorkflowPerProducts() { }
+  runMultiInputWorkflow() {
+    let iNumberOfProducts = this.m_aoSelectedProducts.length;
+    console.log(this.m_aoSelectedProducts);
+    for (let iSelectedProductIndex = 0; iSelectedProductIndex < iNumberOfProducts; iSelectedProductIndex++) {
+      let aoSingleInputFiles: Array<string> = [];
+      aoSingleInputFiles.push(this.m_oSelectedWorkflow.inputFileNames[iSelectedProductIndex]);
 
-  getObjectExecuteGraph(sWorkflowId: string, sName: string, sDescription: string, asInputNodeNames: Array<string>, asInputFileNames: Array<string>, asOutputNodeNames: Array<string>, asOutputFileNames: Array<string>) {
-    if (this.areOkDataExecuteGraph(sWorkflowId, sName, asInputNodeNames, asInputFileNames) === false) {
+      let oSnapWorkflowViewModel = this.getObjectExecuteGraph(this.m_oSelectedWorkflow)
+      if(oSnapWorkflowViewModel) {
+        this.executeGraphFromWorkflowId(this.m_sWorkspaceId, oSnapWorkflowViewModel);
+      } else {
+        console.log("Error in executing workflow");
+      }
+    }
+
+  }
+
+  getObjectExecuteGraph(oWorkflow: Workflow, asInputFile?: Array<string>) {
+    if (this.areOkDataExecuteGraph(oWorkflow.workflowId, oWorkflow.name, oWorkflow.inputNodeNames, oWorkflow.inputFileNames) === false) {
       return null;
     }
     var oExecuteGraph = this.getEmptyObjectExecuteGraph();
-    oExecuteGraph.workflowId = sWorkflowId;
-    oExecuteGraph.name = sName;
-    oExecuteGraph.description = sDescription;
-    oExecuteGraph.inputNodeNames = asInputNodeNames;
-    oExecuteGraph.inputFileNames = asInputFileNames;
-    oExecuteGraph.outputNodeNames = asOutputNodeNames;
-    oExecuteGraph.outputFileNames = asOutputFileNames;
-
+    oExecuteGraph.workflowId = oWorkflow.workflowId;
+    oExecuteGraph.name = oWorkflow.name;
+    oExecuteGraph.description = oWorkflow.description;
+    oExecuteGraph.inputNodeNames = oWorkflow.inputNodeNames;
+    if (asInputFile) {
+      oExecuteGraph.inputFileNames = asInputFile;
+    } else {
+      oExecuteGraph.inputFileNames = oWorkflow.inputFileNames;
+    }
+    oExecuteGraph.outputNodeNames = oWorkflow.outputNodeNames;
+    oExecuteGraph.outputFileNames = oWorkflow.outputFileNames;
     return oExecuteGraph;
   }
 
@@ -165,6 +196,35 @@ export class WorkflowsDialogComponent implements OnInit {
     return bReturnValue;
   }
 
+  addProductInputInNode() {
+
+  }
+
+  /**
+   * Set the value of the inputFileNames in the SelectedWorkflow based on SINGLE selection prodcut input
+   * @param oEvent 
+   */
+  getSingleSelection(oEvent: any) {
+    console.log(oEvent.value);
+    if (oEvent.value) {
+      //Set the inputFileName value to reflect SINGLE input: 
+      this.m_oSelectedWorkflow.inputFileNames = [oEvent.value.name];
+      console.log(this.m_oSelectedWorkflow);
+    }
+  }
+
+  /**
+   * Set the value of the inputFileNames in the SelectedWorkflow based on MULTIPLE selection product input
+   * @param oEvent 
+   */
+  getMultiSelection(oEvent: any) {
+    let asProductNames = [];
+    oEvent.value.forEach(oProduct => {
+      asProductNames.push(oProduct.fileName);
+    });
+    this.m_oSelectedWorkflow.inputFileNames = asProductNames;
+  }
+
   getEmptyObjectExecuteGraph() {
     return {
       workflowId: "",
@@ -175,6 +235,32 @@ export class WorkflowsDialogComponent implements OnInit {
       outputNodeNames: [],
       outputFileNames: []
     }
+  }
+
+  executeGraphFromWorkflowId(sWorkspaceId: string, oWorkflowObject: any) {
+    if (!sWorkspaceId) {
+      return false;
+    }
+    if (!oWorkflowObject) {
+      return false;
+    }
+
+    this.m_oWorkflowService.executeGraphFromWorkflowId(sWorkspaceId, oWorkflowObject).subscribe({
+      next: oResponse => {
+        console.log(oResponse);
+        if (oResponse.boolValue === true) {
+          this.onDismiss();
+        } else {
+          //ADD ALERT DIALOG: 
+          console.log("ERROR IN EXECUTING WORKFLOW");
+        }
+      },
+      error: oError => {
+        //ALERT DIALOG: 
+        console.log(oError);
+      }
+    });
+    return true;
   }
 
   onDismiss() {

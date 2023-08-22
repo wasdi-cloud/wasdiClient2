@@ -75,23 +75,23 @@
 
                 <div class="style-xml-container d-flex flex-column gap-1">
                     <label class="text-success form-label">Read:</label>
-                    <mat-select *ngIf="m_sActiveTab === 'batch'" class="form-control"
-                        [formControl]="m_oSelectedMultiInputWorkflow" multiple>
+                    <mat-select *ngIf="m_sActiveTab === 'batch'" class="form-control" [(ngModel)]="m_aoSelectedProducts"
+                        (selectionChange)="getMultiSelection($event)" multiple>
                         <mat-option *ngFor="let oProduct of m_aoProducts" [value]="oProduct">
                             {{oProduct.name}}
                         </mat-option>
                     </mat-select>
-                    <mat-select *ngIf="m_sActiveTab === 'execute'" class="form-control"
-                        [formControl]="m_oSelectedMultiInputWorkflow">
+                    <mat-select *ngIf="m_sActiveTab === 'execute'" class="form-control" [(ngModel)]="m_oSelectedProduct"
+                        (selectionChange)="getSingleSelection($event)">
                         <mat-option *ngFor="let oProduct of m_aoProducts" [value]="oProduct">
                             {{oProduct.name}}
                         </mat-option>
                     </mat-select>
                     <!-- <button class="btn btn-success" (click)="runMultiInputWorkflow()">Run</button> -->
                     <button *ngIf="m_sActiveTab === 'execute'" class="btn btn-success"
-                        (click)="runMultiInputWorkflow()">Run</button>
+                        (click)="runSingleInputWorkflow()">Run</button>
                     <button *ngIf="m_sActiveTab === 'batch'" class="btn btn-success"
-                        (click)="runWorkflowPerProducts()">Run</button>
+                        (click)="runMultiInputWorkflow()">Run</button>
                 </div>
             </div>
         </div>

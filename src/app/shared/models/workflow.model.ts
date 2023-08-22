@@ -1,6 +1,6 @@
 export interface Workflow {
     description: string | null, 
-    inputFileName: Array<any> | null,
+    inputFileNames: Array<any> | null,
     inputNodeNames: Array<any> | null, 
     name: string, 
     nodeUrl: string, 

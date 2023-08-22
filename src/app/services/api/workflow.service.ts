@@ -18,7 +18,7 @@ export class WorkflowService {
 
   //Run a workflow by Id
   executeGraphFromWorkflowId(sWorkspaceInput: string, oSnapWorkflowViewModel: object) {
-    return this.oHttp.post(this.APIURL + '/workflows/run?workspace=' + sWorkspaceInput, oSnapWorkflowViewModel);
+    return this.oHttp.post<any>(this.APIURL + '/workflows/run?workspace=' + sWorkspaceInput, oSnapWorkflowViewModel);
   };
 
   // Upload a workflow by file
