@@ -9,34 +9,54 @@
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link" [ngClass]="m_sActiveTab === 'workflow' ? 'active': ''"
-                    (click)="setActiveTab('execute')">
+                    (click)="setActiveTab('workflow')">
                     Workflow
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="m_bEditMode === true">
                 <a class="nav-link" [ngClass]="m_sActiveTab === 'share' ? 'active': ''" (click)="setActiveTab('share')">
                     Share
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="m_bEditMode === true">
                 <a class="nav-link" [ngClass]="m_sActiveTab === 'xml' ? 'active': ''" (click)="setActiveTab('xml')">
                     Edit XML
                 </a>
             </li>
         </ul>
         <!-- Workflow Content -->
-        <div *ngIf="m_sActiveTab === 'workflow'"></div>
+        <div class="d-flex flex-column gap-3 px-5 py-3" *ngIf="m_sActiveTab === 'workflow'">
+            <div>
+                <label for="name">
+                    Name
+                </label>
+                <input class="form-control" type="text" [(ngModel)]="m_sWorkflowName">
+            </div>
+            <div>
+                <label for="description">
+                    Description
+                </label>
+                <textarea class="form-control" type="text" [(ngModel)]="m_sWorkflowDescription"></textarea>
+            </div>
+            <div>
+                <mat-checkbox [(ngModel)]="m_bWorkflowIsPublic">Set Workflow to Public</mat-checkbox>
+            </div>
+            <div>
+                <input class="form-control" type="file" name="workflowFile" id="">
+            </div>
+        </div>
         <!-- Share Content -->
         <div *ngIf="m_sActiveTab === 'share'">
             <app-share-ui [resourceType]="'workflow'" [resource]="m_oWorkflow"></app-share-ui>
         </div>
         <!-- Edit XML Content -->
-        <div *ngIf="m_sActiveTab === 'xml'">
+        <div *ngIf="m_sActiveTab === 'xml'" class="px-5 py-3">
             <h6>Workflow XML</h6>
-            <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
+            <textarea class="form-control" [(ngModel)]="m_asWorkflowXML" name="" id="" cols="30" rows="10" (input)="xmlChanged($event)"></textarea>
         </div>
     </div>
-    <div mat-dialog-actions>
-        <button class="btn btn-secondary">Close</button>
+    <div *ngIf="m_sActiveTab !== 'share'" mat-dialog-actions class="d-flex flex-row gap-3 align-self-end">
+        <button class="btn btn-success" (click)="saveWorkflowChanges()">Save</button>
+        <button class="btn btn-secondary" (click)="onDismiss()">Close</button>
     </div>
 </div>
