@@ -96,15 +96,26 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_oSelectedWorkflow = oWorkflow;
   }
 
-  openEditWorkflowDialog(oWorkflow) {
-    let oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
-      height: '70vh',
-      width: '70vw',
-      data: {
-        editMode: true, 
-        workflow: oWorkflow
-      }
-    })
+  openEditWorkflowDialog(oWorkflow?) {
+    if (oWorkflow) {
+      let oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
+        height: '70vh',
+        width: '70vw',
+        data: {
+          editMode: true,
+          workflow: oWorkflow
+        }
+      })
+    } else {
+      let oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
+        height: '70vh', 
+        width: '70vw', 
+        data: {
+          editmode: false, 
+          workflow: {}
+        }
+      })
+    }
   }
 
   removeWorkflow(oWorkflow) {
