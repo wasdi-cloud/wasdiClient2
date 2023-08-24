@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ConstantsService } from './services/constants.service';
-import FadeoutUtils from './lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-root',
@@ -13,15 +12,13 @@ export class AppComponent implements OnInit {
   m_bIsRabbitConnected;
 
   constructor(
-    private m_oConstantsService: ConstantsService,
+    public m_oConstantsService: ConstantsService,
     private m_oRabbitStompService: RabbitStompService) {
-
   }
 
   ngOnInit() {
     this.m_oRabbitStompService.initWebStomp();
     this.updateConnectionState("");
-   
   }
 
   updateConnectionState(forceNotification) {

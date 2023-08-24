@@ -1,2 +1,2 @@
-<app-header></app-header>
+<app-header *ngIf="m_oConstantsService.getUser().userId"></app-header>
 <router-outlet></router-outlet>

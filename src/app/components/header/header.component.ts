@@ -82,11 +82,8 @@ export class HeaderComponent implements OnInit {
     this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     this.m_oUser = this.m_oConstantsService.getUser();
-    if (this.m_oUser) {
-
-      this.initializeProjectsInfo();
-      this.getAccountType();
-    }
+    this.initializeProjectsInfo();
+    this.getAccountType();
 
     if (this.m_oActivatedRoute.snapshot.url[0].path === 'edit') {
       this.m_bEditIsActive = true;
