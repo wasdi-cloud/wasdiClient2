@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConstantsService } from '../constants.service';
 
@@ -23,22 +23,22 @@ export class WorkflowService {
 
   // Upload a workflow by file
   uploadByFile(sWorkspaceInput: string, sName: string, sDescription: string, oBody: object, bIsPublic: boolean) {
-    // return this.oHttp.post(this.APIURL + '/workflows/uploadfile?workspace=' + sWorkspaceInput + "&name=" + sName +
-    //     "&description=" + sDescription + "&public=" + bIsPublic, oBody, this.m_oOptions);
+    return this.oHttp.post(this.APIURL + '/workflows/uploadfile?workspace=' + sWorkspaceInput + "&name=" + sName +
+      "&description=" + sDescription + "&public=" + bIsPublic, oBody); //this.m_oOptions);
   };
 
   // Update workflow xml file
   updateGraphFile(sWorkflowId: string, oBody: object) {
-    // return this.oHttp.post(this.APIURL + '/workflows/updatefile?workflowid=' + sWorkflowId, oBody, this.m_oOptions);
+    return this.oHttp.post(this.APIURL + '/workflows/updatefile?workflowid=' + sWorkflowId, oBody);
   }
 
   // Update workflow parameters
   updateGraphParameters(sWorkflowId: string, sName: string, sDescription: string, bIsPublic: boolean) {
     //Needs argument for the body
-    // return this.oHttp.post(this.APIURL + '/workflows/updateparams?workflowid=' + sWorkflowId +
-    //   '&name=' + sName +
-    //   '&description=' + sDescription +
-    //   '&public=' + bIsPublic);
+    return this.oHttp.post(this.APIURL + '/workflows/updateparams?workflowid=' + sWorkflowId +
+      '&name=' + sName +
+      '&description=' + sDescription +
+      '&public=' + bIsPublic, null);
   }
 
   // Delete workflow
@@ -89,11 +89,16 @@ export class WorkflowService {
 
   // Get workflow xml
   getWorkflowXml(sWorkflowId: string) {
-    return this.oHttp.get(this.APIURL + '/workflows/getxml?workflowId=' + sWorkflowId);
+    return this.oHttp.get(this.APIURL + '/workflows/getxml?workflowId=' + sWorkflowId, { responseType: "text" });
   }
 
   // Update workflow xml
-  postWorkflowXml(sWorkflowId: string, sWorkflowXml: string) {
-    // return this.oHttp.post(this.APIURL + '/workflows/updatexml?workflowId=' + sWorkflowId, sWorkflowXml, this.m_oOptions);
+  postWorkflowXml(sWorkflowId: string, sWorkflowXml: any) {
+    return this.oHttp.post(this.APIURL + '/workflows/updatexml?workflowId=' + sWorkflowId, sWorkflowXml, {
+      // headers: new HttpHeaders({
+      //   'Content-Type': 'form-data'
+      // }),
+      observe: 'response'
+    });
   }
 }

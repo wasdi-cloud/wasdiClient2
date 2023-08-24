@@ -58,7 +58,7 @@ export class WorkflowsDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getWorkflowsByUser()
+    this.getWorkflowsByUser();
     this.m_sUserId = this.m_oConstantsService.getUserId();
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_aoProducts = this.m_oData.products;
@@ -97,8 +97,9 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   openEditWorkflowDialog(oWorkflow?) {
+    let oDialog;
     if (oWorkflow) {
-      let oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
+      oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
         height: '70vh',
         width: '70vw',
         data: {
@@ -107,15 +108,16 @@ export class WorkflowsDialogComponent implements OnInit {
         }
       })
     } else {
-      let oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
-        height: '70vh', 
-        width: '70vw', 
+      oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
+        height: '70vh',
+        width: '70vw',
         data: {
-          editmode: false, 
+          editmode: false,
           workflow: {}
         }
       })
     }
+    oDialog.afterClosed(this.getWorkflowsByUser());
   }
 
   removeWorkflow(oWorkflow) {

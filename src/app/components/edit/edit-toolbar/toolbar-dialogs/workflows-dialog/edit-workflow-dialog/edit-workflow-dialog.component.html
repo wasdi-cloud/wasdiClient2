@@ -42,7 +42,8 @@
                 <mat-checkbox [(ngModel)]="m_bWorkflowIsPublic">Set Workflow to Public</mat-checkbox>
             </div>
             <div>
-                <input class="form-control" type="file" name="workflowFile" id="">
+                <input (change)="onFileSelect($event.target)" class="form-control" type="file" name="workflowFile"
+                    id="">
             </div>
         </div>
         <!-- Share Content -->
@@ -52,7 +53,8 @@
         <!-- Edit XML Content -->
         <div *ngIf="m_sActiveTab === 'xml'" class="px-5 py-3">
             <h6>Workflow XML</h6>
-            <textarea class="form-control" [(ngModel)]="m_asWorkflowXML" name="" id="" cols="30" rows="10" (input)="xmlChanged($event)"></textarea>
+            <textarea class="form-control" [(ngModel)]="m_asWorkflowXML" name="" id="" cols="30" rows="10"
+                (input)="xmlChanged($event)"></textarea>
         </div>
     </div>
     <div *ngIf="m_sActiveTab !== 'share'" mat-dialog-actions class="d-flex flex-row gap-3 align-self-end">
