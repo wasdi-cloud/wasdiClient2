@@ -110,6 +110,9 @@ import { AppsDialogComponent } from './components/edit/edit-toolbar/toolbar-dial
 import { ParamsLibraryDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/params-library-dialog/params-library-dialog.component';
 import { NewAppDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 import { ProcessorTabContentComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-content/processor-tab-content.component';
+import { EditWorkflowDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/workflows-dialog/edit-workflow-dialog/edit-workflow-dialog.component';
+import { WorkflowsDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/workflows-dialog/workflows-dialog.component';
+
 
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
@@ -191,7 +194,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProcessorTabContentComponent,
     ProcessorTabUiComponent,
     ProcessorTabStoreComponent,
-    ProcessorTabMediaComponent
+    ProcessorTabMediaComponent,
+    WorkflowsDialogComponent, 
+    EditWorkflowDialogComponent
   ],
   imports: [
     AppRoutingModule,

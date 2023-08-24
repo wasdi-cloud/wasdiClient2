@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConstantsService } from '../constants.service';
 
@@ -18,37 +18,37 @@ export class WorkflowService {
 
   //Run a workflow by Id
   executeGraphFromWorkflowId(sWorkspaceInput: string, oSnapWorkflowViewModel: object) {
-    return this.oHttp.post(this.APIURL + '/workflows/run?workspace=' + sWorkspaceInput, oSnapWorkflowViewModel);
+    return this.oHttp.post<any>(this.APIURL + '/workflows/run?workspace=' + sWorkspaceInput, oSnapWorkflowViewModel);
   };
 
   // Upload a workflow by file
   uploadByFile(sWorkspaceInput: string, sName: string, sDescription: string, oBody: object, bIsPublic: boolean) {
-    // return this.oHttp.post(this.APIURL + '/workflows/uploadfile?workspace=' + sWorkspaceInput + "&name=" + sName +
-    //     "&description=" + sDescription + "&public=" + bIsPublic, oBody, this.m_oOptions);
+    return this.oHttp.post(this.APIURL + '/workflows/uploadfile?workspace=' + sWorkspaceInput + "&name=" + sName +
+      "&description=" + sDescription + "&public=" + bIsPublic, oBody); //this.m_oOptions);
   };
 
   // Update workflow xml file
   updateGraphFile(sWorkflowId: string, oBody: object) {
-    // return this.oHttp.post(this.APIURL + '/workflows/updatefile?workflowid=' + sWorkflowId, oBody, this.m_oOptions);
+    return this.oHttp.post(this.APIURL + '/workflows/updatefile?workflowid=' + sWorkflowId, oBody);
   }
 
   // Update workflow parameters
   updateGraphParameters(sWorkflowId: string, sName: string, sDescription: string, bIsPublic: boolean) {
     //Needs argument for the body
-    // return this.oHttp.post(this.APIURL + '/workflows/updateparams?workflowid=' + sWorkflowId +
-    //   '&name=' + sName +
-    //   '&description=' + sDescription +
-    //   '&public=' + bIsPublic);
+    return this.oHttp.post(this.APIURL + '/workflows/updateparams?workflowid=' + sWorkflowId +
+      '&name=' + sName +
+      '&description=' + sDescription +
+      '&public=' + bIsPublic, null);
   }
 
   // Delete workflow
   deleteWorkflow(sWorkflowId: string) {
-    return this.oHttp.get(this.APIURL + '/workflows/delete?workflowId=' + sWorkflowId);
+    return this.oHttp.get(this.APIURL + '/workflows/delete?workflowId=' + sWorkflowId, { observe: 'response' });
   };
 
   // Get Workflow list by user
   getWorkflowsByUser() {
-    return this.oHttp.get(this.APIURL + '/workflows/getbyuser');
+    return this.oHttp.get<any>(this.APIURL + '/workflows/getbyuser', { observe: 'response' });
   };
 
   // Download workflow file
@@ -78,22 +78,27 @@ export class WorkflowService {
 
   // Add sharing
   addWorkflowSharing(sWorkflowId: string, sUserId: string) {
-    // return this.oHttp.put(this.APIURL + '/workflows/share/add?workflowId=' + sWorkflowId + '&userId=' + sUserId);
+    return this.oHttp.put<any>(this.APIURL + '/workflows/share/add?workflowId=' + sWorkflowId + '&userId=' + sUserId, {});
   }
 
   // Remove sharing
   removeWorkflowSharing(sWorkflowId: string, sUserId: string) {
-    return this.oHttp.delete(this.APIURL + '/workflows/share/delete?workflowId=' + sWorkflowId + '&userId=' + sUserId);
+    return this.oHttp.delete<any>(this.APIURL + '/workflows/share/delete?workflowId=' + sWorkflowId + '&userId=' + sUserId);
 
   }
 
   // Get workflow xml
   getWorkflowXml(sWorkflowId: string) {
-    return this.oHttp.get(this.APIURL + '/workflows/getxml?workflowId=' + sWorkflowId);
+    return this.oHttp.get(this.APIURL + '/workflows/getxml?workflowId=' + sWorkflowId, { responseType: "text" });
   }
 
   // Update workflow xml
-  postWorkflowXml(sWorkflowId: string, sWorkflowXml: string) {
-    // return this.oHttp.post(this.APIURL + '/workflows/updatexml?workflowId=' + sWorkflowId, sWorkflowXml, this.m_oOptions);
+  postWorkflowXml(sWorkflowId: string, sWorkflowXml: any) {
+    return this.oHttp.post(this.APIURL + '/workflows/updatexml?workflowId=' + sWorkflowId, sWorkflowXml, {
+      // headers: new HttpHeaders({
+      //   'Content-Type': 'form-data'
+      // }),
+      observe: 'response'
+    });
   }
 }

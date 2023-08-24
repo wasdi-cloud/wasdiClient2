@@ -6,7 +6,9 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
 import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+import { WorkflowService } from 'src/app/services/api/workflow.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
 @Component({
   selector: 'app-share-ui',
   templateUrl: './share-ui.component.html',
@@ -27,6 +29,7 @@ export class ShareUiComponent implements OnInit {
     private m_oAdminDashboardService: AdminDashboardService,
     private m_oProcessorService: ProcessorService,
     private m_oStyleService: StyleService,
+    private m_oWorkflowService: WorkflowService,
     private m_oWorkspaceService: WorkspaceService) { }
 
   ngOnInit() {
@@ -59,7 +62,16 @@ export class ShareUiComponent implements OnInit {
         })
       }
 
-      if (this.resourceType === 'workflow') { }
+      if (this.resourceType === 'workflow') {
+        this.m_oWorkflowService.getUsersBySharedWorkflow(this.resource.workflowId).subscribe({
+          next: oResponse => {
+            if (oResponse) {
+              this.m_aoSharedUsers = oResponse;
+            }
+          },
+          error: oError => { }
+        })
+      }
 
       if (this.resourceType === 'processor') {
         this.m_oProcessorService.getUsersBySharedProcessor(this.resource.processorId).subscribe(oResponse => {
@@ -76,7 +88,6 @@ export class ShareUiComponent implements OnInit {
     if (this.resourceType && this.resource && this.m_sUserIdSearch.length !== 0) {
       if (this.resourceType === 'workspace') {
         this.m_oWorkspaceService.putShareWorkspace(this.resource.workspaceId, this.m_sUserIdSearch).subscribe(oResponse => {
-          console.log(oResponse)
           if (oResponse.stringValue === "Done") {
             this.getEnabledUsers();
           }
@@ -85,7 +96,6 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'style') {
         this.m_oStyleService.addStyleSharing(this.resource.styleId, this.m_sUserIdSearch).subscribe(oResponse => {
-          console.log(oResponse);
           if (oResponse.stringValue === "Done") {
             this.getEnabledUsers();
           }
@@ -98,7 +108,16 @@ export class ShareUiComponent implements OnInit {
         })
       }
 
-      if (this.resourceType === 'workflow') { }
+      if (this.resourceType === 'workflow') {
+        this.m_oWorkflowService.addWorkflowSharing(this.resource.workflowId, this.m_sUserIdSearch).subscribe({
+          next: oResponse => {
+            if (oResponse.boolValue === true) {
+              this.getEnabledUsers();
+            }
+          },
+          error: oError => { }
+        })
+      }
 
       if (this.resourceType === 'processor') {
         this.m_oProcessorService.putShareProcessor(this.resource.processorId, this.m_sUserIdSearch).subscribe(oResponse => {
@@ -128,7 +147,6 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'style') {
         this.m_oStyleService.removeStyleSharing(this.resource.styleId, sUserId).subscribe(oResponse => {
-          console.log(oResponse)
           if (oResponse.stringValue === "Done") {
             this.getEnabledUsers();
           }
@@ -141,7 +159,18 @@ export class ShareUiComponent implements OnInit {
         })
       }
 
-      if (this.resourceType === 'workflow') { }
+      if (this.resourceType === 'workflow') {
+        this.m_oWorkflowService.removeWorkflowSharing(this.resource.workflowId, sUserId).subscribe({
+          next: oResponse => { 
+            if(oResponse.stringValue === 'Unauthorized') {
+              console.log("You do not have the permissions to remove this user"); 
+            } else {
+              this.getEnabledUsers();
+            }
+          },
+          error: oError => { }
+        })
+      }
 
       if (this.resourceType === 'processor') {
         this.m_oProcessorService.deleteUserSharedProcessor(this.resource.processorId, sUserId).subscribe({

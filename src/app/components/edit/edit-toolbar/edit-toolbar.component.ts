@@ -14,6 +14,9 @@ import { NewAppDialogComponent } from './toolbar-dialogs/new-app-dialog/new-app-
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
+import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/workflows-dialog.component';
+import { Product } from 'src/app/shared/models/product.model';
+
 @Component({
   selector: 'app-edit-toolbar',
   templateUrl: './edit-toolbar.component.html',
@@ -33,6 +36,7 @@ export class EditToolbarComponent implements OnInit {
   faShare = faShareNodes;
 
   @Input() m_oActiveWorkspace: Workspace;
+  @Input() m_aoProducts: Product[];
   @Output() m_sSearchString = new EventEmitter();
 
   m_bNotebookIsReady: boolean = false;
@@ -86,6 +90,17 @@ export class EditToolbarComponent implements OnInit {
     })
   }
 
+  openWorkflowsDialog(event: MouseEvent) {
+    event.preventDefault();
+    let dialogRef = this.m_oDialog.open(WorkflowsDialogComponent, {
+      height: '80vh',
+      width: '80vw',
+      data: {
+        products: this.m_aoProducts
+      }
+    })
+  }
+
   openNewAppDialog(oEvent: MouseEvent) {
     oEvent.preventDefault();
     let dialogRef = this.m_oDialog.open(NewAppDialogComponent, {
@@ -94,10 +109,6 @@ export class EditToolbarComponent implements OnInit {
       data: { editMode: false }
     })
 
-  }
-
-  openWorkflowsDialog(oEvent: MouseEvent) {
-    oEvent.preventDefault();
   }
 
   openImportDialog(event: MouseEvent) {
