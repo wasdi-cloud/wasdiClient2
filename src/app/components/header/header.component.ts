@@ -103,7 +103,6 @@ export class HeaderComponent implements OnInit {
   }
 
   openUserSettings(event: MouseEvent) {
-    console.log("Open User Settings")
     const oDialogRef = this.m_oDialog.open(UserSettingsDialogComponent, {
       height: '85vh',
       width: '80vw'
