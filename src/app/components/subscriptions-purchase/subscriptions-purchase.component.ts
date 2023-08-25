@@ -31,11 +31,11 @@ export class SubscriptionsPurchaseComponent implements OnInit {
 
   showSubscriptionAddForm(oType: any, price: number) {
     let oNewSubscription = {
+      buySuccess: false,
+      price: price,
       subscriptionId: null,
       typeId: oType.typeId,
       typeName: oType.name,
-      buySuccess: false,
-      price: price
     };
     this.m_oDialog.open(EditSubscriptionDialogComponent, {
       maxHeight: '80vh',

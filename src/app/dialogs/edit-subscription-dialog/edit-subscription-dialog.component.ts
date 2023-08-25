@@ -1,16 +1,20 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
+
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { OrganizationsService } from 'src/app/services/api/organizations.service';
 import { SubscriptionService } from 'src/app/services/api/subscription.service';
-import { ConstantsService } from 'src/app/services/constants.service';
+import { TranslateService } from '@ngx-translate/core';
+
+
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { Workspace } from 'src/app/shared/models/workspace.model';
+
 
 @Component({
   selector: 'app-edit-subscription-dialog',
@@ -21,21 +25,27 @@ export class EditSubscriptionDialogComponent implements OnInit {
   //Font Awesome Imports:
   faX = faX;
 
+  m_oUser = this.m_oConstantsService.getUser();
+
   //Organizations Properties:
   m_aoOrganizations: any = [];
+  m_aoOrganizationsMap: any = [];
+  m_asOrganizations: any = [];
   m_aoUserOrganizations: any = [];
   m_oOrganization: any = {};
   m_bLoadingOrganizations: boolean = true;
+  m_oSelectedOrganization: any;
 
   //Date Properties:
-  m_sPurchaseDate: string | Date = "";
+  m_sBuyDate: string | Date = "";
   m_sStartDate: Date;
   m_sEndDate: Date;
   m_iDurationDays: number = 0;
-  m_iDaysRemaining: number;
+  m_iDaysRemaining: number | string;
 
-  //Inputted Subscription:
+  //Susbscription Information passed from opening dialog
   m_oEditSubscription: any;
+
 
   //State Booleans:
   m_bCheckoutNow: boolean = false;
@@ -55,58 +65,39 @@ export class EditSubscriptionDialogComponent implements OnInit {
     private m_oSubscriptionService: SubscriptionService,
     private m_oTranslate: TranslateService,
     // private m_oWindow: Window
-  ) {
-
-    // this.m_bEditMode = this.m_oData.editMode;
-    // this.initSubscriptionInfo();
-    // console.log(this.m_oEditSubscription);
-  }
+  ) { }
 
   ngOnInit(): void {
     //Set Subscription Information from Dialog Data:
     this.m_oEditSubscription = this.m_oData.subscription;
-    if (this.m_oData.subscription.adminRole !== undefined) {
-      this.m_bIsOwner = this.m_oData.subscription.adminRole;
-    }
     this.m_bEditMode = this.m_oData.editMode;
+
     this.initSubscriptionInfo();
-    console.log(this.m_oEditSubscription);
   }
 
   /**
    * Initialize the Edit Subscription Information:
    */
   initSubscriptionInfo() {
-    //If no subscription ID (i.e., creating a new subscription): 
+    console.log(this.m_oEditSubscription);
     if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oEditSubscription.subscriptionId)) {
       this.m_bIsPaid = this.m_oEditSubscription.buySuccess;
       this.initDates();
       this.getOrganizationsListByUser();
-
     } else {
       this.m_oSubscriptionService.getSubscriptionById(this.m_oEditSubscription.subscriptionId).subscribe({
         next: oResponse => {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.status === 200) {
-            this.m_oEditSubscription = oResponse.body;
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+            this.m_oEditSubscription = oResponse;
             this.m_bIsPaid = this.m_oEditSubscription.buySuccess;
             this.initDates();
             this.getOrganizationsListByUser();
-            this.getDaysRemaining(this.m_oEditSubscription.startDate, this.m_oEditSubscription.endDate);
+            this.getDaysRemaining(this.m_oEditSubscription.startDate, this.m_oEditSubscription.endDate)
           } else {
-            // utilsVexDialogAlertTop(
-            //     "GURU MEDITATION<br>ERROR IN GETTING THE SUBSCRIPTION BY ID"
-            // );
+            this.m_oAlertDialog.openDialog(4000, "ERROR IN GETTING THE SUBSCRIPTION BY ID");
           }
         },
-        error: oError => {
-          let sErrorMessage = "GURU MEDITATION<br>ERROR IN FETCHING THE SUBSCRIPTION";
-
-          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oError) && !FadeoutUtils.utilsIsStrNullOrEmpty(oError.message)) {
-            sErrorMessage += "<br><br>" + this.m_oTranslate.instant(oError.message);
-          }
-
-          //utilsVexDialogAlertTop(sErrorMessage);
-        }
+        error: oError => { }
       });
     }
   }
@@ -116,7 +107,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
     if (!this.m_oEditSubscription.name) {
       this.m_oEditSubscription.name = this.m_oEditSubscription.typeName;
     }
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oOrganization.organizationId)) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oOrganization)) {
       this.m_oEditSubscription.organizationId = "";
     } else {
       this.m_oEditSubscription.organizationId = this.m_oOrganization.organizationId;
@@ -133,14 +124,16 @@ export class EditSubscriptionDialogComponent implements OnInit {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oEditSubscription.durationDays)) {
       this.m_oEditSubscription.durationDays = this.m_iDurationDays;
     }
+
+    console.log(this.m_oEditSubscription);
   }
 
 
   initDates() {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oEditSubscription.buyDate)) {
-      this.m_sPurchaseDate = null;
+      this.m_sBuyDate = null;
     } else {
-      this.m_sPurchaseDate = new Date(this.m_oEditSubscription.buyDate);
+      this.m_sBuyDate = new Date(this.m_oEditSubscription.buyDate);
     }
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oEditSubscription.startDate)) {
@@ -165,28 +158,34 @@ export class EditSubscriptionDialogComponent implements OnInit {
       this.m_sEndDate = new Date(this.m_oEditSubscription.endDate);
     }
 
-    let iDifferenceInTime = this.m_sEndDate.getTime() - this.m_sStartDate.getTime();
-    this.m_iDurationDays = iDifferenceInTime / (1000 * 3600 * 24);
+    let lDifferenceInTime = this.m_sEndDate.getTime() - this.m_sStartDate.getTime();
+    this.m_iDurationDays = lDifferenceInTime / (1000 * 3600 * 24);
     this.m_iDurationDays = Math.round(this.m_iDurationDays);
   }
 
   saveSubscription() {
-    this.createSubscriptionObject();
-    this.getStripePaymentUrl();
+    this.createSubscriptionObject()
+
     this.m_oSubscriptionService.saveSubscription(this.m_oEditSubscription).subscribe({
       next: oResponse => {
         console.log(oResponse)
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.status === 200) {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)
+          && !FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.body) && oResponse.status === 200) {
           this.m_oEditSubscription.subscriptionId = oResponse.body.message;
           this.initSubscriptionInfo();
           this.initDates();
+          if (this.m_bCheckoutNow === false) {
+            this.m_oAlertDialog.openDialog(4000, "UPDATED SUBSCRIPTION");
+          }
           //If creating a subscription:
           if (this.m_bCheckoutNow === true) {
-            this.m_oAlertDialog.openDialog(4000, "SUBSCRIPTION SAVED - REDIRECTING TO PAYMENT")
+            // let oDialog = utilsVexDialogAlertBottomRightCorner("SUBSCRIPTION SAVED<br>REDIRECTING TO PAYMENT");
+            // utilsVexCloseDialogAfter(4000, oDialog);
+
             this.getStripePaymentUrl();
           }
         } else {
-          this.m_oAlertDialog.openDialog(4000, "ERROR IN SAVING YOUR SUBSCRIPTION");
+          //utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR IN SAVING SUBSCRIPTION");
         }
 
         if (this.m_bIsPaid) {
@@ -199,58 +198,32 @@ export class EditSubscriptionDialogComponent implements OnInit {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oError.data) && !FadeoutUtils.utilsIsStrNullOrEmpty(oError.data.message)) {
           sErrorMessage += "<br><br>" + this.m_oTranslate.instant(oError.data.message);
         }
-        this.m_oAlertDialog.openDialog(4000, sErrorMessage);
+
+        // utilsVexDialogAlertTop(sErrorMessage);
 
         if (this.m_bIsPaid) {
-          this.onDismiss();
+          //this.m_oScope.close();
         }
       }
-   })
+    })
   }
-
   getStripePaymentUrl() {
     let oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    let sActiveWorkspace; 
-    if(oActiveWorkspace.workspaceId === undefined) {
-      sActiveWorkspace = null;
-    } else {
-      sActiveWorkspace = oActiveWorkspace;
-    }
-    
-    this.m_oSubscriptionService.getStripePaymentUrl(this.m_oEditSubscription.subscriptionId, sActiveWorkspace).subscribe({
+    let sActiveWorkspaceId = oActiveWorkspace == null ? null : oActiveWorkspace.workspaceId;
+
+    this.m_oSubscriptionService.getStripePaymentUrl(this.m_oEditSubscription.subscriptionId, sActiveWorkspaceId).subscribe({
       next: oResponse => {
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.message) {
-          this.m_oNotificationService.openSnackBar("PAYMENT URL RECEIVED - REDIRECTING", "Close", "bottom", "right");
+        console.log(oResponse);
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
+          this.m_oNotificationService.openSnackBar("PAYMENT URL RECIEVED", "Close", "right", "bottom");
+
           let sUrl = oResponse.message;
 
-          window.open(sUrl, "_blank");
-          this.onDismiss();
+          window.open(sUrl, '_blank');
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "ERROR IN RETRIEVING THE PAYMENT URL");
-        this.onDismiss();
-      }
-    });
-  }
-
-  checkout() {
-    let oController = this;
-    let sMessage = "You will be re-directed to our payment partner, Stripe. Click 'OK' to continue or 'CANCEL' to end the payment process."
-    //Notification that user will be re-directed to Stripe
-    let oDialogData = new ConfirmationDialogModel("Confirm Redirect", sMessage);
-    let oDialog = this.m_oDialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      data: oDialogData
-    });
-    oDialog.afterClosed().subscribe(oDialogResult => {
-      if (oDialogResult === true) {
-        if (!this.m_oEditSubscription.subscriptionId) {
-          this.m_bCheckoutNow = true;
-          this.saveSubscription();
-        } else {
-          this.getStripePaymentUrl();
-        }
+        this.m_oAlertDialog.openDialog(4000, "ERROR IN FETCHING PAYMENT URL");
       }
     });
   }
@@ -258,23 +231,24 @@ export class EditSubscriptionDialogComponent implements OnInit {
   getOrganizationsListByUser() {
     this.m_oOrganizationsService.getOrganizationsListByUser().subscribe({
       next: oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) || oResponse.status !== 200) {
-          this.m_oAlertDialog.openDialog(4000, "Error getting your organizations!");
+        if (oResponse.status !== 200) {
+          this.m_oAlertDialog.openDialog(4000, "ERROR IN FETCHING ORGANIZATIONS");
         } else {
           const oFirstElement = { name: "No Organization", organizationId: null };
-          this.m_aoOrganizations = [oFirstElement].concat(oResponse.body);
-          this.m_aoOrganizations.forEach((oValue, sKey) => {
-            if (oValue.organizationId === this.m_oEditSubscription.organizationId) {
+          this.m_asOrganizations = [oFirstElement].concat(oResponse.body);
+          this.m_aoOrganizationsMap = this.m_asOrganizations.map(
+            (item) => ({ name: item.name, organizationId: item.organizationId })
+          );
+
+          this.m_aoOrganizationsMap.forEach((oValue, sKey) => {
+            if (oValue.organizationId == this.m_oEditSubscription.organizationId) {
               this.m_oOrganization = oValue;
             }
           });
         }
         this.m_bLoadingOrganizations = false;
       },
-      error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "Error getting your organizations!");
-        this.m_bLoadingOrganizations = false;
-      }
+      error: oError => { }
     })
   }
 
@@ -292,15 +266,38 @@ export class EditSubscriptionDialogComponent implements OnInit {
 
   getDaysRemaining(sStartDate: any, sEndDate: any) {
     let sCurrentDate = Date.now();
-    let sEndTimeStamp = Date.parse(sEndDate);
+    let sEndTimestamp = Date.parse(sEndDate);
 
-    let iRemainingDays = Math.ceil((sEndTimeStamp - sCurrentDate) / (1000 * 3600 * 24));
+    let iRemaningDays = Math.ceil((sEndTimestamp - sCurrentDate) / (1000 * 3600 * 24));
 
-    if (iRemainingDays <= 0) {
-      this.m_iDaysRemaining = 0;
+    if (iRemaningDays <= 0) {
+      this.m_iDaysRemaining = "Expired"
     } else {
-      this.m_iDaysRemaining = iRemainingDays;
+      this.m_iDaysRemaining = iRemaningDays;
     }
+  }
+
+  checkout() {
+    this.createSubscriptionObject();
+    let sMessage = "You will be re-directed to our payment partner, Stripe. Click 'OK' to continue or 'CANCEL' to end the payment process."
+    //Notification that user will be re-directed to Stripe
+    let oDialogData: ConfirmationDialogModel = new ConfirmationDialogModel("Confirm Redirect", sMessage);
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      data: oDialogData
+    });
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        if (!this.m_oEditSubscription.subscriptionId) {
+          this.m_bCheckoutNow = true;
+          this.saveSubscription();
+        } else {
+          this.getStripePaymentUrl();
+        }
+      }
+    })
   }
 
   onDismiss() {
