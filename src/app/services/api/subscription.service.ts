@@ -16,7 +16,7 @@ export class SubscriptionService {
   };
 
   getSubscriptionById(sSubscriptionId: string) {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/byId?subscription=' + sSubscriptionId, { observe: 'response' });
+    return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/byId?subscription=' + sSubscriptionId);
   };
 
   saveSubscription(oSubscription) {
