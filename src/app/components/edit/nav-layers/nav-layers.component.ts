@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, AfterViewInit, Output, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { OutletContext } from '@angular/router';
 import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
 import { Map } from 'leaflet';
-import Geocoder from 'leaflet-control-geocoder';
+import { OpenCage } from 'leaflet-control-geocoder/dist/geocoders';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { MapService } from 'src/app/services/map.service';
@@ -26,17 +27,18 @@ export class NavLayersComponent implements OnInit, AfterViewInit, OnChanges, OnD
   @Input() m_aoVisibleBands
   @Input() m_aoProducts: any[] = [];
   @Output() m_aoVisibleBandsChange = new EventEmitter();
-  @ViewChild('navMap') navMapElement: Map;
+
 
   m_sActiveTab: string = 'nav';
   m_oActiveBand: any;
   m_iOpacity: string;
 
   mapOptions: any;
-  navMap: L.Map;
+  navMap: any;
   layersControl: any;
   layersControlOptions: any = { position: 'bottomleft' };
 
+  oController = this;
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -51,31 +53,49 @@ export class NavLayersComponent implements OnInit, AfterViewInit, OnChanges, OnD
   }
 
   ngOnChanges(): void {
-    this.onMapReady(this.navMapElement);
     if (this.m_aoVisibleBands !== undefined) {
       this.setActiveTab('layers');
     }
     if (this.m_b2DMapModeOn === true) {
-
       if (this.m_oGlobeService.getGlobe()) {
         this.m_oGlobeService.getGlobe().destroy();
       }
       this.m_oGlobeService.initGlobe('cesiumContainer2');
     } else {
+
+      this.m_oMapService.clearMap('navMap');
+      console.log(this.m_oMapService.getMap());
+      this.m_oMapService.initWasdiMap('navMap');
+
+      //Set timeout with Arrow function to preserve `this` context within `setTimeout`
+      setTimeout(() => {
+        console.log(this.m_oMapService.getMap());
+        this.m_oMapService.getMap().invalidateSize();
+      }, 300)
+
     }
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
-  get options() {
-    return this.m_oMapService.m_oOptions;
+  loadMap(): void {
+    this.navMap = L.map('navMap').setView([0, 0], 1);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+      maxZoom: 18,
+      // this map option disables world wrapping. by default, it is false.
+      continuousWorld: false,
+      // this option disables loading tiles outside of the world bounds.
+    }).addTo(this.navMap);
   }
 
-  onMapReady(map: L.Map) {
-    this.navMap = map;
-    this.navMap.setView(new L.LatLng(40.737, -73.923), 8);
-    this.m_oMapService.setMap(this.navMap);
-  }
+  // onMapReady(map: L.Map) {
+  //   this.navMap = map;
+  //   console.log(this.navMap);
+  //   console.log(map);
+  //   // this.navMap.setView(new L.LatLng(40.737, -73.923), 8);
+  //   // this.m_oMapService.setMap(this.navMap);
+  // }
 
   setActiveTab(sTabName: string) {
     this.m_sActiveTab = sTabName;

@@ -26,9 +26,7 @@
             </button>
         </div>
     </div>
-    <div [hidden]="m_b2DMapModeOn === false" leaflet class="h-100 w-100" style="height:80vh;" id="editMap"
-        [leafletOptions]="options" [leafletLayersControl]="layersControl"
-        [leafletLayersControlOptions]=" layersControlOptions " (leafletMapReady)="onMapReady($event)">
+    <div [hidden]="m_b2DMapModeOn === false" class="h-100 w-100" style="height:80vh;" id="editMap">
     </div>
     <div [hidden]="m_b2DMapModeOn === true" class="h-100 w-100" style="height:80vh;" id="CesiumContainerEdit"></div>
 

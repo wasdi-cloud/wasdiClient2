@@ -145,6 +145,7 @@ export class MapService {
    */
   initMap(sMapDiv) {
     let oMap: L.Map = L.map(sMapDiv, {
+      zoomControl: false,
       center: [0, 0],
       zoom: 3
     });
@@ -333,7 +334,7 @@ export class MapService {
   clearMap(sMapDiv: string) {
     if (this.m_oWasdiMap) {
       this.m_oWasdiMap.remove();
-      this.initWasdiMap(sMapDiv)
+      // this.initWasdiMap(sMapDiv)
     }
   }
 

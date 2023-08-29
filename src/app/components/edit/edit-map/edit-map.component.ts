@@ -33,48 +33,36 @@ export class EditMapComponent implements OnInit {
 
   constructor(
     private m_oGlobeService: GlobeService,
-    private m_oMapService: MapService) {}
+    private m_oMapService: MapService) { }
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() {
+    this.m_oGlobeService.initGlobe('cesiumContainerEdit');
+  }
   ngOnInit(): void {
-    //this.mapOptions.zoomControl = false;
+    this.m_oMapService.initWasdiMap('editMap');
     this.layersControl = this.m_oMapService.m_oLayersControl;
 
   }
 
-  get options() {
-    return {
-     layers:[ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-        maxZoom: 18,
-        // this map option disables world wrapping. by default, it is false.
-       // continuousWorld: false,
-        // this option disables loading tiles outside of the world bounds.
-        noWrap: false
-      })], 
-      zoom: 3,
-      center: latLng(0, 0)
-    };
-  }
-
   onMapReady(map: L.Map) {
-    this.editMap = map;
-    this.searchControl.setPosition('bottomleft');
-    this.searchControl.addTo(this.editMap);
-    this.m_oMapService.setMap(this.editMap);
-
   }
 
   switch2D3DMode() {
     this.m_b2DMapModeOn = !this.m_b2DMapModeOn;
 
     if (this.m_b2DMapModeOn === false) {
-      this.m_b2DMapModeOutput.emit(false);
       this.m_oGlobeService.clearGlobe();
       this.m_oGlobeService.initGlobe('CesiumContainerEdit');
+      this.m_b2DMapModeOutput.emit(false);
     }
     if (this.m_b2DMapModeOn === true) {
+      this.m_oMapService.clearMap('editMap');
+      this.m_oMapService.initWasdiMap('editMap');
       this.m_b2DMapModeOutput.emit(true);
+      setTimeout(() => {
+        console.log(this.m_oMapService.getMap());
+        this.m_oMapService.getMap().invalidateSize();
+      }, 300)
     }
   }
 
