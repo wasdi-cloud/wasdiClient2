@@ -1,6 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, AfterViewInit, Output, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { OutletContext } from '@angular/router';
 import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
+import { Map } from 'leaflet';
+import { OpenCage } from 'leaflet-control-geocoder/dist/geocoders';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { GlobeService } from 'src/app/services/globe.service';
 import { MapService } from 'src/app/services/map.service';
 import { Band } from 'src/app/shared/models/band.model';
 declare const L: any;
@@ -10,7 +14,7 @@ declare const L: any;
   templateUrl: './nav-layers.component.html',
   styleUrls: ['./nav-layers.component.css']
 })
-export class NavLayersComponent implements OnChanges {
+export class NavLayersComponent implements OnInit, OnChanges, OnDestroy {
   //Font Awesome Icons:
   faExpand = faExpand;
   faList = faList;
@@ -24,24 +28,56 @@ export class NavLayersComponent implements OnChanges {
   @Input() m_aoProducts: any[] = [];
   @Output() m_aoVisibleBandsChange = new EventEmitter();
 
+
   m_sActiveTab: string = 'nav';
   m_oActiveBand: any;
   m_iOpacity: string;
 
+  mapOptions: any;
+  navMap: any;
+  layersControl: any;
+  layersControlOptions: any = { position: 'bottomleft' };
+
+  oController = this;
+
   constructor(
     private m_oConstantsService: ConstantsService,
+    private m_oGlobeService: GlobeService,
     private m_oMapService: MapService
   ) { }
 
+  ngOnInit(): void { }
+
   ngOnChanges(): void {
-    console.log(this.m_b2DMapModeOn);
     if (this.m_aoVisibleBands !== undefined) {
       this.setActiveTab('layers');
     }
+    this.initMaps();
   }
+
+  initMaps() {
+    if (this.m_b2DMapModeOn === true) {
+      if (this.m_oGlobeService.getGlobe()) {
+        this.m_oGlobeService.getGlobe().destroy();
+      }
+      this.m_oGlobeService.initGlobe('cesiumContainer2');
+    } else {
+      this.m_oMapService.clearMap('navMap');
+      this.m_oMapService.initWasdiMap('navMap');
+
+      //Set timeout with Arrow function to preserve `this` context within `setTimeout`
+      setTimeout(() => {
+        this.m_oMapService.getMap().invalidateSize();
+      }, 300)
+    }
+  }
+  ngOnDestroy(): void { }
 
   setActiveTab(sTabName: string) {
     this.m_sActiveTab = sTabName;
+    if (sTabName === 'nav') {
+     this.initMaps();
+    }
   }
 
   setOpacity(event, sLayerId) {
