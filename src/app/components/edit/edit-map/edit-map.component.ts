@@ -36,15 +36,12 @@ export class EditMapComponent implements OnInit {
     private m_oMapService: MapService) { }
 
   ngAfterViewInit() {
-    this.m_oGlobeService.initGlobe('cesiumContainerEdit');
+   // this.m_oGlobeService.initGlobe('cesiumContainerEdit');
   }
   ngOnInit(): void {
     this.m_oMapService.initWasdiMap('editMap');
     this.layersControl = this.m_oMapService.m_oLayersControl;
 
-  }
-
-  onMapReady(map: L.Map) {
   }
 
   switch2D3DMode() {
@@ -60,7 +57,6 @@ export class EditMapComponent implements OnInit {
       this.m_oMapService.initWasdiMap('editMap');
       this.m_b2DMapModeOutput.emit(true);
       setTimeout(() => {
-        console.log(this.m_oMapService.getMap());
         this.m_oMapService.getMap().invalidateSize();
       }, 300)
     }

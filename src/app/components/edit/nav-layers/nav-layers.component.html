@@ -14,7 +14,7 @@
         </li>
     </ul>
     <!-- Navigation and Layers content -->
-    <div class="map-container-panel" *ngIf="m_sActiveTab === 'nav'" style="height: 100%">
+    <div class="map-container-panel" [hidden]="m_sActiveTab !== 'nav'" style="height: 100%">
         <div [hidden]="m_b2DMapModeOn === false" class="h-100 w-100" id="cesiumContainer2"></div>
         <div [hidden]="m_b2DMapModeOn === true" id="navMap" style="height: 100%"></div>
 

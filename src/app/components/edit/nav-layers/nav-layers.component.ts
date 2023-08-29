@@ -14,7 +14,7 @@ declare const L: any;
   templateUrl: './nav-layers.component.html',
   styleUrls: ['./nav-layers.component.css']
 })
-export class NavLayersComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class NavLayersComponent implements OnInit, OnChanges, OnDestroy {
   //Font Awesome Icons:
   faExpand = faExpand;
   faList = faList;
@@ -48,57 +48,36 @@ export class NavLayersComponent implements OnInit, AfterViewInit, OnChanges, OnD
 
   ngOnInit(): void { }
 
-  ngAfterViewInit(): void {
-    this.m_oGlobeService.initGlobe('cesiumContainer2');
-  }
-
   ngOnChanges(): void {
     if (this.m_aoVisibleBands !== undefined) {
       this.setActiveTab('layers');
     }
+    this.initMaps();
+  }
+
+  initMaps() {
     if (this.m_b2DMapModeOn === true) {
       if (this.m_oGlobeService.getGlobe()) {
         this.m_oGlobeService.getGlobe().destroy();
       }
       this.m_oGlobeService.initGlobe('cesiumContainer2');
     } else {
-
       this.m_oMapService.clearMap('navMap');
-      console.log(this.m_oMapService.getMap());
       this.m_oMapService.initWasdiMap('navMap');
 
       //Set timeout with Arrow function to preserve `this` context within `setTimeout`
       setTimeout(() => {
-        console.log(this.m_oMapService.getMap());
         this.m_oMapService.getMap().invalidateSize();
       }, 300)
-
     }
   }
-
   ngOnDestroy(): void { }
-
-  loadMap(): void {
-    this.navMap = L.map('navMap').setView([0, 0], 1);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-      maxZoom: 18,
-      // this map option disables world wrapping. by default, it is false.
-      continuousWorld: false,
-      // this option disables loading tiles outside of the world bounds.
-    }).addTo(this.navMap);
-  }
-
-  // onMapReady(map: L.Map) {
-  //   this.navMap = map;
-  //   console.log(this.navMap);
-  //   console.log(map);
-  //   // this.navMap.setView(new L.LatLng(40.737, -73.923), 8);
-  //   // this.m_oMapService.setMap(this.navMap);
-  // }
 
   setActiveTab(sTabName: string) {
     this.m_sActiveTab = sTabName;
+    if (sTabName === 'nav') {
+     this.initMaps();
+    }
   }
 
   setOpacity(event, sLayerId) {
