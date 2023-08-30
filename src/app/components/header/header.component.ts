@@ -188,6 +188,7 @@ export class HeaderComponent implements OnInit {
             this.m_oNotificationDisplayService.openSnackBar("Active Project Changed", "Close", "right", "bottom");
 
             this.m_oSelectedProject = oProject;
+            this.m_oConstantsService.setActiveProject(oProject);
             this.initializeProjectsInfo();
           }
         },
