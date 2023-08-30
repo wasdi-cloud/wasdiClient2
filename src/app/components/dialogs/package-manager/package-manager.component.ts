@@ -37,7 +37,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   m_sPackageManagerName = "";
   m_sPackageManagerVersion = "";
   m_sPackageName: string = "";
-  m_sPackageToAdd: string; 
+  m_sPackageToAdd: string;
 
   m_iHookIndex: number;
   //SORTING
@@ -134,10 +134,13 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
    * Add a Package (library): 
    */
   addLibrary(sProcessorId: string, sPackageName: string) {
+    if (!sPackageName) {
+      return;
+    }
     let aPackageInfo = sPackageName.split("==");
 
     let aPackageInfoTrimmed = aPackageInfo.map((sElement) => {
-      return sElement.replace(/["]+/g, "");
+      return sElement.replace(/["]+/g, "").trim();
     });
 
     let sPackageInfoName = aPackageInfoTrimmed[0];
