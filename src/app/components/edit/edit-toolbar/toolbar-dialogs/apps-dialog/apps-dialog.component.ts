@@ -173,8 +173,10 @@ export class AppsDialogComponent {
     let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
       height: '80vh',
       width: '80vw',
-      data: { editMode: true,
-      inputProcessor: oProcessor }
+      data: {
+        editMode: true,
+        inputProcessor: oProcessor
+      }
     })
   }
 
@@ -228,33 +230,35 @@ export class AppsDialogComponent {
    * Execute the processor in the active workspace
    */
   runProcessor() {
-    console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
+    if (this.m_oConstantsService.checkProjectSubscriptionsValid() === true) {
+      console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
 
-    let sJSON = this.m_sMyJsonString;
+      let sJSON = this.m_sMyJsonString;
 
-    let sStringJSON = "";
+      let sStringJSON = "";
 
-    if (typeof sJSON !== "string") {
-      sStringJSON = JSON.stringify(sJSON);
-    } else {
-      sStringJSON = sJSON;
-    }
-
-    try {
-      JSON.parse(sStringJSON);
-    } catch (oError) {
-      let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
-
-      console.log(sErrorMessage);
-    }
-
-    this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-        let sNotificationMsg = "PROCESSOR SCHEDULED";
-        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
+      if (typeof sJSON !== "string") {
+        sStringJSON = JSON.stringify(sJSON);
+      } else {
+        sStringJSON = sJSON;
       }
-      this.m_oDialogRef.close();
-    })
+
+      try {
+        JSON.parse(sStringJSON);
+      } catch (oError) {
+        let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
+
+        console.log(sErrorMessage);
+      }
+
+      this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          let sNotificationMsg = "PROCESSOR SCHEDULED";
+          this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
+        }
+        this.m_oDialogRef.close();
+      })
+    }
   }
 
   /**

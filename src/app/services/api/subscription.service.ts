@@ -12,11 +12,11 @@ export class SubscriptionService {
   constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient) { }
 
   getSubscriptionsListByUser() {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/byuser');
+    return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/byuser');
   };
 
   getSubscriptionById(sSubscriptionId: string) {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/byId?subscription=' + sSubscriptionId);
+    return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/byId?subscription=' + sSubscriptionId);
   };
 
   saveSubscription(oSubscription) {
@@ -28,11 +28,11 @@ export class SubscriptionService {
   };
 
   createSubscription(oSubscription) {
-    return this.m_oHttp.post(this.APIURL + '/subscriptions/add', oSubscription);
+    return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/add', oSubscription, { observe: "response" });
   };
 
   updateSubscription(oSubscription) {
-    return this.m_oHttp.put(this.APIURL + '/subscriptions/update', oSubscription);
+    return this.m_oHttp.put<any>(this.APIURL + '/subscriptions/update', oSubscription, { observe: "response" });
   };
 
   deleteSubscription(sSubscriptionId: string) {
@@ -46,7 +46,7 @@ export class SubscriptionService {
 
   // Add sharing
   addSubscriptionSharing(sSubscriptionId: string, sUserId: string) {
-    return this.m_oHttp.post(this.APIURL + '/subscriptions/share/add?subscription=' + sSubscriptionId + '&userId=' + sUserId, {});
+    return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/share/add?subscription=' + sSubscriptionId + '&userId=' + sUserId, {});
   }
 
   // Remove sharing
@@ -56,11 +56,11 @@ export class SubscriptionService {
 
   // Get Subscription Types list
   getSubscriptionTypes() {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/types');
+    return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/types', { observe: 'response' });
   };
 
   // Get Stripe payment url by subscription id
   getStripePaymentUrl(sSubscriptionId: string, sWorkspaceId: string) {
-    return this.m_oHttp.get(this.APIURL + '/subscriptions/stripe/paymentUrl?subscription=' + sSubscriptionId + '&workspace=' + sWorkspaceId);
+    return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/stripe/paymentUrl?subscription=' + sSubscriptionId + '&workspace=' + sWorkspaceId);
   }
 }

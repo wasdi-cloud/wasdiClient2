@@ -1,8 +1,18 @@
 import { Injectable } from '@angular/core';
+
+//Import Services:
+import { AlertDialogTopService } from './alert-dialog-top.service';
+
+//Import enviornment information: 
 import { environment } from 'src/environments/environment';
+import { secrets } from 'src/environments/secrets'
+
+//Import Models:
 import { User } from '../shared/models/user.model';
 import { Workspace } from '../shared/models/workspace.model';
-import { secrets } from 'src/environments/secrets'
+
+//Import Utilities:
+import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +51,17 @@ export class ConstantsService {
 
   m_oSelectedComment: object = {};
 
+  m_aoActiveSubscriptions: Array<any> = [];
+
+  m_aoUserProjects: Array<any> = [];
+
+  m_oActiveProject: any = null;
+
+  m_sAccountType: string = "";
+
+  constructor(
+    private m_oAlertDialog: AlertDialogTopService
+  ) { }
 
   // isMobile() {
   //   if (navigator.userAgent.match((/Android)/i)) ||
@@ -217,6 +238,78 @@ export class ConstantsService {
   deleteCookie(cookieName: string) {
     this.setCookie(cookieName, "", -1000);
   }
+
+  /*------------- SUBSCRIPTIONS --------------*/
+  
+  /**
+   * Return array of user's active subscriptions
+   * @returns  {aoSubscriptions}
+   */
+  getActiveSubscriptions() {
+    return this.m_aoActiveSubscriptions;
+  }
+
+  /**
+   * Set the user's active subscriptions
+   * @param {sActiveSubscriptions}
+   */
+  setActiveSubscriptions(asSubscriptions) {
+    this.m_aoActiveSubscriptions = asSubscriptions;
+  }
+
+  /**
+    * Return the array of user's active projects
+    * @returns {aoProjects}
+    */
+  getUserProjects() {
+    return this.m_aoUserProjects;
+  }
+
+  /**
+    * Set the user projects array
+    * @param {*} aoProjects 
+    */
+  setUserProjects(aoProjects) {
+    this.m_aoUserProjects = aoProjects;
+  }
+
+  /**
+   * Set the user's active project
+   * @param {*} oProject
+   */
+  setActiveProject(oProject) {
+    this.m_oActiveProject = oProject
+  }
+
+  /**
+   * Returns the user's active project
+   */
+  getActiveProject() {
+    return this.m_oActiveProject;
+  }
+
+  /**
+   * Returns boolean representing whether or not the user has a valid subscription AND active Project;
+   */
+  checkProjectSubscriptionsValid() {
+    let sMessage: string;
+    console.log(this.m_oActiveProject);
+    if (this.m_aoActiveSubscriptions.length === 0) {
+      sMessage = "You do not have an Active Subscription at the moment";
+      this.m_oAlertDialog.openDialog(4000, sMessage);
+      return false;
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProject) === true || this.m_oActiveProject.projectId === null) {
+      sMessage = "You do not have an Active Project at the moment. Please select one in the navbar";
+      console.log(this.m_oActiveProject);
+      this.m_oAlertDialog.openDialog(4000, sMessage);
+      return false;
+    }
+
+    return true;
+  }
+
   /**************************************************/
 
   /**
@@ -306,5 +399,5 @@ export class ConstantsService {
     return localStorage.removeItem(sName);
   }
 
-  constructor() { }
+
 }

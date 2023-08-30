@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import { faUserAstronaut, faX } from '@fortawesome/free-solid-svg-icons';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -13,7 +13,10 @@ import { User } from 'src/app/shared/models/user.model';
 })
 export class UserSettingsDialogComponent {
   faClose = faX;
+  faUser = faUserAstronaut;
+
   m_oUser: User;
+
   m_oEditPassword = {
     currentPassword: "",
     newPassword: "",
@@ -24,6 +27,8 @@ export class UserSettingsDialogComponent {
     lname: "",
     userId: ""
   }
+
+  m_sActiveTab: string = "ACCOUNT"; 
 
   m_bEditingPassword: boolean;
 
@@ -71,6 +76,10 @@ export class UserSettingsDialogComponent {
       newPassword: this.m_oEditPassword.newPassword,
       currentPassword: this.m_oEditPassword.currentPassword
     }
+  }
+
+  changeActiveTab(sTabName: string) {
+    this.m_sActiveTab = sTabName;
   }
 
   getUserInfo() {

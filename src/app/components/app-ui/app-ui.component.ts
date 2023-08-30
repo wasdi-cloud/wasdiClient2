@@ -288,12 +288,14 @@ export class AppUiComponent implements OnInit {
    * @param oWorkspace 
    */
   executeProcessorInWorkspace(oController, sApplicationName: string, oProcessorInput, oWorkspace) {
-    oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
-    oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput)).subscribe(oResponse => {
-      if (oResponse) {
-        this.m_oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
-      }
-    })
+    if (this.m_oConstantsService.checkProjectSubscriptionsValid() === true) {
+      oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
+      oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput)).subscribe(oResponse => {
+        if (oResponse) {
+          this.m_oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
+        }
+      })
+    }
   }
 
   /**

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RabbitStompService } from './services/rabbit-stomp.service';
+import { ConstantsService } from './services/constants.service';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +9,11 @@ import { RabbitStompService } from './services/rabbit-stomp.service';
 })
 export class AppComponent implements OnInit {
   title = 'client';
-  m_bIsRabbitConnected
-  constructor(private m_oRabbitStompService: RabbitStompService) {
+  m_bIsRabbitConnected;
 
+  constructor(
+    public m_oConstantsService: ConstantsService,
+    private m_oRabbitStompService: RabbitStompService) {
   }
 
   ngOnInit() {

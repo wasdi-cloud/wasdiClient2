@@ -17,7 +17,7 @@
         <p class="dialog-text">
             Users that currently have access to <span class="text-success">{{resource.name}}</span>:
         </p>
-        <ul class="list-group">
+        <ul class="list-group" style="height:20rem; overflow-y: scroll;">
             <li class="list-group-item d-flex flex-row align-items-center justify-content-between"
                 *ngFor="let oUser of m_aoSharedUsers">
                 <span>

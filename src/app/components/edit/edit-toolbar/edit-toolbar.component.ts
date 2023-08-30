@@ -120,24 +120,31 @@ export class EditToolbarComponent implements OnInit {
 
   openJupyterNotebookPage(oEvent: MouseEvent) {
     oEvent.preventDefault
-    this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
-        console.log(oResponse)
-        if (oResponse.stringValue.includes("http")) {
-          window.open(oResponse.stringValue, '_blank');
-        }
-      } else {
-        let sMessage = "WASDI is preparing your notebook."
-
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.stringValue) === false) {
-            sMessage = sMessage + "<BR>" + oResponse.stringValue;
+    //Check if user has valid subscription and active project
+    if (this.m_oConstantsService.checkProjectSubscriptionsValid() === false) {
+      return false;
+    } else {
+      //If user has subscription and project, prepare notebook:
+      this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
+          console.log(oResponse)
+          if (oResponse.stringValue.includes("http")) {
+            window.open(oResponse.stringValue, '_blank');
           }
+        } else {
+          let sMessage = "WASDI is preparing your notebook."
+
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.stringValue) === false) {
+              sMessage = sMessage + "<BR>" + oResponse.stringValue;
+            }
+          }
+          this.m_bNotebookIsReady = true;
+          console.log(sMessage);
         }
-        this.m_bNotebookIsReady = true;
-        console.log(sMessage);
-      }
-    })
+      });
+      return true;
+    }
   }
 
   openStylesDialog(oEvent: MouseEvent) {

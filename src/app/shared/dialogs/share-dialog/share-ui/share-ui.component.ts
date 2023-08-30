@@ -1,13 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { faUserPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { ConstantsService } from 'src/app/services/constants.service';
-import { StyleService } from 'src/app/services/api/style.service';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
-import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
+
+//Import Services: 
 import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
+import { OrganizationsService } from 'src/app/services/api/organizations.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+import { StyleService } from 'src/app/services/api/style.service';
+import { SubscriptionService } from 'src/app/services/api/subscription.service';
+import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { WorkflowService } from 'src/app/services/api/workflow.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
+import { faUserPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-share-ui',
@@ -27,7 +30,9 @@ export class ShareUiComponent implements OnInit {
 
   constructor(
     private m_oAdminDashboardService: AdminDashboardService,
+    private m_oOrganizationsService: OrganizationsService,
     private m_oProcessorService: ProcessorService,
+    private m_oSubscriptionService: SubscriptionService,
     private m_oStyleService: StyleService,
     private m_oWorkflowService: WorkflowService,
     private m_oWorkspaceService: WorkspaceService) { }
@@ -81,6 +86,24 @@ export class ShareUiComponent implements OnInit {
           }
         })
       }
+
+      if (this.resourceType === "organization") {
+        this.m_oOrganizationsService.getUsersBySharedOrganization(this.resource.organizationId).subscribe({
+          next: oResponse => {
+            this.m_aoSharedUsers = oResponse;
+          },
+          error: oError => { }
+        })
+      }
+
+      if (this.resourceType === "subscription") {
+        this.m_oSubscriptionService.getUsersBySharedSubscription(this.resource.subscriptionId).subscribe({
+          next: oResponse => {
+            this.m_aoSharedUsers = oResponse;
+          },
+          error: oError => { }
+        })
+      }
     }
   }
 
@@ -129,6 +152,32 @@ export class ShareUiComponent implements OnInit {
           }
         })
       }
+
+      if (this.resourceType === 'organization') {
+        this.m_oOrganizationsService.addOrganizationSharing(this.resource.organizationId, this.m_sUserIdSearch).subscribe({
+          next: oResponse => {
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+              if (oResponse.message === "Done") {
+                console.log("Sharing Saved");
+                this.getEnabledUsers();
+              }
+            }
+          },
+          error: oError => { }
+        })
+      }
+
+      if (this.resourceType === 'subscription') {
+        this.m_oSubscriptionService.addSubscriptionSharing(this.resource.subscriptionId, this.m_sUserIdSearch).subscribe({
+          next: oResponse => {
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.message === "Done") {
+              console.log("Sharing Saved");
+              this.getEnabledUsers();
+            }
+          },
+          error: oError => { }
+        })
+      }
     }
   }
 
@@ -174,16 +223,38 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'processor') {
         this.m_oProcessorService.deleteUserSharedProcessor(this.resource.processorId, sUserId).subscribe({
-            next: (oResponse) => {
-              this.getEnabledUsers(); 
-            },
-            error: (oError) => {
-              console.log("ERROR IN REMOVING USER")
+          next: (oResponse) => {
+            this.getEnabledUsers();
+          },
+          error: (oError) => {
+            console.log("ERROR IN REMOVING USER")
 
-            }
           }
+        }
         )
       }
+    }
+
+    if (this.resourceType === 'organization') {
+      this.m_oOrganizationsService.removeOrganizationSharing(this.resource.organizationId, sUserId).subscribe({
+        next: oResponse => {
+          console.log("Removal Successful");
+          this.getEnabledUsers();
+        },
+        error: oError => {
+          console.log("Error in Removing User");
+        }
+      })
+    }
+
+    if (this.resourceType === 'subscription') {
+      this.m_oSubscriptionService.removeSubscriptionSharing(this.resource.subscriptionId, sUserId).subscribe({
+        next: oResponse => {
+          console.log("Removal Successful");
+          this.getEnabledUsers();
+        },
+        error: oError => { }
+      })
     }
   }
 }

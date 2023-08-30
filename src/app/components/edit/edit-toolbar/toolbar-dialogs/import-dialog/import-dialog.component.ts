@@ -99,6 +99,9 @@ export class ImportDialogComponent {
     let sStyle = "";
 
     //Add paywalling in this area on subscriptions
+    if (this.m_oConstantsService.checkProjectSubscriptionsValid() === false) {
+      return false;
+    }
 
     //Check for active workspace:
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_sWorkspaceId)) {
@@ -245,17 +248,17 @@ export class ImportDialogComponent {
   }
 
   isAccountCreated() {
-    if(this.m_bIsAccountCreated) {
+    if (this.m_bIsAccountCreated) {
       return true;
-    } 
+    }
     return false;
   }
 
   ingestAllSelectedFiles() {
-    let iSelectedFilesLength = this.m_aoSelectedFiles.length; 
+    let iSelectedFilesLength = this.m_aoSelectedFiles.length;
 
-    for(let iSelectedFileIndex = 0; iSelectedFileIndex < iSelectedFilesLength; iSelectedFileIndex++) {
-      if(this.ingestFile(this.m_aoSelectedFiles[iSelectedFileIndex]) === false) {
+    for (let iSelectedFileIndex = 0; iSelectedFileIndex < iSelectedFilesLength; iSelectedFileIndex++) {
+      if (this.ingestFile(this.m_aoSelectedFiles[iSelectedFileIndex]) === false) {
         console.log("Problem Ingesting file at index:" + iSelectedFileIndex);
       }
     }
@@ -263,20 +266,19 @@ export class ImportDialogComponent {
 
   ingestFile(oSelectedFile: any) {
     //FADEOUT UTILS: 
-    if(!oSelectedFile) {
+    if (!oSelectedFile) {
       return false;
     }
     this.m_oCatalogService.ingestFile(oSelectedFile, this.m_oConstantsService.getActiveWorkspace().workspaceId).subscribe({
       next: oResponse => {
-        if(oResponse)
-            {
-                console.log("SftpUploadController error during ingest file");
-                //TODO: ADD ALERT DIALOG
-                console.log("GURU MEDITATION<br>INGESTION ERROR FILE:<br>" + oSelectedFile);
-            }
-      }, 
+        if (oResponse) {
+          console.log("SftpUploadController error during ingest file");
+          //TODO: ADD ALERT DIALOG
+          console.log("GURU MEDITATION<br>INGESTION ERROR FILE:<br>" + oSelectedFile);
+        }
+      },
       error: oError => {
-        console.log(oError); 
+        console.log(oError);
       }
     });
     return true;
