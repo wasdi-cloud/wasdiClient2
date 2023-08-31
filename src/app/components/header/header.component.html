@@ -15,28 +15,28 @@
             <ul class="navbar-nav me-auto-sm ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/marketplace"><fa-icon [icon]="faSpaceShip"></fa-icon>
-                        {{'HEADER.MARKETPLACE_BTN' | translate}}</a>
+                        {{'ROOT_VIEW_NAV_BAR_LINK_APPSTORE' | translate}}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/workspaces"><fa-icon [icon]="faFloppyDisk"></fa-icon>
-                        {{'HEADER.WORKSPACE_BTN' | translate}}</a>
+                        {{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/plan"><fa-icon [icon]="faCalendar"></fa-icon> {{'HEADER.PLAN_BTN' |
+                    <a class="nav-link" routerLink="/plan"><fa-icon [icon]="faCalendar"></fa-icon> {{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' |
                         translate}}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/search"><fa-icon [icon]="faMagnifyingGlass"></fa-icon>
-                        {{'HEADER.SEARCH_BTN' | translate}}</a>
+                        {{'ROOT_VIEW_NAV_BAR_LINK_IMPORT' | translate}}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" [ngClass]="{'disabled' : !sActiveWorkspaceId}"
                         routerLink="/edit/{{sActiveWorkspaceId}}"><fa-icon [icon]="faGlobe"></fa-icon>
-                        {{'HEADER.EDIT_BTN' | translate}}</a>
+                        {{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}</a>
                 </li>
                 <li class="nav-item">
                     <a *ngIf="m_oUser.role !== 'USER'" class="nav-link" routerLink="/admin"><fa-icon
-                            [icon]="faGears"></fa-icon> {{'HEADER.ADMIN_BTN' |
+                            [icon]="faGears"></fa-icon> {{'ROOT_VIEW_NAV_BAR_LINK_ADMIN' |
                         translate}}</a>
 
                 </li>
