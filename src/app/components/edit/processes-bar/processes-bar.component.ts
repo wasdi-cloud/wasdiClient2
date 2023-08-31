@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFileDownload, faFilter, faList, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,7 @@ import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
 import { ProcessLogsDialogComponent } from '../process-logs-dialog/process-logs-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface SearchFilter {
   sStatus: string,
@@ -20,7 +21,7 @@ export interface SearchFilter {
   templateUrl: './processes-bar.component.html',
   styleUrls: ['./processes-bar.component.css']
 })
-export class ProcessesBarComponent {
+export class ProcessesBarComponent implements OnInit {
   //Fontawesome Icon Declarations
   faArrowUp = faArrowUp;
 
@@ -29,8 +30,39 @@ export class ProcessesBarComponent {
   m_iNumberOfProcesses: number = 0;
   m_iWaitingProcesses: number = 0;
   m_oLastProcesses: any = null;
+  m_oSummary: any;
 
-  constructor(private _bottomSheet: MatBottomSheet) { }
+  constructor(
+    private _bottomSheet: MatBottomSheet,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oTranslate: TranslateService) { }
+
+  ngOnInit(): void {
+    this.getSummary();
+  }
+
+  getSummary() {
+    let sMessage = this.m_oTranslate.instant("ALERT_MSGS.MSG_SUMMNARY_ERROR");
+
+    this.m_oProcessWorkspaceService.getSummary().subscribe({
+      next: oResponse => {
+        console.log(oResponse)
+        if (!oResponse) {
+          //ADD ALERT DIALOG
+          console.log(sMessage);
+        } else {
+          this.m_oSummary = oResponse;
+          this.m_iNumberOfProcesses = oResponse.userProcessRunning;
+          this.m_iWaitingProcesses = oResponse.userProcessWaiting;
+
+        }
+      },
+      error: oError => { 
+        //ALERT DIALOG
+        console.log(sMessage); 
+      }
+    })
+  }
 
   openProcessesBar(): void {
     this._bottomSheet.open(ProcessesBarContent, {
