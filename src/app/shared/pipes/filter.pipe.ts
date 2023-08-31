@@ -6,29 +6,31 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FilterPipe implements PipeTransform {
 
   transform(items: any[], searchText: string): any[] {
-    if(!items) {
-      console.log("No Items")
+    if (!items) {
       return [];
     }
 
-    if(!searchText) {
-      console.log("No search text")
-      return items; 
+    if (!searchText) {
+      return items;
     }
-    searchText = searchText.toLocaleLowerCase(); 
+    searchText = searchText.toLocaleLowerCase();
 
     return items.filter(item => {
       //Products by Friendly Name: 
-      if(item.friendlyName) {
-        return item.friendlyName.toLocaleLowerCase().includes(searchText); 
+      if (item.friendlyName) {
+        return item.friendlyName.toLocaleLowerCase().includes(searchText);
       }
       //Any Search with name attribute: 
-      if(item.name) {
+      if (item.name) {
         return item.name.toLocaleLowerCase().includes(searchText);
       }
       //Search Logs by Row: 
-      if(item.logRow) {
+      if (item.logRow) {
         return item.logRow.toLocaleLowerCase().includes(searchText);
+      }
+      //Filter for package manager:
+      if (item.packageName) {
+        return item.packageName.toLocaleLowerCase().includes(searchText);
       }
     })
   }
