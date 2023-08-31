@@ -53,6 +53,7 @@ import { MatTooltipModule } from '@angular/material/tooltip'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -133,6 +134,7 @@ import { EditSubscriptionDialogComponent } from './dialogs/edit-subscription-dia
 import { EditOrganizationDialogComponent } from './dialogs/edit-organization-dialog/edit-organization-dialog.component';
 import { ProjectInfoDialogComponent } from './dialogs/project-info-dialog/project-info-dialog.component';
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
+import { PackageManagerComponent } from './components/dialogs/package-manager/package-manager.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -214,7 +216,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditSubscriptionDialogComponent,
     EditOrganizationDialogComponent,
     ProjectInfoDialogComponent,
-    SubscriptionsPurchaseComponent
+    SubscriptionsPurchaseComponent,
+    PackageManagerComponent
   ],
   imports: [
     AppRoutingModule,
@@ -248,10 +251,11 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatBottomSheetModule,
     MatTooltipModule,
     FontAwesomeModule,
-    ClipboardModule, 
-    MatPaginatorModule, 
-    MatSnackBarModule, 
-    MatListModule
+    ClipboardModule,
+    MatPaginatorModule,
+    MatSnackBarModule,
+    MatListModule, 
+    MatProgressSpinnerModule
   ],
   providers: [
     AuthService,

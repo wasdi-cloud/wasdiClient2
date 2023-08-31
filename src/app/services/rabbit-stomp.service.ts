@@ -112,7 +112,7 @@ export class RabbitStompService {
    * Adds a Message Hook to a message type.
    * The hook will be executed once when a message of the specified type is received.
    */
-  addMessageHook(sMessageType: string, oController, fCallback, bCallOnce: boolean) {
+  addMessageHook(sMessageType: string, oController, fCallback, bCallOnce?: boolean) {
     let oHook = {};
     oHook[this.m_sHookMessageCode] = sMessageType;
     oHook[this.m_sHookController] = oController;
@@ -120,8 +120,6 @@ export class RabbitStompService {
     oHook[this.m_sCallOnce] = bCallOnce;
 
     this.m_afMessageHooks.push(oHook);
-
-    console.log(this.m_afMessageHooks)
 
     // Return the index in the array where our hook has been stored
     return this.m_afMessageHooks.length - 1;
@@ -236,8 +234,6 @@ export class RabbitStompService {
     }
   };
 
-
-
   initWebStomp() {
     let _this = this;
 
@@ -347,7 +343,6 @@ export class RabbitStompService {
 
     console.log(sMessage);
   }
-
 
   /**
    * Handler of the "Publish" message

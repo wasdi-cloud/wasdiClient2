@@ -1,0 +1,14 @@
+div.dialog-content {
+    width: 100%;
+}
+
+div.table-container {
+    max-height: 32rem;
+    overflow-y: auto;
+}
+thead.table-header {
+    opacity: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}

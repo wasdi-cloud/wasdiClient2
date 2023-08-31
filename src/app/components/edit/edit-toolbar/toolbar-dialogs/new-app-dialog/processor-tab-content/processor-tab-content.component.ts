@@ -4,17 +4,17 @@ import { FormGroup } from '@angular/forms';
 //Service Imports:
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
-import { ProductService } from 'src/app/services/api/product.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
+//Angular Material Import: 
+import { MatDialog } from '@angular/material/dialog';
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -88,6 +88,11 @@ export class ProcessorTabContentComponent implements OnInit {
   @Input() m_sProcessorId?: string = "";
 
   /**
+   * Processor Name
+   */
+  @Input() m_sProcessorName?: string = ""; 
+
+  /**
    * Selected File
    */
   m_oSelectedFile: any = null;
@@ -118,11 +123,9 @@ export class ProcessorTabContentComponent implements OnInit {
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog, 
     private m_oNotificationService: NotificationDisplayService,
-    private m_oProcessorMediaService: ProcessorMediaService,
-    private m_oProcessorService: ProcessorService,
-    private m_oProductService: ProductService,
-    private m_oWorkspaceService: WorkspaceService) {
+    private m_oProcessorService: ProcessorService) {
   }
 
   ngOnInit(): void {
@@ -159,40 +162,6 @@ export class ProcessorTabContentComponent implements OnInit {
 
     return false;
   };
-
-  /**
-   * Utility method to Create a NEW processor
-   * @param oController
-   * @param oSelectedFile
-   * @returns {boolean}
-   */
-  // postProcessor(oController: any, oSelectedFile: any) {
-  //   if (!oSelectedFile) {
-  //     return false;
-  //   }
-
-  //   let sType = this.m_oSelectedType.id;
-  //   let sPublic = "1";
-  //   if (this.m_bIsPublic === false) {
-  //     sPublic = "0";
-  //   }
-
-  //   let oBody = new FormData();
-  //   oBody.append('file', this.m_oFile[0]);
-
-  //   if (sType === "ubuntu_python_snap" || sType === "ubuntu_python37_snap") {
-  //     this.m_sName = this.m_sName.toLowerCase();
-  //   }
-
-  //   let sName = encodeURIComponent(this.m_sName);
-  //   let sDescription = encodeURIComponent(this.m_sDescription);
-
-  //   this.m_oProcessorService.uploadProcessor(this.m_oActiveWorkspace.workspaceId, sName, this.m_sVersion, sDescription, sType, this.m_sJSONSample, sPublic, oBody).subscribe(oResponse => {
-  //     console.log(oResponse);
-  //   })
-
-  //   return true;
-  // }
 
   setSelectedType(event: any) {
     this.m_aoProcessorTypes.forEach(oType => {
@@ -245,5 +214,19 @@ export class ProcessorTabContentComponent implements OnInit {
 
     })
     return true;
+  }
+  
+  /**
+   * Open Package Manager Dialog
+   */
+  openPackageManager() {
+    let oDialog = this.m_oDialog.open(PackageManagerComponent, {
+      height: '90vh', 
+      width: '90vw', 
+      data: {
+        sProcessorId: this.m_sProcessorId,
+        sProcessorName: this.m_sProcessorName
+      }
+    }); 
   }
 }
