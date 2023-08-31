@@ -40,7 +40,9 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   m_sPackageToAdd: string;
 
   m_iHookIndex: number;
-  //SORTING
+
+  m_sPackageSearch: string; 
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
     private m_oDialog: MatDialog,
@@ -54,6 +56,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
 
     this.fetchPackageManagerInfo(this.m_sProcessorName);
     this.fetchPackages();
+
 
     this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
       "ENVIRONMENTUPDATE",
@@ -91,6 +94,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoPackages = oResponse;
           this.m_bIsLoading = false;
+          console.log(this.m_aoPackages)
         }
       },
       error: oError => {
@@ -242,6 +246,11 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
     })
   }
 
+  /**
+   * Add rabbithook - execute function when message recieved
+   * @param oRabbitMessage 
+   * @param oController 
+   */
   rabbitMessageHook(oRabbitMessage, oController) {
     oController.fetchPackages();
     oController.m_bIsLoading = false
