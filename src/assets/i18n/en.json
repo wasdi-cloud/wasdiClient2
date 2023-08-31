@@ -304,5 +304,8 @@
         "PROPERTIES_WORKSPACE_ID": "Workspace Id",
         "PROPERTIES_PROCESSES_EXECUTED": "Processes Executed",
         "PROPERTIES_SHARED": "Shared With"
+    },
+    "ALERT_MSGS": {
+        "MSG_SUMMARY_ERROR": "GURU MEDITATION<br>ERROR IN GET SUMMARY"
     }
 }

@@ -302,7 +302,7 @@ export class ProcessWorkspaceService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get(sUrl + '/process/summary');
+    return this.oHttp.get<any>(sUrl + '/process/summary');
   };
 
   /**

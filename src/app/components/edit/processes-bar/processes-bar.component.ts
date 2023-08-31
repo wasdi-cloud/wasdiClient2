@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 
 //Angular Material Imports: 
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
@@ -15,9 +15,11 @@ import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProcessLogsDialogComponent } from '../process-logs-dialog/process-logs-dialog.component';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+import { TranslateService } from '@ngx-translate/core';
+
+//Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
-import { TranslateService } from '@ngx-translate/core';
 
 export interface SearchFilter {
   sStatus: string,
@@ -26,6 +28,7 @@ export interface SearchFilter {
   sName: string
 }
 
+//PROCESSES BAR (WHEN BAR IS CLOSED): 
 @Component({
   selector: 'app-processes-bar',
   templateUrl: './processes-bar.component.html',
@@ -42,10 +45,17 @@ export class ProcessesBarComponent implements OnInit {
   m_iWaitingProcesses: number = 0;
   m_oLastProcesses: any = null;
   m_iIsWebsocketConnected: any;
+  m_oSummary: any;
 
-  constructor(private _bottomSheet: MatBottomSheet, private m_oNotificationDisplayService: NotificationDisplayService, private m_oProcessWorkspaceService: ProcessWorkspaceService, private m_oRabbitStompService: RabbitStompService, private m_oTranslateService: TranslateService) { }
+  constructor(
+    private _bottomSheet: MatBottomSheet,
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oRabbitStompService: RabbitStompService,
+    private m_oTranslateService: TranslateService) { }
 
   ngOnInit() {
+    this.getSummary();
     this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
       this.m_iIsWebsocketConnected = oResponse;
     });
@@ -125,6 +135,29 @@ export class ProcessesBarComponent implements OnInit {
     });
   }
 
+  getSummary() {
+    let sMessage = this.m_oTranslateService.instant("ALERT_MSGS.MSG_SUMMNARY_ERROR");
+
+    this.m_oProcessWorkspaceService.getSummary().subscribe({
+      next: oResponse => {
+        console.log(oResponse)
+        if (!oResponse) {
+          //ADD ALERT DIALOG
+          console.log(sMessage);
+        } else {
+          this.m_oSummary = oResponse;
+          this.m_iNumberOfProcesses = oResponse.userProcessRunning;
+          this.m_iWaitingProcesses = oResponse.userProcessWaiting;
+
+        }
+      },
+      error: oError => {
+        //ALERT DIALOG
+        console.log(sMessage);
+      }
+    })
+  }
+
   openProcessesBar(): void {
     this._bottomSheet.open(ProcessesBarContent, {
       data: {
@@ -134,6 +167,7 @@ export class ProcessesBarComponent implements OnInit {
   }
 }
 
+//PROCESSES BAR CONTENT (WHEN BAR IS OPEN):
 @Component({
   selector: 'processes-bar-content',
   templateUrl: 'processes-bar-content.html',
@@ -358,6 +392,7 @@ export class ProcessesBarContent implements OnInit {
 
 }
 
+//PROCESSES DIALOG: 
 @Component({
   selector: 'processes-dialog',
   templateUrl: 'processes-dialog.html',
