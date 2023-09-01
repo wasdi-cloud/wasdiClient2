@@ -49,7 +49,6 @@ export class WorkspaceListItemComponent {
         console.log("Error opening workspace")
         return false;
       }
-      console.log(response)
       this.setActiveWorkspace(response)
       this.oRouter.navigateByUrl(`edit/${response.workspaceId}`);
       return true;
@@ -99,7 +98,6 @@ export class WorkspaceListItemComponent {
   }
 
   showWorkspaceProperties(oWorkspace: Workspace) {
-    console.log(oWorkspace)
     this.activeWorkspace.emit(oWorkspace);
   }
 }

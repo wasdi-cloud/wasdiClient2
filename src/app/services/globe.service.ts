@@ -200,7 +200,6 @@ export class GlobeService {
   }
 
   addRectangleOnGlobeParamArray(aArray: any[]) {
-    console.log(aArray);
     // Safe Programming check
     if (!aArray) {
       return false;

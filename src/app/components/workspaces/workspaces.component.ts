@@ -105,7 +105,6 @@ export class WorkspacesComponent implements OnInit {
   }
 
   fetchWorkspaceInfoList() {
-    console.log("fetching workspaces");
     let sMessage: string;
     this.m_oTranslate.get("MSG_MKT_WS_OPEN_ERROR").subscribe(sResponse => {
       sMessage = sResponse
@@ -132,7 +131,6 @@ export class WorkspacesComponent implements OnInit {
 
   onShowWorkspace(oWorkspace: Workspace) {
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
-      console.log(this.activeWorkspace)
       this.activeWorkspace = response
       this.sharedUsers = response.sharedUsers
     })
@@ -215,7 +213,6 @@ export class WorkspacesComponent implements OnInit {
 
     // For each product
     for (let iIndexProduct = 0; iIndexProduct < iProductsLength; iIndexProduct++) {
-      console.log(this.m_aoProducts[iIndexProduct]);
       aiInvertedArraySplit = [];
       aArraySplit = [];
       // skip if there isn't the product bounding box
