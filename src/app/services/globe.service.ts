@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
+
+//Import Environment file:
 import { environment } from 'src/environments/environment';
-import { ConstantsService } from './constants.service';
-declare var oController: any;
+
+//Import Fadeout Utilities:
+import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
+
+//Declare Cesium:
 declare let Cesium: any;
 
 @Injectable({
@@ -195,6 +200,7 @@ export class GlobeService {
   }
 
   addRectangleOnGlobeParamArray(aArray: any[]) {
+    console.log(aArray);
     // Safe Programming check
     if (!aArray) {
       return false;
@@ -224,9 +230,10 @@ export class GlobeService {
         let oEntity = aoEntities[i];
 
         // Check if it is a valid one (can be a satellite sprite also)
-        if (oEntity.polygon) {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEntity.polygon)) {
           continue;
         }
+       
         // Assume is equal: we will set this = false if a point of the poly is different
         let bIsEqual = true;
 
@@ -245,7 +252,6 @@ export class GlobeService {
         }
 
         if (bIsEqual) {
-
           //If we found an equal bbox we can return this as Rectangle
           return oEntity;
         }
