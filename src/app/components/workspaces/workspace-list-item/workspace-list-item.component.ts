@@ -7,6 +7,7 @@ import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/sh
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { WorkspaceViewModel } from '../workspaces.component';
 import { MatDialog } from '@angular/material/dialog';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-workspace-list-item',
@@ -14,11 +15,16 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./workspace-list-item.component.css']
 })
 export class WorkspaceListItemComponent {
+  faTrashcan = faTrash;
   @Input() workspace!: any;
   @Output() activeWorkspace = new EventEmitter<Workspace>();
   @Output() deletedWorkspace = new EventEmitter<Workspace>();
 
-  constructor(private oConstantsService: ConstantsService, public oDialog: MatDialog, private oRouter: Router, private oWorkspaceService: WorkspaceService) { }
+  constructor(
+    private oConstantsService: ConstantsService,
+    public oDialog: MatDialog,
+    private oRouter: Router,
+    private oWorkspaceService: WorkspaceService) { }
 
   getDate(sTimestamp: number) {
     if (sTimestamp) {
@@ -29,16 +35,15 @@ export class WorkspaceListItemComponent {
   }
   openWorkspace(oWorkspace: Workspace) {
     this.oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
-      if(!response) {
+      if (!response) {
         console.log("Error opening workspace")
         return false;
-      } 
+      }
       console.log(response)
       this.setActiveWorkspace(response)
       this.oRouter.navigateByUrl(`edit/${response.workspaceId}`);
-      return true; 
+      return true;
     })
-    
   }
 
   deleteWorkspace(sWorkspaceId: string) {
@@ -84,6 +89,7 @@ export class WorkspaceListItemComponent {
   }
 
   showWorkspaceProperties(oWorkspace: Workspace) {
+    console.log(oWorkspace)
     this.activeWorkspace.emit(oWorkspace);
   }
 }

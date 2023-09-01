@@ -9,9 +9,11 @@
         </div>
         <div class="button-panel d-flex flex-row gap-2 align-items-center">
             <button class="btn btn-primary btn-rounded btn-sm" role="button"
-                (click)="openWorkspace(workspace)">{{"WORKSPACES.LIST_BTN_OPEN" | translate}}</button>
-            <button class="btn btn-primary btn-rounded btn-sm" role="button"
-                (click)="deleteWorkspace(workspace.workspaceId)">{{"WORKSPACES.LIST_BTN_DELETE" | translate}}</button>
+                (click)="openWorkspace(workspace)">Open</button>
+            <button class="btn btn-sm" role="button"
+                (click)="deleteWorkspace(workspace.workspaceId)">
+            <fa-icon [icon]="faTrashcan"></fa-icon>
+            </button>
         </div>
     </div>
 </li>
