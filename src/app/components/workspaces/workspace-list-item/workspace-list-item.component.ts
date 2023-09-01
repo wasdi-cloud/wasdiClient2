@@ -1,12 +1,21 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProductService } from 'src/app/services/api/product.service';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
+
+//Import Services
 import { ConstantsService } from 'src/app/services/constants.service';
+import { WorkspaceService } from 'src/app/services/api/workspace.service';
+
+//Import Angular Materials Modules:
+import { MatDialog } from '@angular/material/dialog';
+
+//Import Dialogs
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+
+//Import Models:
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { WorkspaceViewModel } from '../workspaces.component';
-import { MatDialog } from '@angular/material/dialog';
+
+//Font Awesome Imports:
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -33,6 +42,7 @@ export class WorkspaceListItemComponent {
     }
     return "N/A"
   }
+
   openWorkspace(oWorkspace: Workspace) {
     this.oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
       if (!response) {

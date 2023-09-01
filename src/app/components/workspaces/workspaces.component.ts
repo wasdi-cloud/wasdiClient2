@@ -1,15 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { faPlay, faPlus, faStop } from '@fortawesome/free-solid-svg-icons';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
+
+//Import Services:
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { User } from 'src/app/shared/models/user.model';
-import { Workspace } from 'src/app/shared/models/workspace.model';
-import { NewWorkspaceDialogComponent } from './new-workspace-dialog/new-workspace-dialog.component';
 import { GlobeService } from 'src/app/services/globe.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
+import { ProductService } from 'src/app/services/api/product.service';
+import { TranslateService } from '@ngx-translate/core';
+import { WorkspaceService } from 'src/app/services/api/workspace.service';
+
+//Import Componenets: 
+import { NewWorkspaceDialogComponent } from './new-workspace-dialog/new-workspace-dialog.component';
+
+//Import Angular Materials:
+import { MatDialog } from '@angular/material/dialog';
+
+//Import Models:
+import { User } from 'src/app/shared/models/user.model';
+import { Workspace } from 'src/app/shared/models/workspace.model';
+
+//Font Awesome Imports:
+import { faPlay, faPlus, faStop } from '@fortawesome/free-solid-svg-icons';
+
+//Import Utilities: 
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
+//Declare Cesium: 
 declare let Cesium: any;
 
 export interface WorkspaceViewModel {
@@ -38,10 +55,11 @@ export class WorkspacesComponent implements OnInit {
   faPlay = faPlay;
   faStop = faStop;
 
-  workspaces: Workspace[] = []
+  m_aoWorkspacesList: Workspace[] = []
   activeWorkspace!: WorkspaceViewModel;
   sharedUsers!: string[];
   setInterval: any;
+
   m_bShowSatellites: boolean;
   m_aoSatelliateInputTracks: any[] = [];
   m_aoSatellitePositions: any[] = [];
@@ -49,12 +67,22 @@ export class WorkspacesComponent implements OnInit {
   m_oUfoPointer: any;
   m_aoSateliteInputTraks: any[] = [];
 
+  m_bLoadingWSFiles: boolean = false;
+  m_bIsVisibleFiles: boolean = false;
+  m_bIsOpenInfo: boolean = true;
+  m_aoProducts: Array<any> = [];
+  m_oWorkspaceViewModel: any;
+  m_oSelectedProduct: any;
+
   constructor(
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oGlobeService: GlobeService,
     private m_oOpportunitySearchService: OpportunitySearchService,
-    private oWorkspaceService: WorkspaceService) { }
+    private m_oProductService: ProductService,
+    private m_oTranslate: TranslateService,
+    private m_oWorkspaceService: WorkspaceService) { }
 
 
   ngOnInit(): void {
@@ -77,13 +105,24 @@ export class WorkspacesComponent implements OnInit {
   }
 
   fetchWorkspaceInfoList() {
-    console.log("fetching workspaces")
+    console.log("fetching workspaces");
+    let sMessage: string;
+    this.m_oTranslate.get("MSG_MKT_WS_OPEN_ERROR").subscribe(sResponse => {
+      sMessage = sResponse
+    })
 
     let oUser: User = this.m_oConstantsService.getUser();
-    if (oUser !== {} as User) {
-      this.oWorkspaceService.getWorkspacesInfoListByUser().subscribe(response => {
-        this.workspaces = response;
-      })
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oUser) === false) {
+      this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
+        next: oResponse => {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+            this.m_oAlertDialog.openDialog(4000, sMessage);
+          } else {
+            this.m_aoWorkspacesList = oResponse;
+          }
+        },
+        error: oError => { }
+      });
     }
   }
 
@@ -92,12 +131,190 @@ export class WorkspacesComponent implements OnInit {
   }
 
   onShowWorkspace(oWorkspace: Workspace) {
-    this.oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
+    this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
+      console.log(this.activeWorkspace)
       this.activeWorkspace = response
       this.sharedUsers = response.sharedUsers
     })
+    this.loadProductList(oWorkspace);
   }
 
+  loadProductList(oWorkspace: Workspace) {
+    this.m_bLoadingWSFiles = true;
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) === true) {
+      return false;
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.workspaceId) === true) {
+      return false;
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.activeWorkspace) === false) {
+      this.activeWorkspace.workspaceId = oWorkspace.workspaceId;
+      this.deselectWorkspace();
+    }
+
+    this.m_bIsVisibleFiles = true;
+    this.m_bIsOpenInfo = false;
+    let oWorkspaceId = oWorkspace.workspaceId;
+    this.m_bIsVisibleFiles = true;
+    let sError = this.m_oTranslate.instant("MSG_MKT_WS_OPEN_ERROR");
+
+    this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspaceId).subscribe({
+      next: oResponse => {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          this.m_oWorkspaceViewModel = oResponse;
+        }
+      },
+      error: oError => { }
+    });
+
+    this.m_oProductService.getProductLightListByWorkspace(oWorkspaceId).subscribe({
+      next: oResponse => {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          for (let i = 0; i < this.m_aoProducts.length; i++) {
+            //this.m_oGlobeService.removeEntity(this.m_aoProducts[i].oRectangle)
+          }
+
+          this.m_aoProducts = [];
+          for (let iIndex = 0; iIndex < oResponse.length; iIndex++) {
+            this.m_aoProducts.push(oResponse[iIndex]);
+          }
+          this.m_bIsOpenInfo = true;
+          //this.activeWorkspace = oWorkspace;
+        }
+
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts) || this.m_aoProducts.length == 0) {
+          this.m_bIsVisibleFiles = false;
+        } else {
+          //add globe bounding box
+          this.createBoundingBoxInGlobe();
+        }
+
+        this.m_bLoadingWSFiles = false;
+      },
+      error: oError => { }
+    });
+    return true;
+  }
+
+  createBoundingBoxInGlobe() {
+    let oRectangle = null;
+    let aArraySplit = [];
+    let iArraySplitLength = 0;
+    let aiInvertedArraySplit = [];
+
+    let aoTotalArray = [];
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts) === true) {
+      return false;
+    }
+
+    let iProductsLength = this.m_aoProducts.length;
+
+    // For each product
+    for (let iIndexProduct = 0; iIndexProduct < iProductsLength; iIndexProduct++) {
+      console.log(this.m_aoProducts[iIndexProduct]);
+      aiInvertedArraySplit = [];
+      aArraySplit = [];
+      // skip if there isn't the product bounding box
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts[iIndexProduct].bbox) === true) continue;
+
+      // Split bbox string
+      aArraySplit = this.m_aoProducts[iIndexProduct].bbox.split(",");
+      iArraySplitLength = aArraySplit.length;
+
+      if (iArraySplitLength < 10) continue;
+
+      let bHasNan = false;
+      for (let iValues = 0; iValues < aArraySplit.length; iValues++) {
+        if (isNaN(aArraySplit[iValues])) {
+          bHasNan = true;
+          break;
+        }
+      }
+
+      if (bHasNan) continue;
+
+      aoTotalArray.push.apply(aoTotalArray, aArraySplit);
+
+      for (let iIndex = 0; iIndex < iArraySplitLength - 1; iIndex = iIndex + 2) {
+        aiInvertedArraySplit.push(aArraySplit[iIndex + 1]);
+        aiInvertedArraySplit.push(aArraySplit[iIndex]);
+      }
+
+      oRectangle = this.m_oGlobeService.addRectangleOnGlobeParamArray(aiInvertedArraySplit);
+      this.m_aoProducts[iIndexProduct].oRectangle = oRectangle;
+      this.m_aoProducts[iIndexProduct].aBounds = aiInvertedArraySplit;
+    }
+
+
+    let aoBounds = [];
+    for (let iIndex = 0; iIndex < aoTotalArray.length - 1; iIndex = iIndex + 2) {
+      aoBounds.push(new Cesium.Cartographic.fromDegrees(aoTotalArray[iIndex + 1], aoTotalArray[iIndex]));
+    }
+
+    let oWSRectangle = Cesium.Rectangle.fromCartographicArray(aoBounds);
+    let oWSCenter = Cesium.Rectangle.center(oWSRectangle);
+
+    //oGlobe.camera.setView({
+    this.m_oGlobeService.getGlobe().camera.flyTo({
+      destination: Cesium.Cartesian3.fromRadians(oWSCenter.longitude, oWSCenter.latitude, this.m_oGlobeService.getWorkspaceZoom()),
+      orientation: {
+        heading: 0.0,
+        pitch: -Cesium.Math.PI_OVER_TWO,
+        roll: 0.0
+      }
+    });
+
+    this.m_oGlobeService.stopRotationGlobe();
+
+    return true;
+  }
+
+  onSelectProduct(oProduct: any) {
+    if (this.m_oSelectedProduct === oProduct) {
+      this.m_oSelectedProduct = null;
+      return false;
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.aBounds) === true) {
+      return false;
+    }
+
+    this.m_oSelectedProduct = oProduct;
+    let aBounds = oProduct.aBounds;
+    let aBoundsLength = aBounds.length;
+    let aoRectangleBounds = [];
+    let oGlobe = this.m_oGlobeService.getGlobe();
+
+    // let temp = null;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct) === true) {
+      return false;
+    }
+
+    this.m_oGlobeService.stopRotationGlobe();
+
+    for (let iIndexBound = 0; iIndexBound < aBoundsLength - 1; iIndexBound = iIndexBound + 2) {
+      aoRectangleBounds.push(new Cesium.Cartographic.fromDegrees(aBounds[iIndexBound], aBounds[iIndexBound + 1]));
+    }
+
+    let zoom = Cesium.Rectangle.fromCartographicArray(aoRectangleBounds);
+    oGlobe.camera.setView({
+      destination: zoom,
+      orientation: {
+        heading: 0.0,
+        pitch: -Cesium.Math.PI_OVER_TWO,
+        roll: 0.0
+      }
+    });
+
+    return true;
+  }
+
+  deselectWorkspace() {
+
+  }
   openNewWorkspaceDialog() {
     let oDialogRef = this.m_oDialog.open(NewWorkspaceDialogComponent, {
       width: '30vw'
@@ -142,16 +359,16 @@ export class WorkspacesComponent implements OnInit {
           if (this.m_oFakePosition === null) {
             if (oResponse.lastPositions != null) {
 
-              var iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
+              let iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
 
               this.m_oFakePosition = oResponse.lastPositions[iFakeIndex];
 
-              var aoUfoPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
+              let aoUfoPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
               aoUfoPosition[2] = aoUfoPosition[2] * 4;
               this.m_oUfoPointer = this.m_oGlobeService.drawPointWithImage(aoUfoPosition, "assets/icons/alien.svg", "U.F.O.", "?");
 
               iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
-              var aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
+              let aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
               //aoMoonPosition [0] = 0.0;
               //aoMoonPosition[1] = 0.0;
               aoMoonPosition[2] = 384400000;
@@ -220,7 +437,7 @@ export class WorkspacesComponent implements OnInit {
     if (this.m_bShowSatellites) {
       this.getTrackSatellite();
     } else {
-      for (var i = 0; i < this.m_aoSatellitePositions.length; i++) {
+      for (let i = 0; i < this.m_aoSatellitePositions.length; i++) {
         this.m_oGlobeService.removeEntity(this.m_aoSatellitePositions[i]);
       }
 
