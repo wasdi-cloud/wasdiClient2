@@ -64,7 +64,7 @@ export class ProcessorService {
     * @returns {*}
     */
   getMarketplaceList(oFilter: object) {
-    return this.m_oHttp.post(this.APIURL + '/processors/getmarketlist', oFilter);
+    return this.m_oHttp.post<any>(this.APIURL + '/processors/getmarketlist', oFilter);
   };
 
   /**

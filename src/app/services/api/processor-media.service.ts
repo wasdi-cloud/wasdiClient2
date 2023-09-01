@@ -18,7 +18,7 @@ export class ProcessorMediaService {
      * @returns {*}
      */
   getCategories() {
-    return this.oHttp.get(this.APIURL + this.m_sResource + '/categories/get');
+    return this.oHttp.get<any>(this.APIURL + this.m_sResource + '/categories/get');
   };
 
   /**
