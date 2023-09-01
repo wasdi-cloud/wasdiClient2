@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-2 search1 align-item-end search-container">
                         <input type="text" name="" id="" class="form-label form-control align-self-center"
-                            placeholder="{{'MARKET_SEARCH_APP' | translate}}" [(ngModel)]="searchWord"
+                            placeholder="{{'MARKET_SEARCH_APP' | translate}}" [(ngModel)]="m_sNameFilter"
                             (ngModelChange)="searchApps()">
                     </div>
                 </div>
@@ -56,9 +56,12 @@
         </div>
     </div>
 
-    <div class="processor-cards-container col-12 d-flex flex-row flex-wrap justify-content-start px-3">
-        <app-marketplace-app-card class="col-xs-12 col-md-6 col-lg-3 px-1"
-            *ngFor="let oProcessor of m_aoApplications | filter: searchWord"
-            [oProcessor]="oProcessor"></app-marketplace-app-card>
+    <div class="processor-cards-container d-flex flex-column pb-3">
+        <div class="col-12 d-flex flex-row flex-wrap justify-content-start px-3">
+            <app-marketplace-app-card class="col-xs-12 col-md-6 col-lg-3 px-1"
+                *ngFor="let oProcessor of m_aoApplications" [oProcessor]="oProcessor"></app-marketplace-app-card>
+        </div>
+        <button [disabled]="m_bLoadMoreEnabled === false" class="btn btn-lg btn-primary align-self-center"
+            (click)="loadMore()">Load More</button>
     </div>
 </main>
