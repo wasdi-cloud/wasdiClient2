@@ -1,46 +1,50 @@
 <nav class="navbar navbar-expand-lg d-flex flex-row justify-content-between px-3">
     <form class="d-flex gap-2" #filterTextForm="ngForm" (ngSubmit)="getFilterText()">
-        <input class="form-control me-2" type="search" placeholder="Product Filter" aria-label="Search"
+        <input class="form-control me-2" type="search" placeholder="{{'EDITOR_PRODUCTS_FILTER'|translate}}" aria-label="Search"
             name="m_sFilterText" [(ngModel)]="m_sFilterText">
-        <button class="btn btn-outline-primary" type="submit" matTooltip="{{'EDIT.PRODUCTS_FILTER_APPLY' | translate}}"
+        <button class="btn btn-outline-primary" type="submit" matTooltip="{{'EDITOR_PRODUCTS_FILTER_APPLY' | translate}}"
             [matTooltipPosition]="'above'">
             <fa-icon [icon]="faSearch"></fa-icon>
         </button>
-        <button class="btn btn-outline-secondary" matTooltip="{{'EDIT.PRODUCTS_FILTER_RESET' | translate}}"
+        <button class="btn btn-outline-secondary" matTooltip="{{'EDITOR_PRODUCTS_FILTER_CLEAN' | translate}}"
             [matTooltipPosition]="'above'">
             <fa-icon [icon]="faRefresh" (click)="resetFilterText($event)"></fa-icon>
         </button>
         <button class="btn btn-outline-secondary" (click)="openWorkspaceInfo($event)"
-            matTooltip="{{'EDIT.WORKSPACE_INFO_OPEN' | translate}}" [matTooltipPosition]="'above'">
+            matTooltip="{{'EDITOR_PRODUCTS_WS_INFO' | translate}}" [matTooltipPosition]="'above'">
             <fa-icon [icon]="faInfo"></fa-icon>
         </button>
     </form>
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openNewAppDialog($event)"><fa-icon [icon]="faPlus"></fa-icon> {{'EDIT.TOOLBAR_NEW_APP' |
+            <a class="nav-link" aria-current="page" (click)="openAppsDialog($event)"><fa-icon [icon]="faRocket"></fa-icon> {{'EDITOR_OPERATION_TITLE_WAPPS' |
                 translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="page"><fa-icon [icon]="faGears"></fa-icon> {{'EDIT.TOOLBAR_WORKFLOWS' |
+            <a class="nav-link" aria-current="page" (click)="openNewAppDialog($event)"><fa-icon [icon]="faPlus"></fa-icon> {{'EDITOR_OPERATION_TITLE_NEW_PROCESSOR' |
                 translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openImportDialog($event)"><fa-icon [icon]="faUpload"></fa-icon> {{'EDIT.TOOLBAR_IMPORT' |
+            <a class="nav-link" aria-current="page"><fa-icon [icon]="faGears"></fa-icon> {{'EDITOR_OPERATION_TITLE_WORKFLOW' |
+                translate}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" (click)="openImportDialog($event)"><fa-icon [icon]="faUpload"></fa-icon> {{'EDITOR_OPERATION_TITLE_IMPORT' |
                 translate}}</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" aria-current="page" (click)="openJupyterNotebookPage($event)"><fa-icon
-                    [icon]="faComputer"></fa-icon> {{'EDIT.TOOLBAR_JUPYTER' |
+                    [icon]="faComputer"></fa-icon> {{'EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_CREATE' |
                 translate}}</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" aria-current="page" (click)="openStylesDialog($event)"><fa-icon
-                    [icon]="faStyles"></fa-icon> {{'EDIT.TOOLBAR_STYLES' |
+                    [icon]="faStyles"></fa-icon> {{'EDITOR_OPERATION_TITLE_STYLE' |
                 translate}}</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" aria-current="page" (click)="openShareDialog($event)"><fa-icon
-                    [icon]="faShare"></fa-icon> {{'EDIT.TOOLBAR_SHARE' |
+                    [icon]="faShare"></fa-icon> {{'EDITOR_OPERATION_TITLE_SHARE' |
                 translate}}</a>
         </li>
     </ul>
