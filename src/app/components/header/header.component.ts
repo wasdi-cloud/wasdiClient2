@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
@@ -45,6 +45,8 @@ export class HeaderComponent implements OnInit {
     message: string | null
   } = { title: null, message: null }
 
+  m_oRouterEvents: any;
+
   //Font Awesome Icons
   faUser = faUserAstronaut;
   faComment = faComment
@@ -62,7 +64,6 @@ export class HeaderComponent implements OnInit {
   faStar = faStar;
 
   constructor(
-    private m_oActivatedRoute: ActivatedRoute,
     private m_oAlertDialog: AlertDialogTopService,
     public m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
@@ -76,6 +77,16 @@ export class HeaderComponent implements OnInit {
     //Register translation languages:
     translate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
     translate.setDefaultLang('en');
+
+    this.m_oRouterEvents = this.oRouter.events.subscribe((oEvent: any) => {
+      if (oEvent instanceof NavigationEnd) {
+        console.log(oEvent.url);
+        if (oEvent.url.includes('edit')) {
+          this.sActiveWorkspaceId = oEvent.url.slice(6);
+          console.log(this.sActiveWorkspaceId);
+        }
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -85,16 +96,6 @@ export class HeaderComponent implements OnInit {
     this.initializeProjectsInfo();
     this.getAccountType();
 
-    if (this.m_oActivatedRoute.snapshot.url[0].path === 'edit') {
-      this.m_bEditIsActive = true;
-      this.sActiveWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId'];
-      this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-      this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.sActiveWorkspaceId).subscribe(oResponse => {
-        this.m_oActiveWorkspace = oResponse;
-      });
-    } else {
-      this.m_bEditIsActive = false;
-    }
   }
 
   logout() {
