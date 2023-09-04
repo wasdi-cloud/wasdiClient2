@@ -3,7 +3,6 @@ import { Product } from 'src/app/shared/models/product.model';
 
 //Angular Material Imports:
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
 
@@ -17,7 +16,7 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 import { ProductService } from 'src/app/services/api/product.service';
 
 //Font Awesome Icons:
-import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck, faBoxOpen } from '@fortawesome/free-solid-svg-icons';
 
 //Component Imports: 
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -40,6 +39,7 @@ export class ProductsListComponent {
   @Output() m_aoVisibleBandsOutput = new EventEmitter();
 
   //font awesome icons: 
+  faBox = faBoxOpen;
   faCircleCheck = faCircleCheck;
   faCircleX = faCircleXmark;
   faDownload = faDownload;
@@ -74,11 +74,13 @@ export class ProductsListComponent {
       }
     });
     this.dataSource = new MatTreeNestedDataSource();
+
   }
 
   ngOnChanges() {
+    console.log(this.productArray);
     this.filterProducts();
-    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace()
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
   filterProducts() {
@@ -375,5 +377,9 @@ export class ProductsListComponent {
     wmsLayer.addTo(oMap);
     return true;
 
+  }
+
+  readMetadata(sFileName: string) {
+    this.m_oProductService.getProductMetadata(sFileName, this.m_oActiveWorkspace.workspaceId);
   }
 }
