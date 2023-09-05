@@ -1,0 +1,57 @@
+<div class="card h-100">
+    <div class="card-header">
+        {{"IMPORT_PANEL_HEAD_TITLE_FILTERS" | translate}}
+    </div>
+    <div class="card-body flex-column">
+        <!-- CronTab / Providers Buttons -->
+        <div class="d-flex flex-row justify-content-between">
+            <button class="btn btn-primary">{{"IMPORT_CRONTAB" | translate}}</button>
+
+            <!-- Providers Multi-select -->
+            <mat-select #auto="matSelect" multiple class="form-control" placeholder="{{'IMPORT_PROVIDERS' | translate}}"
+                style="width: 15rem">
+                <mat-option *ngFor="let oProvider of m_aListOfProviders">
+                    {{oProvider.description}}
+                </mat-option>
+            </mat-select>
+        </div>
+
+        <!-- From/to Date Pickers -->
+        <div class="d-flex flex-row justify-content-between gap-2">
+            <div class="flex-fill">
+                <label for="startDate">{{'IMPORT_DATE_FROM'|translate}}</label>
+                <input type="date" name="" id="" class="form-control">
+            </div>
+            <div class="flex-fill">
+                <label for="startDate">{{'IMPORT_DATE_TO'|translate}}</label>
+                <input type="date" name="" id="" class="form-control">
+            </div>
+        </div>
+
+        <!-- Time-series filters summary -->
+
+        <!-- Missions Selector and Advanced Filters -->
+        <div id="advanced-search-content" class="d-flex flex-column">
+            <!-- Product Name Search -->
+            <div>
+                <label for="productName">{{"IMPORT_PRODUCT_NAME"|translate}}:</label>
+                <input type="text" name="" id="" class="form-control">
+            </div>
+            <!-- Missions Tabs -->
+            <div>
+                <label for="">{{"IMPORT_PRODUCT_SELECTED_MISSIONS"|translate}}</label>
+                <ul>
+                    <li class="" *ngFor="let oMission in m_aoMissions"
+                    
+                    
+                    >
+                    <div class="nav-v4-link" ng-class="{active: $ctrl.m_activeMissionTab === $index}">
+                       <!-- <i class="mr-2 fa" aria-hidden="true" ng-class="{'fa-square' : mission.selected != true, 'fa-check-square' : mission.selected == true}" ></i>  -->
+                        <span>{{oMission.name}}</span>
+                    </div>
+                </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
