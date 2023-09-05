@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
@@ -135,6 +135,9 @@ import { EditOrganizationDialogComponent } from './dialogs/edit-organization-dia
 import { ProjectInfoDialogComponent } from './dialogs/project-info-dialog/project-info-dialog.component';
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
 import { PackageManagerComponent } from './components/dialogs/package-manager/package-manager.component';
+import { SearchMapComponent } from './components/search/search-map/search-map.component';
+import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';
+import { ConfigurationService } from './services/configuration.service';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -217,7 +220,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditOrganizationDialogComponent,
     ProjectInfoDialogComponent,
     SubscriptionsPurchaseComponent,
-    PackageManagerComponent
+    PackageManagerComponent,
+    SearchMapComponent,
+    SearchFiltersComponent
   ],
   imports: [
     AppRoutingModule,
@@ -273,7 +278,13 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
     },
-    { provide: RabbitStompService }
+    { provide: RabbitStompService },
+    {
+      provide : APP_INITIALIZER,
+      multi : true,
+       deps : [ConfigurationService],
+       useFactory : (appConfigService : ConfigurationService) =>  () => appConfigService.loadConfiguration()
+    }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ConfirmationDialogComponent, ProcessesBarContent],
