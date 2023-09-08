@@ -8,6 +8,78 @@ export class MissionFiltersService {
 
   constructor() { }
 
+  missionFilter: string = '';
+
+  setAdvancedFilter(modelFilter: any) {
+    let filter: string = '';
+    filter = filter + ' OR (' + modelFilter.indexname + ':' + modelFilter.indexvalue;
+    for (var j = 0; j < modelFilter.filters.length; j++) {
+      if (modelFilter.filters[j].indexvalue && modelFilter.filters[j].indexvalue.trim() != '') {
+        if (modelFilter.filters[j].indexname && modelFilter.filters[j].indexname.trim() != '') {
+
+          if (modelFilter.filters[j].visibilityConditions && modelFilter.filters[j].visibilityConditions.trim() != '') {
+            let visibilityConditionsArray = modelFilter.filters[j].visibilityConditions.split("&");
+
+            let isFilterVisible = true;
+
+            for (let visibilityCondition of visibilityConditionsArray) {
+
+              let innerVisibilityConditions;
+              if (visibilityCondition.startsWith("(") && visibilityCondition.endsWith(")")) {
+                innerVisibilityConditions = visibilityCondition.substring(1, visibilityCondition.length - 1);
+              } else {
+                innerVisibilityConditions = visibilityCondition;
+              }
+
+              if (innerVisibilityConditions.includes("|")) {
+                let innerVisibilityConditionsArray = innerVisibilityConditions.split("|");
+
+                let innerFilterVisibleFlag = false;
+
+                for (let innerVisibilityCondition of innerVisibilityConditionsArray) {
+                  if (filter.includes(innerVisibilityCondition)) {
+                    innerFilterVisibleFlag = true;
+                    break;
+                  }
+                }
+
+                if (!innerFilterVisibleFlag) {
+                  isFilterVisible = false;
+                  break;
+                }
+              } else {
+                if (!filter.includes(visibilityCondition)) {
+                  isFilterVisible = false;
+                  break;
+                }
+              }
+            }
+
+            if (isFilterVisible) {
+              filter = filter + ' AND ' + modelFilter.filters[j].indexname + ':'
+                + modelFilter.filters[j].indexvalue;
+            }
+          } else {
+            filter = filter + ' AND ' + modelFilter.filters[j].indexname + ':'
+              + modelFilter.filters[j].indexvalue;
+          }
+        }
+        else {
+          filter = filter + ' AND ' + modelFilter.filters[j].indexvalue;
+        }
+      }
+    }
+    filter = filter + ')';
+
+    filter = filter.replace('OR', ''); //cut the first OR espression
+    return this.missionFilter = filter;
+  }
+
+  getAdvancedFilter() {
+    return this.missionFilter;
+  }
+
+
   /**
    * 
    * @param aoAllFilters 
@@ -16,7 +88,6 @@ export class MissionFiltersService {
    */
   setFilterVisibility(aoAllFilters: any, oMissionFilter?: any) {
     let aoVisibileFilters: Array<any> = [];
-
     //Safe Programming Check: If mission is not defined, return all the filters
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMissionFilter) === true) {
       return aoAllFilters;
@@ -29,7 +100,6 @@ export class MissionFiltersService {
       if (oFilter.visibilityConditions) {
         // Split the Visibility conditions at each individual condition:
         let asVisibilityCondiitons = oFilter.visibilityConditions.split("&");
-
         for (let sVisibilityCondition of asVisibilityCondiitons) {
           let sInnerVisibilityConditions: string;
 
@@ -40,7 +110,6 @@ export class MissionFiltersService {
             //If only one Visibility Condition, set that condition.
             sInnerVisibilityConditions = sVisibilityCondition;
           }
-
           if (sInnerVisibilityConditions.includes("|")) {
             let asInnerVisibilityConditionsArray: Array<string> = sInnerVisibilityConditions.split("|");
 
@@ -56,18 +125,18 @@ export class MissionFiltersService {
               bIsFilterVisible = false;
               break;
             }
+          } else {
+            if (!oMissionFilter.includes(sVisibilityCondition)) {
+              bIsFilterVisible = false;
+            }
           }
-        }
-      } else {
-        if (!oMissionFilter.visibilityConditions) {
-          bIsFilterVisible = false;
-          break;
+
         }
       }
       if (bIsFilterVisible === true) {
         aoVisibileFilters.push(oFilter);
       }
     }
-    return aoVisibileFilters; 
+    return aoVisibileFilters;
   }
 }
