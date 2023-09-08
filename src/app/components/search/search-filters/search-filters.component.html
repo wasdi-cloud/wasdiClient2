@@ -1,4 +1,4 @@
-<div class="card h-100">
+<div class="card h-100 " style="overflow-y:scroll;">
     <div class="card-header">
         {{"IMPORT_PANEL_HEAD_TITLE_FILTERS" | translate}}
     </div>
@@ -31,7 +31,7 @@
         <!-- Time-series filters summary -->
 
         <!-- Missions Selector and Advanced Filters -->
-        <div id="advanced-search-content" class="d-flex flex-column">
+        <div id="advanced-search-content h-50" class="d-flex flex-column">
             <!-- Product Name Search -->
             <div>
                 <label for="productName">{{"IMPORT_PRODUCT_NAME"|translate}}:</label>
@@ -40,17 +40,29 @@
             <!-- Missions Tabs -->
             <div>
                 <label for="">{{"IMPORT_PRODUCT_SELECTED_MISSIONS"|translate}}</label>
-                <ul>
-                    <li class="" *ngFor="let oMission in m_aoMissions"
-                    
-                    
-                    >
-                    <div class="nav-v4-link" ng-class="{active: $ctrl.m_activeMissionTab === $index}">
-                       <!-- <i class="mr-2 fa" aria-hidden="true" ng-class="{'fa-square' : mission.selected != true, 'fa-check-square' : mission.selected == true}" ></i>  -->
-                        <span>{{oMission.name}}</span>
-                    </div>
-                </li>
+                <ul class="d-flex flex-row flex-wrap border-bottom pb-2  nav nav-pills">
+                    <li class="nav-item" *ngFor="let oMission of m_aoMissions" (click)="setActiveMission(oMission)">
+                        <a class="nav-link"
+                            [ngClass]="oMission.name === m_oActiveMission.name? 'active' : ''">{{oMission.name}}</a>
+                    </li>
                 </ul>
+            </div>
+            <!-- Mission Search Form -->
+            <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
+                <div class="d-flex flex-column " *ngFor="let oFilter of m_aoVisibleFilters">
+                    <div style="width: 15rem">
+                        <label class="form-label" for="">{{oFilter.indexlabel}}</label>
+                        <mat-select *ngIf="oFilter.indexvalues !== ''" #auto="matSelect" class="form-control"
+                            placeholder="" (selectionChange)="getMissionInput($event, oFilter)"
+                            placeholder="{{oFilter.indexvalue}}">
+                            <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
+                                {{oOption}}
+                            </mat-option>
+                        </mat-select>
+                        <input class="form-control" type="text" *ngIf="oFilter.indexvalues === ''"
+                            placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
