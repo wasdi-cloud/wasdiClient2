@@ -291,7 +291,7 @@ export class MapService {
   // }
 
   /**
-   * Handler function for drawing rectangles/polygons/etc on map
+   * Handler function for drawing rectangles/polygons/etc on map - Creates bounding box to string
    * @param event
    */
   onDrawCreated(event: any) {
@@ -301,10 +301,26 @@ export class MapService {
 
       let selectedCoordinate = new L.LatLngBounds(rectangleCoordinates._northEast, rectangleCoordinates._southWest)
       let m_sSelectedBBox = selectedCoordinate.toBBoxString();
-      console.log(m_sSelectedBBox);
     }
     this.m_oDrawnItems.addLayer(layer);
   }
+
+  /**
+   * Handler function for drawing rectangles on the SEARCH map 
+   * @param oEvent 
+   */
+  onSearchDrawCreated(oEvent: any) {
+    const { layerType, layer } = oEvent;
+
+ if (layerType === "rectangle") {
+      const rectangleCoordinates = layer._latlngs
+      this.m_oDrawnItems.addLayer(layer);
+
+      return rectangleCoordinates; 
+    }
+  }
+
+
   /**
    * Init map Editor
    * @param sMapDiv
