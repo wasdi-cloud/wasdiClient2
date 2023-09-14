@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 //Import Services:
+import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
 import { MissionFiltersService } from 'src/app/services/mission-filters.service';
 import { PagesService } from 'src/app/services/pages.service';
 import { ResultOfSearchService } from 'src/app/services/result-of-search.service';
@@ -22,7 +23,7 @@ export class SearchFiltersComponent implements OnInit {
   @Input() m_aoMissions: Array<any> = [];
   @Output() m_oSearchFilter: any = new EventEmitter();
   @Output() m_aoProviderSelection: any = new EventEmitter();
-  
+
   m_oMissionObject: any = {
     textQuery: '',
     list: '',
@@ -40,7 +41,7 @@ export class SearchFiltersComponent implements OnInit {
   m_oActiveMission: any = null;
   m_aoSelectedProviders = []
   m_aListOfProviders: any = [];
-  
+
   m_aoFilters: Array<any> = [];
   m_aoVisibleFilters: Array<any> = [];
 
@@ -48,6 +49,7 @@ export class SearchFiltersComponent implements OnInit {
   m_sDateFrom: string = '';
 
   constructor(
+    private m_oAdvancedSearchService: AdvancedSearchService,
     private m_oPagesService: PagesService,
     private m_oMissionFiltersService: MissionFiltersService,
     private m_oResultsOfSearchService: ResultOfSearchService,
@@ -58,6 +60,7 @@ export class SearchFiltersComponent implements OnInit {
     this.setActiveMission(this.m_aoMissions[0]);
     this.setDefaultDateData();
     this.setDefaultSelectedProvider();
+    this.setAdvancedSearchFilter();
   }
 
   /************ SET DEFAULT VALUE METHODS ************/
@@ -90,6 +93,83 @@ export class SearchFiltersComponent implements OnInit {
     this.m_oPagesService.getProviders().subscribe(oResponse => {
       this.m_aListOfProviders = oResponse;
     });
+  }
+
+  setAdvancedSearchFilter() {
+    let oAdvancedSensingFrom = null;
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oMissionObject.sensingPeriodFrom) && this.m_oMissionObject.sensingPeriodFrom !== "") {
+      oAdvancedSensingFrom = this.m_fUtcDateConverter(this.m_oMissionObject.sensingPeriodFrom);
+    }
+    let oAdvancedSensingTo = null;
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oMissionObject.sensingPeriodTo) && this.m_oMissionObject.sensingPeriodTo !== "") {
+      oAdvancedSensingTo = this.m_fUtcDateConverter(this.m_oMissionObject.sensingPeriodTo);
+    }
+    let oAdvancedIngestionFrom = null;
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oMissionObject.ingestionFrom) && this.m_oMissionObject.ingestionFrom !== "") {
+      oAdvancedIngestionFrom = this.m_fUtcDateConverter(this.m_oMissionObject.ingestionFrom);
+    }
+    let oAdvancedIngestionTo = null;
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oMissionObject.ingestionTo) && this.m_oMissionObject.ingestionTo !== "") {
+      oAdvancedIngestionTo = this.m_fUtcDateConverter(this.m_oMissionObject.ingestionTo);
+    }
+
+    let advancedFilter = {
+      sensingPeriodFrom: oAdvancedSensingFrom,
+      sensingPeriodTo: oAdvancedSensingTo,
+      ingestionFrom: oAdvancedIngestionFrom,
+      ingestionTo: oAdvancedIngestionTo
+    };
+
+    let sFilterQuery = this.getAdvancedDateFilterQuery(advancedFilter);
+
+    // update advanced filter for save search
+    //this.m_oAdvancedSearchService.setAdvancedSearchFilter(advancedFilter, this.m_oModel);
+    this.m_oSearchService.setAdvancedFilter(sFilterQuery); //this.m_oAdvancedSearchService.getAdvancedSearchFilter()
+  }
+
+  getAdvancedDateFilterQuery(oAdvancedFilter: any) {
+    var sFilter = '';
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter)) return sFilter;
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodFrom) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodTo)) {
+      sFilter += '( beginPosition:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) +
+        ' TO ' + this.m_oAdvancedSearchService.formatToDate(oAdvancedFilter.sensingPeriodTo) + '] AND endPosition:[' +
+        this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) + ' TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.sensingPeriodTo) + '] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodFrom)) {
+      sFilter += '( beginPosition:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) +
+        ' TO NOW] AND endPosition:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) + ' TO NOW] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodTo)) {
+      sFilter += '( beginPosition:[ * TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.sensingPeriodTo) + '] AND endPosition:[* TO ' + this.m_oAdvancedSearchService.formatToDate(oAdvancedFilter.sensingPeriodTo) + ' ] )';
+    }
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionFrom) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionTo)) {
+      sFilter += ((sFilter) ? ' AND' : '') + '( ingestionDate:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.ingestionFrom) +
+        ' TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.ingestionTo) + ' ] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionFrom)) {
+      sFilter += ((sFilter) ? ' AND' : '') + '( ingestionDate:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.ingestionFrom) + ' TO NOW] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionTo)) {
+      sFilter += ((sFilter) ? ' AND' : '') + '( ingestionDate:[ * TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.ingestionTo) + ' ] )';
+    }
+
+    return sFilter;
+  }
+
+  m_fUtcDateConverter(oDate: any) {
+    var result = oDate;
+    if (oDate != undefined) {
+      // let day = oDate.getDay()
+      // let month = oDate.getMonth();
+      // let year = oDate.getYear();
+
+      let utcDate = oDate.toISOString() // parsed as 4:30 UTC
+      result = utcDate;
+    }
+
+    return result;
   }
 
   /************ MISSION METHODS ************/
@@ -165,6 +245,11 @@ export class SearchFiltersComponent implements OnInit {
     // Get long form date from User Input: 
     this.m_oMissionObject.sensingPeriodFrom = new Date(this.m_sDateFrom);
     this.m_oMissionObject.sensingPeriodTo = new Date(this.m_sDateTo);
+
+    //Ensure value is initalized before executing setAdvancedSearchFilter()
+    if (this.m_sDateFrom !== '' && this.m_sDateTo !== '') {
+      this.setAdvancedSearchFilter();
+    }
 
     // Mission Filter set in this.setMissionFilter on changes to mission inputs
     // Text Query set in ngModel in HTML     
