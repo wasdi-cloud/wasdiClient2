@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpenSearchService } from './api/open-search.service';
+import { of } from 'rxjs';
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 
 export interface Provider {
@@ -59,7 +60,7 @@ export class PagesService {
   }
 
   getProviders() {
-    return this.m_aoListOfProviders;
+    return of(this.m_aoListOfProviders);
   }
 
   getProvidersPerPageOptions() {
@@ -118,5 +119,34 @@ export class PagesService {
 
     return this.m_aoListOfProviders[iIndexProviderFind];
 
+  }
+
+  countPages(sProvider: string) {
+
+    let oProvider = this.getProviderObject(sProvider);
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) {
+      return -1;
+    }
+
+    if (oProvider.productsPerPageSelected != 0) {
+      if ((oProvider.totalOfProducts % oProvider.productsPerPageSelected) == 0) {
+        oProvider.totalPages = Math.floor(oProvider.totalOfProducts / oProvider.productsPerPageSelected);
+      }
+      else {
+        oProvider.totalPages = Math.floor(oProvider.totalOfProducts / oProvider.productsPerPageSelected) + 1;
+      }
+    }
+    return oProvider.totalPages;
+  };
+
+  calcOffset(sProvider: string) {
+    let oProvider = this.getProviderObject(sProvider);
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) {
+      return -1;
+    }
+
+    return (oProvider.currentPage - 1) * oProvider.productsPerPageSelected;
   };
 }
