@@ -24,21 +24,50 @@ export class ResultOfSearchService {
     private m_oOpenSearchService: OpenSearchService,
   ) { }
 
-   /************************ Set methods ***************************/
-   setDefaults() {
+  /************************ Set methods ***************************/
+  /**
+   * Reset Default Value
+   */
+  setDefaults() {
     this.m_sTextQuery = "";
-        this.m_oGeoSelection = '';
-        this.m_iCurrentPage = 1;
-        this.m_iProductsPerPageSelected = 10;
-        this.m_aoProductList = [];
-        this.m_iTotalPages = 1;
-        this.m_iTotalOfProducts = 0;
-        this.m_bIsVisibleListOfProducts = false;
-        this.m_oActiveWorkspace = null;
-        this.m_aoMissions  = [];
-        this.m_oSensingPeriodFrom = '';
-        this.m_oSensingPeriodTo='';
-        this.m_oIngestionPeriodFrom = '';
-        this.m_oIngestionPeriodTo = '';
-   }
+    this.m_oGeoSelection = '';
+    this.m_iCurrentPage = 1;
+    this.m_iProductsPerPageSelected = 10;
+    this.m_aoProductList = [];
+    this.m_iTotalPages = 1;
+    this.m_iTotalOfProducts = 0;
+    this.m_bIsVisibleListOfProducts = false;
+    this.m_oActiveWorkspace = null;
+    this.m_aoMissions = [];
+    this.m_oSensingPeriodFrom = '';
+    this.m_oSensingPeriodTo = '';
+    this.m_oIngestionPeriodFrom = '';
+    this.m_oIngestionPeriodTo = '';
+  }
+
+  /**
+   * Set value of sensing period TO
+   * @param oDate 
+   */
+  setSensingPeriodTo(oDate: Date) {
+    this.m_oSensingPeriodTo = oDate;
+  }
+
+  /**
+   * Set value of sensing Period FROM
+   * @param oDate 
+   */
+  setSensingPeriodFrom(oDate: Date) {
+    this.m_oSensingPeriodFrom = oDate;
+  }
+
+  /************************ Get methods ***************************/
+
+  getSensingPeriodTo(): Date {
+    return this.m_oSensingPeriodTo; 
+  }
+
+  getSensingPeriodFrom(): Date {
+    return this.m_oSensingPeriodFrom; 
+  }
 }
