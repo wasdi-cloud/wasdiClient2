@@ -25,9 +25,18 @@ export class SearchComponent {
   m_oConfiguration: any;
   m_aoMissions: Array<any> = [];
 
-  // Model used to retrieve elements for search:
+  m_bClearFiltersEnabled: boolean;
+  m_bIsVisibleListOfLayers: boolean;
+  m_bIsPaginatedList: boolean;
+  m_bIsVisibleLocalStorageInputs: boolean;
+
+  m_aoSelectedProviders: Array<any> = [];
+
+  m_asListOfProviders: Array<any> = []
+
+  // Filter for Basic Search:
   m_oSearchModel = {
-    textQuery:'',
+    textQuery: '',
     list: '',
     geoselection: '',
     offset: 0,
@@ -36,17 +45,12 @@ export class SearchComponent {
     missionFilter: '',
     doneRequest: '',
     sensingPeriodFrom: '',
-    sensingPeriodTo:'' ,
+    sensingPeriodTo: '',
     ingestionFrom: '',
     ingestionTo: ''
   }
-  m_bClearFiltersEnabled: boolean;
-  m_bIsVisibleListOfLayers: boolean;
-  m_bIsPaginatedList: boolean;
-  m_bIsVisibleLocalStorageInputs: boolean;
 
-  m_asListOfProviders: Array<any> = []
-
+  //Filter For CronTab Feature: 
   m_oAdvancedFilter = {
     filterActive: "Seasons",//Seasons,Range,Months
     savedData: [],
@@ -182,11 +186,11 @@ export class SearchComponent {
     this.m_bIsVisibleListOfLayers = true;
     this.m_bIsPaginatedList = true;
 
-    if (this.m_oModel.textQuery.endsWith('*')) {
-      this.m_oSearchService.setTextQuery("*" + this.m_oModel.textQuery + "*");
+    if (this.m_oSearchModel.textQuery.endsWith('*')) {
+      this.m_oSearchService.setTextQuery("*" + this.m_oSearchModel.textQuery + "*");
     }
-    this.m_oSearchService.setTextQuery(this.m_oModel.textQuery);
-    this.m_oSearchService.setGeoselection(this.m_oModel.geoselection);
+    this.m_oSearchService.setTextQuery(this.m_oSearchModel.textQuery);
+    this.m_oSearchService.setGeoselection(this.m_oSearchModel.geoselection);
     var aoProviders = [];
     aoProviders.push(oProvider);
     this.m_oSearchService.setProviders(aoProviders);
@@ -251,14 +255,47 @@ export class SearchComponent {
     return true;
   }
 
-  deleteProducts(sProviderName) { }
+  deleteProducts(sProviderName: string) { }
 
+
+  /********** Event Listeners **********/
+
+  /**
+   * Listens for changes to the Search Map Component and sets the SearchModel
+   * @param oEvent 
+   */
   getMapInput(oEvent: string) {
     // Ensure oEvent is defined and if defined, set the geoselection string to the recieved Event Emitter
     if (oEvent) {
       this.m_oSearchModel.geoselection = oEvent;
     }
-
-    console.log(this.m_oSearchModel);
   }
+
+
+  /**
+   * Listens for changes to the Mission Filter in the Search Filters Component and sets the SearchModel 
+   * @param oEvent 
+   */
+  getMissionFilter(oEvent: any) {
+    //Ensure oEvent is Defined: 
+    if (oEvent) {
+      //Extract Passed Values from oEvent model to Search Model: 
+      this.m_oSearchModel.textQuery = oEvent.textQuery;
+      this.m_oSearchModel.missionFilter = oEvent.missionFilter;
+      this.m_oSearchModel.sensingPeriodFrom = oEvent.sensingPeriodFrom;
+      this.m_oSearchModel.sensingPeriodTo = oEvent.sensingPeriodTo;
+    }
+  }
+
+  /**
+   * Listens for changes to the Selected Providers in the Search Filters Component and sets SelectedProviders
+   * @param oEvent
+   */
+  getSelectedProviders(oEvent: any) {
+
+    this.m_aoSelectedProviders = oEvent;
+    console.log(this.m_aoSelectedProviders);
+
+  }
+
 }

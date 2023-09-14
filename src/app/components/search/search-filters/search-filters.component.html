@@ -8,9 +8,10 @@
             <button class="btn btn-primary">{{"IMPORT_CRONTAB" | translate}}</button>
 
             <!-- Providers Multi-select -->
-            <mat-select #auto="matSelect" multiple class="form-control" placeholder="{{'IMPORT_PROVIDERS' | translate}}"
-                style="width: 15rem">
-                <mat-option *ngFor="let oProvider of m_aListOfProviders">
+            <mat-select multiple class="form-control" placeholder="{{'IMPORT_PROVIDERS' | translate}}"
+                style="width: 15rem" [(ngModel)]="m_aoSelectedProviders"
+                (selectionChange)="emitSelectedProviders($event)">
+                <mat-option *ngFor="let oProvider of m_aListOfProviders" [value]="oProvider">
                     {{oProvider.description}}
                 </mat-option>
             </mat-select>
@@ -20,11 +21,13 @@
         <div class="d-flex flex-row justify-content-between gap-2">
             <div class="flex-fill">
                 <label for="startDate">{{'IMPORT_DATE_FROM'|translate}}</label>
-                <input type="date" name="" id="" class="form-control">
+                <input type="date" name="" id="" class="form-control" [(ngModel)]="m_sDateFrom"
+                    (ngModelChange)="emitModelChanges()">
             </div>
             <div class="flex-fill">
                 <label for="startDate">{{'IMPORT_DATE_TO'|translate}}</label>
-                <input type="date" name="" id="" class="form-control">
+                <input type="date" name="" id="" class="form-control" [(ngModel)]="m_sDateTo"
+                    (ngModelChange)="emitModelChanges()">
             </div>
         </div>
 
@@ -35,7 +38,7 @@
             <!-- Product Name Search -->
             <div>
                 <label for="productName">{{"IMPORT_PRODUCT_NAME"|translate}}:</label>
-                <input type="text" name="" id="" class="form-control">
+                <input type="text" name="" id="" class="form-control" [(ngModel)]="m_oMissionObject.textQuery">
             </div>
             <!-- Missions Tabs -->
             <div>

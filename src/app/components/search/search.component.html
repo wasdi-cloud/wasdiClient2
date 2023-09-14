@@ -1,15 +1,15 @@
 <!-- Operation Bar -->
 <div class="d-flex flex-row gap-2 justify-content-end align-items-center px-4 py-2" style="width: 100%;">
-    <button (click)="executeSeach()" class="btn btn-secondary">Search</button>
+    <button (click)="searchAllSelectedProviders()" class="btn btn-secondary">Search</button>
     <button (click)="openAddToWorkspaceDialog()" class="btn btn-secondary">
         <fa-icon [icon]="faPlus"></fa-icon>
         Add Selected to Workspace</button>
 </div>
 <div class="d-flex flex-row gap-3 px-4 pt-2" style="height: 80%; width: 100%;">
     <div class="filters-panel" style="width: 40%;">
-        <app-search-filters [m_aoMissions]="m_aoMissions"></app-search-filters>
+        <app-search-filters [m_aoMissions]="m_aoMissions" (m_oSearchFilter)="getMissionFilter($event)" (m_aoProviderSelection)="getSelectedProviders($event)"></app-search-filters>
     </div>
     <div class="map" style="width: 60%;">
-        <app-search-map></app-search-map>
+        <app-search-map (m_oMapInputChange)="getMapInput($event)"></app-search-map>
     </div>
 </div>
