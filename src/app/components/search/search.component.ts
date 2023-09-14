@@ -183,6 +183,13 @@ export class SearchComponent {
 
       },
       error: oError => { }
+    }); 
+
+    this.m_oSearchService.search().subscribe({
+      next: oResponse => {
+        console.log(oResponse);
+      }, 
+      error: oError => {}
     })
 
     return true;
