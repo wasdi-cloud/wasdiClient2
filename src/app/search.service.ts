@@ -11,8 +11,7 @@ export class SearchService {
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oHttp: HttpClient,
-
-    private m_oOpenSearchService: OpenSearchService
+    private m_oOpenSearchService: OpenSearchService,
   ) { }
 
   m_sAdvancedFilter = ''
@@ -119,7 +118,7 @@ export class SearchService {
   }
 
 
-  search(query) {
+  search(query?) {
     //console.log('called search function');
     let filter = '';
     if (query)
@@ -133,6 +132,7 @@ export class SearchService {
     //     url: OpenSearchService.getApiProductsWithProviders(self.createSearchRequest(filter, self.offset, self.limit,self.providers)),
     //     method: "GET"
     // });
+    return this.m_oHttp.get<any>(this.m_oOpenSearchService.getApiProductsWithProviders(this.createSearchRequest(filter, this.m_iOffset, this.m_iLimit,this.m_aProviders[0].name)))
   }
 
   getProductsCount(query?) {
