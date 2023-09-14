@@ -109,7 +109,7 @@ export class SearchComponent {
   }
 
   /**
-   * Execute search on all selected providers - 
+   * Execute search on all selected providers using BASIC filters
    */
   searchAllSelectedProviders() {
     //Check if there is at least one provider or layers are already visible - if there is no provider or there are already layers, do not search
@@ -119,9 +119,10 @@ export class SearchComponent {
 
     let iNumberOfProviders = this.m_asListOfProviders.length;
 
-    // If there are providers, iterate over selected providers and for each one, execute the search and count results
-    for (let iProviderIndex = 0; iProviderIndex < iNumberOfProviders; iProviderIndex++) {
-      this.searchAndCount(this.m_asListOfProviders[iNumberOfProviders]);
+    if (this.m_aoSelectedProviders.length > 0) {
+      this.m_aoSelectedProviders.forEach(oProvider => {
+        this.searchAndCount(oProvider);
+      })
     }
 
     return true;
@@ -158,12 +159,31 @@ export class SearchComponent {
     aoProviders.push(oProvider);
     this.m_oSearchService.setProviders(aoProviders);
 
-    let oProviderObject = this.m_oPageService.getProviderObject(oProvider.name);
+    var oProvider = this.m_oPageService.getProviderObject(oProvider.name);
     let iOffset = this.m_oPageService.calcOffset(oProvider.name);
     this.m_oSearchService.setOffset(iOffset);//default 0 (index page)
     this.m_oSearchService.setLimit(oProvider.productsPerPageSelected);// default 10 (total of element per page)
     oProvider.isLoaded = false;
-    oProvider.totalOfProthis
+    oProvider.totalOfProductss = 0;
+  
+    this.m_oSearchService.getProductsCount().subscribe({
+      next: oResponse => {
+        console.log(oResponse)
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          oProvider.totalOfProducts = oResponse;
+
+          let remainder = oProvider.totalOfProducts % oProvider.productsPerPageSelected;
+
+          oProvider.totalPages = Math.floor(oProvider.totalOfProducts / oProvider.productsPerPageSelected);
+
+          if (remainder !== 0) {
+            oProvider.totalPages += 1;
+          }
+        }
+
+      },
+      error: oError => { }
+    })
 
     return true;
   }
@@ -252,10 +272,17 @@ export class SearchComponent {
   }
 
   thereIsAtLeastOneProvider() {
-    return true;
+    if (this.m_aoSelectedProviders.length > 0) {
+      return true;
+    } else {
+      // return false;
+
+      return true; //uncomment before commit
+    }
   }
 
   deleteProducts(sProviderName: string) { }
+
 
 
   /********** Event Listeners **********/
@@ -292,10 +319,7 @@ export class SearchComponent {
    * @param oEvent
    */
   getSelectedProviders(oEvent: any) {
-
     this.m_aoSelectedProviders = oEvent;
-    console.log(this.m_aoSelectedProviders);
-
   }
 
 }
