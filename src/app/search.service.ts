@@ -101,6 +101,17 @@ export class SearchService {
     return searchFilter;
   }
 
+  saveUserSearch(textQuery, geoselection, advancedFilter, missionFilter) {
+    var filter = '';
+    filter = this.createSearchFilter(textQuery, geoselection, advancedFilter, missionFilter);
+    var saveSearchUrl = 'api/stub/users/0/searches?complete=:complete';
+    saveSearchUrl = saveSearchUrl.replace(":complete", (filter) ? filter : '*');
+    // return http({url: ConstantsService.getUrl() + saveSearchUrl, method: "POST"})
+    //     .then(function (response) {
+    //         return (response.status == 200) ? response.data : [];
+    //     });
+  }
+
 
 
   getGeoQueryByCoords(query) {
@@ -108,8 +119,20 @@ export class SearchService {
   }
 
 
-  search() {
-
+  search(query) {
+    //console.log('called search function');
+    let filter = '';
+    if (query)
+        filter = this.createSearchFilter(query, '', '', '');
+    else
+        filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection,
+            this.m_sAdvancedFilter, this.m_sMissionFilter);
+    //console.log('filter xx',filter);
+    // return $http({
+    //     // url: OpenSearchService.getApiProducts(self.createSearchRequest(filter, self.offset, self.limit)),
+    //     url: OpenSearchService.getApiProductsWithProviders(self.createSearchRequest(filter, self.offset, self.limit,self.providers)),
+    //     method: "GET"
+    // });
   }
 
   getProductsCount(query?) {
@@ -121,9 +144,11 @@ export class SearchService {
       filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection, this.m_sAdvancedFilter, this.m_sMissionFilter);
     }
 
+    console.log(this.m_aProviders[0].name);
+
     let prodCountUrl: string = ':filter';
     prodCountUrl = prodCountUrl.replace(":filter", (filter) ? filter : '*');
-    // return $http({url: OpenSearchService.getApiProductsCount(prodCountUrl), method: "GET"});
-    return this.m_oHttp.get<any>(this.m_oOpenSearchService.getApiProductCountWithProviders(prodCountUrl, this.m_aProviders));
+
+    return this.m_oHttp.get<any>(this.m_oOpenSearchService.getApiProductCountWithProviders(prodCountUrl, this.m_aProviders[0].name));
   }
 }
