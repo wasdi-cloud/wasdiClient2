@@ -12,7 +12,7 @@ import { MapService } from 'src/app/services/map.service';
 import { PagesService } from 'src/app/services/pages.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-
+import { Subject } from 'rxjs'
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -26,13 +26,18 @@ export class SearchComponent {
   m_aoMissions: Array<any> = [];
 
   m_bClearFiltersEnabled: boolean;
-  m_bIsVisibleListOfLayers: boolean;
+  m_bIsVisibleListOfLayers: boolean = false;
   m_bIsPaginatedList: boolean;
   m_bIsVisibleLocalStorageInputs: boolean;
 
   m_aoSelectedProviders: Array<any> = [];
 
   m_asListOfProviders: Array<any> = []
+
+  m_aoProductsList: Array<any> = [];
+  m_oProductSubject: Subject<any> = new Subject<any>();
+
+  m_iActiveProvidersTab: number;
 
   // Filter for Basic Search:
   m_oSearchModel = {
@@ -165,10 +170,9 @@ export class SearchComponent {
     this.m_oSearchService.setLimit(oProvider.productsPerPageSelected);// default 10 (total of element per page)
     oProvider.isLoaded = false;
     oProvider.totalOfProductss = 0;
-  
+
     this.m_oSearchService.getProductsCount().subscribe({
       next: oResponse => {
-        console.log(oResponse)
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           oProvider.totalOfProducts = oResponse;
 
@@ -183,13 +187,17 @@ export class SearchComponent {
 
       },
       error: oError => { }
-    }); 
+    });
 
     this.m_oSearchService.search().subscribe({
       next: oResponse => {
-        console.log(oResponse);
-      }, 
-      error: oError => {}
+        console.log(oResponse)
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse !== '') {
+          let aoData = oResponse
+          this.generateLayersList(oResponse);
+        }
+      },
+      error: oError => { }
     })
 
     return true;
@@ -236,41 +244,8 @@ export class SearchComponent {
       error: oError => {
         console.log(oError);
       }
-    })
-
-    // this.m_oSearchService.getProductsCount().subscribe(
-    //   function (result) {
-    //     if (result) {
-    //       if (FadeoutUtils.utilsIsObjectNullOrUndefined(result.data) === false) {
-    //         oProvider.totalOfProducts = result.data;
-    //         //calc number of pages
-    //         var remainder = oProvider.totalOfProducts % oProvider.productsPerPageSelected;
-    //         oProvider.totalPages = Math.floor(oProvider.totalOfProducts / oProvider.productsPerPageSelected);
-    //         if (remainder !== 0) oProvider.totalPages += 1;
-    //       }
-    //     }
-    //   }, function errorCallback(response) {
-    //     console.log("Impossible get products number");
-    //   });
-
-    // this.m_oSearchService.search().then(function (result) {
-    //   var sResults = result;
-
-    //   if (!FadeoutUtils.utilsIsObjectNullOrUndefined(sResults)) {
-    //     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(sResults.data) && sResults.data != "") {
-    //       var aoData = sResults.data;
-    //       this.generateLayersList(aoData);
-    //     }
-
-    //     oProvider.isLoaded = true;
-    //   }
-    // }, function errorCallback(response) {
-    //   //utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR IN OPEN SEARCH REQUEST");
-    //   oProvider.isLoaded = true;
-    //   // this.m_bIsVisibleListOfLayers = false;//visualize filter list
-    //   // this.m_oResultsOfSearchService.setIsVisibleListOfProducts(this.m_bIsVisibleListOfLayers );
-    // });
-
+    });
+    
     return true;
   }
 
@@ -288,11 +263,63 @@ export class SearchComponent {
     }
   }
 
+  /**
+   * Get the Layers List
+   * @param aoData 
+   * @returns 
+   */
+  generateLayersList(aoData: any) {
+    //Ensure Input data is defined: 
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData) === true) {
+      return false;
+    }
+
+    let iDataLength: number = aoData.length;
+
+    for (let iIndexData = 0; iIndexData < iDataLength; iIndexData++) {
+      var oSummary = this.stringToObjectSummary(aoData[iIndexData].summary);//change summary string to array
+      aoData[iIndexData].summary = oSummary;
+
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData[iIndexData].preview) || FadeoutUtils.utilsIsStrNullOrEmpty(aoData[iIndexData].preview))
+        aoData[iIndexData].preview = "assets/icons/ImageNotFound.svg";//default value ( set it if there isn't the image)
+
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData[iIndexData].footprint) == false) {
+        //get bounds
+        var aoBounds = this.getPolygonToBounds(aoData[iIndexData].footprint);
+        aoData[iIndexData].bounds = aoBounds;
+        // aaoAllBounds.push(aoBounds);
+      }
+
+      aoData[iIndexData].rectangle = null;
+      aoData[iIndexData].checked = false;
+
+      this.m_aoProductsList.push(aoData[iIndexData]);
+    }
+    let iActive = this.m_iActiveProvidersTab;
+
+    for (var i = 0; i < this.m_asListOfProviders.length; i++) {
+      if (this.m_asListOfProviders[i].selected) break;
+
+      if (i >= iActive) iActive++;
+    }
+
+    // let sProvider = this.m_asListOfProviders[iActive].name;
+    // this.updateLayerListForActiveTab(sProvider);
+  
+    this.emitProducts();
+    return true;
+  }
+
+
+  updateLayerListForActiveTab(sProviderName) {
+
+  }
+
   deleteProducts(sProviderName: string) { }
 
 
 
-  /********** Event Listeners **********/
+  /********** Event Listeners & Subject Emitters **********/
 
   /**
    * Listens for changes to the Search Map Component and sets the SearchModel
@@ -327,6 +354,62 @@ export class SearchComponent {
    */
   getSelectedProviders(oEvent: any) {
     this.m_aoSelectedProviders = oEvent;
+  }
+
+  /**
+   * Emit Products List to Child Components listening for the Observable
+   */
+  emitProducts() {
+    this.m_oProductSubject.next(this.m_aoProductsList);
+  }
+
+
+  /********** Product Utilities **********/
+
+  stringToObjectSummary(sObjectSummary) {
+
+  }
+
+  getPreview() {
+
+  }
+
+  /**
+   * Convert Polygon to Boudns Format
+   * @param sPolygon 
+   */
+  getPolygonToBounds(sPolygon: string) {
+
+    sPolygon = sPolygon.replace("MULTIPOLYGON ", "");
+    sPolygon = sPolygon.replace("MULTIPOLYGON", "");
+    sPolygon = sPolygon.replace("POLYGON ", "");
+    sPolygon = sPolygon.replace("POLYGON", "");
+    sPolygon = sPolygon.replace("(((", "");
+    sPolygon = sPolygon.replace(")))", "");
+    sPolygon = sPolygon.replace("((", "");
+    sPolygon = sPolygon.replace("))", "");
+    sPolygon = sPolygon.replace(/, /g, ",");
+
+    let aPolygonArray = sPolygon.split(",");
+    let aasNewPolygon = [];
+    for (let iIndexBounds = 0; iIndexBounds < aPolygonArray.length; iIndexBounds++) {
+      let aBounds = aPolygonArray[iIndexBounds];
+      let aNewBounds = aBounds.split(" ");
+
+      var oLatLonArray = [];
+
+      try {
+        oLatLonArray[0] = JSON.parse(aNewBounds[1]); //Lat
+        oLatLonArray[1] = JSON.parse(aNewBounds[0]); //Lon
+      } catch (err) {
+        console.log("Function polygonToBounds: Error in parse operation");
+        return [];
+      }
+
+      aasNewPolygon.push(oLatLonArray);
+    }
+    return aasNewPolygon;
+
   }
 
 }

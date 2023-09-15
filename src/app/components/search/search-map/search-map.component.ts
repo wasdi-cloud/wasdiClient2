@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MapService } from 'src/app/services/map.service';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { Observable } from 'rxjs';
 import * as L from 'leaflet';
 
 @Component({
@@ -12,6 +11,8 @@ import * as L from 'leaflet';
   styleUrls: ['./search-map.component.css']
 })
 export class SearchMapComponent implements OnInit {
+  @Input() m_aoProducts: Observable<any>;
+  m_aoProductsList
   @Input() oMapInput: any = {
     maxArea: 0,
     maxRatioSide: 0,
@@ -36,8 +37,10 @@ export class SearchMapComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.m_oMapService.setDrawnItems();
     this.m_oMapService.initTilelayer();
+
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
     this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
@@ -47,22 +50,39 @@ export class SearchMapComponent implements OnInit {
 
     this.m_sErrorMessage = "Error:"
     this.m_bIsValid = true;
+
+    this.m_aoProductsList = this.m_aoProducts.subscribe(oResponse => {
+      if (oResponse.length > 0) {
+        let aaoAllBounds = [];
+        oResponse.forEach((oProduct, index) => {
+          console.log(oProduct);
+
+          let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(oProduct.bounds, null, index);
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
+            oProduct.rectangle = oRectangle;
+          }
+          aaoAllBounds.push(oProduct.bounds);
+        })
+        if (aaoAllBounds.length > 0 && aaoAllBounds[0] && aaoAllBounds[0].length) {
+          this.m_oMapService.zoomOnBounds(aaoAllBounds);
+        }
+      }
+
+    })
   }
 
-  onMapReady(map: any) {
+  onMapReady(oMap: L.Map) {
+    this.m_oMapService.setMap(oMap);
 
+    console.log(this.m_oMapService.getMap());
   }
-
-
-
 
   onDrawCreated(oEvent: any) {
+    console.log(oEvent);
 
     let oDrawnItem = this.m_oMapService.onSearchDrawCreated(oEvent);
 
     //Add layer to map
-    //this.m_oDrawnItems.addLayer(oEvent)
-
     //on draw created -> need to check area 
     this.checkArea(oDrawnItem);
     //If not valid after check
@@ -70,7 +90,6 @@ export class SearchMapComponent implements OnInit {
       //set layer color
       oEvent.layer.options.color = "#FF0000"
 
-      console.log(this.m_sErrorMessage)
       //Add Confirmation dialog before removal
       if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
         this.m_oDrawnItems.clearLayers();
@@ -82,10 +101,6 @@ export class SearchMapComponent implements OnInit {
     this.oMapInput = this.formatDrawnItemm(oDrawnItem);
     this.m_oMapInputChange.emit(this.oMapInput);
     return true
-  }
-
-  onSeachDraCreated(oEvent: any) {
-
   }
 
   formatDrawnItemm(oLayer) {
@@ -160,6 +175,23 @@ export class SearchMapComponent implements OnInit {
     }
 
     return this.m_bIsValid;
+  }
+
+  zoomOnBounds(oRectangle: any) {
+    let oBounds = oRectangle.getBounds();
+    let oNorthEast = oBounds.getNorthEast();
+    let oSouthWest = oBounds.getSouthWest();
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oNorthEast) || FadeoutUtils.utilsIsObjectNullOrUndefined(oSouthWest)) {
+      console.log("Error in zoom on bounds");
+    }
+    else {
+      let aaBounds = [[oNorthEast.lat, oNorthEast.lng], [oSouthWest.lat, oSouthWest.lng]];
+
+      if (this.m_oMapService.zoomOnBounds(aaBounds) == false) {
+        console.log("Error in zoom on bounds");
+      }
+    }
   }
 
 }

@@ -127,6 +127,11 @@ export class SearchFiltersComponent implements OnInit {
     this.m_oSearchService.setAdvancedFilter(sFilterQuery); //this.m_oAdvancedSearchService.getAdvancedSearchFilter()
   }
 
+  /**
+   * Create the Date Filter for the Search Query
+   * @param oAdvancedFilter 
+   * @returns 
+   */
   getAdvancedDateFilterQuery(oAdvancedFilter: any) {
     var sFilter = '';
 
@@ -158,17 +163,17 @@ export class SearchFiltersComponent implements OnInit {
     return sFilter;
   }
 
+  /**
+   * Convert date to UTC 
+   * @param oDate 
+   * @returns 
+   */
   m_fUtcDateConverter(oDate: any) {
     var result = oDate;
     if (oDate != undefined) {
-      // let day = oDate.getDay()
-      // let month = oDate.getMonth();
-      // let year = oDate.getYear();
-
       let utcDate = oDate.toISOString() // parsed as 4:30 UTC
       result = utcDate;
     }
-
     return result;
   }
 
