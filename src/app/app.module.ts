@@ -138,6 +138,7 @@ import { PackageManagerComponent } from './components/dialogs/package-manager/pa
 import { SearchMapComponent } from './components/search/search-map/search-map.component';
 import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';
 import { ConfigurationService } from './services/configuration.service';
+import { ProductsTableComponent } from './components/search/products-table/products-table.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -222,7 +223,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SubscriptionsPurchaseComponent,
     PackageManagerComponent,
     SearchMapComponent,
-    SearchFiltersComponent
+    SearchFiltersComponent,
+    ProductsTableComponent
   ],
   imports: [
     AppRoutingModule,
