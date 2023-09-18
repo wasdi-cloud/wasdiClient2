@@ -62,68 +62,72 @@
                 </div>
 
                 <!-- Product Icon and Size -->
-                <div class="layer-size-preview">
-                    <span class="label label-success"
-                        *ngIf="oLayer.summary && oLayer.summary.Mode">{{oLayer.summary.Mode}}</span>&nbsp;<!--Mode-->
-                    <span class="label label-success" *ngIf="oLayer.summary && oLayer.summary.Instrument">
-                        {{oLayer.summary.Instrument}}</span><!--Instrument-->
-                    <div class="preview-layer-image"><img src={{oLayer.preview}} alt="Image"
+                <div class="oLayer-size-preview d-flex flex-column align-items-center">
+                    <div>
+                        <!-- Mode -->
+                        <span class="badge bg-success"
+                            *ngIf="oLayer.summary && oLayer.summary.Mode">{{oLayer.summary.Mode}}</span>
+                        <!-- Insturment -->
+                        <span class="badge bg-success" *ngIf="oLayer.summary && oLayer.summary.Instrument">
+                            {{oLayer.summary.Instrument}}</span>
+                    </div>
+                    <div class="preview-oLayer-image"><img src={{oLayer.preview}} alt="Image"
                             style="height: 82px;width: 82px; "></div>
-                    <span class="badge"
+                    <span class="badge bg-secondary"
                         *ngIf="oLayer.summary && oLayer.summary.Size">{{oLayer.summary.Size}}</span><!--Size-->
                 </div>
                 <!-- Product Information -->
                 <!-- <div *ngIf="oLayer" class="d-flex flex-column">
                     {{oLayer.properties.endDate? "Start Date:" : ""}}
                     {{oLayer.properties.endDate? oLayer.properties.startDate: "" |date:'medium': 'GMT'}}
-                    <br ng-if="layer.properties.endDate">
+                    <br *ngIf="oLayer.properties.endDate">
                     {{oLayer.properties.endDate? "End Date:": ""}}
                     {{ oLayer.properties.endDate? oLayer.properties.endDate:
                     oLayer.summary.Date|date:'medium': 'GMT'}}
                 </div> -->
                 <div class="d-flex flex-column">
 
-                    <div ng-if="layer.title">
+                    <div *ngIf="oLayer.title">
                         <span>{{'IMPORT_PRODUCT_LIST_NAME'|translate}}</span>
                         <span><b>{{oLayer.title}}</b></span>
                     </div>
 
-                    <!-- <div ng-if="layer.summary && layer.summary.Mode">
+                    <!-- <div *ngIf="oLayer.summary && oLayer.summary.Mode">
                     <span>{{'IMPORT_PRODUCT_LIST_POLARIZATION'|translate}}</span>
                     <span><b>{{oLayer.summary.Mode}}</b></span>
                 </div> -->
-                    <div ng-if="layer.properties && layer.properties.relativeorbitnumber">
+                    <div *ngIf="oLayer.properties && oLayer.properties.relativeorbitnumber">
                         <span>{{'IMPORT_PRODUCT_LIST_ORBIT'|translate}}</span>
                         <span><b>{{oLayer.properties.relativeorbitnumber}}</b></span>
                     </div>
 
-                    <div ng-if="layer.provider">
+                    <div *ngIf="oLayer.provider">
                         <span>{{'IMPORT_PRODUCT_LIST_PROVIDER'|translate}}</span>
                         <span><b>{{oLayer.provider}}</b></span>
                     </div>
 
-                    <div ng-if="layer.properties && layer.properties.platformname">
+                    <div *ngIf="oLayer.properties && oLayer.properties.platformname">
                         <span>{{'IMPORT_PRODUCT_LIST_PLATFORM'|translate}}</span>
                         <span><b>{{oLayer.properties.platformname}}</b></span>
                     </div>
-                    <div ng-if="layer.properties && layer.properties.sensoroperationalmode">
+                    <div *ngIf="oLayer.properties && oLayer.properties.sensoroperationalmode">
                         <span>{{'IMPORT_PRODUCT_LIST_SENSOR'|translate}}</span>
                         <span><b>{{oLayer.properties.sensoroperationalmode}}</b></span>
                     </div>
 
-                    <div ng-if="layer.properties && layer.properties.productType">
+                    <div *ngIf="oLayer.properties && oLayer.properties.productType">
                         <span>{{'IMPORT_PRODUCT_LIST_TYPE'|translate}}</span>
                         <span><b>{{oLayer.properties.productType}}</b></span>
                     </div>
-                    <div ng-if="layer.properties && layer.properties.dataset">
+                    <div *ngIf="oLayer.properties && oLayer.properties.dataset">
                         <span>{{'IMPORT_PRODUCT_LIST_DATASET'|translate}}</span>
                         <span><b>{{oLayer.properties.dataset}}</b></span>
                     </div>
-                    <div ng-if="layer.properties && layer.properties.variables">
+                    <div *ngIf="oLayer.properties && oLayer.properties.variables">
                         <span>{{'IMPORT_PRODUCT_LIST_VARIABLES'|translate}}</span>
                         <span><b>{{oLayer.properties.variables}}</b></span>
                     </div>
-                    <div ng-if="layer.properties && layer.properties.protocol">
+                    <div *ngIf="oLayer.properties && oLayer.properties.protocol">
                         <span>{{'IMPORT_PRODUCT_LIST_PROTOCOL'|translate}}</span>
                         <span><b>{{oLayer.properties.protocol}}</b></span>
                     </div>

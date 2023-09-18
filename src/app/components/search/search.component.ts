@@ -245,7 +245,7 @@ export class SearchComponent {
         console.log(oError);
       }
     });
-    
+
     return true;
   }
 
@@ -277,7 +277,9 @@ export class SearchComponent {
     let iDataLength: number = aoData.length;
 
     for (let iIndexData = 0; iIndexData < iDataLength; iIndexData++) {
-      var oSummary = this.stringToObjectSummary(aoData[iIndexData].summary);//change summary string to array
+      let oSummary = this.stringToObjectSummary(aoData[iIndexData].summary);//change summary string to array
+      console.log(aoData[iIndexData].summary)
+
       aoData[iIndexData].summary = oSummary;
 
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData[iIndexData].preview) || FadeoutUtils.utilsIsStrNullOrEmpty(aoData[iIndexData].preview))
@@ -305,7 +307,7 @@ export class SearchComponent {
 
     // let sProvider = this.m_asListOfProviders[iActive].name;
     // this.updateLayerListForActiveTab(sProvider);
-  
+
     this.emitProducts();
     return true;
   }
@@ -367,7 +369,37 @@ export class SearchComponent {
   /********** Product Utilities **********/
 
   stringToObjectSummary(sObjectSummary) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sObjectSummary) === true) {
+      return null;
+    }
 
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sObjectSummary) === true) {
+      return null;
+    }
+
+    //Split the Object Summary at commas: 
+    let asSplit = sObjectSummary.split(",");
+
+    let oNewSummary = { Date: "", Instrument: "", Mode: "", Satellite: "", Size: "" };
+    let asSummary = ["Date", "Instrument", "Mode", "Satellite", "Size"];
+    let iSplitLength = asSplit.length;
+    let iSummaryLength = asSummary.length;
+
+    /* it dosen't know if date,instrument,mode...are the first element,second element,... of aSplit array
+       * we fix it with this code
+       * */
+    for (let iIndex = 0; iIndex < iSplitLength; iIndex++) {
+      for (let jIndex = 0; jIndex < iSummaryLength; jIndex++) {
+        if (FadeoutUtils.utilsStrContainsCaseInsensitive(asSplit[iIndex], asSummary[jIndex])) {
+          let oData = asSplit[iIndex].replace(asSummary[jIndex] + ":", "");
+          oData = oData.replace(" ", "");//remove spaces from data
+          oNewSummary[asSummary[jIndex].replace(":", "")] = oData;
+          break;
+        }
+      }
+    }
+
+    return oNewSummary;
   }
 
   /**
