@@ -370,10 +370,6 @@ export class SearchComponent {
 
   }
 
-  getPreview() {
-
-  }
-
   /**
    * Convert Polygon to Boudns Format
    * @param sPolygon 
