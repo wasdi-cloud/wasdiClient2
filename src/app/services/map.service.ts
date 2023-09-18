@@ -87,9 +87,9 @@ export class MapService {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       maxZoom: 18,
       // this map option disables world wrapping. by default, it is false.
-      //continuousWorld: false,
+      // continuousWorld: false,
       // this option disables loading tiles outside of the world bounds.
-      noWrap: false
+      noWrap: true
     });
     this.m_oOpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
       maxZoom: 17,
