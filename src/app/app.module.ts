@@ -139,6 +139,7 @@ import { SearchMapComponent } from './components/search/search-map/search-map.co
 import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';
 import { ConfigurationService } from './services/configuration.service';
 import { ProductsTableComponent } from './components/search/products-table/products-table.component';
+import { WorkspacesListDialogComponent } from './components/search/workspaces-list-dialog/workspaces-list-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -224,7 +225,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     PackageManagerComponent,
     SearchMapComponent,
     SearchFiltersComponent,
-    ProductsTableComponent
+    ProductsTableComponent,
+    WorkspacesListDialogComponent
   ],
   imports: [
     AppRoutingModule,
