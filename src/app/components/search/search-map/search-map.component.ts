@@ -55,7 +55,6 @@ export class SearchMapComponent implements OnInit {
       if (oResponse.length > 0) {
         let aaoAllBounds = [];
         oResponse.forEach((oProduct, index) => {
-          console.log(oProduct);
 
           let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(oProduct.bounds, null, index);
           if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
@@ -67,18 +66,14 @@ export class SearchMapComponent implements OnInit {
           this.m_oMapService.zoomOnBounds(aaoAllBounds);
         }
       }
-
     })
   }
 
   onMapReady(oMap: L.Map) {
     this.m_oMapService.setMap(oMap);
-
-    console.log(this.m_oMapService.getMap());
   }
 
   onDrawCreated(oEvent: any) {
-    console.log(oEvent);
 
     let oDrawnItem = this.m_oMapService.onSearchDrawCreated(oEvent);
 
@@ -105,25 +100,22 @@ export class SearchMapComponent implements OnInit {
 
   formatDrawnItemm(oLayer) {
     let sFilter: string = '( footprint:"intersects(POLYGON(('
-    console.log(oLayer);
+
     //Ensure layer variable is defined: 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oLayer) === false) {
-      var iNumberOfPoints = oLayer[0].length;
-      console.log(iNumberOfPoints);
-      var aaLatLngs = oLayer[0];
+      let iNumberOfPoints = oLayer[0].length;
+      let aaLatLngs = oLayer[0];
       /*open search want the first point as end point */
-      var iLastlat = aaLatLngs[0].lat;
-      var iLastlng = aaLatLngs[0].lng;
-      for (var iIndexBounds = 0; iIndexBounds < iNumberOfPoints; iIndexBounds++) {
+      let iLastlat = aaLatLngs[0].lat;
+      let iLastlng = aaLatLngs[0].lng;
+      for (let iIndexBounds = 0; iIndexBounds < iNumberOfPoints; iIndexBounds++) {
 
         sFilter = sFilter + aaLatLngs[iIndexBounds].lng + " " + aaLatLngs[iIndexBounds].lat + ",";
-        console.log(sFilter);
         //if(iIndexBounds != (iNumberOfPoints-1))
         //    sFilter = sFilter + ",";
       }
       sFilter = sFilter + iLastlng + " " + iLastlat + ')))" )';
     }
-    console.log(sFilter);
     return sFilter
   }
 

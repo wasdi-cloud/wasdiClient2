@@ -31,6 +31,8 @@ export class SearchComponent {
   m_bIsVisibleLocalStorageInputs: boolean;
 
   m_aoSelectedProviders: Array<any> = [];
+  m_oSelectedProvidersSubject: Subject<any> = new Subject<any>();
+  m_aoProvidersAfterCount: Array<any> = []; 
 
   m_asListOfProviders: Array<any> = []
 
@@ -126,7 +128,9 @@ export class SearchComponent {
 
     if (this.m_aoSelectedProviders.length > 0) {
       this.m_aoSelectedProviders.forEach(oProvider => {
+        console.log(oProvider);
         this.searchAndCount(oProvider);
+       
       })
     }
 
@@ -183,6 +187,9 @@ export class SearchComponent {
           if (remainder !== 0) {
             oProvider.totalPages += 1;
           }
+          this.m_aoProvidersAfterCount.push(oProvider);
+          console.log(this.m_aoProvidersAfterCount)
+          this.emitSelectedProviders();
         }
 
       },
@@ -191,7 +198,6 @@ export class SearchComponent {
 
     this.m_oSearchService.search().subscribe({
       next: oResponse => {
-        console.log(oResponse)
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse !== '') {
           let aoData = oResponse
           this.generateLayersList(oResponse);
@@ -278,7 +284,6 @@ export class SearchComponent {
 
     for (let iIndexData = 0; iIndexData < iDataLength; iIndexData++) {
       let oSummary = this.stringToObjectSummary(aoData[iIndexData].summary);//change summary string to array
-      console.log(aoData[iIndexData].summary)
 
       aoData[iIndexData].summary = oSummary;
 
@@ -334,7 +339,6 @@ export class SearchComponent {
     }
   }
 
-
   /**
    * Listens for changes to the Mission Filter in the Search Filters Component and sets the SearchModel 
    * @param oEvent 
@@ -363,6 +367,13 @@ export class SearchComponent {
    */
   emitProducts() {
     this.m_oProductSubject.next(this.m_aoProductsList);
+  }
+
+  /**
+   * Emit Selected Providers list to Child Componenets listening for the Observable
+   */
+  emitSelectedProviders() {
+    this.m_oSelectedProvidersSubject.next(this.m_aoProvidersAfterCount);
   }
 
 

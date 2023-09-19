@@ -12,13 +12,14 @@ export class ProductsTableComponent implements OnInit {
   @Input() m_bIsVisibleListOfLayers: boolean;
   @Input() m_bIsPaginatedList: boolean;
   @Input() m_aoProducts: Observable<any>;
+  @Input() m_aoSelectedProviders: Observable<any>;
   m_aoProductsList: any;
   //font awesome icons: 
   faPlus = faPlus;
   faSearch = faSearchPlus;
   faInfoCircle = faInfoCircle;
 
-  m_aoProviders: Array<any> = [];
+  m_aoProvidersList: Array<any> = [];
   m_iActiveProvider: number;
   m_oActiveProvider: any = null;
 
@@ -28,6 +29,21 @@ export class ProductsTableComponent implements OnInit {
     this.m_aoProducts.subscribe(oResponse => {
       if (oResponse.length > 0) {
         this.m_aoProductsList = oResponse;
+      }
+    });
+
+    this.m_aoSelectedProviders.subscribe(oResponse => {
+      console.log(oResponse);
+      if (oResponse.length > 0) {
+        oResponse.forEach(oProvider => {
+          if (!this.m_aoProvidersList.includes(oProvider)) {
+            if (oProvider.name === 'AUTO') {
+              this.m_aoProvidersList.unshift(oProvider)
+            } else {
+              this.m_aoProvidersList.push(oProvider)
+            }
+          }
+        });
       }
     })
   }
@@ -82,7 +98,7 @@ export class ProductsTableComponent implements OnInit {
       }
     }
 
-    return null; 
+    return null;
   }
 
 }

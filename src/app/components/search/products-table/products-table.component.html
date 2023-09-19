@@ -5,14 +5,13 @@
     <div class="card-body flex-column">
         <!-- Mission Tabs -->
         <ul class="d-flex flex-row flex-wrap border-bottom pb-2  nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link">Auto</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link">ADS</a>
+            <li class="nav-item" *ngFor="let oProvider of m_aoProvidersList">
+                <a class="nav-link">{{oProvider.name}} <span
+                        class="badge rounded-pill bg-secondary">{{oProvider.totalOfProducts !== 0 ||
+                        oProvider.totalOfProducts !== -1 ? oProvider.totalOfProducts : 0}}</span></a>
             </li>
         </ul>
-        <!-- Pagination and Products Per Page -->
+    <!-- Pagination and Products Per Page -->
         <div class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
             <mat-select class="form-control" placeholder="Products Per Page">
                 <mat-option>10</mat-option>
