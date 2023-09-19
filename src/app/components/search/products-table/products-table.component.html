@@ -6,8 +6,8 @@
         <!-- Mission Tabs -->
         <ul class="d-flex flex-row flex-wrap border-bottom pb-2  nav nav-pills">
             <li class="nav-item" *ngFor="let oProvider of m_aoProvidersList">
-                <a class="nav-link">{{oProvider.name}} <span
-                        class="badge rounded-pill bg-secondary">{{oProvider.totalOfProducts !== 0 ||
+                <a class="nav-link" [ngClass]="m_oActiveProvider.name === oProvider.name? 'active' : '' " (click)="setActiveProvider(oProvider)">{{oProvider.name}} <span
+                        class="badge rounded-pill bg-secondary">{{oProvider.totalOfProducts !== 0 &&
                         oProvider.totalOfProducts !== -1 ? oProvider.totalOfProducts : 0}}</span></a>
             </li>
         </ul>
@@ -25,7 +25,7 @@
                 <li class="page-item">
                     <span class="page-link">Prev</span>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li> 
                 <li class="page-item disabled" aria-current="page">
                     <span class="page-link">...</span>
                 </li>
@@ -40,7 +40,7 @@
         <div class="product-card-container d-flex flex-column gap-2" style="height: 28rem; overflow-y: scroll;">
             <!-- Product Date/Time -->
             <!-- Product Card -->
-            <div *ngFor="let oLayer of m_aoProductsList" class="product-card d-flex flex-row"
+            <div *ngFor="let oProduct of m_aoProductsList" class="product-card d-flex flex-row"
                 style="height:15rem; width: 100%;">
                 <!-- Product button group -->
                 <div class="btn-group-vertical">
@@ -48,7 +48,7 @@
                         <input class="form-check-input p-0 m-0" type="checkbox" value="" id="flexCheckDefault">
                     </button>
                     <button type="button" class="btn btn-sm btn-secondary"
-                        title="{{'IMPORT_TOOLTIP_ADD_PRODUCT'|translate}}">
+                        title="{{'IMPORT_TOOLTIP_ADD_PRODUCT'|translate}}" (click)="sendSingleProductToWorkspace(oProduct)">
                         <fa-icon [icon]="faPlus"></fa-icon>
                     </button>
                     <button type="button" class="btn btn-sm btn-secondary"
@@ -61,74 +61,74 @@
                 </div>
 
                 <!-- Product Icon and Size -->
-                <div class="oLayer-size-preview d-flex flex-column align-items-center">
+                <div class="oProduct-size-preview d-flex flex-column align-items-center">
                     <div>
                         <!-- Mode -->
                         <span class="badge bg-success"
-                            *ngIf="oLayer.summary && oLayer.summary.Mode">{{oLayer.summary.Mode}}</span>
+                            *ngIf="oProduct.summary && oProduct.summary.Mode">{{oProduct.summary.Mode}}</span>
                         <!-- Insturment -->
-                        <span class="badge bg-success" *ngIf="oLayer.summary && oLayer.summary.Instrument">
-                            {{oLayer.summary.Instrument}}</span>
+                        <span class="badge bg-success" *ngIf="oProduct.summary && oProduct.summary.Instrument">
+                            {{oProduct.summary.Instrument}}</span>
                     </div>
-                    <div class="preview-oLayer-image"><img src={{oLayer.preview}} alt="Image"
+                    <div class="preview-oProduct-image"><img src={{oProduct.preview}} alt="Image"
                             style="height: 82px;width: 82px; "></div>
                     <span class="badge bg-secondary"
-                        *ngIf="oLayer.summary && oLayer.summary.Size">{{oLayer.summary.Size}}</span><!--Size-->
+                        *ngIf="oProduct.summary && oProduct.summary.Size">{{oProduct.summary.Size}}</span><!--Size-->
                 </div>
                 <!-- Product Information -->
-                <!-- <div *ngIf="oLayer" class="d-flex flex-column">
-                    {{oLayer.properties.endDate? "Start Date:" : ""}}
-                    {{oLayer.properties.endDate? oLayer.properties.startDate: "" |date:'medium': 'GMT'}}
-                    <br *ngIf="oLayer.properties.endDate">
-                    {{oLayer.properties.endDate? "End Date:": ""}}
-                    {{ oLayer.properties.endDate? oLayer.properties.endDate:
-                    oLayer.summary.Date|date:'medium': 'GMT'}}
+                <!-- <div *ngIf="oProduct" class="d-flex flex-column">
+                    {{oProduct.properties.endDate? "Start Date:" : ""}}
+                    {{oProduct.properties.endDate? oProduct.properties.startDate: "" |date:'medium': 'GMT'}}
+                    <br *ngIf="oProduct.properties.endDate">
+                    {{oProduct.properties.endDate? "End Date:": ""}}
+                    {{ oProduct.properties.endDate? oProduct.properties.endDate:
+                    oProduct.summary.Date|date:'medium': 'GMT'}}
                 </div> -->
                 <div class="d-flex flex-column">
 
-                    <div *ngIf="oLayer.title">
+                    <div *ngIf="oProduct.title">
                         <span>{{'IMPORT_PRODUCT_LIST_NAME'|translate}}</span>
-                        <span><b>{{oLayer.title}}</b></span>
+                        <span><b>{{oProduct.title}}</b></span>
                     </div>
 
-                    <!-- <div *ngIf="oLayer.summary && oLayer.summary.Mode">
+                    <!-- <div *ngIf="oProduct.summary && oProduct.summary.Mode">
                     <span>{{'IMPORT_PRODUCT_LIST_POLARIZATION'|translate}}</span>
-                    <span><b>{{oLayer.summary.Mode}}</b></span>
+                    <span><b>{{oProduct.summary.Mode}}</b></span>
                 </div> -->
-                    <div *ngIf="oLayer.properties && oLayer.properties.relativeorbitnumber">
+                    <div *ngIf="oProduct.properties && oProduct.properties.relativeorbitnumber">
                         <span>{{'IMPORT_PRODUCT_LIST_ORBIT'|translate}}</span>
-                        <span><b>{{oLayer.properties.relativeorbitnumber}}</b></span>
+                        <span><b>{{oProduct.properties.relativeorbitnumber}}</b></span>
                     </div>
 
-                    <div *ngIf="oLayer.provider">
+                    <div *ngIf="oProduct.provider">
                         <span>{{'IMPORT_PRODUCT_LIST_PROVIDER'|translate}}</span>
-                        <span><b>{{oLayer.provider}}</b></span>
+                        <span><b>{{oProduct.provider}}</b></span>
                     </div>
 
-                    <div *ngIf="oLayer.properties && oLayer.properties.platformname">
+                    <div *ngIf="oProduct.properties && oProduct.properties.platformname">
                         <span>{{'IMPORT_PRODUCT_LIST_PLATFORM'|translate}}</span>
-                        <span><b>{{oLayer.properties.platformname}}</b></span>
+                        <span><b>{{oProduct.properties.platformname}}</b></span>
                     </div>
-                    <div *ngIf="oLayer.properties && oLayer.properties.sensoroperationalmode">
+                    <div *ngIf="oProduct.properties && oProduct.properties.sensoroperationalmode">
                         <span>{{'IMPORT_PRODUCT_LIST_SENSOR'|translate}}</span>
-                        <span><b>{{oLayer.properties.sensoroperationalmode}}</b></span>
+                        <span><b>{{oProduct.properties.sensoroperationalmode}}</b></span>
                     </div>
 
-                    <div *ngIf="oLayer.properties && oLayer.properties.productType">
+                    <div *ngIf="oProduct.properties && oProduct.properties.productType">
                         <span>{{'IMPORT_PRODUCT_LIST_TYPE'|translate}}</span>
-                        <span><b>{{oLayer.properties.productType}}</b></span>
+                        <span><b>{{oProduct.properties.productType}}</b></span>
                     </div>
-                    <div *ngIf="oLayer.properties && oLayer.properties.dataset">
+                    <div *ngIf="oProduct.properties && oProduct.properties.dataset">
                         <span>{{'IMPORT_PRODUCT_LIST_DATASET'|translate}}</span>
-                        <span><b>{{oLayer.properties.dataset}}</b></span>
+                        <span><b>{{oProduct.properties.dataset}}</b></span>
                     </div>
-                    <div *ngIf="oLayer.properties && oLayer.properties.variables">
+                    <div *ngIf="oProduct.properties && oProduct.properties.variables">
                         <span>{{'IMPORT_PRODUCT_LIST_VARIABLES'|translate}}</span>
-                        <span><b>{{oLayer.properties.variables}}</b></span>
+                        <span><b>{{oProduct.properties.variables}}</b></span>
                     </div>
-                    <div *ngIf="oLayer.properties && oLayer.properties.protocol">
+                    <div *ngIf="oProduct.properties && oProduct.properties.protocol">
                         <span>{{'IMPORT_PRODUCT_LIST_PROTOCOL'|translate}}</span>
-                        <span><b>{{oLayer.properties.protocol}}</b></span>
+                        <span><b>{{oProduct.properties.protocol}}</b></span>
                     </div>
                 </div>
             </div>

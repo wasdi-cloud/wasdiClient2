@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faInfoCircle, faPlus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { WorkspacesListDialogComponent } from '../workspaces-list-dialog/workspaces-list-dialog.component';
 
 @Component({
   selector: 'app-products-table',
@@ -23,15 +25,19 @@ export class ProductsTableComponent implements OnInit {
   m_iActiveProvider: number;
   m_oActiveProvider: any = null;
 
-  constructor() { }
+  constructor(
+    private m_oDialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
+    //Set the products array value
     this.m_aoProducts.subscribe(oResponse => {
       if (oResponse.length > 0) {
         this.m_aoProductsList = oResponse;
       }
     });
 
+    //Set the selected providers array and set the first selected Provider as the active provider
     this.m_aoSelectedProviders.subscribe(oResponse => {
       console.log(oResponse);
       if (oResponse.length > 0) {
@@ -44,8 +50,24 @@ export class ProductsTableComponent implements OnInit {
             }
           }
         });
+        this.m_oActiveProvider = this.m_aoProvidersList[0];
       }
     })
+  }
+
+  /**
+   * Sets the Active Provider and emits the Provider to the Parent for Switching Layers List
+   * @param oProvider 
+   * @returns 
+   */
+  setActiveProvider(oProvider) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider)) {
+      console.log("Error in Switching Provider");
+      return false;
+    }
+
+    this.m_oActiveProvider = oProvider;
+    return true;
   }
 
   /**
@@ -101,4 +123,42 @@ export class ProductsTableComponent implements OnInit {
     return null;
   }
 
+  /********** Event Emitters **********/
+
+
+  /********** Button Handler Functions **********/
+
+  /**
+   * Add checked product to selected products array
+   */
+  addProductSelectedProducts() {
+
+  }
+
+  /**
+   * Open dialog to add single product to a workspace
+   */
+  sendSingleProductToWorkspace(oProduct) {
+    let oDialog = this.m_oDialog.open(WorkspacesListDialogComponent, {
+      height: "60vh",
+      width: '60vw',
+      data: {
+        product: oProduct
+      }
+    })
+  }
+
+  /**
+   * Move map to selected Product
+   */
+  zoomToProduct() {
+
+  }
+
+  /**
+   * Open the information dialog for product
+   */
+  openProductInfoDialog(oProvider) {
+
+  }
 }
