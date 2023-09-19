@@ -96,6 +96,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   openWorkflowsDialog(event: MouseEvent) {
     event.preventDefault();
+    console.log("Emow")
     let dialogRef = this.m_oDialog.open(WorkflowsDialogComponent, {
       height: '80vh',
       width: '80vw',
