@@ -86,8 +86,6 @@ export class MapService {
     this.m_oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       maxZoom: 18,
-      // this map option disables world wrapping. by default, it is false.
-      // continuousWorld: false,
       // this option disables loading tiles outside of the world bounds.
       noWrap: true
     });
