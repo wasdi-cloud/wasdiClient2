@@ -1,10 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { faX } from '@fortawesome/free-solid-svg-icons';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
+//Import Services:
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ProjectService } from 'src/app/services/api/project.service';
 
+//Import Angular Materials
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+
+//Font Awesome Imports
+import { faX } from '@fortawesome/free-solid-svg-icons';
+
+//Utilities Imports:
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
   selector: 'app-project-info-dialog',
   templateUrl: './project-info-dialog.component.html',
@@ -51,7 +58,7 @@ export class ProjectInfoDialogComponent implements OnInit {
       this.m_oEditProject.subscriptionId = this.m_oSubscription.subscriptionId;
     }
 
-    if(this.m_bEditMode === true) {
+    if (this.m_bEditMode === true) {
       this.m_oEditProject.subscriptionId = this.m_oSubscription.subscriptionId
     }
 
@@ -59,16 +66,17 @@ export class ProjectInfoDialogComponent implements OnInit {
   }
 
   saveProject() {
-    
-
-    console.log(this.m_oEditProject.subscriptionId); 
+    console.log(this.m_oEditProject.subscriptionId);
     console.log(this.m_oEditProject.projectId);
     this.m_oProjectService.saveProject(this.m_oEditProject).subscribe({
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.status === 200) {
           console.log(oResponse)
-          if(this.m_oEditProject.activeProject === true) {
-            
+          if (this.m_oEditProject.activeProject === true) {
+            this.m_oProjectService.changeActiveProject(oResponse.body.message).subscribe({
+              next: oResponse => {},
+              error: oError => {}
+            })
           }
         }
       },
