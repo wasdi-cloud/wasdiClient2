@@ -27,10 +27,10 @@ export class AlertDialogTopService {
 @Component({
   selector: 'AlertDialog',
   template: `
-  <div>Dialog</div>
-  <div mat-dialog-actions>
+  <div class="p-1">Alert</div>
+  <div class="d-flex flex-column p-1" mat-dialog-actions>
     {{m_oData}}
-    <button mat-button (click)="closeDialog()">Close</button>
+    <button class="btn btn-secondary btn-sm align-self-end" mat-button (click)="closeDialog()">Close</button>
   </div>`
 })
 export class AlertDialog {
