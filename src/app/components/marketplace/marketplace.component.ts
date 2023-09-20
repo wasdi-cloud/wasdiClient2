@@ -72,7 +72,8 @@ export class MarketplaceComponent implements OnInit {
 
   ngOnInit(): void {
     this.getApplications();
-    this.getCategories();
+    //Remove categories retrieval for ESA demo
+    //this.getCategories();
     this.getPublishers();
   }
 

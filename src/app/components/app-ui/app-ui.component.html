@@ -1,38 +1,39 @@
 <div class="toolbar-container d-flex flex-row justify-content-between pt-3 px-3">
-    <a (click)="marketplaceReturn()" class="btn btn-success col-auto">{{'WAP.WAP_BACK' | translate}}</a>
+    <a (click)="marketplaceReturn()" class="btn btn-success col-auto">{{'WAP_BACK' | translate}}</a>
 
     <form class="workspace-options-container d-flex flex-row align-items-center col-auto gap-2" name="workspaceForm"
         #f="ngForm" (ngSubmit)="f.form && runApplication()">
         <input type="text" name="newWorkspaceName" id="" class="form-control"
-            placeholder="{{'WAP.WAP_CREATE_WORKSPACE' | translate}}" [(ngModel)]="workspaceForm.sNewWorkspaceName">
+            placeholder="{{'WAP_NEW_WORKSPACE' | translate}}" [(ngModel)]="workspaceForm.sNewWorkspaceName">
         <select class="form-select" name="existingWorkspace" [(ngModel)]="workspaceForm.sExistingWorkspace"
             (change)="getSelectedWorkspaceId($event)">
-            <option value="null" disabled="true" [selected]="true">{{'WAP.WAP_SELECT_WORKSPACE' | translate}}</option>
+            <option value="null" disabled="true" [selected]="true">{{'WAP_OPEN_WORKSPACE' | translate}}</option>
             <option value="" *ngFor="let oWorkspace of m_aoExistingWorkspaces" value="{{oWorkspace.workspaceName}}">
                 {{oWorkspace.workspaceName}}</option>
         </select>
-        <button type="submit" class="btn btn-secondary form-control">{{'WAP.WAP_RUN_APP' | translate}}</button>
+        <button type="submit" class="btn btn-secondary form-control">{{'WAP_RUN' | translate}}</button>
     </form>
 </div>
 <div class="app-info-container d-flex flex-row justify-content-between pt-3 px-3" style="height:13vh">
     <div class="">
         <h2>{{processorInformation.friendlyName}}</h2>
-        <p>{{'WAP.WAP_PUBLISHED' | translate}}: {{processorInformation.publisher}}</p>
+        <p>{{'WAP_PUBLISHER' | translate}}: {{processorInformation.publisher}}</p>
     </div>
     <div>
-        <p class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP.WAP_MORE_INFO' | translate }}</p>
+        <p *ngIf="isCollapsed === true" class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP_MORE' | translate }}</p>
+        <p *ngIf="isCollapsed === false" class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP_LESS' | translate }}</p>
     </div>
 </div>
 <div class="collapsible d-flex flex-row justify-content-between py-2 px-3" [@collapse]="isCollapsed">
     <div class="description-container">
-        <p>{{'WAP.WAP_DESCRIPTION2' | translate}}:</p>
+        <p>{{'WAP_DESCRIPTION2' | translate}}:</p>
         <p>{{processorInformation.processorDescription}}</p>
     </div>
     <div class="contact-container">
-        <p>{{'WAP.WAP_CONTACT' | translate}}: <span>{{processorInformation.email ? processorInformation.email :
+        <p>{{'WAP_CONTACT' | translate}}: <span>{{processorInformation.email ? processorInformation.email :
                 processorInformation.publisher}}</span></p>
-        <p>{{'WAP.WAP_WEB' | translate}}: <span>{{processorInformation.link}}</span></p>
-        <p>{{'WAP.WAP_LAST_UPDATE' | translate}}: <span>{{processorInformation.updateDate}}</span></p>
+        <p>{{'WAP_WEB' | translate}}: <span>{{processorInformation.link}}</span></p>
+        <p>{{'WAP_LAST_UPDATE' | translate}}: <span>{{processorInformation.updateDate}}</span></p>
     </div>
 </div>
 <div class="controls-container" style="height:67vh">
