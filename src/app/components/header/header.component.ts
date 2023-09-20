@@ -1,23 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
+//Import Services: 
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProjectService } from 'src/app/services/api/project.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
+//Import Font Awesome Icons: 
 import { faComment, faArrowLeft, faBook, faFloppyDisk, faCalendar, faMagnifyingGlass, faGlobe, faGears, faRocket, faUserAstronaut, faGauge, faArrowRightFromBracket, faCertificate, faStar } from '@fortawesome/free-solid-svg-icons';
 
+//Import Dialog Components:
 import { MatDialog } from '@angular/material/dialog';
 import { UserSettingsDialogComponent } from './header-dialogs/user-settings-dialog/user-settings-dialog.component';
 
+//Import Models:
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
+//Import Utilities: 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-header',
@@ -80,10 +85,8 @@ export class HeaderComponent implements OnInit {
 
     this.m_oRouterEvents = this.oRouter.events.subscribe((oEvent: any) => {
       if (oEvent instanceof NavigationEnd) {
-        console.log(oEvent.url);
         if (oEvent.url.includes('edit')) {
           this.sActiveWorkspaceId = oEvent.url.slice(6);
-          console.log(this.sActiveWorkspaceId);
         }
       }
     })
