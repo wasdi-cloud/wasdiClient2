@@ -140,7 +140,7 @@ export default class WasdiUtils {
             let oAudio = new Audio('assets/audio/message.wav');
             oAudio.play();
 
-            return sUserMessage; 
+            return sUserMessage;
 
             //this.m_oNotificationDisplayService
             // Give the short message
@@ -148,7 +148,7 @@ export default class WasdiUtils {
             // let oDialog = FadeoutUtils.utilsVexDialogAlertBottomRightCorner(sUserMessage);
             // FadeoutUtils.utilsVexCloseDialogAfter(6000, oDialog);
         }
-        return false; 
+        return "";
     }
 
     static utilsProjectConvertPositionsSatelliteFromServerInCesiumArray(aaArrayInput: any[]) {
