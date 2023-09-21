@@ -96,7 +96,6 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   openWorkflowsDialog(event: MouseEvent) {
     event.preventDefault();
-    console.log("Emow")
     let dialogRef = this.m_oDialog.open(WorkflowsDialogComponent, {
       height: '80vh',
       width: '80vw',
@@ -132,7 +131,6 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
       //If user has subscription and project, prepare notebook:
       this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
-          console.log(oResponse)
           if (oResponse.stringValue.includes("http")) {
             window.open(oResponse.stringValue, '_blank');
           }
@@ -145,7 +143,6 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
             }
           }
           this.m_bNotebookIsReady = true;
-          console.log(sMessage);
         }
       });
       return true;
