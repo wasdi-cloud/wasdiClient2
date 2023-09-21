@@ -132,7 +132,6 @@ export class ProcessesBarComponent implements OnInit {
   receivedNewProductMessage(oMessage: any) {
     let sMessage: string;
     this.m_oTranslateService.get('NOTIFICATION.MSG_EDIT_PRODUCT_ADDED').subscribe((sResult: string) => {
-      console.log(sResult);
       sMessage = sResult;
 
       let oNotification = this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close");
@@ -144,7 +143,6 @@ export class ProcessesBarComponent implements OnInit {
 
     this.m_oProcessWorkspaceService.getSummary().subscribe({
       next: oResponse => {
-        console.log(oResponse)
         if (!oResponse) {
           //ADD ALERT DIALOG
           console.log(sMessage);
