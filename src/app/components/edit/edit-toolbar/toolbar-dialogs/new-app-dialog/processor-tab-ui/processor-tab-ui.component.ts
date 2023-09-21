@@ -1,6 +1,5 @@
-import { Component, OnChanges, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { faL } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-processor-tab-ui',
@@ -20,8 +19,7 @@ export class ProcessorTabUiComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-
-    console.log(this.m_oProcessorUIInfo)
+    this.m_sProcessorUI = this.m_oProcessorUIInfo.get('sProcessorUI').value;
 
   }
 
