@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { WorkspacesListDialogComponent } from '../workspaces-list-dialog/workspaces-list-dialog.component';
+import { ProductInfoComponent } from '../product-info/product-info.component';
 
 @Component({
   selector: 'app-products-table',
@@ -140,7 +141,7 @@ export class ProductsTableComponent implements OnInit {
    */
   sendSingleProductToWorkspace(oProduct) {
     let oDialog = this.m_oDialog.open(WorkspacesListDialogComponent, {
-      height: "60vh",
+      height: "55vh",
       width: '60vw',
       data: {
         product: oProduct
@@ -158,7 +159,13 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Open the information dialog for product
    */
-  openProductInfoDialog(oProvider) {
-
+  openProductInfoDialog(oProduct) {
+    let oDialog = this.m_oDialog.open(ProductInfoComponent, {
+      height: "60vh",
+      width: '60vw',
+      data: {
+        product: oProduct
+      }
+    })
   }
 }

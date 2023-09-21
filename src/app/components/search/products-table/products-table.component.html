@@ -55,7 +55,7 @@
                         title="{{'IMPORT_TOOLTIP_ZOOM_ON_PRODUCT'|translate}}">
                         <fa-icon [icon]="faSearch"></fa-icon>
                     </button>
-                    <button type="button" class="btn btn-sm btn-secondary" title="{{'IMPORT_TOOLTIP_INFO'|translate}}">
+                    <button type="button" class="btn btn-sm btn-secondary" title="{{'IMPORT_TOOLTIP_INFO'|translate}}" (click)="openProductInfoDialog(oProduct)">
                         <fa-icon [icon]="faInfoCircle"></fa-icon>
                     </button>
                 </div>
