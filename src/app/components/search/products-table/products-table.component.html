@@ -14,21 +14,23 @@
         </ul>
         <!-- Pagination and Products Per Page -->
         <div class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
-            <mat-select (selectionChange)="changeNumberOfProductsPerPage($event)" class="form-control" placeholder="Products Per Page">
-                <mat-option *ngFor="let iProducts of m_aiProductsPerPageOptions" [value]="iProducts">{{iProducts}}</mat-option>
+            <mat-select (selectionChange)="changeNumberOfProductsPerPage($event)" class="form-control"
+                placeholder="Products Per Page">
+                <mat-option *ngFor="let iProducts of m_aiProductsPerPageOptions"
+                    [value]="iProducts">{{iProducts}}</mat-option>
             </mat-select>
 
             <ul class="pagination pagination mb-0">
-                <li class="page-item">
+                <li class="page-item" (click)="minusOnePage()">
                     <span class="page-link">Prev</span>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link">{{getCurrentPage()}}</a></li>
                 <li class="page-item disabled" aria-current="page">
                     <span class="page-link">...</span>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                <li class="page-item"><a class="page-link">{{getMaxPage()}}</a></li>
+                <li class="page-item" (click)="plusOnePage()">
+                    <a class="page-link">Next</a>
                 </li>
             </ul>
 
