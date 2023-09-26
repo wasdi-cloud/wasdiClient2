@@ -1,22 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { faInfoCircle, faPlus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { WorkspacesListDialogComponent } from '../workspaces-list-dialog/workspaces-list-dialog.component';
 import { ProductInfoComponent } from '../product-info/product-info.component';
+import { MapService } from 'src/app/services/map.service';
+import { PagesService } from 'src/app/services/pages.service';
 
 @Component({
   selector: 'app-products-table',
   templateUrl: './products-table.component.html',
   styleUrls: ['./products-table.component.css']
 })
-export class ProductsTableComponent implements OnInit {
+export class ProductsTableComponent implements OnInit, OnChanges {
   @Input() m_bIsVisibleListOfLayers: boolean;
   @Input() m_bIsPaginatedList: boolean;
   @Input() m_aoProducts: Observable<any>;
   @Input() m_aoSelectedProviders: Observable<any>;
-  m_aoProductsList: any;
+  @Output() m_oActiveProviderChange: EventEmitter<any> = new EventEmitter<any>()
+  m_aoProductsList: any = [];
   //font awesome icons: 
   faPlus = faPlus;
   faSearch = faSearchPlus;
@@ -26,34 +29,41 @@ export class ProductsTableComponent implements OnInit {
   m_iActiveProvider: number;
   m_oActiveProvider: any = null;
 
+  m_bProductListEmpty = false;
+
   constructor(
-    private m_oDialog: MatDialog
+    private m_oDialog: MatDialog,
+    private m_oMapService: MapService,
+    private m_oPageService: PagesService
   ) { }
 
   ngOnInit(): void {
+      //Set the selected providers array and set the first selected Provider as the active provider
+      this.m_aoSelectedProviders.subscribe(oResponse => {
+        if (oResponse.length > 0) {
+          oResponse.forEach(oProvider => {
+            if (!this.m_aoProvidersList.includes(oProvider)) {
+              if (oProvider.name === 'AUTO') {
+                this.m_aoProvidersList.unshift(oProvider)
+              } else {
+                this.m_aoProvidersList.push(oProvider)
+              }
+            }
+          });
+          this.m_oActiveProvider = this.m_aoProvidersList[0];
+        }
+      })
     //Set the products array value
     this.m_aoProducts.subscribe(oResponse => {
       if (oResponse.length > 0) {
         this.m_aoProductsList = oResponse;
+        this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
       }
     });
+  }
 
-    //Set the selected providers array and set the first selected Provider as the active provider
-    this.m_aoSelectedProviders.subscribe(oResponse => {
-      console.log(oResponse);
-      if (oResponse.length > 0) {
-        oResponse.forEach(oProvider => {
-          if (!this.m_aoProvidersList.includes(oProvider)) {
-            if (oProvider.name === 'AUTO') {
-              this.m_aoProvidersList.unshift(oProvider)
-            } else {
-              this.m_aoProvidersList.push(oProvider)
-            }
-          }
-        });
-        this.m_oActiveProvider = this.m_aoProvidersList[0];
-      }
-    })
+  ngOnChanges(): void {
+
   }
 
   /**
@@ -68,6 +78,9 @@ export class ProductsTableComponent implements OnInit {
     }
 
     this.m_oActiveProvider = oProvider;
+    this.deleteLayers();
+    this.getNumberOfProductsByProdvider(oProvider);
+    this.m_oActiveProviderChange.emit(this.m_oActiveProvider);
     return true;
   }
 
@@ -75,8 +88,41 @@ export class ProductsTableComponent implements OnInit {
    * Returns boolean confirming the status of the product list
    * @returns boolean
    */
-  isProductListEmpty(): boolean {
+  isProductListEmpty() {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProductsList)) {
+      this.m_bProductListEmpty = true;
+      return true
+    }
+    if (this.m_aoProductsList.length == 0) {
+      this.m_bProductListEmpty = true;
+      return true
+    }
+
+    this.m_bProductListEmpty = false;
+    console.log(this.m_bProductListEmpty)
     return false;
+  }
+
+  /**
+   * Returns boolean confirming the status of the provider list
+   * @param sProviderName
+   * @returns boolean
+   */
+  isProviderLayerListEmpty(sProviderName: string) {
+    if(!sProviderName) {
+      console.log("no provider")
+      return false;
+    }
+    var iNumberOfProduct = this.m_aoProductsList.length;
+    var bIsEmpty = true;
+
+    for (let iIndexProduct = 0; iIndexProduct < iNumberOfProduct; iIndexProduct++) {
+      if (this.m_aoProductsList[iIndexProduct].provider === sProviderName) {
+        bIsEmpty = false;
+        return bIsEmpty;
+      }
+    }
+    return bIsEmpty;
   }
 
   /********** Provider Information Management Methods **********/
@@ -93,7 +139,9 @@ export class ProductsTableComponent implements OnInit {
    * On Switching Provider emit change to parent in order to change products on map
    * @param sProviderName
    */
-  updateLayerListForActiveTab(sProviderName: string) { }
+  updateLayerListForActiveTab(sProviderName: string) {
+
+  }
 
 
   /********** Layer Information Management Methods **********/
@@ -124,6 +172,53 @@ export class ProductsTableComponent implements OnInit {
     return null;
   }
 
+  getNumberOfProductsByProdvider(sProviderName) {
+    return this.m_oPageService.getNumberOfProductsByProvider(sProviderName)
+  }
+
+  deleteLayers() {
+    if (this.isProductListEmpty()) {
+      return false;
+    }
+
+    let iLengthProductsList = this.m_aoProductsList.length;
+    let oMap = this.m_oMapService.getMap();
+    for (let iIndexProductsList = 0; iIndexProductsList < iLengthProductsList; iIndexProductsList++) {
+      let oRectangle = this.m_aoProductsList[iIndexProductsList].rectangle;
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle))
+        oRectangle.removeFrom(oMap);
+    }
+    return true;
+  }
+
+  /**
+   * deleteProducts
+   * @param sProvider
+   * @returns {boolean}
+   */
+  deleteProducts(sProvider) {
+    //check if layers list is empty
+    if (this.isProductListEmpty()) return false;
+    var iLengthProductsList = this.m_aoProductsList.length;
+    var oMap = this.m_oMapService.getMap();
+    /* remove rectangle in map*/
+    for (var iIndexProductsList = 0; iIndexProductsList < iLengthProductsList; iIndexProductsList++) {
+      if ((FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProductsList[iIndexProductsList].provider) === false) && (this.m_aoProductsList[iIndexProductsList].provider === sProvider)) {
+        var oRectangle = this.m_aoProductsList[iIndexProductsList].rectangle;
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle))
+          oRectangle.removeFrom(oMap);
+        if (iIndexProductsList > -1) {
+          this.m_aoProductsList.splice(iIndexProductsList, 1);
+          iLengthProductsList--;
+          iIndexProductsList--;
+        }
+      }
+    }
+    //delete layers list
+    //this.m_aoProductsList = [];
+    return true;
+  }
+
   /********** Event Emitters **********/
 
 
@@ -152,8 +247,20 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Move map to selected Product
    */
-  zoomToProduct() {
+  zoomToProduct(oRectangle) {
+    let oBounds = oRectangle.getBounds();
+    let oNorthEast = oBounds.getNorthEast();
+    let oSouthWest = oBounds.getSouthWest();
 
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oNorthEast) || FadeoutUtils.utilsIsObjectNullOrUndefined(oSouthWest)) {
+      console.log("Error in zoom on bounds");
+    }
+    else {
+      let aaBounds = [[oNorthEast.lat, oNorthEast.lng], [oSouthWest.lat, oSouthWest.lng]];
+      if (this.m_oMapService.zoomOnBounds(aaBounds) == false) {
+        console.log("Error in zoom on bounds");
+      }
+    }
   }
 
   /**
@@ -167,5 +274,37 @@ export class ProductsTableComponent implements OnInit {
         product: oProduct
       }
     })
+  }
+
+  /**
+   * Handle mouseover on product card
+   * @param oRectangle
+   */
+  changeRectangleStyleMouseOver(oRectangle) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
+      console.log("Error: rectangle is undefined ");
+      return false;
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle._rawPxBounds)) {
+      return false;
+    }
+    oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
+    return true;
+  }
+
+  /**
+   * handle mouseleave on product card
+   * @param oRectangle
+   */
+  changeRectangleStyleMouseLeave(oRectangle) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
+      console.log("Error: rectangle is undefined ");
+      return false;
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle._rawPxBounds)) {
+      return false;
+    }
+    oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
+    return true;
   }
 }
