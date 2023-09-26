@@ -152,10 +152,11 @@ export class PagesService {
     return (oProvider.currentPage - 1) * oProvider.productsPerPageSelected;
   };
 
-  changePage(iNewPage: any, sProviderName: string, oController) {
+  changePage(iNewPage: any, sProviderName: string) {
     iNewPage = parseInt(iNewPage);
 
     let oFunction = this.getFunction();
+    let oController = this.m_oScope; 
    
     let oProvider = this.getProviderObject(sProviderName);
     if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) || (FadeoutUtils.utilsIsObjectNullOrUndefined(oFunction) === true)) {
@@ -172,7 +173,7 @@ export class PagesService {
     return true;
   }
 
-  plusOnePage(sProviderName, oController) {
+  plusOnePage(sProviderName) {
     let oProvider = this.getProviderObject(sProviderName);
     if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true)) {
       return false;
@@ -182,13 +183,13 @@ export class PagesService {
 
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(iNewPage) && isNaN(iNewPage) == false && FadeoutUtils.utilsIsInteger(iNewPage) && iNewPage >= 0 && iNewPage <= oProvider.totalPages) {
       oProvider.currentPage = iNewPage;
-      this.changePage(oProvider.currentPage + 1, sProviderName, oController);
+      this.changePage(oProvider.currentPage + 1, sProviderName);
     }
 
     return true;
   };
 
-  minusOnePage(sProviderName: string, oController) {
+  minusOnePage(sProviderName: string) {
     let oProvider = this.getProviderObject(sProviderName);
 
     if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true))
@@ -198,13 +199,13 @@ export class PagesService {
 
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(iNewPage) && isNaN(iNewPage) == false && FadeoutUtils.utilsIsInteger(iNewPage) && iNewPage > 1 && iNewPage <= oProvider.totalPages) {
       oProvider.currentPage = iNewPage;
-      this.changePage(oProvider.currentPage - 1, sProviderName, oController);
+      this.changePage(oProvider.currentPage - 1, sProviderName);
     }
 
     return true;
   };
 
-  lastPage(sProviderName: string, oController) {
+  lastPage(sProviderName: string) {
 
     let oProvider = this.getProviderObject(sProviderName);
 
@@ -212,13 +213,13 @@ export class PagesService {
       return false;
     }
 
-    this.changePage(oProvider.totalPages, sProviderName, oController);
+    this.changePage(oProvider.totalPages, sProviderName);
     return true;
 
   };
 
-  firstPage(sProviderName: string, oController: any) {
-    this.changePage(1, sProviderName, oController);
+  firstPage(sProviderName: string) {
+    this.changePage(1, sProviderName);
   };
 
   getNumberOfProductsByProvider(sProviderName) {
