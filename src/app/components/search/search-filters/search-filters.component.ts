@@ -90,9 +90,7 @@ export class SearchFiltersComponent implements OnInit {
    * Retrieves the list of providers as an Observable and sets value of List of Providers
    */
   setDefaultSelectedProvider() {
-    this.m_oPagesService.getProviders().subscribe(oResponse => {
-      this.m_aListOfProviders = oResponse;
-    });
+    this.m_aListOfProviders = this.m_oPagesService.getProviders()
   }
 
   setAdvancedSearchFilter() {
