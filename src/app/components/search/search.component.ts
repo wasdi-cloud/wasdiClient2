@@ -200,7 +200,6 @@ export class SearchComponent {
             oProvider.totalPages += 1;
           }
           this.m_aoProvidersAfterCount.push(oProvider);
-          console.log(this.m_aoProvidersAfterCount)
           this.emitSelectedProviders();
         }
 
@@ -211,7 +210,6 @@ export class SearchComponent {
     this.m_oSearchService.search().subscribe({
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse !== '') {
-          let aoData = oResponse
           this.generateLayersList(oResponse);
         }
         oProvider.isLoaded = true;
@@ -224,7 +222,6 @@ export class SearchComponent {
 
     return true;
   }
-
 
   executeSeach(oProvider) {
 
@@ -271,9 +268,7 @@ export class SearchComponent {
     return true;
   }
 
-  openAddToWorkspaceDialog() {
-
-  }
+  openAddToWorkspaceDialog() { }
 
   thereIsAtLeastOneProvider() {
     if (this.m_aoSelectedProviders.length > 0) {
@@ -325,42 +320,9 @@ export class SearchComponent {
 
       if (i >= iActive) iActive++;
     }
-
-    // console.log(this.m_oActiveProvider);
-    // if (this.m_oActiveProvider !== null) {
-    //   let sProvider = this.m_oActiveProvider.name
-    //   this.updateLayerListForActiveTab(sProvider);
-    // }
     this.emitProducts();
 
     return true;
-  }
-
-
-  updateLayerListForActiveTab(sProviderName) {
-    let aaoAllBounds = [];
-
-    console.log(sProviderName)
-
-    for (let iIndexData = 0; iIndexData < this.m_aoProductsList.length; iIndexData++) {
-      if (this.m_aoProductsList[iIndexData].provider !== sProviderName) {
-        continue;
-      }
-
-      let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(this.m_aoProductsList[iIndexData].bounds, null, iIndexData);
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
-        this.m_aoProductsList[iIndexData].rectangle = oRectangle
-      }
-      aaoAllBounds.push(this.m_aoProductsList[iIndexData].bounds);
-      console.log(aaoAllBounds);
-    }
-
-    if (aaoAllBounds.length > 0 && aaoAllBounds[0] && aaoAllBounds[0].length) {
-      this.m_oMapService.zoomOnBounds(aaoAllBounds);
-    }
-
-    console.log(this.m_aoProductsList)
-
   }
 
   deleteProducts(sProviderName: string) {
@@ -381,10 +343,9 @@ export class SearchComponent {
         }
       }
 
-
     }
     //delete layers list
-    //this.m_aoProductsList = [];
+    this.m_aoProductsList = [];
     return true;
   }
 
@@ -394,8 +355,6 @@ export class SearchComponent {
 
     return false;
   }
-
-
 
   /********** Event Listeners & Subject Emitters **********/
 
@@ -434,16 +393,8 @@ export class SearchComponent {
   }
 
   getActiveProvider(oEvent: any) {
-    console.log(oEvent)
-
     this.m_oActiveProvider = oEvent;
-
-    // if (this.m_oActiveProvider.totalOfProducts === 0 || this.m_oActiveProvider.totalOfProducts === -1) {
-    //   this.m_bIsVisibleListOfLayers = false;
-    // } else {
-    //   this.m_bIsVisibleListOfLayers = true;
-    // }
-
+    this.emitProducts();
   }
 
   /**

@@ -13,7 +13,7 @@ import { PagesService } from 'src/app/services/pages.service';
   templateUrl: './products-table.component.html',
   styleUrls: ['./products-table.component.css']
 })
-export class ProductsTableComponent implements OnInit, OnChanges {
+export class ProductsTableComponent implements OnInit {
   @Input() m_bIsVisibleListOfLayers: boolean;
   @Input() m_bIsPaginatedList: boolean;
   @Input() m_aoProducts: Observable<any>;
@@ -26,7 +26,6 @@ export class ProductsTableComponent implements OnInit, OnChanges {
   faInfoCircle = faInfoCircle;
 
   m_aoProvidersList: Array<any> = [];
-  m_iActiveProvider: number;
   m_oActiveProvider: any = null;
 
   m_bProductListEmpty = false;
@@ -38,21 +37,21 @@ export class ProductsTableComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-      //Set the selected providers array and set the first selected Provider as the active provider
-      this.m_aoSelectedProviders.subscribe(oResponse => {
-        if (oResponse.length > 0) {
-          oResponse.forEach(oProvider => {
-            if (!this.m_aoProvidersList.includes(oProvider)) {
-              if (oProvider.name === 'AUTO') {
-                this.m_aoProvidersList.unshift(oProvider)
-              } else {
-                this.m_aoProvidersList.push(oProvider)
-              }
+    //Set the selected providers array and set the first selected Provider as the active provider
+    this.m_aoSelectedProviders.subscribe(oResponse => {
+      if (oResponse.length > 0) {
+        oResponse.forEach(oProvider => {
+          if (!this.m_aoProvidersList.includes(oProvider)) {
+            if (oProvider.name === 'AUTO') {
+              this.m_aoProvidersList.unshift(oProvider)
+            } else {
+              this.m_aoProvidersList.push(oProvider)
             }
-          });
-          this.m_oActiveProvider = this.m_aoProvidersList[0];
-        }
-      })
+          }
+        });
+        this.setActiveProvider(this.m_aoProvidersList[0])
+      }
+    });
     //Set the products array value
     this.m_aoProducts.subscribe(oResponse => {
       if (oResponse.length > 0) {
@@ -62,9 +61,6 @@ export class ProductsTableComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(): void {
-
-  }
 
   /**
    * Sets the Active Provider and emits the Provider to the Parent for Switching Layers List
@@ -78,8 +74,8 @@ export class ProductsTableComponent implements OnInit, OnChanges {
     }
 
     this.m_oActiveProvider = oProvider;
-    this.deleteLayers();
     this.getNumberOfProductsByProdvider(oProvider);
+    this.updateLayerListForActiveTab(oProvider)
     this.m_oActiveProviderChange.emit(this.m_oActiveProvider);
     return true;
   }
@@ -90,16 +86,11 @@ export class ProductsTableComponent implements OnInit, OnChanges {
    */
   isProductListEmpty() {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProductsList)) {
-      this.m_bProductListEmpty = true;
       return true
     }
     if (this.m_aoProductsList.length == 0) {
-      this.m_bProductListEmpty = true;
       return true
     }
-
-    this.m_bProductListEmpty = false;
-    console.log(this.m_bProductListEmpty)
     return false;
   }
 
@@ -109,7 +100,7 @@ export class ProductsTableComponent implements OnInit, OnChanges {
    * @returns boolean
    */
   isProviderLayerListEmpty(sProviderName: string) {
-    if(!sProviderName) {
+    if (!sProviderName) {
       console.log("no provider")
       return false;
     }
@@ -139,8 +130,25 @@ export class ProductsTableComponent implements OnInit, OnChanges {
    * On Switching Provider emit change to parent in order to change products on map
    * @param sProviderName
    */
-  updateLayerListForActiveTab(sProviderName: string) {
+  updateLayerListForActiveTab(sProvider: string) {
 
+    let aaoAllBounds = [];
+
+    this.deleteLayers();
+
+    for (let iIndexData = 0; iIndexData < this.m_aoProductsList.length; iIndexData++) {
+      if (this.m_aoProductsList[iIndexData].provider !== sProvider) continue;
+
+      var oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(this.m_aoProductsList[iIndexData].bounds, null, iIndexData);
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
+        this.m_aoProductsList[iIndexData].rectangle = oRectangle
+      }
+      aaoAllBounds.push(this.m_aoProductsList[iIndexData].bounds);
+    }
+
+    if (aaoAllBounds.length > 0 && aaoAllBounds[0] && aaoAllBounds[0].length) {
+      this.m_oMapService.zoomOnBounds(aaoAllBounds);
+    }
   }
 
 
@@ -177,7 +185,7 @@ export class ProductsTableComponent implements OnInit, OnChanges {
   }
 
   deleteLayers() {
-    if (this.isProductListEmpty()) {
+    if (this.isProductListEmpty() === true) {
       return false;
     }
 

@@ -48,7 +48,7 @@
                 style="height:100%; overflow-y: scroll;">
                 <!-- Product Date/Time -->
                 <!-- Product Card -->
-                <div *ngFor="let oProduct of m_aoProductsList"
+                <div *ngFor="let oProduct of m_aoProductsList | filter: m_oActiveProvider.name"
                     class="product-card list-group-item list-group-item-action d-flex flex-row"
                     style="height:15rem; width: 100%;" (mouseover)=" changeRectangleStyleMouseOver(oProduct.rectangle)"
                     (mouseleave)=" changeRectangleStyleMouseLeave(oProduct.rectangle)">
