@@ -30,6 +30,8 @@ export class ProductsTableComponent implements OnInit {
 
   m_bProductListEmpty = false;
 
+  m_aiProductsPerPageOptions = []
+
   constructor(
     private m_oDialog: MatDialog,
     private m_oMapService: MapService,
@@ -59,8 +61,10 @@ export class ProductsTableComponent implements OnInit {
         this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
       }
     });
-  }
 
+    //Get Products Per Page Options:
+    this.m_aiProductsPerPageOptions = this.getProductsPerPageOptions();
+  }
 
   /**
    * Sets the Active Provider and emits the Provider to the Parent for Switching Layers List
@@ -122,9 +126,7 @@ export class ProductsTableComponent implements OnInit {
    * Get the number of Products from a given provider
    * @param sProviderName
    */
-  getNumberOfProductsByProvider(sProviderName: string) {
-
-  }
+  getNumberOfProductsByProvider(sProviderName: string) { }
 
   /**
    * On Switching Provider emit change to parent in order to change products on map
@@ -315,4 +317,26 @@ export class ProductsTableComponent implements OnInit {
     oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
     return true;
   }
+
+  /********** Pagination Handler Functions **********/
+
+  UpdateProviderProductsPerPage(oProviderName, iProducts) {
+
+  }
+
+  changeNumberOfProductsPerPage(event) {
+    console.log(event);
+    console.log(this.m_oActiveProvider);
+    
+    this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event.value;
+    this.m_oPageService.changeNumberOfProductsPerPage(this.m_oActiveProvider.name);
+
+  }
+
+
+  getProductsPerPageOptions() {
+     return this.m_oPageService.getProvidersPerPageOptions();
+  }
+
+
 }

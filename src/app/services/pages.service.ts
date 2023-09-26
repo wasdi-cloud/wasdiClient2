@@ -17,6 +17,7 @@ export class PagesService {
   m_aoListOfProviders: Array<any> = [];
   m_aiProductsPerPage: Array<number> = [10, 15, 20, 25, 50];
   m_oFunction: any = null;
+  m_oScope: any = null;
 
   constructor(
     private m_oOpenSearchService: OpenSearchService) {
@@ -68,11 +69,12 @@ export class PagesService {
     return this.m_aiProductsPerPage;
   }
 
-  setFunction(oFunction) {
+  setFunction(oFunction, oController) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oFunction) === true) {
       return false;
     } else {
       this.m_oFunction = oFunction;
+      this.m_oScope = oController;
       return true;
     }
   }
@@ -154,9 +156,11 @@ export class PagesService {
     iNewPage = parseInt(iNewPage);
 
     let oFunction = this.getFunction();
+   
     let oProvider = this.getProviderObject(sProviderName);
-    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) || (FadeoutUtils.utilsIsObjectNullOrUndefined(oFunction) === true))
+    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) || (FadeoutUtils.utilsIsObjectNullOrUndefined(oFunction) === true)) {
       return false;
+    }
 
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(iNewPage) && isNaN(iNewPage) == false && FadeoutUtils.utilsIsInteger(iNewPage) && iNewPage >= 0 && iNewPage <= oProvider.totalPages) {
       oProvider.currentPage = iNewPage;
@@ -231,12 +235,12 @@ export class PagesService {
     return -1;
   };
 
-  changeNumberOfProductsPerPage = function (sProviderName, oController) {
+  changeNumberOfProductsPerPage = function (sProviderName) {
     let oFunction = this.getFunction();
-    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(sProviderName) === false) && (FadeoutUtils.utilsIsObjectNullOrUndefined(oController) === false) && (FadeoutUtils.utilsIsObjectNullOrUndefined(oFunction) === false)) {
+    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(sProviderName) === false) &&(FadeoutUtils.utilsIsObjectNullOrUndefined(oFunction) === false)) {
       //countPages
       let oProvider = this.getProviderObject(sProviderName);
-      oFunction(oProvider, oController);
+      oFunction(oProvider, this.m_oScope);
       return true;
     }
     return false;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { AdvancedFilterService } from 'src/app/services/search/advanced-filter.service';
@@ -25,7 +25,7 @@ import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   //Font Awesome Imports:
   faPlus = faPlus;
 
@@ -107,6 +107,10 @@ export class SearchComponent {
   ) {
     this.m_oConfigurationService.loadConfiguration();
     this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
+  }
+
+  ngOnInit(): void {
+    this.m_oPageService.setFunction(this.executeSeach, this)
   }
 
   /**
@@ -223,48 +227,56 @@ export class SearchComponent {
     return true;
   }
 
-  executeSeach(oProvider) {
+  executeSeach(oInputProvider, oInputController?) {
+    let oController = this;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oInputController) === false) {
+      oController = oInputController;
+    }
 
-    if (this.thereIsAtLeastOneProvider() === false) {
+    if (oController.thereIsAtLeastOneProvider() === false) {
+      return false;
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oInputProvider) === true) {
       return false;
     }
 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) {
-      return false;
-    }
-
-    this.m_bClearFiltersEnabled = false;
+    oController.m_bClearFiltersEnabled = false;
     //delete layers and relatives rectangles in map
-    this.deleteProducts(oProvider.name);
+    oController.deleteProducts(oInputProvider.name);
     //hide previous results
-    this.m_bIsVisibleListOfLayers = true;
-    this.m_bIsPaginatedList = true;
+    oController.m_bIsVisibleListOfLayers = true;
+    oController.m_bIsPaginatedList = true;
+    //TODO
+    // "*" + oController.m_oModel.textQuery + "*" fix
+    // oController.m_oSearchService.setTextQuery("*" + oController.m_oModel.textQuery + "*");
+    oController.m_oSearchService.setTextQuery(oController.m_oSearchModel.textQuery);
+    oController.m_oSearchService.setGeoselection(oController.m_oSearchModel.geoselection);
+    let aoProviders = [];
+    aoProviders.push(oInputProvider);
+    oController.m_oSearchService.setProviders(aoProviders);
 
-    if (this.m_oSearchModel.textQuery.endsWith('*')) {
-      this.m_oSearchService.setTextQuery("*" + this.m_oSearchModel.textQuery + "*");
-    }
-    this.m_oSearchService.setTextQuery(this.m_oSearchModel.textQuery);
-    this.m_oSearchService.setGeoselection(this.m_oSearchModel.geoselection);
-    var aoProviders = [];
-    aoProviders.push(oProvider);
-    this.m_oSearchService.setProviders(aoProviders);
+    let oProvider = oController.m_oPageService.getProviderObject(oInputProvider.name);
+    let iOffset = oController.m_oPageService.calcOffset(oInputProvider.name);
+    oController.m_oSearchService.setOffset(iOffset);//default 0 (index page)
+    oController.m_oSearchService.setLimit(oInputProvider.productsPerPageSelected);// default 10 (total of element per page)
+    oInputProvider.isLoaded = false;
 
-    var oProvider = this.m_oPageService.getProviderObject(oProvider.name);
-    var iOffset = this.m_oPageService.calcOffset(oProvider.name);
-    this.m_oSearchService.setOffset(iOffset);//default 0 (index page)
-    this.m_oSearchService.setLimit(oProvider.productsPerPageSelected);// default 10 (total of element per page)
-    oProvider.isLoaded = false;
-    oProvider.totalOfProducts = 0;
+    let sMessage = oController.m_oTranslate.instant("MSG_SEARCH_ERROR");
 
-    this.m_oSearchService.getProductsCount().subscribe({
-      next: oResponse => {
-        console.log(oResponse);
+    oController.m_oSearchService.search().subscribe({
+      next: oResult => {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResult)) {
+          let aoData = oResult;
+          oController.generateLayersList(aoData);
+        }
+
+        oProvider.isLoaded = true;
       },
       error: oError => {
-        console.log(oError);
+        oController.m_oAlertDialogService.openDialog(4000, sMessage);
+        oProvider.isLoaded = true;
       }
-    });
-
+    })
     return true;
   }
 

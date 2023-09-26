@@ -14,12 +14,8 @@
         </ul>
         <!-- Pagination and Products Per Page -->
         <div class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
-            <mat-select class="form-control" placeholder="Products Per Page">
-                <mat-option>10</mat-option>
-                <mat-option>15</mat-option>
-                <mat-option>20</mat-option>
-                <mat-option>25</mat-option>
-                <mat-option>50</mat-option>
+            <mat-select (selectionChange)="changeNumberOfProductsPerPage($event)" class="form-control" placeholder="Products Per Page">
+                <mat-option *ngFor="let iProducts of m_aiProductsPerPageOptions" [value]="iProducts">{{iProducts}}</mat-option>
             </mat-select>
 
             <ul class="pagination pagination mb-0">
