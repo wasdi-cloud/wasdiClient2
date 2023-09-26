@@ -218,11 +218,9 @@ export class PagesService {
   };
 
   getNumberOfProductsByProvider(sProviderName) {
-    console.log(sProviderName)
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sProviderName.name) === true)
       return -1;
     let aoProviders = this.getProviders();
-    console.log(this.getProviders)
     let iNumberOfProviders = aoProviders.length;
 
     for (let iIndexProvider = 0; iIndexProvider < iNumberOfProviders; iIndexProvider++) {
