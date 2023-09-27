@@ -54,6 +54,7 @@ import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatChipsModule } from '@angular/material/chips'
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -212,7 +213,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProcessorTabUiComponent,
     ProcessorTabStoreComponent,
     ProcessorTabMediaComponent,
-    WorkflowsDialogComponent, 
+    WorkflowsDialogComponent,
     EditWorkflowDialogComponent,
     SubscriptionsDisplayComponent,
     OrganizationsDisplayComponent,
@@ -265,8 +266,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ClipboardModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    MatListModule, 
-    MatProgressSpinnerModule
+    MatListModule,
+    MatProgressSpinnerModule, 
+    MatChipsModule
   ],
   providers: [
     AuthService,
@@ -286,10 +288,10 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     },
     { provide: RabbitStompService },
     {
-      provide : APP_INITIALIZER,
-      multi : true,
-       deps : [ConfigurationService],
-       useFactory : (appConfigService : ConfigurationService) =>  () => appConfigService.loadConfiguration()
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [ConfigurationService],
+      useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
     }
   ],
   bootstrap: [AppComponent],
