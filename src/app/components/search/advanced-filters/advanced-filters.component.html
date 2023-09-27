@@ -1,0 +1,82 @@
+<div class="import-advance-filters d-flex flex-column justify-content-between w-100 h-100">
+    <!--Dialog HEADER -->
+    <div class="dialog-header d-flex flex-row justify-content-between px-2 py-1">
+        <!-- <h4>{{"DIALOG_CRONOTAB_TITLE"|translate}}</h4>
+        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon> -->
+    </div>
+    <!-- Dialog Body BODY -->
+    <div class="modal-body ">
+        <div class="advance-search px-3">
+            <!-- <h3>{{"DIALOG_CRONOTAB_CRONOTAB_BOX"|translate}}</h3> -->
+            <form class="d-flex flex-row gap-1">
+                <!-- Year Selector -->
+                <mat-select multiple class="form-select" placeholder="Select Year(s)" style="width: 15rem"
+                    (selectionChange)="getSelectedYears($event)">
+                    <mat-option *ngFor="let sYear of m_oAdvanceFilterOptions.listOfYears" [value]="sYear">
+                        {{sYear}}
+                    </mat-option>
+                </mat-select>
+                <!-- Season Selector -->
+                <mat-select multiple class="form-select" placeholder="Select Season(s)" style="width: 15rem"
+                    (selectionChange)="getSelectedSeasons($event)">
+                    <mat-option *ngFor="let sSeason of m_oAdvanceFilterOptions.listOfSeasons"
+                        [value]="sSeason">{{sSeason}}</mat-option>
+                </mat-select>
+                <!-- Month Selector -->
+                <mat-select multiple class="form-select" placeholder="Select Month(s)" style="width: 15rem"
+                    (selectionChange)="getSelectedMonths($event)">
+                    <mat-option *ngFor="let sMonth of m_oAdvanceFilterOptions.listOfMonths"
+                        [value]="sMonth">{{sMonth}}</mat-option>
+                </mat-select>
+                <!-- Day Selector -->
+                <mat-select multiple class="form-select" placeholder="Select Date(s)" style="width: 15rem"
+                    (selectionChange)="getSelectedDays($event)">
+                    <mat-option *ngFor="let sDay of m_oAdvanceFilterOptions.listOfDays"
+                        [value]="sDay">{{sDay}}</mat-option>
+                </mat-select>
+            </form>
+
+            <div class="edit-filters-buttons d-flex flex-row gap-1 justify-content-end mt-2">
+
+                <button class="btn btn-primary btn-wasdi" (click)="addFiltersData()">
+                    <fa-icon [icon]="faSave"></fa-icon>
+                    {{"DIALOG_CRONOTAB_ADD_BUTTON"|translate}}
+                </button>
+                <button class="btn btn-primary btn-wasdi" (click)="removeSavedData()">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                    {{"DIALOG_CRONOTAB_CLEAR_BUTTON"|translate}}
+                </button>
+            </div>
+
+            <div *ngIf="m_oAdvanceFilterOptions.savedData.length > 0">
+                <div class="col-v4-12">
+                    <form>
+                        <legend>{{"DIALOG_CRONOTAB_FILTERS_BOX"|translate}}</legend>
+                        <mat-chip-grid #chipGrid aria-label="Fruit selection">
+                            <mat-chip-row *ngFor="let oData of m_oAdvanceFilterOptions.savedData">
+                                {{oData.name}}
+                                <button matChipRemove [attr.aria-label]="'remove ' + oData.name">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                        </mat-chip-grid>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div mat-dialog-actions class="d-flex flex-row justify-content-end gap-1">
+        <button type="button" ng-click="close(null)" class="btn btn-secondary" data-dismiss="modal">
+            {{"DIALOG_CRONOTAB_CANCEL_BUTTON"|translate}}
+        </button>
+        <button type="button" ng-click="add(null)" class="btn btn-secondary"
+            ng-disabled="m_oController.isEmptyListOfFilters()" data-dismiss="modal">
+            {{"DIALOG_CRONOTAB_OK_BUTTON"|translate}}
+        </button>
+    </div>
+</div>
