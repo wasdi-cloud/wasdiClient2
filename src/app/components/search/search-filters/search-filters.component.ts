@@ -12,6 +12,8 @@ import { MatSelectChange } from '@angular/material/select';
 
 //Import Utilities:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { MatDialog } from '@angular/material/dialog';
+import { AdvancedFiltersComponent } from '../advanced-filters/advanced-filters.component';
 
 @Component({
   selector: 'app-search-filters',
@@ -50,6 +52,7 @@ export class SearchFiltersComponent implements OnInit {
 
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,
+    private m_oDialog: MatDialog,
     private m_oPagesService: PagesService,
     private m_oMissionFiltersService: MissionFiltersService,
     private m_oResultsOfSearchService: ResultOfSearchService,
@@ -269,5 +272,13 @@ export class SearchFiltersComponent implements OnInit {
       oProvider.selected = true;
     })
     this.m_aoProviderSelection.emit(this.m_aoSelectedProviders);
+  }
+
+
+  openAdvancedSearchFiltersDialog() {
+    this.m_oDialog.open(AdvancedFiltersComponent, {
+      height:'60vh',
+      width: '60vw'
+    })
   }
 }

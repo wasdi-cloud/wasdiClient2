@@ -5,7 +5,7 @@
     <div class="card-body flex-column">
         <!-- CronTab / Providers Buttons -->
         <div class="d-flex flex-row justify-content-between">
-            <button class="btn btn-primary">{{"IMPORT_CRONTAB" | translate}}</button>
+            <button class="btn btn-primary" (click)="openAdvancedSearchFiltersDialog()">{{"IMPORT_CRONTAB" | translate}}</button>
 
             <!-- Providers Multi-select -->
             <mat-select multiple class="form-control" placeholder="{{'IMPORT_PROVIDERS' | translate}}"

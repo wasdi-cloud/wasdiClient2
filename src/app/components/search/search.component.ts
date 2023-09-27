@@ -20,6 +20,7 @@ import { ResultOfSearchService } from 'src/app/services/result-of-search.service
 import { OpenSearchService } from 'src/app/services/api/open-search.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -280,8 +281,6 @@ export class SearchComponent implements OnInit {
     return true;
   }
 
-  openAddToWorkspaceDialog() { }
-
   thereIsAtLeastOneProvider() {
     if (this.m_aoSelectedProviders.length > 0) {
       return true;
@@ -498,4 +497,6 @@ export class SearchComponent implements OnInit {
 
   }
 
+  /********** OPEN DIALOG HANDLERS **********/
+  openAddToWorkspaceDialog() { }
 }
