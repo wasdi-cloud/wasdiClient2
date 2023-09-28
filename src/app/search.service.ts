@@ -152,7 +152,6 @@ export class SearchService {
       }
     }
     let asProviderNames = this.m_aProviders.map(oProvider => {return oProvider.name})
-    console.log(asProviderNames)
 
     // Call the API with the list of queries
     return this.m_oHttp.post(this.m_oOpenSearchService.getApiProductsListWithProviders(asProviderNames), asFilters);
@@ -166,8 +165,6 @@ export class SearchService {
     } else {
       filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection, this.m_sAdvancedFilter, this.m_sMissionFilter);
     }
-
-    console.log(this.m_aProviders[0].name);
 
     let prodCountUrl: string = ':filter';
     prodCountUrl = prodCountUrl.replace(":filter", (filter) ? filter : '*');
@@ -195,7 +192,6 @@ export class SearchService {
     }
 
     let asProviderNames = this.m_aProviders.map(oProvider => {return oProvider.name})
-    console.log(asProviderNames)
     return this.m_oHttp.post(this.m_oOpenSearchService.getApiProductListCountWithProviders(asProviderNames), asFilters);
   }
 
