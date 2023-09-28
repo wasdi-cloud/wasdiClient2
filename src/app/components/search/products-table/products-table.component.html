@@ -21,7 +21,7 @@
                     [value]="iProducts">{{iProducts}}</mat-option>
             </mat-select>
 
-            <ul class="pagination pagination mb-0">
+            <ul class="pagination pagination mb-0" *ngIf="m_oActiveProvider">
                 <li class="page-item" (click)="minusOnePage()">
                     <span class="page-link">Prev</span>
                 </li>

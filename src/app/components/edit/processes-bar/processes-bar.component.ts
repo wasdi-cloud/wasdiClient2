@@ -40,7 +40,7 @@ export class ProcessesBarComponent implements OnInit {
   faPlug = faPlug;
 
   m_aoProcessesRunning: any[] = [];
-  @Input() m_oActiveWorkspace: any = {};
+  @Input() m_oActiveWorkspace?: any = {};
   m_iNumberOfProcesses: number = 0;
   m_iWaitingProcesses: number = 0;
   m_oLastProcesses: any = null;
@@ -190,7 +190,7 @@ export class ProcessesBarContent implements OnInit {
   };
 
   m_aoProcessesRunning: any[] = [];
-  m_oActiveWorkspace: any = this.data.workspace;
+  m_oActiveWorkspace?: any = this.data.workspace;
   m_aoAllProcessesLogs: any = [];
 
   constructor(
@@ -201,10 +201,12 @@ export class ProcessesBarContent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
-    this.m_oProcessWorkspaceService.getProcessesRunning().subscribe(aoProcesses => {
-      this.m_aoProcessesRunning = aoProcesses;
-    })
+    if (this.m_oActiveWorkspace.workspaceId) {
+      this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+      this.m_oProcessWorkspaceService.getProcessesRunning().subscribe(aoProcesses => {
+        this.m_aoProcessesRunning = aoProcesses;
+      })
+    }
   }
 
   refreshProcesses(event: MouseEvent) {
