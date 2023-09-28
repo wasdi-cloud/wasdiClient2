@@ -5,7 +5,8 @@
     <div class="card-body flex-column">
         <!-- CronTab / Providers Buttons -->
         <div class="d-flex flex-row justify-content-between">
-            <button class="btn btn-primary" (click)="openAdvancedSearchFiltersDialog()">{{"IMPORT_CRONTAB" | translate}}</button>
+            <button class="btn btn-primary" (click)="openAdvancedSearchFiltersDialog()">{{"IMPORT_CRONTAB" |
+                translate}}</button>
 
             <!-- Providers Multi-select -->
             <mat-select multiple class="form-control" placeholder="{{'IMPORT_PROVIDERS' | translate}}"
@@ -18,7 +19,7 @@
         </div>
 
         <!-- From/to Date Pickers -->
-        <div class="d-flex flex-row justify-content-between gap-2">
+        <div class="d-flex flex-row justify-content-between gap-2" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
             <div class="flex-fill">
                 <label for="startDate">{{'IMPORT_DATE_FROM'|translate}}</label>
                 <input type="date" name="" id="" class="form-control" [(ngModel)]="m_sDateFrom"
@@ -32,6 +33,18 @@
         </div>
 
         <!-- Time-series filters summary -->
+        <div *ngIf="m_sTypeOfFilterSelected === 'Time series' && m_oAdvancedFilter.savedData.length !== 0">
+            <div class="col-v4-12">
+                <mat-chip-grid #chipGrid aria-label="time selection">
+                    <mat-chip-row *ngFor="let oData of m_oAdvancedFilter.savedData">
+                        {{oData.name}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + oData.name" (click)="removeSavedDataChip(oData)">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                </mat-chip-grid>
+            </div>
+        </div>
 
         <!-- Missions Selector and Advanced Filters -->
         <div id="advanced-search-content h-50" class="d-flex flex-column">
