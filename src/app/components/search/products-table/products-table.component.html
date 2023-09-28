@@ -13,7 +13,7 @@
             </li>
         </ul>
         <!-- Pagination and Products Per Page -->
-        <div class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
+        <div *ngIf="m_bIsVisibleListOfLayers && m_bIsPaginatedList === false" class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
             <mat-select (selectionChange)="changeNumberOfProductsPerPage($event)" class="form-control"
                 placeholder="Products Per Page">
                 <mat-option *ngFor="let iProducts of m_aiProductsPerPageOptions"
