@@ -8,7 +8,7 @@
         <fa-icon [icon]="faPlus"></fa-icon>
         Add Selected to Workspace</button>
 </div>
-<div class="d-flex flex-row gap-3 px-4 pt-2" style="height: 80%; width: 100%;">
+<div class="d-flex flex-row gap-3 px-4 pt-2" style="height: 75%; width: 100%;">
     <div class="products-table" style="width: 40%;" *ngIf="m_bIsVisibleListOfLayers === true">
         <app-products-table [m_aoProducts]="m_oProductSubject.asObservable()"
             [m_aoSelectedProviders]="m_oSelectedProvidersSubject.asObservable()"
@@ -29,3 +29,4 @@
             (m_oMapInputChange)="getMapInput($event)"></app-search-map>
     </div>
 </div>
+<app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>

@@ -55,6 +55,8 @@ export class SearchComponent implements OnInit {
 
   m_iActiveProvidersTab: number;
 
+  m_oActiveWorkspace: any;
+
   // Filter for Basic Search:
   m_oSearchModel = {
     textQuery: '',
@@ -117,6 +119,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.m_oPageService.setFunction(this.executeSearch, this)
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
   m_fUtcDateConverter(oDate) {
