@@ -1,13 +1,14 @@
 <div class="import-advance-filters d-flex flex-column justify-content-between w-100 h-100">
     <!--Dialog HEADER -->
     <div class="dialog-header d-flex flex-row justify-content-between px-2 py-1">
-        <!-- <h4>{{"DIALOG_CRONOTAB_TITLE"|translate}}</h4>
-        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon> -->
+        <h4>{{"DIALOG_CRONOTAB_TITLE"|translate}}</h4>
+        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
     </div>
+    
     <!-- Dialog Body BODY -->
     <div class="modal-body ">
         <div class="advance-search px-3">
-            <!-- <h3>{{"DIALOG_CRONOTAB_CRONOTAB_BOX"|translate}}</h3> -->
+            <h3>{{"DIALOG_CRONOTAB_CRONOTAB_BOX"|translate}}</h3>
             <form class="d-flex flex-row gap-1">
                 <!-- Year Selector -->
                 <mat-select multiple class="form-select" placeholder="Select Year(s)" style="width: 15rem"
@@ -37,7 +38,6 @@
             </form>
 
             <div class="edit-filters-buttons d-flex flex-row gap-1 justify-content-end mt-2">
-
                 <button class="btn btn-primary btn-wasdi" (click)="addFiltersData()">
                     <fa-icon [icon]="faSave"></fa-icon>
                     {{"DIALOG_CRONOTAB_ADD_BUTTON"|translate}}
@@ -49,33 +49,28 @@
             </div>
 
             <div *ngIf="m_oAdvanceFilterOptions.savedData.length > 0">
-                <div class="col-v4-12">
-                    <form>
-                        <legend>{{"DIALOG_CRONOTAB_FILTERS_BOX"|translate}}</legend>
-                        <mat-chip-grid #chipGrid aria-label="Fruit selection">
-                            <mat-chip-row *ngFor="let oData of m_oAdvanceFilterOptions.savedData">
-                                {{oData.name}}
-                                <button matChipRemove [attr.aria-label]="'remove ' + oData.name">
-                                    <mat-icon>cancel</mat-icon>
-                                </button>
-                            </mat-chip-row>
-                        </mat-chip-grid>
+                <form>
+                    <h4>{{"DIALOG_CRONOTAB_FILTERS_BOX"|translate}}</h4>
+                    <mat-chip-grid aria-label="time selection">
+                        <mat-chip-row *ngFor="let oData of m_oAdvanceFilterOptions.savedData">
+                            {{oData.name}}
+                            <button matChipRemove [attr.aria-label]="'remove ' + oData.name">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip-row>
+                    </mat-chip-grid>
 
-                    </form>
-                </div>
+                </form>
             </div>
-
         </div>
-
     </div>
 
     <!-- FOOTER -->
     <div mat-dialog-actions class="d-flex flex-row justify-content-end gap-1">
-        <button type="button" ng-click="close(null)" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" (click)="onDismiss(null)" class="btn btn-secondary" data-dismiss="modal">
             {{"DIALOG_CRONOTAB_CANCEL_BUTTON"|translate}}
         </button>
-        <button type="button" ng-click="add(null)" class="btn btn-secondary"
-            ng-disabled="m_oController.isEmptyListOfFilters()" data-dismiss="modal">
+        <button type="button" (click)="onDismiss(true)" class="btn btn-secondary" [disabled]="isEmptyListOfFilters()">
             {{"DIALOG_CRONOTAB_OK_BUTTON"|translate}}
         </button>
     </div>

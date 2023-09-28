@@ -612,7 +612,12 @@ export class AdvancedFiltersComponent implements OnInit {
     }
   }
 
-  onDismiss() {
-    this.m_oDialogRef.close()
+  onDismiss(oInput?: any) {
+    let aoSavedData = this.m_oAdvanceFilterOptions.savedData;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oInput) === true) {
+      this.m_oDialogRef.close()
+    } else {
+      this.m_oDialogRef.close(aoSavedData);
+    }
   }
 }
