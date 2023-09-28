@@ -85,7 +85,7 @@ export class SearchComponent implements OnInit {
     selectedMonthsSearchForMonths: []
   }
 
-  m_sTypeOfFilterSelected: string;
+  m_sTypeOfFilterSelected: string = "Time period";
 
   constructor(
     private m_oAdvancedFilterService: AdvancedFilterService,
@@ -111,30 +111,17 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.m_oPageService.setFunction(this.executeSeach, this)
+    this.m_oPageService.setFunction(this.executeSearch, this)
   }
 
-  /**
-   * Set the type of filter selected as "Time period"
-   */
-  setFilterTypeAsTimePeriod() {
-    this.m_sTypeOfFilterSelected = "Time period";
-  }
-  /**
-   * Set the type of filter selected as "Time series"
-   */
-  setFilterTypeAsTimeSeries() {
-    this.m_sTypeOfFilterSelected = "Time series";
-  }
-
-  /**
-   * Update the Type of filter selected as time period if no saved data 
-   */
-  updateAdvancedSavedFiltersUi() {
-    if (this.m_oAdvancedFilter.savedData.length == 0) {
-      this.setFilterTypeAsTimePeriod();
+  m_fUtcDateConverter(oDate) {
+    var result = oDate;
+    if (oDate != undefined) {
+      let utcDate = oDate.toISOString() // parsed as 4:30 UTC
+      result = utcDate;
     }
-  }
+    return result;
+  };
 
   /**
    * Execute search on all selected providers using BASIC filters
@@ -151,6 +138,34 @@ export class SearchComponent implements OnInit {
       })
     }
 
+    return true;
+  }
+
+  searchListAllSelectedProviders() {
+    if ((this.m_bIsVisibleListOfLayers || this.m_bIsVisibleLocalStorageInputs)) return false;
+
+    // Check input data
+    if (this.thereIsAtLeastOneProvider() === false) {
+      // var sError= this.m_oTranslate.instant("MSG_SEARCH_SELECT_PROVIDER");
+      // utilsVexDialogAlertDefault(sError,null);
+      console.log("error")
+      return false;
+    }
+
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oSearchModel.geoselection)) {
+      // var sError= this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
+      // utilsVexDialogAlertDefault(sError,null);
+      console.log("error");
+      return false;
+    }
+
+    let iNumberOfProviders = this.m_aoSelectedProviders.length;
+
+    for (let iIndexProvider = 0; iIndexProvider < iNumberOfProviders; iIndexProvider++) {
+      if (this.m_aoSelectedProviders[iIndexProvider].selected === true) {
+        this.executeSearchList(this.m_aoSelectedProviders[iIndexProvider]);
+      }
+    }
     return true;
   }
 
@@ -228,7 +243,7 @@ export class SearchComponent implements OnInit {
     return true;
   }
 
-  executeSeach(oInputProvider, oInputController?) {
+  executeSearch(oInputProvider, oInputController?) {
     let oController = this;
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oInputController) === false) {
       oController = oInputController;
@@ -281,6 +296,119 @@ export class SearchComponent implements OnInit {
     return true;
   }
 
+  executeSearchList(oProvider, oThat?) {
+    // Take reference to the controller
+    var oController = this;
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oThat) === false) {
+      oController = oThat;
+    }
+
+    // Check input data
+    if (oController.thereIsAtLeastOneProvider() === false || FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) {
+      return false;
+    }
+
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(oController.m_oSearchModel.geoselection)) {
+      return false;
+    }
+
+    oController.m_bClearFiltersEnabled = false;
+    //delete layers and relatives rectangles in map
+    oController.deleteProducts(oProvider.name);
+    //hide previous results
+    oController.m_bIsVisibleListOfLayers = true;
+    oController.m_bIsPaginatedList = false;
+    oController.m_oSearchService.setTextQuery(oController.m_oSearchModel.textQuery);
+    oController.m_oSearchService.setGeoselection(oController.m_oSearchModel.geoselection);
+    var aoProviders = [];
+    aoProviders.push(oProvider);
+    oController.m_oSearchService.setProviders(aoProviders);
+
+    // Pagination Info: should be refactored, not needed in the list version
+    var oProvider = oController.m_oPageService.getProviderObject(oProvider.name);
+    var iOffset = oController.m_oPageService.calcOffset(oProvider.name);
+    oController.m_oSearchService.setOffset(iOffset);//default 0 (index page)
+    oController.m_oSearchService.setLimit(oProvider.productsPerPageSelected);// default 10 (total of element per page)
+    oProvider.isLoaded = false;
+    oProvider.totalOfProducts = 0;
+
+    // Generation of different time filters
+    var asTimePeriodsFilters = [];
+
+    // For each saved period
+    for (var iPeriods = 0; iPeriods < this.m_oAdvancedFilter.savedData.length; iPeriods++) {
+
+      // Prepare input data for date conversion
+      var oAdvancedSensingFrom = null;
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodFrom) && this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodFrom !== "") {
+        oAdvancedSensingFrom = this.m_fUtcDateConverter(this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodFrom);
+      }
+      var oAdvancedSensingTo = null;
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodTo) && this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodTo !== "") {
+        oAdvancedSensingTo = this.m_fUtcDateConverter(this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodTo);
+      }
+      var oAdvancedIngestionFrom = null;
+      var oAdvancedIngestionTo = null;
+
+      var advancedFilter = {
+        sensingPeriodFrom: oAdvancedSensingFrom,
+        sensingPeriodTo: oAdvancedSensingTo,
+        ingestionFrom: oAdvancedIngestionFrom,
+        ingestionTo: oAdvancedIngestionTo
+      };
+
+      // Get the time filter object
+      var sTimeFilter = this.getAdvancedDateFilterQuery(advancedFilter);
+      // Push it to the queries list
+      asTimePeriodsFilters.push(sTimeFilter);
+    }
+
+    // Call the complete Get Product Count for all the queries of this provider
+    oController.m_oSearchService.getProductsListCount(asTimePeriodsFilters).subscribe({
+      next: oResponse => {
+        if (oResponse) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+
+            oProvider.totalOfProducts = oResponse;
+            //calc number of pages
+            var remainder = oProvider.totalOfProducts % oProvider.productsPerPageSelected;
+            oProvider.totalPages = Math.floor(oProvider.totalOfProducts / oProvider.productsPerPageSelected);
+            if (remainder !== 0) oProvider.totalPages += 1;
+            this.m_aoProvidersAfterCount.push(oProvider);
+            this.emitSelectedProviders();
+          }
+        }
+      },
+      error: oError => {
+        console.log("Impossible get products number");
+      }
+    })
+
+    // var sMessage = oController.m_oTranslate.instant("MSG_SEARCH_ERROR");
+
+    // // Call the complete Search for all the queries of this provider
+    oController.m_oSearchService.searchList(asTimePeriodsFilters).subscribe({
+      next: oResponse => {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          console.log(oResponse)
+          var aoData = oResponse;
+          oController.generateLayersList(aoData)//.feed;
+
+          oProvider.isLoaded = true;
+        }
+      },
+      error: oError => {
+        console.log(oError);
+
+        oController.m_bIsVisibleListOfLayers = false;//visualize filter list
+        oController.m_oResultsOfSearchService.setIsVisibleListOfProducts(oController.m_bIsVisibleListOfLayers);
+      }
+    });
+
+    return true;
+  }
+
   thereIsAtLeastOneProvider() {
     if (this.m_aoSelectedProviders.length > 0) {
       return true;
@@ -291,6 +419,36 @@ export class SearchComponent implements OnInit {
     }
   }
 
+  getAdvancedDateFilterQuery(oAdvancedFilter: any) {
+    var sFilter = '';
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter)) return sFilter;
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodFrom) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodTo)) {
+      sFilter += '( beginPosition:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) +
+        ' TO ' + this.m_oAdvancedSearchService.formatToDate(oAdvancedFilter.sensingPeriodTo) + '] AND endPosition:[' +
+        this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) + ' TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.sensingPeriodTo) + '] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodFrom)) {
+      sFilter += '( beginPosition:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) +
+        ' TO NOW] AND endPosition:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) + ' TO NOW] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodTo)) {
+      sFilter += '( beginPosition:[ * TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.sensingPeriodTo) + '] AND endPosition:[* TO ' + this.m_oAdvancedSearchService.formatToDate(oAdvancedFilter.sensingPeriodTo) + ' ] )';
+    }
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionFrom) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionTo)) {
+      sFilter += ((sFilter) ? ' AND' : '') + '( ingestionDate:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.ingestionFrom) +
+        ' TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.ingestionTo) + ' ] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionFrom)) {
+      sFilter += ((sFilter) ? ' AND' : '') + '( ingestionDate:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.ingestionFrom) + ' TO NOW] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionTo)) {
+      sFilter += ((sFilter) ? ' AND' : '') + '( ingestionDate:[ * TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.ingestionTo) + ' ] )';
+    }
+
+    return sFilter;
+  }
   /**
    * Get the Layers List
    * @param aoData 
@@ -401,11 +559,20 @@ export class SearchComponent implements OnInit {
    */
   getSelectedProviders(oEvent: any) {
     this.m_aoSelectedProviders = oEvent;
+    console.log(this.m_aoSelectedProviders)
   }
 
   getActiveProvider(oEvent: any) {
     this.m_oActiveProvider = oEvent;
     this.emitProducts();
+  }
+
+  getTimeFilter(oEvent: any) {
+    this.m_sTypeOfFilterSelected = oEvent;
+  }
+
+  getAdvancedFilterSelection(oEvent: any) {
+    this.m_oAdvancedFilter.savedData = oEvent;
   }
 
   /**
