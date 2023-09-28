@@ -54,6 +54,7 @@ import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatChipsModule } from '@angular/material/chips';
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -140,7 +141,8 @@ import { SearchFiltersComponent } from './components/search/search-filters/searc
 import { ConfigurationService } from './services/configuration.service';
 import { ProductsTableComponent } from './components/search/products-table/products-table.component';
 import { WorkspacesListDialogComponent } from './components/search/workspaces-list-dialog/workspaces-list-dialog.component';
-
+import { ProductInfoComponent } from './components/search/product-info/product-info.component';
+import { AdvancedFiltersComponent } from './components/search/advanced-filters/advanced-filters.component';
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -211,7 +213,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProcessorTabUiComponent,
     ProcessorTabStoreComponent,
     ProcessorTabMediaComponent,
-    WorkflowsDialogComponent, 
+    WorkflowsDialogComponent,
     EditWorkflowDialogComponent,
     SubscriptionsDisplayComponent,
     OrganizationsDisplayComponent,
@@ -226,7 +228,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SearchMapComponent,
     SearchFiltersComponent,
     ProductsTableComponent,
-    WorkspacesListDialogComponent
+    WorkspacesListDialogComponent,
+    ProductInfoComponent,
+    AdvancedFiltersComponent
   ],
   imports: [
     AppRoutingModule,
@@ -263,8 +267,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ClipboardModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    MatListModule, 
-    MatProgressSpinnerModule
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatChipsModule
   ],
   providers: [
     AuthService,
@@ -284,10 +289,10 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     },
     { provide: RabbitStompService },
     {
-      provide : APP_INITIALIZER,
-      multi : true,
-       deps : [ConfigurationService],
-       useFactory : (appConfigService : ConfigurationService) =>  () => appConfigService.loadConfiguration()
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [ConfigurationService],
+      useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
     }
   ],
   bootstrap: [AppComponent],

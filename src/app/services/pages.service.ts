@@ -17,6 +17,7 @@ export class PagesService {
   m_aoListOfProviders: Array<any> = [];
   m_aiProductsPerPage: Array<number> = [10, 15, 20, 25, 50];
   m_oFunction: any = null;
+  m_oScope: any = null;
 
   constructor(
     private m_oOpenSearchService: OpenSearchService) {
@@ -34,7 +35,7 @@ export class PagesService {
           "link": "https://www.wasdi.net"
         };
 
-        var iLengthData = oResponse.length;
+        let iLengthData = oResponse.length;
         for (var iIndexProvider = 0; iIndexProvider < iLengthData; iIndexProvider++) {
           this.m_aoListOfProviders[iIndexProvider + 1] = {
             "name": oResponse[iIndexProvider].code,
@@ -48,6 +49,7 @@ export class PagesService {
             "link": oResponse[iIndexProvider].link
           };
         }
+        return this.m_aoListOfProviders
       },
       error: oError => {
         console.log("Error getting providers");
@@ -60,18 +62,19 @@ export class PagesService {
   }
 
   getProviders() {
-    return of(this.m_aoListOfProviders);
+    return this.m_aoListOfProviders;
   }
 
   getProvidersPerPageOptions() {
     return this.m_aiProductsPerPage;
   }
 
-  setFunction(oFunction) {
+  setFunction(oFunction, oController) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oFunction) === true) {
       return false;
     } else {
       this.m_oFunction = oFunction;
+      this.m_oScope = oController;
       return true;
     }
   }
@@ -80,24 +83,23 @@ export class PagesService {
    * Returns callback function
    * @returns {function}
    */
-
   getFunction() {
     return this.m_oFunction;
   }
 
   /**
    * Get index of selected provider
-   * @param sProvider 
+   * @param sProviderName 
    * @returns {number}
    */
-  getProviderIndex(sProvider: string) {
+  getProviderIndex(sProviderName: string) {
     let iResult: number = -1;
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProvider) === true)
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProviderName) === true)
       return iResult;
     let iNumberOfProviders = this.m_aoListOfProviders.length;
 
     for (let iIndexProvider = 0; iIndexProvider < iNumberOfProviders; iIndexProvider++) {
-      if (this.m_aoListOfProviders[iIndexProvider].name === sProvider) {
+      if (this.m_aoListOfProviders[iIndexProvider].name === sProviderName) {
         iResult = iIndexProvider;
         break;
       }
@@ -108,11 +110,11 @@ export class PagesService {
 
   /**
    * Get the object of the selected provider
-   * @param sProvider 
+   * @param sProviderName 
    * @returns 
    */
-  getProviderObject(sProvider) {
-    var iIndexProviderFind = this.getProviderIndex(sProvider);
+  getProviderObject(sProviderName) {
+    var iIndexProviderFind = this.getProviderIndex(sProviderName);
 
     if (iIndexProviderFind === -1)
       return null;
@@ -121,9 +123,9 @@ export class PagesService {
 
   }
 
-  countPages(sProvider: string) {
+  countPages(sProviderName: string) {
 
-    let oProvider = this.getProviderObject(sProvider);
+    let oProvider = this.getProviderObject(sProviderName);
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) {
       return -1;
@@ -140,13 +142,108 @@ export class PagesService {
     return oProvider.totalPages;
   };
 
-  calcOffset(sProvider: string) {
-    let oProvider = this.getProviderObject(sProvider);
+  calcOffset(sProviderName: string) {
+    let oProvider = this.getProviderObject(sProviderName);
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) {
       return -1;
     }
 
     return (oProvider.currentPage - 1) * oProvider.productsPerPageSelected;
+  };
+
+  changePage(iNewPage: any, sProviderName: string) {
+    iNewPage = parseInt(iNewPage);
+
+    let oFunction = this.getFunction();
+    let oController = this.m_oScope; 
+   
+    let oProvider = this.getProviderObject(sProviderName);
+    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) || (FadeoutUtils.utilsIsObjectNullOrUndefined(oFunction) === true)) {
+      return false;
+    }
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(iNewPage) && isNaN(iNewPage) == false && FadeoutUtils.utilsIsInteger(iNewPage) && iNewPage >= 0 && iNewPage <= oProvider.totalPages) {
+      oProvider.currentPage = iNewPage;
+      oFunction(oProvider, oController);
+    }
+    else {
+      return false;
+    }
+    return true;
+  }
+
+  plusOnePage(sProviderName) {
+    let oProvider = this.getProviderObject(sProviderName);
+    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true)) {
+      return false;
+    }
+
+    let iNewPage = parseInt(oProvider.currentPage);
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(iNewPage) && isNaN(iNewPage) == false && FadeoutUtils.utilsIsInteger(iNewPage) && iNewPage >= 0 && iNewPage <= oProvider.totalPages) {
+      oProvider.currentPage = iNewPage;
+      this.changePage(oProvider.currentPage + 1, sProviderName);
+    }
+
+    return true;
+  };
+
+  minusOnePage(sProviderName: string) {
+    let oProvider = this.getProviderObject(sProviderName);
+
+    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true))
+      return false;
+
+    let iNewPage = parseInt(oProvider.currentPage);
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(iNewPage) && isNaN(iNewPage) == false && FadeoutUtils.utilsIsInteger(iNewPage) && iNewPage > 1 && iNewPage <= oProvider.totalPages) {
+      oProvider.currentPage = iNewPage;
+      this.changePage(oProvider.currentPage - 1, sProviderName);
+    }
+
+    return true;
+  };
+
+  lastPage(sProviderName: string) {
+
+    let oProvider = this.getProviderObject(sProviderName);
+
+    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true)) {
+      return false;
+    }
+
+    this.changePage(oProvider.totalPages, sProviderName);
+    return true;
+
+  };
+
+  firstPage(sProviderName: string) {
+    this.changePage(1, sProviderName);
+  };
+
+  getNumberOfProductsByProvider(sProviderName) {
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sProviderName.name) === true)
+      return -1;
+    let aoProviders = this.getProviders();
+    let iNumberOfProviders = aoProviders.length;
+
+    for (let iIndexProvider = 0; iIndexProvider < iNumberOfProviders; iIndexProvider++) {
+      if (aoProviders[iIndexProvider].name === sProviderName.name)
+        return aoProviders[iIndexProvider].totalOfProducts;
+    }
+
+    return -1;
+  };
+
+  changeNumberOfProductsPerPage = function (sProviderName) {
+    let oFunction = this.getFunction();
+    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(sProviderName) === false) &&(FadeoutUtils.utilsIsObjectNullOrUndefined(oFunction) === false)) {
+      //countPages
+      let oProvider = this.getProviderObject(sProviderName);
+      oFunction(oProvider, this.m_oScope);
+      return true;
+    }
+    return false;
   };
 }

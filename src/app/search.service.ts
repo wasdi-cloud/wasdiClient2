@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ConstantsService } from './services/constants.service';
 import { OpenSearchService } from './services/api/open-search.service';
 import { HttpClient } from '@angular/common/http';
-
+import FadeoutUtils from './lib/utils/FadeoutJSUtils';
 @Injectable({
   providedIn: 'root'
 })
@@ -24,8 +24,7 @@ export class SearchService {
   m_iLimit = 25
   m_iOffset = 0
 
-
-  m_oCollectionAllProductsModel = { list: [] }
+  m_oCollectionAllProductsModel: { list: any } = { list: [] }
   m_oCollectionProductsModel = { list: [], count: 0 }
   m_oFilterContext = {
     doneRequest: '',
@@ -56,7 +55,7 @@ export class SearchService {
     this.m_iOffset = iOffset
   }
 
-  setProviders(asProvidersInput:any) {
+  setProviders(asProvidersInput: any) {
     this.m_aProviders = asProvidersInput;
   }
 
@@ -78,7 +77,7 @@ export class SearchService {
 
   /****** CREATOR METHODS ******/
 
-  createSearchRequest(oFilter: any, iOffset: any, iLimit: any, sProviders: any) {
+  createSearchRequest(oFilter: any, iOffset: any, iLimit: any, sProviders?: any) {
     let searchUrl: string = ":filter&offset=:offset&limit=:limit&providers=:providers";
 
     searchUrl = searchUrl.replace(":filter", (oFilter) ? oFilter : '*');
@@ -101,9 +100,9 @@ export class SearchService {
   }
 
   saveUserSearch(textQuery, geoselection, advancedFilter, missionFilter) {
-    var filter = '';
+    let filter = '';
     filter = this.createSearchFilter(textQuery, geoselection, advancedFilter, missionFilter);
-    var saveSearchUrl = 'api/stub/users/0/searches?complete=:complete';
+    let saveSearchUrl = 'api/stub/users/0/searches?complete=:complete';
     saveSearchUrl = saveSearchUrl.replace(":complete", (filter) ? filter : '*');
     // return http({url: ConstantsService.getUrl() + saveSearchUrl, method: "POST"})
     //     .then(function (response) {
@@ -111,28 +110,51 @@ export class SearchService {
     //     });
   }
 
-
-
   getGeoQueryByCoords(query) {
     return query;
   }
-
 
   search(query?) {
     //console.log('called search function');
     let filter = '';
     if (query)
-        filter = this.createSearchFilter(query, '', '', '');
+      filter = this.createSearchFilter(query, '', '', '');
     else
-        filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection,
-            this.m_sAdvancedFilter, this.m_sMissionFilter);
+      filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection,
+        this.m_sAdvancedFilter, this.m_sMissionFilter);
     //console.log('filter xx',filter);
     // return $http({
-    //     // url: OpenSearchService.getApiProducts(self.createSearchRequest(filter, self.offset, self.limit)),
-    //     url: OpenSearchService.getApiProductsWithProviders(self.createSearchRequest(filter, self.offset, self.limit,self.providers)),
+    //     // url: OpenSearchService.getApiProducts(this.createSearchRequest(filter, this.offset, this.limit)),
+    //     url: OpenSearchService.getApiProductsWithProviders(this.createSearchRequest(filter, this.offset, this.limit,this.providers)),
     //     method: "GET"
     // });
-    return this.m_oHttp.get<any>(this.m_oOpenSearchService.getApiProductsWithProviders(this.createSearchRequest(filter, this.m_iOffset, this.m_iLimit,this.m_aProviders[0].name)))
+    return this.m_oHttp.get<any>(this.m_oOpenSearchService.getApiProductsWithProviders(this.createSearchRequest(filter, this.m_iOffset, this.m_iLimit, this.m_aProviders[0].name)))
+  }
+
+  searchList(asTimeQueries: Array<string>) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(asTimeQueries)) asTimeQueries = [];
+
+    // Array of filters to pass to the server
+    let asFilters = [];
+
+    // If there aren't advanced periods
+    if (asTimeQueries.length == 0) {
+      // Use standard dates
+      let filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection,
+        this.m_sAdvancedFilter, this.m_sMissionFilter);
+      asFilters.push(filter);
+    }
+    else {
+      // Put all the time filters in the array
+      for (let iPeriods = 0; iPeriods < asTimeQueries.length; iPeriods++) {
+        let filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection, asTimeQueries[iPeriods], this.m_sMissionFilter);
+        asFilters.push(filter);
+      }
+    }
+    let asProviderNames = this.m_aProviders.map(oProvider => {return oProvider.name})
+
+    // Call the API with the list of queries
+    return this.m_oHttp.post(this.m_oOpenSearchService.getApiProductsListWithProviders(asProviderNames), asFilters);
   }
 
   getProductsCount(query?) {
@@ -144,11 +166,65 @@ export class SearchService {
       filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection, this.m_sAdvancedFilter, this.m_sMissionFilter);
     }
 
-    console.log(this.m_aProviders[0].name);
-
     let prodCountUrl: string = ':filter';
     prodCountUrl = prodCountUrl.replace(":filter", (filter) ? filter : '*');
 
     return this.m_oHttp.get<any>(this.m_oOpenSearchService.getApiProductCountWithProviders(prodCountUrl, this.m_aProviders[0].name));
   }
+
+  getProductsListCount(asTimeQueries) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(asTimeQueries)) asTimeQueries = [];
+    // Array of filters to pass to the server
+    let asFilters = [];
+
+    // If there aren't advanced periods
+    if (asTimeQueries.length == 0) {
+      // Use standard dates
+      let filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection, this.m_sAdvancedFilter, this.m_sMissionFilter);
+      asFilters.push(filter);
+    }
+    else {
+      // Put all the time filters in the array
+      for (let iPeriods = 0; iPeriods < asTimeQueries.length; iPeriods++) {
+        let filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection, asTimeQueries[iPeriods], this.m_sMissionFilter);
+        asFilters.push(filter);
+      }
+    }
+
+    let asProviderNames = this.m_aProviders.map(oProvider => {return oProvider.name})
+    return this.m_oHttp.post(this.m_oOpenSearchService.getApiProductListCountWithProviders(asProviderNames), asFilters);
+  }
+
+  goToPage(iPageNumber: number) {
+    this.setOffset((iPageNumber * this.m_iLimit) - this.m_iLimit);
+    return this.search();
+  }
+
+  getSuggestions(query) {
+    let suggesturl = 'api/search/suggest/' + query;
+    return this.m_oHttp.get(this.m_oConstantsService.getURL() + suggesturl, { observe: 'response' }).subscribe({
+      next: oResponse => {
+        if (oResponse.status === 200) {
+          return oResponse.body
+        } else; {
+          return [];
+        }
+      }
+    });
+  }
+  getCollectionProductsList(query, offset, limit) {
+    return this.getProductsCount(query).subscribe({
+      next: oResponse => { },
+      error: oError => { }
+    });
+  }
+  getAllCollectionProducts(query, offset, limit) {
+    //console.log('called search function');
+    return this.m_oHttp.get(this.m_oConstantsService.getAPIURL() + this.createSearchRequest(query, offset, limit)).subscribe({
+      next: oResponse => {
+        this.m_oCollectionAllProductsModel.list = oResponse;
+      }
+    });
+  }
+
 }

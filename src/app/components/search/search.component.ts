@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
+import { AdvancedFilterService } from 'src/app/services/search/advanced-filter.service';
 import { SearchService } from 'src/app/search.service';
 import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
@@ -13,12 +14,21 @@ import { PagesService } from 'src/app/services/pages.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Subject } from 'rxjs'
+import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
+import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { ResultOfSearchService } from 'src/app/services/result-of-search.service';
+import { OpenSearchService } from 'src/app/services/api/open-search.service';
+import { TranslateService } from '@ngx-translate/core';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { MatDialog } from '@angular/material/dialog';
+import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspaces-list-dialog.component';
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   //Font Awesome Imports:
   faPlus = faPlus;
 
@@ -27,19 +37,25 @@ export class SearchComponent {
 
   m_bClearFiltersEnabled: boolean;
   m_bIsVisibleListOfLayers: boolean = false;
-  m_bIsPaginatedList: boolean;
+  m_bIsPaginatedList: boolean = true;
   m_bIsVisibleLocalStorageInputs: boolean;
 
   m_aoSelectedProviders: Array<any> = [];
   m_oSelectedProvidersSubject: Subject<any> = new Subject<any>();
-  m_aoProvidersAfterCount: Array<any> = []; 
+  m_aoProvidersAfterCount: Array<any> = [];
+
+  m_oActiveProvider: any = null;
 
   m_asListOfProviders: Array<any> = []
 
   m_aoProductsList: Array<any> = [];
   m_oProductSubject: Subject<any> = new Subject<any>();
 
+  m_aoSelectedProducts: any = [];
+
   m_iActiveProvidersTab: number;
+
+  m_oActiveWorkspace: any;
 
   // Filter for Basic Search:
   m_oSearchModel = {
@@ -75,45 +91,45 @@ export class SearchComponent {
     selectedMonthsSearchForMonths: []
   }
 
-  m_sTypeOfFilterSelected: string;
+  m_sTypeOfFilterSelected: string = "Time period";
 
   constructor(
+    private m_oAdvancedFilterService: AdvancedFilterService,
+    private m_oAdvancedSearchService: AdvancedSearchService,
+    private m_oAlertDialogService: AlertDialogTopService,
     private m_oAuthService: AuthService,
     private m_oConfigurationService: ConfigurationService,
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
     private m_oMapService: MapService,
+    private m_oOpenSearchService: OpenSearchService,
     private m_oPageService: PagesService,
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
-    private m_oSearchService: SearchService
+    private m_oResultsOfSearchService: ResultOfSearchService,
+    private m_oSearchService: SearchService,
+    private m_oTranslate: TranslateService,
+    private m_oWorkspaceService: WorkspaceService
   ) {
     this.m_oConfigurationService.loadConfiguration();
     this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
   }
 
-  /**
-   * Set the type of filter selected as "Time period"
-   */
-  setFilterTypeAsTimePeriod() {
-    this.m_sTypeOfFilterSelected = "Time period";
-  }
-  /**
-   * Set the type of filter selected as "Time series"
-   */
-  setFilterTypeAsTimeSeries() {
-    this.m_sTypeOfFilterSelected = "Time series";
+  ngOnInit(): void {
+    this.m_oPageService.setFunction(this.executeSearch, this)
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
-  /**
-   * Update the Type of filter selected as time period if no saved data 
-   */
-  updateAdvancedSavedFiltersUi() {
-    if (this.m_oAdvancedFilter.savedData.length == 0) {
-      this.setFilterTypeAsTimePeriod();
+  m_fUtcDateConverter(oDate) {
+    var result = oDate;
+    if (oDate != undefined) {
+      let utcDate = oDate.toISOString() // parsed as 4:30 UTC
+      result = utcDate;
     }
-  }
+    return result;
+  };
 
   /**
    * Execute search on all selected providers using BASIC filters
@@ -124,16 +140,40 @@ export class SearchComponent {
       return false;
     }
 
-    let iNumberOfProviders = this.m_asListOfProviders.length;
-
     if (this.m_aoSelectedProviders.length > 0) {
       this.m_aoSelectedProviders.forEach(oProvider => {
-        console.log(oProvider);
         this.searchAndCount(oProvider);
-       
       })
     }
 
+    return true;
+  }
+
+  searchListAllSelectedProviders() {
+    if ((this.m_bIsVisibleListOfLayers || this.m_bIsVisibleLocalStorageInputs)) return false;
+
+    // Check input data
+    if (this.thereIsAtLeastOneProvider() === false) {
+      // var sError= this.m_oTranslate.instant("MSG_SEARCH_SELECT_PROVIDER");
+      // utilsVexDialogAlertDefault(sError,null);
+      console.log("error")
+      return false;
+    }
+
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oSearchModel.geoselection)) {
+      // var sError= this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
+      // utilsVexDialogAlertDefault(sError,null);
+      console.log("error");
+      return false;
+    }
+
+    let iNumberOfProviders = this.m_aoSelectedProviders.length;
+
+    for (let iIndexProvider = 0; iIndexProvider < iNumberOfProviders; iIndexProvider++) {
+      if (this.m_aoSelectedProviders[iIndexProvider].selected === true) {
+        this.executeSearchList(this.m_aoSelectedProviders[iIndexProvider]);
+      }
+    }
     return true;
   }
 
@@ -188,7 +228,6 @@ export class SearchComponent {
             oProvider.totalPages += 1;
           }
           this.m_aoProvidersAfterCount.push(oProvider);
-          console.log(this.m_aoProvidersAfterCount)
           this.emitSelectedProviders();
         }
 
@@ -199,64 +238,183 @@ export class SearchComponent {
     this.m_oSearchService.search().subscribe({
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse !== '') {
-          let aoData = oResponse
           this.generateLayersList(oResponse);
         }
-      },
-      error: oError => { }
-    })
-
-    return true;
-  }
-
-
-  executeSeach(oProvider) {
-
-    if (this.thereIsAtLeastOneProvider() === false) {
-      return false;
-    }
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) {
-      return false;
-    }
-
-    this.m_bClearFiltersEnabled = false;
-    //delete layers and relatives rectangles in map
-    this.deleteProducts(oProvider.name);
-    //hide previous results
-    this.m_bIsVisibleListOfLayers = true;
-    this.m_bIsPaginatedList = true;
-
-    if (this.m_oSearchModel.textQuery.endsWith('*')) {
-      this.m_oSearchService.setTextQuery("*" + this.m_oSearchModel.textQuery + "*");
-    }
-    this.m_oSearchService.setTextQuery(this.m_oSearchModel.textQuery);
-    this.m_oSearchService.setGeoselection(this.m_oSearchModel.geoselection);
-    var aoProviders = [];
-    aoProviders.push(oProvider);
-    this.m_oSearchService.setProviders(aoProviders);
-
-    var oProvider = this.m_oPageService.getProviderObject(oProvider.name);
-    var iOffset = this.m_oPageService.calcOffset(oProvider.name);
-    this.m_oSearchService.setOffset(iOffset);//default 0 (index page)
-    this.m_oSearchService.setLimit(oProvider.productsPerPageSelected);// default 10 (total of element per page)
-    oProvider.isLoaded = false;
-    oProvider.totalOfProducts = 0;
-
-    this.m_oSearchService.getProductsCount().subscribe({
-      next: oResponse => {
-        console.log(oResponse);
+        oProvider.isLoaded = true;
       },
       error: oError => {
-        console.log(oError);
+        this.m_oAlertDialogService.openDialog(4000, "GURU MEDITATION<br>ERROR IN OPEN SEARCH REQUEST");
+        oProvider.isLoaded = false;
       }
     });
 
     return true;
   }
 
-  openAddToWorkspaceDialog() {
+  executeSearch(oInputProvider, oInputController?) {
+    let oController = this;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oInputController) === false) {
+      oController = oInputController;
+    }
 
+    if (oController.thereIsAtLeastOneProvider() === false) {
+      return false;
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oInputProvider) === true) {
+      return false;
+    }
+
+    oController.m_bClearFiltersEnabled = false;
+    //delete layers and relatives rectangles in map
+    oController.deleteProducts(oInputProvider.name);
+    //hide previous results
+    oController.m_bIsVisibleListOfLayers = true;
+    oController.m_bIsPaginatedList = true;
+    //TODO
+    // "*" + oController.m_oModel.textQuery + "*" fix
+    // oController.m_oSearchService.setTextQuery("*" + oController.m_oModel.textQuery + "*");
+    oController.m_oSearchService.setTextQuery(oController.m_oSearchModel.textQuery);
+    oController.m_oSearchService.setGeoselection(oController.m_oSearchModel.geoselection);
+    let aoProviders = [];
+    aoProviders.push(oInputProvider);
+    oController.m_oSearchService.setProviders(aoProviders);
+
+    let oProvider = oController.m_oPageService.getProviderObject(oInputProvider.name);
+    let iOffset = oController.m_oPageService.calcOffset(oInputProvider.name);
+    oController.m_oSearchService.setOffset(iOffset);//default 0 (index page)
+    oController.m_oSearchService.setLimit(oInputProvider.productsPerPageSelected);// default 10 (total of element per page)
+    oInputProvider.isLoaded = false;
+
+    let sMessage = oController.m_oTranslate.instant("MSG_SEARCH_ERROR");
+
+    oController.m_oSearchService.search().subscribe({
+      next: oResult => {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResult)) {
+          let aoData = oResult;
+          oController.generateLayersList(aoData);
+        }
+
+        oProvider.isLoaded = true;
+      },
+      error: oError => {
+        oController.m_oAlertDialogService.openDialog(4000, sMessage);
+        oProvider.isLoaded = true;
+      }
+    })
+    return true;
+  }
+
+  executeSearchList(oProvider, oThat?) {
+    // Take reference to the controller
+    var oController = this;
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oThat) === false) {
+      oController = oThat;
+    }
+
+    // Check input data
+    if (oController.thereIsAtLeastOneProvider() === false || FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider) === true) {
+      return false;
+    }
+
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(oController.m_oSearchModel.geoselection)) {
+      return false;
+    }
+
+    oController.m_bClearFiltersEnabled = false;
+    //delete layers and relatives rectangles in map
+    oController.deleteProducts(oProvider.name);
+    //hide previous results
+    oController.m_bIsVisibleListOfLayers = true;
+    oController.m_bIsPaginatedList = false;
+    oController.m_oSearchService.setTextQuery(oController.m_oSearchModel.textQuery);
+    oController.m_oSearchService.setGeoselection(oController.m_oSearchModel.geoselection);
+    var aoProviders = [];
+    aoProviders.push(oProvider);
+    oController.m_oSearchService.setProviders(aoProviders);
+
+    // Pagination Info: should be refactored, not needed in the list version
+    var oProvider = oController.m_oPageService.getProviderObject(oProvider.name);
+    var iOffset = oController.m_oPageService.calcOffset(oProvider.name);
+    oController.m_oSearchService.setOffset(iOffset);//default 0 (index page)
+    oController.m_oSearchService.setLimit(oProvider.productsPerPageSelected);// default 10 (total of element per page)
+    oProvider.isLoaded = false;
+    oProvider.totalOfProducts = 0;
+
+    // Generation of different time filters
+    var asTimePeriodsFilters = [];
+
+    // For each saved period
+    for (var iPeriods = 0; iPeriods < this.m_oAdvancedFilter.savedData.length; iPeriods++) {
+
+      // Prepare input data for date conversion
+      var oAdvancedSensingFrom = null;
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodFrom) && this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodFrom !== "") {
+        oAdvancedSensingFrom = this.m_fUtcDateConverter(this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodFrom);
+      }
+      var oAdvancedSensingTo = null;
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodTo) && this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodTo !== "") {
+        oAdvancedSensingTo = this.m_fUtcDateConverter(this.m_oAdvancedFilter.savedData[iPeriods].data.dateSensingPeriodTo);
+      }
+      var oAdvancedIngestionFrom = null;
+      var oAdvancedIngestionTo = null;
+
+      var advancedFilter = {
+        sensingPeriodFrom: oAdvancedSensingFrom,
+        sensingPeriodTo: oAdvancedSensingTo,
+        ingestionFrom: oAdvancedIngestionFrom,
+        ingestionTo: oAdvancedIngestionTo
+      };
+
+      // Get the time filter object
+      var sTimeFilter = this.getAdvancedDateFilterQuery(advancedFilter);
+      // Push it to the queries list
+      asTimePeriodsFilters.push(sTimeFilter);
+    }
+
+    // Call the complete Get Product Count for all the queries of this provider
+    oController.m_oSearchService.getProductsListCount(asTimePeriodsFilters).subscribe({
+      next: oResponse => {
+        if (oResponse) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+
+            oProvider.totalOfProducts = oResponse;
+            //calc number of pages
+            var remainder = oProvider.totalOfProducts % oProvider.productsPerPageSelected;
+            oProvider.totalPages = Math.floor(oProvider.totalOfProducts / oProvider.productsPerPageSelected);
+            if (remainder !== 0) oProvider.totalPages += 1;
+            this.m_aoProvidersAfterCount.push(oProvider);
+            this.emitSelectedProviders();
+          }
+        }
+      },
+      error: oError => {
+        console.log("Impossible get products number");
+      }
+    })
+
+    // var sMessage = oController.m_oTranslate.instant("MSG_SEARCH_ERROR");
+
+    // // Call the complete Search for all the queries of this provider
+    oController.m_oSearchService.searchList(asTimePeriodsFilters).subscribe({
+      next: oResponse => {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          console.log(oResponse)
+          var aoData = oResponse;
+          oController.generateLayersList(aoData)//.feed;
+
+          oProvider.isLoaded = true;
+        }
+      },
+      error: oError => {
+        console.log(oError);
+
+        oController.m_bIsVisibleListOfLayers = false;//visualize filter list
+        oController.m_oResultsOfSearchService.setIsVisibleListOfProducts(oController.m_bIsVisibleListOfLayers);
+      }
+    });
+
+    return true;
   }
 
   thereIsAtLeastOneProvider() {
@@ -269,6 +427,36 @@ export class SearchComponent {
     }
   }
 
+  getAdvancedDateFilterQuery(oAdvancedFilter: any) {
+    var sFilter = '';
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter)) return sFilter;
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodFrom) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodTo)) {
+      sFilter += '( beginPosition:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) +
+        ' TO ' + this.m_oAdvancedSearchService.formatToDate(oAdvancedFilter.sensingPeriodTo) + '] AND endPosition:[' +
+        this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) + ' TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.sensingPeriodTo) + '] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodFrom)) {
+      sFilter += '( beginPosition:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) +
+        ' TO NOW] AND endPosition:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.sensingPeriodFrom) + ' TO NOW] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.sensingPeriodTo)) {
+      sFilter += '( beginPosition:[ * TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.sensingPeriodTo) + '] AND endPosition:[* TO ' + this.m_oAdvancedSearchService.formatToDate(oAdvancedFilter.sensingPeriodTo) + ' ] )';
+    }
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionFrom) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionTo)) {
+      sFilter += ((sFilter) ? ' AND' : '') + '( ingestionDate:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.ingestionFrom) +
+        ' TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.ingestionTo) + ' ] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionFrom)) {
+      sFilter += ((sFilter) ? ' AND' : '') + '( ingestionDate:[' + this.m_oAdvancedSearchService.formatDateFrom(oAdvancedFilter.ingestionFrom) + ' TO NOW] )';
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter.ingestionTo)) {
+      sFilter += ((sFilter) ? ' AND' : '') + '( ingestionDate:[ * TO ' + this.m_oAdvancedSearchService.formatDateTo(oAdvancedFilter.ingestionTo) + ' ] )';
+    }
+
+    return sFilter;
+  }
   /**
    * Get the Layers List
    * @param aoData 
@@ -309,22 +497,41 @@ export class SearchComponent {
 
       if (i >= iActive) iActive++;
     }
-
-    // let sProvider = this.m_asListOfProviders[iActive].name;
-    // this.updateLayerListForActiveTab(sProvider);
-
     this.emitProducts();
+
     return true;
   }
 
+  deleteProducts(sProviderName: string) {
+    //check if layers list is empty
+    if (this.isEmptyProductsList()) return false;
+    var iLengthProductsList = this.m_aoProductsList.length;
+    var oMap = this.m_oMapService.getMap();
+    /* remove rectangle in map*/
+    for (var iIndexProductsList = 0; iIndexProductsList < iLengthProductsList; iIndexProductsList++) {
+      if ((FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProductsList[iIndexProductsList].provider) === false) && (this.m_aoProductsList[iIndexProductsList].provider === sProviderName)) {
+        var oRectangle = this.m_aoProductsList[iIndexProductsList].rectangle;
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle))
+          oRectangle.removeFrom(oMap);
+        if (iIndexProductsList > -1) {
+          this.m_aoProductsList.splice(iIndexProductsList, 1);
+          iLengthProductsList--;
+          iIndexProductsList--;
+        }
+      }
 
-  updateLayerListForActiveTab(sProviderName) {
-
+    }
+    //delete layers list
+    this.m_aoProductsList = [];
+    return true;
   }
 
-  deleteProducts(sProviderName: string) { }
+  isEmptyProductsList() {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProductsList)) return true;
+    if (this.m_aoProductsList.length == 0) return true;
 
-
+    return false;
+  }
 
   /********** Event Listeners & Subject Emitters **********/
 
@@ -360,6 +567,24 @@ export class SearchComponent {
    */
   getSelectedProviders(oEvent: any) {
     this.m_aoSelectedProviders = oEvent;
+    console.log(this.m_aoSelectedProviders)
+  }
+
+  getActiveProvider(oEvent: any) {
+    this.m_oActiveProvider = oEvent;
+    this.emitProducts();
+  }
+
+  getTimeFilter(oEvent: any) {
+    this.m_sTypeOfFilterSelected = oEvent;
+  }
+
+  getAdvancedFilterSelection(oEvent: any) {
+    this.m_oAdvancedFilter.savedData = oEvent;
+  }
+
+  getSelectedProducts(oEvent: any) {
+    this.m_aoSelectedProducts = oEvent;
   }
 
   /**
@@ -451,4 +676,21 @@ export class SearchComponent {
 
   }
 
+  /********** OPEN DIALOG HANDLERS **********/
+  openAddToWorkspaceDialog() {
+    let aoListOfSelectedProducts = this.m_aoSelectedProducts;
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoListOfSelectedProducts) === true) {
+      return false;
+    }
+    
+    let oDialogRef = this.m_oDialog.open(WorkspacesListDialogComponent, {
+      height: "55vh",
+      width: '60vw',
+      data: {
+        products: aoListOfSelectedProducts
+      }
+    })
+    return true;
+  }
 }

@@ -44,6 +44,15 @@ export class ResultOfSearchService {
     this.m_oIngestionPeriodFrom = '';
     this.m_oIngestionPeriodTo = '';
   }
+  setIngestionPeriodTo(oIngestionPeriodTo) {
+    this.m_oIngestionPeriodTo = oIngestionPeriodTo;
+    return true;
+  };
+
+  setIngestionPeriodFrom(oIngestionPeriodFrom) {
+    this.m_oIngestionPeriodFrom = oIngestionPeriodFrom;
+    return true;
+  };
 
   /**
    * Set value of sensing period TO
@@ -61,13 +70,82 @@ export class ResultOfSearchService {
     this.m_oSensingPeriodFrom = oDate;
   }
 
+  setTextQuery(sTextQuery) {
+    //if(utilsIsStrNullOrEmpty(sTextQuery))
+    //    return false //TODO throw error
+    this.m_sTextQuery = sTextQuery;
+    return true;
+  };
+
+  setGeoSelection(oGeoSelection) {
+    //if(utilsIsStrNullOrEmpty(oGeoSelection))
+    //    return false //TODO throw error
+    this.m_oGeoSelection = oGeoSelection;
+    return true;
+  };
+
+  setCurrentPage(iCurrentPage) {
+    //if(utilsIsObjectNullOrUndefined(iCurrentPage))
+    //    return false //TODO throw error
+    this.m_iCurrentPage = iCurrentPage;
+    return true;
+  };
+
+  setProductsPerPageSelected(iProductsPerPageSelected) {
+    //if(utilsIsObjectNullOrUndefined(iProductsPerPageSelected))
+    //    return false //TODO throw error
+    this.m_iProductsPerPageSelected = iProductsPerPageSelected;
+    return true;
+  };
+
+  setProductList(aoProductList) {
+    //if(utilsIsObjectNullOrUndefined(aoProductList))
+    //    return false //TODO throw error
+    this.m_aoProductList = aoProductList;
+    return true;
+  };
+
+  setTotalPages(iTotalPages) {
+    //if(utilsIsObjectNullOrUndefined(iTotalPages))
+    //    return false //TODO throw error
+    this.m_iTotalPages = iTotalPages;
+    return true;
+  };
+
+  setIsVisibleListOfProducts(bIsVisibleListOfProducts) {
+    //if(utilsIsObjectNullOrUndefined(bIsVisibleListOfProducts))
+    //    return false;//TODO throw error
+    this.m_bIsVisibleListOfProducts = bIsVisibleListOfProducts;
+    return true;
+  };
+  setTotalOfProducts(iTotalOfProducts) {
+    //if(utilsIsObjectNullOrUndefined(iTotalOfProducts))
+    //    return false;//TODO throw error
+    this.m_iTotalOfProducts = iTotalOfProducts;
+    return true;
+  };
+
+  setActiveWorkspace(oActiveWorkspace) {
+    //if(utilsIsObjectNullOrUndefined(oActiveWorkspace))
+    //    return false;//TODO throw error
+    this.m_oActiveWorkspace = oActiveWorkspace;
+    return true;
+  };
+
+  setMissions(aoMissions) {
+    //if(utilsIsObjectNullOrUndefined(aoMissions))
+    //    return false;
+    this.m_aoMissions = aoMissions;
+    return true;
+  };
+
   /************************ Get methods ***************************/
 
   getSensingPeriodTo(): Date {
-    return this.m_oSensingPeriodTo; 
+    return this.m_oSensingPeriodTo;
   }
 
   getSensingPeriodFrom(): Date {
-    return this.m_oSensingPeriodFrom; 
+    return this.m_oSensingPeriodFrom;
   }
 }

@@ -32,6 +32,10 @@ export class FilterPipe implements PipeTransform {
       if (item.packageName) {
         return item.packageName.toLocaleLowerCase().includes(searchText);
       }
+      //Filter for Search Page results: 
+      if(item.provider) {
+        return item.provider.toLocaleLowerCase().includes(searchText);
+      }
     })
   }
 

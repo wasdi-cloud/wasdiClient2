@@ -1,82 +1,96 @@
-<div class="card h-100">
+<div class="card" style="height: 100%">
     <div class="card-header">
         Results
     </div>
-    <div class="card-body flex-column">
+    <div class="card-body flex-column" style="height: 90%">
         <!-- Mission Tabs -->
         <ul class="d-flex flex-row flex-wrap border-bottom pb-2  nav nav-pills">
             <li class="nav-item" *ngFor="let oProvider of m_aoProvidersList">
-                <a class="nav-link" [ngClass]="m_oActiveProvider.name === oProvider.name? 'active' : '' " (click)="setActiveProvider(oProvider)">{{oProvider.name}} <span
+                <a class="nav-link" [ngClass]="m_oActiveProvider.name === oProvider.name? 'active' : '' "
+                    (click)="setActiveProvider(oProvider)">{{oProvider.name}} <span
                         class="badge rounded-pill bg-secondary">{{oProvider.totalOfProducts !== 0 &&
                         oProvider.totalOfProducts !== -1 ? oProvider.totalOfProducts : 0}}</span></a>
             </li>
         </ul>
-    <!-- Pagination and Products Per Page -->
-        <div class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
-            <mat-select class="form-control" placeholder="Products Per Page">
-                <mat-option>10</mat-option>
-                <mat-option>15</mat-option>
-                <mat-option>20</mat-option>
-                <mat-option>25</mat-option>
-                <mat-option>50</mat-option>
+        <!-- Pagination and Products Per Page -->
+        <div *ngIf="m_bIsVisibleListOfLayers && m_bIsPaginatedList === true"
+            class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
+            <mat-select (selectionChange)="changeNumberOfProductsPerPage($event)" class="form-control"
+                placeholder="Products Per Page">
+                <mat-option *ngFor="let iProducts of m_aiProductsPerPageOptions"
+                    [value]="iProducts">{{iProducts}}</mat-option>
             </mat-select>
 
-            <ul class="pagination pagination mb-0">
-                <li class="page-item">
+            <ul class="pagination pagination mb-0" *ngIf="m_oActiveProvider">
+                <li class="page-item" (click)="minusOnePage()">
                     <span class="page-link">Prev</span>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li> 
+                <li class="page-item"><a class="page-link">{{getCurrentPage()}}</a></li>
                 <li class="page-item disabled" aria-current="page">
                     <span class="page-link">...</span>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                <li class="page-item"><a class="page-link">{{getMaxPage()}}</a></li>
+                <li class="page-item" (click)="plusOnePage()">
+                    <a class="page-link">Next</a>
                 </li>
             </ul>
 
         </div>
-        <!-- Product Cards -->
-        <div class="product-card-container d-flex flex-column gap-2" style="height: 28rem; overflow-y: scroll;">
-            <!-- Product Date/Time -->
-            <!-- Product Card -->
-            <div *ngFor="let oProduct of m_aoProductsList" class="product-card d-flex flex-row"
-                style="height:15rem; width: 100%;">
-                <!-- Product button group -->
-                <div class="btn-group-vertical">
-                    <button type="button" class="btn btn-sm btn-secondary" title="{{'IMPORT_TOOLTIP_CHECK'|translate}}">
-                        <input class="form-check-input p-0 m-0" type="checkbox" value="" id="flexCheckDefault">
-                    </button>
-                    <button type="button" class="btn btn-sm btn-secondary"
-                        title="{{'IMPORT_TOOLTIP_ADD_PRODUCT'|translate}}" (click)="sendSingleProductToWorkspace(oProduct)">
-                        <fa-icon [icon]="faPlus"></fa-icon>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-secondary"
-                        title="{{'IMPORT_TOOLTIP_ZOOM_ON_PRODUCT'|translate}}">
-                        <fa-icon [icon]="faSearch"></fa-icon>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-secondary" title="{{'IMPORT_TOOLTIP_INFO'|translate}}">
-                        <fa-icon [icon]="faInfoCircle"></fa-icon>
-                    </button>
-                </div>
-
-                <!-- Product Icon and Size -->
-                <div class="oProduct-size-preview d-flex flex-column align-items-center">
-                    <div>
-                        <!-- Mode -->
-                        <span class="badge bg-success"
-                            *ngIf="oProduct.summary && oProduct.summary.Mode">{{oProduct.summary.Mode}}</span>
-                        <!-- Insturment -->
-                        <span class="badge bg-success" *ngIf="oProduct.summary && oProduct.summary.Instrument">
-                            {{oProduct.summary.Instrument}}</span>
+        <div *ngIf="m_oActiveProvider" style="height:82%;">
+            <!-- IF THE LIST OF LAYERS IS EMPTY -->
+            <div *ngIf="isProviderLayerListEmpty(m_oActiveProvider.name) && m_oActiveProvider.isLoaded === true">
+                empty
+            </div>
+            <!-- Product Cards -->
+            <div *ngIf="isProviderLayerListEmpty(m_oActiveProvider.name) === false"
+                class="product-card-container list-group d-flex flex-column gap-2"
+                style="height:100%; overflow-y: scroll;">
+                <!-- Product Date/Time -->
+                <!-- Product Card -->
+                <div *ngFor="let oProduct of m_aoProductsList | filter: m_oActiveProvider.name"
+                    class="product-card list-group-item list-group-item-action d-flex flex-row"
+                    style="height:15rem; width: 100%;" (mouseover)=" changeRectangleStyleMouseOver(oProduct.rectangle)"
+                    (mouseleave)=" changeRectangleStyleMouseLeave(oProduct.rectangle)">
+                    <!-- Product button group -->
+                    <div class="btn-group-vertical">
+                        <button type="button" class="btn btn-sm btn-secondary"
+                            title="{{'IMPORT_TOOLTIP_CHECK'|translate}}">
+                            <input class="form-check-input p-0 m-0" type="checkbox" value="{{oProduct}}"
+                                id="flexCheckDefault" (change)="addProductSelectedProducts($event, oProduct)">
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary"
+                            title="{{'IMPORT_TOOLTIP_ADD_PRODUCT'|translate}}"
+                            (click)="sendSingleProductToWorkspace(oProduct)">
+                            <fa-icon [icon]="faPlus"></fa-icon>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary"
+                            title="{{'IMPORT_TOOLTIP_ZOOM_ON_PRODUCT'|translate}}"
+                            (click)="zoomToProduct(oProduct.rectangle)">
+                            <fa-icon [icon]="faSearch"></fa-icon>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary"
+                            title="{{'IMPORT_TOOLTIP_INFO'|translate}}" (click)="openProductInfoDialog(oProduct)">
+                            <fa-icon [icon]="faInfoCircle"></fa-icon>
+                        </button>
                     </div>
-                    <div class="preview-oProduct-image"><img src={{oProduct.preview}} alt="Image"
-                            style="height: 82px;width: 82px; "></div>
-                    <span class="badge bg-secondary"
-                        *ngIf="oProduct.summary && oProduct.summary.Size">{{oProduct.summary.Size}}</span><!--Size-->
-                </div>
-                <!-- Product Information -->
-                <!-- <div *ngIf="oProduct" class="d-flex flex-column">
+
+                    <!-- Product Icon and Size -->
+                    <div class="oProduct-size-preview d-flex flex-column align-items-center">
+                        <div>
+                            <!-- Mode -->
+                            <span class="badge bg-success"
+                                *ngIf="oProduct.summary && oProduct.summary.Mode">{{oProduct.summary.Mode}}</span>
+                            <!-- Insturment -->
+                            <span class="badge bg-success" *ngIf="oProduct.summary && oProduct.summary.Instrument">
+                                {{oProduct.summary.Instrument}}</span>
+                        </div>
+                        <div class="preview-oProduct-image"><img src={{oProduct.preview}} alt="Image"
+                                style="height: 82px;width: 82px; "></div>
+                        <span class="badge bg-secondary"
+                            *ngIf="oProduct.summary && oProduct.summary.Size">{{oProduct.summary.Size}}</span><!--Size-->
+                    </div>
+                    <!-- Product Information -->
+                    <!-- <div *ngIf="oProduct" class="d-flex flex-column">
                     {{oProduct.properties.endDate? "Start Date:" : ""}}
                     {{oProduct.properties.endDate? oProduct.properties.startDate: "" |date:'medium': 'GMT'}}
                     <br *ngIf="oProduct.properties.endDate">
@@ -84,55 +98,58 @@
                     {{ oProduct.properties.endDate? oProduct.properties.endDate:
                     oProduct.summary.Date|date:'medium': 'GMT'}}
                 </div> -->
-                <div class="d-flex flex-column">
+                    <div class="d-flex flex-column">
 
-                    <div *ngIf="oProduct.title">
-                        <span>{{'IMPORT_PRODUCT_LIST_NAME'|translate}}</span>
-                        <span><b>{{oProduct.title}}</b></span>
-                    </div>
+                        <div *ngIf="oProduct.title">
+                            <span>{{'IMPORT_PRODUCT_LIST_NAME'|translate}}</span>
+                            <span><b style=" overflow-wrap: break-word;  
+                                word-wrap: break-word; 
+                                word-break: break-word;">{{oProduct.title}}</b></span>
+                        </div>
 
-                    <!-- <div *ngIf="oProduct.summary && oProduct.summary.Mode">
+                        <!-- <div *ngIf="oProduct.summary && oProduct.summary.Mode">
                     <span>{{'IMPORT_PRODUCT_LIST_POLARIZATION'|translate}}</span>
                     <span><b>{{oProduct.summary.Mode}}</b></span>
                 </div> -->
-                    <div *ngIf="oProduct.properties && oProduct.properties.relativeorbitnumber">
-                        <span>{{'IMPORT_PRODUCT_LIST_ORBIT'|translate}}</span>
-                        <span><b>{{oProduct.properties.relativeorbitnumber}}</b></span>
-                    </div>
+                        <div *ngIf="oProduct.properties && oProduct.properties.relativeorbitnumber">
+                            <span>{{'IMPORT_PRODUCT_LIST_ORBIT'|translate}}</span>
+                            <span><b>{{oProduct.properties.relativeorbitnumber}}</b></span>
+                        </div>
 
-                    <div *ngIf="oProduct.provider">
-                        <span>{{'IMPORT_PRODUCT_LIST_PROVIDER'|translate}}</span>
-                        <span><b>{{oProduct.provider}}</b></span>
-                    </div>
+                        <div *ngIf="oProduct.provider">
+                            <span>{{'IMPORT_PRODUCT_LIST_PROVIDER'|translate}}</span>
+                            <span><b>{{oProduct.provider}}</b></span>
+                        </div>
 
-                    <div *ngIf="oProduct.properties && oProduct.properties.platformname">
-                        <span>{{'IMPORT_PRODUCT_LIST_PLATFORM'|translate}}</span>
-                        <span><b>{{oProduct.properties.platformname}}</b></span>
-                    </div>
-                    <div *ngIf="oProduct.properties && oProduct.properties.sensoroperationalmode">
-                        <span>{{'IMPORT_PRODUCT_LIST_SENSOR'|translate}}</span>
-                        <span><b>{{oProduct.properties.sensoroperationalmode}}</b></span>
-                    </div>
+                        <div *ngIf="oProduct.properties && oProduct.properties.platformname">
+                            <span>{{'IMPORT_PRODUCT_LIST_PLATFORM'|translate}}</span>
+                            <span><b>{{oProduct.properties.platformname}}</b></span>
+                        </div>
+                        <div *ngIf="oProduct.properties && oProduct.properties.sensoroperationalmode">
+                            <span>{{'IMPORT_PRODUCT_LIST_SENSOR'|translate}}</span>
+                            <span><b>{{oProduct.properties.sensoroperationalmode}}</b></span>
+                        </div>
 
-                    <div *ngIf="oProduct.properties && oProduct.properties.productType">
-                        <span>{{'IMPORT_PRODUCT_LIST_TYPE'|translate}}</span>
-                        <span><b>{{oProduct.properties.productType}}</b></span>
-                    </div>
-                    <div *ngIf="oProduct.properties && oProduct.properties.dataset">
-                        <span>{{'IMPORT_PRODUCT_LIST_DATASET'|translate}}</span>
-                        <span><b>{{oProduct.properties.dataset}}</b></span>
-                    </div>
-                    <div *ngIf="oProduct.properties && oProduct.properties.variables">
-                        <span>{{'IMPORT_PRODUCT_LIST_VARIABLES'|translate}}</span>
-                        <span><b>{{oProduct.properties.variables}}</b></span>
-                    </div>
-                    <div *ngIf="oProduct.properties && oProduct.properties.protocol">
-                        <span>{{'IMPORT_PRODUCT_LIST_PROTOCOL'|translate}}</span>
-                        <span><b>{{oProduct.properties.protocol}}</b></span>
+                        <div *ngIf="oProduct.properties && oProduct.properties.productType">
+                            <span>{{'IMPORT_PRODUCT_LIST_TYPE'|translate}}</span>
+                            <span><b>{{oProduct.properties.productType}}</b></span>
+                        </div>
+                        <div *ngIf="oProduct.properties && oProduct.properties.dataset">
+                            <span>{{'IMPORT_PRODUCT_LIST_DATASET'|translate}}</span>
+                            <span><b>{{oProduct.properties.dataset}}</b></span>
+                        </div>
+                        <div *ngIf="oProduct.properties && oProduct.properties.variables">
+                            <span>{{'IMPORT_PRODUCT_LIST_VARIABLES'|translate}}</span>
+                            <span><b>{{oProduct.properties.variables}}</b></span>
+                        </div>
+                        <div *ngIf="oProduct.properties && oProduct.properties.protocol">
+                            <span>{{'IMPORT_PRODUCT_LIST_PROTOCOL'|translate}}</span>
+                            <span><b>{{oProduct.properties.protocol}}</b></span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
 </div>

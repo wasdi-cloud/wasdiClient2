@@ -12,6 +12,8 @@ import { MatSelectChange } from '@angular/material/select';
 
 //Import Utilities:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { MatDialog } from '@angular/material/dialog';
+import { AdvancedFiltersComponent } from '../advanced-filters/advanced-filters.component';
 
 @Component({
   selector: 'app-search-filters',
@@ -21,8 +23,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 export class SearchFiltersComponent implements OnInit {
 
   @Input() m_aoMissions: Array<any> = [];
-  @Output() m_oSearchFilter: any = new EventEmitter();
-  @Output() m_aoProviderSelection: any = new EventEmitter();
+  @Output() m_oSearchFilter: EventEmitter<any> = new EventEmitter();
+  @Output() m_aoProviderSelection: EventEmitter<any> = new EventEmitter();
+  @Output() m_oTypeOfFilterSelected: EventEmitter<string> = new EventEmitter();
+  @Output() m_oAdvancedFilterSelection: EventEmitter<any> = new EventEmitter();
 
   m_oMissionObject: any = {
     textQuery: '',
@@ -38,6 +42,24 @@ export class SearchFiltersComponent implements OnInit {
     ingestionTo: ''
   };
 
+  //Filter For CronTab Feature: 
+  m_oAdvancedFilter = {
+    filterActive: "Seasons",//Seasons,Range,Months
+    savedData: [],
+    selectedSeasonYears: [],
+    selectedSeason: "",
+    listOfYears: [],
+    listOfMonths: [],
+    // listOfDays:[],
+    selectedYears: [],
+    selectedDayFrom: "",
+    selectedDayTo: "",
+    selectedMonthFrom: "",
+    selectedMonthTo: "",
+    selectedYearsSearchForMonths: [],
+    selectedMonthsSearchForMonths: []
+  }
+
   m_oActiveMission: any = null;
   m_aoSelectedProviders = []
   m_aListOfProviders: any = [];
@@ -47,9 +69,11 @@ export class SearchFiltersComponent implements OnInit {
 
   m_sDateTo: string = '';
   m_sDateFrom: string = '';
+  m_sTypeOfFilterSelected: string = '';
 
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,
+    private m_oDialog: MatDialog,
     private m_oPagesService: PagesService,
     private m_oMissionFiltersService: MissionFiltersService,
     private m_oResultsOfSearchService: ResultOfSearchService,
@@ -61,9 +85,25 @@ export class SearchFiltersComponent implements OnInit {
     this.setDefaultDateData();
     this.setDefaultSelectedProvider();
     this.setAdvancedSearchFilter();
+    this.setFilterTypeAsTimePeriod();
   }
 
   /************ SET DEFAULT VALUE METHODS ************/
+
+  /**
+  * Set the type of filter selected as "Time period"
+  */
+  setFilterTypeAsTimePeriod() {
+    this.m_sTypeOfFilterSelected = "Time period";
+    this.m_oTypeOfFilterSelected.emit(this.m_sTypeOfFilterSelected);
+  }
+  /**
+   * Set the type of filter selected as "Time series"
+   */
+  setFilterTypeAsTimeSeries() {
+    this.m_sTypeOfFilterSelected = "Time series";
+    this.m_oTypeOfFilterSelected.emit(this.m_sTypeOfFilterSelected);
+  }
 
   /**
    * Set default date data
@@ -90,9 +130,7 @@ export class SearchFiltersComponent implements OnInit {
    * Retrieves the list of providers as an Observable and sets value of List of Providers
    */
   setDefaultSelectedProvider() {
-    this.m_oPagesService.getProviders().subscribe(oResponse => {
-      this.m_aListOfProviders = oResponse;
-    });
+    this.m_aListOfProviders = this.m_oPagesService.getProviders()
   }
 
   setAdvancedSearchFilter() {
@@ -175,6 +213,17 @@ export class SearchFiltersComponent implements OnInit {
       result = utcDate;
     }
     return result;
+  }
+
+  removeAllAdvancedSavedFilters() {
+    this.m_oAdvancedFilter.savedData = [];
+    this.updateAdvancedSavedFiltersUi();
+  }
+
+  updateAdvancedSavedFiltersUi() {
+    if (this.m_oAdvancedFilter.savedData.length == 0) {
+      this.setFilterTypeAsTimePeriod();
+    }
   }
 
   /************ MISSION METHODS ************/
@@ -271,5 +320,45 @@ export class SearchFiltersComponent implements OnInit {
       oProvider.selected = true;
     })
     this.m_aoProviderSelection.emit(this.m_aoSelectedProviders);
+  }
+
+
+  openAdvancedSearchFiltersDialog() {
+    let oDialogRef = this.m_oDialog.open(AdvancedFiltersComponent, {
+      height: '60vh',
+      width: '60vw'
+    })
+
+    oDialogRef.afterClosed().subscribe(oFilterResults => {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oFilterResults) === true) {
+        this.setFilterTypeAsTimePeriod();
+        return false;
+      } else {
+        this.m_oAdvancedFilter.savedData = oFilterResults;
+        this.m_oAdvancedFilterSelection.emit(this.m_oAdvancedFilter.savedData);
+        console.log(this.m_oAdvancedFilter.savedData)
+        this.setFilterTypeAsTimeSeries();
+        return true;
+      }
+    })
+  }
+
+  removeSavedDataChip(oData) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oData) === true) {
+      return false;
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oAdvancedFilter.savedData) === true) {
+      return false;
+    }
+    let iNumberOfSaveData = this.m_oAdvancedFilter.savedData.length;
+
+    for (let iIndexNumberOfSaveData = 0; iIndexNumberOfSaveData < iNumberOfSaveData; iIndexNumberOfSaveData++) {
+      if (this.m_oAdvancedFilter.savedData[iIndexNumberOfSaveData] === oData) {
+        this.m_oAdvancedFilter.savedData.splice(iIndexNumberOfSaveData, 1);
+        this.updateAdvancedSavedFiltersUi();
+        break;
+      }
+    }
+    return true;
   }
 }

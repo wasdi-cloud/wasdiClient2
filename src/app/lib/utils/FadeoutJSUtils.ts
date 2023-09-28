@@ -439,8 +439,9 @@ export default class FadeoutUtils {
     }
 
     //CHECK IF FEBRUARY HAS 29 DAYS
-    static utilsLeapYear(year: number) {
-        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+    static utilsLeapYear(year: string) {
+        let iYear = parseInt(year);
+        return ((iYear % 4 == 0) && (iYear % 100 != 0)) || (iYear % 400 == 0);
     }
 
     //from 1 to iValue
@@ -544,10 +545,10 @@ export default class FadeoutUtils {
             green: number,
             blue: number,
             transparency?: number
-        }   = {
+        } = {
             red: sRGBA[0],
             green: sRGBA[1],
-            blue: sRGBA[2], 
+            blue: sRGBA[2],
         };
 
         if (sRGBA.length === 4) {
