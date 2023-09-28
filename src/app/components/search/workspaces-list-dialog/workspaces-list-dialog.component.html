@@ -36,7 +36,10 @@
         </div>
     </div>
     <div mat-dialog-actions class="border dialog-footer p-1 d-flex flex-row justify-content-end gap-2">
-        <button class="btn btn-sm btn-success" (click)="addSelectedToWorkspace()">Add to Workspace</button>
+        <button *ngIf="m_aoSelectedWorkspaces.length === 0" class="btn btn-sm btn-success"
+            (click)="addProductToWorkspace()">Add to Workspace</button>
+        <button *ngIf="m_aoSelectedWorkspaces.length > 0" class="btn btn-sm btn-success"
+            (click)=" addMultipleProductsToWorkspace()">Add to Workspaces</button>
         <button class="btn btn-sm btn-secondary" (click)="onDismiss()">Close</button>
     </div>
 </div>

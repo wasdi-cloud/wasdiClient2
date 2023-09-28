@@ -13,7 +13,8 @@
             </li>
         </ul>
         <!-- Pagination and Products Per Page -->
-        <div *ngIf="m_bIsVisibleListOfLayers && m_bIsPaginatedList === false" class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
+        <div *ngIf="m_bIsVisibleListOfLayers && m_bIsPaginatedList === true"
+            class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
             <mat-select (selectionChange)="changeNumberOfProductsPerPage($event)" class="form-control"
                 placeholder="Products Per Page">
                 <mat-option *ngFor="let iProducts of m_aiProductsPerPageOptions"
@@ -35,8 +36,8 @@
             </ul>
 
         </div>
-        <!-- IF THE LIST OF LAYERS IS EMPTY -->
         <div *ngIf="m_oActiveProvider" style="height:82%;">
+            <!-- IF THE LIST OF LAYERS IS EMPTY -->
             <div *ngIf="isProviderLayerListEmpty(m_oActiveProvider.name) && m_oActiveProvider.isLoaded === true">
                 empty
             </div>
@@ -54,7 +55,8 @@
                     <div class="btn-group-vertical">
                         <button type="button" class="btn btn-sm btn-secondary"
                             title="{{'IMPORT_TOOLTIP_CHECK'|translate}}">
-                            <input class="form-check-input p-0 m-0" type="checkbox" value="" id="flexCheckDefault">
+                            <input class="form-check-input p-0 m-0" type="checkbox" value="{{oProduct}}"
+                                id="flexCheckDefault" (change)="addProductSelectedProducts($event, oProduct)">
                         </button>
                         <button type="button" class="btn btn-sm btn-secondary"
                             title="{{'IMPORT_TOOLTIP_ADD_PRODUCT'|translate}}"

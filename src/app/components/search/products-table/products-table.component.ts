@@ -18,7 +18,9 @@ export class ProductsTableComponent implements OnInit {
   @Input() m_bIsPaginatedList: boolean;
   @Input() m_aoProducts: Observable<any>;
   @Input() m_aoSelectedProviders: Observable<any>;
-  @Output() m_oActiveProviderChange: EventEmitter<any> = new EventEmitter<any>()
+  @Output() m_oActiveProviderChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() m_oSelectedProducts: EventEmitter<any> = new EventEmitter<any>();
+
   m_aoProductsList: any = [];
   //font awesome icons: 
   faPlus = faPlus;
@@ -31,6 +33,8 @@ export class ProductsTableComponent implements OnInit {
   m_bProductListEmpty = false;
 
   m_aiProductsPerPageOptions = []
+
+  m_aoSelectedProducts: Array<any> = [];
 
   constructor(
     private m_oDialog: MatDialog,
@@ -64,6 +68,7 @@ export class ProductsTableComponent implements OnInit {
 
     //Get Products Per Page Options:
     this.m_aiProductsPerPageOptions = this.getProductsPerPageOptions();
+    console.log(this.m_bIsPaginatedList);
   }
 
   /**
@@ -237,8 +242,15 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Add checked product to selected products array
    */
-  addProductSelectedProducts() {
-
+  addProductSelectedProducts(oEvent, oInputProduct) {
+    if (oEvent.currentTarget.checked === true) {
+      //Add the Product to the Selected Products Array
+      this.m_aoSelectedProducts.push(oInputProduct);
+    } else {
+      //Remove Product from the Selected Products Array
+      this.m_aoSelectedProducts = this.m_aoSelectedProducts.filter(oProduct => oProduct.id != oInputProduct.id);
+    }
+    this.m_oSelectedProducts.emit(this.m_aoSelectedProducts);
   }
 
   /**
@@ -326,7 +338,7 @@ export class ProductsTableComponent implements OnInit {
   }
 
   getProductsPerPageOptions() {
-     return this.m_oPageService.getProvidersPerPageOptions();
+    return this.m_oPageService.getProvidersPerPageOptions();
   }
 
   plusOnePage() {

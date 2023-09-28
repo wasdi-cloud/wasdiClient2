@@ -20,6 +20,8 @@ import { ResultOfSearchService } from 'src/app/services/result-of-search.service
 import { OpenSearchService } from 'src/app/services/api/open-search.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { MatDialog } from '@angular/material/dialog';
+import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspaces-list-dialog.component';
 
 @Component({
   selector: 'app-search',
@@ -48,6 +50,8 @@ export class SearchComponent implements OnInit {
 
   m_aoProductsList: Array<any> = [];
   m_oProductSubject: Subject<any> = new Subject<any>();
+
+  m_aoSelectedProducts: any = [];
 
   m_iActiveProvidersTab: number;
 
@@ -94,6 +98,7 @@ export class SearchComponent implements OnInit {
     private m_oAuthService: AuthService,
     private m_oConfigurationService: ConfigurationService,
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
     private m_oMapService: MapService,
     private m_oOpenSearchService: OpenSearchService,
@@ -575,6 +580,10 @@ export class SearchComponent implements OnInit {
     this.m_oAdvancedFilter.savedData = oEvent;
   }
 
+  getSelectedProducts(oEvent: any) {
+    this.m_aoSelectedProducts = oEvent;
+  }
+
   /**
    * Emit Products List to Child Components listening for the Observable
    */
@@ -665,5 +674,20 @@ export class SearchComponent implements OnInit {
   }
 
   /********** OPEN DIALOG HANDLERS **********/
-  openAddToWorkspaceDialog() { }
+  openAddToWorkspaceDialog() {
+    let aoListOfSelectedProducts = this.m_aoSelectedProducts;
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoListOfSelectedProducts) === true) {
+      return false;
+    }
+    
+    let oDialogRef = this.m_oDialog.open(WorkspacesListDialogComponent, {
+      height: "55vh",
+      width: '60vw',
+      data: {
+        products: aoListOfSelectedProducts
+      }
+    })
+    return true;
+  }
 }

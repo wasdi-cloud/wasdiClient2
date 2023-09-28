@@ -27,6 +27,7 @@ export class WorkspacesListDialogComponent implements OnInit {
   m_sExcludedWorkspaceId: string = '';
 
   m_oSelectedProduct: any = null;
+  m_aoSelectedProducts: any = [];
 
   m_bIsLoadingWorkspaceList: boolean = false;
 
@@ -50,6 +51,10 @@ export class WorkspacesListDialogComponent implements OnInit {
     if (this.m_oData.product) {
       this.m_oSelectedProduct = this.m_oData.product;
       console.log(this.m_oSelectedProduct);
+    }
+    if (this.m_oData.products) {
+      this.m_aoSelectedProducts = this.m_oData.products;
+      console.log(this.m_aoSelectedProducts)
     }
   }
 
@@ -124,7 +129,7 @@ export class WorkspacesListDialogComponent implements OnInit {
     return true;
   }
 
-  addSelectedToWorkspace() {
+  addProductToWorkspace() {
     let iNumberOfWorkspaces: number = this.m_aoSelectedWorkspaces.length;
 
     for (let iWorkspaceIndex = 0; iWorkspaceIndex < iNumberOfWorkspaces; iWorkspaceIndex++) {
@@ -144,6 +149,32 @@ export class WorkspacesListDialogComponent implements OnInit {
     }
   }
 
+  addMultipleProductsToWorkspace() {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoSelectedProducts)) {
+      return false;
+    }
+    //let sMessage = this.m_oTranslate.instant("MSG_ERROR_IMPORTING");
+    let iNumberOfWorkspaces: number = this.m_aoSelectedWorkspaces.length;
+
+    let iNumberOfProducts = this.m_aoSelectedProducts.length;
+
+    for (let iWorkspaceIndex = 0; iWorkspaceIndex < iNumberOfWorkspaces; iWorkspaceIndex++) {
+      console.log(this.m_aoSelectedWorkspaces)
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoSelectedWorkspaces[iWorkspaceIndex])) {
+        for (let iIndexProduct = 0; iIndexProduct < iNumberOfProducts; iIndexProduct++) {
+          console.log("in")
+          this.m_aoSelectedProducts[iIndexProduct].isDisabledToDoDownload = true;
+          let url = this.m_aoSelectedProducts[iIndexProduct].link;
+          let oError = function (data, status) {
+            //FadeoutUtils.utilsVexDialogAlertTop(sMessage);
+            this.m_aoSelectedProducts[iIndexProduct].isDisabledToDoDownload = false;
+          }
+          this.downloadProduct(url, this.m_aoSelectedProducts[iIndexProduct].title, this.m_aoSelectedWorkspaces[iWorkspaceIndex].workspaceId, this.m_aoSelectedProducts[iIndexProduct].bounds.toString(), this.m_aoSelectedProducts[iIndexProduct].provider, null, oError);
+        }
+      }
+    }
+    return true;
+  }
   downloadProduct(sUrl: string, sFileName: string, sWorkspaceId: string, sBounds: string, oProvider: any, oCallback: any, oError: any) {
     let sMessage: string;
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oCallback) === true) {
