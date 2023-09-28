@@ -1,0 +1,82 @@
+pipeline {
+  agent any
+
+  environment {
+    sCurrentRevision = "${env.BUILD_ID}"
+  }
+
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '3', daysToKeepStr: '30'))
+    disableConcurrentBuilds()
+  }
+
+  tools {
+    nodejs "WASDI_NODEJS_V18"
+  }
+
+  stages {
+    stage('DEBUG') {
+      steps {
+        echo "env.GIT_BRANCH        = " + env.GIT_BRANCH
+        echo "env.PYTHONPATH        = " + env.PYTHONPATH
+        echo "env.sAnsibleLimit     = " + env.sAnsibleLimit
+        echo "env.sCurrentRevision  = " + env.sCurrentRevision
+        echo "env.sSourceBranch     = " + env.sSourceBranch
+        echo "env.sWasdiAnsiblePath = " + env.sWasdiAnsiblePath
+        echo "env.WORKSPACE         = " + env.WORKSPACE
+
+        sh script: "pwd", label: "Current location"
+
+        sh script: "which node", label: "Tool > node > path"
+        sh script: "node --version", label: "Tool > node > current version"
+        sh script: "which npm", label: "Tool > npm > path"
+        sh script: "npm --version", label: "Tool > npm > current version"
+        sh script: "which sass", label: "Tool > sass > path"
+        sh script: "sass --version", label: "Tool > sass > current version"
+      }
+    }
+
+    stage('INITIALIZATION') {
+      steps {
+        script {
+          currentBuild.displayName = "${env.sCurrentRevision}"
+          currentBuild.description = "WASDI - BUILD OF THE CLIENT"
+        }
+      }
+    }
+
+    stage('NPM - INSTALL MODULES') {
+      steps {
+        sh script: '''
+          npm install
+        ''',
+        label: "Install NodeJS modules from package.json"
+      }
+    }
+
+    stage('NPM - BUILD') {
+      steps {
+        sh script: '''
+          npm run build
+        ''',
+        label: "Build WASDI client"
+      }
+    }
+
+    stage('DEPLOYMENT') {
+      steps {
+        sh script: """
+          cd ${env.sWasdiAnsiblePath}
+          ansible-playbook playbooks/deployWasdiClient_v2.yml --inventory inventories/wasdi.yml --limit ${env.sAnsibleLimit} --diff --extra-vars 'sCurrentRevision=${env.sCurrentRevision} sSourceDirectory=${WORKSPACE}'
+        """,
+        label: "Deploy the WASDI client"
+      }
+    }
+  }
+
+  post {
+    always {
+      cleanWs()
+    }
+  }
+}
