@@ -144,6 +144,7 @@ import { WorkspacesListDialogComponent } from './components/search/workspaces-li
 import { ProductInfoComponent } from './components/search/product-info/product-info.component';
 import { AdvancedFiltersComponent } from './components/search/advanced-filters/advanced-filters.component';
 import { ReviewEditorDialogComponent } from './components/app-details/app-reviews/review-editor-dialog/review-editor-dialog.component';
+import { CommentEditorDialogComponent } from './components/app-details/app-reviews/comment-editor-dialog/comment-editor-dialog.component';
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -232,7 +233,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WorkspacesListDialogComponent,
     ProductInfoComponent,
     AdvancedFiltersComponent,
-    ReviewEditorDialogComponent
+    ReviewEditorDialogComponent,
+    CommentEditorDialogComponent
   ],
   imports: [
     AppRoutingModule,
