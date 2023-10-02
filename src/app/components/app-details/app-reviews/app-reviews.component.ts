@@ -7,6 +7,7 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReviewEditorDialogComponent } from './review-editor-dialog/review-editor-dialog.component';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-app-reviews',
@@ -44,9 +45,10 @@ export class AppReviewsComponent implements OnChanges {
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorMediaService,
     private m_oTranslate: TranslateService,
-  ) { 
+  ) {
 
   }
 
@@ -73,10 +75,10 @@ export class AppReviewsComponent implements OnChanges {
           console.log(oResponse);
           this.reviews = oResponse.reviews;
           if (oResponse.reviews.length == 0) {
-           this.m_bShowLoadMoreReviews = false;
+            this.m_bShowLoadMoreReviews = false;
           }
           this.reviews.forEach(oReview => {
-            if(oReview.userId === this.m_oConstantsService.getUserId()) {
+            if (oReview.userId === this.m_oConstantsService.getUserId()) {
               this.m_bUserHasReviewed = true;
             }
           })
@@ -84,7 +86,7 @@ export class AppReviewsComponent implements OnChanges {
         else {
           this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg);
         }
-       this.m_bReviewsWaiting = false;
+        this.m_bReviewsWaiting = false;
       },
       error: oError => {
         this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg);
@@ -124,7 +126,32 @@ export class AppReviewsComponent implements OnChanges {
     })
   }
 
-  deleteReview() { }
+  deleteReview(oReview) {
+    let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_REVIEWS_ERROR");
+    let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_REVIEW_DELETE_CONFIRM");
+
+    //Confirm that User wishes to delete the Review:
+    let oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmMsg);
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: oDialogData
+    });
+    
+    //If User agrees, the Review is deleted
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.m_oProcessorMediaService.deleteProcessorReview(this.m_oSelectedProcessor.processorId, oReview.id).subscribe({
+          next: oResponse => {
+            this.refreshReviews();
+          },
+          error: oError => {
+            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+          }
+        })
+      }
+    });
+  }
 
   isMineReview(oReview) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oReview)) {

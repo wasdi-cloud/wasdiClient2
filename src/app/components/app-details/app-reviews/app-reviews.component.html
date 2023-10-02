@@ -63,12 +63,12 @@
                 </div>
                 <div *ngIf="isMineReview(oReview)" class="d-flex justify-content-end gap-1">
                     <div class="delete-btn ml-3 btn btn-secondary btn-sm" data-toggle="modal" ng-show="true"
-                        data-target="#writeReviewsModal" (click)="updateReview(oReview )">
+                        data-target="#writeReviewsModal" (click)="updateReview(oReview)">
                         <fa-icon [icon]="faEdit"></fa-icon>
                         {{"WAP_UPDATE"|translate}}
                     </div>
                     <div class="delete-btn ml-3 btn btn-secondary btn-sm"
-                        ng-click="m_oController.deleteReview(oReview.id)">
+                        ng-click="m_oController.deleteReview(oReview.id)" (click)="deleteReview(oReview)">
                         <fa-icon [icon]="faTrash"></fa-icon>
                         {{"WAP_DELETE"|translate}}
                     </div>
