@@ -1,8 +1,90 @@
 <p>{{oProcessor.friendlyName}}</p>
+<div class="reviews-container d-flex flex-row gap-4 mb-2">
+    <div class="">
+        star rating
 
-<div class="border my-2" *ngFor="let review of reviews">
-    <p>{{review.userId}}</p>
-    <p>{{review.vote}}</p>
-    <p>{{review.title}}</p>
-    <p>{{review.comment}}</p>
+        <div class="star-ratings">
+            <div id="five-star-rating" class="star-rating">
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+            </div>
+            <div id="four-star-rating" class="star-rating">
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+            </div>
+            <div id="three-star-rating" class="star-rating">
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+            </div>
+            <div id="two-star-rating" class="star-rating">
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+            </div>
+            <div id="one-star-rating" class="star-rating">
+                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
+            </div>
+
+        </div>
+
+
+        <button *ngIf="m_bUserHasReviewed === false" class="btn btn-success" (click)="addNewReview()">
+            Add Review
+        </button>
+        <button *ngIf="m_bUserHasReviewed === true" class="btn btn-success" disabled>
+            Already Reviewed
+        </button>
+
+    </div>
+    <div class="flex-fill d-flex flex-column">
+
+        <div class="border my-2 p-2" *ngFor="let oReview of reviews">
+            <div class="d-flex flex-row align-items-center justify-content-between">
+                <div class="d-flex flex-row gap-2">
+                    <!-- <div class="user-iamge mr-3"
+                        style="background-image: url('assets/img/placeholder/user-placeholder.png')"></div> -->
+                    <fa-icon class="text-success" [icon]="faAlien"></fa-icon>
+                    <div class="reviews-name">{{oReview.userId}}</div>
+                </div>
+                <div *ngIf="isMineReview(oReview)" class="d-flex justify-content-end gap-1">
+                    <div class="delete-btn ml-3 btn btn-secondary btn-sm" data-toggle="modal" ng-show="true"
+                        data-target="#writeReviewsModal" (click)="updateReview(oReview )">
+                        <fa-icon [icon]="faEdit"></fa-icon>
+                        {{"WAP_UPDATE"|translate}}
+                    </div>
+                    <div class="delete-btn ml-3 btn btn-secondary btn-sm"
+                        ng-click="m_oController.deleteReview(oReview.id)">
+                        <fa-icon [icon]="faTrash"></fa-icon>
+                        {{"WAP_DELETE"|translate}}
+                    </div>
+                </div>
+            </div>
+
+            <p>{{oReview.vote}}</p>
+            <p>{{oReview.title}}</p>
+            <p>{{oReview.comment}}</p>
+            <p>{{oReview.date | date: 'dd/MM/yyyy'}}</p>
+            <div class="d-flex flex-row justify-content-end gap-1">
+                <button class="btn btn-secondary btn-sm">Add Comment</button>
+                <button class="btn btn-secondary btn-sm">Show Comments</button>
+            </div>
+        </div>
+        <div class="btn btn-primary align-self-center">Load More</div>
+    </div>
+
 </div>

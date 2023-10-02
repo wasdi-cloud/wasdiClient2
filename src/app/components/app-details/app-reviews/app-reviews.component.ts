@@ -1,5 +1,12 @@
 import { Component, Input, OnChanges } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { faEdit, faSpaghettiMonsterFlying, faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ReviewEditorDialogComponent } from './review-editor-dialog/review-editor-dialog.component';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 
 @Component({
   selector: 'app-app-reviews',
@@ -7,6 +14,12 @@ import { ProcessorMediaService } from 'src/app/services/api/processor-media.serv
   styleUrls: ['./app-reviews.component.css']
 })
 export class AppReviewsComponent implements OnChanges {
+  faAlien = faSpaghettiMonsterFlying;
+  faEdit = faEdit;
+  faStar = faStar;
+  faStarRegular = faStar;
+  faTrash = faTrashCan;
+
   @Input() oProcessor: any;
   reviews: {
     comment: string,
@@ -17,14 +30,114 @@ export class AppReviewsComponent implements OnChanges {
     userId: string,
     vote: number
   }[] = []
-  constructor(private oProcessorMediaService: ProcessorMediaService) { }
 
-  ngOnChanges(): void {
-    if (this.oProcessor.friendlyName) {
-      this.oProcessorMediaService.getProcessorReviews(this.oProcessor.processorName, 0, 4).subscribe(response => {
-        this.reviews = response.reviews
-      })
-    }
+  m_bReviewsWaiting: boolean;
+  m_bUserHasReviewed: boolean = false;
+  m_bShowLoadMoreReviews: boolean;
+  m_oReviewsWrapper: any;
+  m_oSelectedProcessor: any;
+  m_sSelectedReview: any;
+  m_iReviewsPage: number = 0;
+  m_iReviewItemsPerPage: number;
+
+  constructor(
+    private m_oAlertDialog: AlertDialogTopService,
+    private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
+    private m_oProcessorService: ProcessorMediaService,
+    private m_oTranslate: TranslateService,
+  ) { 
 
   }
+
+  ngOnChanges(): void {
+    if (this.oProcessor.processorId) {
+      this.m_oSelectedProcessor = this.oProcessor;
+      console.log(this.oProcessor);
+      this.refreshReviews();
+    }
+  }
+
+  /********** Reviews Methods **********/
+  refreshReviews() {
+    this.m_bReviewsWaiting = true;
+
+    let sReviewsErrorMsg: string;
+    this.m_oTranslate.get("MSG_MKT_REVIEWS_ERROR").subscribe(sTranslation => {
+      sReviewsErrorMsg = sTranslation;
+    });
+
+    this.m_oProcessorService.getProcessorReviews(this.m_oSelectedProcessor.processorName, this.m_iReviewsPage, this.m_iReviewItemsPerPage = 4).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) == false) {
+          console.log(oResponse);
+          this.reviews = oResponse.reviews;
+          if (oResponse.reviews.length == 0) {
+           this.m_bShowLoadMoreReviews = false;
+          }
+          this.reviews.forEach(oReview => {
+            if(oReview.userId === this.m_oConstantsService.getUserId()) {
+              this.m_bUserHasReviewed = true;
+            }
+          })
+        }
+        else {
+          this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg);
+        }
+       this.m_bReviewsWaiting = false;
+      },
+      error: oError => {
+        this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg);
+      }
+    });
+  }
+
+  addNewReview() {
+    let oDialogRef = this.m_oDialog.open(ReviewEditorDialogComponent, {
+      height: '50vh',
+      width: '50vw',
+      data: {
+        isEditing: false,
+        selectedProcessor: this.m_oSelectedProcessor,
+        review: null
+      }
+    });
+
+    oDialogRef.afterClosed().subscribe(oResult => {
+      this.refreshReviews();
+    })
+  }
+
+  updateReview(oReview: any) {
+    let oDialogRef = this.m_oDialog.open(ReviewEditorDialogComponent, {
+      height: '50vh',
+      width: '50vw',
+      data: {
+        isEditing: true,
+        selectedProcessor: this.m_oSelectedProcessor,
+        review: oReview
+      }
+    })
+
+    oDialogRef.afterClosed().subscribe(oResult => {
+      this.refreshReviews();
+    })
+  }
+
+  deleteReview() { }
+
+  isMineReview(oReview) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oReview)) {
+      return false;
+    }
+
+    let sActualUser = this.m_oConstantsService.getUserId();
+    //If Current User is same as review user, return true: 
+    if (sActualUser === oReview.userId) {
+      return true;
+    } else {
+      return false
+    }
+  }
+
 }
