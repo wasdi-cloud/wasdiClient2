@@ -17,7 +17,7 @@ import { EditComponent } from './components/edit/edit.component';
 import { HeaderComponent } from './components/header/header.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
 import { MarketplaceAppCardComponent } from './components/marketplace/marketplace-app-card/marketplace-app-card.component';
-import { PlanComponent } from './components/plan/plan.component';
+import { SearchOrbit } from './components/plan/search-orbit.component';
 import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
@@ -146,7 +146,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditComponent,
     HeaderComponent,
     MarketplaceComponent,
-    PlanComponent,
+    SearchOrbit,
     SearchComponent,
     WorkspacesComponent,
     LoginComponent,
