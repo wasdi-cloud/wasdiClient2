@@ -235,7 +235,32 @@ export class AppReviewsComponent implements OnChanges {
     })
   }
 
-  deleteComment(oComment) { }
+  deleteComment(oComment, oReview) {
+
+    let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENTS_ERROR");
+    let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_DELETE_CONFIRM");
+
+    let oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmMsg);
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: oDialogData
+    });
+
+    //If User agrees, the Review is deleted
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.m_oProcessorMediaService.deleteReviewComment(oComment.reviewId, oComment.commentId).subscribe({
+          next: oResponse => {
+            this.getComments(oReview);
+          },
+          error: oError => {
+            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+          }
+        })
+      }
+    });
+  }
 
   isMineComment(oComment) {
     if (oComment.userId === this.m_oConstantsService.getUserId()) {
