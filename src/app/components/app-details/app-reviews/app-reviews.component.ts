@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReviewEditorDialogComponent } from './review-editor-dialog/review-editor-dialog.component';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { CommentEditorDialogComponent } from './comment-editor-dialog/comment-editor-dialog.component';
 
 @Component({
   selector: 'app-app-reviews',
@@ -35,12 +36,17 @@ export class AppReviewsComponent implements OnChanges {
   m_bReviewsWaiting: boolean;
   m_bUserHasReviewed: boolean = false;
   m_bShowLoadMoreReviews: boolean;
+  m_bCommentsWaiting: boolean;
+  m_bShowComments: boolean;
+
+
   m_oReviewsWrapper: any;
   m_oSelectedProcessor: any;
   m_sSelectedReview: any;
   m_iReviewsPage: number = 0;
   m_iReviewItemsPerPage: number;
 
+  m_aoComments: any = [];
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
@@ -137,7 +143,7 @@ export class AppReviewsComponent implements OnChanges {
       maxWidth: "400px",
       data: oDialogData
     });
-    
+
     //If User agrees, the Review is deleted
     oDialogRef.afterClosed().subscribe(oDialogResult => {
       if (oDialogResult === true) {
@@ -167,4 +173,75 @@ export class AppReviewsComponent implements OnChanges {
     }
   }
 
+  /********** Comment Methods **********/
+  getComments(oReview) {
+    let sReviewId = oReview.id;
+
+    this.m_bCommentsWaiting = true;
+
+    let sCommentsErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENTS_ERROR");
+
+    this.m_oProcessorMediaService.getReviewComments(sReviewId, undefined, undefined).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) == false) {
+          if (!oResponse) {
+            this.m_bShowComments = false
+          } else {
+
+            this.m_aoComments = oResponse;
+            console.log(this.m_aoComments);
+            this.m_bCommentsWaiting = false;
+            this.m_bShowComments = true;
+          }
+        }
+      },
+      error: oError => {
+        this.m_oAlertDialog.openDialog(4000, sCommentsErrorMsg);
+        this.m_bCommentsWaiting = false;
+      }
+    });
+    return true;
+  }
+
+  addNewComment(oReview) {
+    let oDialogRef = this.m_oDialog.open(CommentEditorDialogComponent, {
+      height: '50vh',
+      width: '50vw',
+      data: {
+        isEditing: false,
+        reviewId: oReview.id,
+        selectedComment: null
+      }
+    });
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      this.getComments(oReview);
+    })
+  }
+
+  updateComment(oComment, oReview) {
+    console.log(oComment);
+    let oDialogRef = this.m_oDialog.open(CommentEditorDialogComponent, {
+      height: '50vh',
+      width: '50vw',
+      data: {
+        isEditing: true,
+        selectedComment: oComment
+      }
+    });
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      console.log("updating comments")
+      this.getComments(oReview);
+    })
+  }
+
+  deleteComment(oComment) { }
+
+  isMineComment(oComment) {
+    if (oComment.userId === this.m_oConstantsService.getUserId()) {
+      return true;
+    } else {
+      return false
+    }
+  }
 }

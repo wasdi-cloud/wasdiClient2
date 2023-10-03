@@ -62,13 +62,11 @@
                     <div class="reviews-name">{{oReview.userId}}</div>
                 </div>
                 <div *ngIf="isMineReview(oReview)" class="d-flex justify-content-end gap-1">
-                    <div class="delete-btn ml-3 btn btn-secondary btn-sm" data-toggle="modal" ng-show="true"
-                        data-target="#writeReviewsModal" (click)="updateReview(oReview)">
+                    <div class="delete-btn ml-3 btn btn-secondary btn-sm" (click)="updateReview(oReview)">
                         <fa-icon [icon]="faEdit"></fa-icon>
                         {{"WAP_UPDATE"|translate}}
                     </div>
-                    <div class="delete-btn ml-3 btn btn-secondary btn-sm"
-                        ng-click="m_oController.deleteReview(oReview.id)" (click)="deleteReview(oReview)">
+                    <div class="delete-btn ml-3 btn btn-secondary btn-sm" (click)="deleteReview(oReview)">
                         <fa-icon [icon]="faTrash"></fa-icon>
                         {{"WAP_DELETE"|translate}}
                     </div>
@@ -78,10 +76,42 @@
             <p>{{oReview.vote}}</p>
             <p>{{oReview.title}}</p>
             <p>{{oReview.comment}}</p>
-            <p>{{oReview.date | date: 'dd/MM/yyyy'}}</p>
+            <div class="text-success">{{oReview.date | date: 'dd/MM/yyyy'}}</div>
             <div class="d-flex flex-row justify-content-end gap-1">
-                <button class="btn btn-secondary btn-sm">Add Comment</button>
-                <button class="btn btn-secondary btn-sm">Show Comments</button>
+                <button class="btn btn-secondary btn-sm" (click)="addNewComment(oReview)">Add Comment</button>
+                <button class="btn btn-secondary btn-sm" (click)="getComments(oReview)">Show Comments</button>
+            </div>
+            <div *ngIf="m_bShowComments" class="mt-1">
+                <div *ngIf="m_aoComments.length === 0" class="reviews-list shadow-sm p-3 mb-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        {{"WAP_NO_COMMENTS"|translate}}
+                    </div>
+                </div>
+                <div *ngIf="m_aoComments.length > 0" class="reviews-list shadow-sm gap-2">
+                    <div class="d-flex flex-column gap-1 border p-3 mt-3" *ngFor="let oComment of m_aoComments">
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <div class="d-flex flex-row gap-2">
+                                <!-- <div class="user-iamge mr-3"
+                                    style="background-image: url('assets/img/placeholder/user-placeholder.png')"></div> -->
+                                <fa-icon class="text-success" [icon]="faAlien"></fa-icon>
+                                <div class="reviews-name">{{oComment.userId}}</div>
+                            </div>
+                            <div *ngIf="isMineComment(oComment)" class="d-flex justify-content-end gap-1">
+                                <div class="delete-btn ml-3 btn btn-secondary btn-sm"
+                                    (click)="updateComment(oComment, oReview)">
+                                    <fa-icon [icon]="faEdit"></fa-icon>
+                                    {{"WAP_UPDATE"|translate}}
+                                </div>
+                                <div class="delete-btn ml-3 btn btn-secondary btn-sm" (click)="deleteComment(oComment)">
+                                    <fa-icon [icon]="faTrash"></fa-icon>
+                                    {{"WAP_DELETE"|translate}}
+                                </div>
+                            </div>
+                        </div>
+                        <div>{{oComment.text}}</div>
+                        <div class="text-success">{{oComment.date | date: 'dd/MM/yyyy'}}</div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="btn btn-primary align-self-center">Load More</div>
