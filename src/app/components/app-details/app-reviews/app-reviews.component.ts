@@ -1,14 +1,24 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { faEdit, faSpaghettiMonsterFlying, faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { ConstantsService } from 'src/app/services/constants.service';
+
+//Angular Materials Imports
 import { MatDialog } from '@angular/material/dialog';
-import { ReviewEditorDialogComponent } from './review-editor-dialog/review-editor-dialog.component';
+
+//Service Imports:
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
+import { ReviewEditorDialogComponent } from './review-editor-dialog/review-editor-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
+
+//Component Imports:
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { CommentEditorDialogComponent } from './comment-editor-dialog/comment-editor-dialog.component';
+
+//Font Awesome Improts:
+import { faEdit, faSpaghettiMonsterFlying, faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+
+//Import Utilities:
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-app-reviews',
@@ -23,7 +33,8 @@ export class AppReviewsComponent implements OnChanges {
   faTrash = faTrashCan;
 
   @Input() oProcessor: any;
-  reviews: {
+
+  m_aoReviews: {
     comment: string,
     date: number,
     id: string,
@@ -39,14 +50,14 @@ export class AppReviewsComponent implements OnChanges {
   m_bCommentsWaiting: boolean;
   m_bShowComments: boolean;
 
-
   m_oReviewsWrapper: any;
   m_oSelectedProcessor: any;
-  m_sSelectedReview: any;
+
   m_iReviewsPage: number = 0;
   m_iReviewItemsPerPage: number;
 
   m_aoComments: any = [];
+  
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
@@ -54,36 +65,33 @@ export class AppReviewsComponent implements OnChanges {
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorMediaService,
     private m_oTranslate: TranslateService,
-  ) {
-
-  }
+  ) { }
 
   ngOnChanges(): void {
     if (this.oProcessor.processorId) {
       this.m_oSelectedProcessor = this.oProcessor;
-      console.log(this.oProcessor);
-      this.refreshReviews();
+      this.getReviews();
     }
   }
 
   /********** Reviews Methods **********/
-  refreshReviews() {
+  /**
+  * Calls server to return all Reviews associated with the processor
+  */
+  getReviews(): void {
     this.m_bReviewsWaiting = true;
 
-    let sReviewsErrorMsg: string;
-    this.m_oTranslate.get("MSG_MKT_REVIEWS_ERROR").subscribe(sTranslation => {
-      sReviewsErrorMsg = sTranslation;
-    });
+    let sReviewsErrorMsg: string = this.m_oTranslate.instant("MSG_MKT_REVIEWS_ERROR");
 
     this.m_oProcessorService.getProcessorReviews(this.m_oSelectedProcessor.processorName, this.m_iReviewsPage, this.m_iReviewItemsPerPage = 4).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) == false) {
-          console.log(oResponse);
-          this.reviews = oResponse.reviews;
+          this.m_aoReviews = oResponse.reviews;
           if (oResponse.reviews.length == 0) {
             this.m_bShowLoadMoreReviews = false;
           }
-          this.reviews.forEach(oReview => {
+          //If the user has already reviewed this app, set m_bUserHasReviewed to true
+          this.m_aoReviews.forEach(oReview => {
             if (oReview.userId === this.m_oConstantsService.getUserId()) {
               this.m_bUserHasReviewed = true;
             }
@@ -100,7 +108,10 @@ export class AppReviewsComponent implements OnChanges {
     });
   }
 
-  addNewReview() {
+  /**
+   * Opens dialog to create a new review
+   */
+  addNewReview(): void {
     let oDialogRef = this.m_oDialog.open(ReviewEditorDialogComponent, {
       height: '50vh',
       width: '50vw',
@@ -112,11 +123,15 @@ export class AppReviewsComponent implements OnChanges {
     });
 
     oDialogRef.afterClosed().subscribe(oResult => {
-      this.refreshReviews();
+      this.getReviews();
     })
   }
 
-  updateReview(oReview: any) {
+  /**
+   * Opens dialog to update review information (vote, title, and text)
+   * @param oReview 
+   */
+  updateReview(oReview: any): void {
     let oDialogRef = this.m_oDialog.open(ReviewEditorDialogComponent, {
       height: '50vh',
       width: '50vw',
@@ -128,11 +143,15 @@ export class AppReviewsComponent implements OnChanges {
     })
 
     oDialogRef.afterClosed().subscribe(oResult => {
-      this.refreshReviews();
+      this.getReviews();
     })
   }
 
-  deleteReview(oReview) {
+  /**
+   * Calls API to remove the selected Review
+   * @param oReview 
+   */
+  deleteReview(oReview: any): void {
     let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_REVIEWS_ERROR");
     let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_REVIEW_DELETE_CONFIRM");
 
@@ -149,7 +168,7 @@ export class AppReviewsComponent implements OnChanges {
       if (oDialogResult === true) {
         this.m_oProcessorMediaService.deleteProcessorReview(this.m_oSelectedProcessor.processorId, oReview.id).subscribe({
           next: oResponse => {
-            this.refreshReviews();
+            this.getReviews();
           },
           error: oError => {
             this.m_oAlertDialog.openDialog(4000, sErrorMsg);
@@ -159,7 +178,12 @@ export class AppReviewsComponent implements OnChanges {
     });
   }
 
-  isMineReview(oReview) {
+  /**
+   * Checks if the Review belongs to the active user
+   * @param oReview 
+   * @returns {boolean}
+   */
+  isMineReview(oReview: any): boolean {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oReview)) {
       return false;
     }
@@ -174,7 +198,12 @@ export class AppReviewsComponent implements OnChanges {
   }
 
   /********** Comment Methods **********/
-  getComments(oReview) {
+  /**
+   * Calls server to return all comments associated with a review
+   * @param oReview 
+   * @returns {boolean}
+   */
+  getComments(oReview: any): boolean {
     let sReviewId = oReview.id;
 
     this.m_bCommentsWaiting = true;
@@ -189,7 +218,6 @@ export class AppReviewsComponent implements OnChanges {
           } else {
 
             this.m_aoComments = oResponse;
-            console.log(this.m_aoComments);
             this.m_bCommentsWaiting = false;
             this.m_bShowComments = true;
           }
@@ -203,7 +231,11 @@ export class AppReviewsComponent implements OnChanges {
     return true;
   }
 
-  addNewComment(oReview) {
+  /**
+   * Opens dialog to add new comment
+   * @param oReview 
+   */
+  addNewComment(oReview: any): void {
     let oDialogRef = this.m_oDialog.open(CommentEditorDialogComponent, {
       height: '50vh',
       width: '50vw',
@@ -219,8 +251,12 @@ export class AppReviewsComponent implements OnChanges {
     })
   }
 
-  updateComment(oComment, oReview) {
-    console.log(oComment);
+  /**
+   * Opens dialog to update comment text
+   * @param oComment 
+   * @param oReview 
+   */
+  updateComment(oComment: any, oReview: any): void {
     let oDialogRef = this.m_oDialog.open(CommentEditorDialogComponent, {
       height: '50vh',
       width: '50vw',
@@ -230,12 +266,16 @@ export class AppReviewsComponent implements OnChanges {
       }
     });
     oDialogRef.afterClosed().subscribe(oDialogResult => {
-      console.log("updating comments")
       this.getComments(oReview);
     })
   }
 
-  deleteComment(oComment, oReview) {
+  /**
+   * Calls the API to remove the selected Comment
+   * @param oComment 
+   * @param oReview 
+   */
+  deleteComment(oComment: any, oReview: any): void {
 
     let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENTS_ERROR");
     let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_DELETE_CONFIRM");
@@ -262,7 +302,12 @@ export class AppReviewsComponent implements OnChanges {
     });
   }
 
-  isMineComment(oComment) {
+  /**
+   * Checks if the Comment belongs to the Active User
+   * @param oComment 
+   * @returns {boolean}
+   */
+  isMineComment(oComment: any): boolean {
     if (oComment.userId === this.m_oConstantsService.getUserId()) {
       return true;
     } else {
