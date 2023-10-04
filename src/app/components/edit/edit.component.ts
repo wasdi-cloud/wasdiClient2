@@ -13,6 +13,7 @@ import { Product } from 'src/app/shared/models/product.model';
 
 //Utilities Imports: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 
 @Component({
   selector: 'app-edit',
@@ -23,6 +24,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oProductService: ProductService,
     private m_oRabbitStompService: RabbitStompService,
@@ -71,12 +73,7 @@ export class EditComponent implements OnInit, OnDestroy {
       if (this.m_oActivatedRoute.snapshot.params['workspaceId']) {
         //Assign and set new workspace id
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
-        this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.m_sWorkspaceId).subscribe(oResponse => {
-          this.m_oConstantsService.setActiveWorkspace(oResponse);
-          this.m_oActiveWorkspace = oResponse;
-          this.subscribeToRabbit();
-          this.getProductList();
-        })
+        this.openWorkspace(this.m_sWorkspaceId);
       } else {
         //If unable to identify workspace, re-route to workspaces tab
         this.m_oRouter.navigateByUrl('/workspaces')
@@ -92,7 +89,30 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.m_oRabbitStompService.unsubscribe(); 
+    this.m_oRabbitStompService.unsubscribe();
+  }
+
+  openWorkspace(sWorkspaceId: string) {
+    this.m_oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          if (oResponse.workspaceId === null || oResponse.activeNode === false) {
+            this.m_oRouter.navigateByUrl('/workspaces');
+            let sMessage = this.m_oTranslateService.instant("MSG_FORBIDDEN")
+            this.m_oAlertDialog.openDialog(4000, sMessage)
+          } else {
+            this.m_oConstantsService.setActiveWorkspace(oResponse);
+            this.m_oActiveWorkspace = oResponse;
+            this.subscribeToRabbit();
+            this.getProductList();
+          }
+        }
+      },
+      error: oError => {
+        let sMessage = this.m_oTranslateService.instant("MSG_ERROR_READING_WS");
+        this.m_oAlertDialog.openDialog(4000, sMessage);
+      }
+    })
   }
 
   getProductList() {
@@ -115,7 +135,7 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   getProductListUpdate(event: any) {
-    this.getProductList(); 
+    this.getProductList();
   }
 
   subscribeToRabbit() {
