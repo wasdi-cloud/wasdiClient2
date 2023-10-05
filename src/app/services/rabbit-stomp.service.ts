@@ -338,11 +338,11 @@ export class RabbitStompService {
     return true;
   };
 
-  receivedNewProductMessage(oMessage: any) {
-    let sMessage: string = "PRODUCT ADDED";
+  // receivedNewProductMessage(oMessage: any) {
+  //   let sMessage: string = "PRODUCT ADDED";
 
-    console.log(sMessage);
-  }
+  //   console.log(sMessage);
+  // }
 
   /**
    * Handler of the "Publish" message

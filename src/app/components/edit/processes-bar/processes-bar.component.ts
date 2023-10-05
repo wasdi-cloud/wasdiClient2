@@ -1,11 +1,11 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { AfterContentInit, Component, Inject, Input, OnInit } from '@angular/core';
 
 //Angular Material Imports: 
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 //Font Awesome Imports: 
-import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFileAlt, faFileDownload, faFilter, faList, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFilter, faList, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 //Service Imports: 
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -20,6 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 
 export interface SearchFilter {
   sStatus: string,
@@ -48,11 +49,12 @@ export class ProcessesBarComponent implements OnInit {
   m_oSummary: any;
 
   constructor(
+    private m_oAlertDialog: AlertDialogTopService,
     private _bottomSheet: MatBottomSheet,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
-    private m_oTranslateService: TranslateService) { }
+    private m_oTranslate: TranslateService) { }
 
   ngOnInit() {
     this.getSummary();
@@ -119,7 +121,7 @@ export class ProcessesBarComponent implements OnInit {
 
     }
     let sNotificationMsg: string;
-    this.m_oTranslateService.get(WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage)).subscribe(oTranslation => {
+    this.m_oTranslate.get(WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage)).subscribe(oTranslation => {
       console.log(oTranslation);
       sNotificationMsg = oTranslation;
     })
@@ -129,35 +131,43 @@ export class ProcessesBarComponent implements OnInit {
     return true;
   }
 
+  /**
+   * Handler for messages that add a new product to the Workspace
+   * @param oMessage 
+   */
   receivedNewProductMessage(oMessage: any) {
-    let sMessage: string;
-    this.m_oTranslateService.get('NOTIFICATION.MSG_EDIT_PRODUCT_ADDED').subscribe((sResult: string) => {
-      sMessage = sResult;
+    let sMessage: string = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED")
+    this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close");
 
-      let oNotification = this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close");
-    });
+    //Emit the message payload and file name to parent: 
+
   }
 
+  /**
+   * Get summary of Processes Running and Waiting
+   */
   getSummary() {
-    let sMessage = this.m_oTranslateService.instant("ALERT_MSGS.MSG_SUMMNARY_ERROR");
-
-    this.m_oProcessWorkspaceService.getSummary().subscribe({
-      next: oResponse => {
-        if (!oResponse) {
-          //ADD ALERT DIALOG
-          console.log(sMessage);
-        } else {
-          this.m_oSummary = oResponse;
-          this.m_iNumberOfProcesses = oResponse.userProcessRunning;
-          this.m_iWaitingProcesses = oResponse.userProcessWaiting;
-
+    let sMessage: string;
+    
+    //ASYNC Translation in case of refresh (reloading translations):
+    this.m_oTranslate.get("MSG_SUMMARY_ERROR").subscribe(sTranslation => {
+      sMessage = sTranslation;
+      this.m_oProcessWorkspaceService.getSummary().subscribe({
+        next: oResponse => {
+          //If Response is undefined or is null:
+          if (!oResponse) {
+            this.m_oAlertDialog.openDialog(4000, sMessage);
+          } else {
+            this.m_oSummary = oResponse;
+            this.m_iNumberOfProcesses = oResponse.userProcessRunning;
+            this.m_iWaitingProcesses = oResponse.userProcessWaiting;
+          }
+        },
+        error: oError => {
+          this.m_oAlertDialog.openDialog(4000, sMessage)
         }
-      },
-      error: oError => {
-        //ALERT DIALOG
-        console.log(sMessage);
-      }
-    })
+      });
+    });
   }
 
   openProcessesBar(): void {
@@ -200,7 +210,9 @@ export class ProcessesBarContent implements OnInit {
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
     private m_oDialog: MatDialog,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
-  ) { }
+  ) {
+    console.log(this.data)
+   }
 
   ngOnInit(): void {
     if (this.m_oActiveWorkspace.workspaceId) {
