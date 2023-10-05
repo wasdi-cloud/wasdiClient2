@@ -1,0 +1,47 @@
+div.products-container {
+    height: 35vh; 
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 35vw; 
+  
+  }
+  h3.products-header {
+    width: 35vw;
+    z-index: 1; 
+  }
+  .btn {
+    padding: 0; 
+  }
+  .tree-invisible {
+    display: none;
+  }
+  .tree-nested-node {
+    padding-left: 1rem;
+  }
+  
+  
+  .mat-tree-node {
+    background-color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0;
+  }
+  
+  span.product-name {
+    display: block; 
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 12rem;
+  }
+  
+  ul,
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  li.tree-container {
+    border-bottom: 0;
+  }

@@ -21,8 +21,8 @@ export class OpportunitySearchService {
     return this.oHttp.get(this.APIURL + '/searchorbit/getkmlsearchresults?text=' + sText + "&footPrint=" + sFootPrint);
   }
 
-  getSatellitesResources(oData: object) {
-    return this.oHttp.get(this.APIURL + '/searchorbit/getsatellitesresource');
+  getSatellitesResources() {
+    return this.oHttp.get<Array<any>>(this.APIURL + '/searchorbit/getsatellitesresource');
   }
 
   getTrackSatellite(sNameInput: string) {
