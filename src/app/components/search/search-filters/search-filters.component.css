@@ -1,0 +1,7 @@
+a.nav-link {
+    cursor: pointer;
+}
+
+mat-option {
+    min-width: fit-content !important;
+}

@@ -86,10 +86,8 @@ export class MapService {
     this.m_oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       maxZoom: 18,
-      // this map option disables world wrapping. by default, it is false.
-      //continuousWorld: false,
       // this option disables loading tiles outside of the world bounds.
-      noWrap: false
+      noWrap: true
     });
     this.m_oOpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
       maxZoom: 17,
@@ -291,7 +289,7 @@ export class MapService {
   // }
 
   /**
-   * Handler function for drawing rectangles/polygons/etc on map
+   * Handler function for drawing rectangles/polygons/etc on map - Creates bounding box to string
    * @param event
    */
   onDrawCreated(event: any) {
@@ -301,10 +299,26 @@ export class MapService {
 
       let selectedCoordinate = new L.LatLngBounds(rectangleCoordinates._northEast, rectangleCoordinates._southWest)
       let m_sSelectedBBox = selectedCoordinate.toBBoxString();
-      console.log(m_sSelectedBBox);
     }
     this.m_oDrawnItems.addLayer(layer);
   }
+
+  /**
+   * Handler function for drawing rectangles on the SEARCH map 
+   * @param oEvent 
+   */
+  onSearchDrawCreated(oEvent: any) {
+    const { layerType, layer } = oEvent;
+
+ if (layerType === "rectangle") {
+      const rectangleCoordinates = layer._latlngs
+      this.m_oDrawnItems.addLayer(layer);
+
+      return rectangleCoordinates; 
+    }
+  }
+
+
   /**
    * Init map Editor
    * @param sMapDiv

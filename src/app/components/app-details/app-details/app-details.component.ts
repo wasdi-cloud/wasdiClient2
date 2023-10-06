@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProcessorService } from 'src/app/services/api/processor.service';
-import { ConstantsService } from 'src/app/services/constants.service';
 
+//Import Services:
+import { ConstantsService } from 'src/app/services/constants.service';
+import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
+import { ProcessorService } from 'src/app/services/api/processor.service';
+import { TranslateService } from '@ngx-translate/core';
+
+//Import Utilities:
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 export interface application {
   buyed: boolean,
@@ -26,7 +32,21 @@ export class AppDetailsComponent implements OnInit {
   sActiveApplicationName: string = this.oConstantsService.getSelectedApplication()
   sActiveApplicationInfo: any = {} as application;
 
-  constructor(private oActivatedRoute: ActivatedRoute, private oConstantsService: ConstantsService, private oProcessorService: ProcessorService, private oRouter: Router) { }
+  m_bReviewsWaiting: boolean;
+  m_sSelectedApplication: string;
+  m_iReviewsPage: number;
+  m_iReviewItemsPerPage: number;
+  m_oReviewsWrapper: any;
+  m_bShowLoadMoreReviews: boolean;
+
+
+  constructor(
+    private oActivatedRoute: ActivatedRoute,
+    private oConstantsService: ConstantsService,
+    private m_oProcessorMediaService: ProcessorMediaService,
+    private m_oProcessorService: ProcessorService,
+    private m_oTranslate: TranslateService,
+    private oRouter: Router) { }
 
   ngOnInit(): void {
     if (this.sActiveApplicationName) {
@@ -35,12 +55,11 @@ export class AppDetailsComponent implements OnInit {
       this.sActiveApplicationName = this.oActivatedRoute.snapshot.params['processorName']
       this.getApplicationDetails(this.sActiveApplicationName)
     }
-
   }
 
   //Get application details from server
   getApplicationDetails(applicationName: string) {
-    return this.oProcessorService.getMarketplaceDetail(applicationName).subscribe(response => {
+    return this.m_oProcessorService.getMarketplaceDetail(applicationName).subscribe(response => {
       this.sActiveApplicationInfo = response
     });
   }

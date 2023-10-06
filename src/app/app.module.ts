@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
@@ -54,6 +54,7 @@ import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatChipsModule } from '@angular/material/chips';
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -136,7 +137,15 @@ import { ProjectInfoDialogComponent } from './dialogs/project-info-dialog/projec
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
 import { PackageManagerComponent } from './components/dialogs/package-manager/package-manager.component';
 import { SearchOrbitResourcesComponent } from './components/plan/search-orbit-resources/search-orbit-resources.component';
-
+import { SearchMapComponent } from './components/search/search-map/search-map.component';
+import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';
+import { ConfigurationService } from './services/configuration.service';
+import { ProductsTableComponent } from './components/search/products-table/products-table.component';
+import { WorkspacesListDialogComponent } from './components/search/workspaces-list-dialog/workspaces-list-dialog.component';
+import { ProductInfoComponent } from './components/search/product-info/product-info.component';
+import { AdvancedFiltersComponent } from './components/search/advanced-filters/advanced-filters.component';
+import { ReviewEditorDialogComponent } from './components/app-details/app-reviews/review-editor-dialog/review-editor-dialog.component';
+import { CommentEditorDialogComponent } from './components/app-details/app-reviews/comment-editor-dialog/comment-editor-dialog.component';
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -207,7 +216,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProcessorTabUiComponent,
     ProcessorTabStoreComponent,
     ProcessorTabMediaComponent,
-    WorkflowsDialogComponent, 
+    WorkflowsDialogComponent,
     EditWorkflowDialogComponent,
     SubscriptionsDisplayComponent,
     OrganizationsDisplayComponent,
@@ -220,6 +229,14 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SubscriptionsPurchaseComponent,
     PackageManagerComponent,
     SearchOrbitResourcesComponent
+    SearchMapComponent,
+    SearchFiltersComponent,
+    ProductsTableComponent,
+    WorkspacesListDialogComponent,
+    ProductInfoComponent,
+    AdvancedFiltersComponent,
+    ReviewEditorDialogComponent,
+    CommentEditorDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -256,8 +273,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ClipboardModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    MatListModule, 
-    MatProgressSpinnerModule
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatChipsModule
   ],
   providers: [
     AuthService,
@@ -275,7 +293,13 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
     },
-    { provide: RabbitStompService }
+    { provide: RabbitStompService },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [ConfigurationService],
+      useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
+    }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ConfirmationDialogComponent, ProcessesBarContent],

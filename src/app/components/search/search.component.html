@@ -1,1 +1,32 @@
-<p>search works!</p>
+<!-- Operation Bar -->
+<div class="d-flex flex-row gap-2 justify-content-end align-items-center px-4 py-2" style="width: 100%;">
+    <button *ngIf="m_sTypeOfFilterSelected === 'Time period'" (click)="searchAllSelectedProviders()"
+        class="btn btn-secondary">Search</button>
+    <button *ngIf="m_sTypeOfFilterSelected === 'Time series'" (click)=" searchListAllSelectedProviders()"
+        class="btn btn-secondary">Search List</button>
+    <button (click)="openAddToWorkspaceDialog()" class="btn btn-secondary" [disabled]="m_aoSelectedProducts.length < 1">
+        <fa-icon [icon]="faPlus"></fa-icon>
+        Add Selected to Workspace</button>
+</div>
+<div class="d-flex flex-row gap-3 px-4 pt-2" style="height: 75%; width: 100%;">
+    <div class="products-table" style="width: 40%;" *ngIf="m_bIsVisibleListOfLayers === true">
+        <app-products-table [m_aoProducts]="m_oProductSubject.asObservable()"
+            [m_aoSelectedProviders]="m_oSelectedProvidersSubject.asObservable()"
+            [m_bIsPaginatedList]="m_bIsPaginatedList"
+            [m_bIsVisibleListOfLayers]="m_bIsVisibleListOfLayers"
+            (m_oActiveProviderChange)="getActiveProvider($event)"
+            (m_oSelectedProducts)="getSelectedProducts($event)"></app-products-table>
+    </div>
+    <div class="filters-panel" style="width: 40%;" *ngIf="m_bIsVisibleListOfLayers === false">
+        <app-search-filters [m_aoMissions]="m_aoMissions" (m_oSearchFilter)="getMissionFilter($event)"
+            (m_aoProviderSelection)="getSelectedProviders($event)"
+            (m_oTypeOfFilterSelected)="getTimeFilter($event)"
+            (m_oAdvancedFilterSelection)="getAdvancedFilterSelection($event)"
+            ></app-search-filters>
+    </div>
+    <div class="map" style="width: 60%;">
+        <app-search-map [m_aoProducts]="m_oProductSubject.asObservable()"
+            (m_oMapInputChange)="getMapInput($event)"></app-search-map>
+    </div>
+</div>
+<app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>

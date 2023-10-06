@@ -33,6 +33,6 @@ export class OpenSearchService {
   };
 
   getListOfProvider() {
-    return this.oHttp.get(this.APIURL + this.API_GET_PROVIDERS);
+    return this.oHttp.get<any>(this.APIURL + this.API_GET_PROVIDERS);
   }
 }

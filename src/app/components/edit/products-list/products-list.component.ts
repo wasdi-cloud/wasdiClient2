@@ -78,7 +78,6 @@ export class ProductsListComponent {
   }
 
   ngOnChanges() {
-    console.log(this.productArray);
     this.filterProducts();
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
@@ -190,7 +189,6 @@ export class ProductsListComponent {
         //Call m_oProductService.deleteProductFromWorkspace()
         this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
           if (oResponse.boolValue) {
-            console.log(this.productArray)
             this.productArrayOutput.emit(this.productArray);
             return true;
           }
@@ -230,11 +228,7 @@ export class ProductsListComponent {
     let bAlreadyPublished = oBand.published;
     this.m_oActiveBand = oBand;
 
-
-    console.log(oBand)
-
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
-      console.log(oResponse);
       if (!bAlreadyPublished) {
         let sNotificationMsg = "PUBLISHING BAND";
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
@@ -246,7 +240,6 @@ export class ProductsListComponent {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
-          console.log(oResponse.payload.geoserverBoundingBox);
           this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
         } else {
           this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);

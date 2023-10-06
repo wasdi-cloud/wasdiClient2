@@ -1,4 +1,4 @@
-<div class="d-flex flex-row gap-2" style="width: 100%;" [formGroup]="m_oProcessorUIInfo">
+<div class="d-flex flex-row gap-2" style="width: 100%;">
 
     <div class="ui-btns-container d-flex flex-column gap-1">
         <button class="btn btn-secondary btn-sm" (click)="addUIElement('tab')">
@@ -44,9 +44,10 @@
             Table
         </button>
     </div>
-    <div class="JSON-container d-flex flex-column gap-1" style="height: 100%; width: 100%;">
+    <div [formGroup]="m_oProcessorUIInfo" class="JSON-container d-flex flex-column gap-1"
+        style="height: 100%; width: 100%;">
         <textarea [id]="appui" insertable-text-area="" class="form-control" name="" cols="30"
-            style="height: 30rem; width: 100%;" formControlName="sProcessorUI"></textarea>
+            style="height: 30rem; width: 100%;" formControlName="sProcessorUI" [(ngModel)]="m_sProcessorUI"></textarea>
         <button class="btn btn-success btn-sm align-self-end" (click)="formatJSON()">Format JSON</button>
     </div>
 </div>

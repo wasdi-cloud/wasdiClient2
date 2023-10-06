@@ -12,6 +12,11 @@ import { EditSubscriptionDialogComponent } from 'src/app/dialogs/edit-subscripti
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { SubscriptionProjectsDialogComponent } from 'src/app/dialogs/subscription-projects-dialog/subscription-projects-dialog.component';
 import { UserSettingsDialogComponent } from '../user-settings-dialog.component';
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { TranslateService } from '@ngx-translate/core';
+
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-subscriptions-display',
@@ -34,12 +39,15 @@ export class SubscriptionsDisplayComponent implements OnInit {
   m_aoSubscriptionsProjects: Array<any> = [];
 
   constructor(
+    private m_oAlertDialogService: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<UserSettingsDialogComponent>,
+    private m_oNotificationService: NotificationDisplayService,
     private m_oOrganizationsService: OrganizationsService,
     private m_oProjectService: ProjectService,
-    private m_oSubscriptionService: SubscriptionService
+    private m_oSubscriptionService: SubscriptionService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +58,6 @@ export class SubscriptionsDisplayComponent implements OnInit {
     this.m_oSubscriptionService.getSubscriptionsListByUser().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          console.log(oResponse);
           this.m_aoSubscriptions = oResponse;
         }
       },
@@ -58,17 +65,17 @@ export class SubscriptionsDisplayComponent implements OnInit {
     })
   }
 
-  openSharedUsersDialog(oSubscription) { 
+  openSharedUsersDialog(oSubscription) {
     let oDialogData = new ShareDialogModel("subscription", oSubscription);
     let oDialogRef = this.m_oDialog.open(ShareDialogComponent, {
-      width: '50vw', 
+      width: '50vw',
       data: oDialogData
-    }); 
+    });
   }
 
-  openProjectsDialog(bIsOwner: boolean, oSubscription: any) { 
+  openProjectsDialog(bIsOwner: boolean, oSubscription: any) {
     let oDialogRef = this.m_oDialog.open(SubscriptionProjectsDialogComponent, {
-      height: '70vh', 
+      height: '70vh',
       width: '50vw',
       data: {
         subscription: oSubscription
@@ -78,8 +85,8 @@ export class SubscriptionsDisplayComponent implements OnInit {
 
   openEditSubscriptionDialog(oSubscription: any, bIsOwner: boolean) {
     let oDialogRef = this.m_oDialog.open(EditSubscriptionDialogComponent, {
-      height: '80vh', 
-      width: '50vw', 
+      height: '80vh',
+      width: '50vw',
       data: {
         subscription: oSubscription,
         editMode: true,
@@ -88,9 +95,48 @@ export class SubscriptionsDisplayComponent implements OnInit {
     })
   }
 
-  deleteSubscription() { }
+  deleteSubscription(oSubscription) {
+    let sConfirmationMessage: string = `Are you sure you want to remove ${oSubscription.name}?`;
 
-  onDismiss(){ 
+    let oDialogData: ConfirmationDialogModel;
+    oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmationMessage);
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: oDialogData
+    });
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.m_oSubscriptionService.deleteSubscription(oSubscription.subscriptionId).subscribe({
+          next: oResponse => {
+            let sMessage = "SUBSCRIPTION DELETED";
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.status === 200) {
+              if (oResponse.body.message !== "Done") {
+                sMessage += "<br><br>" + this.m_oTranslate.get(oResponse.body.message).subscribe(oTranslation => {
+                  return oTranslation
+                });
+                this.m_oAlertDialogService.openDialog(4000, sMessage)
+              }
+              this.m_oNotificationService.openSnackBar(sMessage, 'Close', 'right', 'bottom');
+            }
+          },
+          error: oError => {
+            let sErrorMessage = "GURU MEDITATION<br>ERROR IN DELETING SUBSCRIPTION";
+
+            if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oError.data) && !FadeoutUtils.utilsIsStrNullOrEmpty(oError.data.message)) {
+              sErrorMessage += "<br><br>" + this.m_oTranslate.get(oError.data.message).subscribe(oTranslation => {
+                return oTranslation;
+              });
+            }
+            this.m_oAlertDialogService.openDialog(4000, sErrorMessage);
+          }
+        })
+      }
+    })
+  }
+
+  onDismiss() {
     this.m_oDialogRef.close();
   }
 }

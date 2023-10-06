@@ -1,0 +1,60 @@
+<div class="d-flex flex-column justify-content-between h-100">
+    <div class="dialog-header d-flex flex-row justify-content-between p-2">
+        <h4 class="modal-title w-100">{{m_oUserReview.title !== '' ? 'Update Review' : 'Add Review'}}</h4>
+        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
+    </div>
+    <div class="dialog-body flex-fill px-3">
+        <div>
+            Select your Rating:
+            <div class="d-flex-flex-row">
+                <fa-icon [icon]="faStar"
+                    [ngClass]="m_oUserReview.vote >= 1 || m_iPreviewRating >= 1 ? 'text-warning' : 'text-secondary'"
+                    (click)="m_oUserReview.vote = 1" (mouseover)="m_iPreviewRating = 1"
+                    (mouseout)="m_iPreviewRating= 0"></fa-icon>
+                <fa-icon [icon]="faStar"
+                    [ngClass]="m_oUserReview.vote >= 2 || m_iPreviewRating >= 2 ? 'text-warning' : 'text-secondary'"
+                    (click)="m_oUserReview.vote = 2" (mouseover)="m_iPreviewRating = 2"
+                    (mouseout)="m_iPreviewRating= 0"></fa-icon>
+                <fa-icon [icon]="faStar"
+                    [ngClass]="m_oUserReview.vote >= 3 || m_iPreviewRating >=3 ? 'text-warning' : 'text-secondary'"
+                    (click)="m_oUserReview.vote = 3" (mouseover)="m_iPreviewRating = 3"
+                    (mouseout)="m_iPreviewRating= 0"></fa-icon>
+                <fa-icon [icon]="faStar"
+                    [ngClass]="m_oUserReview.vote >= 4|| m_iPreviewRating >= 4 ? 'text-warning' : 'text-secondary'"
+                    (click)="m_oUserReview.vote = 4" (mouseover)="m_iPreviewRating = 4"
+                    (mouseout)="m_iPreviewRating= 0"></fa-icon>
+                <fa-icon [icon]="faStar"
+                    [ngClass]="m_oUserReview.vote >= 5|| m_iPreviewRating >= 5 ? 'text-warning' : 'text-secondary'"
+                    (click)="m_oUserReview.vote = 5" (mouseover)="m_iPreviewRating = 5"
+                    (mouseout)="m_iPreviewRating= 0"></fa-icon>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="title">{{"WAP_REVIEW_TITLE"|translate}}</label>
+            <input type="text" id="title" class="form-control" [(ngModel)]="m_oUserReview.title">
+            <small id="titleHelp" class="form-text text-muted">{{"WAP_REVIEW_TITLE_HELP"|translate}}</small>
+        </div>
+        <div class="form-group">
+            <label for="comment">{{"WAP_REVIEW_COMMENT"|translate}}</label>
+            <textarea type="text" class="form-control" id="comment"
+                placeholder="{{'WAP_REVIEW_COMMENT_PLACEHOLDER'|translate}}"
+                [(ngModel)]="m_oUserReview.comment"></textarea>
+            <small id="commentHelp" class="form-text text-muted">{{"WAP_REVIEW_COMMENT_HELP"|translate}}</small>
+        </div>
+
+    </div>
+    <div mat-dialog-actions class="d-flex flex-row justify-content-end gap-1">
+        <button class="btn btn-secondary" (click)="onDismiss()">
+            <fa-icon [icon]="faTrash"></fa-icon>
+            Cancel
+        </button>
+        <button *ngIf="m_bIsEditing === true" class="btn btn-success" (click)="updateReview()">
+            <fa-icon [icon]="faSave"></fa-icon>
+            {{"WAP_UPDATE_REVIEW"|translate}}
+        </button>
+        <button *ngIf="m_bIsEditing === false" class="btn btn-success" (click)="addNewReview()">
+            <fa-icon [icon]="faSave"></fa-icon>
+            {{"WAP_ADD_REVIEW"|translate}}
+        </button>
+    </div>
+</div>

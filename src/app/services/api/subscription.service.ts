@@ -36,7 +36,7 @@ export class SubscriptionService {
   };
 
   deleteSubscription(sSubscriptionId: string) {
-    return this.m_oHttp.delete(this.APIURL + '/subscriptions/delete?subscription=' + sSubscriptionId);
+    return this.m_oHttp.delete<any>(this.APIURL + '/subscriptions/delete?subscription=' + sSubscriptionId, {observe: "response"});
   };
 
   // Get list of shared users by subscription id
