@@ -27,6 +27,7 @@ export class SearchOrbit implements OnInit {
   m_aoSatelliteResources: Array<any> = [];
   treeControl: NestedTreeControl<any>;
   dataSource: MatTreeNestedDataSource<any>;
+  m_oActiveWorkspace: any;
 
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
@@ -43,7 +44,7 @@ export class SearchOrbit implements OnInit {
 
   ngOnInit(): void {
     this.getSatellitesResources();
-   
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
   getSatellitesResources() {
@@ -58,7 +59,7 @@ export class SearchOrbit implements OnInit {
           this.m_oAlertDialog.openDialog(4000, sMessage);
         }
       },
-      error: oError => { 
+      error: oError => {
         this.m_oAlertDialog.openDialog(4000, sMessage);
       }
     });
