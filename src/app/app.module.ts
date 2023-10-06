@@ -135,6 +135,7 @@ import { EditOrganizationDialogComponent } from './dialogs/edit-organization-dia
 import { ProjectInfoDialogComponent } from './dialogs/project-info-dialog/project-info-dialog.component';
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
 import { PackageManagerComponent } from './components/dialogs/package-manager/package-manager.component';
+import { SearchOrbitResourcesComponent } from './components/plan/search-orbit-resources/search-orbit-resources.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -217,7 +218,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditOrganizationDialogComponent,
     ProjectInfoDialogComponent,
     SubscriptionsPurchaseComponent,
-    PackageManagerComponent
+    PackageManagerComponent,
+    SearchOrbitResourcesComponent
   ],
   imports: [
     AppRoutingModule,

@@ -1,32 +1,12 @@
-<div *ngIf="m_aoSatelliteResources">
-    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-        <mat-nested-tree-node *matTreeNodeDef="let node">
-            <li class="tree-container">
-                <mat-checkbox color="success"></mat-checkbox>
-                {{node.name}}
-            </li>
-        </mat-nested-tree-node>
-        <mat-nested-tree-node *matTreeNodeDef="let node when: hasChild">
-            <li class="tree-container">
-                <div class="d-flex flex-row align-items-center">
-                    <button class="btn" mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
-                        <mat-icon class=" mat-icon-rtl-mirror" *ngIf="node.satelliteSensors || node.sensorModes">
-                            {{treeControl.isExpanded(node) ? 'expand_more': 'chevron_right'}}
-                        </mat-icon>
-                    </button>
-                    <mat-checkbox color="success"></mat-checkbox>
+<div class="w-100 d-flex flex-row justify-content-end align-items-center p-3">
+    <button class="btn btn-success">
+        Search
+    </button>
+</div>
+<div class="d-flex flex-row">
 
-                    <span class="product-name">{{node.description ? node.description :
-                        node.satelliteName}}</span>
-                </div>
-                <ul class="tree-nested-node" style="padding-left:2rem">
-                    <div [class.tree-invisible]="!treeControl.isExpanded(node)" role="group">
-                        <ng-container matTreeNodeOutlet></ng-container>
-                    </div>
-                </ul>
-            </li>
-        </mat-nested-tree-node>
+    <app-search-orbit-resources *ngIf="m_aoSatelliteResources.length > 0"
+        [m_aoSatelliteResources]="m_aoSatelliteResources"></app-search-orbit-resources>
 
-
-    </mat-tree>
+    <app-plan-map></app-plan-map>
 </div>

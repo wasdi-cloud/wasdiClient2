@@ -15,17 +15,7 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 
-/**
- * Node for Satellite Parent (e.g., Cosmo-SkyMed 1):
- */
-export class SatelliteNode {
-  satelliteName: string;
-  satelliteSensors: Array<any>;
-  description: string;
-  enable: boolean;
-  sensorModes: Array<any>;
-  name: string;
-}
+
 
 @Component({
   selector: 'app-search-orbit',
@@ -53,16 +43,7 @@ export class SearchOrbit implements OnInit {
 
   ngOnInit(): void {
     this.getSatellitesResources();
-    this.treeControl = new NestedTreeControl<SatelliteNode>(node => {
-      return (node.satelliteSensors) ? node.satelliteSensors : node.sensorModes;
-    });
-    this.dataSource = new MatTreeNestedDataSource();
-  }
-
-  hasChild(_: number, node: SatelliteNode) {
-    return (node.satelliteSensors) ?
-      !!node.satelliteSensors && node.satelliteSensors.length > 0 :
-      !!node.sensorModes && node.sensorModes.length > 0;
+   
   }
 
   getSatellitesResources() {
@@ -70,9 +51,9 @@ export class SearchOrbit implements OnInit {
 
     this.m_oOpportunitySearchService.getSatellitesResources().subscribe({
       next: oResponse => {
+        console.log(oResponse)
         if (oResponse.length > 0) {
           this.m_aoSatelliteResources = oResponse;
-          this.dataSource.data = this.m_aoSatelliteResources;
         } else {
           this.m_oAlertDialog.openDialog(4000, sMessage);
         }
