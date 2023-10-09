@@ -310,11 +310,11 @@ export class MapService {
   onSearchDrawCreated(oEvent: any) {
     const { layerType, layer } = oEvent;
 
- if (layerType === "rectangle") {
+    if (layerType === "rectangle") {
       const rectangleCoordinates = layer._latlngs
       this.m_oDrawnItems.addLayer(layer);
 
-      return rectangleCoordinates; 
+      return rectangleCoordinates;
     }
   }
 
