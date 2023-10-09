@@ -47,18 +47,29 @@ pipeline {
 
     stage('NPM - INSTALL MODULES') {
       steps {
-        sh script: '''
+        sh script: """
           npm install
-        ''',
+        """,
         label: "Install NodeJS modules from package.json"
       }
     }
 
+    stage('ANSIBLE - PREPARE THE CLIENT (RENDER TEMPLATES, DELETE TEMPLATES, ETC)') {
+      steps {
+        sh script: """
+            cd ${env.sWasdiAnsiblePath}
+            ansible-playbook playbooks/prepareWasdiClient_v2.yml --inventory inventories/wasdi.yml --limit ${env.sAnsibleLimit} --diff --extra-vars 'sCurrentRevision=${env.sCurrentRevision} sSourceDirectory=${WORKSPACE}'
+        """,
+        label: "Prepare the WASDI client"
+      }
+    }
+
+
     stage('NPM - BUILD') {
       steps {
-        sh script: '''
+        sh script: """
           npm run build
-        ''',
+        """,
         label: "Build WASDI client"
       }
     }
