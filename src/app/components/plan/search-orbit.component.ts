@@ -14,6 +14,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -23,11 +24,29 @@ import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service
   styleUrls: ['./search-orbit.component.css']
 })
 export class SearchOrbit implements OnInit {
+  //Font Awesome Icons: 
+  faSearch = faSearch;
 
   m_aoSatelliteResources: Array<any> = [];
-  treeControl: NestedTreeControl<any>;
-  dataSource: MatTreeNestedDataSource<any>;
   m_oActiveWorkspace: any;
+
+  m_aoSelectedSatelliteNodes: any = []; 
+
+  m_oGeoJSON: any = null;
+
+  m_oOrbitSearch = {
+    acquisitionStartTime: null,
+    acquisitionEndTime: null,
+    lookingType: "LEFT",
+    viewAngle: {
+      nearAngle: "",
+      farAngle: ""
+    },
+    swathSize: {
+      length: "",
+      width: ""
+    }
+  }
 
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
@@ -63,5 +82,87 @@ export class SearchOrbit implements OnInit {
         this.m_oAlertDialog.openDialog(4000, sMessage);
       }
     });
+  }
+
+  executeSearchOrbit() {
+    let sErrorMsg = "";
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON)) {
+      sErrorMsg += this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
+      this.m_oAlertDialog.openDialog(4000, sErrorMsg)
+    }
+  }
+
+  setAllOpportunitiesDisaled() {
+
+  }
+
+  generateArrayJSONSearchOrbit() { 
+
+  }
+
+  removeUselessInfo() { 
+
+  }
+
+  getPolygon() { 
+    
+  }
+
+  setSatelliteSesnorEnable(oSatellite, sSatelliteSensorDescription?: string, sSatelliteSensorMode?: string): boolean {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sSatelliteSensorDescription)) {
+      return false;
+    }
+    let iNumberOfSatelliteSensors = oSatellite.satelliteSensors.length;
+    // var iNumberOfSensorsModes = oSatellite.satelliteSensors.sensorModes.length;
+    for (let iIndexSatelliteSensor = 0; iIndexSatelliteSensor < iNumberOfSatelliteSensors; iIndexSatelliteSensor++) {
+      let oSatelliteSensor = oSatellite.satelliteSensors[iIndexSatelliteSensor];
+      if (sSatelliteSensorDescription === oSatelliteSensor.description) {
+        oSatelliteSensor.enable = true;
+      }
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(sSatelliteSensorMode) === false) {
+        let iNumberOfSensorModes = oSatelliteSensor.sensorModes.length;
+        for (let iSensorMode = 0; iSensorMode < iNumberOfSensorModes; iSensorMode++) {
+          if (oSatelliteSensor.sensorModes[iSensorMode].name === sSatelliteSensorMode) {
+            oSatelliteSensor.sensorModes[iSensorMode].enable = true;
+          }
+
+        }
+
+      }
+    }
+    return true;
+  }
+
+  /********** Event Listeners **********/
+
+  /**
+   * Listen for Selection Input from Search Orbit Resources Component (Satellite Resources):
+   */
+  getSelectedSatelliteResources(oEvent) {
+    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+      this.m_aoSelectedSatelliteNodes = oEvent;
+    }
+  }
+
+  getSelectedDates(oEvent) {
+    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+      this.m_oOrbitSearch.acquisitionEndTime = oEvent.acquisitionEndTime;
+      this.m_oOrbitSearch.acquisitionStartTime = oEvent.acquisitionStartTime;
+    }
+  }
+
+  /**
+   * Listen for Selection Input from Plan Map Component:
+   */
+  getBoundingBox() {
+
+  }
+
+  /**
+   * Listen for Selection Input fron Search ORbit Resources Component (Results Resources):
+   */
+  getSelectedOrbits() {
+
   }
 }
