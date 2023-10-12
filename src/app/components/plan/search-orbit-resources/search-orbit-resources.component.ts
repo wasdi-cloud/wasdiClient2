@@ -124,7 +124,6 @@ export class SearchOrbitResourcesComponent implements OnInit, OnChanges {
 
   /** Toggle the node selection. Select/deselect all the aoDescendants oNode */
   nodeSelectionToggle(oNode: SatelliteNode): void {
-    console.log(oNode)
     this.checklistSelection.toggle(oNode);
     const aoDescendants = this.treeControl.getDescendants(oNode);
     if (this.checklistSelection.isSelected(oNode)) {

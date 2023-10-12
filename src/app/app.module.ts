@@ -146,6 +146,7 @@ import { ProductInfoComponent } from './components/search/product-info/product-i
 import { AdvancedFiltersComponent } from './components/search/advanced-filters/advanced-filters.component';
 import { ReviewEditorDialogComponent } from './components/app-details/app-reviews/review-editor-dialog/review-editor-dialog.component';
 import { CommentEditorDialogComponent } from './components/app-details/app-reviews/comment-editor-dialog/comment-editor-dialog.component';
+import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -237,7 +238,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProductInfoComponent,
     AdvancedFiltersComponent,
     ReviewEditorDialogComponent,
-    CommentEditorDialogComponent
+    CommentEditorDialogComponent,
+    SearchOrbitResultsComponent
   ],
   imports: [
     AppRoutingModule,

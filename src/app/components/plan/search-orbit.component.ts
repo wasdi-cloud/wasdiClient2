@@ -15,6 +15,7 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { SatelliteNode } from './search-orbit-resources/search-orbit-resources.component';
 
 
 
@@ -33,7 +34,7 @@ export class SearchOrbit implements OnInit {
 
   m_aoSatelliteResources: Array<any> = [];
   m_oActiveWorkspace: any;
-
+  m_aoOrbitResults: Array<any> = []
   m_aoSelectedSatelliteNodes: any = [];
 
   m_oGeoJSON: any = null;
@@ -76,7 +77,6 @@ export class SearchOrbit implements OnInit {
 
     this.m_oOpportunitySearchService.getSatellitesResources().subscribe({
       next: oResponse => {
-        console.log(oResponse)
         if (oResponse.length > 0) {
           this.m_aoSatelliteResources = this.setDisabledAllOpportunities(oResponse);
         } else {
@@ -89,28 +89,6 @@ export class SearchOrbit implements OnInit {
     });
   }
 
-  setDisabledAllOpportunities(aoSatelliteResources) {
-    var iNumberOfSatellites = aoSatelliteResources.length;
-    for (var iIndexSatellite = 0; iIndexSatellite < iNumberOfSatellites; iIndexSatellite++) {
-      var oSatellite = aoSatelliteResources[iIndexSatellite];
-      oSatellite.enable = false;
-      // oSatellite.enabled = false;
-      var iNumberOfSatelliteSensors = oSatellite.satelliteSensors.length;
-      for (var iIndexSensors = 0; iIndexSensors < iNumberOfSatelliteSensors; iIndexSensors++) {
-        var aoSatelliteSensors = oSatellite.satelliteSensors[iIndexSensors];
-        aoSatelliteSensors.enable = false;
-        // aoSatelliteSensors.enabled = false;
-        var iNumberOfSensorModes = aoSatelliteSensors.sensorModes.length;
-        for (var iIndexSensorMode = 0; iIndexSensorMode < iNumberOfSensorModes; iIndexSensorMode++) {
-          var oSensorMode = aoSatelliteSensors.sensorModes[iIndexSensorMode];
-          oSensorMode.enable = false;
-          // oSensorMode.enabled = false;
-        }
-      }
-    }
-
-    return aoSatelliteResources
-  }
 
   executeSearchOrbit(): boolean {
     let sErrorMsg = "";
@@ -121,18 +99,7 @@ export class SearchOrbit implements OnInit {
       return false;
     }
 
-    let aoNodes = this.m_aoSelectedSatelliteNodes.map(oNode => {
-      if (oNode.satelliteName) {
-        return {
-          enable: true,
-          satelliteName: oNode.satelliteName,
-          satelliteSensors: []
-        }
-      }
-
-      return oNode;
-    });
-    if(!this.m_oOrbitSearch.acquisitionStartTime) {
+    if (!this.m_oOrbitSearch.acquisitionStartTime) {
       this.m_oAlertDialog.openDialog(4000, "Please select at least one Satellite Resource");
       return false;
     }
@@ -150,46 +117,20 @@ export class SearchOrbit implements OnInit {
     this.m_bShowSatelliteFilters = false;
     this.m_oOpportunitySearchService.searchOrbit(oJson).subscribe({
       next: oResponse => {
-        console.log(oResponse)
+        this.m_aoOrbitResults = this.generateResultsData(oResponse);
       },
       error: oError => {
-        console.log(oError)
         //Reload Satellite Resources (clean)
         this.getSatellitesResources();
         this.m_bShowSatelliteFilters = true;
       }
     })
 
-    console.log(oJson)
     return true;
   }
 
-  setSatelliteSensorEnable(oSatellite, sSatelliteSensorDescription?: string, sSatelliteSensorMode?: string): boolean {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sSatelliteSensorDescription)) {
-      return false;
-    }
-    let iNumberOfSatelliteSensors = oSatellite.satelliteSensors.length;
-    // let iNumberOfSensorsModes = oSatellite.satelliteSensors.sensorModes.length;
-    for (let iIndexSatelliteSensor = 0; iIndexSatelliteSensor < iNumberOfSatelliteSensors; iIndexSatelliteSensor++) {
-      let oSatelliteSensor = oSatellite.satelliteSensors[iIndexSatelliteSensor];
-      if (sSatelliteSensorDescription === oSatelliteSensor.description) {
-        oSatelliteSensor.enable = true;
-      }
-      if (FadeoutUtils.utilsIsStrNullOrEmpty(sSatelliteSensorMode) === false) {
-        let iNumberOfSensorModes = oSatelliteSensor.sensorModes.length;
-        for (let iSensorMode = 0; iSensorMode < iNumberOfSensorModes; iSensorMode++) {
-          if (oSatelliteSensor.sensorModes[iSensorMode].name === sSatelliteSensorMode) {
-            oSatelliteSensor.sensorModes[iSensorMode].enable = true;
-          }
 
-        }
-
-      }
-    }
-    return true;
-  }
-
-  cleanSatelliteResources(aoSatelliteResources) {
+  cleanSatelliteResources(aoSatelliteResources): Array<SatelliteNode> {
     let aoTempResources = aoSatelliteResources
     if (aoTempResources.length > 0) {
       aoTempResources.forEach(oSatellite => {
@@ -215,6 +156,96 @@ export class SearchOrbit implements OnInit {
     return aoTempResources;
   }
 
+  setDisabledAllOpportunities(aoSatelliteResources): Array<SatelliteNode> {
+    let iNumberOfSatellites = aoSatelliteResources.length;
+    for (let iIndexSatellite = 0; iIndexSatellite < iNumberOfSatellites; iIndexSatellite++) {
+      let oSatellite = aoSatelliteResources[iIndexSatellite];
+      oSatellite.enable = false;
+      // oSatellite.enabled = false;
+      let iNumberOfSatelliteSensors = oSatellite.satelliteSensors.length;
+      for (let iIndexSensors = 0; iIndexSensors < iNumberOfSatelliteSensors; iIndexSensors++) {
+        let aoSatelliteSensors = oSatellite.satelliteSensors[iIndexSensors];
+        aoSatelliteSensors.enable = false;
+        // aoSatelliteSensors.enabled = false;
+        let iNumberOfSensorModes = aoSatelliteSensors.sensorModes.length;
+        for (let iIndexSensorMode = 0; iIndexSensorMode < iNumberOfSensorModes; iIndexSensorMode++) {
+          let oSensorMode = aoSatelliteSensors.sensorModes[iIndexSensorMode];
+          oSensorMode.enable = false;
+          // oSensorMode.enabled = false;
+        }
+      }
+    }
+
+    return aoSatelliteResources
+  }
+
+  generateResultsData(aoData) {
+    let oReturnValue = null;
+    // Ensure passed Data contains a value: 
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData)) {
+      return null;
+    }
+
+    //Format Dates from in Data:
+    aoData.map(oResult => {
+      let oAcquisitionStartTime = new Date(oResult.AcquisitionStartTime);
+      let oAcquisitionEndTime = new Date(oResult.AcquisitionEndTime)
+      oResult.AcquisitionStartTime = oAcquisitionStartTime.toLocaleDateString('en-GB');
+      oResult.AcquisitionEndTime = oAcquisitionEndTime.toLocaleDateString('en-GB')
+    })
+
+    // Format for Mat-Tree Nodes reading: 
+    let aoDateNodes: Array<any> = aoData.map(oResult => {
+      return {
+        acquisitionStartTime: oResult.AcquisitionStartTime,
+        acquisitionEndTime: oResult.AcquisitionEndTime,
+        directions: [
+          { left: [] },
+          { right: [] }
+        ]
+
+      }
+    })
+
+    // Clean duplicate Dates from Array
+    let aoUniqueDateNodes = [];
+
+    let aoCleanedDateNodes = aoDateNodes.filter(element => {
+      let isDuplicate = aoUniqueDateNodes.includes(element.acquisitionStartTime);
+      if (!isDuplicate) {
+        aoUniqueDateNodes.push(element.acquisitionStartTime);
+        return true;
+      }
+      return false;
+    });
+
+    for (let iCleanedNodeIndex = 0; iCleanedNodeIndex < aoCleanedDateNodes.length; iCleanedNodeIndex++) {
+      aoData.forEach(oResult => {
+        if (oResult.AcquisitionStartTime === aoCleanedDateNodes[iCleanedNodeIndex].acquisitionStartTime) {
+          if (oResult.SensorLookDirection === "LEFT") {
+            aoCleanedDateNodes[iCleanedNodeIndex].directions[0].left.push({
+              swathFootPrint: oResult.SwathFootPrint,
+              swathName: oResult.SwathName
+            });
+          }
+
+          if (oResult.SensorLookDirection === "RIGHT") {
+            aoCleanedDateNodes[iCleanedNodeIndex].directions[1].right.push({
+              swathFootPrint: oResult.SwathFootPrint,
+              swathName: oResult.SwathName
+            });
+          }
+        }
+      })
+    }
+
+    if (aoCleanedDateNodes.length > 0) {
+      oReturnValue = aoCleanedDateNodes;
+    }
+    return oReturnValue;
+  }
+
+
   /********** Event Listeners **********/
 
   /**
@@ -222,7 +253,6 @@ export class SearchOrbit implements OnInit {
    */
   getSelectedSatelliteResources(oEvent) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
-      console.log(oEvent);
       this.m_aoSelectedSatelliteNodes = oEvent;
     }
   }
