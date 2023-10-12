@@ -11,8 +11,11 @@ export class SatelliteNode {
   satelliteSensors: Array<any>;
   description: string;
   enable: boolean;
-  sensorModes: Array<any>;
   name: string;
+  sensorModes?: Array<any>;
+  sNodeName?: string;
+  parent?: { name: string | null };
+  grandparent?: { name: string }
 }
 
 @Component({
@@ -52,11 +55,47 @@ export class SearchOrbitResourcesComponent implements OnInit, OnChanges {
 
 
   ngOnChanges() {
-    this.dataSource.data = this.m_aoSatelliteResources;
+    // this.dataSource.data = this.setDisabledAllOpportunities(this.setParentProperty(this.m_aoSatelliteResources));
+    this.dataSource.data = this.setParentProperty(this.m_aoSatelliteResources);
   }
 
+  /**
+   * Sets a parent property for each node to be read when preparing the Selected Nodes for the Search Orbit parent
+   * @param oData 
+   * @param oParent 
+   * @returns {Array<any>}
+   */
+  setParentProperty(oData, oParent = null): Array<any> {
+    oData.forEach(item => {
+      if (oParent !== null) {
+        if (oParent.satelliteName) {
+          item.parent = { name: oParent.satelliteName };
+        }
+        if (oParent.description) {
+          item.parent = { name: oParent.description };
+          item.grandparent = { name: oParent.parent.name }
+        }
+      } else {
+        item.parent = null;
+      }
+      if (item.satelliteSensors) {
+        this.setParentProperty(item.satelliteSensors, item);
+      }
 
-  hasChild(_: number, oNode: SatelliteNode) {
+      if (item.sensorModes) {
+        this.setParentProperty(item.sensorModes, item)
+      }
+    });
+    return oData;
+  }
+
+  /**
+   * Identifies which nodes have child nodes for displaying in the Mat-Nested-Tree
+   * @param iNumber 
+   * @param oNode 
+   * @returns {boolean}
+   */
+  hasChild(_: number, oNode: SatelliteNode): boolean {
     return (oNode.satelliteSensors) ?
       !!oNode.satelliteSensors && oNode.satelliteSensors.length > 0 :
       !!oNode.sensorModes && oNode.sensorModes.length > 0;
@@ -83,8 +122,9 @@ export class SearchOrbitResourcesComponent implements OnInit, OnChanges {
     return aoResults && !this.descendantsAllSelected(oNode);
   }
 
-  /** Toggle the to-do item selection. Select/deselect all the aoDescendants oNode */
-  todoItemSelectionToggle(oNode: SatelliteNode): void {
+  /** Toggle the node selection. Select/deselect all the aoDescendants oNode */
+  nodeSelectionToggle(oNode: SatelliteNode): void {
+    console.log(oNode)
     this.checklistSelection.toggle(oNode);
     const aoDescendants = this.treeControl.getDescendants(oNode);
     if (this.checklistSelection.isSelected(oNode)) {
@@ -99,19 +139,158 @@ export class SearchOrbitResourcesComponent implements OnInit, OnChanges {
     this.emitDateChange();
   }
 
-  addNode(oNode: SatelliteNode) {
-    this.m_aoSelectedNodes.push(oNode);
+
+  /********** Selected Nodes Array Handlers **********/
+
+  /**
+   * Add Node to selected nodes array
+   * @param oNode 
+   * @returns {void}
+   */
+  addNode(oNode: SatelliteNode): void {
+    //Find Node in Satellite Sensors and Enable:
+    if (oNode.satelliteSensors) {
+      this.m_aoSatelliteResources.forEach(oSatellite => {
+        if (oSatellite.satelliteName === oNode.satelliteName) {
+          oSatellite.enable = true;
+        }
+      })
+    }
+    //If Node is the first nested child: 
+    if (oNode.sensorModes && !oNode.grandparent) {
+      //Find Node Parent 
+      let oParentNode = this.m_aoSatelliteResources.find(oSatellite => oSatellite.satelliteName === oNode.parent.name);
+
+      //Is Node Parent Already Enabled?
+      if (oParentNode.enable === false) {
+        //If Not -> Enable Node in 
+        oParentNode.enable = true;
+      }
+      // Enable Node in SatelliteResources Array
+      this.m_aoSatelliteResources.forEach(oSatellite => {
+        if (oSatellite.satelliteName === oNode.parent.name) {
+          oSatellite.satelliteSensors.forEach(oSensor => {
+            if (oSensor.description === oNode.description) {
+              oSensor.enable = true;
+            }
+          })
+        }
+      });
+    }
+
+    //If Node is the second nested child: 
+    if (oNode.grandparent) {
+      //Find Grandparent Node and enable (Parent Node)
+      let oGrandParentNode = this.m_aoSatelliteResources.find(oSatellite => oSatellite.satelliteName === oNode.grandparent.name);
+      //Find Parent Node and enable (first nested child)
+      let oParentNode
+      this.m_aoSatelliteResources.forEach(oSatellite => {
+        if (oSatellite.satelliteName === oGrandParentNode.satelliteName) {
+          oSatellite.satelliteSensors.forEach(oSensor => {
+            if (oSensor.description === oNode.parent.name) {
+              oParentNode = oSensor;
+            }
+          });
+        }
+      });
+
+      //If Grandparent Node not enabled, enable it: 
+      if (oGrandParentNode.enable === false) {
+        oGrandParentNode.enable = true;
+      }
+
+      //If Parent Node not enabled, enable it: 
+      if (oParentNode.enable === false) {
+        oParentNode.enable = true;
+      }
+      //Find Parent Node in SatelliteSensors of Grandparent node:
+      this.m_aoSatelliteResources.forEach(oSatellite => {
+        oSatellite.satelliteSensors.forEach(oSensor => {
+          if (oSensor.description === oParentNode.description) {
+            oSensor.sensorModes.forEach(oMode => {
+              if (oMode.name === oNode.name) {
+                oMode.enable = true;
+              }
+            })
+          }
+        })
+      })
+    }
   }
 
-  removeNode(oNode: SatelliteNode) {
-    if (oNode.satelliteName) {
-      this.m_aoSelectedNodes = this.m_aoSelectedNodes.filter(oResource => oResource.satelliteName !== oNode.satelliteName);
+  /**
+   * Remove a node from selected nodes array
+   * @param oNode 
+   * @returns {void}
+   */
+  removeNode(oNode: SatelliteNode): void {
+    //Disable Node: 
+    if (oNode.satelliteSensors) {
+      this.m_aoSatelliteResources.forEach(oSatellite => {
+        if (oSatellite.satelliteName === oNode.satelliteName) {
+          oSatellite.enable = false;
+        }
+      })
+    }
+    //If Node is the first nested child: 
+    if (oNode.sensorModes && !oNode.grandparent) {
+      let oParentNode = this.m_aoSatelliteResources.find(oSatellite => oSatellite.satelliteName === oNode.parent.name);
+
+      //Is Node Parent Enabled?
+      if (oParentNode.enable === true) {
+        //If Not -> disable Node in 
+        oParentNode.enable = false;
+      }
+      // Disable Node in SatelliteResources Array
+      this.m_aoSatelliteResources.forEach(oSatellite => {
+        if (oSatellite.satelliteName === oNode.parent.name) {
+          oSatellite.satelliteSensors.forEach(oSensor => {
+            if (oSensor.description === oNode.description) {
+              oSensor.enable = false;
+            }
+          })
+        }
+      });
     }
 
-    if (oNode.description) {
-      this.m_aoSelectedNodes = this.m_aoSelectedNodes.filter(oResource => oResource.description !== oNode.description);
-    }
+    //If Node is the second nested child: 
+    if (oNode.grandparent) {
+      //Find Grandparent Node and enable (Parent Node)
+      let oGrandParentNode = this.m_aoSatelliteResources.find(oSatellite => oSatellite.satelliteName === oNode.grandparent.name);
+      //Find Parent Node and enable (first nested child)
+      let oParentNode
+      this.m_aoSatelliteResources.forEach(oSatellite => {
+        if (oSatellite.satelliteName === oGrandParentNode.satelliteName) {
+          oSatellite.satelliteSensors.forEach(oSensor => {
+            if (oSensor.description === oNode.parent.name) {
+              oParentNode = oSensor;
+            }
+          });
+        }
+      });
 
+      //If Grandparent Node not enabled, enable it: 
+      if (oGrandParentNode.enable === true) {
+        oGrandParentNode.enable = false;
+      }
+
+      //If Parent Node not enabled, enable it: 
+      if (oParentNode.enable === true) {
+        oParentNode.enable = false;
+      }
+      //Find Parent Node in SatelliteSensors of Grandparent node:
+      this.m_aoSatelliteResources.forEach(oSatellite => {
+        oSatellite.satelliteSensors.forEach(oSensor => {
+          if (oSensor.description === oParentNode.description) {
+            oSensor.sensorModes.forEach(oMode => {
+              if (oMode.name === oNode.name) {
+                oMode.enable = false;
+              }
+            })
+          }
+        })
+      })
+    }
   }
 
   /********** Event Emitters For Input Changes **********/
@@ -121,19 +300,14 @@ export class SearchOrbitResourcesComponent implements OnInit, OnChanges {
     this.m_oAcquisitionStartTime = new Date(this.m_oStartDate);
     this.m_oAcquisitionEndTime = new Date(this.m_oEndDate);
 
-    console.log({
-      acquisitionStartTime: this.m_oAcquisitionStartTime,
-      acquisitionEndTime: this.m_oAcquisitionEndTime
-    })
-
     this.m_oDateSelection.emit({
       acquisitionStartTime: this.m_oAcquisitionStartTime,
       acquisitionEndTime: this.m_oAcquisitionEndTime
     })
-
   }
 
   emitSatelliteSelection() {
-    this.m_oSatelliteSelection.emit(this.m_aoSelectedNodes);
+    let aoArrayToEmit = this.m_aoSatelliteResources
+    this.m_oSatelliteSelection.emit(aoArrayToEmit);
   }
 }

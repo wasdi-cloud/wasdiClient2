@@ -27,12 +27,17 @@ export class SearchOrbit implements OnInit {
   //Font Awesome Icons: 
   faSearch = faSearch;
 
+  m_bIsVisibleLoadingIcon: boolean;
+  m_bIsDisabledSearchButton: boolean = false;
+  m_bShowSatelliteFilters: boolean = true;
+
   m_aoSatelliteResources: Array<any> = [];
   m_oActiveWorkspace: any;
 
-  m_aoSelectedSatelliteNodes: any = []; 
+  m_aoSelectedSatelliteNodes: any = [];
 
   m_oGeoJSON: any = null;
+  m_sPolygon: string = "";
 
   m_oOrbitSearch = {
     acquisitionStartTime: null,
@@ -73,7 +78,7 @@ export class SearchOrbit implements OnInit {
       next: oResponse => {
         console.log(oResponse)
         if (oResponse.length > 0) {
-          this.m_aoSatelliteResources = oResponse;
+          this.m_aoSatelliteResources = this.setDisabledAllOpportunities(oResponse);
         } else {
           this.m_oAlertDialog.openDialog(4000, sMessage);
         }
@@ -84,37 +89,87 @@ export class SearchOrbit implements OnInit {
     });
   }
 
-  executeSearchOrbit() {
+  setDisabledAllOpportunities(aoSatelliteResources) {
+    var iNumberOfSatellites = aoSatelliteResources.length;
+    for (var iIndexSatellite = 0; iIndexSatellite < iNumberOfSatellites; iIndexSatellite++) {
+      var oSatellite = aoSatelliteResources[iIndexSatellite];
+      oSatellite.enable = false;
+      // oSatellite.enabled = false;
+      var iNumberOfSatelliteSensors = oSatellite.satelliteSensors.length;
+      for (var iIndexSensors = 0; iIndexSensors < iNumberOfSatelliteSensors; iIndexSensors++) {
+        var aoSatelliteSensors = oSatellite.satelliteSensors[iIndexSensors];
+        aoSatelliteSensors.enable = false;
+        // aoSatelliteSensors.enabled = false;
+        var iNumberOfSensorModes = aoSatelliteSensors.sensorModes.length;
+        for (var iIndexSensorMode = 0; iIndexSensorMode < iNumberOfSensorModes; iIndexSensorMode++) {
+          var oSensorMode = aoSatelliteSensors.sensorModes[iIndexSensorMode];
+          oSensorMode.enable = false;
+          // oSensorMode.enabled = false;
+        }
+      }
+    }
+
+    return aoSatelliteResources
+  }
+
+  executeSearchOrbit(): boolean {
     let sErrorMsg = "";
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON)) {
       sErrorMsg += this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
-      this.m_oAlertDialog.openDialog(4000, sErrorMsg)
+      this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+      return false;
     }
+
+    let aoNodes = this.m_aoSelectedSatelliteNodes.map(oNode => {
+      if (oNode.satelliteName) {
+        return {
+          enable: true,
+          satelliteName: oNode.satelliteName,
+          satelliteSensors: []
+        }
+      }
+
+      return oNode;
+    });
+    if(!this.m_oOrbitSearch.acquisitionStartTime) {
+      this.m_oAlertDialog.openDialog(4000, "Please select at least one Satellite Resource");
+      return false;
+    }
+
+    let sAcquisitionStartTime = this.m_oOrbitSearch.acquisitionStartTime.toISOString().replace('T', ' ').replace('Z', '').replace(/\.\d+/, "");
+    let sAcquisitionEndTime = this.m_oOrbitSearch.acquisitionEndTime.toISOString().replace('T', ' ').replace('Z', '').replace(/\.\d+/, "");
+
+    let oJson = {
+      satelliteFilters: this.cleanSatelliteResources(this.m_aoSelectedSatelliteNodes),
+      polygon: this.m_sPolygon,
+      acquisitionStartTime: sAcquisitionStartTime,
+      acquisitionEndTime: sAcquisitionEndTime
+    }
+
+    this.m_bShowSatelliteFilters = false;
+    this.m_oOpportunitySearchService.searchOrbit(oJson).subscribe({
+      next: oResponse => {
+        console.log(oResponse)
+      },
+      error: oError => {
+        console.log(oError)
+        //Reload Satellite Resources (clean)
+        this.getSatellitesResources();
+        this.m_bShowSatelliteFilters = true;
+      }
+    })
+
+    console.log(oJson)
+    return true;
   }
 
-  setAllOpportunitiesDisaled() {
-
-  }
-
-  generateArrayJSONSearchOrbit() { 
-
-  }
-
-  removeUselessInfo() { 
-
-  }
-
-  getPolygon() { 
-    
-  }
-
-  setSatelliteSesnorEnable(oSatellite, sSatelliteSensorDescription?: string, sSatelliteSensorMode?: string): boolean {
+  setSatelliteSensorEnable(oSatellite, sSatelliteSensorDescription?: string, sSatelliteSensorMode?: string): boolean {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(sSatelliteSensorDescription)) {
       return false;
     }
     let iNumberOfSatelliteSensors = oSatellite.satelliteSensors.length;
-    // var iNumberOfSensorsModes = oSatellite.satelliteSensors.sensorModes.length;
+    // let iNumberOfSensorsModes = oSatellite.satelliteSensors.sensorModes.length;
     for (let iIndexSatelliteSensor = 0; iIndexSatelliteSensor < iNumberOfSatelliteSensors; iIndexSatelliteSensor++) {
       let oSatelliteSensor = oSatellite.satelliteSensors[iIndexSatelliteSensor];
       if (sSatelliteSensorDescription === oSatelliteSensor.description) {
@@ -134,19 +189,46 @@ export class SearchOrbit implements OnInit {
     return true;
   }
 
+  cleanSatelliteResources(aoSatelliteResources) {
+    let aoTempResources = aoSatelliteResources
+    if (aoTempResources.length > 0) {
+      aoTempResources.forEach(oSatellite => {
+        if (oSatellite.satelliteSensors.length > 0) {
+          delete oSatellite.parent;
+          oSatellite.satelliteSensors = oSatellite.satelliteSensors.filter(oResource => oResource.enable === true);
+          if (oSatellite.satelliteSensors.length > 0) {
+            oSatellite.satelliteSensors.forEach(oSensor => {
+              delete oSensor.parent
+              if (oSensor.sensorModes.length > 0) {
+                oSensor.sensorModes = oSensor.sensorModes.filter(oMode => oMode.enable === true);
+                oSensor.sensorModes.forEach(oMode => {
+                  delete oMode.parent;
+                  delete oMode.grandparent;
+                })
+              }
+            })
+          }
+        }
+      })
+      aoTempResources = aoTempResources.filter(oSatellite => oSatellite.enable === true);
+    }
+    return aoTempResources;
+  }
+
   /********** Event Listeners **********/
 
   /**
    * Listen for Selection Input from Search Orbit Resources Component (Satellite Resources):
    */
   getSelectedSatelliteResources(oEvent) {
-    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+      console.log(oEvent);
       this.m_aoSelectedSatelliteNodes = oEvent;
     }
   }
 
   getSelectedDates(oEvent) {
-    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_oOrbitSearch.acquisitionEndTime = oEvent.acquisitionEndTime;
       this.m_oOrbitSearch.acquisitionStartTime = oEvent.acquisitionStartTime;
     }
@@ -155,8 +237,11 @@ export class SearchOrbit implements OnInit {
   /**
    * Listen for Selection Input from Plan Map Component:
    */
-  getBoundingBox() {
-
+  getBoundingBox(oEvent) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+      this.m_oGeoJSON = oEvent.geoJSON;
+      this.m_sPolygon = oEvent.polygon;
+    }
   }
 
   /**

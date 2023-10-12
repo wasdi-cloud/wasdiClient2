@@ -22,8 +22,8 @@
         style="height: 80%; overflow-y: scroll;">
         <mat-nested-tree-node *matTreeNodeDef="let node">
             <li class="tree-container">
-                <mat-checkbox color="success" [checked]="checklistSelection.isSelected(node)"
-                    (change)="checklistSelection.toggle(node);"></mat-checkbox>
+                <mat-checkbox color="success"  [checked]="checklistSelection.isSelected(node)"
+                    (change)="nodeSelectionToggle(node)"></mat-checkbox>
                 {{node.name}}
             </li>
         </mat-nested-tree-node>
@@ -37,8 +37,8 @@
                         </mat-icon>
                     </button>
                     <mat-checkbox color="success" [checked]="descendantsAllSelected(node)"
-                    [indeterminate]="descendantsPartiallySelected(node)"
-                    (change)="todoItemSelectionToggle(node)"></mat-checkbox>
+                        [indeterminate]="descendantsPartiallySelected(node)"
+                        (change)="nodeSelectionToggle(node)"></mat-checkbox>
 
                     <span class="product-name">{{node.description ? node.description :
                         node.satelliteName}}</span>
