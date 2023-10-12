@@ -65,7 +65,7 @@ export class MapService {
     edit: {
       featureGroup: new L.FeatureGroup,
       edit: false,
-      remove: true
+      remove: false
     }
   }
   setMap(oMap: any) {
