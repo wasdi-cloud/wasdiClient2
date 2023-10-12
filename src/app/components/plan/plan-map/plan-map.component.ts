@@ -33,7 +33,10 @@ export class PlanMapComponent {
     satelliteFilters: []
   }
 
-  @Output() m_oSearchInfoChange = new EventEmitter;
+  m_oGeoJSON;
+  m_sPolygon;
+
+  @Output() m_oSearchInputhange = new EventEmitter;
 
   constructor(public m_oMapService: MapService) {
     this.m_oMapService.setDrawnItems();
@@ -49,64 +52,64 @@ export class PlanMapComponent {
     this.m_bIsValid = true;
   }
 
-  onMapReady(oMap: L.Map) {
+  onMapReady(oMap: L.Map): void {
     this.m_oMapService.setMap(oMap);
   }
 
-  onDrawCreated(oEvent) {
-    this.m_oDrawnItems.clearLayers();
-    let oDrawnItem = this.m_oMapService.onSearchDrawCreated(oEvent);
+
+
+  onDrawCreated(oEvent): void {
+    let oLayer = oEvent.layer;
+    if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
+      this.m_oDrawnItems.clearLayers();
+    }
+    this.m_oDrawnItems.addLayer(oLayer);
+
+    this.m_oGeoJSON = oLayer.toGeoJSON();
+    this.m_sPolygon = this.getPolygon();
+
+    //Emit Changes to Search Orbit Component: 
+    this.emitMapInputs();
   }
 
-  checkArea(layer) {
-    /**
-     The following happens in this.onDrawCreated():  
-      oController.boundingBox.northEast = layer._bounds._northEast;
-      oController.boundingBox.southWest = layer._bounds._southWest;
-    */
-
-    let latlngs = layer
-    // height and width respectively
-    let oSide: number[] = [this.getDistance(latlngs[0][0], latlngs[0][1]), this.getDistance(latlngs[0][1], latlngs[0][2])];
-
-
-    let fMaxSide = Math.max(...oSide);
-
-    let fRatio = Math.max(...oSide) / Math.min(...oSide);
-
-    // first element is the array itself to be passed
-    let fArea = L.GeometryUtil.geodesicArea(layer[0]) / 1000000;
-
-    if (fArea > this.oMapInput.maxArea && this.oMapInput.maxArea !== 0) {
-      // sErrorMessage = sErrorMessage.concat(this.m_oTranslateService.getTranslation());
-      this.m_bIsValid = false;
+  /**
+   * Get the Polygon Coordinates from the GeoJson
+   * @returns {string}
+   */
+  getPolygon(): string {
+    let sCoordinatesPolygon = "";
+    let iLengthCoordinates;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON.geometry)) {
+      return sCoordinatesPolygon;
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON.geometry.coordinates)) {
+      iLengthCoordinates = 0;
+    }
+    else {
+      iLengthCoordinates = this.m_oGeoJSON.geometry.coordinates.length;
     }
 
-    if (fMaxSide > this.oMapInput.maxSide && this.oMapInput.maxSide != 0) {
-      // sErrorMessage = sErrorMessage.concat($translate.getTranslationTable().WAP_SELECT_AREA_OVER_SIDE);
-      this.m_bIsValid = false;
-    }
+    for (let iLayerCount = 0; iLayerCount < iLengthCoordinates; iLayerCount++) {
 
-    if (fRatio > this.oMapInput.maxRatioSide && this.oMapInput.maxRatioSide != 0) {
-      // sErrorMessage = sErrorMessage.concat($translate.getTranslationTable().WAP_SELECT_AREA_OVER_RATIO);
-      this.m_bIsValid = false;
-    }
+      let oLayer = this.m_oGeoJSON.geometry.coordinates[iLayerCount];
+      for (let iCoordCount = 0; iCoordCount < oLayer.length; iCoordCount++) {
+        if (oLayer[iCoordCount].length == 2) {
+          let x = oLayer[iCoordCount][0];
+          let y = oLayer[iCoordCount][1];
+          sCoordinatesPolygon += (x + " " + y);
 
-    return this.m_bIsValid;
+          if (iCoordCount + 1 < oLayer.length)
+            sCoordinatesPolygon += ',';
+        }
+      }
+    }
+    return sCoordinatesPolygon;
   }
 
-  getDistance(pointFrom, pointTo) {
-    let markerFrom = L.circleMarker(pointFrom, { color: '#4AFF00', radius: 10 });
-    let markerTo = L.circleMarker(pointTo, { color: '#4AFF00', radius: 10 });
-
-    let from = markerFrom.getLatLng();
-    let to = markerTo.getLatLng();
-
-    let distance = parseInt((from.distanceTo(to)).toFixed(0)) / 1000;
-
-    return distance
-
+  emitMapInputs() {
+    this.m_oSearchInputhange.emit({
+      geoJSON: this.m_oGeoJSON,
+      polygon: this.m_sPolygon
+    });
   }
-
-
 }
