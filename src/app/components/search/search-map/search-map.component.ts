@@ -93,12 +93,12 @@ export class SearchMapComponent implements OnInit {
       return false;
     }
     //If valid after check format the selected area for call: 
-    this.oMapInput = this.formatDrawnItemm(oDrawnItem);
+    this.oMapInput = this.formatDrawnItem(oDrawnItem);
     this.m_oMapInputChange.emit(this.oMapInput);
     return true
   }
 
-  formatDrawnItemm(oLayer) {
+  formatDrawnItem(oLayer) {
     let sFilter: string = '( footprint:"intersects(POLYGON(('
 
     //Ensure layer variable is defined: 
