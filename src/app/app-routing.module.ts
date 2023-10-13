@@ -9,7 +9,7 @@ import { EditComponent } from './components/edit/edit.component';
 import { LoginComponent } from './components/login/login.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { PlanComponent } from './components/plan/plan.component';
+import { SearchOrbit } from './components/plan/search-orbit.component';
 import { SearchComponent } from './components/search/search.component';
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'admin', component: AdminComponent },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
-  { path: 'plan', component: PlanComponent, canActivate: [AuthGuard] },
+  { path: 'plan', component: SearchOrbit, canActivate: [AuthGuard] },
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'subscriptions', component: SubscriptionsPurchaseComponent, canActivate: [AuthGuard] },
   { path: 'workspaces', component: WorkspacesComponent, canActivate: [AuthGuard] },

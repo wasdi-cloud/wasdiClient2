@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlanComponent } from './plan.component';
+import { SearchOrbit } from './search-orbit.component';
 
-describe('PlanComponent', () => {
-  let component: PlanComponent;
-  let fixture: ComponentFixture<PlanComponent>;
+describe('SearchOrbit', () => {
+  let component: SearchOrbit;
+  let fixture: ComponentFixture<SearchOrbit>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlanComponent ]
+      declarations: [SearchOrbit]
     })
-    .compileComponents();
+      .compileComponents();
 
-    fixture = TestBed.createComponent(PlanComponent);
+    fixture = TestBed.createComponent(SearchOrbit);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

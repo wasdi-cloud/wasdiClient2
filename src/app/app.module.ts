@@ -17,7 +17,7 @@ import { EditComponent } from './components/edit/edit.component';
 import { HeaderComponent } from './components/header/header.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
 import { MarketplaceAppCardComponent } from './components/marketplace/marketplace-app-card/marketplace-app-card.component';
-import { PlanComponent } from './components/plan/plan.component';
+import { SearchOrbit } from './components/plan/search-orbit.component';
 import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
@@ -136,6 +136,7 @@ import { EditOrganizationDialogComponent } from './dialogs/edit-organization-dia
 import { ProjectInfoDialogComponent } from './dialogs/project-info-dialog/project-info-dialog.component';
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
 import { PackageManagerComponent } from './components/dialogs/package-manager/package-manager.component';
+import { SearchOrbitResourcesComponent } from './components/plan/search-orbit-resources/search-orbit-resources.component';
 import { SearchMapComponent } from './components/search/search-map/search-map.component';
 import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';
 import { ConfigurationService } from './services/configuration.service';
@@ -145,7 +146,11 @@ import { ProductInfoComponent } from './components/search/product-info/product-i
 import { AdvancedFiltersComponent } from './components/search/advanced-filters/advanced-filters.component';
 import { ReviewEditorDialogComponent } from './components/app-details/app-reviews/review-editor-dialog/review-editor-dialog.component';
 import { CommentEditorDialogComponent } from './components/app-details/app-reviews/comment-editor-dialog/comment-editor-dialog.component';
+
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
+
+
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -156,7 +161,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditComponent,
     HeaderComponent,
     MarketplaceComponent,
-    PlanComponent,
+    SearchOrbit,
     SearchComponent,
     WorkspacesComponent,
     LoginComponent,
@@ -228,6 +233,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProjectInfoDialogComponent,
     SubscriptionsPurchaseComponent,
     PackageManagerComponent,
+    SearchOrbitResourcesComponent,
     SearchMapComponent,
     SearchFiltersComponent,
     ProductsTableComponent,
@@ -235,7 +241,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProductInfoComponent,
     AdvancedFiltersComponent,
     ReviewEditorDialogComponent,
-    CommentEditorDialogComponent
+    CommentEditorDialogComponent,
+    SearchOrbitResultsComponent
   ],
   imports: [
     AppRoutingModule,

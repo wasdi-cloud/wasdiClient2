@@ -1,0 +1,54 @@
+<div class="border" style="height: 100%;">
+    <div class="header bg-secondary text-light p-2" style="width:100%">
+        <h4>Filters</h4>
+    </div>
+    <div class="d-flex flex-row gap-2 align-items-center justify-content-between px-2">
+        <!------------------------- TIME PICKER START -------------------->
+        <div class="date-time-wrapper" style="width: 50%">
+            <label for="startDate">{{'PLAN_FROM'|translate}}</label>
+            <input type="date" name="acquisitionStartDate" id="" class="form-control"
+                matTooltip="Select acquisition Start Date" [(ngModel)]="m_oStartDate"
+                (ngModelChange)="emitDateChange()">
+        </div>
+        <!---------------------- TIME PICKER END -------------------->
+        <div class="date-time-wrapper" style="width: 50%">
+            <label for="acquisitionEndDate">{{"PLAN_TO"|translate}}</label>
+            <input type="date" name="acquisitionEndDate" id="" class="form-control"
+                matTooltip="Select acquisition End Date" [(ngModel)]="m_oEndDate" (ngModelChange)="emitDateChange()">
+        </div>
+    </div>
+    <div></div>
+    <mat-tree class="mt-2" [dataSource]="dataSource" [treeControl]="treeControl"
+        style="height: 80%; overflow-y: scroll;">
+        <mat-nested-tree-node *matTreeNodeDef="let node">
+            <li class="tree-container">
+                <mat-checkbox color="success" [checked]="checklistSelection.isSelected(node)"
+                    (change)="nodeSelectionToggle(node)"></mat-checkbox>
+                {{node.name}}
+            </li>
+        </mat-nested-tree-node>
+        <mat-nested-tree-node *matTreeNodeDef="let node when: hasChild">
+            <li class="tree-container">
+                <div class="d-flex flex-row align-items-center">
+                    <button class="btn tree-btn" mat-icon-button matTreeNodeToggle
+                        [attr.aria-label]="'Toggle ' + node.name">
+                        <mat-icon class=" mat-icon-rtl-mirror" *ngIf="node.satelliteSensors || node.sensorModes">
+                            {{treeControl.isExpanded(node) ? 'expand_more': 'chevron_right'}}
+                        </mat-icon>
+                    </button>
+                    <mat-checkbox color="success" [checked]="descendantsAllSelected(node)"
+                        [indeterminate]="descendantsPartiallySelected(node)"
+                        (change)="nodeSelectionToggle(node)"></mat-checkbox>
+
+                    <span class="product-name">{{node.description ? node.description :
+                        node.satelliteName}}</span>
+                </div>
+                <ul class="tree-nested-node" style="padding-left:2rem">
+                    <div [class.tree-invisible]="!treeControl.isExpanded(node)" role="group">
+                        <ng-container matTreeNodeOutlet></ng-container>
+                    </div>
+                </ul>
+            </li>
+        </mat-nested-tree-node>
+    </mat-tree>
+</div>

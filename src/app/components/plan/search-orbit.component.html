@@ -1,0 +1,19 @@
+<div class="d-flex flex-row gap-2 justify-content-end align-items-center px-4 py-2" style="width: 100%;">
+    <button class="btn btn-success" (click)="executeSearchOrbit()" [disabled]="m_bIsDisabledSearchButton === true">
+        <fa-icon [icon]="faSearch"></fa-icon>
+        {{"PLAN_SEARCH"|translate}}
+    </button>
+</div>
+<div class="d-flex flex-row gap-3 px-4 pt-2" style="height: 75%; width: 100%;">
+    <div class="satellites-resource-tree" style="width: 45%;">
+        <app-search-orbit-resources *ngIf="m_aoSatelliteResources && m_bShowSatelliteFilters === true"
+            [m_aoSatelliteResources]="m_aoSatelliteResources" (m_oDateSelection)="getSelectedDates($event)"
+            (m_oSatelliteSelection)="getSelectedSatelliteResources($event)"></app-search-orbit-resources>
+        <app-search-orbit-results *ngIf="m_bShowSatelliteFilters === false" [m_aoSearchOrbits]="m_aoOrbitResults"
+            (m_oBackToFiltersEmit)="getNavigationStatus($event)"></app-search-orbit-results>
+    </div>
+    <div class="map" style="width: 100%;">
+        <app-plan-map (m_oSearchInputhange)="getBoundingBox($event)"></app-plan-map>
+    </div>
+</div>
+<app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>

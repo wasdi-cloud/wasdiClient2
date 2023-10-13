@@ -65,7 +65,7 @@ export class MapService {
     edit: {
       featureGroup: new L.FeatureGroup,
       edit: false,
-      remove: true
+      remove: false
     }
   }
   setMap(oMap: any) {
@@ -240,53 +240,6 @@ export class MapService {
     return oMap;
   }
 
-  /**
-   * Init the Map with the drawing capabilities and search
-   * @param sMapDiv 
-   */
-  // initMapWithDrawSearch(sMapDiv) {
-  //   let oController = this;
-
-  //   //Init Standard Map
-  //   let oMap = this.initMap(sMapDiv);
-
-  //   let aoDrawnItems: L.FeatureGroup = featureGroup();
-  //   //this.m_oDrawnItems.addLayer(aoDrawnItems);
-
-  //   let oDrawOptions: any = {
-  //     position: 'topright',
-  //     draw: {
-  //       circle: false,
-  //       circleMarker: false,
-  //       marker: false,
-  //       polyline: false,
-  //       polygon: false,
-  //       rectangle: { showArea: false }
-  //     },
-  //     edit: {
-  //       featureGroup: aoDrawnItems,
-  //       edit: false,
-  //       remove: false
-  //     }
-  //   }
-
-  //   let oDrawControl = new L.Control.Draw(oDrawOptions)
-  //   console.log(oDrawControl)
-  //   oMap.addControl(oDrawControl)
-
-  //   return oMap
-  // }
-
-  // mapDrawEventDeletePolygon(oMap, oFunction, oController) {
-  //   if (!oFunction || !oMap || !oController) {
-  //     return false;
-  //   }
-
-  //   oMap.on(L.Draw.Event.DELETED, function (event) {
-  //     oFunction(oController);
-  //   });
-  //   return true;
-  // }
 
   /**
    * Handler function for drawing rectangles/polygons/etc on map - Creates bounding box to string
@@ -310,11 +263,11 @@ export class MapService {
   onSearchDrawCreated(oEvent: any) {
     const { layerType, layer } = oEvent;
 
- if (layerType === "rectangle") {
+    if (layerType === "rectangle") {
       const rectangleCoordinates = layer._latlngs
       this.m_oDrawnItems.addLayer(layer);
 
-      return rectangleCoordinates; 
+      return rectangleCoordinates;
     }
   }
 
@@ -348,7 +301,6 @@ export class MapService {
   clearMap(sMapDiv: string) {
     if (this.m_oWasdiMap) {
       this.m_oWasdiMap.remove();
-      // this.initWasdiMap(sMapDiv)
     }
   }
 
@@ -634,7 +586,6 @@ export class MapService {
 
 
   flyToWorkspaceBoundingBox(aoProducts) {
-
     try {
       if (!aoProducts) { return false; }
       if (aoProducts.length == 0) { return false; }

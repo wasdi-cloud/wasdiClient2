@@ -1,0 +1,41 @@
+<div class="border" style="height: 100%">
+    <div class="header bg-secondary text-light p-2 d-flex flex-row justify-content-between align-items-center"
+        style="width: 100%;">
+        <h4>Results</h4>
+        <button class="btn btn-sm" (click)="navigateToFilters()">
+            <fa-icon [icon]="faBack"></fa-icon>
+        </button>
+    </div>
+    <mat-tree class="mt-2" [dataSource]="dataSource" [treeControl]="treeControl"
+        style="height: 80%; overflow-y: scroll;">
+        <mat-nested-tree-node *matTreeNodeDef="let oNode">
+            <li class="tree-container">
+                <div class="d-flex flex-row align-items-center">
+                    <mat-icon disabled class=" mat-icon-rtl-mirror" style="cursor: not-allowed"
+                        *ngIf="oNode.directions || oNode.left || oNode.right">
+                        {{'chevron_right'}}
+                    </mat-icon>
+                    <mat-checkbox (change)="toggleSelectedOrbit(oNode)" *ngIf="oNode.swathName"></mat-checkbox>
+                    {{oNode.swathName? oNode.swathName : (oNode.right) ? "RIGHT" : "LEFT"}}
+                </div>
+            </li>
+        </mat-nested-tree-node>
+        <mat-nested-tree-node *matTreeNodeDef="let oNode when: hasChild">
+            <li class="tree-container">
+                <div class="d-flex flex-row align-items-center">
+                    <button class="btn tree-btn" mat-icon-button matTreeNodeToggle>
+                        <mat-icon class=" mat-icon-rtl-mirror" *ngIf="oNode.directions || oNode.left || oNode.right">
+                            {{treeControl.isExpanded(oNode) ? 'expand_more': 'chevron_right'}}
+                        </mat-icon>
+                    </button>
+                    {{oNode.acquisitionStartTime? oNode.acquisitionStartTime : (oNode.right) ? "RIGHT" : "LEFT"}}
+                </div>
+                <ul class="tree-nested-node" style="padding-left:2rem">
+                    <div [class.tree-invisible]="!treeControl.isExpanded(oNode)" role="group">
+                        <ng-container matTreeNodeOutlet></ng-container>
+                    </div>
+                </ul>
+            </li>
+        </mat-nested-tree-node>
+    </mat-tree>
+</div>
