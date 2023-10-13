@@ -293,4 +293,11 @@ export class SearchOrbit implements OnInit {
       this.m_sPolygon = oEvent.polygon;
     }
   }
+
+  getNavigationStatus(oEvent: any): void {
+    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+      this.m_bShowSatelliteFilters = true;
+      this.getSatellitesResources();
+    }
+  }
 }

@@ -6,6 +6,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 
 //Service Improts: 
 import { MapService } from 'src/app/services/map.service';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 
 // Create Class for Search Result Node to be read by Mat-Tree
@@ -27,6 +28,9 @@ export class SearchResultNode {
 
 export class SearchOrbitResultsComponent implements OnChanges {
   @Input() m_aoSearchOrbits: Array<any>;
+  @Output() m_oBackToFiltersEmit: EventEmitter<any> = new EventEmitter();
+
+  faBack = faArrowLeft;
 
   treeControl: NestedTreeControl<SearchResultNode>;
   dataSource: MatTreeNestedDataSource<SearchResultNode>;
@@ -124,4 +128,7 @@ export class SearchOrbitResultsComponent implements OnChanges {
     return aasNewPolygon;
   }
 
+  navigateToFilters() {
+    this.m_oBackToFiltersEmit.emit(true);
+  }
 }

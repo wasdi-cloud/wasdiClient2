@@ -9,7 +9,8 @@
         <app-search-orbit-resources *ngIf="m_aoSatelliteResources && m_bShowSatelliteFilters === true"
             [m_aoSatelliteResources]="m_aoSatelliteResources" (m_oDateSelection)="getSelectedDates($event)"
             (m_oSatelliteSelection)="getSelectedSatelliteResources($event)"></app-search-orbit-resources>
-        <app-search-orbit-results *ngIf="m_bShowSatelliteFilters === false" [m_aoSearchOrbits]="m_aoOrbitResults"></app-search-orbit-results>
+        <app-search-orbit-results *ngIf="m_bShowSatelliteFilters === false" [m_aoSearchOrbits]="m_aoOrbitResults"
+            (m_oBackToFiltersEmit)="getNavigationStatus($event)"></app-search-orbit-results>
     </div>
     <div class="map" style="width: 100%;">
         <app-plan-map (m_oSearchInputhange)="getBoundingBox($event)"></app-plan-map>
