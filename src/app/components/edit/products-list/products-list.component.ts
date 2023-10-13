@@ -16,15 +16,17 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 import { ProductService } from 'src/app/services/api/product.service';
 
 //Font Awesome Icons:
-import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck, faBoxOpen } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck, faBoxOpen, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 //Component Imports: 
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ImportDialogComponent } from '../edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
 import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
 
 //Leaflet Declaration:
 import * as L from "leaflet";
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products-list',
@@ -49,6 +51,8 @@ export class ProductsListComponent {
   faInfoCircle = faInfoCircle;
   faGlobe = faGlobeEurope;
   faMap = faMap;
+  faSearch = faSearch;
+  faPlus = faPlus;
 
   m_oActiveBand;
   m_oActiveWorkspace;
@@ -68,6 +72,7 @@ export class ProductsListComponent {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oRouter: Router
   ) {
     this.treeControl = new NestedTreeControl<any>(node => {
       if (node.bandsGroups) {
@@ -383,5 +388,17 @@ export class ProductsListComponent {
 
   emitProductInfoChange() {
     this.m_oProductInfoChange.emit(true);
+  }
+
+  /********** Handlers for no Products **********/
+  navigateToSearchPage() {
+    this.m_oRouter.navigateByUrl('/search');
+  }
+
+  openImportDialog() {
+    let oDialog = this.m_oDialog.open(ImportDialogComponent, {
+      height: '40vh',
+      width: '50vw'
+    })
   }
 }
