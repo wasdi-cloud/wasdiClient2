@@ -11,7 +11,7 @@
                         *ngIf="oNode.directions || oNode.left || oNode.right">
                         {{'chevron_right'}}
                     </mat-icon>
-                    <mat-checkbox (click)="onClick(oNode)" *ngIf="oNode.swathName"></mat-checkbox>
+                    <mat-checkbox (change)="toggleSelectedOrbit(oNode)" *ngIf="oNode.swathName"></mat-checkbox>
                     {{oNode.swathName? oNode.swathName : (oNode.right) ? "RIGHT" : "LEFT"}}
                 </div>
             </li>

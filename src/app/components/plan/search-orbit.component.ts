@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 
 //Service Imports:
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { MapService } from 'src/app/services/map.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProductService } from 'src/app/services/api/product.service';
+import { SatelliteNode } from './search-orbit-resources/search-orbit-resources.component';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+//Font Awesome Icon Imports:
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { SatelliteNode } from './search-orbit-resources/search-orbit-resources.component';
 
+//Utilities Import: 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 
 @Component({
@@ -58,7 +59,7 @@ export class SearchOrbit implements OnInit {
     private m_oAlertDialog: AlertDialogTopService,
     private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
-    // private m_oConfigurationService: ConfigurationService,
+    private m_oMapService: MapService,
     private m_oOpportunitySearchService: OpportunitySearchService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oProductService: ProductService,
@@ -72,7 +73,10 @@ export class SearchOrbit implements OnInit {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
-  getSatellitesResources() {
+  /**
+   * Get Satellite Resources from the Server
+   */
+  getSatellitesResources(): void {
     let sMessage = this.m_oTranslate.instant("MSG_ORBIT_ERROR2");
 
     this.m_oOpportunitySearchService.getSatellitesResources().subscribe({
@@ -99,11 +103,13 @@ export class SearchOrbit implements OnInit {
       return false;
     }
 
-    if (!this.m_oOrbitSearch.acquisitionStartTime) {
+    // Dates emitted when satellite resource selected - if none
+    if (!this.m_oOrbitSearch.acquisitionStartTime || !this.m_aoSelectedSatelliteNodes) {
       this.m_oAlertDialog.openDialog(4000, "Please select at least one Satellite Resource");
       return false;
     }
 
+    //Format Date Objects for API Call:
     let sAcquisitionStartTime = this.m_oOrbitSearch.acquisitionStartTime.toISOString().replace('T', ' ').replace('Z', '').replace(/\.\d+/, "");
     let sAcquisitionEndTime = this.m_oOrbitSearch.acquisitionEndTime.toISOString().replace('T', ' ').replace('Z', '').replace(/\.\d+/, "");
 
@@ -175,11 +181,15 @@ export class SearchOrbit implements OnInit {
         }
       }
     }
-
     return aoSatelliteResources
   }
 
-  generateResultsData(aoData) {
+  /**
+   * Create the node format to be read from the Search Orbit Results Component Tree: 
+   * @param aoData 
+   * @returns {Array<any>}
+   */
+  generateResultsData(aoData): Array<any> {
     let oReturnValue = null;
     // Ensure passed Data contains a value: 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData)) {
@@ -219,6 +229,7 @@ export class SearchOrbit implements OnInit {
       return false;
     });
 
+    //Create Nodes for Left and Right Directions: 
     for (let iCleanedNodeIndex = 0; iCleanedNodeIndex < aoCleanedDateNodes.length; iCleanedNodeIndex++) {
       aoData.forEach(oResult => {
         if (oResult.AcquisitionStartTime === aoCleanedDateNodes[iCleanedNodeIndex].acquisitionStartTime) {
@@ -250,14 +261,21 @@ export class SearchOrbit implements OnInit {
 
   /**
    * Listen for Selection Input from Search Orbit Resources Component (Satellite Resources):
+   * @param oEvent 
+   * @returns {void}
    */
-  getSelectedSatelliteResources(oEvent) {
+  getSelectedSatelliteResources(oEvent: any): void {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_aoSelectedSatelliteNodes = oEvent;
     }
   }
 
-  getSelectedDates(oEvent) {
+  /**
+   * Listen for date selection from Search Orbit Resources Componenet (Satellite Resources):
+   * @param oEvent 
+   * @returns {void}
+   */
+  getSelectedDates(oEvent: any): void {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_oOrbitSearch.acquisitionEndTime = oEvent.acquisitionEndTime;
       this.m_oOrbitSearch.acquisitionStartTime = oEvent.acquisitionStartTime;
@@ -266,18 +284,13 @@ export class SearchOrbit implements OnInit {
 
   /**
    * Listen for Selection Input from Plan Map Component:
+   * @param oEvent 
+   * @returns {void}
    */
-  getBoundingBox(oEvent) {
+  getBoundingBox(oEvent: any): void {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_oGeoJSON = oEvent.geoJSON;
       this.m_sPolygon = oEvent.polygon;
     }
-  }
-
-  /**
-   * Listen for Selection Input fron Search ORbit Resources Component (Results Resources):
-   */
-  getSelectedOrbits() {
-
   }
 }

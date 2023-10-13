@@ -1,13 +1,22 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+
+//Angular Material Imports:
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 
+//Service Improts: 
+import { MapService } from 'src/app/services/map.service';
+
+
+// Create Class for Search Result Node to be read by Mat-Tree
 export class SearchResultNode {
   acquisitionStartTime: string;
   acquisitionEndTim: string;
   directions: any;
   left: Array<any>;
   right: Array<any>;
+  swathName: string;
+  swathFootPrint: string;
 }
 
 @Component({
@@ -16,14 +25,19 @@ export class SearchResultNode {
   styleUrls: ['./search-orbit-results.component.css']
 })
 
-export class SearchOrbitResultsComponent implements OnInit {
+export class SearchOrbitResultsComponent implements OnChanges {
   @Input() m_aoSearchOrbits: Array<any>;
-  @Output() m_aoSelectedOrbits: EventEmitter<any> = new EventEmitter();
 
   treeControl: NestedTreeControl<SearchResultNode>;
   dataSource: MatTreeNestedDataSource<SearchResultNode>;
 
-  constructor() {
+  m_aoDisplayedProducts: Array<any> = [];
+
+  m_aoSelectedOrbits: Array<any> = [];
+
+  constructor(
+    private m_oMapService: MapService
+  ) {
     this.treeControl = new NestedTreeControl<SearchResultNode>(oNode => {
       if (oNode.directions) {
         return oNode.directions
@@ -36,13 +50,17 @@ export class SearchOrbitResultsComponent implements OnInit {
     this.dataSource = new MatTreeNestedDataSource();
   }
 
-  ngOnInit(): void { }
-
   ngOnChanges(): void {
     this.dataSource.data = this.m_aoSearchOrbits;
   }
 
-  hasChild(_: number, oNode: SearchResultNode): boolean {
+  /**
+   * Evaluate if the inputted SearchResultNode has children (nested nodes)
+   * @param iIndex
+   * @param oNode 
+   * @returns {boolean}
+   */
+  hasChild(iIndex: number, oNode: SearchResultNode): boolean {
     if (oNode.directions) {
       return !!oNode.directions && oNode.directions.length > 0
     } else if (oNode.left) {
@@ -53,8 +71,57 @@ export class SearchOrbitResultsComponent implements OnInit {
     return false;
   }
 
-  onClick(oNode) {
-    console.log(oNode)
+  toggleSelectedOrbit(oNode: SearchResultNode) {
+    let sBoundingBox = oNode.swathFootPrint.substring(9, oNode.swathFootPrint.length - 3)
+    let aBoundingBox = sBoundingBox.split(",");
+
+    let bIsDisplayed: boolean = false;
+    let oFoundNode: any;
+    let iFoundIndex: number;
+
+    //Find node in Displayed Products Array
+    this.m_aoDisplayedProducts.forEach((oProduct, iIndex) => {
+      if (oProduct.name === oNode.swathName) {
+        bIsDisplayed = true;
+        oFoundNode = oProduct;
+        iFoundIndex = iIndex; 
+      }
+    })
+
+    if (bIsDisplayed === false) {
+      let aasPolygon = this.getPolygonToBounds(aBoundingBox)
+      let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(aasPolygon, 'yellow', this.m_aoDisplayedProducts.length)
+      this.m_aoDisplayedProducts.push({
+        name: oNode.swathName,
+        boundingBox: aBoundingBox,
+        rectangle: oRectangle
+      })
+    } else {
+      //Remove Found Node from displayed Nodes Array: 
+      this.m_aoDisplayedProducts.splice(iFoundIndex, 1); 
+      //Remove Rectangle from the Map: 
+      this.m_oMapService.removeLayerFromMap(oFoundNode.rectangle);
+    }
+  }
+
+  getPolygonToBounds(aBoundingBox) {
+    let aasNewPolygon = [];
+    for (let iIndexBounds = 0; iIndexBounds < aBoundingBox.length; iIndexBounds++) {
+      let aBounds = aBoundingBox[iIndexBounds];
+      let aNewBounds = aBounds.split(" ");
+
+      var oLatLonArray = [];
+
+      try {
+        oLatLonArray[0] = JSON.parse(aNewBounds[1]); //Lat
+        oLatLonArray[1] = JSON.parse(aNewBounds[0]); //Lon
+      } catch (err) {
+        console.log("Function polygonToBounds: Error in parse operation");
+        return [];
+      }
+      aasNewPolygon.push(oLatLonArray);
+    }
+    return aasNewPolygon;
   }
 
 }
