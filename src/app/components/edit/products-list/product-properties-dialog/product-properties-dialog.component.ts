@@ -1,13 +1,17 @@
 import { Component, Inject } from '@angular/core';
 
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { Product } from 'src/app/shared/models/product.model';
 import { ProductService } from 'src/app/services/api/product.service';
 import { StyleService } from 'src/app/services/api/style.service';
 
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Product } from 'src/app/shared/models/product.model';
+
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 interface Style {
   description: string,
@@ -22,23 +26,8 @@ interface Style {
   styleUrls: ['./product-properties-dialog.component.css']
 })
 export class ProductPropertiesDialogComponent {
+  faX = faX;
 
-  constructor(
-    private m_oProductService: ProductService,
-    private m_oStyleService: StyleService,
-    private m_oConstantsService: ConstantsService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-  ) {
-    this.workspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-    this.getStyle();
-    console.log(data.product)
-    this.m_oProduct = data.product
-    this.m_oEditProduct.friendlyName = data.product.productFriendlyName;
-    this.m_oEditProduct.description = data.product.description;
-    this.m_oEditProduct.style = data.product.style;
-  }
-
-  faClose = faX;
   m_oEditProduct = {
     friendlyName: "",
     description: "",
@@ -55,24 +44,58 @@ export class ProductPropertiesDialogComponent {
   m_asStyles: any[];
   m_bLoadingStyle: boolean = true;
   m_bProductChanged: boolean = false;
-  workspaceId: string;
+  m_sWorkspaceId: string;
 
-  getStyle() {
-    this.m_oStyleService.getStylesByUser().subscribe(oResponse => {
-      if (oResponse.length === 0) {
-        //dialog communicating problem getting styles
-      }
-      else {
-        this.m_asStyles = oResponse;
-      }
-    })
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public m_oData: any,
+    private m_oAlertDialog: AlertDialogTopService,
+    private m_oConstantsService: ConstantsService,
+    private m_oDialogRef: MatDialogRef<ProductPropertiesDialogComponent>,
+    private m_oNotificationService: NotificationDisplayService,
+    private m_oProductService: ProductService,
+    private m_oStyleService: StyleService
+  ) {
+    this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+    this.getStyles();
+    this.m_oProduct = this.m_oData.product
+    this.m_oEditProduct.friendlyName = this.m_oData.product.productFriendlyName;
+    this.m_oEditProduct.description = this.m_oData.product.description;
+    this.m_oEditProduct.style = this.m_oData.product.style;
   }
 
-  getStyleName(oStyle: Style) {
+  /**
+   * Get the list of styles:
+   */
+  getStyles(): void {
+    this.m_oStyleService.getStylesByUser().subscribe(
+      {
+        next: oResponse => {
+          if (oResponse.length === 0) {
+            this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>ERROR GETTING STYLES")
+          } else {
+            this.m_asStyles = oResponse;
+          }
+        },
+        error: oError => {
+          this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>ERROR GETTING STYLES");
+        }
+      })
+  }
+
+  /**
+   * Get the Style name from the style object - if no name, return empty string and do not show in dropdown
+   * @param oStyle 
+   * @returns {string}
+   */
+  getStyleName(oStyle: Style): string {
     return oStyle && oStyle.name ? oStyle.name : "";
   }
 
-  updateProduct() {
+  /**
+   * Execute Update of Product Information
+   * @returns {boolean}
+   */
+  updateProduct(): boolean {
     let oOldMetaData = this.m_oProduct.metadata;
     this.m_oProduct.metadata = null;
 
@@ -90,12 +113,25 @@ export class ProductPropertiesDialogComponent {
     oUpdatedViewModel.description = this.m_oEditProduct.description;
 
     console.log(oUpdatedViewModel)
-    this.m_oProductService.updateProduct(oUpdatedViewModel, this.workspaceId).subscribe(oResponse => {
-      if (oResponse.status === 200) {
-        console.log("Updated!")
+    this.m_oProductService.updateProduct(oUpdatedViewModel, this.m_sWorkspaceId).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          this.m_oNotificationService.openSnackBar("Product Updated", "Close", "right", "bottom");
+          this.onDismiss();
+        }
+      },
+      error: oError => {
+        this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>ERROR: IMPOSSIBLE TO UPDATE THE PRODUCT");
+        return false;
       }
     })
-
     return true;
+  }
+
+  /**
+   * Handle dialog close
+   */
+  onDismiss() {
+    this.m_oDialogRef.close();
   }
 }

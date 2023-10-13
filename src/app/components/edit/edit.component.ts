@@ -144,4 +144,13 @@ export class EditComponent implements OnInit, OnDestroy {
       this.m_oRabbitStompService.subscribe(this.m_oActiveWorkspace.workspaceId);
     }
   }
+
+  /**
+   * Listen for changes in Product Information from the Product Tree:
+   */
+  getProductsChange(oEvent: any) {
+    if(oEvent === true) {
+      this.getProductList();
+    }
+  }
 }

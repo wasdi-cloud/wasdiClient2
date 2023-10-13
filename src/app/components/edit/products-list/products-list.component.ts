@@ -37,6 +37,7 @@ export class ProductsListComponent {
   @Input() map: any;
   @Input() m_sSearchString: string;
   @Output() m_aoVisibleBandsOutput = new EventEmitter();
+  @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
 
   //font awesome icons: 
   faBox = faBoxOpen;
@@ -160,8 +161,12 @@ export class ProductsListComponent {
       data: {
         product: node
       },
-      height: '85vh',
+      height: '70vh',
       width: '60vw'
+    })
+
+    oDialogRef.afterClosed().subscribe(oDialogResponse => {
+      this.emitProductInfoChange();
     })
   }
 
@@ -374,5 +379,9 @@ export class ProductsListComponent {
 
   readMetadata(sFileName: string) {
     this.m_oProductService.getProductMetadata(sFileName, this.m_oActiveWorkspace.workspaceId);
+  }
+
+  emitProductInfoChange() {
+    this.m_oProductInfoChange.emit(true);
   }
 }
