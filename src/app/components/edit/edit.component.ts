@@ -14,6 +14,7 @@ import { Product } from 'src/app/shared/models/product.model';
 //Utilities Imports: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-edit',
@@ -29,6 +30,7 @@ export class EditComponent implements OnInit, OnDestroy {
     private m_oProductService: ProductService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oRouter: Router,
+    private m_oTitleService: Title,
     private m_oTranslateService: TranslateService,
     private m_oWorkspaceService: WorkspaceService) { }
   //Map Status: 2D (true) or 3D (false): 
@@ -74,6 +76,7 @@ export class EditComponent implements OnInit, OnDestroy {
         //Assign and set new workspace id
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
         this.openWorkspace(this.m_sWorkspaceId);
+        
       } else {
         //If unable to identify workspace, re-route to workspaces tab
         this.m_oRouter.navigateByUrl('/workspaces')
@@ -81,6 +84,7 @@ export class EditComponent implements OnInit, OnDestroy {
     } else {
       //If workspace is defined => Load Processes
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+      this.m_oTitleService.setTitle(this.m_oActiveWorkspace.name)
       this.subscribeToRabbit();
     }
 
@@ -90,6 +94,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.m_oRabbitStompService.unsubscribe();
+    this.m_oTitleService.setTitle("WASDI 2.0")
   }
 
   openWorkspace(sWorkspaceId: string) {
@@ -105,6 +110,7 @@ export class EditComponent implements OnInit, OnDestroy {
             this.m_oActiveWorkspace = oResponse;
             this.subscribeToRabbit();
             this.getProductList();
+            this.m_oTitleService.setTitle(this.m_oActiveWorkspace.name)
           }
         }
       },
