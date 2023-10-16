@@ -42,7 +42,7 @@ export class CatalogService {
       }
     }
 
-    return this.oHttp.get(sAPIUrl + "/catalog/downloadbyname" + urlParams, { responseType: 'blob'});
+    return this.oHttp.get(sAPIUrl + "/catalog/downloadbyname" + urlParams, { responseType: 'blob' });
   };
 
   ingestFile(sSelectedFile: string, sWorkspace: string) {
@@ -50,6 +50,6 @@ export class CatalogService {
   };
 
   uploadFTPFile(oFtpTransferFile: object, sWorkspaceId: string) {
-    return this.oHttp.put(this.APIURL + '/catalog/upload/ftp?workspace=' + sWorkspaceId, oFtpTransferFile);
+    return this.oHttp.put<any>(this.APIURL + '/catalog/upload/ftp?workspace=' + sWorkspaceId, oFtpTransferFile);
   };
 }
