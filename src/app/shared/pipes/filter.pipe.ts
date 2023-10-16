@@ -36,7 +36,10 @@ export class FilterPipe implements PipeTransform {
       if(item.provider) {
         return item.provider.toLocaleLowerCase().includes(searchText);
       }
+      //Filter For Search Apps (Apps Dialog) results:
+      if(item.processorName) {
+        return item.processorName.toLocaleLowerCase().includes(searchText);
+      }
     })
   }
-
 }
