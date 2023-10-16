@@ -108,7 +108,7 @@
             <label for="">
                 <h6>Reason:</h6>
             </label>
-            <select class="form-control mb-3" name="title" id="" [(ngModel)]="m_oFeedback.title">
+            <select class="form-control mb-3" name="title"  [(ngModel)]="m_oFeedback.title">
                 <option value="" selected disabled hidden>Select a reason</option>
                 <option value="I found a bug/problem">I found a bug/problem</option>
                 <option value="I need help with something">I need help with something</option>
@@ -117,7 +117,7 @@
             <label for="">
                 <h6>Tell us more:</h6>
             </label>
-            <textarea class="form-control" name="message" id="" cols="30" rows="10"
+            <textarea class="form-control" name="message" cols="30" rows="10"
                 [(ngModel)]="m_oFeedback.message"></textarea>
             <div class="btn-container d-flex flex-row gap-2 mt-5 justify-content-end">
                 <a class="btn btn-secondary" href="https://discord.gg/JYuNhPaZbE" target="_blank">Live
