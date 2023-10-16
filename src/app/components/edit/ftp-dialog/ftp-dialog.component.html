@@ -1,0 +1,53 @@
+<div class="dialog d-flex flex-column" style="height: 100%; width: 100%;">
+    <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between align-items-center p-1">
+        <h4>Transfer to FTP</h4>
+        <button class="btn" (click)="onDismiss()">
+            <fa-icon [icon]="faX"></fa-icon>
+        </button>
+    </div>
+    <div class="dialog-content d-flex flex-column flex-fill px-4 mt-3">
+        <h4 class="">
+            {{"DIALOG_FTP_FILE_TO_UPLOAD"|translate}}
+            {{getFileName()}}
+        </h4>
+
+        <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="d-flex flex-column gap-2"
+            ng-submit="m_oController.sendFTPUploadRequest()" ng-hide="m_oController.m_bIsVisibleRecoveryPassword">
+            <div class="form-group my-input-text">
+                <input type="text" name="serverIp" placeholder="{{'DIALOG_FTP_INPUT_SERVER'|translate}}"
+                    class="form-control" id="ipServerFTP" [(ngModel)]="m_oFTPRequest.serverIp" required>
+            </div>
+            <div class="form-group my-input-text">
+                <mat-checkbox [checked]="m_oFTPRequest.sftp" [(ngModel)]="m_oFTPRequest.sftp" name="sftp" required>{{
+                    "DIALOG_FTP_INPUT_SFTPFLAG" |
+                    translate}}</mat-checkbox>
+            </div>
+            <div class="form-group my-input-text">
+                <input type="text" name="port" placeholder="{{'DIALOG_FTP_INPUT_PORT'|translate}}" class="form-control"
+                    id="portServerFTP" [(ngModel)]="m_oFTPRequest.port" required>
+            </div>
+            <div class="form-group my-input-text">
+                <input type="text" name="user" placeholder="{{'DIALOG_FTP_INPUT_USER'|translate}}" class="form-control"
+                    id="userFTPName" [(ngModel)]="m_oFTPRequest.user" required>
+            </div>
+            <div class="form-group my-input-text">
+                <input type="password" name="password" placeholder="{{'DIALOG_FTP_INPUT_PASSWORD'|translate}}"
+                    class="form-control" id="userFTPPassword" [(ngModel)]="m_oFTPRequest.password" required>
+            </div>
+            <div class="form-group my-input-text">
+                <input type="text" name="destinationAbsolutePath" placeholder="{{'DIALOG_FTP_REMOTE_PATH'|translate}}"
+                    class="form-control" id="remoteFTPPath" [(ngModel)]="m_oFTPRequest.destinationAbsolutePath"
+                    required>
+            </div>
+
+            <button class="btn btn-primary align-self-end"
+                type="submit">{{"DIALOG_FTP_INPUT_UPLOAD_BUTTON"|translate}}</button>
+        </form>
+
+    </div>
+    <div mat-dialog-actions class="align-self-end">
+        <button class="btn btn-secondary" (click)="onDismiss()">
+            Close
+        </button>
+    </div>
+</div>

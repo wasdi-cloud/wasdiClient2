@@ -149,6 +149,7 @@ import { CommentEditorDialogComponent } from './components/app-details/app-revie
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
+import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -242,7 +243,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AdvancedFiltersComponent,
     ReviewEditorDialogComponent,
     CommentEditorDialogComponent,
-    SearchOrbitResultsComponent
+    SearchOrbitResultsComponent,
+    FTPDialogComponent
   ],
   imports: [
     AppRoutingModule,

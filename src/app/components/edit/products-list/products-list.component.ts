@@ -27,6 +27,7 @@ import { ProductPropertiesDialogComponent } from './product-properties-dialog/pr
 import * as L from "leaflet";
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Router } from '@angular/router';
+import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
 
 @Component({
   selector: 'app-products-list',
@@ -61,7 +62,6 @@ export class ProductsListComponent {
   m_aoDisplayBands: any[];
   m_oDisplayMap: L.Map | null;
   m_aoVisibleBands: any[] = [];
-
 
   constructor(
     private m_oCatalogService: CatalogService,
@@ -173,6 +173,19 @@ export class ProductsListComponent {
     oDialogRef.afterClosed().subscribe(oDialogResponse => {
       this.emitProductInfoChange();
     })
+  }
+
+  openSendToFTP(oNode: any) {
+    const oDialogRef = this.m_oDialog.open(FTPDialogComponent, {
+      data: {
+        product: oNode
+      }, 
+      height: '70vh', 
+      width: '60vw'
+    }); 
+    // oDialogRef.afterClosed().subscribe(oDialogResponse => {
+    //   console.log()
+    // })
   }
 
   deleteProduct(node: any) {

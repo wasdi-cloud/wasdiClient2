@@ -82,15 +82,15 @@
                                     (click)="readMetadata(node.fileName)">
                                     <fa-icon [icon]="faBox"></fa-icon>
                                 </button>
-                                <button class="tree-btn btn" matTooltip="{{'MENU_DOWNLOAD' | translate}}"><fa-icon
+                                <button class="tree-btn btn" matTooltip="{{'MENU_DOWNLOAD' | translate}}" (click)="downloadProduct(node)"><fa-icon
                                         [icon]="faDownload" title="Download Product"
-                                        (click)="downloadProduct(node)"></fa-icon></button>
-                                <button class="tree-btn btn" matTooltip="{{'MENU_SEND_FTP' | translate}}"><fa-icon
+                                        ></fa-icon></button>
+                                <button class="tree-btn btn" matTooltip="{{'MENU_SEND_FTP' | translate}}" (click)="openSendToFTP(node)"><fa-icon
                                         [icon]="faShare" title="Share Product"></fa-icon></button>
-                                <button class="tree-btn btn" matTooltip="{{'MENU_PROPERTIES' | translate}}"><fa-icon
+                                <button class="tree-btn btn" matTooltip="{{'MENU_PROPERTIES' | translate}}"  (click)="openProductProperties($event, node)"><fa-icon
                                         [icon]="faInfoCircle" title="Properties"
-                                        (click)="openProductProperties($event, node)"></fa-icon></button>
-                                <button class="tree-btn btn" matTooltip="{{'MENU_DELETE' | translate}}"><fa-icon
+                                       ></fa-icon></button>
+                                <button class="tree-btn btn" matTooltip="{{'MENU_DELETE' | translate}}" (click)="deleteProduct(node)"><fa-icon
                                         [icon]="faTrash" title="Delete Product"
                                         (click)="deleteProduct(node)"></fa-icon></button>
                             </div>
