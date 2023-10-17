@@ -94,7 +94,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.m_oRabbitStompService.unsubscribe();
-    this.m_oTitleService.setTitle("WASDI 2.0")
   }
 
   openWorkspace(sWorkspaceId: string) {
