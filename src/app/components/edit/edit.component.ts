@@ -84,7 +84,7 @@ export class EditComponent implements OnInit, OnDestroy {
     } else {
       //If workspace is defined => Load Processes
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-      this.m_oTitleService.setTitle(this.m_oActiveWorkspace.name)
+      this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
       this.subscribeToRabbit();
     }
 
@@ -110,7 +110,7 @@ export class EditComponent implements OnInit, OnDestroy {
             this.m_oActiveWorkspace = oResponse;
             this.subscribeToRabbit();
             this.getProductList();
-            this.m_oTitleService.setTitle(this.m_oActiveWorkspace.name)
+            this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
           }
         }
       },
