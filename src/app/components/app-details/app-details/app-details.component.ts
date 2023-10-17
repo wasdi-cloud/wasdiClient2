@@ -121,8 +121,6 @@ export class AppDetailsComponent implements OnInit {
           this.m_oAlertDialog.openDialog(4000, sErrorMsg);
         } else {
           this.m_oAppStats = oResponse;
-
-          console.log(this.m_oAppStats)
         }
       },
       error: oError => {

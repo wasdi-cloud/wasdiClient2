@@ -15,7 +15,7 @@ import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/sh
 import { CommentEditorDialogComponent } from './comment-editor-dialog/comment-editor-dialog.component';
 
 //Font Awesome Improts:
-import { faEdit, faSpaghettiMonsterFlying, faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSpaghettiMonsterFlying, faStar, faStarHalf, faStarHalfAlt, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 //Import Utilities:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -28,21 +28,24 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 export class AppReviewsComponent implements OnChanges {
   faAlien = faSpaghettiMonsterFlying;
   faEdit = faEdit;
+  faStarHalf = faStarHalf;
+  faStarHalfAlt = faStarHalfAlt;
   faStar = faStar;
   faStarRegular = faStar;
   faTrash = faTrashCan;
 
   @Input() oProcessor: any;
 
-  m_aoReviews: {
-    comment: string,
-    date: number,
-    id: string,
-    processorId: string,
-    title: string,
-    userId: string,
-    vote: number
-  }[] = []
+  m_oReviewsInfo = {
+    avgVote: -1,
+    numberOfOneStarVotes: 0,
+    numberOfTwoStarVotes: 0,
+    numberOfThreeStarVotes: 0,
+    numberOfFourStarVotes: 0,
+    numberOfFiveStarVotes: 0,
+    alreadyVoted: false,
+    reviews: []
+  }
 
   m_bReviewsWaiting: boolean;
   m_bUserHasReviewed: boolean = false;
@@ -57,7 +60,7 @@ export class AppReviewsComponent implements OnChanges {
   m_iReviewItemsPerPage: number;
 
   m_aoComments: any = [];
-  
+
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
@@ -86,12 +89,16 @@ export class AppReviewsComponent implements OnChanges {
     this.m_oProcessorService.getProcessorReviews(this.m_oSelectedProcessor.processorName, this.m_iReviewsPage, this.m_iReviewItemsPerPage = 4).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) == false) {
-          this.m_aoReviews = oResponse.reviews;
-          if (oResponse.reviews.length == 0) {
+          this.m_oReviewsInfo = oResponse;
+          console.log(this.m_oReviewsInfo);
+          if (oResponse.reviews.length === 0) {
+            this.m_bShowLoadMoreReviews = false;
+          }
+          if (oResponse.reviews.length <= this.m_iReviewItemsPerPage) {
             this.m_bShowLoadMoreReviews = false;
           }
           //If the user has already reviewed this app, set m_bUserHasReviewed to true
-          this.m_aoReviews.forEach(oReview => {
+          this.m_oReviewsInfo.reviews.forEach(oReview => {
             if (oReview.userId === this.m_oConstantsService.getUserId()) {
               this.m_bUserHasReviewed = true;
             }
@@ -104,6 +111,37 @@ export class AppReviewsComponent implements OnChanges {
       },
       error: oError => {
         this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg);
+      }
+    });
+  }
+
+  /**
+   * Handler Function for Load More reviews button
+   */
+  loadMoreReviews(): void {
+    this.m_iReviewsPage = this.m_iReviewsPage + 1;
+    this.m_bReviewsWaiting = true;
+
+    var sReviewsErrorMsg = this.m_oTranslate.instant("MSG_MKT_REVIEWS_ERROR");
+
+    // Get the reviews
+    this.m_oProcessorMediaService.getProcessorReviews(this.m_oSelectedProcessor.processorName, this.m_iReviewsPage, this.m_iReviewItemsPerPage = 4).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) == false) {
+          if (oResponse.reviews.length == 0) {
+            this.m_bShowLoadMoreReviews = false;
+          } else {
+            this.m_oReviewsWrapper.reviews = this.m_oReviewsWrapper.reviews.concat(oResponse.reviews);
+          }
+        } else {
+          this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg)
+
+        }
+        this.m_bReviewsWaiting = false;
+      },
+      error: oError => {
+        this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg);
+        this.m_bReviewsWaiting = false;
       }
     });
   }
