@@ -27,7 +27,6 @@ export class RabbitStompService {
     private m_oConstantsService: ConstantsService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService) { 
-      console.log("CREATED ISTANCE OF RabbitStompService")
     }
 
   /**
@@ -320,7 +319,6 @@ export class RabbitStompService {
       // Is this callback called from re-connection or is the real first connection?
       if (m_oThisReference.m_oReconnectTimerFlag != null) {
         // It was a reconnection, because we have a value of m_oReconnectTimerPromise
-        console.log("RabbitStompService.on_connect: it is a re-connection, clean the flag");
 
         // Clear the timer flag
         m_oThisReference.m_oReconnectTimerFlag = null;
@@ -328,7 +326,6 @@ export class RabbitStompService {
         // Do we have also an open workspace?
         if (m_oThisReference.m_sWorkspaceId !== "") {
           // Yes, so we need also to re-subscribe the queue of this workspace
-          console.log("RabbitStompService.on_connect: it is a re-connection, re-subscribe to the workspace");
           m_oThisReference.subscribe(m_oThisReference.m_sWorkspaceId);
         }
       }
@@ -341,8 +338,6 @@ export class RabbitStompService {
      * Callback for the Rabbit On Error
      */
     let on_error = function (sMessage) {
-
-      console.log('RabbitStompService.on_error: WEB STOMP ERROR, message:' + sMessage + ' [' + FadeoutUtils.utilsGetTimeStamp() + ']');
 
       // Message can be a string or an object: here we get the string in a safe way
       if (!(typeof sMessage === 'string' || sMessage instanceof String)) {
@@ -364,20 +359,12 @@ export class RabbitStompService {
         // Is this the first consecutive error we receive?
         if (m_oThisReference.m_oReconnectTimerFlag == null) {
           // Yes, it is
-          console.log('RabbitStompService.on_error: reconnection timer promise is  null, clean Attemp count');
           // Restart our Reconnection counter to zero
           m_oThisReference.m_iRabbitReconnectAttemptCount = 0;
         }
-        else {
-          // This will be deleted, just to understand what is happening
-          console.log('RabbitStompService.on_error: reconnection timer promise is already not null ' + m_oThisReference.m_oReconnectTimerFlag);
-        }
-
           // P.Campanella 16/10/2023: call set Timeout to run rabbit_reconnect once in 5 secs. And keep the return code
           // That we will use to understand if this is the first attemp or not
           m_oThisReference.m_oReconnectTimerFlag = setTimeout(m_oThisReference.m_oRabbitReconnect, 5000);
-
-          console.log('RabbitStompService.on_error: reconnection timer promise now is = ' + m_oThisReference.m_oReconnectTimerFlag);
       }
     };
 
