@@ -330,7 +330,7 @@ export class ProcessWorkspaceService {
 
   getProcessorStatistics(sProcessorName: string) {
     let sUrl: string = this.APIURL;
-    return this.oHttp.get(sUrl + '/process/appstats?processorName=' + sProcessorName);
+    return this.oHttp.get<any>(sUrl + '/process/appstats?processorName=' + sProcessorName);
   };
 
   getProcessWorkspaceTotalRunningTimeByUserAndInterval(sUserId: string, sDateFrom: string, sDateTo: string) {

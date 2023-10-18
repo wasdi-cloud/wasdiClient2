@@ -33,7 +33,7 @@ interface AppFilter {
   styleUrls: ['./marketplace.component.css']
 })
 export class MarketplaceComponent implements OnInit {
-  publisher: string;
+  m_sPublisher: string;
   m_oAppFilter: AppFilter = {
     categories: [],
     publishers: [],
@@ -49,21 +49,16 @@ export class MarketplaceComponent implements OnInit {
 
   m_aoApplications: any = [];
 
-  category = new FormControl('');
   m_asCategoryOptions: any = [];
   m_aoPublishers: any = [];
 
   m_bLoadMoreEnabled: boolean = true;
   m_bWaiting: boolean = true;
 
-  publisherFilter!: string;
   m_sNameFilter!: string;
 
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
-    private m_oAuthService: AuthService,
-    private m_oConstantsService: ConstantsService,
-    private dialog: MatDialog,
     private m_oImageService: ImageService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService,
@@ -80,8 +75,9 @@ export class MarketplaceComponent implements OnInit {
 
   /**
    * Get Marketplace Categories
+   * @returns {void}
    */
-  getCategories() {
+  getCategories(): void {
     let sCategoriesError;
     this.m_oTranslate.get('MSG_WAPPS_CATEGORY_ERROR').subscribe(sResponse => {
       sCategoriesError = sResponse;
@@ -102,8 +98,9 @@ export class MarketplaceComponent implements OnInit {
 
   /**
    * Get list of Publishers from the server
+   * @returns {void}
    */
-  getPublishers() {
+  getPublishers(): void {
     let sErrorMsg: string;
     this.m_oTranslate.get("MSG_WAPPS_PUBLISHERS_ERROR").subscribe(sResponse => {
       sErrorMsg = sResponse;
@@ -122,18 +119,12 @@ export class MarketplaceComponent implements OnInit {
     });
   }
 
-  /**
-   * 
-   * @returns 
-   */
-  searchApps() {
-    return this.m_aoApplications.filter(oApplication => oApplication.friendlyName.includes(this.m_sNameFilter))
-  }
 
   /**
-   * Retrieve the applications list from the server;
+   * Retrieve the applications list from the server
+   * @returns {void}
    */
-  getApplications() {
+  getApplications(): void {
     let sErrorMsg: string;
     this.m_oTranslate.get("MSG_WAPPS_ERROR").subscribe(sResponse => {
       sErrorMsg = sResponse;
@@ -169,11 +160,11 @@ export class MarketplaceComponent implements OnInit {
   }
 
   /**
-   * Initialize applications with default logos
+   * Initialize applications with default logos and return array of processors with new image links
    * @param aoProcessorList 
-   * @returns {*}
+   * @returns {Array<any>}
    */
-  setDefaultImagesAndVotes(aoProcessorList: any) {
+  setDefaultImagesAndVotes(aoProcessorList: any): Array<any> {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoProcessorList) === true) {
       return aoProcessorList;
     }
@@ -201,9 +192,10 @@ export class MarketplaceComponent implements OnInit {
   }
 
   /**
-   * Refresh the application list
+   * Refresh the application list when filters or search text is updated
+   * @returns {void}
    */
-  refreshAppList() {
+  refreshAppList(): void {
     let sMessage: string;
     this.m_oTranslate.get("MSG_WAPPS_ERROR").subscribe(sResponse => {
       sMessage = sResponse;
@@ -244,25 +236,55 @@ export class MarketplaceComponent implements OnInit {
 
   /**
    * Handle Load More Button
+   * @returns {void}
    */
-  loadMore() {
+  loadMore(): void {
     this.m_oAppFilter.page = this.m_oAppFilter.page + 1;
     this.refreshAppList();
   }
 
-  developerChanged(event) {
-    if (this.m_oAppFilter.publishers.length !== 0 || event.target.value === 'all') {
+  /**
+   * Handle Changes to the Search Input field on Enter or if Search Button clicked
+   * @param oEvent 
+   * @returns {void}
+   */
+  onSearchInput(oEvent): void {
+    if (oEvent.keyCode === 13 || oEvent.target.attributes.id.nodeValue === "searchBtn") {
+      if (this.m_sNameFilter) {
+        this.refreshAppList();
+      }
+    }
+  }
+
+  /**
+   * Clear the Search Input Field
+   * @param oEvent 
+   * @returns {void}
+   */
+  clearSearchInput(oEvent): void {
+    this.m_sNameFilter = "";
+    this.refreshAppList();
+  }
+
+  /**
+   * Handle changes to developer selection dropdown
+   * @param oEvent 
+   * @returns {void}
+   */
+  developerChanged(oEvent): void {
+    if (this.m_oAppFilter.publishers.length !== 0 || oEvent.target.value === 'all') {
       this.m_oAppFilter.publishers.splice(0, this.m_oAppFilter.publishers.length)
       console.log(this.m_oAppFilter)
     }
-    if (event.target.value === 'all') {
+    if (oEvent.target.value === 'all') {
       this.getApplications()
     } else {
-      this.m_oAppFilter.publishers.push(event.target.value);
+      this.m_oAppFilter.publishers.push(oEvent.target.value);
       this.getApplications()
     }
 
   }
+
   //Success rate will need to be added
   successChanged() {
 
@@ -273,14 +295,14 @@ export class MarketplaceComponent implements OnInit {
 
   }
 
-  maxPriceChanged(event) {
-    this.m_oAppFilter.maxPrice = event.target.value;
+  maxPriceChanged(oEvent) {
+    this.m_oAppFilter.maxPrice = oEvent.target.value;
 
-    this.getApplications()
+    this.getApplications();
   }
 
-  ratingChanged(event) {
-    this.m_oAppFilter.score = event.target.value;
-    this.getApplications()
+  ratingChanged(oEvent) {
+    this.m_oAppFilter.score = oEvent.target.value;
+    this.getApplications();
   }
 }
