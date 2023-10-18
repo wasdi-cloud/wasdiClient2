@@ -1,4 +1,4 @@
-.box1 {
+.filters-container {
     background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0));
     padding: 0.5rem;
 }
@@ -17,7 +17,7 @@
 }
 
 .search-container {
-    justify-self: end;
+    margin-left: auto;
 }
 
 .form-select {
@@ -36,13 +36,6 @@
   
 }
 
-div.max-price {
-  padding-left: 1rem;
-}
-
-div.search-container {
-    margin-right: 1rem;
-}
 .search1 {
     position: absolute;
     right: 0px;
