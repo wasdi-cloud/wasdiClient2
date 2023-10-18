@@ -49,6 +49,7 @@ export class EditMapComponent implements OnInit {
 
     if (this.m_b2DMapModeOn === false) {
       this.m_oGlobeService.clearGlobe();
+      console.log("EditMapComponent.switch2D3DMode: call init Globe")
       this.m_oGlobeService.initGlobe('CesiumContainerEdit');
       this.m_b2DMapModeOutput.emit(false);
     }

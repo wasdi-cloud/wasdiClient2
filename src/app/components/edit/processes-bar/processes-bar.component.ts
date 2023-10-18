@@ -121,10 +121,16 @@ export class ProcessesBarComponent implements OnInit {
 
     }
     let sNotificationMsg: string;
-    this.m_oTranslate.get(WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage)).subscribe(oTranslation => {
-      console.log(oTranslation);
-      sNotificationMsg = oTranslation;
-    })
+
+    if (this.m_oTranslate) {
+      this.m_oTranslate.get(WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage)).subscribe(oTranslation => {
+        console.log(oTranslation);
+        sNotificationMsg = oTranslation;
+      })  
+    }
+    else {
+      console.log("ProcessesBarComponent.recievedRabbitMessage: m_oTranslate is null")
+    }
     if (sNotificationMsg !== "") {
       this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "bottom", "right");
     }

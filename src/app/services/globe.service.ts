@@ -41,6 +41,7 @@ export class GlobeService {
   constructor() { this.oController = this; }
 
   initGlobe(sGlobeDiv: string) {
+    console.log("GlobeService.initGlobe: start")
     if (window.WebGL2RenderingContext) {
       try {
         let oGlobeOptions = {
@@ -77,9 +78,16 @@ export class GlobeService {
   }
 
   clearGlobe() {
+
+    console.log("GlobeService.clearGlob");
+
     if (this.m_oWasdiGlobe) {
+      console.log("GlobeService.clearGlob: clean actual globe");
       this.m_oWasdiGlobe.destroy();
       this.m_oWasdiGlobe = null;
+    }
+    else {
+      console.log("GlobeService.clearGlob: no globe to clean");
     }
   }
 
@@ -282,6 +290,7 @@ export class GlobeService {
   }
 
   initRotateGlobe(sGlobeDiv: string) {
+    console.log("Globe.service: initRotateGlobe")
     //check if browser supports WebGL
     if (window.WebGLRenderingContext) {
       // browser supports WebGL

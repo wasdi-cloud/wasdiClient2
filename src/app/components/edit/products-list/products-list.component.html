@@ -2,7 +2,7 @@
     <h3 class="products-header bg-secondary text-light sticky">{{'EDITOR_TITLE_PANEL_PRODUCTS' | translate}}</h3>
 
     <div class="products-container d-flex flex-column" style="height:83%">
-        <div *ngIf="productArray === undefined || productArray.length === 0">
+        <div *ngIf="m_oProductArrayOutput === undefined || m_oProductArrayOutput.length === 0">
             <p>{{'EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT' | translate}}</p>
             <div class="d-flex flex-row justify-content-around" style="width:50%">
                 <button class="btn btn-lg btn-primary" (click)="navigateToSearchPage()">
@@ -15,9 +15,9 @@
                 </button>
             </div>
         </div>
-        <div *ngIf="productArray">
-            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                <mat-nested-tree-node *matTreeNodeDef="let node">
+        <div *ngIf="m_oProductArrayOutput">
+            <mat-tree [dataSource]="m_oProductsTreeDataSource" [treeControl]="m_oProductsTreeControl">
+                <!--mat-nested-tree-node *matTreeNodeDef="let node">
                     <li class="tree-container">
                         <div class="mat-tree-node d-flex flex-row justify-content-between">
                             <div class="d-flex flex-row align-items-center">
@@ -55,16 +55,17 @@
                         </div>
                     </li>
 
-                </mat-nested-tree-node>
+                </mat-nested-tree-node-->
 
-                <mat-nested-tree-node *matTreeNodeDef="let node when: hasChild">
+                <!--mat-nested-tree-node *matTreeNodeDef="let node when: hasChild"-->
+                <mat-nested-tree-node *matTreeNodeDef="let node">
                     <li class="tree-container">
                         <div class="mat-tree-node d-flex flex-row justify-content-between">
                             <div class="d-flex flex-row align-items-center">
                                 <button class="tree-btn btn" mat-icon-button matTreeNodeToggle
                                     [attr.aria-label]="'Toggle ' + node.name" *ngIf="node.bandsGroups">
                                     <mat-icon class="mat-icon-rtl-mirror" *ngIf="node.bandsGroups || node.metadata">
-                                        {{treeControl.isExpanded(node) ? 'expand_more': 'chevron_right'}}
+                                        {{m_oProductsTreeControl.isExpanded(node) ? 'expand_more': 'chevron_right'}}
                                     </mat-icon>
                                 </button>
                                 <mat-checkbox color="success" *ngIf="node.bandsGroups"></mat-checkbox>
@@ -105,7 +106,7 @@
                             </div>
                         </div>
                         <ul class="tree-nested-node" style="padding-left:2rem">
-                            <div [class.tree-invisible]="!treeControl.isExpanded(node)" role="group">
+                            <div [class.tree-invisible]="!m_oProductsTreeControl.isExpanded(node)" role="group">
                                 <ng-container matTreeNodeOutlet></ng-container>
                             </div>
                         </ul>

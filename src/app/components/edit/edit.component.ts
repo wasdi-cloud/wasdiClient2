@@ -15,6 +15,7 @@ import { Product } from 'src/app/shared/models/product.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { Title } from '@angular/platform-browser';
+import { GlobeService } from 'src/app/services/globe.service';
 
 @Component({
   selector: 'app-edit',
@@ -32,7 +33,9 @@ export class EditComponent implements OnInit, OnDestroy {
     private m_oRouter: Router,
     private m_oTitleService: Title,
     private m_oTranslateService: TranslateService,
-    private m_oWorkspaceService: WorkspaceService) { }
+    private m_oWorkspaceService: WorkspaceService,
+    private m_oGlobeService: GlobeService) { }
+
   //Map Status: 2D (true) or 3D (false): 
   m_b2DMapModeOn: boolean = true;
   //Has first zoom on band been done? 
@@ -69,15 +72,20 @@ export class EditComponent implements OnInit, OnDestroy {
   m_aoVisibleBands;
 
   ngOnInit(): void {
+    console.log("EditComponent.ngOnInit")
+
     //What to do if workspace undefined: 
     if (!this.m_oActiveWorkspace) {
       //Check route for workspace id
       if (this.m_oActivatedRoute.snapshot.params['workspaceId']) {
         //Assign and set new workspace id
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
-        this.openWorkspace(this.m_sWorkspaceId);
         
-      } else {
+        console.log("edit.component.ngOnInit: call open Workspace ")
+
+        this.openWorkspace(this.m_sWorkspaceId);
+      } 
+      else {
         //If unable to identify workspace, re-route to workspaces tab
         this.m_oRouter.navigateByUrl('/workspaces')
       }
@@ -86,14 +94,15 @@ export class EditComponent implements OnInit, OnDestroy {
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
       this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
       this.subscribeToRabbit();
+      //load Products
+      this.getProductList();
     }
-
-    //load Products
-    this.getProductList();
   }
 
   ngOnDestroy(): void {
+    console.log("EditComponent.ngOnInit")
     this.m_oRabbitStompService.unsubscribe();
+    this.m_oGlobeService.clearGlobe();
   }
 
   openWorkspace(sWorkspaceId: string) {
@@ -104,10 +113,17 @@ export class EditComponent implements OnInit, OnDestroy {
             this.m_oRouter.navigateByUrl('/workspaces');
             let sMessage = this.m_oTranslateService.instant("MSG_FORBIDDEN")
             this.m_oAlertDialog.openDialog(4000, sMessage)
-          } else {
+          }
+          else {
+
+            console.log("edit.component.ngOnInit: Received open Workspace View Model ")
+
             this.m_oConstantsService.setActiveWorkspace(oResponse);
             this.m_oActiveWorkspace = oResponse;
             this.subscribeToRabbit();
+
+            console.log("edit.component.ngOnInit: CALL get product list ")
+
             this.getProductList();
             this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
           }
@@ -121,11 +137,16 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   getProductList() {
-    this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe(response => {
-      this.m_aoProducts = response
+    this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe({
+      next: oResponse => {
+        console.log("edit.component.ngOnInit: RECEIVED got the product list ")
+        this.m_aoProducts = oResponse
+      },
+      error: oError => {
+
+      }
     })
   }
-
 
   getSearchString(event: string) {
     this.m_sSearchString = event;
@@ -154,7 +175,7 @@ export class EditComponent implements OnInit, OnDestroy {
    * Listen for changes in Product Information from the Product Tree:
    */
   getProductsChange(oEvent: any) {
-    if(oEvent === true) {
+    if (oEvent === true) {
       this.getProductList();
     }
   }

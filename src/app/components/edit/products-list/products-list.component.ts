@@ -35,8 +35,8 @@ import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent {
-  @Input() productArray: Product[];
-  @Output() productArrayOutput = new EventEmitter();
+  @Input() m_aoWorkspaceProductsList: Product[];
+  @Output() m_oProductArrayOutput = new EventEmitter();
   @Input() map: any;
   @Input() m_sSearchString: string;
   @Output() m_aoVisibleBandsOutput = new EventEmitter();
@@ -57,8 +57,8 @@ export class ProductsListComponent {
 
   m_oActiveBand;
   m_oActiveWorkspace;
-  treeControl: NestedTreeControl<any>
-  dataSource: MatTreeNestedDataSource<any>
+  m_oProductsTreeControl: NestedTreeControl<any>
+  m_oProductsTreeDataSource: MatTreeNestedDataSource<any>
   m_aoDisplayBands: any[];
   m_oDisplayMap: L.Map | null;
   m_aoVisibleBands: any[] = [];
@@ -74,37 +74,52 @@ export class ProductsListComponent {
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRouter: Router
   ) {
-    this.treeControl = new NestedTreeControl<any>(node => {
+    this.m_oProductsTreeControl = new NestedTreeControl<any>(node => {
       if (node.bandsGroups) {
         return node.bandsGroups.bands
       }
     });
-    this.dataSource = new MatTreeNestedDataSource();
+    this.m_oProductsTreeDataSource = new MatTreeNestedDataSource();
 
   }
 
   ngOnChanges() {
+    console.log("ProductListComponent.ngOnChanges: call filter products ")
     this.filterProducts();
+    console.log("ProductListComponent.ngOnChanges: done filter Products ")
+
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
   filterProducts() {
-    if (this.m_sSearchString) {
-      let filteredProducts = []
-      this.productArray.forEach(oProduct => {
-        if (oProduct.fileName.indexOf(this.m_sSearchString) !== -1 || oProduct.name.indexOf(this.m_sSearchString) !== -1) {
-          filteredProducts.push(oProduct)
-        }
-        if (oProduct.productFriendlyName) {
-          if (oProduct.productFriendlyName.indexOf(this.m_sSearchString) !== -1) {
-            filteredProducts.push(oProduct)
+
+    let aoFilteredProducts = this.m_aoWorkspaceProductsList;
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined) {
+      if (!FadeoutUtils.utilsIsStrNullOrEmpty) {
+
+        console.log("ProductListComponent.filterProducts: m_sSearchString = " + this.m_sSearchString)
+
+        let aoFilteredProducts = [];
+
+        this.m_aoWorkspaceProductsList.forEach(oProduct => {
+          if (oProduct.fileName.indexOf(this.m_sSearchString) !== -1 || oProduct.name.indexOf(this.m_sSearchString) !== -1) {
+            aoFilteredProducts.push(oProduct)
           }
-        }
-      })
-      this.dataSource.data = filteredProducts
-    } else {
-      this.dataSource.data = this.productArray;
+          if (oProduct.productFriendlyName) {
+            if (oProduct.productFriendlyName.indexOf(this.m_sSearchString) !== -1) {
+              aoFilteredProducts.push(oProduct)
+            }
+          }
+        })
+      }
     }
+
+    console.log("ProductListComponent.filterProducts: filter done, assign the data source")
+
+    this.m_oProductsTreeDataSource.data = aoFilteredProducts
+
+    console.log("ProductListComponent.filterProducts: data source assigned")
   }
 
   hasChild(_: number, node: Product) {
@@ -122,7 +137,7 @@ export class ProductsListComponent {
   };
 
   findProductByName(node) {
-    let oFoundProduct = this.productArray.find(oProduct => oProduct.fileName === node.fileName);
+    let oFoundProduct = this.m_aoWorkspaceProductsList.find(oProduct => oProduct.fileName === node.fileName);
     return oFoundProduct
   }
 
@@ -194,7 +209,7 @@ export class ProductsListComponent {
     let bDeleteFile = true;
 
     //Get product from array
-    let oFoundProduct = this.productArray.find(oProduct => oProduct.fileName === node.fileName);
+    let oFoundProduct = this.m_aoWorkspaceProductsList.find(oProduct => oProduct.fileName === node.fileName);
     let sMessage = "Are you sure you wish to delete " + oFoundProduct.name;
 
     let dialogData = new ConfirmationDialogModel("Confirm Deletion", sMessage);
@@ -212,7 +227,7 @@ export class ProductsListComponent {
         //Call m_oProductService.deleteProductFromWorkspace()
         this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
           if (oResponse.boolValue) {
-            this.productArrayOutput.emit(this.productArray);
+            this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
             return true;
           }
           return false
@@ -247,7 +262,7 @@ export class ProductsListComponent {
    * @param oBand
    */
   openBandImage(oBand) {
-    let sFileName = this.productArray[oBand.nodeIndex].fileName;
+    let sFileName = this.m_aoWorkspaceProductsList[oBand.nodeIndex].fileName;
     let bAlreadyPublished = oBand.published;
     this.m_oActiveBand = oBand;
 

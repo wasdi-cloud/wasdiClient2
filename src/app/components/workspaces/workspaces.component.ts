@@ -86,6 +86,7 @@ export class WorkspacesComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log("WorkspaceComponent.ngOnInit")
     this.fetchWorkspaceInfoList();
     this.m_oGlobeService.initRotateGlobe('CesiumContainer3');
     this.getTrackSatellite();
@@ -98,10 +99,15 @@ export class WorkspacesComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
+
+    console.log("WorkspaceComponent.ngOnDestroy")
+
     //Destroy Interval after closing: 
     if (this.setInterval) {
       clearInterval(this.setInterval);
     }
+
+    this.m_oGlobeService.clearGlobe()
   }
 
   fetchWorkspaceInfoList() {

@@ -5,7 +5,7 @@
     <div class="d-flex flex-row px-3">
         <div class="productlist-navigation-container d-flex flex-column " style="height: 70vh">
             <div style="height: 40%;">
-                <app-products-list [productArray]="m_aoProducts"
+                <app-products-list [m_aoWorkspaceProductsList]="m_aoProducts"
                     [m_sSearchString]="m_sSearchString" (m_aoVisibleBandsOutput)="getVisibleBands($event)" (m_oProductInfoChange)="getProductsChange($event)"></app-products-list>
             </div>
             <div style="height: 60%">

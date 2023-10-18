@@ -46,22 +46,36 @@ export class NavLayersComponent implements OnInit, OnChanges, OnDestroy {
     private m_oMapService: MapService
   ) { }
 
-  ngOnInit(): void { }
-
-  ngOnChanges(): void {
-    if (this.m_aoVisibleBands !== undefined) {
-      this.setActiveTab('layers');
-    }
+  ngOnInit(): void { 
+    console.log("NavLayersComponent.ngOnInit")
     this.initMaps();
   }
 
+  ngOnChanges(): void {
+    console.log("NavLayersComponent.ngOnChanges")
+    if (this.m_aoVisibleBands !== undefined) {
+      this.setActiveTab('layers');
+    }
+  }
+
+  /**
+   * Initializes the 2D and 3D maps 
+   */
   initMaps() {
+    // The main map is 2D or 3D?
     if (this.m_b2DMapModeOn === true) {
-      if (this.m_oGlobeService.getGlobe()) {
-        this.m_oGlobeService.getGlobe().destroy();
-      }
+
+      // The big map is 2D: we need to show here the little navigation globe
+      // clear the old globe (if present)
+      this.m_oGlobeService.clearGlobe();
+
+      // And create it in the small navigation tab
+      console.log("NavLayersComponent.initMaps: call init Globe")
       this.m_oGlobeService.initGlobe('cesiumContainer2');
-    } else {
+    } 
+    else {
+
+      // The big map is 3d: here we need to show only the 2d map
       this.m_oMapService.clearMap('navMap');
       this.m_oMapService.initWasdiMap('navMap');
 
@@ -71,6 +85,7 @@ export class NavLayersComponent implements OnInit, OnChanges, OnDestroy {
       }, 300)
     }
   }
+
   ngOnDestroy(): void { }
 
   setActiveTab(sTabName: string) {
