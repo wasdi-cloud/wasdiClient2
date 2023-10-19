@@ -36,7 +36,7 @@ span.product-name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 12rem;
+  max-width: 14rem;
 }
 
 ul,

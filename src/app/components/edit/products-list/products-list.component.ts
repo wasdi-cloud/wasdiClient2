@@ -16,7 +16,7 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 import { ProductService } from 'src/app/services/api/product.service';
 
 //Font Awesome Icons:
-import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck, faBoxOpen, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck, faBoxOpen, faSearch, faPlus, faChevronRight, faChevronDown, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 //Component Imports: 
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -44,6 +44,7 @@ export class ProductsListComponent {
 
   //font awesome icons: 
   faBox = faBoxOpen;
+  faPlusCircle = faPlusCircle;
   faCircleCheck = faCircleCheck;
   faCircleX = faCircleXmark;
   faDownload = faDownload;
@@ -81,6 +82,8 @@ export class ProductsListComponent {
     });
     this.m_oProductsTreeDataSource = new MatTreeNestedDataSource();
 
+
+
   }
 
   ngOnChanges() {
@@ -89,6 +92,7 @@ export class ProductsListComponent {
     console.log("ProductListComponent.ngOnChanges: done filter Products ")
 
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    console.log(this.m_aoWorkspaceProductsList)
   }
 
   filterProducts() {
@@ -122,6 +126,10 @@ export class ProductsListComponent {
     console.log("ProductListComponent.filterProducts: data source assigned")
   }
 
+  trackByIndex(index: number): number {
+    return index;
+  }
+
   hasChild(_: number, node: Product) {
     if (!node.bandsGroups) {
       return !!node
@@ -141,6 +149,9 @@ export class ProductsListComponent {
     return oFoundProduct
   }
 
+  isProductShown() {
+
+  }
   /**
    * Called from the Product list tree and executes a download of the product
    * @param node 
@@ -194,10 +205,10 @@ export class ProductsListComponent {
     const oDialogRef = this.m_oDialog.open(FTPDialogComponent, {
       data: {
         product: oNode
-      }, 
-      height: '70vh', 
+      },
+      height: '70vh',
       width: '60vw'
-    }); 
+    });
     // oDialogRef.afterClosed().subscribe(oDialogResponse => {
     //   console.log()
     // })
@@ -236,8 +247,6 @@ export class ProductsListComponent {
       }
     })
 
-
-
     //in subscription, 
 
     //if deletion successful, reload product tree
@@ -246,12 +255,12 @@ export class ProductsListComponent {
 
   }
 
-  setBandImage(oBand) {
+  setBandImage(oBand: any, iIndex: number) {
     this.m_oActiveBand = oBand;
     if (this.m_aoVisibleBands.indexOf(this.m_oActiveBand) !== -1) {
       this.removeBandImage(oBand)
     } else {
-      this.openBandImage(oBand);
+      this.openBandImage(oBand, iIndex);
     }
 
   }
@@ -261,28 +270,35 @@ export class ProductsListComponent {
    * Called from the tree to open a band
    * @param oBand
    */
-  openBandImage(oBand) {
-    let sFileName = this.m_aoWorkspaceProductsList[oBand.nodeIndex].fileName;
+  openBandImage(oBand: any, iIndex: number) {
+    console.log(oBand)
+    let sFileName = this.m_aoWorkspaceProductsList[iIndex].fileName;
     let bAlreadyPublished = oBand.published;
     this.m_oActiveBand = oBand;
 
+    console.log(this.m_oActiveBand)
+    console.log(sFileName);
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
+      console.log(oResponse)
       if (!bAlreadyPublished) {
         let sNotificationMsg = "PUBLISHING BAND";
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
       }
 
-      if (this.m_aoVisibleBands.length === 0) {
+    //   if (this.m_aoVisibleBands.length === 0) {
 
-      }
+    //   }
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
+        console.log(oResponse)
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
           this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
         } else {
-          this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+          // this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
         }
         this.m_aoVisibleBands.push(this.m_oActiveBand);
+
+        console.log(this.m_aoVisibleBands)
         this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
         this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
       } else {

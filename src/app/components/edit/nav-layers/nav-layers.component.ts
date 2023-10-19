@@ -55,6 +55,7 @@ export class NavLayersComponent implements OnInit, OnChanges, OnDestroy {
     console.log("NavLayersComponent.ngOnChanges")
     if (this.m_aoVisibleBands !== undefined) {
       this.setActiveTab('layers');
+      console.log(this.m_aoVisibleBands)
     }
   }
 
