@@ -17,8 +17,6 @@
     <div class="map-container-panel" [hidden]="m_sActiveTab !== 'nav'" style="height: 100%">
         <div [hidden]="m_b2DMapModeOn === false" class="h-100 w-100" id="cesiumContainer2"></div>
         <div [hidden]="m_b2DMapModeOn === true" id="navMap" style="height: 100%"></div>
-
-
     </div>
     <div class="layers-tab" *ngIf="m_sActiveTab === 'layers'">
         <ul class="list-group pt-3">
@@ -26,16 +24,16 @@
                 class="list-group-item d-flex flex-column py-3">
                 <div class="d-flex flex-row align-items-center justify-content-between">
                     <div>
-                        {{oBand.name}}
+                        <p class="product-name">
+                            {{oBand.productName}}
+                        </p>
+                        <p>
+                            {{oBand.name}}
+                        </p>
                     </div>
-                    <!-- <div>
-                        <span class="product-name">
-                            {{m_aoProducts[oBand.nodeIndex].name}}
-                        </span>
-                    </div> -->
                     <div class="d-flex flex-row">
-                        <mat-slider [min]="0" [max]="100" discrete>
-                            <input matSliderThumb [ngModel]="opacityVal" (input)="setOpacity($event, oBand.layerId)">
+                        <mat-slider *ngIf="m_b2DMapModeOn === true" [min]="0" [max]="100" discrete>
+                            <input matSliderThumb [ngModel]="m_iOpacityVal" (input)="setOpacity($event, oBand.layerId)">
                         </mat-slider>
                         <button class="btn" (click)="zoomOnBandImage(oBand.geoserverBoundingBox)">
                             <fa-icon [icon]="faExpand"></fa-icon>

@@ -165,26 +165,26 @@ export class GlobeService {
     return redRectangle;
   };
 
-  addRectangleOnGLobeByGeoserverBoundingBox(geoserverBoundingBox, oColor) {
+  addRectangleOnGlobeByGeoserverBoundingBox(geoserverBoundingBox, oColor) {
     try {
-      if (!geoserverBoundingBox) {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox)) {
         console.log("MapService.addRectangleByGeoserverBoundingBox: geoserverBoundingBox is null or empty");
         return;
       }
-      if (!oColor) {
+      if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oColor) === true)) {
         oColor = Cesium.Color.RED;
       }
       geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
-      let oBoundingBox = JSON.parse(geoserverBoundingBox);
-      // let bounds = [oBounds.maxy,oBounds.maxx,oBounds.miny,oBounds.minx];
-      // let bounds = [oBounds.maxx,oBounds.maxy,oBounds.minx,oBounds.miny];
-      let oRectangle = Cesium.Rectangle.fromDegrees(oBoundingBox.minx, oBoundingBox.miny, oBoundingBox.maxx, oBoundingBox.maxy);
+      var oBoundingBox = JSON.parse('{"miny":43.150066,"minx":-80.030044,"crs":"EPSG:4326","maxy":43.380082,"maxx":-79.710091}');
+      // var bounds = [oBounds.maxy,oBounds.maxx,oBounds.miny,oBounds.minx];
+      // var bounds = [oBounds.maxx,oBounds.maxy,oBounds.minx,oBounds.miny];
+      var oRectangle = Cesium.Rectangle.fromDegrees(oBoundingBox.minx, oBoundingBox.miny, oBoundingBox.maxx, oBoundingBox.maxy);
 
-      // let oRectangle = this.addRectangleOnGlobeParamArray(bounds);
+      // var oRectangle = this.addRectangleOnGlobeParamArray(bounds);
 
-      // let bounds = [ [oBounds.maxy,oBounds.maxx],[oBounds.miny,oBounds.minx] ];
-      // let oRectangle = L.rectangle(bounds, {color: sColor, weight: 2}).addTo(this.m_oWasdiMap);
-      let oReturnRectangle = this.m_oWasdiGlobe.entities.add({
+      // var bounds = [ [oBounds.maxy,oBounds.maxx],[oBounds.miny,oBounds.minx] ];
+      // var oRectangle = L.rectangle(bounds, {color: sColor, weight: 2}).addTo(this.m_oWasdiMap);
+      var oReturnRectangle = this.m_oWasdiGlobe.entities.add({
         name: 'Red translucent rectangle with outline',
         rectangle: {
           coordinates: oRectangle,
@@ -234,7 +234,7 @@ export class GlobeService {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEntity.polygon)) {
           continue;
         }
-       
+
         // Assume is equal: we will set this = false if a point of the poly is different
         let bIsEqual = true;
 

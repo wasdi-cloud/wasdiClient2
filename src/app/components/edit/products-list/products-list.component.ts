@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Product } from 'src/app/shared/models/product.model';
 
 //Angular Material Imports:
@@ -28,14 +28,18 @@ import * as L from "leaflet";
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Router } from '@angular/router';
 import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+import { GlobeService } from 'src/app/services/globe.service';
+declare let Cesium: any;
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.css']
 })
-export class ProductsListComponent {
+export class ProductsListComponent implements OnChanges, OnInit {
   @Input() m_aoWorkspaceProductsList: Product[];
+  @Input() m_b2DMapMode: boolean = true;
   @Output() m_oProductArrayOutput = new EventEmitter();
   @Input() map: any;
   @Input() m_sSearchString: string;
@@ -69,10 +73,12 @@ export class ProductsListComponent {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
+    private m_oGlobeService: GlobeService,
     private m_oMapService: MapService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oRabbitStompService: RabbitStompService,
     private m_oRouter: Router
   ) {
     this.m_oProductsTreeControl = new NestedTreeControl<any>(node => {
@@ -81,9 +87,11 @@ export class ProductsListComponent {
       }
     });
     this.m_oProductsTreeDataSource = new MatTreeNestedDataSource();
+  }
 
-
-
+  ngOnInit(): void {
+    this.m_oRabbitStompService.setMessageCallback(this.receivedRabbitMessage);
+    this.m_oRabbitStompService.setActiveController(this);
   }
 
   ngOnChanges() {
@@ -92,7 +100,6 @@ export class ProductsListComponent {
     console.log("ProductListComponent.ngOnChanges: done filter Products ")
 
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    console.log(this.m_aoWorkspaceProductsList)
   }
 
   filterProducts() {
@@ -271,36 +278,37 @@ export class ProductsListComponent {
    * @param oBand
    */
   openBandImage(oBand: any, iIndex: number) {
-    console.log(oBand)
     let sFileName = this.m_aoWorkspaceProductsList[iIndex].fileName;
     let bAlreadyPublished = oBand.published;
     this.m_oActiveBand = oBand;
 
-    console.log(this.m_oActiveBand)
-    console.log(sFileName);
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
-      console.log(oResponse)
       if (!bAlreadyPublished) {
         let sNotificationMsg = "PUBLISHING BAND";
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
       }
 
-    //   if (this.m_aoVisibleBands.length === 0) {
+      //   if (this.m_aoVisibleBands.length === 0) {
 
-    //   }
+      //   }
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
-        console.log(oResponse)
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
           this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
+
         } else {
-          // this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+          this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
         }
+        this.m_oActiveBand['productName'] = oResponse.payload.productName
         this.m_aoVisibleBands.push(this.m_oActiveBand);
 
-        console.log(this.m_aoVisibleBands)
         this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
-        this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
+        if(this.m_b2DMapMode === true) {
+
+          this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
+        } else {
+          this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
+        }
       } else {
         // var sMessage = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
         // utilsVexDialogAlertTop(sMessage + oBand.name);
@@ -362,41 +370,102 @@ export class ProductsListComponent {
     return true;
   }
 
+  receivedRabbitMessage(oMessage, oController) {
+    // Check if the message is valid
+    if (oMessage == null) return;
+
+    // Check the Result
+    if (oMessage.messageResult == "KO") {
+
+      var sOperation = "null";
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.messageCode) === false) sOperation = oMessage.messageCode;
+
+      var sErrorDescription = "";
+
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
+
+      //  var oDialog = FadeoutUtils.utilsVexDialogAlertTop(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription);
+      //  FadeoutUtils.utilsVexCloseDialogAfter(10000, oDialog);
+
+      console.log(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription)
+
+      if (oMessage.messageCode == "PUBLISHBAND") {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
+            var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
+
+          }
+        }
+      }
+
+      return;
+    }
+
+    // Switch the Code
+    switch (oMessage.messageCode) {
+      case "PUBLISH":
+        oController.receivedPublishMessage(oMessage);
+        break;
+      case "PUBLISHBAND":
+        oController.receivedPublishBandMessage(oMessage);
+        break;
+      case "DOWNLOAD":
+      case "GRAPH":
+      case "INGEST":
+      case "MOSAIC":
+      case "SUBSET":
+      case "MULTISUBSET":
+      case "RASTERGEOMETRICRESAMPLE":
+      case "REGRID":
+        oController.receivedNewProductMessage(oMessage);
+        break;
+      case "DELETE":
+        //oController.getProductListByWorkspace();
+        break;
+    }
+
+    console.log(oMessage);
+
+    // FadeoutUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate);
+  }
+
   receivedPublishBandMessage(oMessage: any, oActiveBand: any) {
     let oPublishedBand = oMessage.payload;
-    if (oPublishedBand === null || oPublishedBand === undefined) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPublishedBand)) {
       console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
       return false;
     }
-
-
-    oActiveBand.bbox = oPublishedBand.bbox;
+    oActiveBand.bbox = oPublishedBand.boundingBox;
     oActiveBand.geoserverBoundingBox = oPublishedBand.geoserverBoundingBox;
     oActiveBand.geoserverUrl = oPublishedBand.geoserverUrl;
     oActiveBand.layerId = oPublishedBand.layerId;
     oActiveBand.published = true;
     oActiveBand.showLegend = false;
 
-
     let sColor = "#000";
     let sGeoserverBBox = oActiveBand.geoserverBoundingBox;
     this.productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, oActiveBand.bbox, oActiveBand.layerId);
     //if we are in 2D put it on the map
-    this.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
+    if (this.m_b2DMapMode === true) {
+      this.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
+    } else {
+      //If we are in 3D put it on the globe
+      this.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
+
+    }
     if (typeof oPublishedBand === undefined) {
       console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
       return false;
     }
 
     oActiveBand.opacity = 100;
-
-
     return true;
   }
 
   productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, asBbox, sLayerId) {
     if (this.m_oMapService.isProductGeoreferenced(asBbox, sGeoserverBBox) === false) {
-      let oRectangleBoundingBoxMap: L.Rectangle = this.m_oMapService.addRectangleByGeoserverBoundingBox(sGeoserverBBox, sColor, this.m_oMapService.getMap());
+      let oRectangleBoundingBoxMap: L.Rectangle = this.m_oMapService.addRectangleByGeoserverBoundingBox(sGeoserverBBox, "", this.m_oMapService.getMap());
 
       if (oRectangleBoundingBoxMap) {
         oRectangleBoundingBoxMap.options.attribution = "wasdi:" + sLayerId;
@@ -424,6 +493,30 @@ export class ProductsListComponent {
     wmsLayer.addTo(oMap);
     return true;
 
+  }
+
+  addLayerMap3DByServer(sLayerId, sServer) {
+    if (sLayerId == null) return false;
+    if (sServer == null) sServer = this.m_oConstantsService.getWmsUrlGeoserver();
+
+    var oGlobeLayers = this.m_oGlobeService.getGlobeLayers();
+
+    var oWMSOptions = { // wms options
+      transparent: true,
+      format: 'image/png'
+    };
+
+    // WMS get GEOSERVER
+    var oProvider = new Cesium.WebMapServiceImageryProvider({
+      url: sServer,
+      layers: sLayerId,
+      parameters: oWMSOptions
+
+    });
+
+    oGlobeLayers.addImageryProvider(oProvider);
+
+    return true
   }
 
   readMetadata(sFileName: string) {

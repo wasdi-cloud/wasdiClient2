@@ -3,6 +3,7 @@ import { ConstantsService } from './constants.service';
 import Geocoder from 'leaflet-control-geocoder';
 import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
 import { latLng, Map, tileLayer, featureGroup } from 'leaflet';
+import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 import * as L from "leaflet";
 
 @Injectable({
@@ -428,46 +429,41 @@ export class MapService {
     catch (e) {
       console.log(e);
     }
+    console.log("MapService.addAllWorkspaceRectanglesOnMap: added rectangles to map")
     return true;
   }
 
   isAlreadyDrawRectangle(aoProductBbox) {
-    console.log("Is already draw rectangle")
-    // try{
-    //     let aoBounds = this.convertBboxInBoundariesArray(aoProductBbox);
-    //     // let aoLatLngsProduct = [];
-    //     let oRectangle = L.polygon(aoBounds);
-    //     let aoLatLngsProduct = oRectangle.getLatLngs();
-    //     // aoLatLngsProduct.concat(aoLatLngsRectangle);
+    let isAlreadyDraw = false;
+    try {
+      let aoBounds = this.convertBboxInBoundariesArray(aoProductBbox);
+      let oRectangle = L.polygon(aoBounds);
+      let aoLatLngsProduct: Array<any> = oRectangle.getLatLngs();
 
-    //     // for(let iIndexBound = 0 ; iIndexBound < aoBounds.length; iIndexBound++ ){
-    //     //     let oLatLng = L.latLng(aoBounds[iIndexBound]);
-    //     //     aoLatLngArrayProduct.push(oLatLng);
-    //     // }
+      let oMap = this.getMap();
 
-    //     let oMap = this.getMap();
-    //     let isAlreadyDraw = false;
-    //     oMap.eachLayer( function(layer) {
-    //         if(layer instanceof L.Polygon) {
-    //             let aoLayerLatLng = layer._latlngs;
-    //             let iLatLngsProductLength = aoLatLngsProduct[0].length;
+      oMap.eachLayer(function (layer) {
 
-    //             for(let iIndexLatLngProduct = 0 ; iIndexLatLngProduct < iLatLngsProductLength; iIndexLatLngProduct++){
+        if (layer instanceof L.Polygon) {
+          let aoLayerLatLng = layer.getLatLngs();
+          let iLatLngsProductLength = aoLatLngsProduct[0].length;
 
-    //                 let bAreEquals = aoLatLngsProduct[0][iIndexLatLngProduct].equals(aoLayerLatLng[0][iIndexLatLngProduct] , 0.1);
-    //                 if(bAreEquals){
-    //                     isAlreadyDraw = true;
-    //                 }
-    //             }
-    //         }
-    //     });
-    // }
-    // catch(e){
-    //     return false;
-    // }
+          for (let iIndexLatLngProduct = 0; iIndexLatLngProduct < iLatLngsProductLength; iIndexLatLngProduct++) {
 
-    // return isAlreadyDraw;
-    return true;
+            let bAreEquals = aoLatLngsProduct[0][iIndexLatLngProduct].equals(aoLayerLatLng[0][iIndexLatLngProduct], 0.1);
+            if (bAreEquals) {
+              isAlreadyDraw = true;
+            }
+          }
+        }
+      });
+    }
+    catch (e) {
+      return false;
+    }
+
+    return isAlreadyDraw;
+
   }
   /**
     * Add a rectangle shape on the map
@@ -542,7 +538,6 @@ export class MapService {
       // create an colored rectangle
       // weight = line thickness
       let oRectangle = L.polygon(aoBounds, { color: sColor, weight: 1 }).addTo(this.m_oWasdiMap);
-
       //event on click
       if (sReferenceName) {
         oRectangle.on("click", function (event) {
@@ -565,15 +560,11 @@ export class MapService {
         console.log("on-mouse-leave-rectangle")
         //$rootScope.$broadcast('on-mouse-leave-rectangle', { rectangle: oRectangle });
       });
-
+      return oRectangle;
     } catch (e) {
       return null;
     }
-    console.log("the rectangle")
-    //return oRectangle;
   };
-
-
 
   /******* ZOOM AND NAVIGATION FUNCTIONS ********/
 
@@ -605,6 +596,7 @@ export class MapService {
     }
     return true;
   };
+
   /**
    * flyOnRectangle
    * @param oRectangle
@@ -620,6 +612,7 @@ export class MapService {
     this.m_oWasdiMap.flyToBounds(oRectangle.getBounds());
     return true;
   };
+
   /**
    * Zoom on bounds
    * @param aBounds
@@ -722,70 +715,66 @@ export class MapService {
   /**
    * This method works only for s1 products
    * @param boundingBox The bounding box declared by product
-   * @param geoserverBoundindBox The bounding box declared by the Geo Server when a band has been published
+   * @param geoserverBoundingBox The bounding box declared by the Geo Server when a band has been published
    * @returns {boolean}
    */
-  isProductGeoreferenced(boundingBox, geoserverBoundindBox) {
-    if (!boundingBox || !geoserverBoundindBox) {
-      if (!boundingBox) {
+  isProductGeoreferenced(boundingBox, geoserverBoundingBox) {
+    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(boundingBox) === true) || (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox) === true)) {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(boundingBox) === true) {
         console.debug("Product bounding box is null");
         // Impossible to assume if is correct or not. Assume true
         return true;
       }
-      else if (!geoserverBoundindBox) {
+      else if (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox) === true) {
         console.debug("Geoserver bounding box is null");
       }
 
       return false;
     }
 
-    if (!boundingBox || !geoserverBoundindBox) {
-      if (!boundingBox) {
+    if ((FadeoutUtils.utilsIsStrNullOrEmpty(boundingBox) === true) || (FadeoutUtils.utilsIsStrNullOrEmpty(geoserverBoundingBox) === true)) {
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(boundingBox) === true) {
         console.debug("Product bounding box is null");
         // Impossible to assume if is correct or not. Assume true
         return true;
       }
-      else if (!geoserverBoundindBox) {
+      else if (FadeoutUtils.utilsIsStrNullOrEmpty(geoserverBoundingBox) === true) {
         console.debug("Geoserver bounding box is null");
       }
       return false;
     }
 
-    let oGeoserverBoundingBox = this.parseGeoserverBoundingBox(geoserverBoundindBox);
+    var oGeoserverBoundingBox = this.parseGeoserverBoundingBox(geoserverBoundingBox);
 
-    if (!oGeoserverBoundingBox) {
-      return false;
-    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oGeoserverBoundingBox)) return false;
 
-    let asBoundingBox = this.fromBboxToRectangleArray(boundingBox);
+    var asBoundingBox = this.fromBboxToRectangleArray(boundingBox);
 
-    if (!asBoundingBox) {
-      return false;
-    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(asBoundingBox)) return false;
 
-    let aoLatLngs = [];
+    var aoLatLngs = [];
 
-    for (let iPoints = 0; iPoints < asBoundingBox.length - 2; iPoints += 2) {
-      let oLatLon = [parseFloat(asBoundingBox[iPoints + 1]), parseFloat(asBoundingBox[iPoints])];
+    for (var iPoints = 0; iPoints < asBoundingBox.length - 2; iPoints += 2) {
+      var oLatLon = [parseFloat(asBoundingBox[iPoints + 1]), parseFloat(asBoundingBox[iPoints])];
       aoLatLngs.push(oLatLon);
     }
 
-    let oBBPolygon = L.polygon(aoLatLngs, { color: 'red' });
+    var oBBPolygon = L.polygon(aoLatLngs, { color: 'red' });
 
-    let oBBCenter = oBBPolygon.getBounds().getCenter();
+    var oBBCenter = oBBPolygon.getBounds().getCenter();
 
     //it takes the center of the bounding box
-    // let oMidPointGeoserverBoundingBox = utilsGetMidPoint(oGeoserverBoundingBox.maxx, oGeoserverBoundingBox.maxy, oGeoserverBoundingBox.minx, oGeoserverBoundingBox.miny);
-    // //let oMidPointBoundingBox = utilsGetMidPoint( parseFloat(asBoundingBox[0]), parseFloat(asBoundingBox[1]), parseFloat(asBoundingBox[4]), parseFloat(asBoundingBox[5]));
-    // let oMidPointBoundingBox = {};
-    // oMidPointBoundingBox.x = oBBCenter.lng;
-    // oMidPointBoundingBox.y = oBBCenter.lat;
-    // //TODO FIX IT
-    // let isMidPointGeoserverBoundingBoxInBoundingBox = utilsIsPointInsideSquare(oMidPointGeoserverBoundingBox.x, oMidPointGeoserverBoundingBox.y, oBBPolygon.getBounds().getEast(), oBBPolygon.getBounds().getNorth(), oBBPolygon.getBounds().getWest(), oBBPolygon.getBounds().getSouth());
-    // let isMidPointBoundingBoxGeoserverBoundingBox = utilsIsPointInsideSquare(oMidPointBoundingBox.x, oMidPointBoundingBox.y, oGeoserverBoundingBox.maxx, oGeoserverBoundingBox.maxy, oGeoserverBoundingBox.minx, oGeoserverBoundingBox.miny);
-    // if ((isMidPointBoundingBoxGeoserverBoundingBox === true) && (isMidPointGeoserverBoundingBoxInBoundingBox === true)) {
-    //   return true;
-    // }
+    var oMidPointGeoserverBoundingBox = FadeoutUtils.utilsGetMidPoint(oGeoserverBoundingBox.maxx, oGeoserverBoundingBox.maxy, oGeoserverBoundingBox.minx, oGeoserverBoundingBox.miny);
+    //var oMidPointBoundingBox = utilsGetMidPoint( parseFloat(asBoundingBox[0]), parseFloat(asBoundingBox[1]), parseFloat(asBoundingBox[4]), parseFloat(asBoundingBox[5]));
+    var oMidPointBoundingBox: any = {};
+    oMidPointBoundingBox.x = oBBCenter.lng;
+    oMidPointBoundingBox.y = oBBCenter.lat;
+    //TODO FIX IT
+    var isMidPointGeoserverBoundingBoxInBoundingBox = FadeoutUtils.utilsIsPointInsideSquare(oMidPointGeoserverBoundingBox.x, oMidPointGeoserverBoundingBox.y, oBBPolygon.getBounds().getEast(), oBBPolygon.getBounds().getNorth(), oBBPolygon.getBounds().getWest(), oBBPolygon.getBounds().getSouth());
+    var isMidPointBoundingBoxGeoserverBoundingBox = FadeoutUtils.utilsIsPointInsideSquare(oMidPointBoundingBox.x, oMidPointBoundingBox.y, oGeoserverBoundingBox.maxx, oGeoserverBoundingBox.maxy, oGeoserverBoundingBox.minx, oGeoserverBoundingBox.miny);
+    if ((isMidPointBoundingBoxGeoserverBoundingBox === true) && (isMidPointGeoserverBoundingBoxInBoundingBox === true)) {
+      return true;
+    }
     return false;
   };
 
@@ -796,20 +785,21 @@ export class MapService {
    */
   parseGeoserverBoundingBox(geoserverBoundingBox) {
     // Check the input
-    if (!geoserverBoundingBox) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox)) {
       console.log("geoserverBoundingBox: geoserverBoundingBox is null");
       return null;
     }
 
     // Parse the bounding box
     geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
-    let oBoundingBox = JSON.parse(geoserverBoundingBox);
-    if (!oBoundingBox) {
+    var oBoundingBox = JSON.parse('{"miny":43.150066,"minx":-80.030044,"crs":"EPSG:4326","maxy":43.380082,"maxx":-79.710091}');
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oBoundingBox)) {
       console.log("GlobeService.zoomBandImageOnGeoserverBoundingBox: parsing bouning box is null");
       return null;
     }
     return oBoundingBox;
   };
+
   /**
    *
    * @param bbox
@@ -838,7 +828,7 @@ export class MapService {
     return aiInvertedArraySplit;
   };
 
-  addRectangleByGeoserverBoundingBox(geoserverBoundingBox, sColor, oMap) {
+  addRectangleByGeoserverBoundingBox(geoserverBoundingBox, sColor, oMap = this.getMap()) {
     if (!geoserverBoundingBox) {
       console.log("MapService.addRectangleByGeoserverBoundingBox: geoserverBoundingBox is null or empty ");
     }
@@ -846,7 +836,6 @@ export class MapService {
       sColor = "#ff7800";
     }
 
-    console.log(geoserverBoundingBox)
     geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
     let oBounds = JSON.parse(geoserverBoundingBox);
     //Zoom on layer
