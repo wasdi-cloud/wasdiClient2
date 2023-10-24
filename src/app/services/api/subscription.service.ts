@@ -36,7 +36,7 @@ export class SubscriptionService {
   };
 
   deleteSubscription(sSubscriptionId: string) {
-    return this.m_oHttp.delete<any>(this.APIURL + '/subscriptions/delete?subscription=' + sSubscriptionId, {observe: "response"});
+    return this.m_oHttp.delete<any>(this.APIURL + '/subscriptions/delete?subscription=' + sSubscriptionId, { observe: "response" });
   };
 
   // Get list of shared users by subscription id
@@ -45,8 +45,8 @@ export class SubscriptionService {
   }
 
   // Add sharing
-  addSubscriptionSharing(sSubscriptionId: string, sUserId: string) {
-    return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/share/add?subscription=' + sSubscriptionId + '&userId=' + sUserId, {});
+  addSubscriptionSharing(sSubscriptionId: string, sUserId: string, sRights) {
+    return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/share/add?subscription=' + sSubscriptionId + '&userId=' + sUserId + "&rights=" + sRights, {});
   }
 
   // Remove sharing

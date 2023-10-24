@@ -38,8 +38,8 @@ export class AdminDashboardService {
   };
 
 
-  addResourcePermission(sResourceType: string, sResourceId: string, sUserId: string) {
-    return this.oHttp.post<DefaultResponse>(this.APIURL + '/admin/resourcePermissions?resourceType=' + sResourceType + "&resourceId=" + sResourceId + "&userId=" + sUserId, {});
+  addResourcePermission(sResourceType: string, sResourceId: string, sUserId: string, sRights: string) {
+    return this.oHttp.post<DefaultResponse>(this.APIURL + '/admin/resourcePermissions?resourceType=' + sResourceType + "&resourceId=" + sResourceId + "&userId=" + sUserId + '&rights=' + sRights, {});
   };
 
   removeResourcePermission(sResourceType: string, sResourceId: string, sUserId: string) {

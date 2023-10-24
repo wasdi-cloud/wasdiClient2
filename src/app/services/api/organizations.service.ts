@@ -45,8 +45,8 @@ export class OrganizationsService {
   }
 
   // Add sharing
-  addOrganizationSharing(sOrganizationId: string, sUserId: string) {
-    return this.m_oHttp.post<any>(this.APIURL + '/organizations/share/add?organization=' + sOrganizationId + '&userId=' + sUserId, {});
+  addOrganizationSharing(sOrganizationId: string, sUserId: string, sRights: string) {
+    return this.m_oHttp.post<any>(this.APIURL + '/organizations/share/add?organization=' + sOrganizationId + '&userId=' + sUserId + '&rights=' + sRights, {});
   }
 
   // Remove sharing

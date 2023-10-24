@@ -252,10 +252,10 @@ export class ProcessorService {
        * @param sUserId
        * @returns {*}
        */
-  //REQUIRES BODY ARGUMENT HERE
-  putShareProcessor(sProcessorId: string, sUserId: string) {
+
+  putShareProcessor(sProcessorId: string, sUserId: string, sRights: string) {
     let oBody = {};
-    return this.m_oHttp.put<Response>(this.APIURL + '/processors/share/add?processorId=' + sProcessorId + "&userId=" + sUserId, oBody);
+    return this.m_oHttp.put<Response>(this.APIURL + '/processors/share/add?processorId=' + sProcessorId + "&userId=" + sUserId + '&rights=' + sRights, oBody);
   };
 
   /**

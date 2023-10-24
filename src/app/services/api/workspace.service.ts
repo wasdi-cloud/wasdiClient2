@@ -72,8 +72,8 @@ export class WorkspaceService {
     return null;
   };
 
-  putShareWorkspace(sWorkspaceId: string, sUserId: string) {
-    return this.oHttp.put<oConfirmation>(this.APIURL + '/ws/share/add?workspace=' + sWorkspaceId + "&userId=" + sUserId, {});
+  putShareWorkspace(sWorkspaceId: string, sUserId: string, sRights: string) {
+    return this.oHttp.put<oConfirmation>(this.APIURL + '/ws/share/add?workspace=' + sWorkspaceId + "&userId=" + sUserId + "&rights=" + sRights, {});
   };
 
   getUsersBySharedWorkspace(sWorkspaceId: string) {

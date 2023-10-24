@@ -77,8 +77,8 @@ export class WorkflowService {
   }
 
   // Add sharing
-  addWorkflowSharing(sWorkflowId: string, sUserId: string) {
-    return this.oHttp.put<any>(this.APIURL + '/workflows/share/add?workflowId=' + sWorkflowId + '&userId=' + sUserId, {});
+  addWorkflowSharing(sWorkflowId: string, sUserId: string, sRights: string) {
+    return this.oHttp.put<any>(this.APIURL + '/workflows/share/add?workflowId=' + sWorkflowId + '&userId=' + sUserId + '&rights=' + sRights, {});
   }
 
   // Remove sharing

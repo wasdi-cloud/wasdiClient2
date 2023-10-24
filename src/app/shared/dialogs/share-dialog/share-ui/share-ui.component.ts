@@ -24,6 +24,7 @@ export class ShareUiComponent implements OnInit {
 
   m_aoSharedUsers: any;
   m_sUserIdSearch: string;
+  m_sPermission: string; 
 
   @Input() resource: any;
   @Input() resourceType: string;
@@ -47,6 +48,7 @@ export class ShareUiComponent implements OnInit {
         this.m_oWorkspaceService.getUsersBySharedWorkspace(this.resource.workspaceId).subscribe(oResponse => {
           if (oResponse) {
             this.m_aoSharedUsers = oResponse;
+            console.log(oResponse)
           }
         })
       }
@@ -110,7 +112,7 @@ export class ShareUiComponent implements OnInit {
   onAddEnabledUser() {
     if (this.resourceType && this.resource && this.m_sUserIdSearch.length !== 0) {
       if (this.resourceType === 'workspace') {
-        this.m_oWorkspaceService.putShareWorkspace(this.resource.workspaceId, this.m_sUserIdSearch).subscribe(oResponse => {
+        this.m_oWorkspaceService.putShareWorkspace(this.resource.workspaceId, this.m_sUserIdSearch, this.m_sPermission).subscribe(oResponse => {
           if (oResponse.stringValue === "Done") {
             this.getEnabledUsers();
           }
@@ -118,7 +120,7 @@ export class ShareUiComponent implements OnInit {
       }
 
       if (this.resourceType === 'style') {
-        this.m_oStyleService.addStyleSharing(this.resource.styleId, this.m_sUserIdSearch).subscribe(oResponse => {
+        this.m_oStyleService.addStyleSharing(this.resource.styleId, this.m_sUserIdSearch, this.m_sPermission).subscribe(oResponse => {
           if (oResponse.stringValue === "Done") {
             this.getEnabledUsers();
           }
@@ -126,13 +128,13 @@ export class ShareUiComponent implements OnInit {
       }
 
       if (this.resourceType === 'PROCESSORPARAMETERSTEMPLATE') {
-        this.m_oAdminDashboardService.addResourcePermission(this.resourceType, this.resource.templateId, this.m_sUserIdSearch).subscribe(oResponse => {
+        this.m_oAdminDashboardService.addResourcePermission(this.resourceType, this.resource.templateId, this.m_sUserIdSearch, this.m_sPermission).subscribe(oResponse => {
           this.getEnabledUsers();
         })
       }
 
       if (this.resourceType === 'workflow') {
-        this.m_oWorkflowService.addWorkflowSharing(this.resource.workflowId, this.m_sUserIdSearch).subscribe({
+        this.m_oWorkflowService.addWorkflowSharing(this.resource.workflowId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
           next: oResponse => {
             if (oResponse.boolValue === true) {
               this.getEnabledUsers();
@@ -143,7 +145,7 @@ export class ShareUiComponent implements OnInit {
       }
 
       if (this.resourceType === 'processor') {
-        this.m_oProcessorService.putShareProcessor(this.resource.processorId, this.m_sUserIdSearch).subscribe(oResponse => {
+        this.m_oProcessorService.putShareProcessor(this.resource.processorId, this.m_sUserIdSearch, this.m_sPermission).subscribe(oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
             if (oResponse.boolValue) {
               console.log("Sharing Saved");
@@ -154,7 +156,7 @@ export class ShareUiComponent implements OnInit {
       }
 
       if (this.resourceType === 'organization') {
-        this.m_oOrganizationsService.addOrganizationSharing(this.resource.organizationId, this.m_sUserIdSearch).subscribe({
+        this.m_oOrganizationsService.addOrganizationSharing(this.resource.organizationId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
           next: oResponse => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
               if (oResponse.message === "Done") {
@@ -168,7 +170,7 @@ export class ShareUiComponent implements OnInit {
       }
 
       if (this.resourceType === 'subscription') {
-        this.m_oSubscriptionService.addSubscriptionSharing(this.resource.subscriptionId, this.m_sUserIdSearch).subscribe({
+        this.m_oSubscriptionService.addSubscriptionSharing(this.resource.subscriptionId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
           next: oResponse => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.message === "Done") {
               console.log("Sharing Saved");
@@ -182,7 +184,6 @@ export class ShareUiComponent implements OnInit {
   }
 
   onRemoveEnabledUser(sUserId: string) {
-
     //Remove whitespace from email 
     FadeoutUtils.utilsRemoveSpaces(sUserId);
     if (this.resourceType && this.resource) {

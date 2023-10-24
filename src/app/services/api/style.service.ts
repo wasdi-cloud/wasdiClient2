@@ -21,7 +21,7 @@ export class StyleService {
   // Upload a style by file
   uploadFile(sName: string, sDescription: string, oBody: object, bIsPublic: boolean) {
     return this.oHttp.post<oConfirmation>(this.APIURL + '/styles/uploadfile?' + "name=" + sName +
-      "&description=" + sDescription + "&public=" + bIsPublic, oBody, { });
+      "&description=" + sDescription + "&public=" + bIsPublic, oBody, {});
   };
 
   // Update style xml file
@@ -71,9 +71,9 @@ export class StyleService {
   }
 
   // Add sharing
-  addStyleSharing(sStyleId: string, sUserId: string) {
+  addStyleSharing(sStyleId: string, sUserId: string, sRights: string) {
     //Requires an argument for the body
-    return this.oHttp.put<oConfirmation>(this.APIURL + '/styles/share/add?styleId=' + sStyleId + '&userId=' + sUserId, {});
+    return this.oHttp.put<oConfirmation>(this.APIURL + '/styles/share/add?styleId=' + sStyleId + '&userId=' + sUserId + '&rights=' + sRights, {});
   }
 
   // Remove sharing
