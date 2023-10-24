@@ -40,6 +40,11 @@ export class FilterPipe implements PipeTransform {
       if(item.processorName) {
         return item.processorName.toLocaleLowerCase().includes(searchText);
       }
+      //Filter for Workspaces where workspaceName is an attribute:
+      if(item.workspaceName) {
+        return item.workspaceName.toLocaleLowerCase().includes(searchText);
+      }
+
     })
   }
 }

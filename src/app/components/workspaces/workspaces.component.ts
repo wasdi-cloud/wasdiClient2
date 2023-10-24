@@ -75,6 +75,7 @@ export class WorkspacesComponent implements OnInit {
   m_oWorkspaceViewModel: any;
   m_oSelectedProduct: any;
 
+  m_sWorkspaceSearchInput: string = '';
   m_aoSortingOptions = [
     {
       title: "Newest",
