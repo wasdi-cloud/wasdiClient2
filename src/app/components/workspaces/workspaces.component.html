@@ -1,5 +1,5 @@
-<div class="workspaces-header py-3 px-3 my-0 bg-light d-flex flex-row justify-content-between align-items-center">
-    <h4 class="">{{"ROOT_VIEW_NAV_BAR_LINK_WORKSPACES" | translate}}</h4>
+<div class="workspaces-header py-3 px-4 my-0 bg-light d-flex flex-row justify-content-between align-items-center">
+    <input type="text" class="form-control" name="" id="" style="width: 16rem;" placeholder="Search Workspaces...">
     <button class="btn btn-primary" (click)="openNewWorkspaceDialog()">
         <fa-icon [icon]="faPlus"></fa-icon>
         {{"WORKSPACES_BUTTON_NEW_WORKSPACE" | translate}}</button>
@@ -7,8 +7,24 @@
 
 <div class="row col-12 p-auto px-3 d-flex flex-row m-0">
     <div class="workspace-properties-container col-sm-5 d-flex flex-column justify-content-between align-items-center">
-        <div class="workspaces-container overflow-auto">
-            <ul class="list-group">
+        <div class="workspaces-container">
+            <div class="bg-secondary p-1 d-flex flex-row justify-content-between align-items-center">
+                <h6 class="text-light p-0 m-0 ms-2">Workspaces</h6>
+                <div class="dropdown">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Sorting
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li style="cursor: pointer" *ngFor="let oSortingOption of m_aoSortingOptions"><a
+                                class="dropdown-item"
+                                [ngClass]="oSortingOption.title === m_oActiveSortingOption.title ? 'active' : ''"
+                                (click)="setSorting(oSortingOption)">{{oSortingOption.title}}</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <ul class="list-group" style="height: 90%; overflow-y: scroll;">
                 <app-workspace-list-item *ngFor="let oWorkspace of m_aoWorkspacesList" [workspace]="oWorkspace"
                     (activeWorkspace)="onShowWorkspace($event)" (deletedWorkspace)="onDeleteWorkspace($event)">
                 </app-workspace-list-item>
@@ -34,7 +50,8 @@
                     <li *ngFor="let user of activeWorkspace.sharedUsers">{{ user }}</li>
                 </ul>
                 <ul class="list-group">
-                    <li class="list-group-item list-group-item-action" *ngFor="let oProduct of m_aoProducts" (click)="onSelectProduct(oProduct)">
+                    <li class="list-group-item list-group-item-action" *ngFor="let oProduct of m_aoProducts"
+                        (click)="onSelectProduct(oProduct)">
                         {{oProduct.name}}
                     </li>
                 </ul>

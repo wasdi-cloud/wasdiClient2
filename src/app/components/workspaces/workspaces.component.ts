@@ -20,7 +20,7 @@ import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Font Awesome Imports:
-import { faPlay, faPlus, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsUpDown, faPlay, faPlus, faStop } from '@fortawesome/free-solid-svg-icons';
 
 //Import Utilities: 
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
@@ -51,6 +51,7 @@ export interface WorkspaceViewModel {
 })
 export class WorkspacesComponent implements OnInit {
   //Icons: 
+  faArrowsUpDown = faArrowsUpDown;
   faPlus = faPlus
   faPlay = faPlay;
   faStop = faStop;
@@ -74,6 +75,36 @@ export class WorkspacesComponent implements OnInit {
   m_oWorkspaceViewModel: any;
   m_oSelectedProduct: any;
 
+  m_aoSortingOptions = [
+    {
+      title: "Newest",
+      column: "date",
+      direction: "asc"
+    },
+    {
+      title: "Oldest",
+      column: "date",
+      direction: "desc"
+    },
+    {
+      title: "Workspace A-Z",
+      column: "workspace",
+      direction: "desc"
+    }, {
+      title: "Workspace Z-A",
+      column: "workspace",
+      direction: "asc"
+    }, {
+      title: "Owner A-Z",
+      column: "owner",
+      direction: "desc"
+    }, {
+      title: "Owner Z-A",
+      column: "owner",
+      direction: "asc"
+    }
+  ]
+  m_oActiveSortingOption: any = {}
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
@@ -318,6 +349,7 @@ export class WorkspacesComponent implements OnInit {
   deselectWorkspace() {
 
   }
+
   openNewWorkspaceDialog() {
     let oDialogRef = this.m_oDialog.open(NewWorkspaceDialogComponent, {
       width: '30vw'
@@ -452,4 +484,26 @@ export class WorkspacesComponent implements OnInit {
     }
   }
 
+  setSorting(oSortingOption) {
+    let bIsDescending: boolean = false;
+    let propertyName: string = '';
+    //Set Active Sorting Option: 
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSortingOption) === false) {
+      this.m_oActiveSortingOption = oSortingOption;
+      oSortingOption.direction === 'asc' ? bIsDescending = true : bIsDescending = false;
+      oSortingOption.column === 'date' ? propertyName = 'creationDate' : oSortingOption.column === 'workspace' ? propertyName = 'workspaceName' : propertyName = 'ownerUserId';
+    }
+
+    console.log(this.m_aoWorkspacesList)
+
+    this.m_aoWorkspacesList.sort((a: any, b: any) => {
+      if (a[propertyName].toLowerCase() < b[propertyName].toLowerCase()) {
+        return bIsDescending ? 1 : -1;
+      }
+      if (a[propertyName].toLowerCase() > b[propertyName].toLowerCase()) {
+        return bIsDescending ? -1 : 1;
+      }
+      return 0;
+    });
+  }
 }

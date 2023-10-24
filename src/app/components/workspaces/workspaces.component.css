@@ -17,6 +17,12 @@ div.workspace-globe-contaienr {
 
 div.workspaces-container,
 div.properties-container {
-    height: 50%;
+    height: 40vh;
     width: 100%;
+}
+
+div.workspaces-list-group {
+    height: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
 }
