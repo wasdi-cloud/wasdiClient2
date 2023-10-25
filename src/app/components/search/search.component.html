@@ -9,20 +9,18 @@
         Add Selected to Workspace</button>
 </div>
 <div class="d-flex flex-row gap-3 px-4 pt-2" style="height: 75%; width: 100%;">
-    <div class="products-table" style="width: 40%;" *ngIf="m_bIsVisibleListOfLayers === true">
+    <div class="products-table" style="width: 40%;"  *ngIf="m_bIsVisibleListOfLayers === true">
         <app-products-table [m_aoProducts]="m_oProductSubject.asObservable()"
             [m_aoSelectedProviders]="m_oSelectedProvidersSubject.asObservable()"
-            [m_bIsPaginatedList]="m_bIsPaginatedList"
-            [m_bIsVisibleListOfLayers]="m_bIsVisibleListOfLayers"
-            (m_oActiveProviderChange)="getActiveProvider($event)"
+            [m_bIsPaginatedList]="m_bIsPaginatedList" [m_bIsVisibleListOfLayers]="m_bIsVisibleListOfLayers"
+            (m_oNavigateBackOutput)="getNavigationFilters($event)" (m_oActiveProviderChange)="getActiveProvider($event)"
             (m_oSelectedProducts)="getSelectedProducts($event)"></app-products-table>
     </div>
-    <div class="filters-panel" style="width: 40%;" *ngIf="m_bIsVisibleListOfLayers === false">
-        <app-search-filters [m_aoMissions]="m_aoMissions" (m_oSearchFilter)="getMissionFilter($event)"
-            (m_aoProviderSelection)="getSelectedProviders($event)"
+    <div class="filters-panel" style="width: 40%;" [hidden]="m_bIsVisibleListOfLayers === true">
+        <app-search-filters [m_aoMissions]="m_aoMissions" [m_aoSelectedProviders]="m_aoSelectedProviders"
+            (m_oSearchFilter)="getMissionFilter($event)" (m_aoProviderSelection)="getSelectedProviders($event)"
             (m_oTypeOfFilterSelected)="getTimeFilter($event)"
-            (m_oAdvancedFilterSelection)="getAdvancedFilterSelection($event)"
-            ></app-search-filters>
+            (m_oAdvancedFilterSelection)="getAdvancedFilterSelection($event)"></app-search-filters>
     </div>
     <div class="map" style="width: 60%;">
         <app-search-map [m_aoProducts]="m_oProductSubject.asObservable()"

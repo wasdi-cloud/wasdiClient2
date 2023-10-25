@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { faInfoCircle, faPlus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { faArrowLeft, faInfoCircle, faPlus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -20,9 +20,11 @@ export class ProductsTableComponent implements OnInit {
   @Input() m_aoSelectedProviders: Observable<any>;
   @Output() m_oActiveProviderChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oSelectedProducts: EventEmitter<any> = new EventEmitter<any>();
+  @Output() m_oNavigateBackOutput: EventEmitter<any> = new EventEmitter<boolean>();
 
   m_aoProductsList: any = [];
   //font awesome icons: 
+  faBack = faArrowLeft;
   faPlus = faPlus;
   faSearch = faSearchPlus;
   faInfoCircle = faInfoCircle;
@@ -128,13 +130,6 @@ export class ProductsTableComponent implements OnInit {
   }
 
   /********** Provider Information Management Methods **********/
-
-  /**
-   * Get the number of Products from a given provider
-   * @param sProviderName
-   */
-  getNumberOfProductsByProvider(sProviderName: string) { }
-
   /**
    * On Switching Provider emit change to parent in order to change products on map
    * @param sProviderName
@@ -208,38 +203,18 @@ export class ProductsTableComponent implements OnInit {
     return true;
   }
 
-  /**
-   * deleteProducts
-   * @param sProvider
-   * @returns {boolean}
-   */
-  deleteProducts(sProvider) {
-    //check if layers list is empty
-    if (this.isProductListEmpty()) return false;
-    var iLengthProductsList = this.m_aoProductsList.length;
-    var oMap = this.m_oMapService.getMap();
-    /* remove rectangle in map*/
-    for (var iIndexProductsList = 0; iIndexProductsList < iLengthProductsList; iIndexProductsList++) {
-      if ((FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProductsList[iIndexProductsList].provider) === false) && (this.m_aoProductsList[iIndexProductsList].provider === sProvider)) {
-        var oRectangle = this.m_aoProductsList[iIndexProductsList].rectangle;
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle))
-          oRectangle.removeFrom(oMap);
-        if (iIndexProductsList > -1) {
-          this.m_aoProductsList.splice(iIndexProductsList, 1);
-          iLengthProductsList--;
-          iIndexProductsList--;
-        }
-      }
-    }
-    //delete layers list
-    //this.m_aoProductsList = [];
-    return true;
-  }
 
   /********** Event Emitters **********/
 
 
   /********** Button Handler Functions **********/
+  /**
+   * 
+   */
+  navigateBackToFilters() {   
+    this.m_oNavigateBackOutput.emit(false);
+  }
+
 
   /**
    * Add checked product to selected products array

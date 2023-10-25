@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { AdvancedFilterService } from 'src/app/services/search/advanced-filter.service';
 import { SearchService } from 'src/app/search.service';
-import { FileBufferService } from 'src/app/services/api/file-buffer.service';
-import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { ProductService } from 'src/app/services/api/product.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConfigurationService } from 'src/app/services/configuration.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { MapService } from 'src/app/services/map.service';
@@ -15,9 +10,7 @@ import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Subject } from 'rxjs'
 import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ResultOfSearchService } from 'src/app/services/result-of-search.service';
-import { OpenSearchService } from 'src/app/services/api/open-search.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -46,7 +39,8 @@ export class SearchComponent implements OnInit {
 
   m_oActiveProvider: any = null;
 
-  m_asListOfProviders: Array<any> = []
+  m_asListOfProviders: Array<any> = [];
+  m_aoListOfProviders: Array<any> = [];
 
   m_aoProductsList: Array<any> = [];
   m_oProductSubject: Subject<any> = new Subject<any>();
@@ -94,31 +88,24 @@ export class SearchComponent implements OnInit {
   m_sTypeOfFilterSelected: string = "Time period";
 
   constructor(
-    private m_oAdvancedFilterService: AdvancedFilterService,
     private m_oAdvancedSearchService: AdvancedSearchService,
     private m_oAlertDialogService: AlertDialogTopService,
-    private m_oAuthService: AuthService,
     private m_oConfigurationService: ConfigurationService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oFileBufferService: FileBufferService,
     private m_oMapService: MapService,
-    private m_oOpenSearchService: OpenSearchService,
     private m_oPageService: PagesService,
-    private m_oProductService: ProductService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oResultsOfSearchService: ResultOfSearchService,
     private m_oSearchService: SearchService,
     private m_oTranslate: TranslateService,
-    private m_oWorkspaceService: WorkspaceService
   ) {
     this.m_oConfigurationService.loadConfiguration();
     this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
   }
 
   ngOnInit(): void {
-    this.m_oPageService.setFunction(this.executeSearch, this)
+    this.m_oPageService.setFunction(this.executeSearch, this);
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
@@ -399,7 +386,7 @@ export class SearchComponent implements OnInit {
     oController.m_oSearchService.searchList(asTimePeriodsFilters).subscribe({
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          console.log(oResponse)
+
           var aoData = oResponse;
           oController.generateLayersList(aoData)//.feed;
 
@@ -567,7 +554,6 @@ export class SearchComponent implements OnInit {
    */
   getSelectedProviders(oEvent: any) {
     this.m_aoSelectedProviders = oEvent;
-    console.log(this.m_aoSelectedProviders)
   }
 
   getActiveProvider(oEvent: any) {
@@ -585,6 +571,16 @@ export class SearchComponent implements OnInit {
 
   getSelectedProducts(oEvent: any) {
     this.m_aoSelectedProducts = oEvent;
+  }
+
+  getNavigationFilters(oEvent: boolean) {
+    this.m_bClearFiltersEnabled = true;
+
+    this.m_bIsVisibleListOfLayers = false;
+    //set default pages
+    this.m_oPageService.setDefaultPaginationValuesForProvider();
+
+    this.m_oResultsOfSearchService.setIsVisibleListOfProducts(false);
   }
 
   /**
