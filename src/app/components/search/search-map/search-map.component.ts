@@ -75,6 +75,9 @@ export class SearchMapComponent implements OnInit {
 
   onDrawCreated(oEvent: any) {
 
+     if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
+          this.m_oDrawnItems.clearLayers();
+        }
     let oDrawnItem = this.m_oMapService.onSearchDrawCreated(oEvent);
 
     //Add layer to map
