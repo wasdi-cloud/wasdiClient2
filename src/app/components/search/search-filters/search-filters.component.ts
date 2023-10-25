@@ -14,6 +14,7 @@ import { MatSelectChange } from '@angular/material/select';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { MatDialog } from '@angular/material/dialog';
 import { AdvancedFiltersComponent } from '../advanced-filters/advanced-filters.component';
+import { OpenSearchService } from 'src/app/services/api/open-search.service';
 
 @Component({
   selector: 'app-search-filters',
@@ -23,6 +24,7 @@ import { AdvancedFiltersComponent } from '../advanced-filters/advanced-filters.c
 export class SearchFiltersComponent implements OnInit {
 
   @Input() m_aoMissions: Array<any> = [];
+  @Input() m_aoSelectedProviders: Array<any> = [];
   @Output() m_oSearchFilter: EventEmitter<any> = new EventEmitter();
   @Output() m_aoProviderSelection: EventEmitter<any> = new EventEmitter();
   @Output() m_oTypeOfFilterSelected: EventEmitter<string> = new EventEmitter();
@@ -61,8 +63,9 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   m_oActiveMission: any = null;
-  m_aoSelectedProviders = []
-  m_aListOfProviders: any = [];
+  m_aoUserProviderSelection: Array<any> = [];
+
+  m_aoListOfProviders: any = [];
 
   m_aoFilters: Array<any> = [];
   m_aoVisibleFilters: Array<any> = [];
@@ -74,6 +77,7 @@ export class SearchFiltersComponent implements OnInit {
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,
     private m_oDialog: MatDialog,
+    private m_oOpenSearchService: OpenSearchService,
     private m_oPagesService: PagesService,
     private m_oMissionFiltersService: MissionFiltersService,
     private m_oResultsOfSearchService: ResultOfSearchService,
@@ -130,8 +134,50 @@ export class SearchFiltersComponent implements OnInit {
    * Retrieves the list of providers as an Observable and sets value of List of Providers
    */
   setDefaultSelectedProvider() {
-    this.m_aListOfProviders = this.m_oPagesService.getProviders()
+    // this.m_aoListOfProviders = this.m_oPagesService.getProviders();
+    this.m_oOpenSearchService.getListOfProvider().subscribe({
+      next: oResponse => {
+        this.m_aoListOfProviders[0] = {
+          "name": "AUTO",
+          "totalOfProducts": 0,
+          "totalPages": 1,
+          "currentPage": 1,
+          "productsPerPageSelected": 10,
+          "selected": true,
+          "isLoaded": false,
+          "description": "WASDI Automatic Data Provider",
+          "link": "https://www.wasdi.net"
+        };
+
+        let iLengthData = oResponse.length;
+        for (var iIndexProvider = 0; iIndexProvider < iLengthData; iIndexProvider++) {
+          this.m_aoListOfProviders[iIndexProvider + 1] = {
+            "name": oResponse[iIndexProvider].code,
+            "totalOfProducts": 0,
+            "totalPages": 1,
+            "currentPage": 1,
+            "productsPerPageSelected": 10,
+            "selected": false,
+            "isLoaded": false,
+            "description": oResponse[iIndexProvider].description,
+            "link": oResponse[iIndexProvider].link
+          };
+        }
+        this.m_aoUserProviderSelection[0] = this.m_aoListOfProviders[0];
+
+        if (this.m_aoSelectedProviders.length > 0) {
+          this.m_aoUserProviderSelection = this.m_aoSelectedProviders;
+        }
+
+        this.m_aoProviderSelection.emit(this.m_aoUserProviderSelection);
+        return this.m_aoListOfProviders
+      },
+      error: oError => {
+        console.log("Error getting providers");
+      }
+    })
   }
+
 
   setAdvancedSearchFilter() {
     let oAdvancedSensingFrom = null;
@@ -316,10 +362,10 @@ export class SearchFiltersComponent implements OnInit {
    * Emit Provider Selection to the Search Component
    */
   emitSelectedProviders(oEvent: MatSelectChange) {
-    this.m_aoSelectedProviders.forEach(oProvider => {
+    this.m_aoUserProviderSelection.forEach(oProvider => {
       oProvider.selected = true;
     })
-    this.m_aoProviderSelection.emit(this.m_aoSelectedProviders);
+    this.m_aoProviderSelection.emit(this.m_aoUserProviderSelection);
   }
 
 
