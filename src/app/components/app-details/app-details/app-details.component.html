@@ -11,7 +11,12 @@
         <div class="processor-info mx-4 col">
             <h3>{{m_oApplicationInfo.friendlyName}}</h3>
             <p>Reviews: {{m_oApplicationInfo.reviewsCount}}</p>
-            <p>Published By: {{m_oApplicationInfo.publisher}}</p>
+            <p *ngIf="!m_sActiveUser === m_oApplicationInfo.publisher">Published By: {{m_oApplicationInfo.publisher}}
+            </p>
+            <div *ngIf="m_sActiveUser === m_oApplicationInfo.publisher" class="d-flex flex-row align-items-center gap-3">
+                <div>You are the Master!</div>
+                <button class="btn btn-sm btn-success" (click)="openEditAppDialog(m_oApplicationInfo)">Edit</button>
+            </div>
             <div class="categories-container">
                 <span>Categories</span>
             </div>

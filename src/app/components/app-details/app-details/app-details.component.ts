@@ -11,6 +11,8 @@ import { TranslateService } from '@ngx-translate/core';
 
 //Import Utilities:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { MatDialog } from '@angular/material/dialog';
+import { NewAppDialogComponent } from '../../edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 
 export interface application {
   buyed: boolean,
@@ -31,7 +33,8 @@ export interface application {
   styleUrls: ['./app-details.component.css']
 })
 export class AppDetailsComponent implements OnInit {
-  sActiveApplicationName: string = this.m_oConstantsService.getSelectedApplication()
+  sActiveApplicationName: string = this.m_oConstantsService.getSelectedApplication(); 
+  m_sActiveUser: string = ""; 
   m_oApplicationInfo: any = {} as application;
 
   m_bReviewsWaiting: boolean;
@@ -57,6 +60,7 @@ export class AppDetailsComponent implements OnInit {
     private m_oActivatedRoute: ActivatedRoute,
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
     private m_oImageService: ImageService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oProcessorService: ProcessorService,
@@ -70,6 +74,7 @@ export class AppDetailsComponent implements OnInit {
       this.sActiveApplicationName = this.m_oActivatedRoute.snapshot.params['processorName']
       this.getApplicationDetails(this.sActiveApplicationName)
     }
+    this.m_sActiveUser = this.m_oConstantsService.getUserId();
   }
 
   /**
@@ -160,5 +165,16 @@ export class AppDetailsComponent implements OnInit {
    */
   openAppUI(processorName: string): void {
     this.m_oRouter.navigateByUrl(`${processorName}/appui`)
+  }
+
+  openEditAppDialog(oProcessor) {
+    let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
+      height: '80vh',
+      width: '80vw',
+      data: {
+        editMode: true,
+        inputProcessor: oProcessor
+      }
+    })
   }
 }
