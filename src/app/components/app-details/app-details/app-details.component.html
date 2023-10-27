@@ -7,13 +7,14 @@
 </div>
 <div class="info-container d-flex flex-column align-items-center justify-content-center py-2">
     <div class="d-flex flex-row col-10">
-        <div class="processor-img col" style="background-image: url({{m_oApplicationInfo.imgLink}});"></div>
+        <div class="processor-img col" style="background-image: url({{m_asImages[0]}});"></div>
         <div class="processor-info mx-4 col">
             <h3>{{m_oApplicationInfo.friendlyName}}</h3>
             <p>Reviews: {{m_oApplicationInfo.reviewsCount}}</p>
             <p *ngIf="!m_sActiveUser === m_oApplicationInfo.publisher">Published By: {{m_oApplicationInfo.publisher}}
             </p>
-            <div *ngIf="m_sActiveUser === m_oApplicationInfo.publisher" class="d-flex flex-row align-items-center gap-3">
+            <div *ngIf="m_sActiveUser === m_oApplicationInfo.publisher"
+                class="d-flex flex-row align-items-center gap-3">
                 <div>You are the Master!</div>
                 <button class="btn btn-sm btn-success" (click)="openEditAppDialog(m_oApplicationInfo)">Edit</button>
             </div>
