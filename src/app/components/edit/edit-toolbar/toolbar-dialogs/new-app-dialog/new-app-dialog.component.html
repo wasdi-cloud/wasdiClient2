@@ -31,12 +31,14 @@
         <!-- Default Page - Processor Information -->
         <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR'" [m_bEditMode]="m_bEditMode"
             [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')"
-            [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''" [m_sProcessorName]="m_sName"></app-processor-tab-content>
+            [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''"
+            [m_sProcessorName]="m_sName"></app-processor-tab-content>
         <!-- Processor Store Options -->
         <app-processor-tab-store *ngIf="m_sActiveTab==='STORE'"
             [m_oProecessorStoreInfo]="m_oProcessorForm.get('processorStoreInfo')"></app-processor-tab-store>
         <!-- Processor Media Options -->
-        <app-processor-tab-media *ngIf="m_sActiveTab==='MEDIA'"></app-processor-tab-media>
+        <app-processor-tab-media *ngIf="m_sActiveTab==='MEDIA'"
+            [m_oProcessor]="m_oProcessorDetails"></app-processor-tab-media>
         <!-- Processor UI JSON file -->
         <app-processor-tab-ui *ngIf="m_sActiveTab==='UI'" [m_oProcessor]="m_oInputProcessor"
             [m_oProcessorUIInfo]="m_oProcessorForm.get('processorUIInfo')"></app-processor-tab-ui>

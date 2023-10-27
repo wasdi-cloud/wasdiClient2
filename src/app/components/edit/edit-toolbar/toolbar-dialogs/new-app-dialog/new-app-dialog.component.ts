@@ -17,6 +17,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { ImageService } from 'src/app/services/api/image.service';
 
 @Component({
   selector: 'app-new-app-dialog',
@@ -180,6 +181,7 @@ export class NewAppDialogComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oFormBuilder: FormBuilder,
+    private m_oImageService: ImageService,
     private m_oProcessorService: ProcessorService) { }
 
   ngOnInit(): void {
@@ -271,7 +273,7 @@ export class NewAppDialogComponent implements OnInit {
         } else {
           //if oResponse vaild, assign response to m_oProcessorDetails
           this.m_oProcessorDetails = oResponse;
-          console.log(this.m_oProcessorDetails);
+          this.m_oImageService.updateProcessorLogoImageUrl(this.m_oProcessorDetails);
         }
       },
       error: oError => {

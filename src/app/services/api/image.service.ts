@@ -31,7 +31,7 @@ export class ImageService {
       headers: { 'Content-Type': undefined }
     };
 
-    return this.m_oHttp.post(this.APIURL + this.m_sResource + '/processors/logo/upload?processorId=' + encodeURI(sProcessorId), oBody, oOptions);
+    return this.m_oHttp.post<any>(this.APIURL + this.m_sResource + '/processors/logo/upload?processorId=' + encodeURI(sProcessorId), oBody);
   };
 
   /**
@@ -41,13 +41,7 @@ export class ImageService {
    * @returns {*}
    */
   uploadProcessorImage(sProcessorId, oBody) {
-
-    let oOptions = {
-
-      headers: { 'Content-Type': undefined }
-    };
-
-    return this.m_oHttp.post(this.APIURL + this.m_sResource + '/processors/gallery/upload?processorId=' + encodeURI(sProcessorId), oBody, oOptions);
+    return this.m_oHttp.post<any>(this.APIURL + this.m_sResource + '/processors/gallery/upload?processorId=' + encodeURI(sProcessorId), oBody);
   };
 
   /**
@@ -108,7 +102,7 @@ export class ImageService {
         oProcessor.images[iImage] = this.getImageLink(oProcessor.images[iImage]);
       }
     }
-    return true; 
+    return true;
   }
 
   getImageNameFromUrl(sUrl) {
