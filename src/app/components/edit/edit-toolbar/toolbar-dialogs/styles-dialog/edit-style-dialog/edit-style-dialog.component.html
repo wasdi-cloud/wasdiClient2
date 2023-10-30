@@ -35,21 +35,24 @@
                     <label class="form-label" for="name">
                         Name:
                     </label>
-                    <input class="form-control" id="name" name="name" type="text">
+                    <input class="form-control" id="name" name="name" type="text" value="{{m_oStyle.name}}" disabled
+                        readonly>
                 </div>
                 <div>
                     <label class="form-label" for="description">Description:</label>
-                    <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+                    <textarea class="form-control" name="description" id="description" cols="30" rows="10"
+                        [(ngModel)]="m_oEditStyleForm.sDescription"
+                        placeholder="{{m_oStyle.description !== 'undefined' ? m_oStyle.description : ''}}"></textarea>
                 </div>
                 <div>
-                    <mat-checkbox [color]="'primary'">Set Styles as Public</mat-checkbox>
+                    <mat-checkbox name="isPublic" [color]="'primary'" [checked]="m_oStyle.public"
+                        [(ngModel)]="m_oEditStyleForm.bIsPublic">Set Styles as
+                        Public</mat-checkbox>
                 </div>
             </div>
-            <div class="form-col-2" style="width: 50%">
-
+            <div class="form-col-2 d-flex flex-column" style="width: 50%">
                 <label for="formFileLg" class="form-label">Choose XML Style to Upload</label>
                 <input class="form-control" id="formFileLg" type="file">
-
             </div>
 
         </form>
@@ -57,8 +60,8 @@
 
     <div *ngIf="m_sActiveTab === 'editXml'" mat-dialog-content>
         <p class="text-success">Style XML:</p>
-        <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
-        <button class="btn btn-success">
+        <textarea class="form-control" name="" id="" cols="30" rows="10" [(ngModel)]="m_sStyleXML"></textarea>
+        <button class="btn btn-success" (click)="updateStyleXML(m_oStyle.styleId, m_sStyleXML)">
             Apply
         </button>
     </div>
@@ -66,8 +69,10 @@
     <div *ngIf="m_sActiveTab === 'share'" mat-dialog-content>
         <app-share-ui [resourceType]="'style'" [resource]="m_oStyle"></app-share-ui>
     </div>
-    <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
-        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">
+    <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end gap-3">
+        <button *ngIf="m_sActiveTab==='editStyle'" class="btn btn-success align-self-end"
+            (click)="updateStyle()">Save</button>
+        <button class="btn btn-secondary" (click)="onDismiss()">
             Close
         </button>
     </div>

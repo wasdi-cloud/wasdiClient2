@@ -69,7 +69,6 @@ export class StylesDialogComponent implements OnInit {
   ) {
     this.m_sActiveUserId = m_oConstantsService.getUserId()
     this.getStylesByUser();
-    console.log(this.m_aoStyleList)
   }
 
   ngOnInit() { }
@@ -87,7 +86,6 @@ export class StylesDialogComponent implements OnInit {
     this.m_oStyleService.getStylesByUser().subscribe(oResponse => {
       if (oResponse !== null && oResponse !== undefined) {
         this.m_aoStyleList = oResponse;
-        console.log(oResponse[0])
       }
     });
   }
@@ -104,26 +102,33 @@ export class StylesDialogComponent implements OnInit {
   }
 
   getStyleXml(sStyleId: string, sUserId: string) {
-    if (this.m_oConstantsService.getUserId() === sUserId) {
-      this.m_oStyleService.getStyleXml(sStyleId).subscribe(oResponse => {
-        this.m_asStyleXml = oResponse;
-
-      })
-    }
+    this.m_oStyleService.getStyleXml(sStyleId).subscribe(oResponse => {
+      this.m_asStyleXml = oResponse;
+    })
   }
 
   openStyleEditDialog(oStyle) {
     let oDialog = this.m_oDialog.open(EditStyleDialogComponent, {
       height: '80vh',
       width: '80vw',
-      data: oStyle
+      data: {
+        styleInfo: oStyle,
+        styleXML: this.m_asStyleXml
+      }
     });
+    oDialog.afterClosed().subscribe(() => {
+      this.getStylesByUser();
+    })
   }
 
   openNewStyleDialog() {
     let oDialog = this.m_oDialog.open(NewStyleDialogComponent, {
       height: '80vh',
       width: '50vw'
+    })
+
+    oDialog.afterClosed().subscribe(() => {
+      this.getStylesByUser();
     })
   }
 
