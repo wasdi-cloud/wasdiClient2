@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { oConfirmation } from './workspace.service';
 import { ConstantsService } from '../constants.service';
@@ -12,12 +12,6 @@ export class StyleService {
 
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
 
-  //REFACTOR oOptions: 
-  m_oOptions = {
-    //transformRequest: angular.identity,
-    headers: { 'Content-Type': undefined }
-  };
-
   // Upload a style by file
   uploadFile(sName: string, sDescription: string, oBody: object, bIsPublic: boolean) {
     return this.oHttp.post<oConfirmation>(this.APIURL + '/styles/uploadfile?' + "name=" + sName +
@@ -26,13 +20,13 @@ export class StyleService {
 
   // Update style xml file
   updateStyleFile(sStyleId: string, oBody: object) {
-    // return this.oHttp.post(this.APIURL + '/styles/updatefile?styleId=' + sStyleId, oBody, this.m_oOptions);
+    return this.oHttp.post(this.APIURL + '/styles/updatefile?styleId=' + sStyleId, oBody);
   }
 
   // Update style parameters
   updateStyleParameters(sStyleId: string, sDescription: string, bIsPublic: boolean) {
-    // return this.oHttp.post(this.APIURL + '/styles/updateparams?styleId=' + sStyleId +
-    //   '&description=' + sDescription +'&public=' + bIsPublic);
+    return this.oHttp.post<any>(this.APIURL + '/styles/updateparams?styleId=' + sStyleId +
+      '&description=' + sDescription + '&public=' + bIsPublic, null);
   }
 
   // Delete style
@@ -88,7 +82,7 @@ export class StyleService {
   }
 
   // Update style xml
-  postStyleXml(sStyleId: string, sStyleXml: string) {
-    // return this.oHttp.post(this.APIURL + '/styles/updatexml?styleId=' + sStyleId, sStyleXml, this.m_oOptions);
+  postStyleXml(sStyleId: string, sStyleXml: any) {
+    return this.oHttp.post<any>(this.APIURL + '/styles/updatexml?styleId=' + sStyleId, sStyleXml, {});
   }
 }
