@@ -3,57 +3,66 @@
         <div class="col-1">
             <h5 class="hbody-text">{{"MARKET_FILTERS" | translate }}:</h5>
         </div>
-        <div class="col-lg-2 col-sm-2 ">
-            <select class="form-control" ng-model="publisherFilter" (change)="developerChanged($event)">
-                <option selected disabled hidden>{{"MARKET_DEVELOPER" | translate}}</option>
-                <option value="all">Show All</option>
-                <option *ngFor="let oPublisher of m_aoPublishers" [ngValue]="m_sPublisher">
-                    {{oPublisher.publisher}}
-                </option>
-            </select>
-        </div>
-        <div class="col-lg-2 col-sm-2 ">
-            <select name="" id="" class="form-control">
-                <option selected disabled hidden>{{"MARKET_SUCCESS" | translate}}</option>
-                <option value="20">{{"MARKET_ABOVE" | translate}} 20%</option>
-                <option value="40">{{"MARKET_ABOVE" | translate}} 40%</option>
-                <option value="60">{{"MARKET_ABOVE" | translate}} 60%</option>
-                <option value="80">{{"MARKET_ABOVE" | translate}} 80%</option>
-            </select>
-        </div>
-        <div class="col-lg-1 col-sm-1 ">
-            <select name="" id="" class="form-control">
-                <option value="mostUsed" selected>{{"MARKET_MOST_USED" | translate}}</option>
-                <option value="leastUsed">{{"MARKET_LEAST_USED" | translate}}</option>
-            </select>
+        <div class="d-flex flex-row flex-fill">
+            <div style="width: 15rem;">
+                <mat-select multiple class="form-control" [(ngModel)]="m_aoSelectedPublishers"
+                    placeholder='{{"MARKET_DEVELOPER" | translate}}' (selectionChange)="developerChanged($event)"
+                    style="width: 15rem;">
+                    <mat-option *ngFor="let oPublisher of m_aoPublishers" [value]="oPublisher.publisher">
+                        {{oPublisher.publisher}}
+                    </mat-option>
+                </mat-select>
+            </div>
 
-        </div>
-        <div class="col-lg-1 col-sm-2">
-            <select name="" id="" class="form-control" (change)="ratingChanged($event)">
-                <option selected disabled hidden>{{"MARKET_RATING" | translate}}</option>
-                <option value="0">Show All</option>
-                <option value="1">1 Star and Above</option>
-                <option value="2">2 Stars and Above</option>
-                <option value="3">3 Stars and Above</option>
-                <option value="4">4 Stars and Above</option>
-                <option value="5">5 Stars Only</option>
-            </select>
-        </div>
-        <div class="col-lg-1 col-sm-2  max-price">
-            <input type="text" name="" id="" class="form-control " placeholder="{{'MARKET_MAX_PRICE' | translate}}"
-                (change)="maxPriceChanged($event)">
+            <div style="width: 10rem">
+                <mat-select multiple placeholder="Categories" class="form-control" [(ngModel)]="m_aoSelectedCategories" (selectionChange)="categoriesChanged($event)" style="width: 10rem">
+                    <mat-option *ngFor="let oCategory of m_asCategoryOptions"
+                        [value]="oCategory.id">{{oCategory.category}}</mat-option>
+                </mat-select>
+            </div>
+
+            <div style="width: 12rem">
+                <mat-select name="" id="" class="form-control" (change)="ratingChanged($event)" [(ngModel)]="m_iSelectedStarRating"
+                    style="width: 12rem" placeholder='{{"MARKET_RATING" | translate}}'>
+                    <mat-option value="0">See All</mat-option>
+                    <mat-option value="1">1 Star and Above</mat-option>
+                    <mat-option value="2">2 Stars and Above</mat-option>
+                    <mat-option value="3">3 Stars and Above</mat-option>
+                    <mat-option value="4">4 Stars and Above</mat-option>
+                    <mat-option value="5">5 Stars Only</mat-option>
+                </mat-select>
+            </div>
+            <!-- Commented Unused/Inactive Filters -->
+            <!-- <div style="width: 10rem">
+                <mat-select name="" id="" class="form-control" placeholder='{{"MARKET_SUCCESS" | translate}}'
+                    style="width: 10rem">
+                    <mat-option value="">Show All</mat-option>
+                    <mat-option value="20">{{"MARKET_ABOVE" | translate}} 20%</mat-option>
+                    <mat-option value="40">{{"MARKET_ABOVE" | translate}} 40%</mat-option>
+                    <mat-option value="60">{{"MARKET_ABOVE" | translate}} 60%</mat-option>
+                    <mat-option value="80">{{"MARKET_ABOVE" | translate}} 80%</mat-option>
+                </mat-select>
+            </div> -->
+
+            <!-- <mat-select name="" id="" class="form-control">
+                <mat-option value="0">Show All</mat-option>
+                <mat-option value="mostUsed" selected>{{"MARKET_MOST_USED" | translate}}</mat-option>
+                <mat-option value="leastUsed">{{"MARKET_LEAST_USED" | translate}}</mat-option>
+            </mat-select> -->
+            <!-- <input type="text" name="" id="" class="form-control " placeholder="{{'MARKET_MAX_PRICE' | translate}}"
+                (change)="maxPriceChanged($event)"> -->
         </div>
 
-        <div class="col-3 search search-container justify-self-end d-flex flex-row gap-1 align-items-center">
+        <!-- Search Bar Container -->
+        <div class="col-3 search search-container justify-self-end d-flex flex-row align-items-center ps-3">
             <input type="text" name="" id="" class="form-control" placeholder="{{'MARKET_SEARCH_APP' | translate}}"
                 [(ngModel)]="m_sNameFilter" (keyup)="onSearchInput($event)">
-            <button class="btn  btn-primary" id="searchBtn" (click)="onSearchInput($event)">Search</button>
-            <button class="btn  btn-secondary" (click)="clearSearchInput($event)">Clear</button>
+            <button class="btn btn-primary" id="searchBtn" (click)="onSearchInput($event)">Search</button>
+            <button class="btn btn-secondary" (click)="clearSearchInput($event)">Clear</button>
         </div>
     </div>
 
-
-
+    <!-- Marketplace App Cards -->
     <div class="processor-cards-container d-flex flex-column pb-3">
         <div class="col-12 d-flex flex-row flex-wrap justify-content-start px-3">
             <app-marketplace-app-card class="col-xs-12 col-md-6 col-lg-3 px-1"

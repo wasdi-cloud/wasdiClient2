@@ -15,7 +15,7 @@ import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 interface AppFilter {
-  categories: [];
+  categories: any[];
   publishers: string[],
   name: string,
   score: number,
@@ -57,6 +57,10 @@ export class MarketplaceComponent implements OnInit {
 
   m_sNameFilter!: string;
 
+  m_aoSelectedPublishers: Array<any> = [];
+  m_aoSelectedCategories: Array<any> = [];
+  m_iSelectedStarRating: number = 0;
+
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oImageService: ImageService,
@@ -68,7 +72,7 @@ export class MarketplaceComponent implements OnInit {
   ngOnInit(): void {
     this.getApplications();
     //Remove categories retrieval for ESA demo
-    //this.getCategories();
+    this.getCategories();
     this.getPublishers();
   }
 
@@ -85,6 +89,7 @@ export class MarketplaceComponent implements OnInit {
     this.m_oProcessorMediaService.getCategories().subscribe(
       {
         next: oResponse => {
+          console.log(oResponse)
           if (oResponse.length === 0) {
             this.m_oAlertDialog.openDialog(4000, sCategoriesError);
           }
@@ -272,37 +277,42 @@ export class MarketplaceComponent implements OnInit {
    * @returns {void}
    */
   developerChanged(oEvent): void {
-    if (this.m_oAppFilter.publishers.length !== 0 || oEvent.target.value === 'all') {
-      this.m_oAppFilter.publishers.splice(0, this.m_oAppFilter.publishers.length)
-      console.log(this.m_oAppFilter)
-    }
-    if (oEvent.target.value === 'all') {
-      this.getApplications()
-    } else {
-      this.m_oAppFilter.publishers.push(oEvent.target.value);
-      this.getApplications()
-    }
+    //Add Selected Developers to the App Filter publishers and then get applicatinons
+    this.m_oAppFilter.publishers = this.m_aoSelectedPublishers;
+    this.m_oAppFilter.page = 0;
+    this.getApplications();
 
   }
 
-  //Success rate will need to be added
+  categoriesChanged(oEvent): void {
+    //Add Selected Categories to the App Filter Categories and then get applications
+    this.m_oAppFilter.categories = this.m_aoSelectedCategories;
+    this.m_oAppFilter.page = 0;
+    this.getApplications();
+
+  }
+
+  //TODO: Sort apps based on Success Rate
   successChanged() {
 
   }
 
-  //most used will need to be added
+  //TODO: Sort apps based on usage
   usedChanged() {
 
   }
 
   maxPriceChanged(oEvent) {
     this.m_oAppFilter.maxPrice = oEvent.target.value;
-
+    this.m_oAppFilter.page = 0;
     this.getApplications();
+
   }
 
   ratingChanged(oEvent) {
-    this.m_oAppFilter.score = oEvent.target.value;
+    this.m_oAppFilter.score = this.m_iSelectedStarRating;
+    this.m_oAppFilter.page = 0;
     this.getApplications();
+
   }
 }
