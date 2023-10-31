@@ -494,17 +494,26 @@ export class WorkspacesComponent implements OnInit {
       oSortingOption.direction === 'asc' ? bIsDescending = true : bIsDescending = false;
       oSortingOption.column === 'date' ? propertyName = 'creationDate' : oSortingOption.column === 'workspace' ? propertyName = 'workspaceName' : propertyName = 'ownerUserId';
     }
+    if (propertyName === 'ownerUserId' || propertyName === 'workspaceName') {
+      this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
+        if (oWorkspace1[propertyName].toLowerCase() < oWorkspace2[propertyName].toLowerCase()) {
+          return bIsDescending ? 1 : -1;
+        }
+        if (oWorkspace1[propertyName].toLowerCase() > oWorkspace2[propertyName].toLowerCase()) {
+          return bIsDescending ? -1 : 1;
+        }
+        return 0;
+      });
+    }
+    if (propertyName === 'creationDate') {
+      this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
+        if (bIsDescending === true) {
+          return <any>new Date(oWorkspace2[propertyName]) - <any>new Date(oWorkspace1[propertyName]);
+        } else {
+          return <any>new Date(oWorkspace1[propertyName]) - <any>new Date(oWorkspace2[propertyName]);
+        }
+      });
+    }
 
-    console.log(this.m_aoWorkspacesList)
-
-    this.m_aoWorkspacesList.sort((a: any, b: any) => {
-      if (a[propertyName].toLowerCase() < b[propertyName].toLowerCase()) {
-        return bIsDescending ? 1 : -1;
-      }
-      if (a[propertyName].toLowerCase() > b[propertyName].toLowerCase()) {
-        return bIsDescending ? -1 : 1;
-      }
-      return 0;
-    });
   }
 }
