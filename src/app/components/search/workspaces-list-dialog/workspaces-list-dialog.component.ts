@@ -46,15 +46,14 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+
     this.getWorkspaces();
     this.getWorkflowsByUser();
     if (this.m_oData.product) {
       this.m_oSelectedProduct = this.m_oData.product;
-      console.log(this.m_oSelectedProduct);
     }
     if (this.m_oData.products) {
       this.m_aoSelectedProducts = this.m_oData.products;
-      console.log(this.m_aoSelectedProducts)
     }
   }
 
@@ -72,6 +71,18 @@ export class WorkspacesListDialogComponent implements OnInit {
           console.log(oResponse);
           this.m_aoWorkspaceList = oResponse;
           this.m_bIsLoadingWorkspaceList = false;
+
+          // If there is an Active Workspace, move it to the first position to display first:
+          if (this.m_oActiveWorkspace.workspaceId) {
+            this.m_aoWorkspaceList.forEach((oWorkspace, iIndex) => {
+              if (oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
+                this.m_aoWorkspaceList.splice(iIndex, 1);
+                this.m_aoWorkspaceList.unshift(oWorkspace);
+                // Add the workspace to the selected workspaces array:
+                this.m_aoSelectedWorkspaces.push(oWorkspace);
+              }
+            })
+          }
         }
       },
       error: oError => { }
