@@ -1,14 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
+
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { ConstantsService } from 'src/app/services/constants.service';
 import { FileBufferService } from 'src/app/services/api/file-buffer.service';
+import { TranslateService } from '@ngx-translate/core';
 import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
-import { ConstantsService } from 'src/app/services/constants.service';
+
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
   selector: 'app-workspaces-list-dialog',
   templateUrl: './workspaces-list-dialog.component.html',
@@ -27,12 +32,13 @@ export class WorkspacesListDialogComponent implements OnInit {
   m_sExcludedWorkspaceId: string = '';
 
   m_oSelectedProduct: any = null;
-  m_aoSelectedProducts: any = [];
+  m_aoSelectedProducts: Array<any> = [];
 
   m_bIsLoadingWorkspaceList: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<WorkspacesListDialogComponent>,
@@ -80,6 +86,7 @@ export class WorkspacesListDialogComponent implements OnInit {
                 this.m_aoWorkspaceList.unshift(oWorkspace);
                 // Add the workspace to the selected workspaces array:
                 this.m_aoSelectedWorkspaces.push(oWorkspace);
+                oWorkspace.checked = true;
               }
             })
           }
@@ -98,35 +105,42 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   /**
   * Select all Workspaces
+  * @param oEvent
   */
-  selectAllWorkspaces() {
-
+  selectAllWorkspaces(oEvent: any): void {
+    console.log(oEvent)
+    if (oEvent.checked === true) {
+      this.m_aoSelectedWorkspaces = this.m_aoWorkspaceList;
+      this.m_aoWorkspaceList.forEach(oWorkspace => {
+        oWorkspace.checked = true;
+      })
+    } else {
+      this.m_aoSelectedWorkspaces = [];
+      this.m_aoWorkspaceList.forEach(oWorkspace => {
+        oWorkspace.checked = false;
+      })
+    }
   }
 
   /**
    * Select one Workspace
    * @param oWorkspace 
    */
-  selectWorkspace(event: any, oWorkspace: any) {
+  selectWorkspace(event: any, oWorkspace: any): void {
     //If workspace is checked, add it to the Selected Workspaces Array
     if (event.checked === true) {
       this.m_aoSelectedWorkspaces.push(oWorkspace);
-      console.log(this.m_aoSelectedWorkspaces);
     } else {
       //If Workspace is not checked, remove it from the Selected Workspaces Array
       this.deselectWorkspace(oWorkspace);
     }
   }
-  /**
-   * Deselect All Workspaces
-   */
-  deselectAllWorkspaces() { }
 
   /**
    * Deselect one Workspace
    * @param oWorkspace
    */
-  deselectWorkspace(oWorkspace) {
+  deselectWorkspace(oWorkspace): boolean {
     //Search for Workspace in Selected Workspaces Array
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) === true) {
       return false;
@@ -140,15 +154,25 @@ export class WorkspacesListDialogComponent implements OnInit {
     return true;
   }
 
-  addProductToWorkspace() {
+  /**'
+   * Add a single product to a workspace
+   */
+  addProductToWorkspace(): void {
     let iNumberOfWorkspaces: number = this.m_aoSelectedWorkspaces.length;
+    let sErrorMessage = this.m_oTranslate.instant("MSG_ERROR_IMPORTING");
+    let oController = this;
+
+    // If the single selected product is null, the user has only selected 1 product from products list - transfer it to the Selected Proudct Object
+    if (this.m_aoSelectedProducts.length === 1 && this.m_oSelectedProduct === null) {
+      this.m_oSelectedProduct = this.m_aoSelectedProducts[0];
+    }
 
     for (let iWorkspaceIndex = 0; iWorkspaceIndex < iNumberOfWorkspaces; iWorkspaceIndex++) {
-      this.m_oSelectedProduct.isDisabledToDoDownload = true;
+      oController.m_oSelectedProduct.isDisabledToDoDownload = true;
       let sUrl: string = this.m_oSelectedProduct.link;
       let oError = function (data, status) {
-        //utilsVexDialogAlertTop(sErrorMessage);
-        this.m_oSelectedProduct.isDisabledToDoDownload = false;
+        oController.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        oController.m_oSelectedProduct.isDisabledToDoDownload = false;
       };
 
       let sBound = "";
@@ -186,6 +210,7 @@ export class WorkspacesListDialogComponent implements OnInit {
     }
     return true;
   }
+
   downloadProduct(sUrl: string, sFileName: string, sWorkspaceId: string, sBounds: string, oProvider: any, oCallback: any, oError: any) {
     let sMessage: string;
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oCallback) === true) {

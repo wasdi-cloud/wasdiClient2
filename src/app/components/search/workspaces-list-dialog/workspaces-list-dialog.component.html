@@ -19,7 +19,7 @@
                         <th scope="col">Workspace Name</th>
                         <th scope="col">Owner</th>
                         <th>
-                            <mat-checkbox></mat-checkbox>
+                            <mat-checkbox (change)="selectAllWorkspaces($event)"></mat-checkbox>
                         </th>
                     </tr>
                 </thead>
@@ -29,7 +29,7 @@
                         <td>{{oWorkspace.ownerUserId}}</td>
                         <td>
                             <mat-checkbox (change)="selectWorkspace($event, oWorkspace)"
-                                [checked]="m_oActiveWorkspace.workspaceId === oWorkspace.workspaceId"></mat-checkbox>
+                                [checked]="oWorkspace.checked === true"></mat-checkbox>
                         </td>
                     </tr>
                 </tbody>
@@ -41,7 +41,7 @@
             class="btn btn-sm btn-success" [disabled]="m_aoSelectedWorkspaces.length === 0"
             (click)="addProductToWorkspace()">Add to Workspace</button>
         <button *ngIf="m_aoSelectedWorkspaces.length > 1" class="btn btn-sm btn-success"
-            (click)=" addMultipleProductsToWorkspace()">Add to Workspaces</button>
+            (click)="addMultipleProductsToWorkspace()">Add to Workspaces</button>
 
         <button class="btn btn-sm btn-secondary" (click)="onDismiss()">Close</button>
     </div>
