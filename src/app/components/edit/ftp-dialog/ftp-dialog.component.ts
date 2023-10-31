@@ -20,6 +20,8 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 export class FTPDialogComponent implements OnInit {
   faX = faX;
 
+  m_sActiveTab: string = "sendToWorkspace";
+
   m_oActiveWorkspace: Workspace;
   m_oProduct: Product;
 
@@ -45,7 +47,6 @@ export class FTPDialogComponent implements OnInit {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oData) === false) {
       this.m_oProduct = this.m_oData.product;
     }
-
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
@@ -85,6 +86,12 @@ export class FTPDialogComponent implements OnInit {
     })
   }
 
+
+  setActiveTab(sActiveTab: string): void {
+    if (sActiveTab) {
+      this.m_sActiveTab = sActiveTab;
+    }
+  }
   /**
    * Returns the File Name of the Inputted Product
    * @returns {string}

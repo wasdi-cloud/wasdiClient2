@@ -40,14 +40,15 @@
                         <button class="tree-btn btn" matTooltip="{{'MENU_DOWNLOAD' | translate}}">
                             <fa-icon [icon]="faDownload" (click)="downloadProduct(oProduct)"></fa-icon>
                         </button>
-                        <button class="tree-btn btn" matTooltip="{{'MENU_SEND_FTP' | translate}}" (click)="openSendToFTP(oProduct)">
+                        <button class="tree-btn btn" matTooltip="{{'MENU_SHARE_PRODUCT' | translate}}"
+                            (click)="openSendToFTP(oProduct)">
                             <fa-icon [icon]="faShare" title="Share Product"></fa-icon>
                         </button>
-                        <button class="tree-btn btn" matTooltip="{{'EDIT.PRODUCTS_TREE_INFO' | translate}}">
+                        <button class="tree-btn btn" matTooltip="{{'MENU_PROPERTIES' | translate}}">
                             <fa-icon [icon]="faInfoCircle" title="Properties"
                                 (click)="openProductProperties($event, oProduct)"></fa-icon>
                         </button>
-                        <button class="tree-btn btn" matTooltip="{{'EDIT.PRODUCTS_TREE_DELETE' | translate}}">
+                        <button class="tree-btn btn" matTooltip="{{'MENU_DELETE' | translate}}">
                             <fa-icon [icon]="faTrash" title="Delete Product"
                                 (click)="deleteProduct(oProduct)"></fa-icon>
                         </button>

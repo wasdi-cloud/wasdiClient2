@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -14,6 +14,7 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 @Component({
   selector: 'app-workspaces-list-dialog',
   templateUrl: './workspaces-list-dialog.component.html',
@@ -22,6 +23,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 export class WorkspacesListDialogComponent implements OnInit {
   //Font Awesome Icons: 
   faX = faX;
+
+  @Input() m_bIsDialog: boolean = true;
 
   m_aoWorkspaceList: Array<any> = [];
   m_aoSelectedWorkspaces: Array<any> = [];
@@ -43,6 +46,7 @@ export class WorkspacesListDialogComponent implements OnInit {
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<WorkspacesListDialogComponent>,
     private m_oFileBufferService: FileBufferService,
+    private m_oNotificationService: NotificationDisplayService,
     private m_oTranslate: TranslateService,
     private m_oWorkflowsService: WorkflowService,
     private m_oWorkspaceService: WorkspaceService
@@ -74,12 +78,11 @@ export class WorkspacesListDialogComponent implements OnInit {
     this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          console.log(oResponse);
           this.m_aoWorkspaceList = oResponse;
           this.m_bIsLoadingWorkspaceList = false;
 
           // If there is an Active Workspace, move it to the first position to display first:
-          if (this.m_oActiveWorkspace.workspaceId) {
+          if (this.m_oActiveWorkspace.workspaceId && this.m_bIsDialog === true) {
             this.m_aoWorkspaceList.forEach((oWorkspace, iIndex) => {
               if (oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
                 this.m_aoWorkspaceList.splice(iIndex, 1);
@@ -108,7 +111,6 @@ export class WorkspacesListDialogComponent implements OnInit {
   * @param oEvent
   */
   selectAllWorkspaces(oEvent: any): void {
-    console.log(oEvent)
     if (oEvent.checked === true) {
       this.m_aoSelectedWorkspaces = this.m_aoWorkspaceList;
       this.m_aoWorkspaceList.forEach(oWorkspace => {
@@ -194,10 +196,8 @@ export class WorkspacesListDialogComponent implements OnInit {
     let iNumberOfProducts = this.m_aoSelectedProducts.length;
 
     for (let iWorkspaceIndex = 0; iWorkspaceIndex < iNumberOfWorkspaces; iWorkspaceIndex++) {
-      console.log(this.m_aoSelectedWorkspaces)
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoSelectedWorkspaces[iWorkspaceIndex])) {
         for (let iIndexProduct = 0; iIndexProduct < iNumberOfProducts; iIndexProduct++) {
-          console.log("in")
           this.m_aoSelectedProducts[iIndexProduct].isDisabledToDoDownload = true;
           let url = this.m_aoSelectedProducts[iIndexProduct].link;
           let oError = function (data, status) {
@@ -238,6 +238,45 @@ export class WorkspacesListDialogComponent implements OnInit {
       error: oError
     });
 
+  }
+
+  shareProductToWorkspace() {
+    let oController = this;
+    let aoWorkspaces = this.m_aoSelectedWorkspaces;
+    let oProduct = this.m_oSelectedProduct;
+    let iNumberOfWorkspaces = aoWorkspaces.length;
+
+    let sMessage = this.m_oTranslate.instant("MSG_SHARE_WITH_WS");
+    let sErrorMessage = this.m_oTranslate.instant("MSG_ERROR_SHARING");
+
+    for (var iIndexWorkspace = 0; iIndexWorkspace < iNumberOfWorkspaces; iIndexWorkspace++) {
+
+      oProduct.isDisabledToDoDownload = true;
+      var sUrl = oProduct.link;
+      var oError = function (data, status) {
+        oController.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        oProduct.isDisabledToDoDownload = false;
+      };
+
+      var sBound = "";
+
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds) == false) {
+        sBound = oProduct.bounds.toString();
+      }
+      //                oThat.shareProduct(sUrl,oProduct.title, aoWorkspaces[iIndexWorkspace].workspaceId,sBound,oProduct.provider,null,oError);
+      let sOriginWorkspaceId = oController.m_oActiveWorkspace.workspaceId;
+      let sDestinationWorkspaceId = aoWorkspaces[iIndexWorkspace].workspaceId;
+      let sProductName = oProduct.fileName;
+
+      oController.m_oFileBufferService.share(sOriginWorkspaceId, sDestinationWorkspaceId, sProductName).subscribe({
+        next: oResponse => {
+          oController.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom")
+        },
+        error: oError => {
+          oController.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        }
+      });
+    }
   }
 
   /**
