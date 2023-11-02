@@ -18,6 +18,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ImageService } from 'src/app/services/api/image.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-new-app-dialog',
@@ -182,6 +183,7 @@ export class NewAppDialogComponent implements OnInit {
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oFormBuilder: FormBuilder,
     private m_oImageService: ImageService,
+    private m_oNotificationService:NotificationDisplayService,
     private m_oProcessorService: ProcessorService) { }
 
   ngOnInit(): void {
@@ -198,6 +200,7 @@ export class NewAppDialogComponent implements OnInit {
       this.m_sJSONSample = decodeURIComponent(this.m_oInputProcessor.paramsSample);
       this.m_sProcessorId = this.m_oInputProcessor.processorId;
       this.m_iMinuteTimeout = this.m_oInputProcessor.minuteTimeout;
+      this.m_sTypeIdOnly = this.m_oInputProcessor.type;
 
       try {
         let oParsed = JSON.parse(this.m_sJSONSample);
@@ -230,8 +233,11 @@ export class NewAppDialogComponent implements OnInit {
           value: this.m_sName,
           disabled: this.m_bEditMode
         }),
-        oType: '',
-        sShortDescription: this.m_sDescription,
+        oType: {
+          value: this.m_oInputProcessor.type,
+          disabled: this.m_bEditMode
+        },
+        sShortDescription: this.m_oInputProcessor.processorDescription,
         sJSONSample: this.m_sJSONSample,
         iMinuteTimeout: this.m_iMinuteTimeout,
         bIsPublic: this.m_bPublic,
@@ -241,14 +247,14 @@ export class NewAppDialogComponent implements OnInit {
 
       //Nested Form Builder for STORE tab: 
       processorStoreInfo: this.m_oFormBuilder.group({
-        sFriendlyName: "",
-        sLink: "",
-        sEmail: "",
-        iOnDemandPrice: 0,
-        iSubscriptionPrice: 0,
-        bShowInStore: false,
-        sLongDescription: "",
-        aoCategories: []
+        sFriendlyName: this.m_oProcessorDetails.friendlyName,
+        sLink: this.m_oProcessorDetails.link,
+        sEmail: this.m_oProcessorDetails.email,
+        iOnDemandPrice: this.m_oProcessorDetails.ondemandPrice,
+        iSubscriptionPrice: this.m_oProcessorDetails.subscriptionPrice,
+        bShowInStore: this.m_oProcessorDetails.showInStore,
+        sLongDescription: this.m_oProcessorDetails.longDescription,
+        aoCategories: [this.m_oProcessorDetails.categories]
       }),
 
       //Nested Form Builder for UI tab: 
@@ -261,7 +267,7 @@ export class NewAppDialogComponent implements OnInit {
   }
 
   /**
-   * Get Marketplace details - set m_oProcessorDetails view model
+   * Get Marketplace details - set m_oProcessorDetails view model and execute form builder initalization
    * @param sProcessorName 
    */
   getMarketplaceDetails(sProcessorName: string) {
@@ -273,6 +279,8 @@ export class NewAppDialogComponent implements OnInit {
         } else {
           //if oResponse vaild, assign response to m_oProcessorDetails
           this.m_oProcessorDetails = oResponse;
+          this.initializeFormBuilder();
+          console.log(this.m_oProcessorDetails);
           this.m_oImageService.updateProcessorLogoImageUrl(this.m_oProcessorDetails);
         }
       },
@@ -331,7 +339,6 @@ export class NewAppDialogComponent implements OnInit {
       this.m_oInputProcessor.paramsSample = encodeURI(this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value);
     }
 
-
     //Set time out (in minutes): 
     this.m_oInputProcessor.minuteTimeout = this.m_oProcessorForm.get('processorBasicInfo.iMinuteTimeout').value;
 
@@ -371,15 +378,13 @@ export class NewAppDialogComponent implements OnInit {
    */
   updateProcessor() {
     this.setInputProcessorValues();
-
-    console.log(this.m_oProcessorDetails);
-    //Update the processor and the processor details
+    // Update the processor and the processor details
     this.m_oProcessorService.updateProcessor(this.m_oInputProcessor.processorId, this.m_oInputProcessor).subscribe({
       next: oResponse => {
         this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oProcessorDetails).subscribe({
           next: oResponse => {
             console.log(oResponse);
-            console.log("processor data updated");
+            this.m_oNotificationService.openSnackBar("Processor Data Updated", "Close", "right", "bottom");
           },
           error: oError => {
             console.log(oError);
@@ -391,7 +396,7 @@ export class NewAppDialogComponent implements OnInit {
       }
     });
 
-    // //Check if there was also a file uploaded:
+    //Check if there was also a file uploaded:
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === false) {
       let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value
       let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value
@@ -406,10 +411,9 @@ export class NewAppDialogComponent implements OnInit {
       })
     }
 
-    //Check if the UI JSON Param was changed: 
-    // if (this.m_oProcessorForm.get('processorUIInfo.bUIChanged').value === true) {
+    // Check if the UI JSON Param was changed: 
 
-    //If user has interacted with the Processor UI Textarea:
+    // If user has interacted with the Processor UI Textarea:
     if (this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').touched === true) {
       //Try parse JSON on UI Input
       if (this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value)) {

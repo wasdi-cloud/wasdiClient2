@@ -7,9 +7,10 @@
             </div>
             <div>
                 <label for="type">Type:</label>
-                <input class="form-control" type="text" name="type" [matAutocomplete]="auto"
-                    placeholder="{{m_bEditMode?  m_sTypeNameOnly : 'Select Programming Language'}}"
-                    [readOnly]="m_bEditMode===true" [disabled]="m_bEditMode === true">
+                <input *ngIf="m_bEditMode === true" class="form-control" type="text" formControlName="oType" placeholder="meow">
+                <input *ngIf="m_bEditMode === false" class="form-control" type="text" name="type"
+                    [matAutocomplete]="auto" placeholder="Select Programming Language">
+
                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="setSelectedType($event)">
                     <mat-option *ngFor="let oProcessorType of m_aoProcessorTypes" [value]="oProcessorType.name">
                         {{oProcessorType.name}}

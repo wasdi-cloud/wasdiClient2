@@ -1,4 +1,4 @@
-<div class="" style="width: 100%;" [formGroup]="m_oProecessorStoreInfo">
+<div class="" style="width: 100%;" [formGroup]="m_oProcessorStoreInfo">
     <div class="d-flex flex-row gap-2 pb-1">
         <div class="flex-fill">
             <label for="friendlyName">Friendly Name:</label>
@@ -24,22 +24,18 @@
         </div>
         <mat-checkbox [color]="'success'" formControlName="bShowInStore">Show Application App Store</mat-checkbox>
     </div>
-    <div class="d-flex flex-row gap-2 align-items-center py-1">
+    <div class="d-flex flex-row gap-2 py-1">
         <div>
             <label for="longDescription">Long Description</label>
             <textarea class="form-control" name="" id="" cols="30" rows="10"
                 formControlName="sLongDescription"></textarea>
         </div>
         <div>
-            <mat-form-field>
-                <mat-label for="categories">Cateogries</mat-label>
-                <mat-select multiple>
-                    <mat-option *ngFor="let sCategory of m_aoCategories">
-                        {{sCategory}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-
+            <span>Categories</span>
+            <div class="d-flex flex-row" *ngFor="let oCategory of m_aoCategories">
+                <mat-checkbox [value]="oCategory.id" id="" (change)="categoryChanged($event, oCategory)"
+                    [checked]="oCategory.checked">{{oCategory.category}}</mat-checkbox>
+            </div>
         </div>
     </div>
 </div>

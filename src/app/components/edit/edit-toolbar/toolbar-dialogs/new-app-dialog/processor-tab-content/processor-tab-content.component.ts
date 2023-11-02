@@ -131,7 +131,16 @@ export class ProcessorTabContentComponent implements OnInit {
   ngOnInit(): void {
     //Set the active workspace from the constants service
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    
     this.displayProcessorType();
+
+    let sType = this.m_oProcessorBasicInfo.get('oType').value;
+    this.m_aoProcessorTypes.forEach(type => {
+      if(type.id === sType) {
+        sType = type.name
+        this.m_oProcessorBasicInfo.controls['oType'].setValue(sType)
+      }
+    })
   }
 
   /**
@@ -171,7 +180,6 @@ export class ProcessorTabContentComponent implements OnInit {
         })
       }
     });
-    console.log(this.m_oProcessorBasicInfo.get('oType').value);
   }
 
   onFileSelect(input: any) {

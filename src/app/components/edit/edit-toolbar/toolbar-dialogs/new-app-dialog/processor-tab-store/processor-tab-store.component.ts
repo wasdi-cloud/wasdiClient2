@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 @Component({
@@ -9,35 +11,72 @@ import { ProcessorService } from 'src/app/services/api/processor.service';
 })
 export class ProcessorTabStoreComponent implements OnInit {
   //Manually inserted categories
-  m_aoCategories: String[] = [
-    "Water", "Fire", "Population", "Buildings", "Optical", "SAR", "GIS", "Vegetation", "LU/LC", "Air Quality", "Ground Motion", "Impacts"
-  ]; 
+  m_aoCategories: Array<any> = [];
 
+  m_aoSelectedCategories: Array<any> = [];
   /**
    * Input Form Group from Store Info - passed from New App Dialog Component
    */
 
-  @Input() m_oProecessorStoreInfo: FormGroup; 
+  @Input() m_oProcessorStoreInfo: FormGroup;
 
   constructor(
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService) { }
 
   ngOnInit(): void {
     //Uncomment when committing
-    //this.getCategories();
+    this.getCategories();
+    this.m_aoSelectedCategories = this.m_oProcessorStoreInfo.get('aoCategories').value;
 
-    console.log(this.m_oProecessorStoreInfo)
+    console.log(this.m_oProcessorStoreInfo)
   }
 
   getCategories() {
     this.m_oProcessorMediaService.getCategories().subscribe({
       next: oResponse => {
-        console.log(oResponse);
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          this.m_aoCategories = oResponse;
+
+          this.m_aoCategories.forEach(oCategory => {
+            this.isChecked(oCategory);
+          })
+        }
       },
       error: oError => {
-        console.log("Error in retreiving categories");
+        this.m_oAlertDialog.openDialog(4000, "Error in getting categories");
       }
+    })
+  }
+
+  isChecked(oCategory): boolean {
+    let oInputCategories = this.m_oProcessorStoreInfo.get("aoCategories").value;
+    let isChecked: boolean = false
+    oInputCategories.forEach(oInput => {
+      if (oCategory.id == oInput) {
+        oCategory.checked = true;
+      }
+    })
+    return isChecked;
+  }
+
+  categoryChanged(oEvent, oCategory) {
+    if (oEvent.checked) {
+      if (this.m_aoSelectedCategories.indexOf(oCategory.id) === -1) {
+        this.m_aoSelectedCategories.push(oCategory.id)
+      }
+    }
+
+    if (!oEvent.checked) {
+      if (this.m_aoSelectedCategories.indexOf(oCategory.id) !== -1) {
+        let iCategoryIndex = this.m_aoSelectedCategories.indexOf(oCategory.id);
+        this.m_aoSelectedCategories.splice(iCategoryIndex, 1);
+      }
+    }
+
+    this.m_oProcessorStoreInfo.patchValue({
+      aoCategories: this.m_aoSelectedCategories
     })
   }
 }
