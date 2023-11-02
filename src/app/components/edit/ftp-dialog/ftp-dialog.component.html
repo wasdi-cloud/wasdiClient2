@@ -14,10 +14,10 @@
             <a class="nav-link" aria-current="page" [ngClass]="m_sActiveTab === 'sendToFPT' ? 'active' : ''">Send to
                 FTP</a>
         </li>
-        <li class="nav-item" (click)="setActiveTab('sendToUsers')">
+        <!-- <li class="nav-item" (click)="setActiveTab('sendToUsers')">
             <a class="nav-link" aria-current="page" [ngClass]="m_sActiveTab === 'sendToUsers' ? 'active' : ''">Share
                 with Users</a>
-        </li>
+        </li> -->
     </ul>
     <!-- Send to Workspace Content -->
     <div *ngIf="m_sActiveTab === 'sendToWorkspace'" class="dialog-content flex-fill px-4 mt-3"
