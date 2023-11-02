@@ -90,7 +90,7 @@ export class ProcessorTabContentComponent implements OnInit {
   /**
    * Processor Name
    */
-  @Input() m_sProcessorName?: string = ""; 
+  @Input() m_sProcessorName?: string = "";
 
   /**
    * Selected File
@@ -105,14 +105,14 @@ export class ProcessorTabContentComponent implements OnInit {
   @Input() m_oProcessorBasicInfo: FormGroup;
 
   m_aoProcessorTypes = [
-    { name: "Python 3.7 Pip", id: "ubuntu_python37_snap" },
-    // { name: "Python 3.x Pip 2", id: "python_pip_2" },
-    // { name: "Python 3.x Pip One Shot", id: "pip_oneshot" },
+    { name: "Ubuntu 22.04 + Python 3.10", id: "python_pip_2" },
+    { name: "OGC Application Package", id: "eoepca" },
+    //{ name: "Python 3.x Pip One Shot", id:"pip_oneshot"},
     { name: "IDL 3.7.2", id: "ubuntu_idl372" },
     { name: "OCTAVE 6.x", id: "octave" },
     { name: "Python 3.x Conda", id: "conda" },
     { name: "C# .NET Core", id: "csharp" },
-    { name: "OGC Application Package", id: "eoepca" }
+    { name: "Ubuntu 20.04 + Python 3.8", id: "ubuntu_python37_snap" }
   ];
 
   m_aoProcessorTypesMap = this.m_aoProcessorTypes.map(oProcessorType => {
@@ -123,7 +123,7 @@ export class ProcessorTabContentComponent implements OnInit {
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog, 
+    private m_oDialog: MatDialog,
     private m_oNotificationService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService) {
   }
@@ -215,18 +215,18 @@ export class ProcessorTabContentComponent implements OnInit {
     })
     return true;
   }
-  
+
   /**
    * Open Package Manager Dialog
    */
   openPackageManager() {
     let oDialog = this.m_oDialog.open(PackageManagerComponent, {
-      height: '90vh', 
-      width: '90vw', 
+      height: '90vh',
+      width: '90vw',
       data: {
         sProcessorId: this.m_sProcessorId,
         sProcessorName: this.m_sProcessorName
       }
-    }); 
+    });
   }
 }
