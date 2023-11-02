@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { faBook, faPlus, faShareNodes, faUpload, faX } from '@fortawesome/free-solid-svg-icons';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -65,7 +66,11 @@ export class ParamsLibraryDialogComponent {
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.getProcessorParametersTemplateList(this.m_sProcessorId);
     if (this.m_oProcessorParametersTemplate.description === undefined) {
-      this.m_oProcessorParametersTemplate.description = "{}";
+      this.m_oProcessorParametersTemplate.description = "";
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorParametersTemplate.jsonParameters)) {
+      this.m_oProcessorParametersTemplate.jsonParameters = "{}";
     }
   }
 
