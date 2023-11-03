@@ -19,6 +19,7 @@ export class ProcessorParamsTemplateService {
     return this.oHttp.get(this.APIURL + this.m_sResource + '/getlist?processorId=' + sProcessorId);
   };
 
+
   /**
    * Get the processor parameter template by template Id.
    * @param sTemplateId
@@ -55,4 +56,18 @@ export class ProcessorParamsTemplateService {
     return this.oHttp.delete(this.APIURL + this.m_sResource + '/delete?templateId=' + sTemplateId);
   };
 
+  /**
+  * Get list of enabled users for a template
+  * @param sProcessorTemplateId 
+  * @returns {*}
+  */
+  getEnabledUsers(sProcessorTemplateId: string) {
+    return this.oHttp.get(this.APIURL + this.m_sResource + "/share/byprocessorParametersTemplate?processorParametersTemplate=" + sProcessorTemplateId)
+  }
+
+  shareProcessorParameterTemplate(sTemplateId: string, sUserId: string, sRights: string) {
+    return this.oHttp.put<any>(this.APIURL + this.m_sResource + "/share/add?processorParametersTemplate=" + sTemplateId + "&userId=" + sUserId + "&rights=" + sRights, {})
+  }
+
+  removeEnabledUser() { }
 }
