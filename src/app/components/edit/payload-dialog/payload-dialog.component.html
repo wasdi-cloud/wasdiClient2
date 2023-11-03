@@ -13,7 +13,15 @@
 </div>
 <div class="process-payload d-flex flex-column align-items-center gap-3 mx-5 my-4">
 
-    <ngx-charts-line-chart 
+    <div *ngFor="let oChart of m_aoChartsInformation">
+        <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" [view]="view" [legend]="m_bLegend"
+            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="oChart['x-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
+            [results]="oChart['chart-data']"></ngx-charts-line-chart>
+        <ngx-charts-area-chart *ngIf="oChart['chart-type'] === 'line-area'" [view]="view" [legend]="m_bLegend"
+            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="oChart['x-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
+            [results]="oChart['chart-data']"></ngx-charts-area-chart>
+    </div>
+    <!-- <ngx-charts-line-chart 
    
     [view]="view" [legend]="m_bLegend"
         [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis"
@@ -24,5 +32,5 @@
         [xAxis]="xAxis" [yAxis]="yAxis" [legend]="m_bLegend" [legendPosition]="legendPosition"
         [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
         [yAxisLabel]="yAxisLabel">
-    </ngx-charts-bar-horizontal-2d>
+    </ngx-charts-bar-horizontal-2d> -->
 </div>
