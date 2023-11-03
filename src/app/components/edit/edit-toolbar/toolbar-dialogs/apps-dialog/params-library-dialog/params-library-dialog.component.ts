@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { faBook, faPlus, faShareNodes, faUpload, faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -56,6 +57,7 @@ export class ParamsLibraryDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<ParamsLibraryDialogComponent>,
@@ -72,6 +74,8 @@ export class ParamsLibraryDialogComponent {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorParametersTemplate.jsonParameters)) {
       this.m_oProcessorParametersTemplate.jsonParameters = "{}";
     }
+
+    this.m_oProcessorParametersTemplate.processorId = this.m_sProcessorId;
   }
 
   /**
@@ -110,9 +114,11 @@ export class ParamsLibraryDialogComponent {
     if (oTemplate) {
       this.m_oProcessorParametersTemplateService.getProcessorParametersTemplate(oTemplate.templateId).subscribe(oResponse => {
         if (oResponse) {
+          console.log(oResponse);
           this.m_oSelectedTemplate = oResponse;
           this.m_oProcessorParametersTemplate = oResponse;
-          this.m_oProcessorParametersTemplate.jsonParameters = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters);
+          this.m_oProcessorParametersTemplate.jsonParameters = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters)
+          this.m_sParametersString = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters);
           this.m_bEditMode = false;
         }
       })
@@ -194,15 +200,13 @@ export class ParamsLibraryDialogComponent {
       console.log(this.m_oProcessorParametersTemplate.jsonParameters);
       let sJSONPayload = this.m_oProcessorParametersTemplate.jsonParameters
       JSON.parse(sJSONPayload);
-
-
     } catch (error) {
       //ADD ERROR DIALOG
       console.log("error in parsing the JSON payload");
       return false;
     }
 
-    this.m_oProcessorParametersTemplate.jsonParameters = encodeURI(this.m_oProcessorParametersTemplate.jsonParameters);
+    this.m_oProcessorParametersTemplate.jsonParameters = encodeURI(this.m_sParametersString);
 
     this.m_bIsLoading = true;
     if (this.m_oProcessorParametersTemplate.templateId) {
@@ -211,13 +215,17 @@ export class ParamsLibraryDialogComponent {
         this.getProcessorParametersTemplateList(this.m_oProcessorParametersTemplate.processorId);
       })
     } else {
-      console.log(this.m_oProcessorParametersTemplate);
-      this.m_oProcessorParametersTemplateService.addProcessorParameterTemplate(this.m_oProcessorParametersTemplate).subscribe(oResponse => {
-        this.getProcessorParametersTemplateList(this.m_sProcessorId);
-        this.m_bEditMode = false;
-        this.m_oProcessorParametersTemplate = null;
+      this.m_oProcessorParametersTemplateService.addProcessorParameterTemplate(this.m_oProcessorParametersTemplate).subscribe({
+        next: oResponse => {
+          this.m_bEditMode = false;
+          this.m_oProcessorParametersTemplate = null;
+          this.m_bIsLoading = false;
+          this.getProcessorParametersTemplateList(this.m_sProcessorId);
 
-        this.m_bIsLoading = false;
+        },
+        error: oError => {
+          this.m_oAlertDialog.openDialog(4000, "ERROR IN SAVING YOUR PARAMETERS TEMPLATE");
+        }
       })
     }
 
