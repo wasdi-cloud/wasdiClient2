@@ -151,12 +151,9 @@ export class ShareUiComponent implements OnInit {
       }
 
       if (this.resourceType === 'PROCESSORPARAMETERSTEMPLATE') {
-        // this.m_oAdminDashboardService.addResourcePermission(this.resourceType, this.resource.templateId, this.m_sUserIdSearch, this.m_sPermission).subscribe(oResponse => {
-        //   this.getEnabledUsers();
-        // })
         this.m_oProcessorParametersTemplateService.shareProcessorParameterTemplate(this.resource.templateId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
           next: oResponse => {
-            console.log(oResponse)
+            this.getEnabledUsers();
           },
           error: oError => {
             console.log(oError);
