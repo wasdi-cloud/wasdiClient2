@@ -18,18 +18,17 @@
                     class="card d-flex flex-column gap-3 p-2 " style="cursor: pointer; height: 15rem;  width: 32%"
                     (click)="selectProcessor(oProcessor)">
                     <div style="height: 30px">
-                        <div *ngIf="oProcessor.sharedWithMe || oProcessor.publisher === m_sActiveUserId"
-                            class="card-toolbar d-flex flex-row justify-content-end">
+                        <div class="card-toolbar d-flex flex-row justify-content-end">
                             <button class="btn btn-sm" (click)="openParametersDialog($event, oProcessor)">
                                 <fa-icon [icon]="faBook"></fa-icon>
                             </button>
-                            <button class="btn btn-sm" (click)="downloadProcessor($event, oProcessor)">
+                            <button class="btn btn-sm" *ngIf="oProcessor.readOnly === false" (click)="downloadProcessor($event, oProcessor)">
                                 <fa-icon [icon]="faDownload"></fa-icon>
                             </button>
-                            <button class="btn btn-sm" (click)="openEditProcessorDialog($event, oProcessor)">
+                            <button class="btn btn-sm" *ngIf="oProcessor.readOnly === false" (click)="openEditProcessorDialog($event, oProcessor)">
                                 <fa-icon [icon]="faEdit"></fa-icon>
                             </button>
-                            <button class="btn btn-sm text-danger" (click)="removeProcessor($event, oProcessor)">
+                            <button class="btn btn-sm text-danger" *ngIf="m_sActiveUserId === oProcessor.publisher || oProcessor.sharedWithMe" (click)="removeProcessor($event, oProcessor)">
                                 <fa-icon [icon]="faX"></fa-icon>
                             </button>
                         </div>
