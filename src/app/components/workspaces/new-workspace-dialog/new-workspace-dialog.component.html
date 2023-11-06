@@ -1,13 +1,31 @@
 <div class="dialog">
-    <h1 class="dialog-text" mat-dialog-title>
-        New Workspace
+    <h1 *ngIf="m_bIsEditingWorkspaceName === false" class="dialog-text" mat-dialog-title>
+        {{"DIALOG_ADD_NEW_WORKSPACE_HEADER" | translate}}
+    </h1>
+    <h1 *ngIf="m_bIsEditingWorkspaceName === true" class="dialog-text" mat-dialog-title>
+        {{"DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER" | translate}}
     </h1>
     <div class="m-2" mat-dialog-content>
-        <label class="form-label" for="">Enter workspace name: </label>
-        <input class="form-control my-2" type="text" name="m_sWorkspaceName" placeholder="Workspace Name" [(ngModel)]="m_sWorkspaceName"> 
+        <label *ngIf="m_bIsEditingWorkspaceName === false " class="form-label" for="">
+            {{"DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE" | translate}}
+        </label>
+        <label *ngIf="m_bIsEditingWorkspaceName === true" class="form-label" for="">
+            {{"DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" | translate}}
+        </label>
+        <input class="form-control my-2" type="text" name="m_sWorkspaceName" placeholder="Workspace Name"
+            [(ngModel)]="m_sWorkspaceName">
     </div>
     <div mat-dialog-actions class="d-flex flex-row gap-1 justify-content-end">
-        <button class="btn btn-success btn-sm" (click)="onCreateWorkspace()">Create Workspace</button>
-        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">Cancel</button>
+        <!-- Add New Workspace -->
+        <button *ngIf="m_bIsEditingWorkspaceName === false" class="btn btn-success btn-sm"
+            (click)="onCreateWorkspace()">{{"DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON" |
+            translate}}</button>
+        <!-- Update Existing Workspace -->
+        <button *ngIf="m_bIsEditingWorkspaceName === true" class="btn btn-success btn-sm"
+            (click)="onRenameWorkspace()">{{"DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON" |
+            translate}}</button>
+        <!-- Cancel Button -->
+        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">{{"DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON" |
+            translate}}</button>
     </div>
 </div>

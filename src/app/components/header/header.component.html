@@ -4,8 +4,8 @@
             <a class="navbar-brand" href="#">
                 <img class="brand-logo" src="assets/images/wasdi_logo_header.png" alt="">
             </a>
-            <input class="form-control new-workspace-name" type="text" *ngIf="m_bEditIsActive=== true"
-                value="{{m_oActiveWorkspace.name}}">
+            <input class="form-control new-workspace-name" type="text" *ngIf="m_bEditIsActive"
+                value="{{m_oActiveWorkspace.name}}" (click)="reNameWorkspace(m_oActiveWorkspace)" readonly>
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +22,8 @@
                         {{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/plan"><fa-icon [icon]="faCalendar"></fa-icon> {{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' |
+                    <a class="nav-link" routerLink="/plan"><fa-icon [icon]="faCalendar"></fa-icon>
+                        {{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' |
                         translate}}</a>
                 </li>
                 <li class="nav-item">
@@ -108,7 +109,7 @@
             <label for="">
                 <h6>Reason:</h6>
             </label>
-            <select class="form-control mb-3" name="title"  [(ngModel)]="m_oFeedback.title">
+            <select class="form-control mb-3" name="title" [(ngModel)]="m_oFeedback.title">
                 <option value="" selected disabled hidden>Select a reason</option>
                 <option value="I found a bug/problem">I found a bug/problem</option>
                 <option value="I need help with something">I need help with something</option>

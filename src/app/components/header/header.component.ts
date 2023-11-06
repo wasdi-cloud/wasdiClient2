@@ -23,6 +23,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Import Utilities: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -70,23 +71,34 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
-    public m_oConstantsService: ConstantsService,
+    private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
     private m_oProjectService: ProjectService,
-    public oRouter: Router,
+    private m_oRouter: Router,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    public translate: TranslateService,
+    public m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
   ) {
     //Register translation languages:
-    translate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
-    translate.setDefaultLang('en');
+    m_oTranslate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
+    m_oTranslate.setDefaultLang('en');
 
-    this.m_oRouterEvents = this.oRouter.events.subscribe((oEvent: any) => {
+    this.m_oRouterEvents = this.m_oRouter.events.subscribe((oEvent: any) => {
       if (oEvent instanceof NavigationEnd) {
         if (oEvent.url.includes('edit')) {
           this.sActiveWorkspaceId = oEvent.url.slice(6);
+          this.m_bEditIsActive = true;
+          this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.sActiveWorkspaceId).subscribe({
+            next: oResponse => {
+              this.m_oActiveWorkspace = oResponse;
+            },
+            error: oError => {
+              this.m_oAlertDialog.openDialog(4000, "Error in retreiving Workspace Information")
+            }
+          })
+        } else {
+          this.m_bEditIsActive = false;
         }
       }
     })
@@ -95,15 +107,15 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    console.log(this.m_oActiveWorkspace);
     this.m_oUser = this.m_oConstantsService.getUser();
     this.initializeProjectsInfo();
     this.getAccountType();
-
   }
 
   logout() {
     this.m_oConstantsService.logOut();
-    this.oRouter.navigateByUrl("login");
+    this.m_oRouter.navigateByUrl("login");
   }
 
   openUserSettings(event: MouseEvent) {
@@ -112,7 +124,7 @@ export class HeaderComponent implements OnInit {
       width: '80vw'
     })
     event.preventDefault();
-  }
+}
 
   sendFeedback() {
     if (typeof this.m_oFeedback === undefined || !this.m_oFeedback.title || !this.m_oFeedback.message) {
@@ -199,6 +211,16 @@ export class HeaderComponent implements OnInit {
         error: oError => { }
       })
     }
+  }
+
+  reNameWorkspace(oInputWorkspace) {
+    let oDialog = this.m_oDialog.open(NewWorkspaceDialogComponent, {
+      width: '30vw',
+      data: {
+        renameWorkspace: true,
+        workspace: oInputWorkspace
+      }
+    })
   }
 
   getAccountType() {
