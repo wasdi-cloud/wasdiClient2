@@ -4,33 +4,42 @@
         <fa-icon [icon]="faXmark"></fa-icon>
     </button>
 </div>
-<div *ngIf="m_bIsWasdiDasboard === false" class="process-payload d-flex flex-column align-items-center gap-3 mx-5 my-4">
+<div class="nav nav-tabs mt-2 px-2" *ngIf="m_bIsWasdiDasboard === true">
+    <li class="nav-item" (click)="setActiveTab('dashboard')">
+        <a class="nav-link" [ngClass]="m_sActiveTab === 'dashboard' ? 'active' : ''">Charts</a>
+    </li>
+    <li class="nav-item" (click)="setActiveTab('payload')">
+        <a class="nav-link" [ngClass]="m_sActiveTab === 'payload' ? 'active' : ''">Payload</a>
+    </li>
+</div>
+<div *ngIf="m_bIsWasdiDasboard === false || m_sActiveTab === 'payload'"
+    class="process-payload d-flex flex-column align-items-center gap-3 my-4 px-3" style="height: 70%; width:100%;">
     <textarea class="process-payload-display" name="" id="" value={{m_sPayloadString}}></textarea>
     <div class="d-flex flex-row jusify-content-end align-self-end gap-3">
         <button class="btn btn-success" [cdkCopyToClipboard]="m_sPayloadString">Copy Payload</button>
         <button class="btn btn-secondary" (click)="dismiss($event)">Close</button>
     </div>
 </div>
-<div class="process-payload d-flex flex-column align-items-center gap-3 mx-5 my-4">
+<div *ngIf="m_bIsWasdiDasboard === true && m_sActiveTab === 'dashboard'"
+    class="process-payload d-flex flex-column align-items-center gap-3 my-3 px-3"
+    style="height: 70%; width:100%; overflow-y: scroll;">
 
     <div *ngFor="let oChart of m_aoChartsInformation">
+        <!-- Line Chart -->
         <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" [view]="view" [legend]="m_bLegend"
             [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="oChart['x-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
             [results]="oChart['chart-data']"></ngx-charts-line-chart>
+        <!-- Area Line Chart -->
         <ngx-charts-area-chart *ngIf="oChart['chart-type'] === 'line-area'" [view]="view" [legend]="m_bLegend"
             [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="oChart['x-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
             [results]="oChart['chart-data']"></ngx-charts-area-chart>
+        <!-- Horizontal Bar Chart -->
+        <ngx-charts-bar-horizontal *ngIf="oChart['chart-type'] === 'bar-horizontal'" [view]="view" [legend]="m_bLegend"
+            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="oChart['x-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
+            [results]="oChart['chart-data']"></ngx-charts-bar-horizontal>
+        <!-- Vertical Bar Chart -->
+        <ngx-charts-bar-vertical *ngIf="oChart['chart-type'] === 'bar-vertical'" [view]="view" [legend]="m_bLegend"
+            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="oChart['x-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
+            [results]="oChart['chart-data']"></ngx-charts-bar-vertical>
     </div>
-    <!-- <ngx-charts-line-chart 
-   
-    [view]="view" [legend]="m_bLegend"
-        [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis"
-        [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [legendPosition]="legendPosition" [results]="multi"
-        [timeline]="timeline">
-    </ngx-charts-line-chart>
-    <ngx-charts-bar-horizontal-2d  [view]="view" [results]="multi"
-        [xAxis]="xAxis" [yAxis]="yAxis" [legend]="m_bLegend" [legendPosition]="legendPosition"
-        [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel">
-    </ngx-charts-bar-horizontal-2d> -->
 </div>

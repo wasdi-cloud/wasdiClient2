@@ -2,3 +2,7 @@ textarea.process-payload-display {
     width: 100%;
     height: 20rem;
 }
+
+li.nav-item, a.nav-link {
+    cursor: pointer;
+}
