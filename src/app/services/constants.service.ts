@@ -211,23 +211,27 @@ export class ConstantsService {
     document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
   }
 
-  getCookie(cookieName: string) {
+  getCookie(sCookieName: string) {
 
     try {
-      let sName: string = cookieName + "=";
+
+      if (!document.cookie) {
+        return "";
+      }
+
+      let sName: string = sCookieName + "=";
       let aCookieArray: Array<string> = document.cookie.split(";");
 
-      for (let index: number = 0; index < aCookieArray.length; index++) {
-        let cookie: string = aCookieArray[index];
+      for (let iIndex: number = 0; iIndex < aCookieArray.length; iIndex++) {
+        let sCookie: string = aCookieArray[iIndex];
 
-        while (cookie.charAt(0) === ' ') {
-          return JSON.parse(cookie.substring(sName.length, cookie.length));
+        sCookie = sCookie.trim()
+        if (sCookie.startsWith(sName)) {
+          return JSON.parse(sCookie.substring(sName.length, sCookie.length));
         }
       }
-      if (!document.cookie) {
-        return ""
-      }
-      return JSON.parse(document.cookie.substring(6));
+
+      return "";
     } catch (sError) {
       console.log(`${document.cookie} and ${sError}`)
       return "";
