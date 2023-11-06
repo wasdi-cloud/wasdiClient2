@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LegendPosition } from '@swimlane/ngx-charts';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
@@ -85,6 +85,7 @@ export class PayloadDialogComponent implements OnInit {
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oDialog: MatDialog,
+    private m_oDialogRef: MatDialogRef<PayloadDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public m_oData: any
   ) { }
 
@@ -135,6 +136,6 @@ export class PayloadDialogComponent implements OnInit {
   }
 
   dismiss(event: MouseEvent) {
-    this.m_oDialog.closeAll();
+    this.m_oDialogRef.close();
   }
 }
