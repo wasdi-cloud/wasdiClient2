@@ -595,6 +595,20 @@
                 }
             ]
         },
+		{
+            "name": "JRC GHSL",
+            "indexname": "platformname",
+            "indexvalue": "StaticTiles",
+            "filters": [
+                {
+                    "indexname": "producttype",
+                    "indexlabel": "Product Type",
+                    "indexvalues": "GHS_BUILT_S_E2018_GLOBE_R2023A_54009_10_V1_0",
+                    "regex": ".*",
+                    "indexvalue":"GHS_BUILT_S_E2018_GLOBE_R2023A_54009_10_V1_0"
+                }
+            ]
+        },
         {
             "name": "IMERG",
             "indexname": "platformname",
@@ -1071,6 +1085,20 @@
                     "indexmin":"0",
                     "indexmax":"100",
                     "regex": ".*"
+                }
+            ]
+        },
+		{
+            "name": "Terra",
+            "indexname": "platformname",
+            "indexvalue": "TERRA",
+            "filters": [
+                {
+                    "indexname": "producttype",
+                    "indexlabel": "Product Type",
+                    "indexvalues": "MOD11A2",
+                    "regex": ".*",
+                    "indexvalue": "MOD11A2"
                 }
             ]
         }
