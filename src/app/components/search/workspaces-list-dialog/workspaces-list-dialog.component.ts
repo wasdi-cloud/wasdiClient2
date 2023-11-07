@@ -184,6 +184,7 @@ export class WorkspacesListDialogComponent implements OnInit {
       }
       this.downloadProduct(sUrl, this.m_oSelectedProduct.title, this.m_aoSelectedWorkspaces[iWorkspaceIndex].workspaceId, sBound, this.m_oSelectedProduct.provider, null, oError);
     }
+    this.onDismiss();
   }
 
   addMultipleProductsToWorkspace() {
@@ -208,6 +209,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         }
       }
     }
+    this.onDismiss();
     return true;
   }
 
