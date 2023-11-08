@@ -44,6 +44,9 @@ export class FilterPipe implements PipeTransform {
       if(item.workspaceName) {
         return item.workspaceName.toLocaleLowerCase().includes(searchText);
       }
+      if(item.publisher) {
+        return item.publisher.toLocaleLowerCase().includes(searchText);
+      }
 
     })
   }

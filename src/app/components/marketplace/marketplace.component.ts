@@ -61,6 +61,7 @@ export class MarketplaceComponent implements OnInit {
   m_aoSelectedCategories: Array<any> = [];
   m_iSelectedStarRating: number = 0;
 
+  m_sDeveloperSearch: string = "";
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oImageService: ImageService,
@@ -277,6 +278,13 @@ export class MarketplaceComponent implements OnInit {
    * @returns {void}
    */
   developerChanged(oEvent): void {
+    console.log(oEvent);
+    let iDeveloperIndex = this.m_aoSelectedPublishers.indexOf(oEvent.publisher)
+    if (iDeveloperIndex === -1) {
+      this.m_aoSelectedPublishers.push(oEvent.publisher);
+    } else {
+      this.m_aoSelectedPublishers.splice(iDeveloperIndex, 1);
+    }
     //Add Selected Developers to the App Filter publishers and then get applicatinons
     this.m_oAppFilter.publishers = this.m_aoSelectedPublishers;
     this.m_oAppFilter.page = 0;
@@ -285,11 +293,17 @@ export class MarketplaceComponent implements OnInit {
   }
 
   categoriesChanged(oEvent): void {
+    let iCategoryIndex = this.m_aoSelectedCategories.indexOf(oEvent.id)
+
+    if (iCategoryIndex === -1) {
+      this.m_aoSelectedCategories.push(oEvent.id);
+    } else {
+      this.m_aoSelectedCategories.splice(iCategoryIndex, 1);
+    }
     //Add Selected Categories to the App Filter Categories and then get applications
     this.m_oAppFilter.categories = this.m_aoSelectedCategories;
     this.m_oAppFilter.page = 0;
     this.getApplications();
-
   }
 
   //TODO: Sort apps based on Success Rate
@@ -310,7 +324,7 @@ export class MarketplaceComponent implements OnInit {
   }
 
   ratingChanged(oEvent) {
-    this.m_oAppFilter.score = this.m_iSelectedStarRating;
+    this.m_oAppFilter.score = oEvent;
     this.m_oAppFilter.page = 0;
     this.getApplications();
 

@@ -1,94 +1,250 @@
-.filters-container {
-    background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0));
-    padding: 0.5rem;
+.sub-menu {
+	background-color: #fbfbfb;
+	border-right: 1px solid rgba(0, 0, 0, 0.13);
+
+	display: flex;
+	flex-direction: column;
+	padding: 1.5rem 3rem;
 }
 
-.box2 {
-    background-color: azure;
-    height: 50%;
-    width: fit-content;
+.sub-menu-grp {
+	margin-top: 2rem;
+	width: 20vw;
 }
 
-.hbody-text {
-    padding-top: 1rem;
-    color: #43516a;
-    font-weight: bolder;
-    padding-left: 1rem;
+.sub-menu .title {
+	display: flex;
+	gap: 0.7rem;
 }
 
-.search-container {
-    margin-left: auto;
+.category-body {
+	margin: 1rem 0rem 0rem 1rem;
+	display: flex;
+	align-items: flex-start;
+	align-content: flex-start;
+	gap: 12px 8px;
+	flex-wrap: wrap;
+}
+.category-body button {
+	border-radius: 6px;
+	border: 1px solid rgba(33, 47, 69, 0.3);
+
+	display: flex;
+	padding: 1px 7px;
+
+	gap: 6px;
+
+	color: rgba(33, 47, 69, 0.3);
+	font-size: 12.753px;
+}
+.category-body button.selected {
+	border: 1px solid rgba(33, 47, 69, 1);
+	color: #212f45;
 }
 
-/* .form-select {
-    position: relative;
-    top: 0.33rem;
-    font-size: 0.75rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
+.sub-menu {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.sub-menu h3 {
+	color: #212f45;
+	font-family: "Poppins", sans-serif;
+	font-size: 17px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	padding: 0; 
+	margin: 0; 
 }
 
-.form-label {
-    --bs-gutter-x: 1.5rem;
-    position: relative;
-    top: 0.6rem;
-    font-size: 0.75rem;
-  
-} */
+.sub-menu-search {
+	border-radius: 100px;
+	border: 1px solid rgba(33, 47, 69, 0.35);
+	width: 100%;
+	padding: 4px 12px;
 
-.search1 {
-    position: absolute;
-    right: 0px;
+	display: flex;
+	align-items: center;
 }
 
-.division_line {
-    background-color: lightgray;
-    height: 1px;
-    margin: 1rem;
+.sub-menu-search input {
+	border-radius: 100px;
+	padding: 4px 12px;
+	margin-left: 1rem;
+	color: #9d9d9e;
+	border: none;
+	width: 100%;
+	height: 100%;
+	background-color: #ffffff00;
 }
 
-.btn-primary {
-    background-color: #43516a;
-    border: none;
+.sub-menu-body {
+	padding-top: 0.5rem;
+	padding-left: 0.75rem;
+	width: 100%;
 }
 
-.card-text {
-    font-size: smaller;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    height: 80px;
+/* CHECKBOX CUSTOM STYLE ********/
+/* The container */
+.sub-menu label {
+	display: flex;
+	align-items: center;
+	position: relative;
+	padding-left: 24px;
+	margin-top: 12px;
+	cursor: pointer;
+	font-size: 22px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	color: #212f45;
+	font-size: 0.75rem;
 }
 
-.card {
-    border: none;
-    height: 20rem;
-    box-shadow: 4px 4px 16px lightgray;
-    overflow: auto;
-    margin-bottom: 1rem;
+.num {
+	padding-left: 0.3rem;
+	color: rgba(33, 47, 69, 0.3);
+	font-family: "Poppins", sans-serif;
+	font-size: 0.8rem;
+	font-weight: 700;
+}
+/* Hide the browser's default checkbox */
+.sub-menu-body label input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
 }
 
-.price-tag {
-    background-color: #009036;
-    float: right;
-    color: white;
-    padding: 8px;
+/* Create a custom checkbox */
+.checkmark {
+	position: absolute;
+	left: 0;
+	height: 16px;
+	width: 16px;
+	border: 1px solid #212f4599;
+	border-radius: 4px;
 }
 
-.publisher .pub-name {
-    color: #009036;
+/* On mouse-over, add a grey background color */
+.sub-menu-body label:hover input ~ .checkmark {
+	background-color: #ebebeb;
 }
 
-/* .row>* {
-    flex-shrink: 1;
-} */
+/* When the checkbox is checked, add a blue background */
+.sub-menu-body label input:checked ~ .checkmark {
+	border-color: #226efb;
+}
 
-/* a {
-    margin-bottom: 1rem;
-} */
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+}
 
-h5 {
-    color: #009036;
+/* Show the checkmark when checked */
+.sub-menu-body label input:checked ~ .checkmark:after {
+	display: block;
+}
+
+/* Style the checkmark/indicator */
+.sub-menu-body label .checkmark:after {
+	left: 4px;
+	top: 1px;
+	width: 4px;
+	height: 8px;
+	border: solid rgb(48, 48, 48);
+	border-width: 0 2px 2px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+/* Slider Custom css */
+.range-slider {
+	height: 5px;
+	position: relative;
+	background-color: #e1e9f6;
+	border-radius: 2px;
+}
+.range-selected {
+	height: 100%;
+	left: 30%;
+	right: 30%;
+	position: absolute;
+	border-radius: 5px;
+	background-color: #43526b;
+}
+.range-input {
+	position: relative;
+}
+.range-input input {
+	position: absolute;
+	width: 100%;
+	height: 5px;
+	top: -7px;
+	background: none;
+	pointer-events: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+.range-input input::-webkit-slider-thumb {
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	border: 3px solid #43526b;
+	background-color: #fff;
+	pointer-events: auto;
+	-webkit-appearance: none;
+}
+.range-input input::-moz-range-thumb {
+	height: 8px;
+	width: 8px;
+	border-radius: 50%;
+	border: 3px solid #43526b;
+	background-color: #43526b;
+	transform: translateY(2px);
+	pointer-events: auto;
+	-moz-appearance: none;
+}
+.range-price {
+	margin: 30px 0;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	display: none;
+}
+.range-price label {
+	margin-right: 5px;
+}
+.range-price input {
+	width: 40px;
+	padding: 5px;
+}
+.range-price input:first-of-type {
+	margin-right: 15px;
+}
+.price-values-display {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+	margin-top: 1rem;
+}
+.price-values-display p {
+	color: #c3c7cd;
+	font-family: "Poppins", sans-serif;
+	font-size: 15.756px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}
+.price-values-display .min,
+.price-values-display .max {
+	color: #212f45;
 }
