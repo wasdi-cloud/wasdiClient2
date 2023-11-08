@@ -104,6 +104,8 @@ export class ProcessorTabContentComponent implements OnInit {
 
   @Input() m_oProcessorBasicInfo: FormGroup;
 
+
+
   m_aoProcessorTypes = [
     { name: "Ubuntu 22.04 + Python 3.10", id: "python_pip_2" },
     { name: "OGC Application Package", id: "eoepca" },
@@ -131,12 +133,12 @@ export class ProcessorTabContentComponent implements OnInit {
   ngOnInit(): void {
     //Set the active workspace from the constants service
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    
+
     this.displayProcessorType();
 
     let sType = this.m_oProcessorBasicInfo.get('oType').value;
     this.m_aoProcessorTypes.forEach(type => {
-      if(type.id === sType) {
+      if (type.id === sType) {
         sType = type.name
         this.m_oProcessorBasicInfo.controls['oType'].setValue(sType)
       }
@@ -183,7 +185,9 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   onFileSelect(input: any) {
+    console.log(input)
     if (input.files && input.files[0]) {
+      console.log(input.files);
       this.m_sSelectedFileName = input.files[0].name;
       this.m_oSelectedFile = new FormData();
       this.m_oSelectedFile.append('file', input.files[0]);
@@ -237,4 +241,13 @@ export class ProcessorTabContentComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * on file drop handler
+   */
+  onFileDropped($event) {
+    this.onFileSelect($event);
+  }
+
+
 }

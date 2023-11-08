@@ -7,7 +7,8 @@
             </div>
             <div>
                 <label for="type">Type:</label>
-                <input *ngIf="m_bEditMode === true" class="form-control" type="text" formControlName="oType" placeholder="meow">
+                <input *ngIf="m_bEditMode === true" class="form-control" type="text" formControlName="oType"
+                    placeholder="meow">
                 <input *ngIf="m_bEditMode === false" class="form-control" type="text" name="type"
                     [matAutocomplete]="auto" placeholder="Select Programming Language">
 
@@ -17,9 +18,15 @@
                     </mat-option>
                 </mat-autocomplete>
             </div>
-            <div class="">
-                <input type="file" class="form-control" name="m_oSelectedFile" id=""
+            <div class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)">
+                <input type="file" class="dropzone-input" name="m_oSelectedFile" id=""
                     (change)="onFileSelect($event.target)">
+                <h3>Drag and Drop Processor File</h3>
+                <h3>or</h3>
+                <label class="dropzone-label" for="m_oSelectedFile">Browse For File</label>
+                <div *ngIf="m_sSelectedFileName">
+                    {{m_sSelectedFileName}}
+                </div>
             </div>
         </div>
         <div class="d-flex flex-row gap-2" *ngIf="m_bEditMode">
