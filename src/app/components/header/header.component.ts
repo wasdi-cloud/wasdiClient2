@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Import Font Awesome Icons: 
-import { faComment, faArrowLeft, faBook, faFloppyDisk, faCalendar, faMagnifyingGlass, faGlobe, faGears, faRocket, faUserAstronaut, faGauge, faArrowRightFromBracket, faCertificate, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faArrowLeft, faBook, faFloppyDisk, faCalendar, faMagnifyingGlass, faGlobe, faGears, faRocket, faUserAstronaut, faGauge, faArrowRightFromBracket, faCertificate, faStar, faBars } from '@fortawesome/free-solid-svg-icons';
 
 //Import Dialog Components:
 import { MatDialog } from '@angular/material/dialog';
@@ -54,6 +54,7 @@ export class HeaderComponent implements OnInit {
   m_oRouterEvents: any;
 
   //Font Awesome Icons
+  faBars = faBars;
   faUser = faUserAstronaut;
   faComment = faComment
   faArrowLeft = faArrowLeft;

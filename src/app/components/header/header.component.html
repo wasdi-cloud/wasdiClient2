@@ -1,4 +1,48 @@
-<nav class="navbar navbar-expand-lg">
+<header class="d-flex flex-row">
+    <a href="#"><img src="assets/svg/logo.svg" alt="logo" class="logo" /></a>
+
+    <img src="assets/svg/space-market.svg" alt="space market decorative title" />
+
+    <form action="#" method="get">
+        <div class="search"></div>
+    </form>
+    <menu class="d-flex flex-row">
+        <li>
+            <div class="background-color">
+                <img src="assets/svg/search-icon.svg" alt="search icon" />
+                <label for="search-bar">Search</label>
+            </div>
+            <input class="search-input" type="text" id="search-bar" name="search-bar" placeholder="Find Apps..." />
+        </li>
+
+        <li>
+            <select class="name-select" id="name">
+                <option value="name" selected>Name</option>
+                <option value="name2">Name 2</option>
+                <option value="name3">Name 3</option>
+                <option value="name4">Name 4</option>
+            </select>
+        </li>
+        <li>
+            <select class="name-select date-select" id="date">
+                <option value="date" selected>Date</option>
+                <option value="date2">Date 2</option>
+                <option value="date3">Date 3</option>
+                <option value="date4">Date 4</option>
+            </select>
+        </li>
+        <li>
+            <select class="name-select price-select" id="price">
+                <option value="price" selected>Price</option>
+                <option value="price2">Price 2</option>
+                <option value="price3">Price 3</option>
+                <option value="price4">Price 4</option>
+            </select>
+        </li>
+    </menu>
+
+</header>
+<!-- <nav class="navbar navbar-expand-lg">
     <div class="container-fluid ">
         <div class="d-flex align-items-center">
             <a class="navbar-brand" href="#">
@@ -53,9 +97,9 @@
                     </ul>
                 </li>
                 <!-- Account Type: -->
-                <li class="nav-item">
-                    <!-- User with brand new WASDI Account -->
-                    <a class="nav-link" routerLink="/subscriptions" href=""
+<!-- <li class="nav-item"> -->
+<!-- User with brand new WASDI Account -->
+<!-- <a class="nav-link" routerLink="/subscriptions" href=""
                         *ngIf="m_sUserAccount !== 'FREE' && m_sUserAccount !== 'PROFESSIONAL' && m_sUserAccount !==  'STANDARD'">PURCHASE
                         SUBSCRIPTION</a>
                     <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
@@ -64,8 +108,8 @@
                         *ngIf="m_sUserAccount === 'PROFESSIONAL'"><fa-icon [icon]="faStar"></fa-icon> PRO</a>
                     <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
                         *ngIf="m_sUserAccount === 'STANDARD'"><fa-icon [icon]="faCertificate"></fa-icon> STND</a>
-                </li>
-                <app-language-switch></app-language-switch>
+                </li> -->
+<!-- <app-language-switch></app-language-switch>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
                         <fa-icon [icon]="faUser"></fa-icon>
@@ -86,7 +130,7 @@
             </ul>
         </div>
     </div>
-</nav>
+</nav> -->
 
 
 
