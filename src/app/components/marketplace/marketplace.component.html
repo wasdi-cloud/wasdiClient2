@@ -1,5 +1,4 @@
 <main class="d-flex flex-row">
-    <app-navbar></app-navbar>
     <div class="d-flex flex-row">
         <section class="sub-menu">
             <article class="sub-menu-grp">
@@ -40,7 +39,8 @@
                 </div>
                 <div class="sub-menu-body">
                     <label for="all-ratings">
-                        <input id="all-ratings" type="radio" name="rating"  (click)="ratingChanged(0)"checked="checked" />
+                        <input id="all-ratings" type="radio" name="rating" (click)="ratingChanged(0)"
+                            checked="checked" />
                         <span class="checkmark"></span>
                         <p class="p-0 m-0">All Ratings</p>
                     </label>
@@ -104,8 +104,8 @@
                             <p>500</p>
                         </div>
                         <!-- the following div is used as input for the JS -->
-                        <!-- Display: hidden: -->
-                        <!-- <div class="range-price">
+                <!-- Display: hidden: -->
+                <!-- <div class="range-price">
                             <input type="number" name="min" value="300" />
                             <input type="number" name="max" value="700" />
                         </div>

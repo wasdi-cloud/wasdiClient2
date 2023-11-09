@@ -1,57 +1,122 @@
-<nav>
-    <button class="minimize">
+<nav class="collapsed" *ngIf="m_bIsNavbarOpen === false">
+    <button class="maximise mx-auto" (click)="openCloseNavbar()">
+        <img src="assets/svg/bars.svg" alt="icon">
+    </button>
+    <menu class="navigation-menu">
+        <li>
+            <button routerLink="/marketplace" matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_APPSTORE' | translate}}"
+                [matTooltipPosition]="'right'" [ngClass]="m_sSelectedTab === 'marketplace' ?  'active': ''"
+                (click)="setActiveTab('marketplace')">
+                <img src="assets/svg/apps-icon.svg" alt="icon" />
+            </button>
+        </li>
+        <li>
+            <button class="" routerLink="/workspaces" matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}"
+                [matTooltipPosition]="'right'" [ngClass]="m_sSelectedTab === 'workspaces' ? 'active': ''"
+                (click)="setActiveTab('workspaces')">
+                <img src="assets/svg/workplace-icon.svg" alt="icon" />
+            </button>
+        </li>
+        <li>
+            <button class="" routerLink="/plan" matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' |
+            translate}}" [ngClass]="m_sSelectedTab === 'plan' ? 'active': ''" [matTooltipPosition]="'right'"
+                (click)="setActiveTab('plan')">
+                <img src="assets/svg/plan-icon.svg" alt="icon" />
+            </button>
+        </li>
+        <li>
+            <button class="" routerLink="/search" matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_IMPORT' | translate}}"
+                [matTooltipPosition]="'right'" [ngClass]="m_sSelectedTab === 'search' ?  'active': ''"
+                (click)="setActiveTab('search')">
+                <img src="assets/svg/search-fill.svg" alt="icon" />
+            </button>
+        </li>
+        <li>
+            <button class="" routerLink="/edit/{{sActiveWorkspaceId}}"
+                matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}" [matTooltipPosition]="'right'"
+                [ngClass]="m_sSelectedTab === 'edit' ?  'active': ''" (click)="setActiveTab('edit')">
+                <img src="assets/svg/edit-icon.svg" alt="icon" />
+            </button>
+        </li>
+        <li>
+            <button data-bs-toggle="offcanvas" data-bs-target="#feedbackOffcanvas" aria-controls="feedbackOffcanvas"
+                matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_FEEDBACK' | translate}}" [matTooltipPosition]="'right'">
+                <img src="assets/svg/chat-icon.svg" alt="icon" />
+            </button>
+        </li>
+        <li>
+            <button>
+                <img src="assets/svg/report-icon.svg" alt="icon" />
+            </button>
+        </li>
+        <li>
+            <button>
+                <img src="assets/svg/setting-icon.svg" alt="icon" />
+            </button>
+        </li>
+    </menu>
+</nav>
+
+<!-- Open Navbar -->
+<nav *ngIf="m_bIsNavbarOpen=== true">
+    <button class="minimize" (click)="openCloseNavbar()">
         <img src="assets/svg/hide-icon.svg" alt="" />
     </button>
     <menu class="navigation-menu">
         <li>
-            <button class="active">
+            <button routerLink="/marketplace" [ngClass]="m_sSelectedTab === 'marketplace' ?'active' : ''"
+                (click)="setActiveTab('marketplace')">
                 <img src="assets/svg/apps-icon.svg" alt="icon" />
-                Apps
+                {{'ROOT_VIEW_NAV_BAR_LINK_APPSTORE' | translate}}
             </button>
         </li>
         <li>
-            <button>
-                <img
-                    src="assets/svg/workplace-icon.svg"
-                    alt="apps icon"
-                />
-                WorkPlaces
+            <button routerLink="/workspaces" [ngClass]="m_sSelectedTab === 'workspaces' ?'active' : ''"
+                (click)="setActiveTab('workspaces')">
+                <img src="assets/svg/workplace-icon.svg" alt="apps icon" />
+                {{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}
                 <div class="notification-red"></div>
             </button>
         </li>
         <li>
-            <button>
+            <button routerLink="/plan" [ngClass]="m_sSelectedTab === 'plan' ?'active' : ''"
+                (click)="setActiveTab('plan')">
                 <img src="assets/svg/plan-icon.svg" alt="icon" />
                 Plan
                 <div class="notification-green"></div>
             </button>
         </li>
         <li>
-            <button>
-                <img
-                    src="assets/svg/search-fill.svg"
-                    alt="apps icon"
-                />
+            <button routerLink="/search" [ngClass]="m_sSelectedTab === 'search' ?'active' : ''"
+                (click)="setActiveTab('search')">
+                <img src="assets/svg/search-fill.svg" alt="apps icon" />
                 Search
             </button>
         </li>
         <li>
-            <button>
+            <button routerLink="/edit/{{sActiveWorkspaceId}}" [ngClass]="{'disabled' : !sActiveWorkspaceId}"
+                [ngClass]="m_sSelectedTab === 'edit' ?'active' : ''" (click)="setActiveTab('')">
                 <img src="assets/svg/edit-icon.svg" alt="icon" />
                 Edit
             </button>
         </li>
         <li>
-            <button>
+            <button data-bs-toggle="offcanvas" data-bs-target="#feedbackOffcanvas" aria-controls="feedbackOffcanvas">
                 <img src="assets/svg/chat-icon.svg" alt="icon" />
-                Conversations
+                Feedback
             </button>
         </li>
-        <li>
-            <button>
+        <li class="dropdown-center">
+            <button class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="assets/svg/report-icon.svg" alt="icon" />
-                Reports
+                Language
             </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li *ngFor="let language of m_oTranslate.getLangs()">
+                    <a (click)="translateLanguageTo(language)
+                        " class="dropdown-item">{{language | uppercase}}</a>
+                </li>
+            </ul>
         </li>
         <li>
             <button>
@@ -64,10 +129,7 @@
                 <div class="upgrade-card">
                     <div>
                         <h2>Upgrade to Pro</h2>
-                        <img
-                            src="assets/svg/yellow-star-icon.svg"
-                            alt="star"
-                        />
+                        <img src="assets/svg/yellow-star-icon.svg" alt="star" />
                     </div>
                     <p>
                         Get 1 Month free and Unlock All Pro Features
@@ -79,15 +141,54 @@
         <li>
             <button>
                 <img src="assets/svg/help-book-icon.svg" alt="icon" />
-                Help & Information
+                Documentation
             </button>
         </li>
         <li>
             <button>
                 <img src="assets/svg/alien-icon.svg" alt="icon" />
-                Account
+                User Settings
             </button>
         </li>
     </menu>
-    <p>Project: <span>WASDI</span></p>
 </nav>
+
+<!-- Feedback Form OffCanvas -->
+<div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
+    <div class="offcanvas-header d-flex flex-row justify-content-start gap-3 p-0 m-0">
+        <button type="button" class="btn btn-secondary close-feedback-btn" data-bs-dismiss="offcanvas"
+            aria-label="Close">
+            <fa-icon [icon]="faArrowLeft"></fa-icon>
+        </button>
+        <h5 class="offcanvas-title">Send Feedback to WASDI</h5>
+    </div>
+    <div class="offcanvas-body">
+        <form name="m_oFeedback" #f="ngForm" (ngSubmit)="f.form && sendFeedback()">
+            <div class="user-contact-info mb-3">
+                <h6>As:</h6>
+                <p class="m-0 p-0">{{m_oUser.name}} {{m_oUser.surname}}</p>
+                <p class="m-0 p-0">{{m_oUser.userId}}</p>
+            </div>
+            <label for="">
+                <h6>Reason:</h6>
+            </label>
+            <select class="form-control mb-3" name="title" [(ngModel)]="m_oFeedback.title">
+                <option value="" selected disabled hidden>Select a reason</option>
+                <option value="I found a bug/problem">I found a bug/problem</option>
+                <option value="I need help with something">I need help with something</option>
+                <option value="I want to suggest a feature">I want to suggest a feature</option>
+            </select>
+            <label for="">
+                <h6>Tell us more:</h6>
+            </label>
+            <textarea class="form-control" name="message" cols="30" rows="10"
+                [(ngModel)]="m_oFeedback.message"></textarea>
+            <div class="btn-container d-flex flex-row gap-2 mt-5 justify-content-end">
+                <a class="btn btn-secondary" href="https://discord.gg/JYuNhPaZbE" target="_blank">Live
+                    Support</a>
+                <button class="btn btn-success" type="submit">Send</button>
+
+            </div>
+        </form>
+    </div>
+</div>
