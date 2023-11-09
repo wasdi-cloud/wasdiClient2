@@ -170,4 +170,8 @@ export class AuthService {
   recoverPassword(sEmail: string) {
     return this.oHttp.get(this.APIURL + '/auth/lostPassword?userId=' + sEmail);
   }
+
+  checkSession() {
+      return this.oHttp.get(this.APIURL + '/auth/checksession');
+  }
 }

@@ -42,35 +42,48 @@ export class LoginComponent implements OnInit {
     }))
   }
 
+  /**
+   * Handle the answer of the Login Service
+   * @param data 
+   * @param oController 
+   */
   callbackLogin(data: User, oController: this) {
+
     if (!oController) {
       oController = this;
     }
 
-    if (data.hasOwnProperty("sessionId") && data.sessionId == null) {
-
-      let oDialogData = new ErrorDialogModel("Error logging in.", "Please check Email and Password");
-      let dialogRef = this.m_oDialog.open(ErrorDialogComponent, {
-        maxWidth: "400px",
-        data: oDialogData
-      })
-      return
-    }
+    // We need sessionId
     if (data.hasOwnProperty("sessionId")) {
-      let oUser = {} as User;
-      oUser.userId = data.userId;
-      oUser.authProvider = 'wasdi';
-      oUser.name = data.name;
-      oUser.surname = data.surname;
-      oUser.sessionId = data.sessionId;
-      oUser.role = data.role;
-      oUser.type = data.type;
-      oUser.grantedAuthorities = data.grantedAuthorities;
+      if (data.sessionId == null) {
+        // If it is null, the login failed
+        let oDialogData = new ErrorDialogModel("Error logging in.", "Please check Email and Password");
+        let dialogRef = this.m_oDialog.open(ErrorDialogComponent, {
+          maxWidth: "400px",
+          data: oDialogData
+        })  
+      }
+      else {
+        // Ok we have a valid session Id
+        let oUser = {} as User;
+        oUser.userId = data.userId;
+        oUser.authProvider = 'wasdi';
+        oUser.name = data.name;
+        oUser.surname = data.surname;
+        oUser.sessionId = data.sessionId;
+        oUser.role = data.role;
+        oUser.type = data.type;
+        oUser.grantedAuthorities = data.grantedAuthorities;
+  
+        //set user and cookie
+        this.m_oConstantsService.setUser(oUser);
+        this.m_oAuthService.saveToken(data.sessionId);
 
-      //set user and cookie
-      this.m_oConstantsService.setUser(oUser);
-      this.m_oRouter.navigateByUrl('/marketplace');
-      this.m_oAuthService.saveToken(data.sessionId);
+        this.m_oAuthService.checkSession().subscribe({next: oResponse =>  {
+          oController.m_oRouter.navigateByUrl('/marketplace');
+        }})
+        
+      }
     }
   }
 }
