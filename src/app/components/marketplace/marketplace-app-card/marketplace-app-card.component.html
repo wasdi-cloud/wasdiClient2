@@ -1,24 +1,37 @@
 <a (click)="openProcessorDetails(oProcessor.processorName)">
-    <div class="card d-flex">
-        <div class="featured-img" style="background-image: url({{oProcessor.imgLink}});"></div>
-        <div class=" card-body d-flex flex-column justify-content-between">
-            <h5 class="card-title">{{oProcessor.friendlyName}}</h5>
-            <div class="card-drescription">
-                <p class="card-text">{{oProcessor.processorDescription}}</p>
-            </div>
-            <div class="processor-badges d-flex flex-row justify-content-start">
-                <!-- There are no categories in test - placeholder example for now -->
-                <!-- <a href="#" class="btn btn-primary">FIRE</a>
-                <a href="#" class="btn btn-primary">S3</a> -->
-            </div>
-            <div class="creator-price-container d-flex flex-row justify-content-between align-items-center flex-wrap">
-                <span class="pub-name ng-binding">Published By: {{oProcessor.publisher}}</span>
-            </div>
-            <div class="price-tag shadow-sm align-self-start">
-                <!-- ngIf: processor.price>0 -->
-                <!-- ngIf: processor.price==0 --><span ng-if="processor.price==0"
-                    class="ng-binding ng-scope">Free</span>
-            </div>
+    <article class="market-card">
+        <p *ngIf="oProcessor.price!== 0" class="tag">PRO</p>
+        <p *ngIf="oProcessor.price=== 0" class="tag free">FREE</p>
+        <div class="img-container">
+            <img class="processor-img" src="{{oProcessor.imgLink}}" alt="">
         </div>
-    </div>
+        <div class="card-stars d-flex flex-row align-items-center">
+            <div>
+                <fa-icon [icon]="oProcessor.score> 0.25 &&oProcessor.score< 0.75 ? faStarHalf : faStar"
+                    [ngClass]="oProcessor.score >= 0.25 ? 'text-warning' : 'text-secondary'">
+                </fa-icon>
+                <fa-icon [icon]="oProcessor.score> 1.25 &&oProcessor.score< 1.75 ? faStarHalf : faStar"
+                    [ngClass]="oProcessor.score >= 1.25 ? 'text-warning' : 'text-secondary'">
+                </fa-icon>
+                <fa-icon [icon]="oProcessor.score> 2.25 &&oProcessor.score< 2.75 ? faStarHalf : faStar"
+                    [ngClass]="oProcessor.score >= 2.25 ? 'text-warning' : 'text-secondary'">
+                </fa-icon>
+                <fa-icon [icon]="oProcessor.score> 3.25 &&oProcessor.score< 3.75 ? faStarHalf : faStar"
+                    [ngClass]="oProcessor.score >= 3.25 ? 'text-warning' : 'text-secondary'">
+                </fa-icon>
+                <fa-icon [icon]="oProcessor.score> 4.25 &&oProcessor.score< 4.75 ? faStarHalf : faStar"
+                    [ngClass]="oProcessor.score >= 4.25 ? 'text-warning' : 'text-secondary'">
+                </fa-icon>
+            </div>
+            <p class="num m-0 p-0">({{oProcessor.votes}})</p>
+        </div>
+        <h4>{{oProcessor.friendlyName}}</h4>
+        <p class="processor-description">
+            {{oProcessor.processorDescription}}
+        </p>
+        <hr />
+        <p class="owner">
+            Published by: <span>Luca.pulvirenti</span>
+        </p>
+    </article>
 </a>

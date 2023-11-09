@@ -120,74 +120,11 @@
                 </div> -->
             </article>
         </section>
-        <!-- <div class="filters-container d-flex flex-row align-items-center justify-content-start" style="width: 100%">
-            <div class="col-1">
-                <h5 class="hbody-text">{{"MARKET_FILTERS" | translate }}:</h5>
-            </div>
-            <div class="d-flex flex-row flex-fill">
-                <div style="width: 15rem;">
-                    <mat-select multiple class="form-control" [(ngModel)]="m_aoSelectedPublishers"
-                        placeholder='{{"MARKET_DEVELOPER" | translate}}' (selectionChange)="developerChanged($event)"
-                        style="width: 15rem;">
-                        <mat-option *ngFor="let oPublisher of m_aoPublishers" [value]="oPublisher.publisher">
-                            {{oPublisher.publisher}}
-                        </mat-option>
-                    </mat-select>
-                </div>
-    
-                <div style="width: 10rem">
-                    <mat-select multiple placeholder="Categories" class="form-control" [(ngModel)]="m_aoSelectedCategories" (selectionChange)="categoriesChanged($event)" style="width: 10rem">
-                        <mat-option *ngFor="let oCategory of m_asCategoryOptions"
-                            [value]="oCategory.id">{{oCategory.category}}</mat-option>
-                    </mat-select>
-                </div>
-    
-                <div style="width: 12rem">
-                    <mat-select name="" id="" class="form-control" (change)="ratingChanged($event)" [(ngModel)]="m_iSelectedStarRating"
-                        style="width: 12rem" placeholder='{{"MARKET_RATING" | translate}}'>
-                        <mat-option value="0">See All</mat-option>
-                        <mat-option value="1">1 Star and Above</mat-option>
-                        <mat-option value="2">2 Stars and Above</mat-option>
-                        <mat-option value="3">3 Stars and Above</mat-option>
-                        <mat-option value="4">4 Stars and Above</mat-option>
-                        <mat-option value="5">5 Stars Only</mat-option>
-                    </mat-select>
-                </div> -->
-        <!-- Commented Unused/Inactive Filters -->
-        <!-- <div style="width: 10rem">
-                    <mat-select name="" id="" class="form-control" placeholder='{{"MARKET_SUCCESS" | translate}}'
-                        style="width: 10rem">
-                        <mat-option value="">Show All</mat-option>
-                        <mat-option value="20">{{"MARKET_ABOVE" | translate}} 20%</mat-option>
-                        <mat-option value="40">{{"MARKET_ABOVE" | translate}} 40%</mat-option>
-                        <mat-option value="60">{{"MARKET_ABOVE" | translate}} 60%</mat-option>
-                        <mat-option value="80">{{"MARKET_ABOVE" | translate}} 80%</mat-option>
-                    </mat-select>
-                </div> -->
-
-        <!-- <mat-select name="" id="" class="form-control">
-                    <mat-option value="0">Show All</mat-option>
-                    <mat-option value="mostUsed" selected>{{"MARKET_MOST_USED" | translate}}</mat-option>
-                    <mat-option value="leastUsed">{{"MARKET_LEAST_USED" | translate}}</mat-option>
-                </mat-select> -->
-        <!-- <input type="text" name="" id="" class="form-control " placeholder="{{'MARKET_MAX_PRICE' | translate}}"
-                    (change)="maxPriceChanged($event)"> -->
-        <!-- </div>
-     -->
-        <!-- Search Bar Container -->
-        <!-- <div class="col-3 search search-container justify-self-end d-flex flex-row align-items-center ps-3">
-                <input type="text" name="" id="" class="form-control" placeholder="{{'MARKET_SEARCH_APP' | translate}}"
-                    [(ngModel)]="m_sNameFilter" (keyup)="onSearchInput($event)">
-                <button class="btn btn-primary" id="searchBtn" (click)="onSearchInput($event)">Search</button>
-                <button class="btn btn-secondary" (click)="clearSearchInput($event)">Clear</button>
-            </div>
-        </div>
-     -->
         <!-- Marketplace App Cards -->
         <div class="processor-cards-container d-flex flex-column pb-3">
-            <div class="col-12 d-flex flex-row flex-wrap justify-content-start px-3">
-                <app-marketplace-app-card class="col-xs-12 col-md-6 col-lg-3 px-1"
-                    *ngFor="let oProcessor of m_aoApplications" [oProcessor]="oProcessor"></app-marketplace-app-card>
+            <div class="col-12 d-flex flex-row flex-wrap justify-content-start px-3 gap-1">
+                <app-marketplace-app-card *ngFor="let oProcessor of m_aoApplications"
+                    [oProcessor]="oProcessor"></app-marketplace-app-card>
             </div>
             <button [disabled]="m_bLoadMoreEnabled === false" class="btn btn-lg btn-primary align-self-center"
                 (click)="loadMore()">Load More</button>
