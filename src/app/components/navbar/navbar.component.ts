@@ -22,7 +22,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 //Import Utilities: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
-import { faArrowLeft, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRightFromBracket, faBars } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -34,6 +34,7 @@ import { faArrowLeft, faBars } from '@fortawesome/free-solid-svg-icons';
 export class NavbarComponent implements OnInit {
   faBars = faBars;
   faArrowLeft = faArrowLeft;
+  faLogout = faArrowRightFromBracket;
   m_bIsNavbarOpen: boolean = false;
 
   sActiveWorkspaceId: string | null = null;
@@ -107,6 +108,7 @@ export class NavbarComponent implements OnInit {
     this.m_oUser = this.m_oConstantsService.getUser();
     this.initializeProjectsInfo();
     this.getAccountType();
+    console.log(this.m_sUserAccount);
   }
 
   setActiveTab(sActiveTab: string) {

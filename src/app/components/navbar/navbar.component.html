@@ -45,13 +45,32 @@
             </button>
         </li>
         <li>
-            <button>
+            <button matTooltip="Languages" [matTooltipPosition]="'right'">
                 <img src="assets/svg/report-icon.svg" alt="icon" />
             </button>
         </li>
         <li>
-            <button>
-                <img src="assets/svg/setting-icon.svg" alt="icon" />
+            <button matTooltip="User Settings" [matTooltipPosition]="'right'" (click)="openUserSettings($event)">
+                <img src="assets/svg/alien-icon.svg" alt="icon" />
+            </button>
+        </li>
+        <li>
+            <button (click)="openCloseNavbar()" matTooltip="My Subscriptions" [matTooltipPosition]="'right'">
+                <img src="assets/svg/yellow-star-icon.svg" alt="star" />
+            </button>
+
+        </li>
+        <li>
+            <button matTooltip="Documentation" [matTooltipPosition]="'right'">
+                <a class="documentation-btn" href="https://wasdi.readthedocs.io/en/latest/" target="_blank">
+                    <img src="assets/svg/help-book-icon.svg" alt="icon" />
+                </a>
+            </button>
+        </li>
+        <li>
+            <button (click)="logout()" matTooltip="Logout" [matTooltipPosition]="'right'">
+                <fa-icon [icon]="faLogout"></fa-icon>
+
             </button>
         </li>
     </menu>
@@ -75,7 +94,7 @@
                 (click)="setActiveTab('workspaces')">
                 <img src="assets/svg/workplace-icon.svg" alt="apps icon" />
                 {{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}
-                <div class="notification-red"></div>
+                <!-- <div class="notification-red"></div> -->
             </button>
         </li>
         <li>
@@ -83,7 +102,7 @@
                 (click)="setActiveTab('plan')">
                 <img src="assets/svg/plan-icon.svg" alt="icon" />
                 Plan
-                <div class="notification-green"></div>
+                <!-- <div class="notification-green"></div> -->
             </button>
         </li>
         <li>
@@ -119,35 +138,67 @@
             </ul>
         </li>
         <li>
-            <button>
-                <img src="assets/svg/setting-icon.svg" alt="icon" />
-                Settings
+            <button (click)="openUserSettings($event)">
+                <img src="assets/svg/alien-icon.svg" alt="icon" />
+                User Settings
             </button>
         </li>
         <li>
-            <div class="upgrade-container">
+            <div class="upgrade-container"
+                *ngIf="m_sUserAccount !== 'FREE' && m_sUserAccount !== 'PROFESSIONAL' && m_sUserAccount !==  'STANDARD'">
                 <div class="upgrade-card">
                     <div>
                         <h2>Upgrade to Pro</h2>
                         <img src="assets/svg/yellow-star-icon.svg" alt="star" />
                     </div>
                     <p>
-                        Get 1 Month free and Unlock All Pro Features
+                        Your 3 Month Trial Period has Expired. Upgrade to WASDI PRO
                     </p>
-                    <a href="#">Get Started</a>
+                    <a routerLink="/subscriptions">Get Started</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="upgrade-container"
+                *ngIf="m_sUserAccount === 'FREE' || m_sUserAccount === 'PROFESSIONAL' || m_sUserAccount ===  'STANDARD'">
+                <div class="upgrade-card">
+                    <div *ngIf="m_sUserAccount === 'PROFESSIONAL'">
+                        <img src="assets/svg/yellow-star-icon.svg" alt="star" />
+                        <h2>WASDI PRO</h2>
+                    </div>
+                    <div *ngIf="m_sUserAccount === 'STANDARD'">
+                        <img src="assets/svg/yellow-star-icon.svg" alt="star" />
+                        <h2>WASDI STND</h2>
+                    </div>
+                    <div *ngIf="m_sUserAccount === 'FREE'">
+                        <img src="assets/svg/yellow-star-icon.svg" alt="star" />
+                        <h2>WASDI FREE</h2>
+                    </div>
+                    <p class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Project :
+                        {{m_oSelectedProject.name}}
+                    </p>
+                    <ul class="dropdown-menu">
+                        <li style="cursor:pointer;" class="dropdown-item" *ngFor="let oProject of m_aoUserProjectsMap"
+                            (click)="setActiveProject(oProject)">
+                            {{oProject.name}}</li>
+                    </ul>
+                    <a routerLink="/subscriptions">Buy New Subscription</a>
                 </div>
             </div>
         </li>
         <li>
             <button>
-                <img src="assets/svg/help-book-icon.svg" alt="icon" />
-                Documentation
+                <a class="documentation-btn" href="https://wasdi.readthedocs.io/en/latest/" target="_blank">
+                    <img src="assets/svg/help-book-icon.svg" alt="icon" />
+                    Documentation
+                </a>
             </button>
         </li>
         <li>
-            <button>
-                <img src="assets/svg/alien-icon.svg" alt="icon" />
-                User Settings
+            <button (click)="logout()">
+                <fa-icon [icon]="faLogout"></fa-icon>
+                Logout
             </button>
         </li>
     </menu>
