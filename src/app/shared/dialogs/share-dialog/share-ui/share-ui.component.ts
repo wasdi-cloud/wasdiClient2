@@ -11,6 +11,9 @@ import { WorkflowService } from 'src/app/services/api/workflow.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 import { faUserPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
 
 @Component({
   selector: 'app-share-ui',
@@ -24,17 +27,20 @@ export class ShareUiComponent implements OnInit {
 
   m_aoSharedUsers: any;
   m_sUserIdSearch: string;
-  m_sPermission: string; 
+  m_sPermission: string = "read";
 
   @Input() resource: any;
   @Input() resourceType: string;
 
   constructor(
     private m_oAdminDashboardService: AdminDashboardService,
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oOrganizationsService: OrganizationsService,
     private m_oProcessorService: ProcessorService,
+    private m_oProcessorParametersTemplateService: ProcessorParamsTemplateService,
     private m_oSubscriptionService: SubscriptionService,
     private m_oStyleService: StyleService,
+    private m_oTranslate: TranslateService,
     private m_oWorkflowService: WorkflowService,
     private m_oWorkspaceService: WorkspaceService) { }
 
@@ -48,7 +54,6 @@ export class ShareUiComponent implements OnInit {
         this.m_oWorkspaceService.getUsersBySharedWorkspace(this.resource.workspaceId).subscribe(oResponse => {
           if (oResponse) {
             this.m_aoSharedUsers = oResponse;
-            console.log(oResponse)
           }
         })
       }
@@ -62,11 +67,16 @@ export class ShareUiComponent implements OnInit {
       }
 
       if (this.resourceType === 'PROCESSORPARAMETERSTEMPLATE') {
-        this.m_oAdminDashboardService.findResourcePermissions(this.resourceType, this.resource.templateId, "").subscribe(oResponse => {
-          if (oResponse) {
-            this.m_aoSharedUsers = oResponse;
+        this.m_oProcessorParametersTemplateService.getEnabledUsers(this.resource.templateId).subscribe({
+          next: oResponse => {
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+              this.m_aoSharedUsers = oResponse;
+            }
+          },
+          error: oError => {
+            console.log(oError);
           }
-        })
+        });
       }
 
       if (this.resourceType === 'workflow') {
@@ -110,11 +120,24 @@ export class ShareUiComponent implements OnInit {
   }
 
   onAddEnabledUser() {
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sUserIdSearch)) {
+      this.m_oAlertDialog.openDialog(4000, "Please enter a valid user");
+    }
     if (this.resourceType && this.resource && this.m_sUserIdSearch.length !== 0) {
       if (this.resourceType === 'workspace') {
-        this.m_oWorkspaceService.putShareWorkspace(this.resource.workspaceId, this.m_sUserIdSearch, this.m_sPermission).subscribe(oResponse => {
-          if (oResponse.stringValue === "Done") {
-            this.getEnabledUsers();
+        this.m_oWorkspaceService.putShareWorkspace(this.resource.workspaceId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
+          next: oResponse => {
+            if (oResponse.stringValue === "Done") {
+              this.getEnabledUsers();
+            }
+            if (oResponse.boolValue === false) {
+              let sErrorMsg = this.m_oTranslate.instant(oResponse.stringValue);
+              this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            }
+          },
+          error: oError => {
+            let sErrorMsg = "Error in Sharing Workspace";
+            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
           }
         })
       }
@@ -128,8 +151,13 @@ export class ShareUiComponent implements OnInit {
       }
 
       if (this.resourceType === 'PROCESSORPARAMETERSTEMPLATE') {
-        this.m_oAdminDashboardService.addResourcePermission(this.resourceType, this.resource.templateId, this.m_sUserIdSearch, this.m_sPermission).subscribe(oResponse => {
-          this.getEnabledUsers();
+        this.m_oProcessorParametersTemplateService.shareProcessorParameterTemplate(this.resource.templateId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
+          next: oResponse => {
+            this.getEnabledUsers();
+          },
+          error: oError => {
+            console.log(oError);
+          }
         })
       }
 
@@ -211,9 +239,9 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'workflow') {
         this.m_oWorkflowService.removeWorkflowSharing(this.resource.workflowId, sUserId).subscribe({
-          next: oResponse => { 
-            if(oResponse.stringValue === 'Unauthorized') {
-              console.log("You do not have the permissions to remove this user"); 
+          next: oResponse => {
+            if (oResponse.stringValue === 'Unauthorized') {
+              console.log("You do not have the permissions to remove this user");
             } else {
               this.getEnabledUsers();
             }
