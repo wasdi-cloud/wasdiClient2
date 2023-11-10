@@ -1,11 +1,11 @@
-import { AfterContentInit, Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 
 //Angular Material Imports: 
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 //Font Awesome Imports: 
-import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFilter, faList, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faCircleXmark, faDatabase, faDownload, faFile, faFilter, faList, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 //Service Imports: 
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -54,7 +54,24 @@ export class ProcessesBarComponent implements OnInit {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
-    private m_oTranslate: TranslateService) { }
+    private m_oTranslate: TranslateService) { 
+      setTimeout(() => {
+        if(!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProcessesRunning) && this.m_aoProcessesRunning.length != 0)
+        {
+            var iNumberOfProcesses = this.m_aoProcessesRunning.length;
+    
+            for(var iIndexProcess = 0; iIndexProcess < iNumberOfProcesses;iIndexProcess++ )
+            {
+                if (this.m_aoProcessesRunning[iIndexProcess].status==="RUNNING" ||
+                    this.m_aoProcessesRunning[iIndexProcess].status==="WAITING" ||
+                    this.m_aoProcessesRunning[iIndexProcess].status==="READY") {
+                    this.m_aoProcessesRunning[iIndexProcess].timeRunning.setSeconds( this.m_aoProcessesRunning[iIndexProcess].timeRunning.getSeconds() + 1) ;
+                }
+            }
+        }
+  
+      }, 1000)
+    }
 
   ngOnInit() {
     this.getSummary();
@@ -126,7 +143,7 @@ export class ProcessesBarComponent implements OnInit {
       this.m_oTranslate.get(WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage)).subscribe(oTranslation => {
         console.log(oTranslation);
         sNotificationMsg = oTranslation;
-      })  
+      })
     }
     else {
       console.log("ProcessesBarComponent.recievedRabbitMessage: m_oTranslate is null")
@@ -154,7 +171,7 @@ export class ProcessesBarComponent implements OnInit {
    */
   getSummary() {
     let sMessage: string;
-    
+
     //ASYNC Translation in case of refresh (reloading translations):
     this.m_oTranslate.get("MSG_SUMMARY_ERROR").subscribe(sTranslation => {
       sMessage = sTranslation;
@@ -198,7 +215,7 @@ export class ProcessesBarContent implements OnInit {
   faList = faList;
   faFile = faFile;
   faDatabase = faDatabase;
-
+  faCircleX = faCircleXmark;
   //Filter inputs (form): 
   m_oFilter: any = {
     sStatus: "",
@@ -218,12 +235,13 @@ export class ProcessesBarContent implements OnInit {
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
   ) {
     console.log(this.data)
-   }
+  }
 
   ngOnInit(): void {
     if (this.m_oActiveWorkspace.workspaceId) {
       this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
       this.m_oProcessWorkspaceService.getProcessesRunning().subscribe(aoProcesses => {
+        console.log(aoProcesses);
         this.m_aoProcessesRunning = aoProcesses;
       })
     }
@@ -297,12 +315,13 @@ export class ProcessesBarContent implements OnInit {
   }
 
   getDuration(oProcess: any) {
+    let sStartDate = oProcess.operationStartDate;
     if (!oProcess.operationStartDate.endsWith("Z")) {
-      oProcess.operationStartDate += "Z";
+      sStartDate += "Z";
     }
 
     // start time by server
-    let oStartTime: any = new Date(oProcess.operationStartDate);
+    let oStartTime: any = new Date(sStartDate);
     // still running -> assign "now"
     let oEndTime: any = new Date();
     // reassign in case the process is already ended
@@ -342,7 +361,6 @@ export class ProcessesBarContent implements OnInit {
 
     let sTimeSpan = this.renderTwoDigitNumber(iHours) + ":" + this.renderTwoDigitNumber(iMinutes) + ":" + this.renderTwoDigitNumber(iSeconds);
 
-
     // var oDate = new Date(1970, 0, 1);
     // oDate.setSeconds(0 + iSecondsTimeSpan);
 
@@ -364,6 +382,14 @@ export class ProcessesBarContent implements OnInit {
     return sNumber;
   }
 
+  deleteProcess(oProcessInput: any) {
+    this.m_oProcessWorkspaceService.deleteProcess(oProcessInput);
+    return true;
+  }
+
+  getOperationDescription(oOperation: any) {
+    return WasdiUtils.utilsConvertOperationToDescription(oOperation);
+  }
   openPayloadDialog(oProcess: any) {
     let oDialogRef = this.m_oDialog.open(PayloadDialogComponent, {
       height: '65vh',
@@ -444,7 +470,7 @@ export class ProcessesDialog {
   }
 
   m_bHasError: boolean = false;
-  m_aoProcessesLogs: any[] = [];
+  m_aoProcessesRunning: any[] = [];
   m_aoAllProcessesLogs: any[] = [];
   m_sFilterTable: string = "";
   m_bAreProcessesLoaded: boolean = false;

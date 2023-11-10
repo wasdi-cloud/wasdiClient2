@@ -4,6 +4,9 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AlertDialogTopService } from '../alert-dialog-top.service';
 
 export interface Process {
   fileSize: string,
@@ -42,7 +45,11 @@ export class ProcessWorkspaceService {
   //ORDER OF PROCESSES IS IMPORTANT
   TYPE_OF_PROCESS: Array<string> = ["DOWNLOAD", "PUBLISHBAND", "PUBLISH", "UPDATEPROCESSES"];
 
-  constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
+  constructor(
+    private m_oAlertDialog: AlertDialogTopService,
+    private oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
+    private oHttp: HttpClient) { }
 
   /**
     * Load the last 5 processes of a workspace
@@ -167,6 +174,7 @@ export class ProcessWorkspaceService {
    * @returns {boolean}
    */
   removeProcessInServer(sPidInput: string, sWorkSpaceId: string, oProcess: Process) {
+    let oService = this;
     if (!sPidInput) {
       return false;
     }
@@ -178,14 +186,27 @@ export class ProcessWorkspaceService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    // this.oHttp.get(sUrl + '/process/delete?procws=' + sPidInput).then(function (data, status) {
-    //   if (utilsIsObjectNullOrUndefined(sWorkSpaceId) === false) {
-    //     oProcess.status = "stopped";
-    //     oService.m_aoProcessesStopped.push(oProcess);
-    //     oService.loadProcessesFromServer(sWorkSpaceId);
-    //   }
+    this.oHttp.get<any>(sUrl + '/process/delete?procws=' + sPidInput).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(sWorkSpaceId) === false) {
+          oProcess.status = "stopped";
+          this.m_aoProcessesStopped.push(oProcess);
+          this.loadProcessesFromServer(sWorkSpaceId);
+        }
+      },
+      error: oError => {
+        oService.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS")
+      }
+    }
+    );
+
+
+
+    //   function (data, status) {
+    //
     // }, (function (data, status) {
-    //   utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS");
+    //  
+    //   // FadeoutUtils.utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS");
     // }));
     return true;
   };
@@ -314,6 +335,18 @@ export class ProcessWorkspaceService {
     let oController = this;
     let oWorkspace = this.oConstantsService.getActiveWorkspace();
 
+    let oDialogData = new ConfirmationDialogModel("Confrim Removal", "Are you sure you want to kill this process?");
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      data: oDialogData
+    })
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.removeProcessInServer(oProcessInput.processObjId, oWorkspace.workspaceId, oProcessInput)
+      }
+    })
     // this.m_oModalService.showModal({
     //   templateUrl: "dialogs/delete_process/DeleteProcessDialog.html",
     //   controller: "DeleteProcessController"
