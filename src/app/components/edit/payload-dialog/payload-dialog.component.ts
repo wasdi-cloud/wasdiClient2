@@ -55,22 +55,13 @@ export class PayloadDialogComponent implements OnInit {
   /**
    * Show yAxis label (title):
    */
-  showYAxisLabel: boolean = true;
+  m_bShowYAxisLabel: boolean = false;
 
   /**
    * Show xAxis label (title):
    */
-  showXAxisLabel: boolean = true;
+  m_bShowXAxisLabel: boolean = false;
 
-  /**
-   * xAxis Label (title):
-   */
-  xAxisLabel: string;
-
-  /**
-   * xAxis label (title): 
-   */
-  yAxisLabel: string;
 
   /**
    * Show Timeline: display a timeline control under the chart. Only available if a the x scale is linear or time
@@ -123,6 +114,15 @@ export class PayloadDialogComponent implements OnInit {
       console.log(oPayload.wasdi_dashboard)
       this.m_aoChartsInformation = oPayload.wasdi_dashboard;
       this.m_sActiveTab = 'dashboard';
+      oPayload.wasdi_dashboard.forEach(oChart => {
+        console.log(oChart)
+        if (oChart['x-axis-name'] !== false) {
+          this.m_bShowXAxisLabel = true;
+        }
+        if (oChart['y-axis-name'] !== false) {
+          this.m_bShowYAxisLabel = true;
+        }
+      });
       console.log(this.m_aoChartsInformation);
     } else {
       this.getPayloadString();
