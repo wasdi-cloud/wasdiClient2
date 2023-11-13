@@ -215,14 +215,13 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   downloadProduct(sUrl: string, sFileName: string, sWorkspaceId: string, sBounds: string, oProvider: any, oCallback: any, oError: any) {
     let sMessage: string;
+    let oController = this;
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oCallback) === true) {
       this.m_oTranslate.get('MSG_IMPORTING').subscribe(sResponse => {
         sMessage = sResponse;
       });
       oCallback = function (data, status) {
-        console.log(sMessage)
-        //var oDialog = FadeoutUtils.utilsVexDialogAlertBottomRightCorner(sMessage);
-        //FadeoutUtils.utilsVexCloseDialogAfter("3000", oDialog);
+        oController.m_oNotificationService.openSnackBar(sMessage, "Close", "bottom", "right");
       }
     }
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oError) === true) {
@@ -230,9 +229,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         sMessage = sResponse;
       });
       oError = function (data, status) {
-        console.log(sMessage);
-        //FadeoutUtils.utilsVexDialogAlertTop(sMessage);
-        // oProduct.isDisabledToDoDownload = false;
+        oController.m_oAlertDialog.openDialog(4000, sMessage);
       };
     }
     this.m_oFileBufferService.download(sUrl, sFileName, sWorkspaceId, sBounds, oProvider).subscribe({
