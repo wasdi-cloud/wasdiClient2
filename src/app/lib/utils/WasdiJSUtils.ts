@@ -2,8 +2,6 @@ import FadeoutUtils from "./FadeoutJSUtils";
 
 export default class WasdiUtils {
 
-    
-
     static utilsProjectConvertJSONFromServerInOptions(oJSONInput) {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oJSONInput) == true)
             return null;
@@ -56,59 +54,59 @@ export default class WasdiUtils {
         }
     }
 
-    static utilsProjectShowRabbitMessageUserFeedBack(oMessage) {
+    static utilsProjectShowRabbitMessageUserFeedBack(oMessage, oTranslate) {
 
         let sMessageCode = oMessage.messageCode;
         let sUserMessage = "";
         // Get extra operations
         switch (sMessageCode) {
             case "DOWNLOAD":
-                sUserMessage = "MSG_DOWNLOAD";
+                sUserMessage = oTranslate.instant("MSG_DOWNLOAD");
                 break;
             case "PUBLISHBAND":
-                sUserMessage = "MSG_PUBLISHBAND_1" + oMessage.payload.bandName + "MSG_PUBLISHBAND_2" + oMessage.payload.productName + "MSG_MSG_PUBLISHBAND_3";
+                sUserMessage = oTranslate.instant("MSG_PUBLISHBAND_1") + oMessage.payload.bandName + "MSG_PUBLISHBAND_2" + oMessage.payload.productName + "MSG_MSG_PUBLISHBAND_3";
                 break;
             case "UPDATEPROCESSES":
                 console.log("UPDATE PROCESSES" + " " + FadeoutUtils.utilsGetTimeStamp());
                 break;
             case "MOSAIC":
-                sUserMessage = "MSG_MOSAIC";
+                sUserMessage = oTranslate.instant("MSG_MOSAIC");
                 break;
             case "SUBSET":
-                sUserMessage = "MSG_SUBSET";
+                sUserMessage = oTranslate.instant("MSG_SUBSET");
                 break;
             case "MULTISUBSET":
-                sUserMessage = "MSG_MULTISUBSET";
+                sUserMessage = oTranslate.instant("MSG_MULTISUBSET");
                 break;
             case "GRAPH":
-                sUserMessage = "MSG_GRAPH";
+                sUserMessage = oTranslate.instant("MSG_GRAPH");
                 break;
             case "RUNPROCESSOR":
-                sUserMessage = "MSG_RUNPROCESSOR";
+                sUserMessage = oTranslate.instant("MSG_RUNPROCESSOR");
                 break;
             case "RUNIDL":
-                sUserMessage = "MSG_RUNPROCESSOR";
+                sUserMessage = oTranslate.instant("MSG_RUNPROCESSOR");
                 break;
             case "RUNMATLAB":
-                sUserMessage = "MSG_RUNPROCESSOR";
+                sUserMessage = oTranslate.instant("MSG_RUNPROCESSOR");
                 break;
             case "FTPUPLOAD":
-                sUserMessage = "MSG_FTPUPLOAD";
+                sUserMessage = oTranslate.instant("MSG_FTPUPLOAD");
                 break;
             case "RASTERGEOMETRICRESAMPLE":
-                sUserMessage = "MSG_RASTERGEOMETRICRESAMPLE";
+                sUserMessage = oTranslate.instant("MSG_RASTERGEOMETRICRESAMPLE");
                 break;
             case "FILTER":
-                sUserMessage = "MSG_FILTER";
+                sUserMessage = oTranslate.instant("MSG_FILTER");
                 break;
             case "REGRID":
-                sUserMessage = "MSG_REGRID";
+                sUserMessage = oTranslate.instant("MSG_REGRID");
                 break;
             case "DEPLOYPROCESSOR":
-                sUserMessage = "MSG_DEPLOYPROCESSOR";
+                sUserMessage = oTranslate.instant("MSG_DEPLOYPROCESSOR");
                 break;
             case "DELETEPROCESSOR":
-                sUserMessage = "MSG_DELETEPROCESSOR";
+                sUserMessage = oTranslate.instant("MSG_DELETEPROCESSOR");
                 break;
             case "INFO":
             case "ENVIRONMENTUPDATE":
@@ -116,16 +114,16 @@ export default class WasdiUtils {
                 sUserMessage = oMessage.payload;
                 break;
             case "REDEPLOYPROCESSOR":
-                sUserMessage = "MSG_REDEPLOYPROCESSOR";
+                sUserMessage = oTranslate.instant("MSG_REDEPLOYPROCESSOR");
                 break;
             case "LIBRARYUPDATE":
-                sUserMessage = "MSG_LIBRARYUPDATE";
+                sUserMessage = oTranslate.instant("MSG_LIBRARYUPDATE");
                 break;
             case "KILLPROCESSTREE":
-                sUserMessage = "MSG_KILLPROCESSTREE";
+                sUserMessage = oTranslate.instant("MSG_KILLPROCESSTREE");
                 break;
             case "READMETADATA":
-                sUserMessage = "MSG_READMETADATA";
+                sUserMessage = oTranslate.instant("MSG_READMETADATA");
                 break;
             case "TERMINATEJUPYTERNOTEBOOK":
             case "LAUNCHJUPYTERNOTEBOOK":

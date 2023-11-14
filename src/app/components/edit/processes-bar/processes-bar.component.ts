@@ -54,24 +54,22 @@ export class ProcessesBarComponent implements OnInit {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
-    private m_oTranslate: TranslateService) { 
-      setTimeout(() => {
-        if(!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProcessesRunning) && this.m_aoProcessesRunning.length != 0)
-        {
-            var iNumberOfProcesses = this.m_aoProcessesRunning.length;
-    
-            for(var iIndexProcess = 0; iIndexProcess < iNumberOfProcesses;iIndexProcess++ )
-            {
-                if (this.m_aoProcessesRunning[iIndexProcess].status==="RUNNING" ||
-                    this.m_aoProcessesRunning[iIndexProcess].status==="WAITING" ||
-                    this.m_aoProcessesRunning[iIndexProcess].status==="READY") {
-                    this.m_aoProcessesRunning[iIndexProcess].timeRunning.setSeconds( this.m_aoProcessesRunning[iIndexProcess].timeRunning.getSeconds() + 1) ;
-                }
-            }
+    private m_oTranslate: TranslateService) {
+    setTimeout(() => {
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProcessesRunning) && this.m_aoProcessesRunning.length != 0) {
+        var iNumberOfProcesses = this.m_aoProcessesRunning.length;
+
+        for (var iIndexProcess = 0; iIndexProcess < iNumberOfProcesses; iIndexProcess++) {
+          if (this.m_aoProcessesRunning[iIndexProcess].status === "RUNNING" ||
+            this.m_aoProcessesRunning[iIndexProcess].status === "WAITING" ||
+            this.m_aoProcessesRunning[iIndexProcess].status === "READY") {
+            this.m_aoProcessesRunning[iIndexProcess].timeRunning.setSeconds(this.m_aoProcessesRunning[iIndexProcess].timeRunning.getSeconds() + 1);
+          }
         }
-  
-      }, 1000)
-    }
+      }
+
+    }, 1000)
+  }
 
   ngOnInit() {
     this.getSummary();
@@ -139,18 +137,10 @@ export class ProcessesBarComponent implements OnInit {
     }
     let sNotificationMsg: string;
 
-    if (this.m_oTranslate) {
-      this.m_oTranslate.get(WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage)).subscribe(oTranslation => {
-        console.log(oTranslation);
-        sNotificationMsg = oTranslation;
-      })
-    }
-    else {
-      console.log("ProcessesBarComponent.recievedRabbitMessage: m_oTranslate is null")
-    }
-    if (sNotificationMsg !== "") {
-      this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "bottom", "right");
-    }
+    sNotificationMsg = WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate);
+
+    this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, 'Close', 'right', 'bottom');
+
     return true;
   }
 
