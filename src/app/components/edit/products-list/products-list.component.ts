@@ -38,7 +38,7 @@ declare let Cesium: any;
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent implements OnChanges, OnInit {
-  @Input() m_aoWorkspaceProductsList: Product[];
+  @Input() m_aoWorkspaceProductsList: Product[] = [];
   @Input() m_b2DMapMode: boolean = true;
   @Output() m_oProductArrayOutput = new EventEmitter();
   @Input() map: any;

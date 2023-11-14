@@ -48,7 +48,7 @@ export class EditComponent implements OnInit, OnDestroy {
   m_bTreeIsLoading: boolean = true;
 
   //Array of Products in Workspace
-  m_aoProducts: Product[];
+  m_aoProducts: Product[] = [];
 
   //WorkspaceId is necessary. If null, create a new one.
   m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
