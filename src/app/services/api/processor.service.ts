@@ -283,8 +283,8 @@ export class ProcessorService {
     */
   redeployProcessor(sProcessorId: string) {
 
-    var oWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    var sWorkspaceId = "-";
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    let sWorkspaceId = "-";
 
     if (oWorkspace) {
       sWorkspaceId = oWorkspace.workspaceId;

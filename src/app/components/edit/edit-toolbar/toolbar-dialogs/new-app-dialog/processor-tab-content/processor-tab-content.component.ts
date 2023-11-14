@@ -15,6 +15,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -131,12 +132,12 @@ export class ProcessorTabContentComponent implements OnInit {
   ngOnInit(): void {
     //Set the active workspace from the constants service
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    
+
     this.displayProcessorType();
 
     let sType = this.m_oProcessorBasicInfo.get('oType').value;
     this.m_aoProcessorTypes.forEach(type => {
-      if(type.id === sType) {
+      if (type.id === sType) {
         sType = type.name
         this.m_oProcessorBasicInfo.controls['oType'].setValue(sType)
       }
@@ -207,20 +208,57 @@ export class ProcessorTabContentComponent implements OnInit {
     })
   }
 
+  forceLibUpdate(sProcessorId: string) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId) === true) {
+      return false;
+    }
+
+    let oDialogData = new ConfirmationDialogModel("Confrim Update", "Are you sure you want to update this Processor?");
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      data: oDialogData
+    });
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.m_oProcessorService.forceLibUpdate(sProcessorId).subscribe({
+          next: oResponse => {
+            this.m_oNotificationService.openSnackBar("LIBRARY UPDATE SCHEDULED", "Close", "right", "bottom");
+          },
+          error: oError => {
+            this.m_oAlertDialog.openDialog(4000, "Error in Updating Library")
+          }
+        })
+      }
+    })
+
+    return true;
+  }
+
   forceProcessorRefresh(sProcessorId: string) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId)) {
       return false;
     }
 
-    this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
-      next: oResponse => {
-        this.m_oNotificationService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
-      },
-      error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "Error in Refreshing Processor")
-      }
-
+    let oDialogData = new ConfirmationDialogModel("Confirm Re-Deploy", "Are you sure you want to Redeploy this processor?");
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      data: oDialogData
     })
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
+          next: oResponse => {
+            this.m_oNotificationService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
+          },
+          error: oError => {
+            this.m_oAlertDialog.openDialog(4000, "Error in Refreshing Processor")
+          }
+
+        })
+      }
+    });
     return true;
   }
 
