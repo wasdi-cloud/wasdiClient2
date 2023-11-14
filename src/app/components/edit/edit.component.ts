@@ -71,6 +71,8 @@ export class EditComponent implements OnInit, OnDestroy {
 
   m_aoVisibleBands;
 
+  m_bIsLoadingProducts: boolean = true;
+
   ngOnInit(): void {
     console.log("EditComponent.ngOnInit")
 
@@ -80,11 +82,11 @@ export class EditComponent implements OnInit, OnDestroy {
       if (this.m_oActivatedRoute.snapshot.params['workspaceId']) {
         //Assign and set new workspace id
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
-        
+
         console.log("edit.component.ngOnInit: call open Workspace ")
 
         this.openWorkspace(this.m_sWorkspaceId);
-      } 
+      }
       else {
         //If unable to identify workspace, re-route to workspaces tab
         this.m_oRouter.navigateByUrl('/workspaces')
@@ -141,6 +143,7 @@ export class EditComponent implements OnInit, OnDestroy {
       next: oResponse => {
         console.log("edit.component.ngOnInit: RECEIVED got the product list ")
         this.m_aoProducts = oResponse
+        this.m_bIsLoadingProducts = false;
       },
       error: oError => {
 

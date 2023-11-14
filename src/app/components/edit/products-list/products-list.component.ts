@@ -46,6 +46,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
   @Output() m_aoVisibleBandsOutput = new EventEmitter();
   @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
 
+  @Input() m_bIsLoadingProducts: boolean = true;
+
   //font awesome icons: 
   faBox = faBoxOpen;
   faPlusCircle = faPlusCircle;
@@ -303,7 +305,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         this.m_aoVisibleBands.push(this.m_oActiveBand);
 
         this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
-        if(this.m_b2DMapMode === true) {
+        if (this.m_b2DMapMode === true) {
 
           this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
         } else {

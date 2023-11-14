@@ -3,8 +3,11 @@
     <h3 class="products-header bg-secondary text-light sticky">{{'EDITOR_TITLE_PANEL_PRODUCTS' | translate}}</h3>
     <!-- Product Tree Scrollable content -->
     <div class="products-container d-flex flex-column" style="height:83%">
+        <div *ngIf="m_bIsLoadingProducts === true" class="d-flex flex-column align-items-center pt-3">
+            <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
+        </div>
         <!-- Buttons to import/search for products if there is no product -->
-        <div *ngIf="!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0">
+        <div *ngIf="(!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0) && !m_bIsLoadingProducts">
             <p>{{'EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT' | translate}}</p>
             <div class="d-flex flex-row justify-content-around" style="width:50%">
                 <button class="btn btn-lg btn-primary" (click)="navigateToSearchPage()">
@@ -17,7 +20,8 @@
                 </button>
             </div>
         </div>
-        <ul *ngIf="m_oProductArrayOutput" class="list-group list-group-flush">
+        <ul *ngIf="(m_aoWorkspaceProductsList.length !== 0) && !m_bIsLoadingProducts"
+            class="list-group list-group-flush">
             <li *ngFor="let oProduct of m_aoWorkspaceProductsList; let iIndex = index"
                 class="list-group-item p-2 d-flex flex-column" style="cursor: pointer;">
                 <div class="d-flex flex-row justify-content-between align-items-center">
