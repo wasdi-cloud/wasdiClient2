@@ -336,7 +336,7 @@ export class NewAppDialogComponent implements OnInit {
 
     //Set JSON Parameters: 
     if (this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value) {
-      this.m_oInputProcessor.paramsSample = encodeURI(this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value);
+      this.m_oInputProcessor.paramsSample = this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value;
     }
 
     //Set time out (in minutes): 
@@ -446,11 +446,14 @@ export class NewAppDialogComponent implements OnInit {
     this.setInputProcessorValues();
     let sType = this.m_oProcessorForm.get('processorBasicInfo.oType').value;
 
-    console.log(sType);
-
-    if (sType === "ubuntu_python_snap" || sType === "ubuntu_python37_snap") {
-      this.m_oInputProcessor.processorName = this.m_oInputProcessor.processorName.toLowerCase();
+    
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sType)) {
+      this.m_oAlertDialog.openDialog(4000, "Please select a processor type");
+      return false;      
     }
+
+    this.m_oInputProcessor.processorName = this.m_oInputProcessor.processorName.toLowerCase();
+    
 
     let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value
     let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value
