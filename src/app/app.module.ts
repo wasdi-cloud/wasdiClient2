@@ -151,6 +151,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
 import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.component';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
+import { DragAndDropComponent } from './shared/drag-and-drop/drag-and-drop.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -246,7 +247,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     CommentEditorDialogComponent,
     SearchOrbitResultsComponent,
     FTPDialogComponent,
-    DragAndDropDirective
+    DragAndDropDirective,
+    DragAndDropComponent
   ],
   imports: [
     AppRoutingModule,

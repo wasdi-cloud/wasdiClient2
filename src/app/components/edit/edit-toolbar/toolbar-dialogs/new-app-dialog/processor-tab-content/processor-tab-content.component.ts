@@ -185,18 +185,24 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   onFileSelect(input: any) {
-    console.log(input)
-    if (input.files && input.files[0]) {
-      console.log(input.files);
-      this.m_sSelectedFileName = input.files[0].name;
+    if (input['0']) {
+      let oInput = input['0'];
+      this.m_sSelectedFileName = oInput.name;
       this.m_oSelectedFile = new FormData();
-      this.m_oSelectedFile.append('file', input.files[0]);
+      this.m_oSelectedFile.append('file', oInput);
 
       this.m_oProcessorBasicInfo.patchValue({
         oSelectedFile: this.m_oSelectedFile,
         sSelectedFileName: this.m_sSelectedFileName
       })
     }
+  }
+
+  getSelectedFile(oEvent) {
+    this.m_oProcessorBasicInfo.patchValue({
+      oSelectedFile: oEvent.file,
+      sSelectedFileName: oEvent.name
+    })
   }
 
   /**
