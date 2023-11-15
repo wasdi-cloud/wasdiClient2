@@ -117,7 +117,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   openImportDialog(event: MouseEvent) {
     let oDialog = this.m_oDialog.open(ImportDialogComponent, {
-      height: '40vh',
+      height: '60vh',
       width: '50vw'
     })
   }

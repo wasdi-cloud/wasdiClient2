@@ -85,14 +85,11 @@ export class ImportDialogComponent {
   }
 
   /*************** UPLOAD ***************/
-  onFileSelect(input: any) {
-    if (input.files && input.files[0]) {
-      this.m_sFileName = input.files[0].name
-      this.m_oFile = new FormData();
-      this.m_oFile.append('file', input.files[0]);
-    }
+  getSelectedFile(oEvent){ 
+    this.m_sFileName = oEvent.name;
+    this.m_oFile = oEvent.file
   }
-
+  
   onUploadFile() {
 
     this.m_bIsLoading = true;

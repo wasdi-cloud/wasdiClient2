@@ -7,7 +7,7 @@
         </button>
     </div>
 
-    <div class="m-2" style="height: 60%">
+    <div class="m-2 flex-fill" style="height: 60%">
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link" (click)="changeActiveTab('upload')"
@@ -22,7 +22,7 @@
         <div *ngIf="m_sActiveTab === 'upload'">
             <form #f="ngForm" (ngSubmit)="f.form && onUploadFile()"
                 class="d-flex flex-column gap-3 my-3 align-items-center" action="">
-                <input (change)="onFileSelect($event.target)" type="file" class="form-control" name="m_oFile">
+                <app-drag-and-drop (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
                 <input type="text" name="m_sStyle" placeholder="Select a Style" [matAutocomplete]="auto"
                     class="form-control">
                 <mat-autocomplete #auto="matAutocomplete">
