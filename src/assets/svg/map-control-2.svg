@@ -1,0 +1,16 @@
+<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="36" height="36" fill="black" fill-opacity="0.63"/>
+<rect x="12.5499" y="10.1832" width="11.5784" height="1.5" fill="white"/>
+<rect x="10.7283" y="15.8773" width="9.0709" height="0.5" transform="rotate(-34.3875 10.7283 15.8773)" fill="white"/>
+<rect x="10.7808" y="19.0192" width="13.2807" height="0.5" transform="rotate(-34.3875 10.7808 19.0192)" fill="white"/>
+<rect x="11.5547" y="21.6655" width="15.1122" height="0.5" transform="rotate(-34.3875 11.5547 21.6655)" fill="white"/>
+<rect x="13.375" y="23.5962" width="12.9895" height="0.5" transform="rotate(-34.3875 13.375 23.5962)" fill="white"/>
+<rect x="17.5135" y="23.5673" width="7.78809" height="0.5" transform="rotate(-34.3875 17.5135 23.5673)" fill="white"/>
+<rect x="25.2091" y="13.129" width="11.5784" height="1.5" transform="rotate(90 25.2091 13.129)" fill="white"/>
+<rect x="11.5" y="12" width="11.5784" height="1.5" transform="rotate(90 11.5 12)" fill="white"/>
+<circle cx="24.0081" cy="11.4977" r="2.36673" fill="white"/>
+<circle cx="11.3667" cy="11.3667" r="2.36673" fill="white"/>
+<rect x="12.5498" y="23.5957" width="11.5784" height="1.5" fill="white"/>
+<circle cx="24.0081" cy="23.9103" r="2.36673" fill="white"/>
+<circle cx="11.3667" cy="23.7793" r="2.36673" fill="white"/>
+</svg>
