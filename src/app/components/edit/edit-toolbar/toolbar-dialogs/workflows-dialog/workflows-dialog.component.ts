@@ -8,6 +8,7 @@ import { Workflow } from 'src/app/shared/models/workflow.model';
 import { Product } from 'src/app/shared/models/product.model';
 import { FormControl } from '@angular/forms';
 import { EditWorkflowDialogComponent } from './edit-workflow-dialog/edit-workflow-dialog.component';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-workflows-dialog',
@@ -98,7 +99,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   openEditWorkflowDialog(oWorkflow?) {
     let oDialog;
-    if (oWorkflow) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkflow) === false) {
       oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
         height: '70vh',
         width: '70vw',
@@ -108,16 +109,19 @@ export class WorkflowsDialogComponent implements OnInit {
         }
       })
     } else {
+      console.log(oWorkflow)
       oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
         height: '70vh',
         width: '70vw',
         data: {
-          editmode: false,
+          editMode: false,
           workflow: {}
         }
       })
     }
-    oDialog.afterClosed(this.getWorkflowsByUser());
+    oDialog.afterClosed().subscribe(oDialogResult => {
+      this.getWorkflowsByUser();
+    });
   }
 
   removeWorkflow(oWorkflow) {
