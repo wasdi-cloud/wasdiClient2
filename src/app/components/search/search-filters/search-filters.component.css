@@ -1,7 +1,113 @@
-a.nav-link {
-    cursor: pointer;
+@import url(/src/app/components/marketplace/marketplace.component.css);
+@import url(/src/app/components/header/header.component.css);
+@import url(/src/app/components/search/search.component.css);
+
+.sub-menu {
+	height: 90vh;
+	overflow-y: scroll;
+    width: 500px;
 }
 
-mat-option {
-    min-width: fit-content !important;
+.add-workspace-btn {
+	padding-left: 1rem;
+	padding-right: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.3rem;
+
+	color: #43526b;
+	font-family: "Inter", sans-serif;
+	font-size: 12.75px;
+	font-weight: 400;
+	line-height: 18px;
+}
+
+.sub-menu-body {
+	display: flex;
+	gap: 20px;
+	margin-top: 1rem;
+}
+
+.sub-menu-body button {
+	color: #ffffff;
+	background-color: #212f45;
+	display: flex;
+	gap: 4px;
+	align-items: center;
+	padding: 4px 12px;
+	border-radius: 8px;
+}
+.search-input-container {
+	border: 1px solid rgba(67, 82, 107, 0.15);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+}
+
+.sub-menu-grp {
+	max-width: 350px;
+	margin-top: 0;
+}
+
+.sub-menu label {
+	margin: 0;
+	padding-left: 0;
+}
+
+.sub-menu input {
+	width: 100px;
+	height: 24px;
+}
+
+.sub-menu input.date-select {
+    width: 150px;
+}
+
+hr {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+    width: 400px;
+}
+
+.sub-menu .name-select {
+	border: 1px solid rgba(67, 82, 107, 0.15);
+	height: 28px;
+    width: 10rem;
+	padding-right: 2rem;
+	font-size: 1rem;
+}
+
+.name-select {
+    background: none;
+}
+
+.provider label {
+	padding-left: 0;
+}
+
+.date {
+	margin-top: 2rem;
+	display: flex;
+	gap: 2rem;
+    width: 150px;
+}
+
+.mission p {
+	color: #212f45;
+	font-size: 0.75rem;
+}
+
+.sub-menu .input {
+	border: 1px solid rgba(67, 82, 107, 0.295);
+	border-radius: 8px;
+	width: 150px;
+	padding-left: 0.5rem;
+}
+
+.filter-inputs {
+	display: flex;
+    flex-wrap: wrap;
+	gap: 2rem;
+	margin-top: 0.5rem;
 }

@@ -19,7 +19,8 @@ import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspac
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css']
+  styleUrls: ['./search.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class SearchComponent implements OnInit {
   //Font Awesome Imports:
@@ -679,7 +680,7 @@ export class SearchComponent implements OnInit {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoListOfSelectedProducts) === true) {
       return false;
     }
-    
+
     let oDialogRef = this.m_oDialog.open(WorkspacesListDialogComponent, {
       height: "55vh",
       width: '60vw',
