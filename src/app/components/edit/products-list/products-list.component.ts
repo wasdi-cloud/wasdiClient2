@@ -31,6 +31,7 @@ import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { TranslateService } from '@ngx-translate/core';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 declare let Cesium: any;
 
 @Component({
@@ -70,8 +71,10 @@ export class ProductsListComponent implements OnChanges, OnInit {
   m_aoDisplayBands: any[];
   m_oDisplayMap: L.Map | null;
   m_aoVisibleBands: any[] = [];
+  m_aoSelectedProducts: Array<any> = [];
 
   constructor(
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
@@ -158,9 +161,33 @@ export class ProductsListComponent implements OnChanges, OnInit {
     return oFoundProduct
   }
 
-  isProductShown() {
-
+  addProductToSelectedProducts(oEvent: any, oProduct: Product) {
+    if (oEvent.currentTarget.checked === true) {
+      //Add the Product to the Selected Products Array
+      this.m_aoSelectedProducts.push(oProduct);
+    } else {
+      //Remove Product from the Selected Products Array
+      this.m_aoSelectedProducts = this.m_aoSelectedProducts.filter((oProductInput) => {
+        return oProductInput.fileName !== oProduct.fileName
+      });
+    }
   }
+
+  selectAllProducts(oEvent) {
+    if (oEvent.currentTarget.checked === true) {
+      this.m_aoWorkspaceProductsList.forEach(oProduct => {
+        oProduct['checked'] = true;
+      })
+
+      this.m_aoSelectedProducts = this.m_aoWorkspaceProductsList;
+    } else {
+      this.m_aoWorkspaceProductsList.forEach(oProduct => {
+        oProduct['checked'] = false;
+      })
+      this.m_aoSelectedProducts = [];
+    }
+  }
+
   /**
    * Called from the Product list tree and executes a download of the product
    * @param node 
@@ -169,6 +196,13 @@ export class ProductsListComponent implements OnChanges, OnInit {
     if (node.fileName) {
       this.downloadProductByName(node.fileName)
     }
+  }
+
+  downloadMultipleProducts() {
+    this.m_aoSelectedProducts.forEach(oProduct => {
+      console.log(oProduct);
+      this.downloadProduct(oProduct);
+    })
   }
 
   /**
@@ -263,6 +297,45 @@ export class ProductsListComponent implements OnChanges, OnInit {
     //if deletion unsuccessful show dialog
 
   }
+
+  deleteMultipleProducts() {
+    let bDeleteLayer = true;
+    let bDeleteFile = true;
+
+    let sMessage = "Are you sure you wish to delete " + this.m_aoSelectedProducts.length + " products?";
+
+    let oDialogData = new ConfirmationDialogModel("Confirm Removal", sMessage);
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: oDialogData
+    })
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === false) {
+        return;
+      } else {
+        this.m_aoSelectedProducts.forEach(oProduct => {
+          this.m_oProductService.deleteProductFromWorkspace(oProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe({
+            next: oResponse => {
+              if (oResponse.boolValue) {
+                this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
+                this.m_aoSelectedProducts = [];
+                return true;
+              } else {
+                this.m_oAlertDialog.openDialog(4000, "Error deleting " + oProduct.fileName);
+                return false;
+              }
+            },
+            error: oError => {
+              this.m_oAlertDialog.openDialog(4000, "Error deleting " + oProduct.fileName);
+              return false;
+            }
+          })
+        })
+      }
+    })
+  }
+
 
   setBandImage(oBand: any, iIndex: number) {
     this.m_oActiveBand = oBand;

@@ -1,6 +1,24 @@
 <div class="product-tree-container" style="height: 100%;">
     <!-- Product Tree Header -->
-    <h3 class="products-header bg-secondary text-light sticky">{{'EDITOR_TITLE_PANEL_PRODUCTS' | translate}}</h3>
+    <div
+        class="products-header bg-secondary text-light d-flex flex-row justify-content-between align-items-center px-1">
+        <h3 class="p-0 m-0">{{'EDITOR_TITLE_PANEL_PRODUCTS' | translate}}</h3>
+
+        <div class="d-flex flex-row align-items-center gap-2">
+            <input type="checkbox" name="" id="" matTooltip="Select All" (change)="selectAllProducts($event)">
+            <div *ngIf="m_aoSelectedProducts.length > 0">
+                <button class="btn btn-sm text-light" matTooltip="Download Selected"
+                    (click)="downloadMultipleProducts()">
+                    <fa-icon [icon]="faDownload"></fa-icon>
+                </button>
+                <button class="btn btn-sm text-light" matTooltip="Delete Selected" (click)="deleteMultipleProducts()">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                </button>
+            </div>
+            <div class="badge rounded-pill text-bg-success" *ngIf="m_aoWorkspaceProductsList">
+                {{m_aoWorkspaceProductsList.length}}</div>
+        </div>
+    </div>
     <!-- Product Tree Scrollable content -->
     <div class="products-container d-flex flex-column" style="height:83%">
         <div *ngIf="m_bIsLoadingProducts === true" class="d-flex flex-column align-items-center pt-3">
@@ -26,13 +44,13 @@
                 class="list-group-item p-2 d-flex flex-column" style="cursor: pointer;">
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     <div class="d-flex flex-row align-items-center gap-2">
-
                         <fa-icon [icon]="faPlusCircle" data-bs-toggle="collapse"
                             [attr.data-bs-target]="'#collapseExample' + iIndex" aria-expanded="false"
                             aria-controls="collapseExample"
                             [ngClass]="oProduct.bandsGroups.bands ? 'text-primary' : 'text-secondary'"></fa-icon>
 
-                        <input class="form-check-input me-1" type="checkbox" value="">
+                        <input class="form-check-input me-1" type="checkbox" value="{{oProduct}}"
+                            [checked]="oProduct['checked']" (change)="addProductToSelectedProducts($event, oProduct)">
                         <span class="product-name">{{oProduct.name}}</span>
                     </div>
 

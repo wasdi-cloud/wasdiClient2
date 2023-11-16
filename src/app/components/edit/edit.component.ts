@@ -281,7 +281,8 @@ export class EditComponent implements OnInit, OnDestroy {
      * Listen for changes in Product Information from the Product Tree:
      */
     getProductsChange(oEvent: any) {
-      if (oEvent === true) {
+      this.getProductList();
+      if (oEvent) {
         this.getProductList();
       }
     }
