@@ -17,6 +17,9 @@ import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service
 import { Title } from '@angular/platform-browser';
 import { GlobeService } from 'src/app/services/globe.service';
 
+import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -28,11 +31,12 @@ export class EditComponent implements OnInit, OnDestroy {
     private m_oActivatedRoute: ActivatedRoute,
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
+    private m_oNotificationService: NotificationDisplayService,
     private m_oProductService: ProductService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oRouter: Router,
     private m_oTitleService: Title,
-    private m_oTranslateService: TranslateService,
+    private m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
     private m_oGlobeService: GlobeService) { }
 
@@ -73,8 +77,17 @@ export class EditComponent implements OnInit, OnDestroy {
 
   m_bIsLoadingProducts: boolean = true;
 
+
+
+  m_iHookIndex;
+
   ngOnInit(): void {
     console.log("EditComponent.ngOnInit")
+
+    //RabbitStomp Service Call
+    this.m_oRabbitStompService.addMessageHook("LAUNCHJUPYTERNOTEBOOK",
+      this,
+      this.rabbitMessageHook)
 
     //What to do if workspace undefined: 
     if (!this.m_oActiveWorkspace) {
@@ -95,91 +108,185 @@ export class EditComponent implements OnInit, OnDestroy {
       //If workspace is defined => Load Processes
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
       this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
-      this.subscribeToRabbit();
+      this._subscribeToRabbit();
       //load Products
       this.getProductList();
     }
+
+    this.m_oRabbitStompService.setMessageCallback(this.recievedRabbitMessage);
+    this.m_oRabbitStompService.setActiveController(this);
   }
 
-  ngOnDestroy(): void {
-    console.log("EditComponent.ngOnInit")
-    this.m_oRabbitStompService.unsubscribe();
-    this.m_oGlobeService.clearGlobe();
-  }
+  recievedRabbitMessage(oMessage, oController) {
+    // Check if the message is valid
+    if (oMessage == null) return;
 
-  openWorkspace(sWorkspaceId: string) {
-    this.m_oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe({
-      next: oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          if (oResponse.workspaceId === null || oResponse.activeNode === false) {
-            this.m_oRouter.navigateByUrl('/workspaces');
-            let sMessage = this.m_oTranslateService.instant("MSG_FORBIDDEN")
-            this.m_oAlertDialog.openDialog(4000, sMessage)
-          }
-          else {
+    // Check the Result
+    if (oMessage.messageResult == "KO") {
 
-            console.log("edit.component.ngOnInit: Received open Workspace View Model ")
+      var sOperation = "null";
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.messageCode) === false) sOperation = oMessage.messageCode;
 
-            this.m_oConstantsService.setActiveWorkspace(oResponse);
-            this.m_oActiveWorkspace = oResponse;
-            this.subscribeToRabbit();
+      var sErrorDescription = "";
 
-            console.log("edit.component.ngOnInit: CALL get product list ")
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
 
-            this.getProductList();
-            this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
+      oController.m_oAlertDialog.openDialog(4000, oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription)
+
+      if (oMessage.messageCode == "PUBLISHBAND") {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
+            // var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
+            // this.setTreeNodeAsDeselected(sNodeName);
           }
         }
-      },
-      error: oError => {
-        let sMessage = this.m_oTranslateService.instant("MSG_ERROR_READING_WS");
-        this.m_oAlertDialog.openDialog(4000, sMessage);
       }
-    })
-  }
 
-  getProductList() {
-    this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe({
-      next: oResponse => {
-        console.log("edit.component.ngOnInit: RECEIVED got the product list ")
-        this.m_aoProducts = oResponse
-        this.m_bIsLoadingProducts = false;
-      },
-      error: oError => {
-
-      }
-    })
-  }
-
-  getSearchString(event: string) {
-    this.m_sSearchString = event;
-  }
-
-  getVisibleBands(event: any) {
-    this.m_aoVisibleBands = event;
-  }
-
-  getMapMode(event: any) {
-    this.m_b2DMapModeOn = event;
-  }
-
-  getProductListUpdate(event: any) {
-    this.getProductList();
-  }
-
-  subscribeToRabbit() {
-    if (this.m_oRabbitStompService.isSubscrbed() === false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
-      console.log('EditorController: Web Stomp is ready --> subscribe');
-      this.m_oRabbitStompService.subscribe(this.m_oActiveWorkspace.workspaceId);
+      return;
     }
+
+    // Switch the Code
+    switch (oMessage.messageCode) {
+      case "PUBLISH":
+        oController.receivedPublishMessage(oMessage);
+        break;
+      case "PUBLISHBAND":
+        oController.receivedPublishBandMessage(oMessage);
+        break;
+      case "DOWNLOAD":
+      case "GRAPH":
+      case "INGEST":
+      case "MOSAIC":
+      case "SUBSET":
+      case "MULTISUBSET":
+      case "RASTERGEOMETRICRESAMPLE":
+      case "REGRID":
+      case "SHARE":
+        oController.receivedNewProductMessage(oMessage);
+        break;
+      case "DELETE":
+        //oController.getProductListByWorkspace();
+        break;
+    }
+
+    WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate, oController);
   }
 
-  /**
-   * Listen for changes in Product Information from the Product Tree:
-   */
-  getProductsChange(oEvent: any) {
-    if (oEvent === true) {
+  receivedNewProductMessage(oMessage) {
+
+    let sMessage = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED");
+
+    // Alert the user
+    this.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom");
+
+    // Update product list
+    this.getProductList();
+
+  };
+
+  receivedPublishMessage(oMessage) {
+    if (oMessage == null) {
+      return;
+    }
+    if (oMessage.messageResult == "KO") {
+      let sMessage = this.m_oTranslate.instant("MSG_PUBLISH_ERROR");
+      this.m_oAlertDialog.openDialog(4000, sMessage);
+      return;
+    }
+  };
+    ngOnDestroy(): void {
+      console.log("EditComponent.ngOnInit")
+    this.m_oRabbitStompService.unsubscribe();
+      this.m_oGlobeService.clearGlobe();
+    }
+
+    _subscribeToRabbit() {
+      if (this.m_oRabbitStompService.isSubscrbed() == false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
+        let _this = this;
+        this.m_oRabbitStompService.waitServiceIsReady()
+        console.log('EditorController: Web Stomp is ready --> subscribe');
+        _this.m_oRabbitStompService.subscribe(_this.m_oActiveWorkspace.workspaceId);
+      }
+    }
+
+    openWorkspace(sWorkspaceId: string) {
+      this.m_oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe({
+        next: oResponse => {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+            if (oResponse.workspaceId === null || oResponse.activeNode === false) {
+              this.m_oRouter.navigateByUrl('/workspaces');
+              let sMessage = this.m_oTranslate.instant("MSG_FORBIDDEN")
+              this.m_oAlertDialog.openDialog(4000, sMessage)
+            }
+            else {
+
+              console.log("edit.component.ngOnInit: Received open Workspace View Model ")
+
+              this.m_oConstantsService.setActiveWorkspace(oResponse);
+              this.m_oActiveWorkspace = oResponse;
+              this._subscribeToRabbit();
+
+              console.log("edit.component.ngOnInit: CALL get product list ")
+
+              this.getProductList();
+              this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
+            }
+          }
+        },
+        error: oError => {
+          let sMessage = this.m_oTranslate.instant("MSG_ERROR_READING_WS");
+          this.m_oAlertDialog.openDialog(4000, sMessage);
+        }
+      })
+    }
+
+    getProductList() {
+      this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe({
+        next: oResponse => {
+          console.log("edit.component.ngOnInit: RECEIVED got the product list ")
+          this.m_aoProducts = oResponse
+          this.m_bIsLoadingProducts = false;
+        },
+        error: oError => {
+
+        }
+      })
+    }
+
+    getSearchString(event: string) {
+      this.m_sSearchString = event;
+    }
+
+    getVisibleBands(event: any) {
+      this.m_aoVisibleBands = event;
+    }
+
+    getMapMode(event: any) {
+      this.m_b2DMapModeOn = event;
+    }
+
+    getProductListUpdate(event: any) {
       this.getProductList();
     }
+
+    subscribeToRabbit() {
+      if (this.m_oRabbitStompService.isSubscrbed() === false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
+        console.log('EditorController: Web Stomp is ready --> subscribe');
+        this.m_oRabbitStompService.subscribe(this.m_oActiveWorkspace.workspaceId);
+      }
+    }
+
+    /**
+     * Listen for changes in Product Information from the Product Tree:
+     */
+    getProductsChange(oEvent: any) {
+      if (oEvent === true) {
+        this.getProductList();
+      }
+    }
+
+    rabbitMessageHook(oRabbitMessage, oController) {
+      console.log(oRabbitMessage);
+    }
   }
-}

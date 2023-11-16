@@ -30,6 +30,7 @@ import { Router } from '@angular/router';
 import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { GlobeService } from 'src/app/services/globe.service';
+import { TranslateService } from '@ngx-translate/core';
 declare let Cesium: any;
 
 @Component({
@@ -81,6 +82,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
+    private m_oTranslate: TranslateService,
     private m_oRouter: Router
   ) {
     this.m_oProductsTreeControl = new NestedTreeControl<any>(node => {
@@ -92,8 +94,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    this.m_oRabbitStompService.setMessageCallback(this.receivedRabbitMessage);
-    this.m_oRabbitStompService.setActiveController(this);
   }
 
   ngOnChanges() {
@@ -290,9 +290,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
       }
 
-      //   if (this.m_aoVisibleBands.length === 0) {
-
-      //   }
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
@@ -312,10 +309,9 @@ export class ProductsListComponent implements OnChanges, OnInit {
           this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
         }
       } else {
-        // var sMessage = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
         // utilsVexDialogAlertTop(sMessage + oBand.name);
         // oController.setTreeNodeAsDeselected(oBand.productName + "_" + oBand.name);
-        let sNotificationMsg = "ERROR PUBLISHING BAND";
+        let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
 
 
