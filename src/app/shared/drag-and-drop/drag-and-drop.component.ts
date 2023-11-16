@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-drag-and-drop',
@@ -7,6 +7,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class DragAndDropComponent {
   @Output() m_oSelectedFileOutput = new EventEmitter();
+  @Input() m_sFormDataType: string = 'file'
   m_sSelectedFileName: string = '';
   m_oSelectedFile: any;
 
@@ -15,26 +16,25 @@ export class DragAndDropComponent {
    * @param oInput 
    */
   onFileSelect(oInput: any) {
-    console.log(oInput)
+    let oInputFile
+  
     if (oInput['0']) {
-      let oInputFile = oInput['0'];
-      this.m_sSelectedFileName = oInputFile.name;
-      this.m_oSelectedFile = new FormData();
-      this.m_oSelectedFile.append('file', oInputFile);
-      this.m_oSelectedFileOutput.emit({
-        name: this.m_sSelectedFileName,
-        file: this.m_oSelectedFile
-      });
+      oInputFile = oInput['0'];
+
     } else if (oInput.files['0']) {
-      let oInputFile = oInput.files['0'];
+      oInputFile = oInput.files['0']
+    }
       this.m_sSelectedFileName = oInputFile.name;
       this.m_oSelectedFile = new FormData();
-      this.m_oSelectedFile.append('file', oInputFile);
+      if (this.m_sFormDataType === 'file') {
+        this.m_oSelectedFile.append('file', oInputFile);
+      } else if (this.m_sFormDataType === 'image') {
+        this.m_oSelectedFile.append('image', oInputFile)
+      }
       this.m_oSelectedFileOutput.emit({
         name: this.m_sSelectedFileName,
         file: this.m_oSelectedFile
       });
-    }
   }
 
   /**

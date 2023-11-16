@@ -100,6 +100,15 @@ export class ProcessorTabMediaComponent implements OnInit {
     }
   }
 
+  getSelectedLogo(oEvent: any) {
+    this.m_sProcessorLogoName = oEvent.name;
+    this.m_oProcessorLogo = oEvent.file;
+  }
+
+  getSelectedAppImage(oEvent: any) {
+    this.m_sApplicaitonImageName = oEvent.name;
+    this.m_oApplicationImage = oEvent.file;
+  }
   onDismiss() {
     this.m_oDialogRef.close();
   }
