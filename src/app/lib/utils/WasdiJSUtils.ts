@@ -54,7 +54,7 @@ export default class WasdiUtils {
         }
     }
 
-    static utilsProjectShowRabbitMessageUserFeedBack(oMessage, oTranslate) {
+    static utilsProjectShowRabbitMessageUserFeedBack(oMessage, oTranslate, oController) {
 
         let sMessageCode = oMessage.messageCode;
         let sUserMessage = "";
@@ -133,18 +133,13 @@ export default class WasdiUtils {
                 console.log("ERROR: GOT EMPTY MESSAGE<br>READY");
         }
 
+
         // Is there a feedback for the user?
         if (!FadeoutUtils.utilsIsStrNullOrEmpty(sUserMessage)) {
-            let oAudio = new Audio('assets/audio/message.wav');
-            oAudio.play();
+            // let oAudio = new Audio('assets/audio/message.wav');
+            // oAudio.play();            
 
-            return sUserMessage;
-
-            //this.m_oNotificationDisplayService
-            // Give the short message
-            //Add new Dialog engine
-            // let oDialog = FadeoutUtils.utilsVexDialogAlertBottomRightCorner(sUserMessage);
-            // FadeoutUtils.utilsVexCloseDialogAfter(6000, oDialog);
+            oController.m_oNotificationService.openSnackBar(sUserMessage, "Close", "right", "bottom");
         }
         return "";
     }
