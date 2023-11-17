@@ -1,6 +1,8 @@
 <li class="list-group-item list-group-item-action py-3" (click)="showWorkspaceProperties(workspace)">
     <div class="d-flex flex-row justify-content-between" style="cursor: pointer;">
-        <div class="d-flex flex-column gap-1">
+        <mat-checkbox [checked]="workspace.checked"
+            (change)="workspaceSelectionChange(workspace, $event)"></mat-checkbox>
+        <div class="d-flex flex-column gap-1 flex-fill">
             <p class="p-0 m-0">{{workspace.workspaceName}}</p>
             <div class="d-flex flex-row gap-3">
                 <p class="secondary-info text-muted p-0 m-0">{{getDate(workspace.creationDate)}}</p>
@@ -10,9 +12,8 @@
         <div class="button-panel d-flex flex-row gap-2 align-items-center">
             <button class="btn btn-primary btn-rounded btn-sm" role="button"
                 (click)="openWorkspace(workspace)">Open</button>
-            <button class="btn btn-sm" role="button"
-                (click)="deleteWorkspace(workspace.workspaceId)">
-            <fa-icon [icon]="faTrashcan"></fa-icon>
+            <button class="btn btn-sm" role="button" (click)="deleteWorkspace(workspace.workspaceId)">
+                <fa-icon [icon]="faTrashcan"></fa-icon>
             </button>
         </div>
     </div>

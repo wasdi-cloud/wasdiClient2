@@ -20,11 +20,13 @@ import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Font Awesome Imports:
-import { faArrowsUpDown, faPlay, faPlus, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsUpDown, faPlay, faPlus, faStop, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 //Import Utilities: 
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 //Declare Cesium: 
 declare let Cesium: any;
@@ -55,6 +57,7 @@ export class WorkspacesComponent implements OnInit {
   faPlus = faPlus
   faPlay = faPlay;
   faStop = faStop;
+  faTrashcan = faTrash;
 
   m_aoWorkspacesList: Workspace[] = []
   activeWorkspace!: WorkspaceViewModel;
@@ -106,11 +109,14 @@ export class WorkspacesComponent implements OnInit {
     }
   ]
   m_oActiveSortingOption: any = {}
+
+  m_aoSelectedWorkspaces: Array<Workspace> = [];
   constructor(
     private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oGlobeService: GlobeService,
+    private m_oNotificationService: NotificationDisplayService,
     private m_oOpportunitySearchService: OpportunitySearchService,
     private m_oProductService: ProductService,
     private m_oTranslate: TranslateService,
@@ -515,5 +521,54 @@ export class WorkspacesComponent implements OnInit {
       });
     }
 
+  }
+
+  selectAllWorkspaces(oEvent) {
+    if (oEvent.checked === true) {
+      this.m_aoWorkspacesList.forEach(oWorkspace => {
+        oWorkspace['checked'] = true;
+      })
+      this.m_aoSelectedWorkspaces = this.m_aoWorkspacesList;
+    } else if (oEvent.checked === false) {
+      this.m_aoWorkspacesList.forEach(oWorkspace => {
+        oWorkspace['checked'] = false;
+      })
+      this.m_aoSelectedWorkspaces = [];
+    }
+  }
+
+  getWorkspaceSelectionChange(oEvent) {
+    if (oEvent.checked === true) {
+      this.m_aoSelectedWorkspaces.push(oEvent);
+    } else if (oEvent.checked === false) {
+      this.m_aoSelectedWorkspaces = this.m_aoSelectedWorkspaces.filter(oWorkspace => oWorkspace.workspaceId !== oEvent.workspaceId)
+    }
+  }
+
+  deleteMultipleWorkspaces() {
+    let oDialogData = new ConfirmationDialogModel("Confirm Removal", `Are you sure you want to delete ${this.m_aoSelectedWorkspaces.length} workspaces?`);
+
+    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
+      maxWidth: "400px",
+      data: oDialogData
+    });
+
+    oDialogRef.afterClosed().subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.m_aoSelectedWorkspaces.forEach((oWorkspace, iIndex) => {
+          this.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
+            next: oResponse => {
+              this.m_oNotificationService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
+              if(iIndex === this.m_aoSelectedWorkspaces.length -1) {
+                this.fetchWorkspaceInfoList();
+              }
+            },
+            error: oError => {
+              this.m_oAlertDialog.openDialog(4000, `Error in deleting ${oWorkspace.workspaceName}`);
+            }
+          })
+        })
+      }
+    })
   }
 }

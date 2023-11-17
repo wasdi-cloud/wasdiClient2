@@ -12,23 +12,31 @@
             <div class="bg-secondary p-1 d-flex flex-row justify-content-between align-items-center">
                 <h6 class="text-light p-0 m-0 ms-2">Workspaces <span class="badge rounded-pill text-bg-success">
                         {{m_aoWorkspacesList.length}}</span></h6>
-                <div class="dropdown">
-                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Sorting
+                <div class="d-flex flex-row align-items-center gap-2">
+                    <button *ngIf="m_aoSelectedWorkspaces.length > 0" class="btn btn-sm text-light"
+                        (click)="deleteMultipleWorkspaces()" matTooltip="Delete Workspaces">
+                        <fa-icon [icon]="faTrashcan"></fa-icon>
                     </button>
-                    <ul class="dropdown-menu">
-                        <li style="cursor: pointer" *ngFor="let oSortingOption of m_aoSortingOptions"><a
-                                class="dropdown-item"
-                                [ngClass]="oSortingOption.title === m_oActiveSortingOption.title ? 'active' : ''"
-                                (click)="setSorting(oSortingOption)">{{oSortingOption.title}}</a></li>
-                    </ul>
+                    <mat-checkbox (change)="selectAllWorkspaces($event)"></mat-checkbox>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Sorting
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li style="cursor: pointer" *ngFor="let oSortingOption of m_aoSortingOptions"><a
+                                    class="dropdown-item"
+                                    [ngClass]="oSortingOption.title === m_oActiveSortingOption.title ? 'active' : ''"
+                                    (click)="setSorting(oSortingOption)">{{oSortingOption.title}}</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
             <ul class="list-group" style="height: 90%; overflow-y: scroll;">
                 <app-workspace-list-item *ngFor="let oWorkspace of m_aoWorkspacesList | filter: m_sWorkspaceSearchInput"
                     [workspace]="oWorkspace" (activeWorkspace)="onShowWorkspace($event)"
+                    (m_oWorkspaceSelection)="getWorkspaceSelectionChange($event)"
                     (deletedWorkspace)="onDeleteWorkspace($event)">
                 </app-workspace-list-item>
             </ul>

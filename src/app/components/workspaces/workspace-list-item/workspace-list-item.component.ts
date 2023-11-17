@@ -28,6 +28,7 @@ export class WorkspaceListItemComponent {
   @Input() workspace!: any;
   @Output() activeWorkspace = new EventEmitter<Workspace>();
   @Output() deletedWorkspace = new EventEmitter<Workspace>();
+  @Output() m_oWorkspaceSelection = new EventEmitter<Workspace>();
 
   constructor(
     private oConstantsService: ConstantsService,
@@ -99,5 +100,12 @@ export class WorkspaceListItemComponent {
 
   showWorkspaceProperties(oWorkspace: Workspace) {
     this.activeWorkspace.emit(oWorkspace);
+  }
+
+  workspaceSelectionChange(oWorkspace: Workspace, oEvent) {
+    //Set Checked property of workspace
+    oWorkspace['checked'] = oEvent.checked
+    //Emit selected (or deselected workspace to parent)
+    this.m_oWorkspaceSelection.emit(oWorkspace);
   }
 }
