@@ -14,7 +14,7 @@ import { PagesService } from 'src/app/services/pages.service';
   styleUrls: ['./products-table.component.css']
 })
 export class ProductsTableComponent implements OnInit {
-  @Input() m_bIsVisibleListOfLayers: boolean;
+  @Input() m_bIsVisibleListOfLayers: boolean = false;
   @Input() m_bIsPaginatedList: boolean;
   @Input() m_aoProducts: Observable<any>;
   @Input() m_aoSelectedProviders: Observable<any>;

@@ -14,7 +14,7 @@
             </li>
         </ul>
         <!-- Pagination and Products Per Page -->
-        <div *ngIf="m_bIsVisibleListOfLayers && m_bIsPaginatedList === true"
+        <div *ngIf="m_bIsVisibleListOfLayers === true && m_bIsPaginatedList === true"
             class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
             <mat-select (selectionChange)="changeNumberOfProductsPerPage($event)" class="form-control"
                 placeholder="Products Per Page">
@@ -39,7 +39,12 @@
         </div>
         <div *ngIf="m_oActiveProvider" style="height:82%;">
             <!-- IF THE LIST OF LAYERS IS EMPTY -->
-            <div *ngIf="isProviderLayerListEmpty(m_oActiveProvider.name) && m_oActiveProvider.isLoaded === true">
+            <div class="d-flex flex-column justify-content-center align-items-center"
+                *ngIf="isProviderLayerListEmpty(m_oActiveProvider.name) && m_bIsVisibleListOfLayers === true &&
+                m_oActiveProvider.isLoaded === false">
+                <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
+            </div>
+            <div *ngIf="isProviderLayerListEmpty(m_oActiveProvider.name) &&  m_oActiveProvider.isLoaded === true">
                 empty
             </div>
             <!-- Product Cards -->
