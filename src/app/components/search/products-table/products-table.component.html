@@ -37,18 +37,18 @@
             </ul>
 
         </div>
-        <div *ngIf="m_oActiveProvider" style="height:82%;">
+        <div *ngIf="m_bIsVisibleListOfLayers" style="height:82%;">
             <!-- IF THE LIST OF LAYERS IS EMPTY -->
             <div class="d-flex flex-column justify-content-center align-items-center"
-                *ngIf="isProviderLayerListEmpty(m_oActiveProvider.name) && m_bIsVisibleListOfLayers === true &&
-                m_oActiveProvider.isLoaded === false">
+                *ngIf="!m_oActiveProvider || (m_oActiveProvider.isLoaded === false || isProviderLayerListEmpty(m_oActiveProvider.name) === true)">
                 <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
             </div>
-            <div *ngIf="isProviderLayerListEmpty(m_oActiveProvider.name) &&  m_oActiveProvider.isLoaded === true">
+            <div
+                *ngIf="m_oActiveProvider && isProviderLayerListEmpty(m_oActiveProvider.name) &&  m_oActiveProvider.isLoaded === true">
                 empty
             </div>
             <!-- Product Cards -->
-            <div *ngIf="isProviderLayerListEmpty(m_oActiveProvider.name) === false"
+            <div *ngIf="m_oActiveProvider && isProviderLayerListEmpty(m_oActiveProvider.name) === false"
                 class="product-card-container list-group d-flex flex-column gap-2"
                 style="height:100%; overflow-y: scroll;">
                 <!-- Product Date/Time -->
