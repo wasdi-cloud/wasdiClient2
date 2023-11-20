@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 //Angular Materials Modules: 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -21,13 +21,15 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 
 @Component({
   selector: 'app-apps-dialog',
   templateUrl: './apps-dialog.component.html',
   styleUrls: ['./apps-dialog.component.css']
 })
-export class AppsDialogComponent {
+export class AppsDialogComponent implements OnInit, OnDestroy {
   //Font Awesome Icon Imports
   faBook = faBook;
   faDownload = faDownload;
@@ -39,21 +41,28 @@ export class AppsDialogComponent {
   faRun = faPlay;
   faX = faX;
 
-  m_sActiveUserId: string = ""
+  m_sActiveUserId: string = "";
   m_aoWorkspaceList: any[] = [];
   m_aWorkspacesName: any[] = [];
   m_aoSelectedWorkspaces: any[] = [];
   m_sFileName: string = "";
   m_aoProcessorList: any[] = [];
-  m_bIsLoadingProcessorList: boolean = false;
+  m_bIsLoadingProcessorList: boolean = true;
   m_bIsJsonEditModeActive: boolean = false;
   m_sJson: any = {};
   m_sMyJsonString: string = "";
   m_sSearchString = ""
   m_oSelectedProcessor: any;
 
+  m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
+    "DELETEPROCESSOR",
+    this,
+    this.rabbitMessageHook
+  )
+
 
   constructor(
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
@@ -61,25 +70,34 @@ export class AppsDialogComponent {
     private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oProductService: ProductService,
+    private m_oRabbitStompService: RabbitStompService,
     private m_oWorkspaceService: WorkspaceService,
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.getProcessorsList();
+  }
 
+  ngOnDestroy(): void {
+    this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
   }
 
   /**
    * Get the list of processors from the server
    */
   getProcessorsList() {
-    this.m_bIsLoadingProcessorList = true;
-
-    this.m_oProcessorService.getProcessorsList().subscribe(oResponse => {
-      if (oResponse) {
-        this.m_aoProcessorList = this.setDefaultImages(oResponse);
-        this.m_bIsLoadingProcessorList = false;
-      } else {
-        //ERROR DIALOG
+    this.m_oProcessorService.getProcessorsList().subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          this.m_aoProcessorList = this.setDefaultImages(oResponse);
+          this.m_bIsLoadingProcessorList = false;
+        } else {
+          this.m_oAlertDialog.openDialog(4000, "Error in getting processors");
+        }
+      },
+      error: oError => {
+        this.m_oAlertDialog.openDialog(4000, "Error in getting processors");
       }
     });
   }
@@ -207,14 +225,13 @@ export class AppsDialogComponent {
     })
 
     oDialogRef.afterClosed().subscribe(oDialogResult => {
-      this.m_bIsLoadingProcessorList = true
       if (oDialogResult === true) {
         this.m_oProcessorService.deleteProcessor(oProcessor.processorId).subscribe(oResponse => {
           this.m_bIsLoadingProcessorList = true;
-          this.getProcessorsList();
+          // this.getProcessorsList();
         });
       }
-      this.m_bIsLoadingProcessorList = false;
+      // this.m_bIsLoadingProcessorList = false;
     });
     return true;
   }
@@ -293,5 +310,9 @@ export class AppsDialogComponent {
    */
   onDismiss() {
     this.m_oDialogRef.close();
+  }
+
+  rabbitMessageHook(oRabbitMessage: any, oController: any) {
+    oController.getProcessorsList();
   }
 }

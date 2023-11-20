@@ -12,7 +12,11 @@
             </ul>
             <input class="form-control my-3" type="text" placeholder="Search by Processor Name"
                 [(ngModel)]="m_sSearchString">
-            <div class=" processor-cards-container d-flex flex-row flex-wrap justify-content-start gap-1"
+            <div *ngIf="m_bIsLoadingProcessorList === true" class="d-flex flex-row justify-content-center">
+                <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
+            </div>
+            <div *ngIf="m_bIsLoadingProcessorList === false"
+                class="processor-cards-container d-flex flex-row flex-wrap justify-content-start gap-1"
                 style="width:100%">
                 <div *ngFor="let oProcessor of m_aoProcessorList | filter: m_sSearchString"
                     class="card d-flex flex-column gap-3 p-2 " style="cursor: pointer; height: 15rem;  width: 32%"
@@ -22,13 +26,17 @@
                             <button class="btn btn-sm" (click)="openParametersDialog($event, oProcessor)">
                                 <fa-icon [icon]="faBook"></fa-icon>
                             </button>
-                            <button class="btn btn-sm" *ngIf="oProcessor.readOnly === false" (click)="downloadProcessor($event, oProcessor)">
+                            <button class="btn btn-sm" *ngIf="oProcessor.readOnly === false"
+                                (click)="downloadProcessor($event, oProcessor)">
                                 <fa-icon [icon]="faDownload"></fa-icon>
                             </button>
-                            <button class="btn btn-sm" *ngIf="oProcessor.readOnly === false" (click)="openEditProcessorDialog($event, oProcessor)">
+                            <button class="btn btn-sm" *ngIf="oProcessor.readOnly === false"
+                                (click)="openEditProcessorDialog($event, oProcessor)">
                                 <fa-icon [icon]="faEdit"></fa-icon>
                             </button>
-                            <button class="btn btn-sm text-danger" *ngIf="m_sActiveUserId === oProcessor.publisher || oProcessor.sharedWithMe" (click)="removeProcessor($event, oProcessor)">
+                            <button class="btn btn-sm text-danger"
+                                *ngIf="m_sActiveUserId === oProcessor.publisher || oProcessor.sharedWithMe"
+                                (click)="removeProcessor($event, oProcessor)">
                                 <fa-icon [icon]="faX"></fa-icon>
                             </button>
                         </div>
