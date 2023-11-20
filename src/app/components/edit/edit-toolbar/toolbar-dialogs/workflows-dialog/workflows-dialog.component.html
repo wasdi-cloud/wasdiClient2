@@ -74,17 +74,26 @@
                 </div>
 
                 <div class="style-xml-container d-flex flex-column gap-1">
+                    <div class="d-flex flex-row align-items-center">
+                        Show file extension: <mat-checkbox [color]="'success'" [(ngModel)]="m_bShowExtension"></mat-checkbox>
+                    </div>
                     <label class="text-success form-label">Read:</label>
+                    <!-- Multi-select for Batch Processing -->
                     <mat-select *ngIf="m_sActiveTab === 'batch'" class="form-control" [(ngModel)]="m_aoSelectedProducts"
                         (selectionChange)="getMultiSelection($event)" multiple>
-                        <mat-option *ngFor="let oProduct of m_aoProducts" [value]="oProduct">
-                            {{oProduct.name}}
+                        <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
+                            [(ngModel)]="m_sSearchString">
+                        <mat-option *ngFor="let oProduct of m_aoProducts | filter: m_sSearchString" [value]="oProduct">
+                            {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
                         </mat-option>
                     </mat-select>
+                    <!-- Single Select for Single Processing -->
                     <mat-select *ngIf="m_sActiveTab === 'execute'" class="form-control" [(ngModel)]="m_oSelectedProduct"
                         (selectionChange)="getSingleSelection($event)">
-                        <mat-option *ngFor="let oProduct of m_aoProducts" [value]="oProduct">
-                            {{oProduct.name}}
+                        <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
+                            [(ngModel)]="m_sSearchString">
+                        <mat-option *ngFor="let oProduct of m_aoProducts | filter:m_sSearchString" [value]="oProduct">
+                            {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
                         </mat-option>
                     </mat-select>
                     <!-- <button class="btn btn-success" (click)="runMultiInputWorkflow()">Run</button> -->

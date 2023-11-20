@@ -31,6 +31,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   m_bIsUploadingWorkflow: boolean = false;
   m_bIsLoadingWorkdlow: boolean = false;
+  m_bShowExtension: boolean = false;
 
   m_oSelectedWorkflow: Workflow = {} as Workflow;
   m_oSelectedMultiInputWorkflow: any = null;
@@ -49,7 +50,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   m_sUserId: string;
   m_sWorkspaceId: string;
-
+  m_sSearchString: string = "";
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
     private m_oConstantsService: ConstantsService,
@@ -63,6 +64,7 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_sUserId = this.m_oConstantsService.getUserId();
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_aoProducts = this.m_oData.products;
+    console.log(this.m_aoProducts);
   }
 
   setActiveTab(sTabName: string) {
@@ -250,6 +252,7 @@ export class WorkflowsDialogComponent implements OnInit {
       asProductNames.push(oProduct.fileName);
     });
     this.m_oSelectedWorkflow.inputFileNames = asProductNames;
+    console.log(this.m_oSelectedWorkflow.inputFileNames);
   }
 
   getEmptyObjectExecuteGraph() {
