@@ -16,6 +16,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { BuildLogsComponent } from 'src/app/components/dialogs/build-logs/build-logs.component';
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -110,7 +111,7 @@ export class ProcessorTabContentComponent implements OnInit {
   m_aoProcessorTypes = [
     { name: "Ubuntu 22.04 + Python 3.10", id: "python_pip_2" },
     { name: "OGC Application Package", id: "eoepca" },
-    { name: "Python 3.x Pip One Shot", id:"pip_oneshot"},
+    { name: "Python 3.x Pip One Shot", id: "pip_oneshot" },
     { name: "IDL 3.7.2", id: "ubuntu_idl372" },
     { name: "OCTAVE 6.x", id: "octave" },
     { name: "Python 3.x Conda", id: "conda" },
@@ -284,6 +285,17 @@ export class ProcessorTabContentComponent implements OnInit {
         sProcessorName: this.m_sProcessorName
       }
     });
+  }
+
+  openBuildLogs(){ 
+    let oDialog = this.m_oDialog.open(BuildLogsComponent, {
+      height: '70vh',
+      width: '70vw',
+      data: {
+        sProcessorId: this.m_sProcessorId,
+        sProcessorName: this.m_sProcessorName
+      }
+    })
   }
 
   /**
