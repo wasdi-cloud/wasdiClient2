@@ -367,4 +367,8 @@ export class ProcessorService {
   saveProcessorUI(sProcessorName: string, sProcessorUI: string) {
     return this.m_oHttp.post(this.APIURL + '/processors/saveui?name=' + sProcessorName, sProcessorUI);
   }
+
+  getProcessorLogsBuild(sProcessorId: string) {
+    return this.m_oHttp.get<any>(this.APIURL + '/processors/logs/build?processorId=' + sProcessorId);
+  }
 }
