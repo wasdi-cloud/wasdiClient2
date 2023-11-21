@@ -152,6 +152,7 @@ import { SearchOrbitResultsComponent } from './components/plan/search-orbit-resu
 import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.component';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { DragAndDropComponent } from './shared/drag-and-drop/drag-and-drop.component';
+import { BuildLogsComponent } from './components/dialogs/build-logs/build-logs.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -248,7 +249,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SearchOrbitResultsComponent,
     FTPDialogComponent,
     DragAndDropDirective,
-    DragAndDropComponent
+    DragAndDropComponent,
+    BuildLogsComponent
   ],
   imports: [
     AppRoutingModule,
