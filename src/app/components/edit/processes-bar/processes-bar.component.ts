@@ -36,12 +36,15 @@ export interface SearchFilter {
   styleUrls: ['./processes-bar.component.css']
 })
 export class ProcessesBarComponent implements OnInit {
+  @Input() m_oActiveWorkspace?: any = {};
+  @Input() m_sDownloadProductName?: string = ""; 
+  @Input() m_bShowDownloadProgress: boolean = false;
+  
   //Fontawesome Icon Declarations
   faArrowUp = faArrowUp;
   faPlug = faPlug;
 
   m_aoProcessesRunning: any[] = [];
-  @Input() m_oActiveWorkspace?: any = {};
   m_iNumberOfProcesses: number = 0;
   m_iWaitingProcesses: number = 0;
   m_oLastProcesses: any = null;

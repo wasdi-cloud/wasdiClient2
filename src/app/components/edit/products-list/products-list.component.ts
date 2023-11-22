@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Product } from 'src/app/shared/models/product.model';
+import { HttpEventType } from '@angular/common/http';
 
 //Angular Material Imports:
 import { MatDialog } from '@angular/material/dialog';
@@ -47,6 +48,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   @Input() m_sSearchString: string;
   @Output() m_aoVisibleBandsOutput = new EventEmitter();
   @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
+  @Output() m_oDownloadProgress: EventEmitter<any> = new EventEmitter();
 
   @Input() m_bIsLoadingProducts: boolean = true;
 
@@ -219,14 +221,27 @@ export class ProductsListComponent implements OnChanges, OnInit {
       sUrl = this.m_oConstantsService.getActiveWorkspace().apiUrl;
     }
 
-    this.m_oCatalogService.newDownloadByName(sFileName, this.m_oActiveWorkspace.workspaceId, sUrl).subscribe(blob => {
-      const a = document.createElement('a');
-      const objectUrl = URL.createObjectURL(blob);
-      a.href = objectUrl;
-      a.download = sFileName;
-      a.click();
-      URL.revokeObjectURL(objectUrl);
-    })
+    this.m_oCatalogService.newDownloadByName(sFileName, this.m_oActiveWorkspace.workspaceId, sUrl).subscribe({
+      next: oResponse => {
+        if (oResponse.type === HttpEventType.DownloadProgress) {
+          this.m_oDownloadProgress.emit({ downloadStatus: "incomplete", productName: sFileName })
+        }
+        if (oResponse.type === HttpEventType.Response) {
+          console.log("donwload completed"); this.m_oDownloadProgress.emit({ downloadStatus: "complete", productName: sFileName })
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(oResponse.body);
+          a.href = objectUrl;
+          a.download = sFileName;
+          a.click();
+          URL.revokeObjectURL(objectUrl);
+          this.m_oNotificationDisplayService.openSnackBar("Download Complete", "Close", "right", "bottom");
+        }
+      },
+      error: oError => {
+        this.m_oAlertDialog.openDialog(4000, "Problem in getting Product Download");
+      }
+    });
+
     return true;
   }
 

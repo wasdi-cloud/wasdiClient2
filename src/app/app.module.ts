@@ -55,6 +55,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatChipsModule } from '@angular/material/chips';
+import {MatProgressBarModule } from '@angular/material/progress-bar'
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -290,6 +291,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatListModule,
     MatProgressSpinnerModule,
     MatChipsModule, 
+    MatProgressBarModule,
     NgxChartsModule
   ],
   providers: [
