@@ -1,12 +1,7 @@
-<div class="dialog">
-    <h1 class="dialog-text"mat-dialog-title>
-        {{title}}
-    </h1>
-    <div mat-dialog-content>
-        <p class="dialog-text">{{message}}</p>
-    </div>
-    <div mat-dialog-actions class="d-flex flex-row gap-1">
-        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">No</button>
+<div class="dialog d-flex flex-column">
+    <div mat-dialog-content [innerHTML]="m_sMessage"></div>
+    <div mat-dialog-actions class="d-flex flex-row align-self-end gap-1">
+        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">Cancel</button>
         <button class="btn btn-danger btn-sm" (click)="onConfirm()">Yes</button>
     </div>
 </div>

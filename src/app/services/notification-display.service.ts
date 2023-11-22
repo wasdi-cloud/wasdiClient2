@@ -57,4 +57,20 @@ export class NotificationDisplayService {
       }, iTimeout)
     });
   }
+
+  /**
+   * Handle open of confirmation dialog
+   * @param sMessage 
+   * @returns 
+   */
+  openConfirmationDialog(sMessage: string) {
+    let oDialogRef = this.m_oMatDialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      data: {
+        message: sMessage
+      }
+    })
+
+    return oDialogRef.afterClosed();
+  }
 }
