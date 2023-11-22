@@ -154,6 +154,8 @@ import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.comp
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { DragAndDropComponent } from './shared/drag-and-drop/drag-and-drop.component';
 import { BuildLogsComponent } from './components/dialogs/build-logs/build-logs.component';
+import { AlertDialogComponent } from './shared/dialogs/alert-dialog/alert-dialog.component';
+import { NotificationSnackbarComponent } from './shared/dialogs/notification-snackbar/notification-snackbar.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -251,7 +253,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     FTPDialogComponent,
     DragAndDropDirective,
     DragAndDropComponent,
-    BuildLogsComponent
+    BuildLogsComponent,
+    AlertDialogComponent,
+    NotificationSnackbarComponent
   ],
   imports: [
     AppRoutingModule,
