@@ -6,12 +6,12 @@ import { MatDialog } from '@angular/material/dialog';
 //Service Imports:
 import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { ReviewEditorDialogComponent } from './review-editor-dialog/review-editor-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 
 //Component Imports:
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { CommentEditorDialogComponent } from './comment-editor-dialog/comment-editor-dialog.component';
 
 //Font Awesome Improts:
@@ -62,9 +62,9 @@ export class AppReviewsComponent implements OnChanges {
   m_aoComments: any = [];
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorMediaService,
     private m_oTranslate: TranslateService,
@@ -105,12 +105,12 @@ export class AppReviewsComponent implements OnChanges {
           })
         }
         else {
-          this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg);
         }
         this.m_bReviewsWaiting = false;
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg);
       }
     });
   }
@@ -134,13 +134,13 @@ export class AppReviewsComponent implements OnChanges {
             this.m_oReviewsWrapper.reviews = this.m_oReviewsWrapper.reviews.concat(oResponse.reviews);
           }
         } else {
-          this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg)
+          this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg)
 
         }
         this.m_bReviewsWaiting = false;
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sReviewsErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg);
         this.m_bReviewsWaiting = false;
       }
     });
@@ -194,26 +194,21 @@ export class AppReviewsComponent implements OnChanges {
     let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_REVIEW_DELETE_CONFIRM");
 
     //Confirm that User wishes to delete the Review:
-    let oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmMsg);
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: oDialogData
-    });
-
-    //If User agrees, the Review is deleted
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
-      if (oDialogResult === true) {
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
+        //If User agrees, the Review is deleted
         this.m_oProcessorMediaService.deleteProcessorReview(this.m_oSelectedProcessor.processorId, oReview.id).subscribe({
           next: oResponse => {
             this.getReviews();
           },
           error: oError => {
-            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
           }
         })
       }
-    });
+    })
   }
 
   /**
@@ -262,7 +257,7 @@ export class AppReviewsComponent implements OnChanges {
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sCommentsErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sCommentsErrorMsg);
         this.m_bCommentsWaiting = false;
       }
     });
@@ -318,22 +313,18 @@ export class AppReviewsComponent implements OnChanges {
     let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENTS_ERROR");
     let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_DELETE_CONFIRM");
 
-    let oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmMsg);
+    //Confirm Comment Removal
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: oDialogData
-    });
-
-    //If User agrees, the Review is deleted
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
-      if (oDialogResult === true) {
-        this.m_oProcessorMediaService.deleteReviewComment(oComment.reviewId, oComment.commentId).subscribe({
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
+        //If User agrees, the Comment is deleted
+        this.m_oProcessorMediaService.deleteReviewComment(this.m_oSelectedProcessor.processorId, oReview.id).subscribe({
           next: oResponse => {
-            this.getComments(oReview);
+            this.getReviews();
           },
           error: oError => {
-            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
           }
         })
       }
