@@ -32,7 +32,7 @@ import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+
 declare let Cesium: any;
 
 @Component({
@@ -76,7 +76,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
   m_aoSelectedProducts: Array<any> = [];
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
@@ -238,7 +237,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "Problem in getting Product Download");
+        this.m_oNotificationDisplayService.openAlertDialog( "Problem in getting Product Download");
       }
     });
 
@@ -337,12 +336,12 @@ export class ProductsListComponent implements OnChanges, OnInit {
                 this.m_aoSelectedProducts = [];
                 return true;
               } else {
-                this.m_oAlertDialog.openDialog(4000, "Error deleting " + oProduct.fileName);
+                this.m_oNotificationDisplayService.openAlertDialog( "Error deleting " + oProduct.fileName);
                 return false;
               }
             },
             error: oError => {
-              this.m_oAlertDialog.openDialog(4000, "Error deleting " + oProduct.fileName);
+              this.m_oNotificationDisplayService.openAlertDialog( "Error deleting " + oProduct.fileName);
               return false;
             }
           })

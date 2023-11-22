@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 //Import Services: 
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -70,7 +69,6 @@ export class HeaderComponent implements OnInit {
   faStar = faStar;
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
@@ -94,7 +92,7 @@ export class HeaderComponent implements OnInit {
               this.m_oActiveWorkspace = oResponse;
             },
             error: oError => {
-              this.m_oAlertDialog.openDialog(4000, "Error in retreiving Workspace Information")
+              this.m_oNotificationDisplayService.openAlertDialog( "Error in retreiving Workspace Information")
             }
           })
         } else {
@@ -180,7 +178,7 @@ export class HeaderComponent implements OnInit {
           }
           this.m_bLoadingProjects = false;
         } else {
-          this.m_oAlertDialog.openDialog(4000, "Error in getting your projects");
+          this.m_oNotificationDisplayService.openAlertDialog( "Error in getting your projects");
           this.m_bLoadingProjects = false;
           this.m_oProject = oFirstProjectElement;
 
@@ -189,7 +187,7 @@ export class HeaderComponent implements OnInit {
       error: oError => {
         let sErrorMessage = "Error in getting your projects";
         this.m_oProject = oFirstProjectElement;
-        this.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        this.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
       }
     })
 

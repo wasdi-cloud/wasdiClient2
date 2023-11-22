@@ -1,8 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { faSave, faTrash, faX } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
@@ -25,9 +24,8 @@ export class CommentEditorDialogComponent implements OnInit {
   m_bIsEditing: boolean;
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
-    private m_oAlertService: AlertDialogTopService,
     private m_oDialogRef: MatDialogRef<CommentEditorDialogComponent>,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oTranslate: TranslateService
   ) { }
@@ -50,10 +48,10 @@ export class CommentEditorDialogComponent implements OnInit {
 
     this.m_oProcessorMediaService.addReviewComment(this.m_oCommentInfo).subscribe({
       next: oResponse => {
-        this.m_oNotificationService.openSnackBar(sSavedMsg, "Close", "right", "bottom");
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close")
       },
       error: oError => {
-        this.m_oAlertService.openDialog(4000, sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
       }
     });
 
@@ -62,16 +60,15 @@ export class CommentEditorDialogComponent implements OnInit {
 
 
   updateComment() {
-
     let sSavedMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_UPDATED");
     let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_UPDATED_ERROR");
 
     this.m_oProcessorMediaService.updateReviewComment(this.m_oCommentInfo).subscribe({
       next: oResponse => {
-        this.m_oNotificationService.openSnackBar(sSavedMsg, "Close", "right", "bottom");
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close");
       },
       error: oError => {
-        this.m_oAlertService.openDialog(4000, sErrorMsg)
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, 4000);
       }
     });
 

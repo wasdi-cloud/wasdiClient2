@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 //Service Imports:
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { OrganizationsService } from 'src/app/services/api/organizations.service';
 
@@ -31,9 +30,8 @@ export class OrganizationsDisplayComponent implements OnInit {
   m_aoOrganizations: Array<any> = [];
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oDialog: MatDialog,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOrganizationsService: OrganizationsService) { }
 
   ngOnInit(): void {
@@ -90,10 +88,10 @@ export class OrganizationsDisplayComponent implements OnInit {
         this.m_oOrganizationsService.deleteOrganization(oOrganization.organizationId).subscribe({
           next: oResponse => {
             this.getUserOrganizations();
-            this.m_oNotificationService.openSnackBar("Organization Removed", "Close", 'bottom', 'right');
+            this.m_oNotificationDisplayService.openSnackBar("Organization Removed", "Close", 'bottom', 'right');
           },
           error: oError => {
-            this.m_oAlertDialog.openDialog(4000, "Error in deleting this organization");
+            this.m_oNotificationDisplayService.openAlertDialog( "Error in deleting this organization");
           }
         })
       }

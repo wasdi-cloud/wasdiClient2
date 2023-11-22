@@ -20,7 +20,6 @@ import { TranslateService } from '@ngx-translate/core';
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 
 export interface SearchFilter {
   sStatus: string,
@@ -52,7 +51,6 @@ export class ProcessesBarComponent implements OnInit {
   m_oSummary: any;
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private _bottomSheet: MatBottomSheet,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
@@ -94,7 +92,7 @@ export class ProcessesBarComponent implements OnInit {
         next: oResponse => {
           //If Response is undefined or is null:
           if (!oResponse) {
-            this.m_oAlertDialog.openDialog(4000, sMessage);
+            this.m_oNotificationDisplayService.openAlertDialog( sMessage);
           } else {
             this.m_oSummary = oResponse;
             this.m_iNumberOfProcesses = oResponse.userProcessRunning;
@@ -102,7 +100,7 @@ export class ProcessesBarComponent implements OnInit {
           }
         },
         error: oError => {
-          this.m_oAlertDialog.openDialog(4000, sMessage)
+          this.m_oNotificationDisplayService.openAlertDialog( sMessage)
         }
       });
     });

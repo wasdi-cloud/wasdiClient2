@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 //Import Services:
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
@@ -112,11 +111,10 @@ export class WorkspacesComponent implements OnInit {
 
   m_aoSelectedWorkspaces: Array<Workspace> = [];
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oGlobeService: GlobeService,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOpportunitySearchService: OpportunitySearchService,
     private m_oProductService: ProductService,
     private m_oTranslate: TranslateService,
@@ -159,7 +157,7 @@ export class WorkspacesComponent implements OnInit {
       this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
         next: oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oAlertDialog.openDialog(4000, sMessage);
+            this.m_oNotificationDisplayService.openAlertDialog( sMessage);
           } else {
             this.m_aoWorkspacesList = oResponse;
           }
@@ -558,13 +556,13 @@ export class WorkspacesComponent implements OnInit {
         this.m_aoSelectedWorkspaces.forEach((oWorkspace, iIndex) => {
           this.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
             next: oResponse => {
-              this.m_oNotificationService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
               if(iIndex === this.m_aoSelectedWorkspaces.length -1) {
                 this.fetchWorkspaceInfoList();
               }
             },
             error: oError => {
-              this.m_oAlertDialog.openDialog(4000, `Error in deleting ${oWorkspace.workspaceName}`);
+              this.m_oNotificationDisplayService.openAlertDialog( `Error in deleting ${oWorkspace.workspaceName}`);
             }
           })
         })

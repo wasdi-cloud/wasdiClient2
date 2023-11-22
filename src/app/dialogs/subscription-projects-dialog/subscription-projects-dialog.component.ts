@@ -25,7 +25,7 @@ export class SubscriptionProjectsDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
     private m_oDialogRef: MatDialogRef<SubscriptionProjectsDialogComponent>,
     private m_oDialog: MatDialog,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProjectService: ProjectService,
     private m_oTranslate: TranslateService
   ) { }
@@ -80,9 +80,9 @@ export class SubscriptionProjectsDialogComponent implements OnInit {
         this.m_oProjectService.deleteProject(oProject.projectId).subscribe({
           next: oResponse => {
             if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.status === 200) {
-              this.m_oNotificationService.openSnackBar("Project Deleted", "Close", "bottom", "right");
+              this.m_oNotificationDisplayService.openSnackBar("Project Deleted", "Close", "bottom", "right");
             } else {
-              this.m_oNotificationService.openSnackBar("Error in Deleting Project", "Close", "bottom", "right");
+              this.m_oNotificationDisplayService.openSnackBar("Error in Deleting Project", "Close", "bottom", "right");
             }
             this.getProjects();
           },
@@ -92,7 +92,7 @@ export class SubscriptionProjectsDialogComponent implements OnInit {
               sErrorMsg = this.m_oTranslate.instant(oError.message);
             }
 
-            this.m_oNotificationService.openSnackBar(sErrorMsg, "Close", "bottom", "right");
+            this.m_oNotificationDisplayService.openSnackBar(sErrorMsg, "Close", "bottom", "right");
           }
         })
       }

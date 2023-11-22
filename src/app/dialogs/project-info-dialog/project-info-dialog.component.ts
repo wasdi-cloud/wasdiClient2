@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
 //Import Services:
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ProjectService } from 'src/app/services/api/project.service';
 
 //Import Angular Materials
@@ -12,6 +11,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 @Component({
   selector: 'app-project-info-dialog',
   templateUrl: './project-info-dialog.component.html',
@@ -40,9 +40,9 @@ export class ProjectInfoDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
-    private m_oAlerDialogService: AlertDialogTopService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<ProjectInfoDialogComponent>,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProjectService: ProjectService
   ) { }
 

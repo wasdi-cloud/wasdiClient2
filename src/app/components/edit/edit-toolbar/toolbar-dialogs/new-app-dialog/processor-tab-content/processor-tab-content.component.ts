@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 //Service Imports:
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -125,10 +124,9 @@ export class ProcessorTabContentComponent implements OnInit {
 
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService) {
   }
 
@@ -234,10 +232,10 @@ export class ProcessorTabContentComponent implements OnInit {
       if (oDialogResult === true) {
         this.m_oProcessorService.forceLibUpdate(sProcessorId).subscribe({
           next: oResponse => {
-            this.m_oNotificationService.openSnackBar("LIBRARY UPDATE SCHEDULED", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar("LIBRARY UPDATE SCHEDULED", "Close", "right", "bottom");
           },
           error: oError => {
-            this.m_oAlertDialog.openDialog(4000, "Error in Updating Library")
+            this.m_oNotificationDisplayService.openAlertDialog( "Error in Updating Library")
           }
         })
       }
@@ -261,10 +259,10 @@ export class ProcessorTabContentComponent implements OnInit {
       if (oDialogResult === true) {
         this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
           next: oResponse => {
-            this.m_oNotificationService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
           },
           error: oError => {
-            this.m_oAlertDialog.openDialog(4000, "Error in Refreshing Processor")
+            this.m_oNotificationDisplayService.openAlertDialog( "Error in Refreshing Processor")
           }
 
         })

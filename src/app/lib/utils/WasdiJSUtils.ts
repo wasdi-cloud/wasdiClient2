@@ -139,7 +139,7 @@ export default class WasdiUtils {
             // let oAudio = new Audio('assets/audio/message.wav');
             // oAudio.play();            
 
-            oController.m_oNotificationService.openSnackBar(sUserMessage, "Close", "right", "bottom");
+            oController.m_oNotificationDisplayService.openSnackBar(sUserMessage, "Close", "right", "bottom");
         }
         return "";
     }

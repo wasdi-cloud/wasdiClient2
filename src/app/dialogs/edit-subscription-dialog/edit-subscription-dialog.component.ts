@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 
 import { faX } from '@fortawesome/free-solid-svg-icons';
 
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { OrganizationsService } from 'src/app/services/api/organizations.service';
@@ -56,11 +55,10 @@ export class EditSubscriptionDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<EditSubscriptionDialogComponent>,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOrganizationsService: OrganizationsService,
     private m_oSubscriptionService: SubscriptionService,
     private m_oTranslate: TranslateService,
@@ -94,7 +92,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
             this.getOrganizationsListByUser();
             this.getDaysRemaining(this.m_oEditSubscription.startDate, this.m_oEditSubscription.endDate)
           } else {
-            this.m_oAlertDialog.openDialog(4000, "ERROR IN GETTING THE SUBSCRIPTION BY ID");
+            this.m_oNotificationDisplayService.openAlertDialog( "ERROR IN GETTING THE SUBSCRIPTION BY ID");
           }
         },
         error: oError => { }
@@ -175,7 +173,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
           this.initSubscriptionInfo();
           this.initDates();
           if (this.m_bCheckoutNow === false) {
-            this.m_oAlertDialog.openDialog(4000, "UPDATED SUBSCRIPTION");
+            this.m_oNotificationDisplayService.openAlertDialog( "UPDATED SUBSCRIPTION");
           }
           //If creating a subscription:
           if (this.m_bCheckoutNow === true) {
@@ -215,7 +213,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
       next: oResponse => {
         console.log(oResponse);
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
-          this.m_oNotificationService.openSnackBar("PAYMENT URL RECIEVED", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED", "Close", "right", "bottom");
 
           let sUrl = oResponse.message;
 
@@ -223,7 +221,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "ERROR IN FETCHING PAYMENT URL");
+        this.m_oNotificationDisplayService.openAlertDialog( "ERROR IN FETCHING PAYMENT URL");
       }
     });
   }
@@ -232,7 +230,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
     this.m_oOrganizationsService.getOrganizationsListByUser().subscribe({
       next: oResponse => {
         if (oResponse.status !== 200) {
-          this.m_oAlertDialog.openDialog(4000, "ERROR IN FETCHING ORGANIZATIONS");
+          this.m_oNotificationDisplayService.openAlertDialog( "ERROR IN FETCHING ORGANIZATIONS");
         } else {
           const oFirstElement = { name: "No Organization", organizationId: null };
           this.m_asOrganizations = [oFirstElement].concat(oResponse.body);

@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { AlertDialogTopService } from '../alert-dialog-top.service';
+import { NotificationDisplayService } from '../notification-display.service';
 
 export interface Process {
   fileSize: string,
@@ -46,9 +46,9 @@ export class ProcessWorkspaceService {
   TYPE_OF_PROCESS: Array<string> = ["DOWNLOAD", "PUBLISHBAND", "PUBLISH", "UPDATEPROCESSES"];
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private oHttp: HttpClient) { }
 
   /**
@@ -195,7 +195,7 @@ export class ProcessWorkspaceService {
         }
       },
       error: oError => {
-        oService.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS")
+        oService.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS")
       }
     }
     );

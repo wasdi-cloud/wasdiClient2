@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 @Component({
   selector: 'app-processor-tab-store',
   templateUrl: './processor-tab-store.component.html',
@@ -21,7 +21,7 @@ export class ProcessorTabStoreComponent implements OnInit {
   @Input() m_oProcessorStoreInfo: FormGroup;
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService) { }
 
@@ -45,7 +45,7 @@ export class ProcessorTabStoreComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "Error in getting categories");
+        this.m_oNotificationDisplayService.openAlertDialog( "Error in getting categories");
       }
     })
   }

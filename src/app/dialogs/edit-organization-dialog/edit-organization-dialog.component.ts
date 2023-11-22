@@ -2,11 +2,11 @@ import { Component, Inject, OnInit, } from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { OrganizationsService } from 'src/app/services/api/organizations.service';
 import { TranslateService } from '@ngx-translate/core';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-edit-organization-dialog',
@@ -32,8 +32,8 @@ export class EditOrganizationDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oDialogRef: MatDialogRef<EditOrganizationDialogComponent>,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOrganizationsService: OrganizationsService,
     private m_oTranslate: TranslateService
   ) { }
@@ -55,7 +55,7 @@ export class EditOrganizationDialogComponent implements OnInit {
         this.m_oOrganization = oResponse;
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "Error in getting organization information");
+        this.m_oNotificationDisplayService.openAlertDialog("Error in getting organization information");
       }
     })
   }
@@ -65,9 +65,9 @@ export class EditOrganizationDialogComponent implements OnInit {
       next: oResponse => {
         console.log(oResponse);
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.status === 200) {
-          this.m_oAlertDialog.openDialog(4000, "Organization Saved");
+          this.m_oNotificationDisplayService.openAlertDialog("Organization Saved");
         } else {
-          this.m_oAlertDialog.openDialog(4000, "Error in Saving this Organization");
+          this.m_oNotificationDisplayService.openAlertDialog("Error in Saving this Organization");
         }
       },
       error: oError => {

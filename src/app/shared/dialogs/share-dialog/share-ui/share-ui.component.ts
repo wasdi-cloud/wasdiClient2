@@ -11,7 +11,6 @@ import { WorkflowService } from 'src/app/services/api/workflow.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 import { faUserPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -35,8 +34,7 @@ export class ShareUiComponent implements OnInit {
 
   constructor(
     private m_oAdminDashboardService: AdminDashboardService,
-    private m_oAlertDialog: AlertDialogTopService,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOrganizationsService: OrganizationsService,
     private m_oProcessorService: ProcessorService,
     private m_oProcessorParametersTemplateService: ProcessorParamsTemplateService,
@@ -123,7 +121,7 @@ export class ShareUiComponent implements OnInit {
 
   onAddEnabledUser() {
     if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sUserIdSearch)) {
-      this.m_oAlertDialog.openDialog(4000, "Please enter a valid user");
+      this.m_oNotificationDisplayService.openAlertDialog( "Please enter a valid user");
     }
 
     if (this.resourceType && this.resource && this.m_sUserIdSearch.length !== 0) {
@@ -135,12 +133,12 @@ export class ShareUiComponent implements OnInit {
             }
             if (oResponse.boolValue === false) {
               let sErrorMsg = this.m_oTranslate.instant(oResponse.stringValue);
-              this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+              this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
             }
           },
           error: oError => {
             let sErrorMsg = "Error in Sharing Workspace";
-            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
           }
         })
       }
@@ -152,14 +150,14 @@ export class ShareUiComponent implements OnInit {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
               let sMessage = `Successfully Shared ${this.resource.name}`
-              this.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
-              this.m_oAlertDialog.openDialog(4000, oResponse.stringValue);
+              this.m_oNotificationDisplayService.openAlertDialog( oResponse.stringValue);
             }
           },
           error: oError => {
             let sErrorMsg = "Error in sharing this style";
-            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
           }
         });
       }
@@ -170,15 +168,15 @@ export class ShareUiComponent implements OnInit {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
               let sMessage = `Successfully Shared ${this.resource.name}`
-              this.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               let sErrorMsg = this.m_oTranslate.instant(oResponse.stringValue)
-              this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+              this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
             }
           },
           error: oError => {
             let sErrorMsg = "Error in sharing this Processor Parameters Template";
-            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
           }
         })
       }
@@ -190,14 +188,14 @@ export class ShareUiComponent implements OnInit {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
               let sMessage = `Successfully shared ${this.resource.name}`
-              this.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
-              this.m_oAlertDialog.openDialog(4000, oResponse.stringValue);
+              this.m_oNotificationDisplayService.openAlertDialog( oResponse.stringValue);
             }
           },
           error: oError => {
             let sErrorMsg = "Error in sharing this workflow";
-            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
           }
         })
       }
@@ -208,14 +206,14 @@ export class ShareUiComponent implements OnInit {
             if (oResponse.boolValue === true) {
               this.getEnabledUsers();
               let sMessage = `Successfully shared ${this.resource.name}`;
-              this.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
-              this.m_oAlertDialog.openDialog(4000, oResponse.stringValue)
+              this.m_oNotificationDisplayService.openAlertDialog( oResponse.stringValue)
             }
           },
           error: oError => {
             let sErrorMsg = "Error in sharing this workflow";
-            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
           }
         });
       }
@@ -226,14 +224,14 @@ export class ShareUiComponent implements OnInit {
             if (oResponse.message === "Done") {
               this.getEnabledUsers();
               let sMessage = `Successfully shared ${this.resource.name}`;
-              this.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
-              this.m_oAlertDialog.openDialog(4000, oResponse.stringValue)
+              this.m_oNotificationDisplayService.openAlertDialog( oResponse.stringValue)
             }
           },
           error: oError => {
             let sErrorMsg = "Error in sharing this workflow";
-            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
           }
         })
       }
@@ -243,14 +241,14 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.message === "Done") {
               let sMessage = `Successfully shared ${this.resource.name}`;
-              this.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
-              this.m_oAlertDialog.openDialog(4000, oResponse.stringValue)
+              this.m_oNotificationDisplayService.openAlertDialog( oResponse.stringValue)
             }
           },
           error: oError => {
             let sErrorMsg = "Error in sharing this workflow";
-            this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
           }
         })
       }

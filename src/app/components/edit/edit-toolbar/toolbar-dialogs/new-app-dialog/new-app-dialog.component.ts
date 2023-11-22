@@ -2,9 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 
 //Service Imports:
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+
 
 //Font Awesome Icon Imports:
 import { faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -18,7 +19,6 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ImageService } from 'src/app/services/api/image.service';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-new-app-dialog',
@@ -178,12 +178,11 @@ export class NewAppDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oFormBuilder: FormBuilder,
     private m_oImageService: ImageService,
-    private m_oNotificationService:NotificationDisplayService,
+    private m_oNotificationDisplayService:NotificationDisplayService,
     private m_oProcessorService: ProcessorService) { }
 
   ngOnInit(): void {
@@ -384,7 +383,7 @@ export class NewAppDialogComponent implements OnInit {
         this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oProcessorDetails).subscribe({
           next: oResponse => {
             console.log(oResponse);
-            this.m_oNotificationService.openSnackBar("Processor Data Updated", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar("Processor Data Updated", "Close", "right", "bottom");
           },
           error: oError => {
             console.log(oError);
@@ -439,7 +438,7 @@ export class NewAppDialogComponent implements OnInit {
    */
   postNewProcessor() {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === true) {
-      this.m_oAlertDialog.openDialog(4000, "Please add a .zip file containing your processor");
+      this.m_oNotificationDisplayService.openAlertDialog( "Please add a .zip file containing your processor");
       return false;
     }
 
@@ -448,7 +447,7 @@ export class NewAppDialogComponent implements OnInit {
 
     
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sType)) {
-      this.m_oAlertDialog.openDialog(4000, "Please select a processor type");
+      this.m_oNotificationDisplayService.openAlertDialog( "Please select a processor type");
       return false;      
     }
 

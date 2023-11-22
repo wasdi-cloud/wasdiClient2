@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 //Service Imports: 
 import { ConstantsService } from 'src/app/services/constants.service';
+import { GlobeService } from 'src/app/services/globe.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,12 +16,8 @@ import { Product } from 'src/app/shared/models/product.model';
 
 //Utilities Imports: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
-import { Title } from '@angular/platform-browser';
-import { GlobeService } from 'src/app/services/globe.service';
 
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-edit',
@@ -29,9 +28,8 @@ export class EditComponent implements OnInit, OnDestroy {
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oRouter: Router,
@@ -133,7 +131,7 @@ export class EditComponent implements OnInit, OnDestroy {
       if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
       if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
 
-      oController.m_oAlertDialog.openDialog(4000, oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription)
+      oController.m_oNotificationDisplayService.openAlertDialog( oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription)
 
       if (oMessage.messageCode == "PUBLISHBAND") {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
@@ -179,7 +177,7 @@ export class EditComponent implements OnInit, OnDestroy {
     let sMessage = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED");
 
     // Alert the user
-    this.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom");
+    this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
 
     // Update product list
     this.getProductList();
@@ -192,7 +190,7 @@ export class EditComponent implements OnInit, OnDestroy {
     }
     if (oMessage.messageResult == "KO") {
       let sMessage = this.m_oTranslate.instant("MSG_PUBLISH_ERROR");
-      this.m_oAlertDialog.openDialog(4000, sMessage);
+      this.m_oNotificationDisplayService.openAlertDialog( sMessage);
       return;
     }
   };
@@ -218,7 +216,7 @@ export class EditComponent implements OnInit, OnDestroy {
           if (oResponse.workspaceId === null || oResponse.activeNode === false) {
             this.m_oRouter.navigateByUrl('/workspaces');
             let sMessage = this.m_oTranslate.instant("MSG_FORBIDDEN")
-            this.m_oAlertDialog.openDialog(4000, sMessage)
+            this.m_oNotificationDisplayService.openAlertDialog( sMessage)
           }
           else {
 
@@ -237,7 +235,7 @@ export class EditComponent implements OnInit, OnDestroy {
       },
       error: oError => {
         let sMessage = this.m_oTranslate.instant("MSG_ERROR_READING_WS");
-        this.m_oAlertDialog.openDialog(4000, sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog( sMessage);
       }
     })
   }

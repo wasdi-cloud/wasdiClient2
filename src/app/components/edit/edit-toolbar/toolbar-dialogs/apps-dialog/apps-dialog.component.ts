@@ -9,6 +9,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProductService } from 'src/app/services/api/product.service';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Font Awesome Icons: 
@@ -21,8 +22,7 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+
 
 @Component({
   selector: 'app-apps-dialog',
@@ -62,7 +62,6 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
@@ -93,11 +92,11 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
           this.m_aoProcessorList = this.setDefaultImages(oResponse);
           this.m_bIsLoadingProcessorList = false;
         } else {
-          this.m_oAlertDialog.openDialog(4000, "Error in getting processors");
+          this.m_oNotificationDisplayService.openAlertDialog( "Error in getting processors");
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "Error in getting processors");
+        this.m_oNotificationDisplayService.openAlertDialog( "Error in getting processors");
       }
     });
   }

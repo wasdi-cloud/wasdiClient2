@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 
 //Service Imports:
 import { CatalogService } from 'src/app/services/api/catalog.service';
@@ -36,11 +35,10 @@ export class FTPDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oCatalogueService: CatalogService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialogRef<FTPDialogComponent>,
-    private m_oNotificationService: NotificationDisplayService
+    private m_oNotificationDisplayService: NotificationDisplayService
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +54,7 @@ export class FTPDialogComponent implements OnInit {
    */
   onSubmit(oForm: NgForm): void {
     if (oForm.status === "INVALID") {
-      this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION: \n INVALID DATA FTP");
+      this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION: \n INVALID DATA FTP");
     }
 
     if (oForm.status === "VALID") {
@@ -69,19 +67,19 @@ export class FTPDialogComponent implements OnInit {
    */
   sendFTPUploadRequest(): void {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
-      this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION:\nYOU MUST SELECT AN ACTIVE WORKSPACE");
+      this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION:\nYOU MUST SELECT AN ACTIVE WORKSPACE");
     }
 
     this.m_oCatalogueService.uploadFTPFile(this.m_oFTPRequest, this.m_oActiveWorkspace.workspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
-          this.m_oNotificationService.openSnackBar("Upload Complete", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("Upload Complete", "Close", "right", "bottom");
         } else {
-          this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION\nERROR TRANSFERRING FILE TO FTP");
+          this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION\nERROR TRANSFERRING FILE TO FTP");
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION:\nERROR TRANSFERRING FILE TO FTP")
+        this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION:\nERROR TRANSFERRING FILE TO FTP")
       }
     })
   }

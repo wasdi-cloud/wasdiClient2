@@ -16,7 +16,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/workflows-dialog.component';
 import { Product } from 'src/app/shared/models/product.model';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+
 
 @Component({
   selector: 'app-edit-toolbar',
@@ -46,10 +47,10 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   m_iHookIndex;
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConsoleService: ConsoleService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oRabbitStompService: RabbitStompService
   ) { }
 
@@ -145,7 +146,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
             }
           }
           this.m_bNotebookIsReady = true;
-          this.m_oAlertDialog.openDialog(4000, sMessage);
+          this.m_oNotificationDisplayService.openAlertDialog( sMessage);
         }
       });
       return true;

@@ -2,12 +2,12 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { faDownload, faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { AlertDialog, AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-process-logs-dialog',
@@ -32,12 +32,12 @@ export class ProcessLogsDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oAuthService: AuthService,
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<ProcessLogsDialogComponent>,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     ) {
@@ -75,7 +75,7 @@ export class ProcessLogsDialogComponent {
         } 
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sErrorRefreshMsg);
+        this.m_oNotificationDisplayService.openAlertDialog( sErrorRefreshMsg);
       }
     });
     return true;

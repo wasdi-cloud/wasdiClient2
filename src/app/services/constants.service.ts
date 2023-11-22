@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 
 //Import Services:
-import { AlertDialogTopService } from './alert-dialog-top.service';
+import { NotificationDisplayService } from './notification-display.service';
+
 
 //Import enviornment information: 
 import { environment } from 'src/environments/environment';
@@ -60,7 +61,7 @@ export class ConstantsService {
   m_sAccountType: string = "";
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService
+    private m_oNotificationDisplayService: NotificationDisplayService
   ) { }
 
   // isMobile() {
@@ -300,14 +301,14 @@ export class ConstantsService {
     console.log(this.m_oActiveProject);
     if (this.m_aoActiveSubscriptions.length === 0) {
       sMessage = "You do not have an Active Subscription at the moment";
-      this.m_oAlertDialog.openDialog(4000, sMessage);
+      this.m_oNotificationDisplayService.openAlertDialog( sMessage);
       return false;
     }
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProject) === true || this.m_oActiveProject.projectId === null) {
       sMessage = "You do not have an Active Project at the moment. Please select one in the navbar";
       console.log(this.m_oActiveProject);
-      this.m_oAlertDialog.openDialog(4000, sMessage);
+      this.m_oNotificationDisplayService.openAlertDialog( sMessage);
       return false;
     }
 

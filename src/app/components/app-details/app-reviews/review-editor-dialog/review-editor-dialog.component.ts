@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -40,9 +39,8 @@ export class ReviewEditorDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oDialogRef: MatDialogRef<ReviewEditorDialogComponent>,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oTranslate: TranslateService
   ) { }
@@ -67,16 +65,16 @@ export class ReviewEditorDialogComponent implements OnInit {
 
     if (!this.m_oUserReview.comment || !this.m_oUserReview.title || !this.m_oUserReview.vote) {
       let sError = "Please complete your Review";
-      this.m_oAlertDialog.openDialog(4000, sError);
+      this.m_oNotificationDisplayService.openAlertDialog(sError);
       return false;
     }
 
     this.m_oProcessorMediaService.addProcessorReview(this.m_oUserReview).subscribe({
       next: oResponse => {
-        this.m_oNotificationService.openSnackBar(sSavedMsg, "Close", "right", "bottom");
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close", "right", "bottom");
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
       }
     });
     this.onDismiss()
@@ -100,10 +98,10 @@ export class ReviewEditorDialogComponent implements OnInit {
 
     this.m_oProcessorMediaService.updateProcessorReview(this.m_oUserReview).subscribe({
       next: oResponse => {
-        this.m_oNotificationService.openSnackBar(sSavedMessage, "Close", "right", "bottom");
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMessage, "Close");
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
       }
     });
     this.onDismiss();

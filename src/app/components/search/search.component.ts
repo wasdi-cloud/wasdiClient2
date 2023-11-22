@@ -12,9 +12,9 @@ import { Subject } from 'rxjs'
 import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
 import { ResultOfSearchService } from 'src/app/services/result-of-search.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspaces-list-dialog.component';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-search',
@@ -89,11 +89,11 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,
-    private m_oAlertDialogService: AlertDialogTopService,
     private m_oConfigurationService: ConfigurationService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oMapService: MapService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oPageService: PagesService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oResultsOfSearchService: ResultOfSearchService,
@@ -230,7 +230,7 @@ export class SearchComponent implements OnInit {
         oProvider.isLoaded = true;
       },
       error: oError => {
-        this.m_oAlertDialogService.openDialog(4000, "GURU MEDITATION<br>ERROR IN OPEN SEARCH REQUEST");
+        this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR IN OPEN SEARCH REQUEST");
         oProvider.isLoaded = false;
       }
     });
@@ -284,7 +284,7 @@ export class SearchComponent implements OnInit {
         oProvider.isLoaded = true;
       },
       error: oError => {
-        oController.m_oAlertDialogService.openDialog(4000, sMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sMessage);
         oProvider.isLoaded = true;
       }
     })

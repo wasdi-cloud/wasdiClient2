@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { StyleService } from 'src/app/services/api/style.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
@@ -27,9 +26,8 @@ export class NewStyleDialogComponent {
   m_bIsUploadingStyle: boolean = false;
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oDialogRef: MatDialogRef<NewStyleDialogComponent>,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oStyleService: StyleService) { }
 
   onUploadStyle() {
@@ -42,14 +40,14 @@ export class NewStyleDialogComponent {
     this.m_oStyleService.uploadFile(sName, sDescription, oBody, bIsPublic).subscribe({
       next: oResponse => {
         if (oResponse && oResponse.boolValue == true) {
-          this.m_oNotificationService.openSnackBar("STYLE UPLOADED", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("STYLE UPLOADED", "Close", "right", "bottom");
         } else {
-          this.m_oAlertDialog.openDialog(4000, "Error in uploading Style");
+          this.m_oNotificationDisplayService.openAlertDialog( "Error in uploading Style");
         }
         this.m_bIsUploadingStyle = false;
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "Error in uploading Style");
+        this.m_oNotificationDisplayService.openAlertDialog( "Error in uploading Style");
       }
     });
     return true;

@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
@@ -29,9 +28,8 @@ export class EditWorkflowDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oMatDialogRef: MatDialogRef<EditWorkflowDialogComponent>,
-    private m_oNotification: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oWorkflowService: WorkflowService) {
     this.m_oWorkflow = this.m_oData.workflow;
 
@@ -80,35 +78,35 @@ export class EditWorkflowDialogComponent implements OnInit {
       next: oResponse => {
         this.m_oWorkflowService.updateGraphFile(this.m_oWorkflow.workflowId, this.m_oFile).subscribe({
           next: oResponse => {
-            this.m_oNotification.openSnackBar("GRAPH FILE UPDATED", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar("GRAPH FILE UPDATED", "Close", "right", "bottom");
           },
           error: oError => {
-            this.m_oAlertDialog.openDialog(4000, "Error in updating Graph File");
+            this.m_oNotificationDisplayService.openAlertDialog( "Error in updating Graph File");
           }
         })
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "Error in updating Graph File");
+        this.m_oNotificationDisplayService.openAlertDialog( "Error in updating Graph File");
       }
     })
   }
 
   createNewGraph(sWorkspaceId: string, sName: string, sDescription: string, bIsPublic: boolean, oBody: any) {
     if (!this.m_sWorkflowName) {
-      this.m_oAlertDialog.openDialog(4000, "Please add a name");
+      this.m_oNotificationDisplayService.openAlertDialog( "Please add a name");
     }
     if (!this.m_oFile) {
-      this.m_oAlertDialog.openDialog(4000, "Please upload a file");
+      this.m_oNotificationDisplayService.openAlertDialog( "Please upload a file");
     }
 
     this.m_bIsUploadingWorkflow = true;
     this.m_oWorkflowService.uploadByFile('workspace', sName, sDescription, oBody, bIsPublic).subscribe({
       next: oResponse => {
         let sMessage = "WORKFLOW UPLOADED " + sName.toUpperCase();
-        this.m_oNotification.openSnackBar(sMessage, "Close", "right", "bottom")
+        this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom")
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "INVALID SNAP FILE!");
+        this.m_oNotificationDisplayService.openAlertDialog( "INVALID SNAP FILE!");
       }
     })
   }
@@ -123,7 +121,7 @@ export class EditWorkflowDialogComponent implements OnInit {
         this.m_asWorkflowXML = oResponse;
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "ERROR GETTING WORKFLOW XML")
+        this.m_oNotificationDisplayService.openAlertDialog( "ERROR GETTING WORKFLOW XML")
       }
     });
   }
@@ -136,19 +134,19 @@ export class EditWorkflowDialogComponent implements OnInit {
         next: oResponse => {
           if (oResponse.status === 200) {
             let sMessage = "WORKFLOW XML UPDATED";
-            this.m_oNotification.openSnackBar(sMessage, "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
           }
         },
         error: oError => {
           if (oError.status === 304) {
             let sMessage = "MODIFICATIONS REJECTED - PLEASE CHECK THE XML";
-            this.m_oAlertDialog.openDialog(4000, sMessage);
+            this.m_oNotificationDisplayService.openAlertDialog( sMessage);
           } else if (oError.status === 401) {
             let sMessage = "MODIFICATIONS REJECTED - UNAUTHORIZED"
-            this.m_oAlertDialog.openDialog(4000, sMessage);
+            this.m_oNotificationDisplayService.openAlertDialog( sMessage);
           } else; {
             let sMessage = "INTERNAL SERVER ERROR - PLEASE TRY AGAIN LATER"
-            this.m_oAlertDialog.openDialog(4000, sMessage);
+            this.m_oNotificationDisplayService.openAlertDialog( sMessage);
           }
 
         }

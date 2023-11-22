@@ -1,18 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+//Angular Materials Import:
+import { MatDialog } from '@angular/material/dialog';
+
+//Component Imports
+import { NewAppDialogComponent } from '../../edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
+
 //Import Services:
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ImageService } from 'src/app/services/api/image.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { TranslateService } from '@ngx-translate/core';
 
 //Import Utilities:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { MatDialog } from '@angular/material/dialog';
-import { NewAppDialogComponent } from '../../edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 
 export interface application {
   buyed: boolean,
@@ -33,8 +37,8 @@ export interface application {
   styleUrls: ['./app-details.component.css']
 })
 export class AppDetailsComponent implements OnInit {
-  sActiveApplicationName: string = this.m_oConstantsService.getSelectedApplication(); 
-  m_sActiveUser: string = ""; 
+  m_sActiveApplicationName: string = this.m_oConstantsService.getSelectedApplication();
+  m_sActiveUser: string = "";
   m_oApplicationInfo: any = {} as application;
 
   m_bReviewsWaiting: boolean;
@@ -58,21 +62,21 @@ export class AppDetailsComponent implements OnInit {
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oImageService: ImageService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oProcessorService: ProcessorService,
     private m_oTranslate: TranslateService,
     private m_oRouter: Router) { }
 
   ngOnInit(): void {
-    if (this.sActiveApplicationName) {
-      this.getApplicationDetails(this.sActiveApplicationName)
+    if (this.m_sActiveApplicationName) {
+      this.getApplicationDetails(this.m_sActiveApplicationName)
     } else if (this.m_oActivatedRoute.snapshot.params['processorName']) {
-      this.sActiveApplicationName = this.m_oActivatedRoute.snapshot.params['processorName']
-      this.getApplicationDetails(this.sActiveApplicationName)
+      this.m_sActiveApplicationName = this.m_oActivatedRoute.snapshot.params['processorName']
+      this.getApplicationDetails(this.m_sActiveApplicationName)
     }
     this.m_sActiveUser = this.m_oConstantsService.getUserId();
   }
@@ -86,7 +90,7 @@ export class AppDetailsComponent implements OnInit {
     this.m_oProcessorService.getMarketplaceDetail(applicationName).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === true) {
-          this.m_oAlertDialog.openDialog(4000, sDataErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg);
         } else {
           this.m_oApplicationInfo = oResponse;
           this.getApplicationStats();
@@ -107,7 +111,7 @@ export class AppDetailsComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sDataErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg);
       }
     });
 
@@ -123,7 +127,7 @@ export class AppDetailsComponent implements OnInit {
     this.m_oProcessWorkspaceService.getProcessorStatistics(this.m_oApplicationInfo.processorName).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
         } else {
           this.m_oAppStats = oResponse;
         }
