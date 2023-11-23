@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 //Import Services:
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -24,8 +25,6 @@ import { faArrowsUpDown, faPlay, faPlus, faStop, faTrash } from '@fortawesome/fr
 //Import Utilities: 
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 //Declare Cesium: 
 declare let Cesium: any;
@@ -157,7 +156,7 @@ export class WorkspacesComponent implements OnInit {
       this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
         next: oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
           } else {
             this.m_aoWorkspacesList = oResponse;
           }
@@ -544,25 +543,20 @@ export class WorkspacesComponent implements OnInit {
   }
 
   deleteMultipleWorkspaces() {
-    let oDialogData = new ConfirmationDialogModel("Confirm Removal", `Are you sure you want to delete ${this.m_aoSelectedWorkspaces.length} workspaces?`);
-
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: oDialogData
-    });
-
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
+    let sConfirmMsg = `Are you sure you want to delete ${this.m_aoSelectedWorkspaces.length} workspaces?`;
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_aoSelectedWorkspaces.forEach((oWorkspace, iIndex) => {
           this.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
             next: oResponse => {
               this.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
-              if(iIndex === this.m_aoSelectedWorkspaces.length -1) {
+              if (iIndex === this.m_aoSelectedWorkspaces.length - 1) {
                 this.fetchWorkspaceInfoList();
               }
             },
             error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog( `Error in deleting ${oWorkspace.workspaceName}`);
+              this.m_oNotificationDisplayService.openAlertDialog(`Error in deleting ${oWorkspace.workspaceName}`);
             }
           })
         })

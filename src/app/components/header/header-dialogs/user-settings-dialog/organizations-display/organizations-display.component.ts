@@ -5,7 +5,6 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { OrganizationsService } from 'src/app/services/api/organizations.service';
 
 //Components Imports:
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { EditOrganizationDialogComponent } from 'src/app/dialogs/edit-organization-dialog/edit-organization-dialog.component';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 //Font Awesome Imports
@@ -25,7 +24,7 @@ export class OrganizationsDisplayComponent implements OnInit {
   faPlus = faPlus;
   faInfo = faInfoCircle;
   faX = faX;
-  faUsers = faUsers; 
+  faUsers = faUsers;
 
   m_aoOrganizations: Array<any> = [];
 
@@ -70,20 +69,14 @@ export class OrganizationsDisplayComponent implements OnInit {
     let sConfirmMsgOwner = `Are you sure you want to delete ${oOrganization.name}?`
     let sConfirmMsgShared = `Are you sure you want to remove your permissions from ${oOrganization.name}?`;
 
-    let oDialogData: ConfirmationDialogModel;
+    let bConfirmResult: any;
 
     if (oOrganization.adminRole) {
-      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmMsgOwner);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsgOwner);
     } else {
-      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmMsgShared);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsgShared);
     }
-
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      data: oDialogData
-    });
-
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_oOrganizationsService.deleteOrganization(oOrganization.organizationId).subscribe({
           next: oResponse => {
@@ -91,12 +84,11 @@ export class OrganizationsDisplayComponent implements OnInit {
             this.m_oNotificationDisplayService.openSnackBar("Organization Removed", "Close", 'bottom', 'right');
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog( "Error in deleting this organization");
+            this.m_oNotificationDisplayService.openAlertDialog("Error in deleting this organization");
           }
         })
       }
-    })
-
+    });
   }
 
   openOrganizationShareDialog(oOrganization) {

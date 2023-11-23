@@ -3,19 +3,21 @@ import { FormGroup } from '@angular/forms';
 
 //Service Imports:
 import { ConstantsService } from 'src/app/services/constants.service';
-import { ProcessorService } from 'src/app/services/api/processor.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { ProcessorService } from 'src/app/services/api/processor.service';
 
 //Angular Material Import: 
 import { MatDialog } from '@angular/material/dialog';
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
+//Component Imports
+import { BuildLogsComponent } from 'src/app/components/dialogs/build-logs/build-logs.component';
+import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
+
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
-import { BuildLogsComponent } from 'src/app/components/dialogs/build-logs/build-logs.component';
+
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -222,25 +224,22 @@ export class ProcessorTabContentComponent implements OnInit {
       return false;
     }
 
-    let oDialogData = new ConfirmationDialogModel("Confrim Update", "Are you sure you want to update this Processor?");
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      data: oDialogData
-    });
+    let sConfirnMsg = "Are you sure you want to update this Processor?"
 
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
-      if (oDialogResult === true) {
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirnMsg);
+
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
         this.m_oProcessorService.forceLibUpdate(sProcessorId).subscribe({
           next: oResponse => {
             this.m_oNotificationDisplayService.openSnackBar("LIBRARY UPDATE SCHEDULED", "Close", "right", "bottom");
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog( "Error in Updating Library")
+            this.m_oNotificationDisplayService.openAlertDialog("Error in Updating Library")
           }
         })
       }
-    })
-
+    });
     return true;
   }
 
@@ -249,20 +248,17 @@ export class ProcessorTabContentComponent implements OnInit {
       return false;
     }
 
-    let oDialogData = new ConfirmationDialogModel("Confirm Re-Deploy", "Are you sure you want to Redeploy this processor?");
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      data: oDialogData
-    })
+    let sConfirmMsg = "Are you sure you want to Redeploy this processor?";
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
 
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
           next: oResponse => {
             this.m_oNotificationDisplayService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog( "Error in Refreshing Processor")
+            this.m_oNotificationDisplayService.openAlertDialog("Error in Refreshing Processor")
           }
 
         })
@@ -285,7 +281,7 @@ export class ProcessorTabContentComponent implements OnInit {
     });
   }
 
-  openBuildLogs(){ 
+  openBuildLogs() {
     let oDialog = this.m_oDialog.open(BuildLogsComponent, {
       height: '70vh',
       width: '70vw',

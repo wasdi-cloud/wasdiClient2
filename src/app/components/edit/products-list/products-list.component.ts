@@ -20,7 +20,6 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck, faBoxOpen, faSearch, faPlus, faChevronRight, faChevronDown, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 //Component Imports: 
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ImportDialogComponent } from '../edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
 import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
 
@@ -237,7 +236,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( "Problem in getting Product Download");
+        this.m_oNotificationDisplayService.openAlertDialog("Problem in getting Product Download");
       }
     });
 
@@ -280,15 +279,9 @@ export class ProductsListComponent implements OnChanges, OnInit {
     let oFoundProduct = this.m_aoWorkspaceProductsList.find(oProduct => oProduct.fileName === node.fileName);
     let sMessage = "Are you sure you wish to delete " + oFoundProduct.name;
 
-    let dialogData = new ConfirmationDialogModel("Confirm Deletion", sMessage);
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
 
-    //Open confirmation dialog for Product Removal
-    let dialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: dialogData
-    })
-
-    dialogRef.afterClosed().subscribe(oDialogResult => {
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === false) {
         return false;
       } else {
@@ -302,14 +295,12 @@ export class ProductsListComponent implements OnChanges, OnInit {
         });
         return true;
       }
-    })
-
+    });
     //in subscription, 
 
     //if deletion successful, reload product tree
 
     //if deletion unsuccessful show dialog
-
   }
 
   deleteMultipleProducts() {
@@ -318,13 +309,9 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     let sMessage = "Are you sure you wish to delete " + this.m_aoSelectedProducts.length + " products?";
 
-    let oDialogData = new ConfirmationDialogModel("Confirm Removal", sMessage);
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: oDialogData
-    })
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
 
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === false) {
         return;
       } else {
@@ -336,12 +323,12 @@ export class ProductsListComponent implements OnChanges, OnInit {
                 this.m_aoSelectedProducts = [];
                 return true;
               } else {
-                this.m_oNotificationDisplayService.openAlertDialog( "Error deleting " + oProduct.fileName);
+                this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
                 return false;
               }
             },
             error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog( "Error deleting " + oProduct.fileName);
+              this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
               return false;
             }
           })

@@ -16,7 +16,6 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { faBook, faDownload, faEdit, faPaintBrush, faPlay, faPlus, faQuestionCircle, faRocket, faX } from '@fortawesome/free-solid-svg-icons';
 
 //Components Imports:
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
 import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
 
@@ -92,11 +91,11 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
           this.m_aoProcessorList = this.setDefaultImages(oResponse);
           this.m_bIsLoadingProcessorList = false;
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog( "Error in getting processors");
+          this.m_oNotificationDisplayService.openAlertDialog("Error in getting processors");
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( "Error in getting processors");
+        this.m_oNotificationDisplayService.openAlertDialog("Error in getting processors");
       }
     });
   }
@@ -211,27 +210,27 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     let sConfirmOwner = `Are you sure you want to delete ${oProcessor.processorName}?`;
     let sConfirmShared = `Are you sure you want to remove your permissions from ${oProcessor.processorName}?`
 
-    let oDialogData: ConfirmationDialogModel;
+    let bConfirmResult: any;
+
     if (oProcessor.sharedWithMe) {
-      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmShared)
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared);
     } else {
-      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmOwner)
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner);
     }
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: oDialogData
-    })
-
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
-      if (oDialogResult === true) {
-        this.m_oProcessorService.deleteProcessor(oProcessor.processorId).subscribe(oResponse => {
-          this.m_bIsLoadingProcessorList = true;
-          // this.getProcessorsList();
-        });
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
+        this.m_bIsLoadingProcessorList = true;
+        this.m_oProcessorService.deleteProcessor(oProcessor.processorId).subscribe({
+          next: oResponse => {
+            this.getProcessorsList();
+            this.m_bIsLoadingProcessorList = false;
+          },
+          error: oError => { }
+        }
+        );
       }
-      // this.m_bIsLoadingProcessorList = false;
-    });
+    })
     return true;
   }
 
@@ -264,7 +263,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
       } catch (oError) {
         let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
 
-        console.log(sErrorMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
       }
 
       this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {

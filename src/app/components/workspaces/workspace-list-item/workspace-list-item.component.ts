@@ -8,15 +8,13 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 //Import Angular Materials Modules:
 import { MatDialog } from '@angular/material/dialog';
 
-//Import Dialogs
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
-
 //Import Models:
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { WorkspaceViewModel } from '../workspaces.component';
 
 //Font Awesome Imports:
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-workspace-list-item',
@@ -33,6 +31,7 @@ export class WorkspaceListItemComponent {
   constructor(
     private oConstantsService: ConstantsService,
     public oDialog: MatDialog,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private oRouter: Router,
     private oWorkspaceService: WorkspaceService) { }
 
@@ -59,14 +58,9 @@ export class WorkspaceListItemComponent {
   deleteWorkspace(sWorkspaceId: string) {
     let sMessage = "Are you sure you wish to delete this Workspace?"
 
-    let dialogData = new ConfirmationDialogModel("Confirm Deletion", sMessage);
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
 
-    let dialogRef = this.oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: dialogData
-    })
-
-    dialogRef.afterClosed().subscribe(dialogResult => {
+    bConfirmResult.subscribe(dialogResult => {
       if (dialogResult === false) {
         return false;
       }
@@ -74,22 +68,32 @@ export class WorkspaceListItemComponent {
       let oWorkspaceViewModel: WorkspaceViewModel;
       let oActiveWorkspace: Workspace;
 
-      this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(oResponse => {
-        oWorkspaceViewModel = oResponse;
+      this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe({
+        next: oResponse => {
+          oWorkspaceViewModel = oResponse;
 
-        if (oWorkspaceViewModel) {
-          let bDeleteFile: boolean = true;
-          let bDeleteLayer: boolean = true;
-          this.oWorkspaceService.deleteWorkspace(oWorkspaceViewModel, bDeleteFile, bDeleteLayer)?.subscribe(oResponse => {
-            oActiveWorkspace = this.oConstantsService.getActiveWorkspace();
-            if (JSON.stringify(oActiveWorkspace) === JSON.stringify(oWorkspaceViewModel)) {
-              oWorkspaceViewModel = {} as WorkspaceViewModel;
-              this.oConstantsService.setActiveWorkspace(oWorkspaceViewModel);
-            }
-            this.deletedWorkspace.emit(oWorkspaceViewModel)
-          })
+          if (oWorkspaceViewModel) {
+            let bDeleteFile: boolean = true;
+            let bDeleteLayer: boolean = true;
+            this.oWorkspaceService.deleteWorkspace(oWorkspaceViewModel, bDeleteFile, bDeleteLayer)?.subscribe({
+              next: oResponse => {
+                oActiveWorkspace = this.oConstantsService.getActiveWorkspace();
+                if (JSON.stringify(oActiveWorkspace) === JSON.stringify(oWorkspaceViewModel)) {
+                  oWorkspaceViewModel = {} as WorkspaceViewModel;
+                  this.oConstantsService.setActiveWorkspace(oWorkspaceViewModel);
+                }
+                this.deletedWorkspace.emit(oWorkspaceViewModel)
+              },
+              error: oError => {
+                this.m_oNotificationDisplayService.openAlertDialog("Error deleting this workspace");
+              }
+            })
+          }
+        },
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog("Error deleting this workspace");
         }
-      })
+      });
       return true;
     })
   }

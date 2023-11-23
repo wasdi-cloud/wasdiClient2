@@ -12,7 +12,6 @@ import { EditSubscriptionDialogComponent } from 'src/app/dialogs/edit-subscripti
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { SubscriptionProjectsDialogComponent } from 'src/app/dialogs/subscription-projects-dialog/subscription-projects-dialog.component';
 import { UserSettingsDialogComponent } from '../user-settings-dialog.component';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -96,15 +95,10 @@ export class SubscriptionsDisplayComponent implements OnInit {
   deleteSubscription(oSubscription) {
     let sConfirmationMessage: string = `Are you sure you want to remove ${oSubscription.name}?`;
 
-    let oDialogData: ConfirmationDialogModel;
-    oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmationMessage);
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: oDialogData
-    });
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
 
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_oSubscriptionService.deleteSubscription(oSubscription.subscriptionId).subscribe({
           next: oResponse => {
@@ -114,7 +108,7 @@ export class SubscriptionsDisplayComponent implements OnInit {
                 sMessage += "<br><br>" + this.m_oTranslate.get(oResponse.body.message).subscribe(oTranslation => {
                   return oTranslation
                 });
-                this.m_oNotificationDisplayService.openAlertDialog(sMessage)
+                this.m_oNotificationDisplayService.openAlertDialog(sMessage);
               }
               this.m_oNotificationDisplayService.openSnackBar(sMessage, 'Close', 'right', 'bottom');
             }

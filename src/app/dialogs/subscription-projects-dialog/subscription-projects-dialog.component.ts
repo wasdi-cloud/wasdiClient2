@@ -4,7 +4,6 @@ import { faEdit, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProjectService } from 'src/app/services/api/project.service';
 import { ProjectInfoDialogComponent } from '../project-info-dialog/project-info-dialog.component';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -67,15 +66,10 @@ export class SubscriptionProjectsDialogComponent implements OnInit {
   }
 
   removeProject(oProject) {
-    let oDialogData: ConfirmationDialogModel;
-    oDialogData = new ConfirmationDialogModel("Confirm Removal", `Are you sure you want to delete ${oProject.name}`);
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      data: oDialogData
-    });
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(`Are you sure you want to delete ${oProject.name}`);
 
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_oProjectService.deleteProject(oProject.projectId).subscribe({
           next: oResponse => {

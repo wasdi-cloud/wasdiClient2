@@ -4,7 +4,6 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationDisplayService } from '../notification-display.service';
 
@@ -195,7 +194,7 @@ export class ProcessWorkspaceService {
         }
       },
       error: oError => {
-        oService.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS")
+        oService.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS")
       }
     }
     );
@@ -335,14 +334,9 @@ export class ProcessWorkspaceService {
     let oController = this;
     let oWorkspace = this.oConstantsService.getActiveWorkspace();
 
-    let oDialogData = new ConfirmationDialogModel("Confrim Removal", "Are you sure you want to kill this process?");
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog("Are you sure you want to kill this process?");
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      data: oDialogData
-    })
-
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.removeProcessInServer(oProcessInput.processObjId, oWorkspace.workspaceId, oProcessInput)
       }

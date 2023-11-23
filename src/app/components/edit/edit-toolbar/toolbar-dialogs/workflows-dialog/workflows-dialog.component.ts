@@ -3,12 +3,12 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { faDownload, faEdit, faLaptopCode, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { Workflow } from 'src/app/shared/models/workflow.model';
 import { Product } from 'src/app/shared/models/product.model';
 import { FormControl } from '@angular/forms';
 import { EditWorkflowDialogComponent } from './edit-workflow-dialog/edit-workflow-dialog.component';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-workflows-dialog',
@@ -56,6 +56,7 @@ export class WorkflowsDialogComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oMatDialogRef: MatDialogRef<WorkflowsDialogComponent>,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oWorkflowService: WorkflowService
   ) { }
 
@@ -130,20 +131,18 @@ export class WorkflowsDialogComponent implements OnInit {
     if (!oWorkflow) {
       return false;
     }
-    let oDialogData = new ConfirmationDialogModel("Confirm Removal", "Are you sure you want to delete " + oWorkflow.name);
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      data: oDialogData
-    });
+    let sConfirmMsg = "Are you sure you want to delete " + oWorkflow.name;
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
 
-    oDialogRef.afterClosed().subscribe(bDialogResult => {
+    bConfirmResult.subscribe(bDialogResult => {
       if (bDialogResult === true) {
         this.m_oWorkflowService.deleteWorkflow(oWorkflow.workflowId).subscribe({
           next: oResponse => {
-            console.log(oResponse);
             this.getWorkflowsByUser();
-
           },
-          error: oError => { }
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog("Error in Removing this Workflow");
+          }
         });
       }
     })

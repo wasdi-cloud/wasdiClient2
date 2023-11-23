@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
@@ -92,7 +92,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
             this.getOrganizationsListByUser();
             this.getDaysRemaining(this.m_oEditSubscription.startDate, this.m_oEditSubscription.endDate)
           } else {
-            this.m_oNotificationDisplayService.openAlertDialog( "ERROR IN GETTING THE SUBSCRIPTION BY ID");
+            this.m_oNotificationDisplayService.openAlertDialog("ERROR IN GETTING THE SUBSCRIPTION BY ID");
           }
         },
         error: oError => { }
@@ -173,7 +173,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
           this.initSubscriptionInfo();
           this.initDates();
           if (this.m_bCheckoutNow === false) {
-            this.m_oNotificationDisplayService.openAlertDialog( "UPDATED SUBSCRIPTION");
+            this.m_oNotificationDisplayService.openAlertDialog("UPDATED SUBSCRIPTION");
           }
           //If creating a subscription:
           if (this.m_bCheckoutNow === true) {
@@ -221,7 +221,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( "ERROR IN FETCHING PAYMENT URL");
+        this.m_oNotificationDisplayService.openAlertDialog("ERROR IN FETCHING PAYMENT URL");
       }
     });
   }
@@ -230,7 +230,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
     this.m_oOrganizationsService.getOrganizationsListByUser().subscribe({
       next: oResponse => {
         if (oResponse.status !== 200) {
-          this.m_oNotificationDisplayService.openAlertDialog( "ERROR IN FETCHING ORGANIZATIONS");
+          this.m_oNotificationDisplayService.openAlertDialog("ERROR IN FETCHING ORGANIZATIONS");
         } else {
           const oFirstElement = { name: "No Organization", organizationId: null };
           this.m_asOrganizations = [oFirstElement].concat(oResponse.body);
@@ -279,14 +279,9 @@ export class EditSubscriptionDialogComponent implements OnInit {
     this.createSubscriptionObject();
     let sMessage = "You will be re-directed to our payment partner, Stripe. Click 'OK' to continue or 'CANCEL' to end the payment process."
     //Notification that user will be re-directed to Stripe
-    let oDialogData: ConfirmationDialogModel = new ConfirmationDialogModel("Confirm Redirect", sMessage);
-
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      data: oDialogData
-    });
-
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
+    
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         if (!this.m_oEditSubscription.subscriptionId) {
           this.m_bCheckoutNow = true;
