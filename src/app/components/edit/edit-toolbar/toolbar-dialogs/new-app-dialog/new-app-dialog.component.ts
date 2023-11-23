@@ -182,7 +182,7 @@ export class NewAppDialogComponent implements OnInit {
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oFormBuilder: FormBuilder,
     private m_oImageService: ImageService,
-    private m_oNotificationDisplayService:NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService) { }
 
   ngOnInit(): void {
@@ -274,17 +274,16 @@ export class NewAppDialogComponent implements OnInit {
       next: oResponse => {
         //If oResponse is null or undefined 
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          console.log("error in retrieving app details");
+          this.m_oNotificationDisplayService.openAlertDialog("Error in fetching the application details");
         } else {
           //if oResponse vaild, assign response to m_oProcessorDetails
           this.m_oProcessorDetails = oResponse;
           this.initializeFormBuilder();
-          console.log(this.m_oProcessorDetails);
           this.m_oImageService.updateProcessorLogoImageUrl(this.m_oProcessorDetails);
         }
       },
       error: oError => {
-        console.log(oError);
+        this.m_oNotificationDisplayService.openAlertDialog("Error in fetching the application details");
       }
     })
   }
@@ -302,7 +301,7 @@ export class NewAppDialogComponent implements OnInit {
         }
       },
       error: oError => {
-        console.log("Error getting processor UI")
+        this.m_oNotificationDisplayService.openAlertDialog("Error getting the processor UI");
       }
     })
   }
@@ -368,7 +367,7 @@ export class NewAppDialogComponent implements OnInit {
       }
 
     } catch (error) {
-      console.log("error when parsing JSON");
+      this.m_oNotificationDisplayService.openAlertDialog("There was an error in parsing the JSON");
     }
   }
 
@@ -382,16 +381,15 @@ export class NewAppDialogComponent implements OnInit {
       next: oResponse => {
         this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oProcessorDetails).subscribe({
           next: oResponse => {
-            console.log(oResponse);
             this.m_oNotificationDisplayService.openSnackBar("Processor Data Updated", "Close", "right", "bottom");
           },
           error: oError => {
-            console.log(oError);
+            this.m_oNotificationDisplayService.openAlertDialog(`Error in updating ${this.m_oInputProcessor.processorName}`);
           }
         })
       },
       error: oError => {
-        console.log(oError);
+        this.m_oNotificationDisplayService.openAlertDialog(`Error in updating ${this.m_oInputProcessor.processorName}`);
       }
     });
 
@@ -438,21 +436,21 @@ export class NewAppDialogComponent implements OnInit {
    */
   postNewProcessor() {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === true) {
-      this.m_oNotificationDisplayService.openAlertDialog( "Please add a .zip file containing your processor");
+      this.m_oNotificationDisplayService.openAlertDialog("Please add a .zip file containing your processor");
       return false;
     }
 
     this.setInputProcessorValues();
     let sType = this.m_oProcessorForm.get('processorBasicInfo.oType').value;
 
-    
+
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sType)) {
-      this.m_oNotificationDisplayService.openAlertDialog( "Please select a processor type");
-      return false;      
+      this.m_oNotificationDisplayService.openAlertDialog("Please select a processor type");
+      return false;
     }
 
     this.m_oInputProcessor.processorName = this.m_oInputProcessor.processorName.toLowerCase();
-    
+
 
     let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value
     let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value
@@ -467,10 +465,11 @@ export class NewAppDialogComponent implements OnInit {
       this.m_oInputProcessor.isPublic,
       oSelectedFile).subscribe({
         next: oResponse => {
-
+          this.m_oNotificationDisplayService.openSnackBar(`Deployment of ${this.m_oInputProcessor.processorName} has started`, "Close");
+          this.onDismiss();
         },
         error: oError => {
-          console.log(oError)
+          this.m_oNotificationDisplayService.openAlertDialog(`Error in deploying ${this.m_oInputProcessor.processorName}`);
         }
       })
 
