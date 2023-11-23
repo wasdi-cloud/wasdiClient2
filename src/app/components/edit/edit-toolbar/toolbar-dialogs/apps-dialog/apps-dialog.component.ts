@@ -223,8 +223,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
         this.m_bIsLoadingProcessorList = true;
         this.m_oProcessorService.deleteProcessor(oProcessor.processorId).subscribe({
           next: oResponse => {
-            this.getProcessorsList();
-            this.m_bIsLoadingProcessorList = false;
+            //Next actions are handled on RabbitMessageHook function
           },
           error: oError => { }
         }
