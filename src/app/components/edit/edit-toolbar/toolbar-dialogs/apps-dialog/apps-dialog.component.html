@@ -26,11 +26,11 @@
                             <button class="btn btn-sm" (click)="openParametersDialog($event, oProcessor)">
                                 <fa-icon [icon]="faBook"></fa-icon>
                             </button>
-                            <button class="btn btn-sm" *ngIf="oProcessor.readOnly === false"
+                            <button class="btn btn-sm" *ngIf="m_sActiveUserId === oProcessor.publisher || oProcessor.sharedWithMe"
                                 (click)="downloadProcessor($event, oProcessor)">
                                 <fa-icon [icon]="faDownload"></fa-icon>
                             </button>
-                            <button class="btn btn-sm" *ngIf="oProcessor.readOnly === false"
+                            <button class="btn btn-sm" *ngIf="m_sActiveUserId === oProcessor.publisher || oProcessor.sharedWithMe"
                                 (click)="openEditProcessorDialog($event, oProcessor)">
                                 <fa-icon [icon]="faEdit"></fa-icon>
                             </button>
