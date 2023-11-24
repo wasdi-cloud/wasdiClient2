@@ -253,6 +253,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
 
       if (typeof sJSON !== "string") {
         sStringJSON = JSON.stringify(sJSON);
+      } else if (sJSON === '') {
+        sStringJSON = '{}'
       } else {
         sStringJSON = sJSON;
       }
