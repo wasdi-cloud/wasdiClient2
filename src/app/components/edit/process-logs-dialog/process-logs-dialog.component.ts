@@ -40,7 +40,7 @@ export class ProcessLogsDialogComponent {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    ) {
+  ) {
     this.getLogsCount(this.m_oProcess.processObjId);
   }
 
@@ -48,6 +48,7 @@ export class ProcessLogsDialogComponent {
     if (!oResponse) {
       return false;
     }
+    console.log(oResponse);
     this.m_iNumberOfLogs = oResponse;
 
     let iFirstRow = this.m_iNumberOfLogs - (this.m_iCurrentPage * this.m_iNumberOfLogsPerPage);
@@ -55,7 +56,7 @@ export class ProcessLogsDialogComponent {
     if (iFirstRow < 0) {
       iFirstRow = 0;
     }
-
+    console.log(iLastRow, iFirstRow);
     this.getPaginatedLogs(this.m_oProcess.processObjId, iFirstRow, iLastRow);
     return true;
   }
@@ -72,16 +73,22 @@ export class ProcessLogsDialogComponent {
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.getLogsCountANDLogsCallback(oResponse);
-        } 
+        }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( sErrorRefreshMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorRefreshMsg);
       }
     });
     return true;
   }
 
-  handlePagination(event) {
+  handlePagination(oEvent) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false && oEvent.pageIndex >= 0) {
+      //Page Index begins at 0: 
+      this.m_iCurrentPage = oEvent.pageIndex + 1;
+      //Get the Logs Count
+      this.getLogsCount(this.m_oProcess.processObjId);
+    }
 
   }
 
@@ -89,17 +96,20 @@ export class ProcessLogsDialogComponent {
     if (!oProcessId) {
       return false;
     }
-    if (!iStartRow) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(iStartRow) === true) {
       iStartRow = "";
     }
-    if (!iEndRow) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(iEndRow) === true) {
       iEndRow = "";
     }
+
+    console.log(iStartRow, iEndRow);
 
     this.m_oProcessorService.getPaginatedLogs(oProcessId, iStartRow, iEndRow).subscribe(oResponse => {
       if (oResponse) {
         this.m_aoLogs = oResponse;
         this.m_aoLogs.reverse();
+        console.log(this.m_aoLogs)
       }
     });
     return true;
