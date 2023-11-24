@@ -33,8 +33,8 @@ export class ProcessWorkspaceService {
   _m_aoProcessesRunning$ = this.m_aoProcessesRunning.asObservable();
   m_aoProcessesStopped: Array<Process> = [];
 
-  updateProcessBarMsg: BehaviorSubject<string> = new BehaviorSubject<string>("Intial Status");
-  updatePrcoessBarMsg$ = this.updateProcessBarMsg.asObservable();
+  updateProcessBarMsg: BehaviorSubject<any> = new BehaviorSubject<any>({ messagE: "Intial Status" });
+  updateProcessBarMsg$ = this.updateProcessBarMsg.asObservable();
 
   //Days
   COOKIE_EXPIRE_TIME_DAYS: number = 1;
@@ -66,7 +66,7 @@ export class ProcessWorkspaceService {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
         // this.m_aoProcessesRunning = oResponse; 
         this.setProcessesRunning(oResponse.reverse());
-        this.updateProcessesBar("m_aoProcessesRunning:updated");
+        this.updateProcessesBar("m_aoProcessesRunning:updated", true);
       }
     });
   };
@@ -221,10 +221,10 @@ export class ProcessWorkspaceService {
   /**
    * Triggers the update of the WASDI process bar
    */
-  updateProcessesBar(sMessage: string) {
+  updateProcessesBar(sMessage: string, oData: boolean) {
     //send a message to RootController for update the bar of processes
     // $rootScope.$broadcast('m_aoProcessesRunning:updated', true);
-    this.updateProcessBarMsg.next(sMessage);
+    this.updateProcessBarMsg.next({ message: sMessage, data: true });
   };
 
   /**

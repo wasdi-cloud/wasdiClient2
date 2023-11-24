@@ -49,6 +49,7 @@ export class ProcessesBarComponent implements OnInit {
   m_oLastProcesses: any = null;
   m_iIsWebsocketConnected: any;
   m_oSummary: any;
+  m_oProcessesBarSubscription: any;
 
   constructor(
     private _bottomSheet: MatBottomSheet,
@@ -74,6 +75,11 @@ export class ProcessesBarComponent implements OnInit {
 
   ngOnInit() {
     this.getSummary();
+    this.m_oProcessesBarSubscription = this.m_oProcessWorkspaceService.updateProcessBarMsg.subscribe(oResponse => {
+      if(oResponse.message === "m_aoProcessesRunning:updated" && oResponse.data === true) {
+        this.getSummary(); 
+      }
+    })
     this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
       this.m_iIsWebsocketConnected = oResponse;
     });
