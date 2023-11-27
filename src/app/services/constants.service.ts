@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 //Import Services:
 import { NotificationDisplayService } from './notification-display.service';
@@ -37,6 +38,11 @@ export class ConstantsService {
   m_bIgnoreWorkspaceApiUrl: boolean = false;
 
   m_oUser: User = {} as User;
+
+  // m_oActiveWorkspace: Workspace = {} as Workspace;
+  m_oActiveWorkspaceSubscription: BehaviorSubject<Workspace> = new BehaviorSubject<Workspace>({} as Workspace);
+
+  _m_oActiveWorkspaceSubscription$ = this.m_oActiveWorkspaceSubscription.asObservable();
 
   m_oActiveWorkspace: Workspace = {} as Workspace;
 
@@ -158,7 +164,9 @@ export class ConstantsService {
 
   /*------------- WORKSPACES --------------*/
   setActiveWorkspace(oWorkspace: Workspace) {
-    this.m_oActiveWorkspace = oWorkspace;
+    this.m_oActiveWorkspace = oWorkspace
+    //Set Workspace Subscription for Subscribed Components
+    this.m_oActiveWorkspaceSubscription.next(oWorkspace);
   }
 
   getActiveWorkspace() {
@@ -245,7 +253,7 @@ export class ConstantsService {
   }
 
   /*------------- SUBSCRIPTIONS --------------*/
-  
+
   /**
    * Return array of user's active subscriptions
    * @returns  {aoSubscriptions}
@@ -301,14 +309,14 @@ export class ConstantsService {
     console.log(this.m_oActiveProject);
     if (this.m_aoActiveSubscriptions.length === 0) {
       sMessage = "You do not have an Active Subscription at the moment";
-      this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+      this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       return false;
     }
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProject) === true || this.m_oActiveProject.projectId === null) {
       sMessage = "You do not have an Active Project at the moment. Please select one in the navbar";
       console.log(this.m_oActiveProject);
-      this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+      this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       return false;
     }
 

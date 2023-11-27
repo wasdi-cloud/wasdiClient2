@@ -92,7 +92,7 @@ export class HeaderComponent implements OnInit {
               this.m_oActiveWorkspace = oResponse;
             },
             error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog( "Error in retreiving Workspace Information")
+              this.m_oNotificationDisplayService.openAlertDialog("Error in retreiving Workspace Information")
             }
           })
         } else {
@@ -105,10 +105,18 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    console.log(this.m_oActiveWorkspace);
     this.m_oUser = this.m_oConstantsService.getUser();
     this.initializeProjectsInfo();
     this.getAccountType();
+    this.m_oConstantsService.m_oActiveWorkspaceSubscription.subscribe(oResponse => {
+      if (oResponse) {
+        if (!oResponse.workspaceId) {
+          this.sActiveWorkspaceId = "";
+        } else {
+          this.sActiveWorkspaceId = oResponse.workspaceId;
+        }
+      }
+    })
   }
 
   logout() {
@@ -122,7 +130,7 @@ export class HeaderComponent implements OnInit {
       width: '80vw'
     })
     event.preventDefault();
-}
+  }
 
   sendFeedback() {
     if (typeof this.m_oFeedback === undefined || !this.m_oFeedback.title || !this.m_oFeedback.message) {
@@ -178,7 +186,7 @@ export class HeaderComponent implements OnInit {
           }
           this.m_bLoadingProjects = false;
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog( "Error in getting your projects");
+          this.m_oNotificationDisplayService.openAlertDialog("Error in getting your projects");
           this.m_bLoadingProjects = false;
           this.m_oProject = oFirstProjectElement;
 
@@ -187,7 +195,7 @@ export class HeaderComponent implements OnInit {
       error: oError => {
         let sErrorMessage = "Error in getting your projects";
         this.m_oProject = oFirstProjectElement;
-        this.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
       }
     })
 

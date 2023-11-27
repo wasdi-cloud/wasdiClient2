@@ -33,7 +33,7 @@ export class ProcessWorkspaceService {
   _m_aoProcessesRunning$ = this.m_aoProcessesRunning.asObservable();
   m_aoProcessesStopped: Array<Process> = [];
 
-  updateProcessBarMsg: BehaviorSubject<any> = new BehaviorSubject<any>({ messagE: "Intial Status" });
+  updateProcessBarMsg: BehaviorSubject<any> = new BehaviorSubject<any>({ message: "Intial Status" });
   updateProcessBarMsg$ = this.updateProcessBarMsg.asObservable();
 
   //Days
@@ -55,7 +55,7 @@ export class ProcessWorkspaceService {
     * @param sWorkSpaceId
     */
   loadProcessesFromServer(sWorkspaceId: string) {
-    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace = this.oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
     if (oWorkspace !== null && oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
