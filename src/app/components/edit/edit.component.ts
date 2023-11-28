@@ -131,7 +131,7 @@ export class EditComponent implements OnInit, OnDestroy {
       if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
       if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
 
-      oController.m_oNotificationDisplayService.openAlertDialog( oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription)
+      oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription);
 
       if (oMessage.messageCode == "PUBLISHBAND") {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
@@ -190,7 +190,7 @@ export class EditComponent implements OnInit, OnDestroy {
     }
     if (oMessage.messageResult == "KO") {
       let sMessage = this.m_oTranslate.instant("MSG_PUBLISH_ERROR");
-      this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+      this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       return;
     }
   };
@@ -216,9 +216,8 @@ export class EditComponent implements OnInit, OnDestroy {
           if (oResponse.workspaceId === null || oResponse.activeNode === false) {
             this.m_oRouter.navigateByUrl('/workspaces');
             let sMessage = this.m_oTranslate.instant("MSG_FORBIDDEN")
-            this.m_oNotificationDisplayService.openAlertDialog( sMessage)
-          }
-          else {
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage)
+          } else {
 
             console.log("edit.component.ngOnInit: Received open Workspace View Model ")
 
@@ -235,7 +234,7 @@ export class EditComponent implements OnInit, OnDestroy {
       },
       error: oError => {
         let sMessage = this.m_oTranslate.instant("MSG_ERROR_READING_WS");
-        this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       }
     })
   }
