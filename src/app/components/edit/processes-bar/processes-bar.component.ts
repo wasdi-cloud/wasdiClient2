@@ -146,21 +146,30 @@ export class ProcessesBarContent implements OnInit {
   m_aoAllProcessesLogs: any = [];
 
   constructor(
-    private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
+    private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarComponent>,
     private m_oDialog: MatDialog,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
-  ) {
-    console.log(this.data)
-  }
+  ) { }
 
   ngOnInit(): void {
     if (this.m_oActiveWorkspace.workspaceId) {
+      
       this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
-      this.m_oProcessWorkspaceService.getProcessesRunning().subscribe(aoProcesses => {
-        console.log(aoProcesses);
-        this.m_aoProcessesRunning = aoProcesses;
-      })
+
+      this.m_oProcessWorkspaceService.getProcessesRunning().subscribe({
+        next: oResponse => {
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+            this.m_aoProcessesRunning = oResponse;
+          } else {
+            this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
+          }
+        },
+        error: oError => { 
+          this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
+        }
+      });
     }
   }
 
