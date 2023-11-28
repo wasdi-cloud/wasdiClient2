@@ -28,7 +28,8 @@ import { ProductsListComponent } from './components/edit/products-list/products-
 import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
 import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
 import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
-import { ProcessesBarComponent, ProcessesBarContent, ProcessesDialog } from './components/edit/processes-bar/processes-bar.component';
+import { ProcessesBarComponent, ProcessesBarContent } from './components/edit/processes-bar/processes-bar.component';
+import { ProcessesDialog } from './components/edit/processes-bar/processes-dialog/processes-dialog.component';
 import { UserSettingsDialogComponent } from './components/header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
 import { ProductPropertiesDialogComponent } from './components/edit/products-list/product-properties-dialog/product-properties-dialog.component';
 import { NavLayersComponent } from './components/edit/nav-layers/nav-layers.component';
