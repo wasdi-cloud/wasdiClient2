@@ -73,6 +73,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   m_oDisplayMap: L.Map | null;
   m_aoVisibleBands: any[] = [];
   m_aoSelectedProducts: Array<any> = [];
+  m_bIsReadOnly: boolean = true;
 
   constructor(
     private m_oCatalogService: CatalogService,
@@ -87,24 +88,19 @@ export class ProductsListComponent implements OnChanges, OnInit {
     private m_oRabbitStompService: RabbitStompService,
     private m_oTranslate: TranslateService,
     private m_oRouter: Router
-  ) {
-    this.m_oProductsTreeControl = new NestedTreeControl<any>(node => {
-      if (node.bandsGroups) {
-        return node.bandsGroups.bands
-      }
-    });
-    this.m_oProductsTreeDataSource = new MatTreeNestedDataSource();
-  }
+  ) { }
 
   ngOnInit(): void {
+    
   }
-
   ngOnChanges() {
     console.log("ProductListComponent.ngOnChanges: call filter products ")
     this.filterProducts();
     console.log("ProductListComponent.ngOnChanges: done filter Products ")
 
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
   filterProducts() {
@@ -130,12 +126,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
         })
       }
     }
-
-    console.log("ProductListComponent.filterProducts: filter done, assign the data source")
-
-    this.m_oProductsTreeDataSource.data = aoFilteredProducts
-
-    console.log("ProductListComponent.filterProducts: data source assigned")
   }
 
   trackByIndex(index: number): number {

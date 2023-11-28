@@ -5,6 +5,7 @@
         <h3 class="p-0 m-0">{{'EDITOR_TITLE_PANEL_PRODUCTS' | translate}}</h3>
 
         <div class="d-flex flex-row align-items-center gap-2">
+            <span *ngIf="m_bIsReadOnly === true" class="badge badge-sm bg-warning">Read Only</span>
             <input type="checkbox" name="" id="" matTooltip="Select All" (change)="selectAllProducts($event)">
             <div *ngIf="m_aoSelectedProducts.length > 0">
                 <button class="btn btn-sm text-light" matTooltip="Download Selected"
@@ -70,7 +71,8 @@
                             <fa-icon [icon]="faInfoCircle" title="Properties"
                                 (click)="openProductProperties($event, oProduct)"></fa-icon>
                         </button>
-                        <button class="tree-btn btn" matTooltip="{{'MENU_DELETE' | translate}}">
+                        <button class="tree-btn btn" matTooltip="{{'MENU_DELETE' | translate}}"
+                        [disabled]="m_bIsReadOnly === true">
                             <fa-icon [icon]="faTrash" title="Delete Product"
                                 (click)="deleteProduct(oProduct)"></fa-icon>
                         </button>
