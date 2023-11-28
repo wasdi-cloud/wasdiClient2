@@ -6,7 +6,7 @@
             <div class="flex-fill d-flex flex-row gap-1">
                 <input class="form-control" type="email" placeholder="Search by WASDI Email Address"
                     [(ngModel)]="m_sUserIdSearch">
-                <mat-select class="form-control" style="width: 10rem" placeholder="Permissions" 
+                <mat-select class="form-control" style="width: 10rem" placeholder="Permissions"
                     [(ngModel)]="m_sPermission">
                     <mat-option value="read">
                         Read
@@ -16,7 +16,8 @@
                     </mat-option>
                 </mat-select>
             </div>
-            <button class="btn btn-success" (click)="onAddEnabledUser()"><fa-icon [icon]="faUserPlus"></fa-icon> Give
+            <button class="btn btn-success" (click)="onAddEnabledUser()"
+                [disabled]="this.m_bIsReadOnly === true"><fa-icon [icon]="faUserPlus"></fa-icon> Give
                 Access</button>
         </div>
     </div>
@@ -34,8 +35,8 @@
                 </span>
                 <div class="d-flex flex-row gap-4 align-items-center">
                     {{oUser.permissions.toUpperCase()}}
-                    <button class="btn btn-sm btn-danger" (click)="onRemoveEnabledUser(oUser.userId)"><fa-icon
-                            [icon]="faTrashCan"></fa-icon> Remove</button>
+                    <button class="btn btn-sm btn-danger" (click)="onRemoveEnabledUser(oUser.userId)"
+                        [disabled]="m_bIsReadOnly === true"><fa-icon [icon]="faTrashCan"></fa-icon> Remove</button>
                 </div>
             </li>
         </ul>
