@@ -75,7 +75,8 @@
 
                 <div class="style-xml-container d-flex flex-column gap-1">
                     <div class="d-flex flex-row align-items-center">
-                        Show file extension: <mat-checkbox [color]="'success'" [(ngModel)]="m_bShowExtension"></mat-checkbox>
+                        Show file extension: <mat-checkbox [color]="'success'"
+                            [(ngModel)]="m_bShowExtension"></mat-checkbox>
                     </div>
                     <label class="text-success form-label">Read:</label>
                     <!-- Multi-select for Batch Processing -->
@@ -98,9 +99,9 @@
                     </mat-select>
                     <!-- <button class="btn btn-success" (click)="runMultiInputWorkflow()">Run</button> -->
                     <button *ngIf="m_sActiveTab === 'execute'" class="btn btn-success"
-                        (click)="runSingleInputWorkflow()">Run</button>
-                    <button *ngIf="m_sActiveTab === 'batch'" class="btn btn-success"
-                        (click)="runMultiInputWorkflow()">Run</button>
+                        (click)="runSingleInputWorkflow()" [disabled]="m_bIsReadOnly === true">Run</button>
+                    <button *ngIf="m_sActiveTab === 'batch'" class="btn btn-success" (click)="runMultiInputWorkflow()"
+                        [disabled]="m_bIsReadOnly === true">Run</button>
                 </div>
             </div>
         </div>
