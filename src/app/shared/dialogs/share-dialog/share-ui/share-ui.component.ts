@@ -98,7 +98,6 @@ export class ShareUiComponent implements OnInit {
 
       if (this.resourceType === 'processor') {
         this.m_oProcessorService.getUsersBySharedProcessor(this.resource.processorId).subscribe(oResponse => {
-          console.log(oResponse)
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
             this.m_aoSharedUsers = oResponse;
           }
@@ -152,7 +151,6 @@ export class ShareUiComponent implements OnInit {
       if (this.resourceType === 'style') {
         this.m_oStyleService.addStyleSharing(this.resource.styleId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
           next: oResponse => {
-            console.log(oResponse)
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
               let sMessage = `Successfully Shared ${this.resource.name}`
@@ -190,7 +188,6 @@ export class ShareUiComponent implements OnInit {
       if (this.resourceType === 'workflow') {
         this.m_oWorkflowService.addWorkflowSharing(this.resource.workflowId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
           next: oResponse => {
-            console.log(oResponse)
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
               let sMessage = `Successfully shared ${this.resource.name}`
@@ -291,7 +288,7 @@ export class ShareUiComponent implements OnInit {
         this.m_oWorkflowService.removeWorkflowSharing(this.resource.workflowId, sUserId).subscribe({
           next: oResponse => {
             if (oResponse.stringValue === 'Unauthorized') {
-              console.log("You do not have the permissions to remove this user");
+              this.m_oNotificationDisplayService.openAlertDialog("You do not have the permissions to remove this user");
             } else {
               this.getEnabledUsers();
             }
@@ -309,8 +306,7 @@ export class ShareUiComponent implements OnInit {
             console.log("ERROR IN REMOVING USER")
 
           }
-        }
-        )
+        });
       }
     }
 
@@ -323,7 +319,7 @@ export class ShareUiComponent implements OnInit {
         error: oError => {
           console.log("Error in Removing User");
         }
-      })
+      });
     }
 
     if (this.resourceType === 'subscription') {
@@ -333,7 +329,7 @@ export class ShareUiComponent implements OnInit {
           this.getEnabledUsers();
         },
         error: oError => { }
-      })
+      });
     }
   }
 }

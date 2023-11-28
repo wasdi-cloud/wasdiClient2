@@ -25,7 +25,8 @@
     <!-- User Permissions display -->
     <div>
         <p class="dialog-text">
-            Users that currently have access to <span class="text-success">{{resource.name}}</span>:
+            Users that currently have access to <span class="text-success">{{resource.name ? resource.name:
+                resource.processorName}}</span>:
         </p>
         <ul class="list-group" style="height:20rem; overflow-y: scroll;">
             <li class="list-group-item d-flex flex-row align-items-center justify-content-between"
