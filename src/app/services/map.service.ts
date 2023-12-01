@@ -853,4 +853,22 @@ export class MapService {
     }
     return null;
   }
+
+
+  productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, asBbox, sLayerId) {
+    if (this.isProductGeoreferenced(asBbox, sGeoserverBBox) === true) {
+      var oRectangleBoundingBoxMap = this.addRectangleByGeoserverBoundingBox(sGeoserverBBox, sColor);
+
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangleBoundingBoxMap) === false) {
+        console.log(oRectangleBoundingBoxMap.options);
+        //the options.layers property is used for remove the rectangle to the map
+        oRectangleBoundingBoxMap.options["layers"] = "wasdi:" + sLayerId;
+      }
+    }
+    if (this.isProductGeoreferenced(asBbox, sGeoserverBBox) === true) {
+      return true;
+    } else {
+      return false
+    }
+  }
 }

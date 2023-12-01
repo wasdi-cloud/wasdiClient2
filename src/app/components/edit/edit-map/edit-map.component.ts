@@ -38,7 +38,7 @@ export class EditMapComponent implements OnInit {
   m_b2DMapModeOn = true;
 
   @Input() m_aoProducts: Array<any> = [];
-  @Input() m_aoVisibleBands: Array<any> = []
+  @Input() m_aoVisibleBands: Array<any> = [];
   @Output() m_b2DMapModeOutput = new EventEmitter();
 
   constructor(
@@ -60,7 +60,6 @@ export class EditMapComponent implements OnInit {
       console.log("EditMapComponent.switch2D3DMode: call init Globe")
       this.m_oGlobeService.initGlobe('CesiumContainerEdit');
       this.m_b2DMapModeOutput.emit(false);
-
       //Load any exisiting layers onto the Globe
       for (let iIndexLayers = 0; iIndexLayers < this.m_aoVisibleBands.length; iIndexLayers++) {
         // Check if it is a valid layer
@@ -68,7 +67,7 @@ export class EditMapComponent implements OnInit {
 
           var sGeoserverBBox = this.m_aoVisibleBands[iIndexLayers].geoserverBoundingBox;
 
-          let oRectangleIsNotGeoreferencedProduct = this.productIsNotGeoreferencedRectangle3DMap(sGeoserverBBox, this.m_aoVisibleBands[iIndexLayers].bbox, this.m_aoVisibleBands[iIndexLayers].layerId);
+          let oRectangleIsNotGeoreferencedProduct = this.m_oGlobeService.productIsNotGeoreferencedRectangle3DMap(sGeoserverBBox, this.m_aoVisibleBands[iIndexLayers].bbox, this.m_aoVisibleBands[iIndexLayers].layerId);
 
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangleIsNotGeoreferencedProduct) === false) {
             this.addLayerMap3DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);
@@ -98,11 +97,9 @@ export class EditMapComponent implements OnInit {
         for (var iIndexLayers = 0; iIndexLayers < this.m_aoVisibleBands.length; iIndexLayers++) {
           // Check if it is a valid layer
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoVisibleBands[iIndexLayers].layerId)) {
-
             var sColor = "#f22323";
             var sGeoserverBBox = this.m_aoVisibleBands[iIndexLayers].geoserverBoundingBox;
-
-            this.productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, this.m_aoVisibleBands[iIndexLayers].bbox, this.m_aoVisibleBands[iIndexLayers].layerId);
+            this.m_oMapService.productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, this.m_aoVisibleBands[iIndexLayers].bbox, this.m_aoVisibleBands[iIndexLayers].layerId);
           }
           this.addLayerMap2DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);
         }
@@ -113,7 +110,6 @@ export class EditMapComponent implements OnInit {
             this.addLayerMap2DByServer(this.m_aoExternalLayers[iExternals].Name, this.m_aoExternalLayers[iExternals].sServerLink);
           }
         }
-
         //  Add all bounding boxes to 3D Map
         this.m_oGlobeService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts);
         // Zoom on the active band
@@ -124,29 +120,13 @@ export class EditMapComponent implements OnInit {
         } else {
           // Zoom on the workspace
           this.m_oMapService.flyToWorkspaceBoundingBox(this.m_aoProducts);
-
-
         }
       }, 300)
     }
 
   }
 
-  productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, asBbox, sLayerId) {
-    if (this.m_oMapService.isProductGeoreferenced(asBbox, sGeoserverBBox) === false) {
-      var oRectangleBoundingBoxMap = this.m_oMapService.addRectangleByGeoserverBoundingBox(sGeoserverBBox, sColor);
 
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangleBoundingBoxMap) === false) {
-        //the options.layers property is used for remove the rectangle to the map
-        // oRectangleBoundingBoxMap.options.layers = "wasdi:" + sLayerId;
-      }
-    }
-    if (this.m_oMapService.isProductGeoreferenced(asBbox, sGeoserverBBox) === true) {
-      return true;
-    } else {
-      return false
-    }
-  }
 
   addLayerMap2DByServer(sLayerId, sServer) {
     // Check input data
@@ -185,19 +165,6 @@ export class EditMapComponent implements OnInit {
     });
 
     oGlobeLayers.addImageryProvider(oProvider);
-  }
-
-  productIsNotGeoreferencedRectangle3DMap(sGeoserverBBox, asBbox, sLayerId) {
-    var oRectangle = null;
-    if (this.m_oMapService.isProductGeoreferenced(asBbox, sGeoserverBBox) === false) {
-      oRectangle = this.m_oGlobeService.addRectangleOnGlobeByGeoserverBoundingBox(sGeoserverBBox, '');
-      //the options.layers property is used for remove the rectangle to the map
-      // oRectangleBoundingBoxMap.options.layers = "wasdi:" + sLayerId;
-      oRectangle.layers = "wasdi:" + sLayerId;
-
-    }
-    return oRectangle;
-
   }
 
   goWorkspaceHome() {

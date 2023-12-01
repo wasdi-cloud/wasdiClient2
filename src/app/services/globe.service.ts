@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 
 //Import Fadeout Utilities:
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
+import { MapService } from './map.service';
 
 //Declare Cesium:
 declare let Cesium: any;
@@ -38,7 +39,9 @@ export class GlobeService {
     scene3DOnly: true
   }
 
-  constructor() { this.oController = this; }
+  constructor(
+    private m_oMapService: MapService
+  ) { this.oController = this; }
 
   initGlobe(sGlobeDiv: string) {
     if (window.WebGL2RenderingContext) {
@@ -797,6 +800,18 @@ export class GlobeService {
       console.log(e);
       return false;
     }
+  }
+
+  productIsNotGeoreferencedRectangle3DMap(sGeoserverBBox, asBbox, sLayerId) {
+    var oRectangle = null;
+    if (this.m_oMapService.isProductGeoreferenced(asBbox, sGeoserverBBox) === false) {
+      oRectangle = this.addRectangleOnGlobeByGeoserverBoundingBox(sGeoserverBBox, '');
+      //the options.layers property is used for remove the rectangle to the map
+      // oRectangleBoundingBoxMap.options.layers = "wasdi:" + sLayerId;
+      oRectangle["layers"] = "wasdi:" + sLayerId;
+    }
+    return oRectangle;
+
   }
 }
 

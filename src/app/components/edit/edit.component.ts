@@ -71,7 +71,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   m_sSearchString: string;
 
-  m_aoVisibleBands;
+  m_aoVisibleBands = [];
 
   m_bIsLoadingProducts: boolean = true;
 
