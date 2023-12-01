@@ -188,7 +188,9 @@ export class GlobeService {
         name: 'Red translucent rectangle with outline',
         rectangle: {
           coordinates: oRectangle,
-          material: oColor.withAlpha(0.3),
+          material: Cesium.Color.RED.withAlpha(0.3),
+          
+          // oColor.withAlpha(0.3),
           outline: true,
           outlineColor: oColor
         }

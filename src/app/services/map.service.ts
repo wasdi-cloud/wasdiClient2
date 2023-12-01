@@ -829,21 +829,28 @@ export class MapService {
   };
 
   addRectangleByGeoserverBoundingBox(geoserverBoundingBox, sColor, oMap = this.getMap()) {
-    if (!geoserverBoundingBox) {
-      console.log("MapService.addRectangleByGeoserverBoundingBox: geoserverBoundingBox is null or empty ");
-    }
-    if (!sColor || sColor === "") {
-      sColor = "#ff7800";
-    }
+    try {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox)) {
+        console.log("MapService.addRectangleByGeoserverBoundingBox: geoserverBoundingBox is null or empty ");
+        return null;
+      } else {
+        if ((FadeoutUtils.utilsIsObjectNullOrUndefined(sColor) === true) || (FadeoutUtils.utilsIsStrNullOrEmpty(sColor) === true)) {
+          sColor = "#ff7800";
+        }
 
-    geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
-    let oBounds = JSON.parse(geoserverBoundingBox);
-    //Zoom on layer
-    let corner1 = L.latLng(oBounds.maxy, oBounds.maxx);
-    let corner2 = L.latLng(oBounds.miny, oBounds.minx);
-    let bounds: L.LatLngBoundsExpression = L.latLngBounds(corner1, corner2);
-    let oRectangle = L.rectangle(bounds, { color: sColor, weight: 2 }).addTo(oMap);
+        geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
+        let oBounds = JSON.parse(geoserverBoundingBox);
+        //Zoom on layer
+        // let corner1 = L.latLng(oBounds.maxy, oBounds.maxx);
+        // let corner2 = L.latLng(oBounds.miny, oBounds.minx);
+        let bounds: L.LatLngBoundsExpression = L.latLngBounds([oBounds.maxy, oBounds.maxx], [oBounds.miny, oBounds.minx]);
+        let oRectangle = L.rectangle(bounds, { color: sColor, weight: 2 }).addTo(oMap);
 
-    return oRectangle
+        return oRectangle
+      }
+    } catch (oError) {
+      console.log(oError)
+    }
+    return null;
   }
 }
