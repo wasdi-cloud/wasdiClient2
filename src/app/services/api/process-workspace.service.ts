@@ -374,6 +374,14 @@ export class ProcessWorkspaceService {
     return this.oHttp.get(sUrl);
   };
 
+  getProcessWorkspaceTimeByUser(){
+    return this.oHttp.get<any>(this.APIURL + '/process/runningtimeproject/byuser');
+  }
+
+  getProcessWorkspaceTimeByProject() {
+    return this.oHttp.get<any>(this.APIURL + '/process/runningtimeproject');
+  }
+
   getQueuesStatus(sNodeCode: string, sStatuses: string) {
     let sUrl: string = this.APIURL + '/process/queuesStatus?';
 
