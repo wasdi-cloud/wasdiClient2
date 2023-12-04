@@ -29,7 +29,7 @@
                     <td> {{oProject.activeProject ? "Active" :
                         "Inactive"}}</td>
                     <td class="text-center">{{oProject.individualProcessingTime ?( oProject.individualProcessingTime | convertMsToTime) :
-                        'N/A'}}</td>
+                        '00:00:00'}}</td>
                     <td class="text-center">{{oProject.totalProcessingTime ? (oProject.totalProcessingTime | convertMsToTime ): '00:00:00'}}</td>
                     <td class="d-flex flex-row gap-2">
                         <button class="btn btn-sm btn-secondary"
