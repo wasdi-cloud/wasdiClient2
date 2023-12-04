@@ -18,6 +18,8 @@
                 <tr>
                     <th scope="col">Project Name</th>
                     <th scope="col">Status</th>
+                    <th class="text-center" scope="col">My Processing Time</th>
+                    <th class="text-center" scope="col">Total Processing Time</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -26,6 +28,9 @@
                     <td>{{oProject.name}}</td>
                     <td> {{oProject.activeProject ? "Active" :
                         "Inactive"}}</td>
+                    <td class="text-center">{{oProject.individualProcessingTime ?( oProject.individualProcessingTime | convertMsToTime) :
+                        'N/A'}}</td>
+                    <td class="text-center">{{oProject.totalProcessingTime ? (oProject.totalProcessingTime | convertMsToTime ): '00:00:00'}}</td>
                     <td class="d-flex flex-row gap-2">
                         <button class="btn btn-sm btn-secondary"
                             (click)="openProjectInfoDialog(true, m_oSubscription, oProject)">
