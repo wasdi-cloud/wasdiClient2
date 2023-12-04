@@ -95,6 +95,9 @@ export class ProcessorTabContentComponent implements OnInit {
    */
   @Input() m_sProcessorName?: string = "";
 
+  @Input() m_sPublisher?: string = ""; 
+
+
   /**
    * Selected File
    */
@@ -137,7 +140,7 @@ export class ProcessorTabContentComponent implements OnInit {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
 
     this.displayProcessorType();
-
+    console.log(this.m_sPublisher)
     let sType = this.m_oProcessorBasicInfo.get('oType').value;
     this.m_aoProcessorTypes.forEach(type => {
       if (type.id === sType) {

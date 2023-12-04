@@ -52,6 +52,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
   m_sMyJsonString: string = "";
   m_sSearchString = ""
   m_oSelectedProcessor: any;
+  m_bIsReadonly: boolean = true;
 
   m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
     "DELETEPROCESSOR",
@@ -74,6 +75,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
+    this.m_bIsReadonly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getProcessorsList();
   }
 
@@ -244,35 +246,46 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * Execute the processor in the active workspace
    */
   runProcessor() {
-    if (this.m_oConstantsService.checkProjectSubscriptionsValid() === true) {
-      console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
-
-      let sJSON = this.m_sMyJsonString;
-
-      let sStringJSON = "";
-
-      if (typeof sJSON !== "string") {
-        sStringJSON = JSON.stringify(sJSON);
-      } else {
-        sStringJSON = sJSON;
-      }
-
-      try {
-        JSON.parse(sStringJSON);
-      } catch (oError) {
-        let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
-
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
-      }
-
-      this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          let sNotificationMsg = "PROCESSOR SCHEDULED";
-          this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
-        }
-        this.m_oDialogRef.close();
-      })
+    if (this.m_oConstantsService.checkProjectSubscriptionsValid() === false) {
+      return false;
     }
+
+    if (this.m_bIsReadonly === true) {
+      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to edit this workspace.");
+      return false;
+    }
+    console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
+
+    let sJSON = this.m_sMyJsonString;
+
+    let sStringJSON = "";
+
+    if (typeof sJSON !== "string") {
+      sStringJSON = JSON.stringify(sJSON);
+    } else if (sJSON === '') {
+      sStringJSON = '{}'
+    } else {
+      sStringJSON = sJSON;
+    }
+
+    try {
+      JSON.parse(sStringJSON);
+    } catch (oError) {
+      let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
+
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+    }
+
+    this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+        let sNotificationMsg = "PROCESSOR SCHEDULED";
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
+      }
+      this.m_oDialogRef.close();
+    })
+
+    return true;
+
   }
 
   /**

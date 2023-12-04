@@ -23,7 +23,6 @@ export class WorkflowsDialogComponent implements OnInit {
   faPlus = faPlus;
   faX = faX;
 
-
   m_aoWorkflows: any[];
   m_aoProducts: any[];
   m_asProductNames: string[];
@@ -51,6 +50,7 @@ export class WorkflowsDialogComponent implements OnInit {
   m_sUserId: string;
   m_sWorkspaceId: string;
   m_sSearchString: string = "";
+  m_bIsReadOnly: boolean = true;
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
     private m_oConstantsService: ConstantsService,
@@ -65,7 +65,7 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_sUserId = this.m_oConstantsService.getUserId();
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_aoProducts = this.m_oData.products;
-    console.log(this.m_aoProducts);
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
   setActiveTab(sTabName: string) {
@@ -162,6 +162,10 @@ export class WorkflowsDialogComponent implements OnInit {
    * Execute processing on single product input (Previously: runMultiInputWorkflow)
   */
   runSingleInputWorkflow() {
+    if (this.m_bIsReadOnly === true) {
+      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to execute a workflow in this workspace");
+      return false;
+    }
     // this.addProductInputInNode();  
     let oSnapWorkflowViewModel = this.getObjectExecuteGraph(this.m_oSelectedWorkflow);
     console.log(oSnapWorkflowViewModel);
@@ -179,6 +183,10 @@ export class WorkflowsDialogComponent implements OnInit {
    * Execute processing on multiple product input (Previously: runWorkflowPerProducts)
   */
   runMultiInputWorkflow() {
+    if (this.m_bIsReadOnly === true) {
+      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to execute a workflow in this workspace");
+      return false;
+    }
     let iNumberOfProducts = this.m_aoSelectedProducts.length;
     console.log(this.m_aoSelectedProducts);
     for (let iSelectedProductIndex = 0; iSelectedProductIndex < iNumberOfProducts; iSelectedProductIndex++) {
@@ -192,7 +200,7 @@ export class WorkflowsDialogComponent implements OnInit {
         console.log("Error in executing workflow");
       }
     }
-
+    return true;
   }
 
   getObjectExecuteGraph(oWorkflow: Workflow, asInputFile?: Array<string>) {

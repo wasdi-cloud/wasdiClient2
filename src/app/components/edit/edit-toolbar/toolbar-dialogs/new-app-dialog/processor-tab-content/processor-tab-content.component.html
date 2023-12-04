@@ -5,10 +5,13 @@
                 <label for="name">Name:</label>
                 <input class="form-control" type="text" formControlName="sProcessorName">
             </div>
+            <div *ngIf="m_bEditMode === true">
+                <label for="publisher">Publisher:</label>
+                <input class="form-control" type="text" value="{{m_sPublisher}}" disabled readonly>
+            </div>
             <div>
                 <label for="type">Type:</label>
-                <input *ngIf="m_bEditMode === true" class="form-control" type="text" formControlName="oType"
-                    placeholder="meow">
+                <input *ngIf="m_bEditMode === true" class="form-control" type="text" formControlName="oType">
                 <input *ngIf="m_bEditMode === false" class="form-control" type="text" name="type"
                     [matAutocomplete]="auto" placeholder="Select Programming Language">
 

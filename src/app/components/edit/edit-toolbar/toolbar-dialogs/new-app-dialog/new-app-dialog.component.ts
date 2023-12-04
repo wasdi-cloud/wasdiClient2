@@ -64,6 +64,7 @@ export class NewAppDialogComponent implements OnInit {
     processorName: string,
     processorVersion: string,
     publisher: string,
+    readOnly: boolean,
     sharedWithMe: boolean,
     type: string
   } = {
@@ -76,6 +77,7 @@ export class NewAppDialogComponent implements OnInit {
       processorName: "",
       processorVersion: "1",
       publisher: "",
+      readOnly: false,
       sharedWithMe: false,
       type: ""
     };
@@ -192,6 +194,7 @@ export class NewAppDialogComponent implements OnInit {
     //If oProcessor assigned in data, Input Processor = oProcessor:
     if (this.data.inputProcessor && this.m_bEditMode) {
       this.m_oInputProcessor = this.data.inputProcessor;
+      console.log(this.m_oInputProcessor);
 
       //Assign Input data to model: 
       this.m_sName = this.m_oInputProcessor.processorName;

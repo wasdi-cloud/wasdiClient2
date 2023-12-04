@@ -73,6 +73,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
   m_oDisplayMap: L.Map | null;
   m_aoVisibleBands: any[] = [];
   m_aoSelectedProducts: Array<any> = [];
+  m_bIsReadOnly: boolean = true;
+  m_aoProductsLayersIn3DMapArentGeoreferenced: Array<any> = [];
 
   constructor(
     private m_oCatalogService: CatalogService,
@@ -87,24 +89,17 @@ export class ProductsListComponent implements OnChanges, OnInit {
     private m_oRabbitStompService: RabbitStompService,
     private m_oTranslate: TranslateService,
     private m_oRouter: Router
-  ) {
-    this.m_oProductsTreeControl = new NestedTreeControl<any>(node => {
-      if (node.bandsGroups) {
-        return node.bandsGroups.bands
-      }
-    });
-    this.m_oProductsTreeDataSource = new MatTreeNestedDataSource();
-  }
+  ) { }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void { }
   ngOnChanges() {
     console.log("ProductListComponent.ngOnChanges: call filter products ")
     this.filterProducts();
     console.log("ProductListComponent.ngOnChanges: done filter Products ")
 
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
   filterProducts() {
@@ -130,12 +125,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
         })
       }
     }
-
-    console.log("ProductListComponent.filterProducts: filter done, assign the data source")
-
-    this.m_oProductsTreeDataSource.data = aoFilteredProducts
-
-    console.log("ProductListComponent.filterProducts: data source assigned")
   }
 
   trackByIndex(index: number): number {
@@ -493,7 +482,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         oController.receivedNewProductMessage(oMessage);
         break;
       case "DELETE":
-        //oController.getProductListByWorkspace();
+        oController.getProductListByWorkspace();
         break;
     }
 
@@ -504,6 +493,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   receivedPublishBandMessage(oMessage: any, oActiveBand: any) {
     let oPublishedBand = oMessage.payload;
+
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPublishedBand)) {
       console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
       return false;
@@ -514,35 +504,33 @@ export class ProductsListComponent implements OnChanges, OnInit {
     oActiveBand.layerId = oPublishedBand.layerId;
     oActiveBand.published = true;
     oActiveBand.showLegend = false;
+    oActiveBand['bVisibleNow'] = true;
 
-    let sColor = "#000";
-    let sGeoserverBBox = oActiveBand.geoserverBoundingBox;
-    this.productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, oActiveBand.bbox, oActiveBand.layerId);
-    //if we are in 2D put it on the map
-    if (this.m_b2DMapMode === true) {
-      this.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
-    } else {
-      //If we are in 3D put it on the globe
+    if (this.m_b2DMapMode === false) {
+      var oRectangleIsNotGeoreferencedProduct = this.m_oGlobeService.productIsNotGeoreferencedRectangle3DMap(oActiveBand.geoserverBoundingBox, oActiveBand.bbox, oActiveBand.layerId);
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangleIsNotGeoreferencedProduct) === false) {
+        this.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
+        var oLayer3DMap = {
+          id: oActiveBand.layerId,
+          rectangle: oRectangleIsNotGeoreferencedProduct
+        };
+        this.m_aoProductsLayersIn3DMapArentGeoreferenced.push(oLayer3DMap);
+      }
+      //if we are in 3D put the layer on the globe
       this.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
-
+    } else {
+      var sColor = "#f22323";
+      var sGeoserverBBox = oActiveBand.geoserverBoundingBox;
+      this.m_oMapService.productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, oActiveBand.bbox, oActiveBand.layerId);
+      //if we are in 2D put it on the map
+      this.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
     }
     if (typeof oPublishedBand === undefined) {
       console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
       return false;
     }
 
-    oActiveBand.opacity = 100;
     return true;
-  }
-
-  productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, asBbox, sLayerId) {
-    if (this.m_oMapService.isProductGeoreferenced(asBbox, sGeoserverBBox) === false) {
-      let oRectangleBoundingBoxMap: L.Rectangle = this.m_oMapService.addRectangleByGeoserverBoundingBox(sGeoserverBBox, "", this.m_oMapService.getMap());
-
-      if (oRectangleBoundingBoxMap) {
-        oRectangleBoundingBoxMap.options.attribution = "wasdi:" + sLayerId;
-      }
-    }
   }
 
   addLayerMap2DByServer(sLayerId, sServer) {

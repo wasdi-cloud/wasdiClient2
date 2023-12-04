@@ -80,7 +80,7 @@ export class WorkspaceListItemComponent {
                 oActiveWorkspace = this.oConstantsService.getActiveWorkspace();
                 if (JSON.stringify(oActiveWorkspace) === JSON.stringify(oWorkspaceViewModel)) {
                   oWorkspaceViewModel = {} as WorkspaceViewModel;
-                  this.oConstantsService.setActiveWorkspace(oWorkspaceViewModel);
+                  this.oConstantsService.setActiveWorkspace({} as Workspace);
                 }
                 this.deletedWorkspace.emit(oWorkspaceViewModel)
               },

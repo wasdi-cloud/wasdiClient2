@@ -192,11 +192,11 @@ export class ProcessorService {
 
     sUrl += '/processors/logs/list?processworkspace=' + oProcessId;
 
-    if (iStartRow) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(iStartRow) === false) {
       sUrl += '&startrow=' + iStartRow;
     }
 
-    if (iEndRow) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(iEndRow) === false) {
       sUrl += '&endrow=' + iEndRow;
     }
 

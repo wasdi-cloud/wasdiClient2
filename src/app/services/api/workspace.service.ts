@@ -13,6 +13,7 @@ export interface WorkspaceViewModel {
   name: string;
   nodeCode: string;
   processesCount: string;
+  readOnly: boolean;
   sharedUsers: string[];
   slaLink: string;
   userId: string;

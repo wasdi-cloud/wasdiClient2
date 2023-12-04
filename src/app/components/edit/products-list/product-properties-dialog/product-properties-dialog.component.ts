@@ -44,6 +44,7 @@ export class ProductPropertiesDialogComponent {
   m_bLoadingStyle: boolean = true;
   m_bProductChanged: boolean = false;
   m_sWorkspaceId: string;
+  m_bIsReadOnly: boolean = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
@@ -59,6 +60,7 @@ export class ProductPropertiesDialogComponent {
     this.m_oEditProduct.friendlyName = this.m_oData.product.productFriendlyName;
     this.m_oEditProduct.description = this.m_oData.product.description;
     this.m_oEditProduct.style = this.m_oData.product.style;
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
   /**
