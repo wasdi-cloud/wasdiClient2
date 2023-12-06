@@ -15,6 +15,7 @@ import { Workspace } from '../shared/models/workspace.model';
 
 //Import Utilities:
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
+import { Title } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -67,7 +68,8 @@ export class ConstantsService {
   m_sAccountType: string = "";
 
   constructor(
-    private m_oNotificationDisplayService: NotificationDisplayService
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTitleService: Title
   ) { }
 
   // isMobile() {
@@ -165,6 +167,9 @@ export class ConstantsService {
   /*------------- WORKSPACES --------------*/
   setActiveWorkspace(oWorkspace: Workspace) {
     this.m_oActiveWorkspace = oWorkspace
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) || !oWorkspace.workspaceId) {
+      this.m_oTitleService.setTitle("WASDI 2.0");
+    }
     //Set Workspace Subscription for Subscribed Components
     this.m_oActiveWorkspaceSubscription.next(oWorkspace);
   }

@@ -550,6 +550,9 @@ export class WorkspacesComponent implements OnInit {
     bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_aoSelectedWorkspaces.forEach((oWorkspace, iIndex) => {
+          if(oWorkspace.workspaceId === this.activeWorkspace.workspaceId) {
+            this.activeWorkspace = null;
+          }
           this.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
             next: oResponse => {
               this.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");

@@ -24,7 +24,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 export class WorkspaceListItemComponent {
   faTrashcan = faTrash;
   @Input() workspace!: any;
-  @Output() activeWorkspace = new EventEmitter<Workspace>();
+  @Output() activeWorkspace = new EventEmitter<any>();
   @Output() deletedWorkspace = new EventEmitter<Workspace>();
   @Output() m_oWorkspaceSelection = new EventEmitter<Workspace>();
 
@@ -81,6 +81,7 @@ export class WorkspaceListItemComponent {
                 if (JSON.stringify(oActiveWorkspace) === JSON.stringify(oWorkspaceViewModel)) {
                   oWorkspaceViewModel = {} as WorkspaceViewModel;
                   this.oConstantsService.setActiveWorkspace({} as Workspace);
+                  this.activeWorkspace.emit({})
                 }
                 this.deletedWorkspace.emit(oWorkspaceViewModel)
               },

@@ -8,7 +8,6 @@ import { ConstantsService } from './services/constants.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'client';
   m_bIsRabbitConnected;
 
   constructor(
