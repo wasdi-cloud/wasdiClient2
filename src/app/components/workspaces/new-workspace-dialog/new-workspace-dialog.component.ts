@@ -69,9 +69,23 @@ export class NewWorkspaceDialogComponent implements OnInit {
           this.onDismiss();
         },
         error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
         }
       });
+    }
+  }
+
+  /**
+   * Execute Search/Rename on Enter Key Input
+   * @param oEvent 
+   */
+  onWorkspaceInput(oEvent: any) {
+    if (oEvent.keyCode === 13) {
+      if (this.m_bIsEditingWorkspaceName === false) {
+        this.onCreateWorkspace();
+      } else if (this.m_bIsEditingWorkspaceName === true) {
+        this.onRenameWorkspace();
+      }
     }
   }
 
