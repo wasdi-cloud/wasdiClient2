@@ -175,8 +175,8 @@ export class WorkspacesComponent implements OnInit {
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
       this.activeWorkspace = response
       this.sharedUsers = response.sharedUsers
+      this.loadProductList(oWorkspace);
     })
-    this.loadProductList(oWorkspace);
   }
 
   loadProductList(oWorkspace: Workspace) {
@@ -200,16 +200,17 @@ export class WorkspacesComponent implements OnInit {
     let oWorkspaceId = oWorkspace.workspaceId;
     this.m_bIsVisibleFiles = true;
     let sError = this.m_oTranslate.instant("MSG_MKT_WS_OPEN_ERROR");
-
-    this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspaceId).subscribe({
-      next: oResponse => {
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oWorkspaceViewModel = oResponse;
-        }
-      },
-      error: oError => { }
-    });
-
+    console.log(sError)
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.activeWorkspace)) {
+      this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspaceId).subscribe({
+        next: oResponse => {
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+            this.m_oWorkspaceViewModel = oResponse;
+          }
+        },
+        error: oError => { }
+      });
+    }
     this.m_oProductService.getProductLightListByWorkspace(oWorkspaceId).subscribe({
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
