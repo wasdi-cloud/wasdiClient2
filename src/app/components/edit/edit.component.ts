@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 //Service Imports: 
+import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -28,6 +29,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,
+    private m_oConsoleService: ConsoleService,
     private m_oConstantsService: ConstantsService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
@@ -48,6 +50,7 @@ export class EditComponent implements OnInit, OnDestroy {
   m_bIsFilteredTree: false;
 
   m_bTreeIsLoading: boolean = true;
+  m_bJupyterIsReady: boolean = false;
 
   //Array of Products in Workspace
   m_aoProducts: Product[] = [];
@@ -194,6 +197,7 @@ export class EditComponent implements OnInit, OnDestroy {
       return;
     }
   };
+
   ngOnDestroy(): void {
     console.log("EditComponent.ngOnInit")
     this.m_oRabbitStompService.unsubscribe();
@@ -229,6 +233,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
             this.getProductList();
             this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
+            this.getJupyterIsReady(this.m_oActiveWorkspace.workspaceId);
           }
         }
       },
@@ -249,6 +254,20 @@ export class EditComponent implements OnInit, OnDestroy {
       error: oError => {
 
       }
+    })
+  }
+
+  getJupyterIsReady(sWorkspaceId) {
+    this.m_oConsoleService.isConsoleReady(sWorkspaceId).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === true) {
+          this.m_oNotificationDisplayService.openAlertDialog("Error in getting Jupyter Notebook Status");
+          return false;
+        }
+        this.m_bJupyterIsReady = oResponse.boolValue;
+        return true;
+      },
+      error: oError => { }
     })
   }
 
@@ -298,6 +317,6 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   rabbitMessageHook(oRabbitMessage, oController) {
-    console.log(oRabbitMessage);
+
   }
 }

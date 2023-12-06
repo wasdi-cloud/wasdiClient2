@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-lg d-flex flex-row justify-content-between px-3">
     <form class="d-flex gap-2" #filterTextForm="ngForm" (ngSubmit)="getFilterText()">
-        <input class="form-control me-2" type="search" placeholder="{{'EDITOR_PRODUCTS_FILTER'|translate}}" aria-label="Search"
-            name="m_sFilterText" [(ngModel)]="m_sFilterText">
-        <button class="btn btn-outline-primary" type="submit" matTooltip="{{'EDITOR_PRODUCTS_FILTER_APPLY' | translate}}"
-            [matTooltipPosition]="'above'">
+        <input class="form-control me-2" type="search" placeholder="{{'EDITOR_PRODUCTS_FILTER'|translate}}"
+            aria-label="Search" name="m_sFilterText" [(ngModel)]="m_sFilterText">
+        <button class="btn btn-outline-primary" type="submit"
+            matTooltip="{{'EDITOR_PRODUCTS_FILTER_APPLY' | translate}}" [matTooltipPosition]="'above'">
             <fa-icon [icon]="faSearch"></fa-icon>
         </button>
         <button class="btn btn-outline-secondary" matTooltip="{{'EDITOR_PRODUCTS_FILTER_CLEAN' | translate}}"
@@ -17,25 +17,30 @@
     </form>
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openAppsDialog($event)"><fa-icon [icon]="faRocket"></fa-icon> {{'EDITOR_OPERATION_TITLE_WAPPS' |
+            <a class="nav-link" aria-current="page" (click)="openAppsDialog($event)"><fa-icon
+                    [icon]="faRocket"></fa-icon> {{'EDITOR_OPERATION_TITLE_WAPPS' |
                 translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openNewAppDialog($event)"><fa-icon [icon]="faPlus"></fa-icon> {{'EDITOR_OPERATION_TITLE_NEW_PROCESSOR' |
+            <a class="nav-link" aria-current="page" (click)="openNewAppDialog($event)"><fa-icon
+                    [icon]="faPlus"></fa-icon> {{'EDITOR_OPERATION_TITLE_NEW_PROCESSOR' |
                 translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openWorkflowsDialog($event)"><fa-icon [icon]="faGears"></fa-icon> {{'EDITOR_OPERATION_TITLE_WORKFLOW' |
+            <a class="nav-link" aria-current="page" (click)="openWorkflowsDialog($event)"><fa-icon
+                    [icon]="faGears"></fa-icon> {{'EDITOR_OPERATION_TITLE_WORKFLOW' |
                 translate}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openImportDialog($event)"><fa-icon [icon]="faUpload"></fa-icon> {{'EDITOR_OPERATION_TITLE_IMPORT' |
+            <a class="nav-link" aria-current="page" (click)="openImportDialog($event)"><fa-icon
+                    [icon]="faUpload"></fa-icon> {{'EDITOR_OPERATION_TITLE_IMPORT' |
                 translate}}</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" aria-current="page" (click)="openJupyterNotebookPage($event)"><fa-icon
-                    [icon]="faComputer"></fa-icon> {{'EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_CREATE' |
-                translate}}</a>
+                    [icon]="faComputer"></fa-icon> {{m_bJupyterIsReady === true ?
+                ('EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_OPEN' |
+                translate) : ("EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_CREATE" | translate)}}</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" aria-current="page" (click)="openStylesDialog($event)"><fa-icon

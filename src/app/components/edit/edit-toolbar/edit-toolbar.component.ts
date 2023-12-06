@@ -39,6 +39,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   @Input() m_oActiveWorkspace: Workspace;
   @Input() m_aoProducts: Product[];
+  @Input() m_bJupyterIsReady: boolean = false;
   @Output() m_sSearchString = new EventEmitter();
 
   m_bNotebookIsReady: boolean = false;
@@ -62,7 +63,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex); 
+    this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
   }
 
   openWorkspaceInfo(event: MouseEvent) {
@@ -133,21 +134,17 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     } else {
       //If user has subscription and project, prepare notebook:
       this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
+        let sMessage = "WASDI is preparing your notebook."
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
+
           if (oResponse.stringValue.includes("http")) {
             window.open(oResponse.stringValue, '_blank');
+          } else {
+            sMessage = sMessage + "<BR>" + oResponse.stringValue;
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
           }
-        } else {
-          let sMessage = "WASDI is preparing your notebook."
+          }
 
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.stringValue) === false) {
-              sMessage = sMessage + "<BR>" + oResponse.stringValue;
-            }
-          }
-          this.m_bNotebookIsReady = true;
-          this.m_oNotificationDisplayService.openAlertDialog( sMessage);
-        }
       });
       return true;
     }
@@ -171,6 +168,8 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   rabbitMessageHook(oRabbitMessage, oController) {
-
+    if (oRabbitMessage.messageResult === "OK") {
+      oController.m_bJupyterIsReady = true;
+    }
   }
 }

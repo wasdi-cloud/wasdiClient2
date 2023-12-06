@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConstantsService } from '../constants.service';
 
-import { HttpResponse as defaultResponse} from 'src/app/shared/models/http-response.model';
+import { HttpResponse as defaultResponse } from 'src/app/shared/models/http-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +47,6 @@ export class ConsoleService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get(sUrl + this.m_sResource + '/ready?workspaceId=' + sWorkspaceId);
+    return this.oHttp.get<any>(sUrl + this.m_sResource + '/ready?workspaceId=' + sWorkspaceId);
   }
 }
