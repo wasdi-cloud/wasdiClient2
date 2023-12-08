@@ -52,6 +52,30 @@
                             {{oProject.name}}</li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" role="button" data-bs-toggle="dropdown">
+                        <div class="position-relative">
+                            <fa-icon [icon]="faEnvelope"></fa-icon>
+                            <span *ngIf="m_bHasNotifications"
+                                class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle">
+                                <span class="visually-hidden">New alerts</span>
+                            </span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notifications">
+                        <li *ngIf="m_aoNotifications.length === 0" class="text-center">You have no notifications.</li>
+                        <li *ngFor="let oMessage of m_aoNotifications.reverse()"
+                            class="d-flex flex-row justify-content-between px-1 notification-container">
+                            <div class="d-flex flex-column">
+                                <div class="notification-text" [innerHTML]="oMessage.date + ' ' + oMessage.time"></div>
+                                <div class="notification-text" [innerHTML]="oMessage.displayMessage"></div>
+                            </div>
+                            <button class="btn btn-sm">
+                                <fa-icon [icon]="faX"></fa-icon>
+                            </button>
+                        </li>
+                    </ul>
+                </li>
                 <!-- Account Type: -->
                 <li class="nav-item">
                     <!-- User with brand new WASDI Account -->
@@ -73,7 +97,8 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a href="" class="dropdown-item" (click)="openUserSettings($event)"><fa-icon
                                     [icon]="faGauge"></fa-icon> User Dashboard</a></li>
-                        <li><a href="https://wasdi.readthedocs.io/en/latest/index.html" target="_blank" class="dropdown-item"><fa-icon [icon]="faDocumentation"></fa-icon>
+                        <li><a href="https://wasdi.readthedocs.io/en/latest/index.html" target="_blank"
+                                class="dropdown-item"><fa-icon [icon]="faDocumentation"></fa-icon>
                                 Documentation</a></li>
                         <li><a href="" class="dropdown-item" data-bs-toggle="offcanvas"
                                 data-bs-target="#feedbackOffcanvas" aria-controls="feedbackOffcanvas"><fa-icon
