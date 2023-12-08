@@ -31,6 +31,8 @@ import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { TranslateService } from '@ngx-translate/core';
+import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
+import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 
 declare let Cesium: any;
 
@@ -84,9 +86,9 @@ export class ProductsListComponent implements OnChanges, OnInit {
     private m_oGlobeService: GlobeService,
     private m_oMapService: MapService,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oNotificationsQueueService: NotificationsQueueService,
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    private m_oRabbitStompService: RabbitStompService,
     private m_oTranslate: TranslateService,
     private m_oRouter: Router
   ) { }
@@ -486,9 +488,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         break;
     }
 
-    console.log(oMessage);
-
-    // FadeoutUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate);
+    WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate, oController);
   }
 
   receivedPublishBandMessage(oMessage: any, oActiveBand: any) {
