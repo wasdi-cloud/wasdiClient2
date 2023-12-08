@@ -138,7 +138,14 @@ export default class WasdiUtils {
         if (!FadeoutUtils.utilsIsStrNullOrEmpty(sUserMessage)) {
             // let oAudio = new Audio('assets/audio/message.wav');
             // oAudio.play();            
-
+            let oUserMessage = {
+                ...oMessage,
+                displayMessage: sUserMessage,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+                seen: false
+            }
+            oController.m_oNotificationsQueueService.setNotifications(oUserMessage);
             oController.m_oNotificationDisplayService.openSnackBar(sUserMessage, "Close", "right", "bottom");
         }
         return "";

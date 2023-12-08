@@ -39,3 +39,20 @@ button.close-feedback-btn {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
 }
+
+ul.dropdown-menu-notifications {
+    width: 25rem;
+}
+
+li.notification-container {
+    border-bottom: 1px solid grey;
+}
+
+li.notification-container:last-child {
+    border-bottom: none;
+}
+
+div.notification-text {
+    font-size: 1rem;
+
+}

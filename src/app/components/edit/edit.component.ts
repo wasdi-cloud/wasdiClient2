@@ -7,6 +7,7 @@ import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,6 +33,7 @@ export class EditComponent implements OnInit, OnDestroy {
     private m_oConsoleService: ConsoleService,
     private m_oConstantsService: ConstantsService,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oNotificationsQueueService: NotificationsQueueService,
     private m_oProductService: ProductService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oRouter: Router,

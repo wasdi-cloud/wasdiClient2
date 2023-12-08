@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 //Import Services: 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 import { ProjectService } from 'src/app/services/api/project.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Import Font Awesome Icons: 
-import { faComment, faArrowLeft, faBook, faFloppyDisk, faCalendar, faMagnifyingGlass, faGlobe, faGears, faRocket, faUserAstronaut, faGauge, faArrowRightFromBracket, faCertificate, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faArrowLeft, faBook, faFloppyDisk, faCalendar, faMagnifyingGlass, faGlobe, faGears, faRocket, faUserAstronaut, faGauge, faArrowRightFromBracket, faCertificate, faStar, faEnvelope, faX } from '@fortawesome/free-solid-svg-icons';
 
 //Import Dialog Components:
 import { MatDialog } from '@angular/material/dialog';
+import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { UserSettingsDialogComponent } from './header-dialogs/user-settings-dialog/user-settings-dialog.component';
 
 //Import Models:
@@ -22,7 +24,6 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Import Utilities: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -51,6 +52,10 @@ export class HeaderComponent implements OnInit {
   } = { title: null, message: null }
 
   m_oRouterEvents: any;
+  m_bHasNotificationsSubscription: any;
+  m_bHasNotifications: boolean = false;
+  m_aoNotificationsSubscription: any;
+  m_aoNotifications: Array<any> = [];
 
   //Font Awesome Icons
   faUser = faUserAstronaut;
@@ -67,6 +72,8 @@ export class HeaderComponent implements OnInit {
   faLogout = faArrowRightFromBracket;
   faCertificate = faCertificate;
   faStar = faStar;
+  faEnvelope = faEnvelope;
+  faX = faX;
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -75,6 +82,7 @@ export class HeaderComponent implements OnInit {
     private m_oProjectService: ProjectService,
     private m_oRouter: Router,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oNotificationsQueueService: NotificationsQueueService,
     public m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
   ) {
@@ -117,11 +125,31 @@ export class HeaderComponent implements OnInit {
         }
       }
     })
+
+    this.m_aoNotificationsSubscription = this.m_oNotificationsQueueService.m_aoNotificationsSubscription.subscribe(oResponse => {
+      console.log(oResponse);
+      if (oResponse.length > 0) {
+        this.m_aoNotifications = oResponse;
+        console.log("header.componenet: ngOnInit: " + this.m_aoNotifications)
+      }
+    })
+
+    this.m_bHasNotificationsSubscription = this.m_oNotificationsQueueService.m_bHasNotifications.subscribe(oResponse => {
+      this.m_bHasNotifications = oResponse;
+    })
   }
 
   logout() {
     this.m_oConstantsService.logOut();
     this.m_oRouter.navigateByUrl("login");
+  }
+
+  clearNotification() {
+    setTimeout(() => {
+      if(this.m_bHasNotifications === true) {
+        this.m_bHasNotifications = false;
+      }
+    }, 1000)
   }
 
   openUserSettings(event: MouseEvent) {
