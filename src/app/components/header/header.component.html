@@ -53,7 +53,7 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link" role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link" role="button" data-bs-toggle="dropdown" (click)="clearNotification()">
                         <div class="position-relative">
                             <fa-icon [icon]="faEnvelope"></fa-icon>
                             <span *ngIf="m_bHasNotifications"
@@ -70,9 +70,6 @@
                                 <div class="notification-text" [innerHTML]="oMessage.date + ' ' + oMessage.time"></div>
                                 <div class="notification-text" [innerHTML]="oMessage.displayMessage"></div>
                             </div>
-                            <button class="btn btn-sm">
-                                <fa-icon [icon]="faX"></fa-icon>
-                            </button>
                         </li>
                     </ul>
                 </li>

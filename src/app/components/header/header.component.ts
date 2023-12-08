@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 //Import Services: 
@@ -52,6 +52,7 @@ export class HeaderComponent implements OnInit {
   } = { title: null, message: null }
 
   m_oRouterEvents: any;
+  m_bHasNotificationsSubscription: any;
   m_bHasNotifications: boolean = false;
   m_aoNotificationsSubscription: any;
   m_aoNotifications: Array<any> = [];
@@ -128,21 +129,27 @@ export class HeaderComponent implements OnInit {
     this.m_aoNotificationsSubscription = this.m_oNotificationsQueueService.m_aoNotificationsSubscription.subscribe(oResponse => {
       console.log(oResponse);
       if (oResponse.length > 0) {
-        this.m_bHasNotifications = true;
         this.m_aoNotifications = oResponse;
         console.log("header.componenet: ngOnInit: " + this.m_aoNotifications)
       }
-      if (oResponse.length === 0) {
-        this.m_bHasNotifications = false;
-      }
+    })
 
-
+    this.m_bHasNotificationsSubscription = this.m_oNotificationsQueueService.m_bHasNotifications.subscribe(oResponse => {
+      this.m_bHasNotifications = oResponse;
     })
   }
 
   logout() {
     this.m_oConstantsService.logOut();
     this.m_oRouter.navigateByUrl("login");
+  }
+
+  clearNotification() {
+    setTimeout(() => {
+      if(this.m_bHasNotifications === true) {
+        this.m_bHasNotifications = false;
+      }
+    }, 1000)
   }
 
   openUserSettings(event: MouseEvent) {
