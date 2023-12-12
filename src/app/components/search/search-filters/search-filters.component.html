@@ -11,7 +11,7 @@
             <!-- Providers Multi-select -->
             <div>
                 <mat-select class="form-control" multiple placeholder="{{'IMPORT_PROVIDERS' | translate}}"
-                    style="width: 20rem;" [(ngModel)]=" m_aoUserProviderSelection"
+                    style="width: 20rem;" [(ngModel)]="m_aoUserProviderSelection"
                     (selectionChange)="emitSelectedProviders($event)">
                     <mat-option *ngFor="let oProvider of m_aoListOfProviders" [value]="oProvider">
                         {{oProvider.description}}

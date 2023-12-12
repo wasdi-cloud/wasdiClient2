@@ -103,6 +103,8 @@ export class AppUiComponent implements OnInit {
   //Error Message
   m_sMessage = "The following inputs are required:"
 
+  //Active Workspace
+  m_oActiveWorkspace = null;
 
   ngOnInit(): void {
     this.fetchWorkspaces();
@@ -123,6 +125,13 @@ export class AppUiComponent implements OnInit {
         data: oDialogData
       })
     }
+  
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace(); 
+    if(this.m_oActiveWorkspace !== null) {
+      console.log("active workspace")
+      this.workspaceForm.sExistingWorkspace = this.m_oActiveWorkspace.workspaceName;
+      console.log(this.m_oActiveWorkspace)
+    }  
   }
 
   /**
@@ -347,6 +356,11 @@ export class AppUiComponent implements OnInit {
 
     }
     return oProcessorInput;
+  }
+
+  setSelectedWorkspace(oEvent: any) {
+    this.workspaceForm.sExistingWorkspace = oEvent.value;
+    console.log(this.workspaceForm.sExistingWorkspace);
   }
 
   toggleCollapse() {
