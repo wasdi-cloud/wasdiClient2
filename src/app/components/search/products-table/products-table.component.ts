@@ -72,7 +72,6 @@ export class ProductsTableComponent implements OnInit {
 
     //Get Products Per Page Options:
     this.m_aiProductsPerPageOptions = this.getProductsPerPageOptions();
-    console.log(this.m_bIsPaginatedList);
   }
 
   /**

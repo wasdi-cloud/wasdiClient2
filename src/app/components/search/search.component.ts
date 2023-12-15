@@ -128,6 +128,8 @@ export class SearchComponent implements OnInit {
     }
 
     if (this.m_aoSelectedProviders.length > 0) {
+      //Clear Providers After Count before executing Search and Count
+      this.m_aoProvidersAfterCount = [];
       this.m_aoSelectedProviders.forEach(oProvider => {
         this.searchAndCount(oProvider);
       })
@@ -165,7 +167,6 @@ export class SearchComponent implements OnInit {
   }
 
   searchAndCount(oProvider) {
-
     //If there is no provider selected, return false
     if (this.thereIsAtLeastOneProvider() === false) {
       return false;
