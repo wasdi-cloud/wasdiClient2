@@ -44,6 +44,8 @@ export class NewWorkspaceDialogComponent implements OnInit {
     if (!this.m_sWorkspaceName) {
 
     }
+    this.m_oDialogRef.close();
+    this.m_oNotificationDisplayService.openAlertDialog("WASDI is creating your workspace...")
     this.m_oWorkspaceService.createWorkspace(this.m_sWorkspaceName).subscribe(oResponse => {
       if (oResponse.boolValue === false) {
         console.log("error")
@@ -52,7 +54,6 @@ export class NewWorkspaceDialogComponent implements OnInit {
       oNewWorkspace = this.m_oWorkspaceService.getWorkspaceEditorViewModel(oResponse.stringValue)
       this.m_oConstantsService.setActiveWorkspace(oNewWorkspace)
       this.m_oRouter.navigateByUrl(`edit/${oResponse.stringValue}`);
-      this.m_oDialogRef.close();
       return true;
     })
   }
