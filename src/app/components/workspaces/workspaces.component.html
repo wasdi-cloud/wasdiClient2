@@ -56,8 +56,9 @@
                     {{activeWorkspace.workspaceId}}</p>
                 <p><strong>{{"WORKSPACES_PROC_COUNT" | translate}}:
                     </strong>{{activeWorkspace.processesCount}}</p>
-                <strong>{{"WORKSPACES_SHARED_WITH" | translate}}: </strong>
-                <ul>
+                <strong *ngIf="activeWorkspace.sharedUsers.length > 0">{{"WORKSPACES_SHARED_WITH" | translate}}:
+                </strong>
+                <ul *ngIf="activeWorkspace.sharedUsers.length > 0">
                     <li *ngFor="let user of activeWorkspace.sharedUsers">{{ user }}</li>
                 </ul>
                 <ul class="list-group">
