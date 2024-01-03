@@ -56,7 +56,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatChipsModule } from '@angular/material/chips';
-import {MatProgressBarModule } from '@angular/material/progress-bar'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -159,7 +159,8 @@ import { AlertDialogComponent } from './shared/dialogs/alert-dialog/alert-dialog
 import { NotificationSnackbarComponent } from './shared/dialogs/notification-snackbar/notification-snackbar.component';
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 
-
+import { initializeKeycloak } from './init/keycloak-init.factory';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular'
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -267,6 +268,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
+    KeycloakAngularModule,
     LeafletModule,
     LeafletDrawModule,
     TranslateModule.forRoot({
@@ -297,7 +299,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatSnackBarModule,
     MatListModule,
     MatProgressSpinnerModule,
-    MatChipsModule, 
+    MatChipsModule,
     MatProgressBarModule,
     NgxChartsModule
   ],
@@ -323,6 +325,11 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       multi: true,
       deps: [ConfigurationService],
       useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
+    }, {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
     }
   ],
   bootstrap: [AppComponent],
