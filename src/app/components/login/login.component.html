@@ -1,11 +1,16 @@
+<div class="register-toolbar d-flex flex-row gap-2 p-2 w-100 justify-content-end">
+    <button class="btn btn-sm btn-success" (click)="keycloakRegister()">
+        Sign Up
+    </button>
+    <button class="btn btn-sm btn-secondary" (click)="keycloakLogin()">
+        Keycloak Login
+    </button>
+</div>
 <form class="col-6 m-auto" name="form" #f="ngForm" (ngSubmit)="f.form.valid && login()" novalidate>
     <!-- Email input -->
     <div class="form-outline mb-4">
-        <input 
-            type="email" 
-            id="form2Example1" class="form-control" 
-            [(ngModel)]="form.username" #username="ngModel" 
-            name="username"/>
+        <input type="email" id="form2Example1" class="form-control" [(ngModel)]="form.username" #username="ngModel"
+            name="username" />
         <label class="form-label" for="form2Example1">
             Email address
         </label>
@@ -13,11 +18,7 @@
 
     <!-- Password input -->
     <div class="form-outline mb-4">
-        <input 
-            type="password" 
-            id="form2Example2" class="form-control" 
-            [(ngModel)]="form.password"
-            #password="ngModel"
+        <input type="password" id="form2Example2" class="form-control" [(ngModel)]="form.password" #password="ngModel"
             name="password" />
         <label class="form-label" for="form2Example2">
             Password
