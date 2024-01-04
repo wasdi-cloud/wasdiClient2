@@ -33,7 +33,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkKeycloakAuthStatus(this);
-    console.log(initializeKeycloak);
+    //Subscribe to Keycloak Events
+    // this.m_oKeycloakService.keycloakEvents$.subscribe(oEvent => {
+    //   console.log(oEvent)
+    // })
+   // console.log(initializeKeycloak);
   }
 
   login(): void {
@@ -49,10 +53,11 @@ export class LoginComponent implements OnInit {
   }
 
   checkKeycloakAuthStatus(oController) {
-    if (this.m_oKeycloakService.isLoggedIn) {
+   // console.log(this.m_oKeycloakService.loadUserProfile())
+    if (this.m_oKeycloakService.isLoggedIn()) {
       if (this.m_oKeycloakService.getToken()) {
-        console.log(this.m_oKeycloakService.getToken());
-        console.log(this.m_oKeycloakService.getKeycloakInstance())
+        // console.log(this.m_oKeycloakService.getToken());
+        // console.log(this.m_oKeycloakService.getKeycloakInstance())
       }
     }
   }
