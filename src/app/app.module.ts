@@ -68,7 +68,7 @@ import { WorkspaceListItemComponent } from './components/workspaces/workspace-li
 import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
 
 //Import Services
-import { AuthService } from './services/auth/auth.service';
+import { AuthService } from './auth/service/auth.service';
 import { ConstantsService } from './services/constants.service';
 
 import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/workspaces-map.component';
@@ -159,8 +159,9 @@ import { AlertDialogComponent } from './shared/dialogs/alert-dialog/alert-dialog
 import { NotificationSnackbarComponent } from './shared/dialogs/notification-snackbar/notification-snackbar.component';
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 
-import { initializeKeycloak } from './init/keycloak-init.factory';
+import { initializeKeycloak } from './auth/keycloak-init.factory';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular'
+
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -320,16 +321,17 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       useFactory: rxStompServiceFactory,
     },
     { provide: RabbitStompService },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   multi: true,
+    //   deps: [ConfigurationService],
+    //   useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
+    // },
     {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [ConfigurationService],
-      useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
-    }, {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
-      deps: [KeycloakService],
+      deps: [KeycloakService]
     }
   ],
   bootstrap: [AppComponent],

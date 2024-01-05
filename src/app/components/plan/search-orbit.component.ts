@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 //Service Imports:
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { MapService } from 'src/app/services/map.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';

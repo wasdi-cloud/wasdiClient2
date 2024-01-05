@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { ConstantsService } from '../constants.service';
+import { ConstantsService } from '../../services/constants.service';
 import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Workspace } from '../../shared/models/workspace.model';
 import { User } from '../../shared/models/user.model';
+import { KeycloakProfile, KeycloakTokenParsed } from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient, public oJwtHelper: JwtHelperService) { }
+  constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient, public oJwtHelper: JwtHelperService, private m_oKeycloakService: KeycloakService) { }
+  m_bKeycloakInit: boolean = false
 
   APIURL: string = this.oConstantsService.getAPIURL();
   AUTHURL: string = this.oConstantsService.getAUTHURL();
@@ -26,11 +29,50 @@ export class AuthService {
 
   m_sAuthClientId: string = 'wasdi_client';
 
+
   keycloakConfiguration = {
     //'token_endpoint': window.app.url.oidcIssuer + "protocol/openid-connect/token/",
     'token_endpoint': this.oConstantsService.getAUTHURL() + "/protocol/openid-connect/token",
     //'end_session_endpoint': window.app.url.oidcIssuer + "protocol/openid-connect/logout/"
     'end_session_endpoint': this.oConstantsService.getAUTHURL() + "/protocol/openid-connect/logout"
+  }
+
+  /**
+   * Gets the parsed Id Token of a user authenticated through Keycloak
+   * @returns {KeycloakTokenParsed | undefined}
+   */
+  public getLoggedUser(): KeycloakTokenParsed | undefined {
+    try {
+      const m_oUserDetails: KeycloakTokenParsed | undefined = this.m_oKeycloakService.getKeycloakInstance().idTokenParsed;
+      return m_oUserDetails;
+    } catch (oError) {
+      console.error("AuthService.getLoggedUser:", oError);
+      return undefined;
+    }
+  }
+
+  public isLoggedIn(): boolean {
+    return this.m_oKeycloakService.isLoggedIn();
+  }
+
+  public loadUserProfile(): Promise<KeycloakProfile> {
+    return this.m_oKeycloakService.loadUserProfile();
+  }
+
+  public login(): void {
+    this.m_oKeycloakService.login();
+  }
+
+  // public logout(): void {
+  //   this.m_oKeycloakService.logout();
+  // }
+
+  public redirectToProfile(): void {
+    this.m_oKeycloakService.getKeycloakInstance().accountManagement();
+  }
+
+  public getRoles(): Array<string> {
+    return this.m_oKeycloakService.getUserRoles();
   }
 
   public isAuthenticated(): boolean {
@@ -81,9 +123,9 @@ export class AuthService {
    * @returns {*}
    */
   createAccountUpload(sEmailInput: string) {
-    var oWorkspace = this.oConstantsService.getActiveWorkspace();
-    var sUrl = this.APIURL;
-    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
+    if (oWorkspace?.apiUrl && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
@@ -172,6 +214,6 @@ export class AuthService {
   }
 
   checkSession() {
-      return this.oHttp.get(this.APIURL + '/auth/checksession');
+    return this.oHttp.get<any>(this.APIURL + '/auth/checksession');
   }
 }

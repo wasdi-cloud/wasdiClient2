@@ -24,6 +24,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Import Utilities: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-header',
@@ -79,6 +80,7 @@ export class HeaderComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
+    private m_oKeycloakService: KeycloakService,
     private m_oProjectService: ProjectService,
     private m_oRouter: Router,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -140,13 +142,23 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.m_oConstantsService.logOut();
-    this.m_oRouter.navigateByUrl("login");
+    let oController = this;
+    try {
+      oController.m_oConstantsService.setActiveWorkspace(null);
+
+      oController.m_oConstantsService.logOut();
+      let oLogoutOptions = this.m_oConstantsService.BASEURL
+
+      this.m_oKeycloakService.logout(oLogoutOptions);
+      console.log(this.m_oConstantsService.getUser());
+    } catch (oError) {
+      console.error("HeaderController - Exception: " + oError)
+    }
   }
 
   clearNotification() {
     setTimeout(() => {
-      if(this.m_bHasNotifications === true) {
+      if (this.m_bHasNotifications === true) {
         this.m_bHasNotifications = false;
       }
     }, 1000)

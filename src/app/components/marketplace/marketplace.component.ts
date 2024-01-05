@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 //Service Imports:
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ImageService } from 'src/app/services/api/image.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';

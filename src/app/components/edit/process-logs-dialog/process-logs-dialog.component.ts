@@ -5,7 +5,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { CatalogService } from 'src/app/services/api/catalog.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 

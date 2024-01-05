@@ -15,10 +15,10 @@ import { SubscriptionsPurchaseComponent } from './components/subscriptions-purch
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 
 //import auth guard
-import { AuthGuard } from './services/auth/auth.guard';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'marketplace', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },

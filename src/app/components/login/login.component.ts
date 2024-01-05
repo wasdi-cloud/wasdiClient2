@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent, ErrorDialogModel } from 'src/app/shared/dialogs/error-dialog/error-dialog.component';
 import { KeycloakService } from 'keycloak-angular';
-import { initializeKeycloak } from 'src/app/init/keycloak-init.factory';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-login',
@@ -24,20 +25,22 @@ export class LoginComponent implements OnInit {
 
   m_sErrorMessage: string = '';
 
+  m_oKeycloak: any = null;
+
   constructor(
+    //  @Inject(Keycloak) private m_oKeycloak: any,
     private m_oAuthService: AuthService,
     private m_oDialog: MatDialog,
     private m_oConstantsService: ConstantsService,
     private m_oKeycloakService: KeycloakService,
+    private m_oJwtService: JwtHelperService,
     private m_oRouter: Router) { }
 
   ngOnInit(): void {
+    this.m_oKeycloak = this.m_oKeycloakService.getKeycloakInstance();
     this.checkKeycloakAuthStatus(this);
     //Subscribe to Keycloak Events
-    // this.m_oKeycloakService.keycloakEvents$.subscribe(oEvent => {
-    //   console.log(oEvent)
-    // })
-   // console.log(initializeKeycloak);
+
   }
 
   login(): void {
@@ -53,11 +56,16 @@ export class LoginComponent implements OnInit {
   }
 
   checkKeycloakAuthStatus(oController) {
-   // console.log(this.m_oKeycloakService.loadUserProfile())
-    if (this.m_oKeycloakService.isLoggedIn()) {
-      if (this.m_oKeycloakService.getToken()) {
-        // console.log(this.m_oKeycloakService.getToken());
-        // console.log(this.m_oKeycloakService.getKeycloakInstance())
+    if (this.m_oKeycloak.authenticated) {
+      if (this.m_oKeycloak.idToken) {
+        const aoDataTokens = {
+          'access_token': this.m_oKeycloak.idToken,
+          'refresh_token': this.m_oKeycloak.refreshToken
+        }
+
+        this.callbackLogin(aoDataTokens, null);
+      } else {
+        console.log("LoginController: Not Authenticated")
       }
     }
   }
@@ -67,46 +75,62 @@ export class LoginComponent implements OnInit {
    * @param data 
    * @param oController 
    */
-  callbackLogin(data: User, oController: this) {
+  callbackLogin(m_oData: any, oController: this) {
 
+    //Ensure controller is defined: 
     if (!oController) {
       oController = this;
     }
 
-    // We need sessionId
-    if (data.hasOwnProperty("sessionId")) {
-      if (data.sessionId == null) {
-        // If it is null, the login failed
-        let oDialogData = new ErrorDialogModel("Error logging in.", "Please check Email and Password");
-        let dialogRef = this.m_oDialog.open(ErrorDialogComponent, {
-          maxWidth: "400px",
-          data: oDialogData
-        })
-      }
-      else {
-        // Ok we have a valid session Id
-        let oUser = {} as User;
-        oUser.userId = data.userId;
-        oUser.authProvider = 'wasdi';
-        oUser.name = data.name;
-        oUser.surname = data.surname;
-        oUser.sessionId = data.sessionId;
-        oUser.role = data.role;
-        oUser.type = data.type;
-        oUser.grantedAuthorities = data.grantedAuthorities;
+    let oUser = {} as User;
+    //If the user logs in with legacy login:
+    if (m_oData.hasOwnProperty("sessionId")) {
+      oUser.userId = m_oData.userId;
+      oUser.authProvider = 'wasdi';
+      oUser.name = m_oData.name;
+      oUser.surname = m_oData.surname;
+      oUser.sessionId = m_oData.sessionId;
+      oUser.role = m_oData.role;
+      oUser.type = m_oData.type;
+      oUser.grantedAuthorities = m_oData.grantedAuthorities;
 
-        //set user and cookie
-        this.m_oConstantsService.setUser(oUser);
-        this.m_oAuthService.saveToken(data.sessionId);
+      //Set User and Cookie:
+      this.m_oConstantsService.setUser(oUser);
+      this.m_oAuthService.saveToken(m_oData.sessionId);
+      oController.m_oRouter.navigateByUrl('/marketplace');
+    } else {
+      window.localStorage["access_token"] = m_oData['access_token'];
+      window.localStorage["refresh_token"] = m_oData['refresh_token'];
 
-        this.m_oAuthService.checkSession().subscribe({
-          next: oResponse => {
+      let oDecodedToken = this.m_oJwtService.decodeToken(m_oData["access_token"]);
+
+      oUser.userId = oDecodedToken.preferred_username;
+      oUser.name = oDecodedToken.given_name;
+      oUser.surname = oDecodedToken.family_name;
+      oUser.type = m_oData.type;
+      oUser.authProvider = "wasdi";
+      oUser.sessionId = m_oData['access_token'];
+      oUser["refreshToken"] = m_oData['refresh_token'];
+
+      oController.m_oConstantsService.setUser(oUser);
+
+      this.m_oAuthService.checkSession().subscribe({
+        next: oResponse => {
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.type)) {
+            oUser.type = oResponse.type;
+            oController.m_oConstantsService.setUser(oUser);
+
+          }
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.userId)) {
             oController.m_oRouter.navigateByUrl('/marketplace');
           }
-        })
+        },
+        error: oError => {
 
-      }
+        }
+      })
     }
+
   }
 
   keycloakLogin() {

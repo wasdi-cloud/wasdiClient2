@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { faUserAstronaut, faX } from '@fortawesome/free-solid-svg-icons';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
 
