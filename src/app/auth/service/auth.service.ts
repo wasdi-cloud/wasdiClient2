@@ -7,6 +7,7 @@ import { User } from '../../shared/models/user.model';
 import { KeycloakProfile, KeycloakTokenParsed } from 'keycloak-js';
 import { KeycloakService } from 'keycloak-angular';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -51,9 +52,9 @@ export class AuthService {
     }
   }
 
-  public isLoggedIn(): boolean {
+  /*public isLoggedIn(): boolean {
     return this.m_oKeycloakService.isLoggedIn();
-  }
+  }*/
 
   public loadUserProfile(): Promise<KeycloakProfile> {
     return this.m_oKeycloakService.loadUserProfile();

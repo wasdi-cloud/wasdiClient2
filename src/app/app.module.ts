@@ -160,7 +160,7 @@ import { NotificationSnackbarComponent } from './shared/dialogs/notification-sna
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 
 import { initializeKeycloak } from './auth/keycloak-init.factory';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular'
+import { KeycloakAngularModule,KeycloakService } from 'keycloak-angular'
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -269,7 +269,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
-    KeycloakAngularModule,
     LeafletModule,
     LeafletDrawModule,
     TranslateModule.forRoot({
@@ -302,7 +301,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatProgressSpinnerModule,
     MatChipsModule,
     MatProgressBarModule,
-    NgxChartsModule
+    NgxChartsModule,
+    KeycloakAngularModule
   ],
   providers: [
     AuthService,

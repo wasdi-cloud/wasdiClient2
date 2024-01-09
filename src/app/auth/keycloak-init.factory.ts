@@ -3,7 +3,11 @@ import { environment } from "src/environments/environment";
 
 export function initializeKeycloak(m_oKeycloak: KeycloakService): () => Promise<boolean> {
     const m_oOptions: KeycloakOptions = {
-        config: environment.keycloakJs,
+        config: {
+            url: 'https://test.wasdi.net/auth/',
+            realm: 'wasdi',
+            clientId: 'wasdi_client',
+        },
         loadUserProfileAtStartUp: true,
         initOptions: {
             onLoad: "check-sso",
