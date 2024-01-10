@@ -150,7 +150,7 @@ export class SearchFiltersComponent implements OnInit {
         };
 
         let iLengthData = oResponse.length;
-        for (var iIndexProvider = 0; iIndexProvider < iLengthData; iIndexProvider++) {
+        for (let iIndexProvider = 0; iIndexProvider < iLengthData; iIndexProvider++) {
           this.m_aoListOfProviders[iIndexProvider + 1] = {
             "name": oResponse[iIndexProvider].code,
             "totalOfProducts": 0,
@@ -217,7 +217,7 @@ export class SearchFiltersComponent implements OnInit {
    * @returns 
    */
   getAdvancedDateFilterQuery(oAdvancedFilter: any) {
-    var sFilter = '';
+    let sFilter: string = '';
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oAdvancedFilter)) return sFilter;
 
@@ -253,12 +253,12 @@ export class SearchFiltersComponent implements OnInit {
    * @returns 
    */
   m_fUtcDateConverter(oDate: any) {
-    var result = oDate;
+    let oResult = oDate;
     if (oDate != undefined) {
       let utcDate = oDate.toISOString() // parsed as 4:30 UTC
-      result = utcDate;
+      oResult = utcDate;
     }
-    return result;
+    return oResult;
   }
 
   removeAllAdvancedSavedFilters() {
@@ -292,7 +292,7 @@ export class SearchFiltersComponent implements OnInit {
    * @param oFilter 
    * @returns 
    */
-  prepMissionFilter(oFilter) {
+  prepMissionFilter(oFilter: any) {
     if (oFilter.indexvalues && oFilter.indexvalues !== '') {
       return oFilter.indexvalues.split('|')
     }
@@ -304,7 +304,7 @@ export class SearchFiltersComponent implements OnInit {
    * @param oInputFilter 
    * @returns 
    */
-  getMissionInput(oMissionSelection, oInputFilter) {
+  getMissionInput(oMissionSelection: any, oInputFilter: any) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMissionSelection) === true) {
       return false;
     }
@@ -323,11 +323,31 @@ export class SearchFiltersComponent implements OnInit {
     return true;
   }
 
+  getMultiSelectInput(oMissionSelection, oInputFilter) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMissionSelection) === true) {
+      return false;
+    }
+    let changedMission = this.m_oActiveMission;
+
+    //Get set the value of the filter: 
+    changedMission.filters.forEach(oFilter => {
+      if (oFilter.indexname === oInputFilter.indexname && oFilter.indexlabel === oInputFilter.indexlabel) {
+        console.log(oMissionSelection.value)
+        oFilter.indexvalue = oMissionSelection.value.toString()
+      }
+    });
+
+    this.setMissionFilter(changedMission);
+
+    return true;
+  }
+
   /**
    * Set the mission filter in the Mission Filter Service, the Search Service, and the Mission Model
    * @param oActiveMission 
    */
   setMissionFilter(oActiveMission) {
+    console.log(oActiveMission);
     this.m_oMissionFiltersService.setAdvancedFilter(oActiveMission)
     this.m_oMissionObject.missionFilter = this.m_oMissionFiltersService.getAdvancedFilter();
     this.m_oSearchService.setMissionFilter(this.m_oMissionObject.missionFilter);

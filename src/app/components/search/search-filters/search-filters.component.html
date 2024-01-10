@@ -70,7 +70,7 @@
             <!-- Mission Search Form -->
             <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
                 <div class="d-flex flex-column " *ngFor="let oFilter of m_aoVisibleFilters">
-                    <div style="width: 15rem">
+                    <div *ngIf="m_oActiveMission.name !== 'ERA5'" style="width: 15rem">
                         <label class="form-label" for="">{{oFilter.indexlabel}}</label>
                         <mat-select *ngIf="oFilter.indexvalues !== ''" #auto="matSelect" class="form-control"
                             placeholder="" (selectionChange)="getMissionInput($event, oFilter)"
@@ -81,6 +81,29 @@
                         </mat-select>
                         <input class="form-control" type="text" *ngIf="oFilter.indexvalues === ''"
                             placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}">
+
+                    </div>
+                    <!--Special inputs for ERA5 Missions -->
+                    <div *ngIf="m_oActiveMission.name === 'ERA5'" style="width: 15rem">
+                        <label class="form-label" for="">{{oFilter.indexlabel}}</label>
+                        <mat-select
+                            *ngIf="oFilter.indexvalues !== '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
+                            #auto="matSelect" class="form-control" placeholder=""
+                            (selectionChange)="getMissionInput($event, oFilter)" placeholder="{{oFilter.indexvalue}}">
+                            <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
+                                {{oOption}}
+                            </mat-option>
+                        </mat-select>
+                        <input class="form-control" type="text"
+                            *ngIf="oFilter.indexvalues === '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
+                            placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}">
+                        <mat-select *ngIf="oFilter.indexname === 'pressureLevels' || oFilter.indexname ==='variables'"
+                            multiple class="form-control" #auto="matSelect"
+                            (selectionChange)="getMultiSelectInput($event, oFilter)"
+                            placeholder="{{oFilter.indexvalue}}">
+                            <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)"
+                                [value]="oOption">{{oOption}}</mat-option>
+                        </mat-select>
                     </div>
                 </div>
             </div>
