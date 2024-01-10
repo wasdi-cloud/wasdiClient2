@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
 
         this.callbackLogin(aoDataTokens, null);
       } else {
-        console.log("LoginController: Not Authenticated")
+        console.log("LoginComponent.checkKeycloakAuthStatus: Not Authenticated")
       }
     }
   }
