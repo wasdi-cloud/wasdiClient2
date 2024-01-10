@@ -52,3 +52,6 @@ secrets.ts
 
 #sonarqube
 sonar-project.properties
+
+#postgres data 
+/postgres/data
