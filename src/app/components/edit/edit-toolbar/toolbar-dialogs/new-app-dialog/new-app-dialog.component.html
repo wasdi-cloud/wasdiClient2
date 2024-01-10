@@ -33,7 +33,7 @@
     </div>
     <div class="tab-content-container p-3" style="height: 75%;">
         <!-- Default Page - Processor Information -->
-        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR'" [m_bEditMode]="m_bEditMode"
+        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR' && m_oProcessorForm" [m_bEditMode]="m_bEditMode"
             [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')"
             [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''" [m_sProcessorName]="m_sName"
             [m_sPublisher]="m_oProcessorDetails.publisher"></app-processor-tab-content>

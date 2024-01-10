@@ -55,7 +55,7 @@ export class ProcessorService {
      * @returns {*}
      */
   getDeployedProcessor(sProcessorId: string) {
-    return this.m_oHttp.get(this.APIURL + this.m_sResource + "/getprocessor?processorId=" + sProcessorId)
+    return this.m_oHttp.get<any>(this.APIURL + this.m_sResource + "/getprocessor?processorId=" + sProcessorId)
   }
 
   /**
@@ -210,6 +210,7 @@ export class ProcessorService {
      * @returns {*}
      */
   updateProcessor(sProcessorId: string, oBody: object) {
+    console.log(oBody)
 
     return this.m_oHttp.post(this.APIURL + '/processors/update?processorId=' + encodeURI(sProcessorId), oBody);
   };
@@ -246,6 +247,7 @@ export class ProcessorService {
 
     return this.m_oHttp.post(this.APIURL + '/processors/updatefiles?workspace=' + encodeURI(sWorkspaceId) + '&processorId=' + encodeURI(sProcessorId) + '&file=' + encodeURI(sFileName), oBody, { observe: 'response' });
   };
+
   /**
        * Share a processor
        * @param sProcessorId
