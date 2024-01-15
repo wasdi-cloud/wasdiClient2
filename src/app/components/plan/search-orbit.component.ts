@@ -23,7 +23,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
   selector: 'app-search-orbit',
   templateUrl: './search-orbit.component.html',
-  styleUrls: ['./search-orbit.component.css']
+  styleUrls: ['./search-orbit.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class SearchOrbit implements OnInit {
   //Font Awesome Icons: 
