@@ -67,7 +67,6 @@ export class NavLayersComponent implements OnInit, OnChanges {
     if (this.m_aoVisibleBands !== undefined && this.m_aoVisibleBands.length === 1) {
       this.setActiveTab('layers');
     }
-    //this.initMaps();
   }
 
   /**
@@ -79,7 +78,6 @@ export class NavLayersComponent implements OnInit, OnChanges {
       // The big map is 2D: we need to show here the little navigation globe
       // clear the old globe (if present)
       this.m_oGlobeService.clearGlobe();
-
 
       // And create it in the small navigation tab
       console.log("NavLayersComponent.initMaps: call init Globe")

@@ -166,6 +166,14 @@ export class EditComponent implements OnInit, OnDestroy {
     this.m_oRabbitStompService.setActiveController(this);
   }
 
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("EditComponent.ngOnDestroy")
+    
+    this.m_oRabbitStompService.unsubscribe();
+    this.m_oGlobeService.clearGlobe();
+    this.m_oMapService.clearMap();
+  }  
+
   recievedRabbitMessage(oMessage, oController) {
     // Check if the message is valid
     if (oMessage == null) return;
@@ -244,14 +252,6 @@ export class EditComponent implements OnInit, OnDestroy {
       return;
     }
   };
-
-  ngOnDestroy(): void {
-    FadeoutUtils.verboseLog("EditComponent.ngOnDestroy")
-    this.m_oRabbitStompService.unsubscribe();
-    this.m_oGlobeService.clearGlobe();
-    this.m_oMapService.clearMap();
-    
-  }
 
   _subscribeToRabbit() {
     if (this.m_oRabbitStompService.isSubscrbed() == false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {

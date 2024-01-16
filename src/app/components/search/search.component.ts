@@ -105,13 +105,13 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    FadeoutUtils.verboseLog("SearchComponent.ngOnInit")
     this.m_oPageService.setFunction(this.executeSearch, this);
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("SearchComponent.ngOnDestroy")
-    //this.m_oMapService.clearMap();    
   }
 
   m_fUtcDateConverter(oDate) {

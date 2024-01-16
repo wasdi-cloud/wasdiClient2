@@ -69,13 +69,13 @@ export class SearchOrbit implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    FadeoutUtils.verboseLog("PlanComponent.ngOnInit")
     this.getSatellitesResources();
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
   
   ngOnDestroy(): void {
-    FadeoutUtils.verboseLog("SearchComponent.ngOnDestroy")
-    //this.m_oMapService.clearMap();    
+    FadeoutUtils.verboseLog("PlanComponent.ngOnDestroy")
   }
 
   /**

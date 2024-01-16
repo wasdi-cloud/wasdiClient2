@@ -43,23 +43,23 @@
         </div>
         <div class="properties-container border mt-3 overflow-auto">
             <h4>{{"WORKSPACE_DETAILS_BOX" | translate}}</h4>
-            <div class="px-3 d-inline-block" *ngIf="activeWorkspace">
+            <div class="px-3 d-inline-block" *ngIf="m_oActiveWorkspace">
                 <div class="d-flex flex-row justify-content-between gap-2">
-                    <p><strong>{{"WORKSPACES_OWNER" | translate}}: </strong>{{activeWorkspace.userId}}</p>
+                    <p><strong>{{"WORKSPACES_OWNER" | translate}}: </strong>{{m_oActiveWorkspace.userId}}</p>
                     <p><strong>{{"WORKSPACES_CLOUD" | translate}}: </strong>
-                        {{activeWorkspace.cloudProvider}}</p>
+                        {{m_oActiveWorkspace.cloudProvider}}</p>
                 </div>
-                <p><strong>{{"WORKSPACES_NODE_CODE" | translate}}:</strong>{{activeWorkspace.nodeCode}}</p>
+                <p><strong>{{"WORKSPACES_NODE_CODE" | translate}}:</strong>{{m_oActiveWorkspace.nodeCode}}</p>
                 <p><strong>{{"WORKSPACES_PRODUCTS" | translate}}:</strong> {{m_aoProducts.length}}</p>
-                <p><strong>{{"WORKSPACES_NAME" | translate}}: </strong>{{activeWorkspace.name}}</p>
+                <p><strong>{{"WORKSPACES_NAME" | translate}}: </strong>{{m_oActiveWorkspace.name}}</p>
                 <p><strong>{{"WORKSPACES_ID" | translate}}: </strong>
-                    {{activeWorkspace.workspaceId}}</p>
+                    {{m_oActiveWorkspace.workspaceId}}</p>
                 <p><strong>{{"WORKSPACES_PROC_COUNT" | translate}}:
-                    </strong>{{activeWorkspace.processesCount}}</p>
-                <strong *ngIf="activeWorkspace.sharedUsers.length > 0">{{"WORKSPACES_SHARED_WITH" | translate}}:
+                    </strong>{{m_oActiveWorkspace.processesCount}}</p>
+                <strong *ngIf="m_oActiveWorkspace.sharedUsers.length > 0">{{"WORKSPACES_SHARED_WITH" | translate}}:
                 </strong>
-                <ul *ngIf="activeWorkspace.sharedUsers.length > 0">
-                    <li *ngFor="let user of activeWorkspace.sharedUsers">{{ user }}</li>
+                <ul *ngIf="m_oActiveWorkspace.sharedUsers.length > 0">
+                    <li *ngFor="let user of m_oActiveWorkspace.sharedUsers">{{ user }}</li>
                 </ul>
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-action" *ngFor="let oProduct of m_aoProducts"

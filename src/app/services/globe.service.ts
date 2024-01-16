@@ -97,7 +97,7 @@ export class GlobeService {
         this.m_oWasdiGlobe = new Cesium.Viewer(sGlobeDiv, oGlobeOptions);
 
         // Select OpenLayers and Cesium DEM Terrain by default
-        this.m_oWasdiGlobe.baseLayerPicker.viewModel.selectedImagery = this.m_oWasdiGlobe.baseLayerPicker.viewModel.imageryProviderViewModels[6];
+        this.m_oWasdiGlobe.baseLayerPicker.viewModel.selectedImagery = this.m_oWasdiGlobe.baseLayerPicker.viewModel.imageryProviderViewModels[14];
         this.m_oWasdiGlobe.baseLayerPicker.viewModel.selectedTerrain = this.m_oWasdiGlobe.baseLayerPicker.viewModel.terrainProviderViewModels[1];
 
         this.m_aoLayers = this.m_oWasdiGlobe.imageryLayers;
@@ -221,20 +221,33 @@ export class GlobeService {
     return null;
   }
 
-  addRectangleOnGlobeParamArray(aArray: any[]) {
+  addRectangleOnGlobeParamArray(aiArray: any[]) {
     // Safe Programming check
-    if (!aArray) {
+    if (!aiArray) {
       return false;
     }
     if (!this.m_oWasdiGlobe) {
       return false;
     }
 
+    let bHasNan = false;
+
+    for (let iIndex = 0; iIndex < aiArray.length; iIndex = iIndex + 1) {
+      if (isNaN(aiArray[iIndex])) {
+        bHasNan = true;
+        break;
+      }
+    }
+
+    if (bHasNan) {
+      return null;
+    }
+
     try {
 
       // Create the new Polygon
       let oNewPolygon = {
-        hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(aArray)),
+        hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(aiArray)),
         outline: true,
         outlineColor: Cesium.Color.RED.withAlpha(1),
         outlineWidth: 10,
@@ -281,7 +294,7 @@ export class GlobeService {
       // If we exit from the above cycle, there are no entities with the same poly, so add it.
       let oRectangle = this.m_oWasdiGlobe.entities.add({
         polygon: {
-          hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(aArray)),
+          hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(aiArray)),
           outline: true,
           outlineColor: Cesium.Color.RED.withAlpha(1),
           outlineWidth: 10,
@@ -329,9 +342,8 @@ export class GlobeService {
       }
     }
     else {
-      //TODO ERROR  browser doesn't support WebGL
+      // ERROR  browser doesn't support WebGL
       console.log("Error in Cesium Globe miss WebGl");
-      let errorMsg = "GURU MEDITATION<br>PLEASE UPDATE WEB GL<br>LINK: HTTPS://GET.WEBGL.ORG/";
     }
   }
 
