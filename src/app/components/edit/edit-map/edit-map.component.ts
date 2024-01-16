@@ -92,7 +92,7 @@ export class EditMapComponent implements OnInit {
       this.m_oGlobeService.flyToWorkspaceBoundingBox(this.m_aoProducts);
     }
     else {
-      this.m_oMapService.clearMap('editMap');
+      this.m_oMapService.clearMap();
       this.m_oMapService.initWasdiMap('editMap');
       this.m_b2DMapModeOutput.emit(true);
       //Set time out for Leaflet to animate:

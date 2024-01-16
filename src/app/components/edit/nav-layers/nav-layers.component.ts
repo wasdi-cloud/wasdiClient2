@@ -91,7 +91,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
     }
     else {
       // The big map is 3d: here we need to show only the 2d map
-      this.m_oMapService.clearMap('navMap');
+      this.m_oMapService.clearMap();
       this.m_oMapService.initWasdiMap('navMap');
 
       //Set timeout with Arrow function to preserve `this` context within `setTimeout`

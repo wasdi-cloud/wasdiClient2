@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 //Service Imports:
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -25,7 +25,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   templateUrl: './search-orbit.component.html',
   styleUrls: ['./search-orbit.component.css']
 })
-export class SearchOrbit implements OnInit {
+export class SearchOrbit implements OnInit, OnDestroy {
   //Font Awesome Icons: 
   faSearch = faSearch;
 
@@ -71,6 +71,11 @@ export class SearchOrbit implements OnInit {
   ngOnInit(): void {
     this.getSatellitesResources();
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+  }
+  
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("SearchComponent.ngOnDestroy")
+    this.m_oMapService.clearMap();    
   }
 
   /**

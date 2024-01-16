@@ -315,7 +315,7 @@ export class MapService {
   /**
    * Clear Map 
    */
-  clearMap(sMapDiv: string) {
+  clearMap() {
     
     if (this.m_oWasdiMap) {
       FadeoutUtils.verboseLog("MapService.clearMap: cleaning the map instance")

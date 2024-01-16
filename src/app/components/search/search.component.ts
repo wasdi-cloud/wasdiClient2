@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { SearchService } from 'src/app/search.service';
@@ -21,7 +21,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   //Font Awesome Imports:
   faPlus = faPlus;
 
@@ -107,6 +107,11 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.m_oPageService.setFunction(this.executeSearch, this);
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+  }
+
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("SearchComponent.ngOnDestroy")
+    this.m_oMapService.clearMap();    
   }
 
   m_fUtcDateConverter(oDate) {
