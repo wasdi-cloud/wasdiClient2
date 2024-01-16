@@ -67,7 +67,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
     if (this.m_aoVisibleBands !== undefined && this.m_aoVisibleBands.length === 1) {
       this.setActiveTab('layers');
     }
-    this.initMaps();
+    //this.initMaps();
   }
 
   /**

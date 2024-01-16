@@ -124,11 +124,6 @@ export class EditComponent implements OnInit, OnDestroy {
   m_bIsLoadingProducts: boolean = true;
 
   /**
-   * Rabbit Message Hook index
-   */
-  m_iHookIndex: any = -1;
-
-  /**
    * Name of the product in download
    */
   m_sDownloadProductName: string = "";
@@ -140,9 +135,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     FadeoutUtils.verboseLog("EditComponent.ngOnInit")
-
-    //We register to the Launch Jupyter Notebook message
-    this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("LAUNCHJUPYTERNOTEBOOK", this, this.rabbitMessageHook);
 
     //What to do if workspace undefined: 
     if (!this.m_oActiveWorkspace) {
@@ -255,13 +247,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("EditComponent.ngOnDestroy")
-
-    // If we registered in the hook
-    if (this.m_iHookIndex>=0) {
-      // Clean it
-      this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
-    }
-
     this.m_oRabbitStompService.unsubscribe();
     this.m_oGlobeService.clearGlobe();
     this.m_oMapService.clearMap();

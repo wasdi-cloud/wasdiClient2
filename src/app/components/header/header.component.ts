@@ -127,10 +127,9 @@ export class HeaderComponent implements OnInit {
     })
 
     this.m_aoNotificationsSubscription = this.m_oNotificationsQueueService.m_aoNotificationsSubscription.subscribe(oResponse => {
-      console.log(oResponse);
       if (oResponse.length > 0) {
         this.m_aoNotifications = oResponse;
-        console.log("header.componenet: ngOnInit: " + this.m_aoNotifications)
+        FadeoutUtils.verboseLog("header.componenet: ngOnInit: " + this.m_aoNotifications)
       }
     })
 
