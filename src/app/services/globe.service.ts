@@ -13,6 +13,7 @@ declare let Cesium: any;
 @Injectable({
   providedIn: 'root'
 })
+
 export class GlobeService {
   m_oWasdiGlobe: any = null;
   m_aoLayers: any[] = null;
@@ -25,7 +26,6 @@ export class GlobeService {
 
 
   oGlobeOptions = {
-    //imageryProvider : Cesium.createOpenStreetMapImageryProvider(),
     timeline: false,
     animation: false,
     baseLayerPicker: true,
