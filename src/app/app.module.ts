@@ -151,6 +151,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
 import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { MarketSearchComponent } from './components/header/market-search/market-search.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -246,7 +247,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     CommentEditorDialogComponent,
     SearchOrbitResultsComponent,
     FTPDialogComponent,
-    NavbarComponent
+    NavbarComponent,
+    MarketSearchComponent
   ],
   imports: [
     AppRoutingModule,
