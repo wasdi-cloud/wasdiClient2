@@ -75,7 +75,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
   
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("SearchComponent.ngOnDestroy")
-    this.m_oMapService.clearMap();    
+    //this.m_oMapService.clearMap();    
   }
 
   /**

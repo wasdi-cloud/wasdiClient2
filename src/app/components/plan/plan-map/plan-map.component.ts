@@ -10,32 +10,40 @@ import * as L from 'leaflet';
   styleUrls: ['./plan-map.component.css']
 })
 export class PlanMapComponent {
-  m_bIsValid: boolean;
-  m_oDrawnItems: any;
+
+  /**
+   * Array of the elements drawn on the map
+   */
+  m_aoDrawnItems: any;
+
+  /**
+   * Layers control
+   */
   m_oLayersControl: any;
+
+  /**
+   * Draw options
+   */
   m_oDrawOptions: any;
+
+  /**
+   * Maps Options
+   */
   m_oMapOptions: any;
 
-  @Input() oMapInput: any = {
-    maxArea: 0,
-    maxRatioSide: 0,
-    maxSide: 0,
-    oBoundingBox: {
-      northEast: '',
-      southWest: ''
-    }
-  };
+  /**
+   * Layers' GeoJson
+   */
+  m_oGeoJSON: any;
 
-  m_oSearchInfo = {
-    aquisitionEndTime: "",
-    aquisitionStartTime: "",
-    polygon: "",
-    satelliteFilters: []
-  }
+  /**
+   * String representation of the Polygon
+   */
+  m_sPolygon: string;
 
-  m_oGeoJSON;
-  m_sPolygon;
-
+  /**
+   * Event for the search params
+   */
   @Output() m_oSearchInputhange = new EventEmitter;
 
   constructor(public m_oMapService: MapService) {
@@ -45,11 +53,9 @@ export class PlanMapComponent {
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
     this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
-    this.m_oDrawnItems = this.m_oMapService.m_oDrawnItems;
+    this.m_aoDrawnItems = this.m_oMapService.m_oDrawnItems;
 
-    this.m_oDrawOptions.edit.featureGroup = this.m_oDrawnItems;
-
-    this.m_bIsValid = true;
+    this.m_oDrawOptions.edit.featureGroup = this.m_aoDrawnItems;
   }
 
   onMapReady(oMap: L.Map): void {
@@ -57,13 +63,12 @@ export class PlanMapComponent {
   }
 
 
-
   onDrawCreated(oEvent): void {
     let oLayer = oEvent.layer;
-    if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
-      this.m_oDrawnItems.clearLayers();
+    if (this.m_aoDrawnItems && this.m_aoDrawnItems.getLayers().length !== 0) {
+      this.m_aoDrawnItems.clearLayers();
     }
-    this.m_oDrawnItems.addLayer(oLayer);
+    this.m_aoDrawnItems.addLayer(oLayer);
 
     this.m_oGeoJSON = oLayer.toGeoJSON();
     this.m_sPolygon = this.getPolygon();
