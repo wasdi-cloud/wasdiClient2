@@ -1,24 +1,28 @@
-<app-edit-toolbar [m_oActiveWorkspace]="m_oActiveWorkspace" [m_aoProducts]="m_aoProducts"
-    (m_sSearchString)="getSearchString($event)"></app-edit-toolbar>
-<main>
-    <div class="d-flex flex-row px-3">
-        <div class="productlist-navigation-container d-flex flex-column " style="height: 70vh">
-            <div style="height: 50%;">
-                <app-products-list [m_aoWorkspaceProductsList]="m_aoProducts" [m_sSearchString]="m_sSearchString"
-                    [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
-                    (m_oProductInfoChange)="getProductsChange($event)"></app-products-list>
-            </div>
-            <div style="height: 50%">
-                <app-nav-layers [m_aoVisibleBands]="m_aoVisibleBands" [m_aoVisibleBands]="m_aoVisibleBands"
-                    [m_aoProducts]="m_aoProducts" [m_b2DMapModeOn]="m_b2DMapModeOn"></app-nav-layers>
-            </div>
+<main class="d-flex flex-column flex-fill">
+    <div style="height: 92%; width: 100%;">
+        <div style="height: 8%;">
+            <app-edit-toolbar [m_oActiveWorkspace]="m_oActiveWorkspace" [m_aoProducts]="m_aoProducts"
+                (m_sSearchString)="getSearchString($event)"></app-edit-toolbar>
         </div>
-        <div style="height: 75vh; width: 100%">
-            <app-edit-map [m_aoProducts]="m_aoProducts" [m_aoVisibleBands]="m_aoVisibleBands"
-                (m_b2DMapModeOutput)="getMapMode($event)"></app-edit-map>
+        <div class="d-flex flex-row gap-1" style="height: 92%; width: 100%;">
+            <div class="productlist-navigation-container d-flex flex-column gap-1" style="height: 100%; width: 37%;">
+                <div style="height: 45%; width: 100%;">
+                    <app-products-list [m_aoWorkspaceProductsList]="m_aoProducts" [m_sSearchString]="m_sSearchString"
+                        [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
+                        (m_oProductInfoChange)="getProductsChange($event)"></app-products-list>
+                </div>
+                <div style="height: 45%;">
+                    <app-nav-layers [m_aoVisibleBands]="m_aoVisibleBands" [m_aoVisibleBands]="m_aoVisibleBands"
+                        [m_aoProducts]="m_aoProducts" [m_b2DMapModeOn]="m_b2DMapModeOn"></app-nav-layers>
+                </div>
+            </div>
+            <div class="map map-container flex-fill" style="height: 100%; width: 60%;">
+                <app-edit-map [m_aoProducts]="m_aoProducts" [m_aoVisibleBands]="m_aoVisibleBands"
+                    (m_b2DMapModeOutput)="getMapMode($event)"></app-edit-map>
+            </div>
         </div>
     </div>
-    <div>
+    <div style="height: 8%;">
         <app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>
     </div>
 </main>

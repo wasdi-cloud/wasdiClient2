@@ -1,126 +1,11 @@
-<main class="d-flex flex-row flex-fill">
-    <!-- <section class="sub-menu"> -->
-    <!-- <div class="products-table" *ngIf="m_bIsVisibleListOfLayers === true">
-            <app-products-table [m_aoProducts]="m_oProductSubject.asObservable()"
-                [m_aoSelectedProviders]="m_oSelectedProvidersSubject.asObservable()"
-                [m_bIsPaginatedList]="m_bIsPaginatedList" [m_bIsVisibleListOfLayers]="m_bIsVisibleListOfLayers"
-                (m_oNavigateBackOutput)="getNavigationFilters($event)" (m_oActiveProviderChange)="getActiveProvider($event)"
-                (m_oSelectedProducts)="getSelectedProducts($event)"></app-products-table>
-        </div>-->
-    <section>
+<main class="d-flex flex-column flex-fill">
+    <div class="d-flex flex-row" style="height: 92%; width: 100%;">
         <app-search-filters [hidden]="m_bIsVisibleListOfLayers === true" [m_aoMissions]="m_aoMissions"
             [m_aoSelectedProviders]="m_aoSelectedProviders" (m_oSearchFilter)="getMissionFilter($event)"
             (m_aoProviderSelection)="getSelectedProviders($event)" (m_oTypeOfFilterSelected)="getTimeFilter($event)"
             (m_oAdvancedFilterSelection)="getAdvancedFilterSelection($event)"></app-search-filters>
 
-    </section>
-
-    <!-- <article class="sub-menu-grp">
-            <div class="title">
-                <img src="./assets/svg/filter-icon.svg" alt="filter icon" />
-                <h3>Filters</h3>
-            </div>
-
-            <div class="sub-menu-body">
-                <button>
-                    <img src="./assets/svg/cron-icon.svg" alt="cron tab icon" />
-                    Cron&nbsp;Tab
-                </button>
-                <li class="search-input-container">
-                    <div class="background-color">
-                        <img src="./assets/svg/search-icon.svg" alt="search icon" />
-                        <label for="search-bar">Search</label>
-                    </div>
-                    <input class="search-input" type="text" id="search-bar" name="search-bar"
-                        placeholder="Products name" />
-                </li>
-            </div>
-            <hr />
-        </article>
-        <article class="provider">
-            <label for="wasdi">Provider:</label>
-            <select class="name-select" id="wasdi">
-                <option value="name" selected>WASDI</option>
-            </select>
-            <div class="date">
-                <div>
-                    <label for="from">From:</label>
-                    <select class="name-select" id="from">
-                        <option value="name" selected>
-                            01/01/2024
-                        </option>
-                    </select>
-                </div>
-                <div>
-                    <label for="to">To:</label>
-                    <select class="name-select" id="to">
-                        <option value="name" selected>
-                            01/09/2024
-                        </option>
-                    </select>
-                </div>
-            </div>
-            <hr />
-        </article>
-        <article class="sub-menu-grp mission">
-            <p>Select a mission:</p>
-            <div class="category-body">
-                <button class="selected">S1</button>
-                <button>S2</button>
-                <button>S3</button>
-                <button>S5P</button>
-                <button>PROBAV</button>
-                <button>ENVISAT</button>
-                <button class="selected">Viirs</button>
-                <button>ERA5</button>
-                <button>CAMS</button>
-                <button>PLANET</button>
-                <button>IMERG</button>
-                <button>THEMATICS</button>
-                <button>Earthcache</button>
-                <button>WorldCover</button>
-                <button>CM</button>
-                <button>European ECOSTRESS hub</button>
-                <button class="selected">DEM</button>
-            </div>
-            <hr />
-        </article>
-        <article class="">
-            <div class="filter-inputs">
-                <div>
-                    <label for="">Satellite Platform:</label>
-                    <input type="text" class="input" />
-                </div>
-                <div>
-                    <label for="">Product Type:</label>
-                    <input type="text" class="input" />
-                </div>
-            </div>
-            <div class="filter-inputs">
-                <div>
-                    <label for="">Polarisation:</label>
-                    <input type="text" class="input" />
-                </div>
-                <div>
-                    <label for="">Sensor Mode:</label>
-                    <input type="text" class="input" />
-                </div>
-            </div>
-            <div class="filter-inputs">
-                <div>
-                    <label for="">Relative Orbit Number:</label>
-                    <input type="text" class="input" />
-                </div>
-                <div>
-                    <label for="">Swath:</label>
-                    <input type="text" class="input" />
-                </div>
-            </div>
-        </article>-->
-    <!-- </section>  -->
-    <!-- Page Content -->
-    <section class="page-content  d-flex flex-column">
-        <div class="map map-container">
+        <div class="map map-container flex-fill">
             <app-search-map [m_aoProducts]="m_oProductSubject.asObservable()"
                 (m_oMapInputChange)="getMapInput($event)"></app-search-map>
         </div>
@@ -172,23 +57,11 @@
                 />
             </div>
         </div> -->
-        <!-- THE following code is an example of implementation of MapBox API -->
-        <!-- ----------------------------------------------------------------- -->
-        <!-- <div id="map"></div>
-        <script>
-            // TO MAKE THE MAP APPEAR YOU MUST
-            // ADD YOUR ACCESS TOKEN FROM
-            // https://account.mapbox.com
-            mapboxgl.accessToken = "YOUR_MAPBOX_ACCESS_TOKEN";
-            const map = new mapboxgl.Map({
-                container: "map", // container ID
-                // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-                style: "mapbox://styles/mapbox/streets-v12", // style URL
-                center: [-74.5, 40], // starting position [lng, lat]
-                zoom: 9, // starting zoom
-            });
-        </script> -->
-    </section>
+    </div>
+    <div style="height: 8%;">
+        <app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>
+
+    </div>
 </main>
 
 <!-- Operation Bar
@@ -219,5 +92,4 @@
         <app-search-map [m_aoProducts]="m_oProductSubject.asObservable()"
             (m_oMapInputChange)="getMapInput($event)"></app-search-map>
     </div>
-</div>
-<app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar> -->
+</div> -->

@@ -3,7 +3,7 @@
 @import url(/src/app/components/search/search.component.css);
 
 .sub-menu {
-	height: 90vh;
+	height: 100%;
 	overflow-y: scroll;
     width: 500px;
 }

@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 
 //Angular Material Imports: 
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
@@ -11,7 +11,6 @@ import { faArrowDown, faArrowUp, faDatabase, faDownload, faFile, faFilter, faLis
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
-import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProcessLogsDialogComponent } from '../process-logs-dialog/process-logs-dialog.component';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
@@ -33,7 +32,8 @@ export interface SearchFilter {
 @Component({
   selector: 'app-processes-bar',
   templateUrl: './processes-bar.component.html',
-  styleUrls: ['./processes-bar.component.css']
+  styleUrls: ['./processes-bar.component.css'],
+  host: { "class": "flex-fill" }
 })
 export class ProcessesBarComponent implements OnInit {
   //Fontawesome Icon Declarations
@@ -126,7 +126,7 @@ export class ProcessesBarComponent implements OnInit {
       this.m_oTranslate.get(WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage)).subscribe(oTranslation => {
         console.log(oTranslation);
         sNotificationMsg = oTranslation;
-      })  
+      })
     }
     else {
       console.log("ProcessesBarComponent.recievedRabbitMessage: m_oTranslate is null")
@@ -154,7 +154,7 @@ export class ProcessesBarComponent implements OnInit {
    */
   getSummary() {
     let sMessage: string;
-    
+
     //ASYNC Translation in case of refresh (reloading translations):
     this.m_oTranslate.get("MSG_SUMMARY_ERROR").subscribe(sTranslation => {
       sMessage = sTranslation;
@@ -189,7 +189,7 @@ export class ProcessesBarComponent implements OnInit {
 @Component({
   selector: 'processes-bar-content',
   templateUrl: 'processes-bar-content.html',
-  styleUrls: ['./processes-bar-content.css']
+  styleUrls: ['./processes-bar-content.css'],
 })
 export class ProcessesBarContent implements OnInit {
   faArrowDown = faArrowDown;
@@ -218,7 +218,7 @@ export class ProcessesBarContent implements OnInit {
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
   ) {
     console.log(this.data)
-   }
+  }
 
   ngOnInit(): void {
     if (this.m_oActiveWorkspace.workspaceId) {
