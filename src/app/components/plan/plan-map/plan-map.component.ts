@@ -39,8 +39,8 @@ export class PlanMapComponent {
   @Output() m_oSearchInputhange = new EventEmitter;
 
   constructor(public m_oMapService: MapService) {
-    this.m_oMapService.setDrawnItems();
-    this.m_oMapService.initTilelayer();
+    //this.m_oMapService.setDrawnItems();
+    //this.m_oMapService.initTilelayer();
 
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;

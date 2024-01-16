@@ -22,7 +22,7 @@ export class WorkspacesMapComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("init map")
-    this.m_oMapService.setDrawnItems();
+    //this.m_oMapService.setDrawnItems();
     this.mapOptions = this.m_oMapService.m_oOptions;
     this.layersControl = this.m_oMapService.m_oLayersControl;
     this.drawOptions = this.m_oMapService.m_oDrawOptions;
