@@ -55,3 +55,6 @@ sonar-project.properties
 
 #postgres data 
 /postgres/data
+
+#mongodb data
+/mongo/data

@@ -43,3 +43,15 @@ services:
     build:
         context: ./reverse-proxy
         dockerfile: Dockerfile
+
+  
+  mongo:
+    image: mongo:4.4.25
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: multipass
+    ports:
+     - "27017:27017"
+    volumes:
+      - ./mongo/data:/data/db
