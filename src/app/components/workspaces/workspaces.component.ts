@@ -200,7 +200,7 @@ export class WorkspacesComponent implements OnInit {
     let oWorkspaceId = oWorkspace.workspaceId;
     this.m_bIsVisibleFiles = true;
     let sError = this.m_oTranslate.instant("MSG_MKT_WS_OPEN_ERROR");
-    console.log(sError)
+    
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.activeWorkspace)) {
       this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspaceId).subscribe({
         next: oResponse => {
