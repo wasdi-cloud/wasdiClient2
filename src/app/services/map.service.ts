@@ -147,13 +147,7 @@ export class MapService {
    * Initalize WASDI Map
    */
   initWasdiMap(sMapDiv: string) {
-
     FadeoutUtils.verboseLog("MapService.initWasdiMap: initializing Leaflet");
-    
-    if (this.m_oWasdiMap !== null) {
-      FadeoutUtils.verboseLog("MapService.initWasdiMap: calling initTileLayer!!!!");
-      //this.initTilelayer();
-    }
     this.m_oWasdiMap = this.initMap(sMapDiv);
   }
 
@@ -322,10 +316,15 @@ export class MapService {
    * Clear Map 
    */
   clearMap(sMapDiv: string) {
+    
     if (this.m_oWasdiMap) {
+      FadeoutUtils.verboseLog("MapService.clearMap: cleaning the map instance")
       this.m_oDrawnItems.clearLayers();
       this.m_oWasdiMap.remove();
       this.m_oWasdiMap = null;
+    }
+    else{
+      FadeoutUtils.verboseLog("MapService.clearMap: map was already null")
     }
   }
 

@@ -20,6 +20,7 @@ import { ConstantsService } from 'src/app/services/constants.service';
   templateUrl: './edit-map.component.html',
   styleUrls: ['./edit-map.component.css']
 })
+
 export class EditMapComponent implements OnInit {
   //Font Awesome Imports
   faHome = faHome;
@@ -47,6 +48,9 @@ export class EditMapComponent implements OnInit {
     private m_oMapService: MapService) { }
 
   ngOnInit(): void {
+
+    FadeoutUtils.verboseLog("EditMapComponent.ngOnInit: initializing")
+
     this.m_oMapService.initWasdiMap('editMap');
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
   }
@@ -56,10 +60,13 @@ export class EditMapComponent implements OnInit {
 
     // Changing the Displayed Map to the 3D Cesium Globe:
     if (this.m_b2DMapModeOn === false) {
+
       this.m_oGlobeService.clearGlobe();
       console.log("EditMapComponent.switch2D3DMode: call init Globe")
       this.m_oGlobeService.initGlobe('CesiumContainerEdit');
+
       this.m_b2DMapModeOutput.emit(false);
+
       //Load any exisiting layers onto the Globe
       for (let iIndexLayers = 0; iIndexLayers < this.m_aoVisibleBands.length; iIndexLayers++) {
         // Check if it is a valid layer
@@ -84,9 +91,7 @@ export class EditMapComponent implements OnInit {
       }
       this.m_oGlobeService.flyToWorkspaceBoundingBox(this.m_aoProducts);
     }
-
-    //Changing the Displayed Map to the 2D Leaflet Map: 
-    if (this.m_b2DMapModeOn === true) {
+    else {
       this.m_oMapService.clearMap('editMap');
       this.m_oMapService.initWasdiMap('editMap');
       this.m_b2DMapModeOutput.emit(true);
