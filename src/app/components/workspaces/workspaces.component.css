@@ -1,6 +1,7 @@
 section.workspaces-container {
     max-width: 95vw;
 }
+
 h4 {
     color: #43516a;
     font-weight: bolder;
@@ -8,7 +9,7 @@ h4 {
 
 div.workspace-properties-container {
     height: 80vh;
-
+    width: 40%;
 }
 
 div.workspace-globe-contaienr {
@@ -26,4 +27,8 @@ div.workspaces-list-group {
     height: 100%;
     overflow: hidden;
     overflow-y: scroll;
+}
+
+li.workspace-product {
+    overflow: hidden;
 }

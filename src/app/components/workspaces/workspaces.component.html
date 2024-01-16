@@ -55,7 +55,7 @@
                         <li *ngFor="let user of activeWorkspace.sharedUsers">{{ user }}</li>
                     </ul>
                     <ul class="list-group">
-                        <li class="list-group-item list-group-item-action" *ngFor="let oProduct of m_aoProducts"
+                        <li class="list-group-item list-group-item-action workspace-product" *ngFor="let oProduct of m_aoProducts"
                             (click)="onSelectProduct(oProduct)">
                             {{oProduct.name}}
                         </li>
