@@ -158,6 +158,7 @@ import { BuildLogsComponent } from './components/dialogs/build-logs/build-logs.c
 import { AlertDialogComponent } from './shared/dialogs/alert-dialog/alert-dialog.component';
 import { NotificationSnackbarComponent } from './shared/dialogs/notification-snackbar/notification-snackbar.component';
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
+import { ManualBoundingBoxComponent } from './shared/shared-components/manual-bounding-box/manual-bounding-box.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -258,7 +259,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     BuildLogsComponent,
     AlertDialogComponent,
     NotificationSnackbarComponent,
-    ConvertMsToTimePipe
+    ConvertMsToTimePipe,
+    ManualBoundingBoxComponent
   ],
   imports: [
     AppRoutingModule,
