@@ -106,10 +106,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   filterProducts() {
 
-    let aoFilteredProducts = this.m_aoWorkspaceProductsList;
-
-    if (!FadeoutUtils.utilsIsObjectNullOrUndefined) {
-      if (!FadeoutUtils.utilsIsStrNullOrEmpty) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoWorkspaceProductsList)) {
+      if (!FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sSearchString)) {
 
         console.log("ProductListComponent.filterProducts: m_sSearchString = " + this.m_sSearchString)
 
@@ -129,29 +127,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
     }
   }
 
-  trackByIndex(index: number): number {
-    return index;
-  }
-
-  hasChild(_: number, node: Product) {
-    if (!node.bandsGroups) {
-      return !!node
-    } else {
-      //Add id to child nodes (bands)
-      if (node.bandsGroups.bands) {
-        node.bandsGroups.bands.forEach(band => {
-          band.nodeIndex = _
-        })
-      }
-      return !!node.bandsGroups.bands && node.bandsGroups.bands.length > 0
-    }
-  };
-
-  findProductByName(node) {
-    let oFoundProduct = this.m_aoWorkspaceProductsList.find(oProduct => oProduct.fileName === node.fileName);
-    return oFoundProduct
-  }
-
+  /**
+   * Adds or Removes a product to the selected List once the user clicks on the associated checkbox
+   * @param oEvent 
+   * @param oProduct 
+   */
   addProductToSelectedProducts(oEvent: any, oProduct: Product) {
     if (oEvent.currentTarget.checked === true) {
       //Add the Product to the Selected Products Array
@@ -164,6 +144,10 @@ export class ProductsListComponent implements OnChanges, OnInit {
     }
   }
 
+  /**
+   * Handle the click on the select (de-select) all button
+   * @param oEvent 
+   */
   selectAllProducts(oEvent) {
     if (oEvent.currentTarget.checked === true) {
       this.m_aoWorkspaceProductsList.forEach(oProduct => {
@@ -189,11 +173,15 @@ export class ProductsListComponent implements OnChanges, OnInit {
     }
   }
 
+  /**
+   * Called from the Product List tree when the user wants to download many products at once.
+   */
   downloadMultipleProducts() {
+
     this.m_aoSelectedProducts.forEach(oProduct => {
-      console.log(oProduct);
       this.downloadProduct(oProduct);
     })
+
   }
 
   /**
@@ -216,7 +204,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
           this.m_oDownloadProgress.emit({ downloadStatus: "incomplete", productName: sFileName })
         }
         if (oResponse.type === HttpEventType.Response) {
-          console.log("donwload completed"); this.m_oDownloadProgress.emit({ downloadStatus: "complete", productName: sFileName })
+          this.m_oDownloadProgress.emit({ downloadStatus: "complete", productName: sFileName })
           const a = document.createElement('a');
           const objectUrl = URL.createObjectURL(oResponse.body);
           a.href = objectUrl;
@@ -234,6 +222,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
     return true;
   }
 
+  /**
+   * Open the Product Properties Dialog
+   * @param event 
+   * @param node 
+   */
   openProductProperties(event: MouseEvent, node: any) {
     const oDialogRef = this.m_oDialog.open(ProductPropertiesDialogComponent, {
       data: {
@@ -248,6 +241,10 @@ export class ProductsListComponent implements OnChanges, OnInit {
     })
   }
 
+  /**
+   * Open the send to ftp dialog
+   * @param oNode 
+   */
   openSendToFTP(oNode: any) {
     const oDialogRef = this.m_oDialog.open(FTPDialogComponent, {
       data: {
@@ -256,11 +253,12 @@ export class ProductsListComponent implements OnChanges, OnInit {
       height: '75vh',
       width: '60vw'
     });
-    // oDialogRef.afterClosed().subscribe(oDialogResponse => {
-    //   console.log()
-    // })
   }
 
+  /**
+   * Delete Product command: ask for confirmatio and, in case, calls the API to delete a product
+   * @param node 
+   */
   deleteProduct(node: any) {
 
     let bDeleteLayer = true;
@@ -275,8 +273,9 @@ export class ProductsListComponent implements OnChanges, OnInit {
     bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === false) {
         return false;
-      } else {
-        //Call m_oProductService.deleteProductFromWorkspace()
+      } 
+      else {
+        //Call the API
         this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
           if (oResponse.boolValue) {
             this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
@@ -294,6 +293,9 @@ export class ProductsListComponent implements OnChanges, OnInit {
     //if deletion unsuccessful show dialog
   }
 
+  /**
+   * Delete Multiple products
+   */
   deleteMultipleProducts() {
     let bDeleteLayer = true;
     let bDeleteFile = true;

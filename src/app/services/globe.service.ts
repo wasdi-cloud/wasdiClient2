@@ -114,6 +114,11 @@ export class GlobeService {
   clearGlobe() {
 
     if (this.m_oWasdiGlobe) {
+      
+      if (this.m_oWasdiGlobe.entities) {
+        this.m_oWasdiGlobe.entities.removeAll();
+      }
+
       this.m_oWasdiGlobe.destroy();
       this.m_oWasdiGlobe = null;
       this.m_aoLayers = null;
