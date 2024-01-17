@@ -2,19 +2,22 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 //Service Imports:
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { ProcessorService } from 'src/app/services/api/processor.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { ProcessorService } from 'src/app/services/api/processor.service';
 
 //Angular Material Import: 
 import { MatDialog } from '@angular/material/dialog';
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
+//Component Imports
+import { BuildLogsComponent } from 'src/app/components/dialogs/build-logs/build-logs.component';
+import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
+
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
+
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -92,6 +95,9 @@ export class ProcessorTabContentComponent implements OnInit {
    */
   @Input() m_sProcessorName?: string = "";
 
+  @Input() m_sPublisher?: string = ""; 
+
+
   /**
    * Selected File
    */
@@ -104,10 +110,12 @@ export class ProcessorTabContentComponent implements OnInit {
 
   @Input() m_oProcessorBasicInfo: FormGroup;
 
+
+
   m_aoProcessorTypes = [
     { name: "Ubuntu 22.04 + Python 3.10", id: "python_pip_2" },
     { name: "OGC Application Package", id: "eoepca" },
-    //{ name: "Python 3.x Pip One Shot", id:"pip_oneshot"},
+    { name: "Python 3.x Pip One Shot", id: "pip_oneshot" },
     { name: "IDL 3.7.2", id: "ubuntu_idl372" },
     { name: "OCTAVE 6.x", id: "octave" },
     { name: "Python 3.x Conda", id: "conda" },
@@ -121,22 +129,21 @@ export class ProcessorTabContentComponent implements OnInit {
 
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService) {
   }
 
   ngOnInit(): void {
     //Set the active workspace from the constants service
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    
-    this.displayProcessorType();
 
+    this.displayProcessorType();
+    console.log(this.m_sPublisher)
     let sType = this.m_oProcessorBasicInfo.get('oType').value;
     this.m_aoProcessorTypes.forEach(type => {
-      if(type.id === sType) {
+      if (type.id === sType) {
         sType = type.name
         this.m_oProcessorBasicInfo.controls['oType'].setValue(sType)
       }
@@ -183,16 +190,24 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   onFileSelect(input: any) {
-    if (input.files && input.files[0]) {
-      this.m_sSelectedFileName = input.files[0].name;
+    if (input['0']) {
+      let oInput = input['0'];
+      this.m_sSelectedFileName = oInput.name;
       this.m_oSelectedFile = new FormData();
-      this.m_oSelectedFile.append('file', input.files[0]);
+      this.m_oSelectedFile.append('file', oInput);
 
       this.m_oProcessorBasicInfo.patchValue({
         oSelectedFile: this.m_oSelectedFile,
         sSelectedFileName: this.m_sSelectedFileName
       })
     }
+  }
+
+  getSelectedFile(oEvent) {
+    this.m_oProcessorBasicInfo.patchValue({
+      oSelectedFile: oEvent.file,
+      sSelectedFileName: oEvent.name
+    })
   }
 
   /**
@@ -207,20 +222,51 @@ export class ProcessorTabContentComponent implements OnInit {
     })
   }
 
+  forceLibUpdate(sProcessorId: string) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId) === true) {
+      return false;
+    }
+
+    let sConfirnMsg = "Are you sure you want to update this Processor?"
+
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirnMsg);
+
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
+        this.m_oProcessorService.forceLibUpdate(sProcessorId).subscribe({
+          next: oResponse => {
+            this.m_oNotificationDisplayService.openSnackBar("LIBRARY UPDATE SCHEDULED", "Close", "right", "bottom");
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog("Error in Updating Library")
+          }
+        })
+      }
+    });
+    return true;
+  }
+
   forceProcessorRefresh(sProcessorId: string) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId)) {
       return false;
     }
 
-    this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
-      next: oResponse => {
-        this.m_oNotificationService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
-      },
-      error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "Error in Refreshing Processor")
-      }
+    let sConfirmMsg = "Are you sure you want to Redeploy this processor?";
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
 
-    })
+    bConfirmResult.subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
+          next: oResponse => {
+            this.m_oNotificationDisplayService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog("Error in Refreshing Processor")
+          }
+
+        })
+      }
+    });
     return true;
   }
 
@@ -237,4 +283,24 @@ export class ProcessorTabContentComponent implements OnInit {
       }
     });
   }
+
+  openBuildLogs() {
+    let oDialog = this.m_oDialog.open(BuildLogsComponent, {
+      height: '70vh',
+      width: '70vw',
+      data: {
+        sProcessorId: this.m_sProcessorId,
+        sProcessorName: this.m_sProcessorName
+      }
+    })
+  }
+
+  /**
+   * on file drop handler
+   */
+  onFileDropped($event) {
+    this.onFileSelect($event);
+  }
+
+
 }

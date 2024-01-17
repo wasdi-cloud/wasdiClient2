@@ -1,6 +1,10 @@
 <div class="dialog d-flex flex-column justify-content-between" style="height: 100%;">
     <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between px-4 pt-3 pb-2">
-        <h4 class="dialog-text"><fa-icon [icon]="faRocket"></fa-icon> WASDI App</h4>
+        <h4 *ngIf="m_bEditMode === false" class="dialog-text"><fa-icon [icon]="faRocket"></fa-icon> WASDI App <span class="badge bg-success"></span></h4>
+        <h4 *ngIf="m_bEditMode === true" class="dialog-text">
+            <fa-icon [icon]="faRocket"></fa-icon> {{m_oProcessorDetails.processorName}} -
+            {{m_oProcessorDetails.processorId}} <span class="badge bg-success" *ngIf="m_oInputProcessor.readOnly">Read Only</span>
+        </h4>
         <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
     </div>
     <div class="processor-tabs m-2">
@@ -29,10 +33,10 @@
     </div>
     <div class="tab-content-container p-3" style="height: 75%;">
         <!-- Default Page - Processor Information -->
-        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR'" [m_bEditMode]="m_bEditMode"
+        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR' && m_oProcessorForm" [m_bEditMode]="m_bEditMode"
             [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')"
-            [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''"
-            [m_sProcessorName]="m_sName"></app-processor-tab-content>
+            [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''" [m_sProcessorName]="m_sName"
+            [m_sPublisher]="m_oProcessorDetails.publisher"></app-processor-tab-content>
         <!-- Processor Store Options -->
         <app-processor-tab-store *ngIf="m_sActiveTab==='STORE'"
             [m_oProcessorStoreInfo]="m_oProcessorForm.get('processorStoreInfo')"></app-processor-tab-store>

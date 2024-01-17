@@ -1,20 +1,20 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { faDownload, faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { AlertDialog, AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-process-logs-dialog',
   templateUrl: './process-logs-dialog.component.html',
   styleUrls: ['./process-logs-dialog.component.css']
 })
-export class ProcessLogsDialogComponent {
+export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
   //Font Awesome Imports
   faXmark = faX;
   faDownload = faDownload;
@@ -29,19 +29,27 @@ export class ProcessLogsDialogComponent {
   m_iCurrentPage: number = 1;
   m_iNumberOfLogs: number = 0;
   m_iNumberOfLogsPerPage: number = 10;
+  m_oTick: any = null;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oAuthService: AuthService,
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<ProcessLogsDialogComponent>,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    ) {
+  ) { }
+
+  ngOnInit(): void {
     this.getLogsCount(this.m_oProcess.processObjId);
+    this.m_oTick = this.startTick(this.m_oProcess.status);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.m_oTick);
   }
 
   getLogsCountANDLogsCallback(oResponse: any) {
@@ -55,7 +63,6 @@ export class ProcessLogsDialogComponent {
     if (iFirstRow < 0) {
       iFirstRow = 0;
     }
-
     this.getPaginatedLogs(this.m_oProcess.processObjId, iFirstRow, iLastRow);
     return true;
   }
@@ -72,16 +79,22 @@ export class ProcessLogsDialogComponent {
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.getLogsCountANDLogsCallback(oResponse);
-        } 
+        }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sErrorRefreshMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorRefreshMsg);
       }
     });
     return true;
   }
 
-  handlePagination(event) {
+  handlePagination(oEvent) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false && oEvent.pageIndex >= 0) {
+      //Page Index begins at 0: 
+      this.m_iCurrentPage = oEvent.pageIndex + 1;
+      //Get the Logs Count
+      this.getLogsCount(this.m_oProcess.processObjId);
+    }
 
   }
 
@@ -89,10 +102,10 @@ export class ProcessLogsDialogComponent {
     if (!oProcessId) {
       return false;
     }
-    if (!iStartRow) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(iStartRow) === true) {
       iStartRow = "";
     }
-    if (!iEndRow) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(iEndRow) === true) {
       iEndRow = "";
     }
 
@@ -115,15 +128,12 @@ export class ProcessLogsDialogComponent {
         return false;
       }
       this.m_aoAllLogs = oResponse;
-      console.log(this.m_aoAllLogs);
-      // let oFile = this.generateLogFile();
-      // let oLink = document.createElement('a');
+      let oFile = this.generateLogFile();
+      let oLink = document.createElement('a');
 
-      // console.log(oFile)
-
-      // oLink.href = oFile;
-      // oLink.download = 'processorLog';
-      // oLink.click();
+      oLink.href = oFile;
+      oLink.download = 'processorLog';
+      oLink.click();
       return true;
     })
   }
@@ -161,6 +171,24 @@ export class ProcessLogsDialogComponent {
     }
 
     return sText;
+  }
+
+  startTick(sStatus: string) {
+    if ((FadeoutUtils.utilsIsStrNullOrEmpty(sStatus) === true) || (sStatus !== "RUNNING")) {
+      return undefined;
+    }
+    let oController = this;
+
+    let oTick = setInterval(() => {
+      this.getLogsCount(oController.m_oProcess.processObjId);
+      sStatus = oController.m_oProcess.status;
+
+      if (sStatus === "STOPPED " || sStatus === "ERROR" || sStatus === "DONE") {
+        clearInterval(oController.m_oTick)
+      }
+    }, 5000);
+
+    return oTick;
   }
 
   dismiss() {

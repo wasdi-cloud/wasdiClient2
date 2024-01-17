@@ -28,7 +28,8 @@ import { ProductsListComponent } from './components/edit/products-list/products-
 import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
 import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
 import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
-import { ProcessesBarComponent, ProcessesBarContent, ProcessesDialog } from './components/edit/processes-bar/processes-bar.component';
+import { ProcessesBarComponent, ProcessesBarContent } from './components/edit/processes-bar/processes-bar.component';
+import { ProcessesDialog } from './components/edit/processes-bar/processes-dialog/processes-dialog.component';
 import { UserSettingsDialogComponent } from './components/header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
 import { ProductPropertiesDialogComponent } from './components/edit/products-list/product-properties-dialog/product-properties-dialog.component';
 import { NavLayersComponent } from './components/edit/nav-layers/nav-layers.component';
@@ -55,6 +56,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatChipsModule } from '@angular/material/chips';
+import {MatProgressBarModule } from '@angular/material/progress-bar'
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -153,6 +155,12 @@ import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.comp
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MarketSearchComponent } from './components/header/market-search/market-search.component';
 import { SearchBtnGrpComponent } from './shared/shared-components/search-btn-grp/search-btn-grp.component';
+import { DragAndDropDirective } from './directives/drag-and-drop.directive';
+import { DragAndDropComponent } from './shared/drag-and-drop/drag-and-drop.component';
+import { BuildLogsComponent } from './components/dialogs/build-logs/build-logs.component';
+import { AlertDialogComponent } from './shared/dialogs/alert-dialog/alert-dialog.component';
+import { NotificationSnackbarComponent } from './shared/dialogs/notification-snackbar/notification-snackbar.component';
+import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -250,7 +258,13 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     FTPDialogComponent,
     NavbarComponent,
     MarketSearchComponent,
-    SearchBtnGrpComponent
+    SearchBtnGrpComponent,
+    DragAndDropDirective,
+    DragAndDropComponent,
+    BuildLogsComponent,
+    AlertDialogComponent,
+    NotificationSnackbarComponent,
+    ConvertMsToTimePipe
   ],
   imports: [
     AppRoutingModule,
@@ -290,6 +304,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatListModule,
     MatProgressSpinnerModule,
     MatChipsModule, 
+    MatProgressBarModule,
     NgxChartsModule
   ],
   providers: [

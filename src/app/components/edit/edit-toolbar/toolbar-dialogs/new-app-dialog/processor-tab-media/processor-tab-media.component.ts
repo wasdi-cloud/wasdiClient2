@@ -3,7 +3,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ImageService } from 'src/app/services/api/image.service';
 import { NewAppDialogComponent } from '../new-app-dialog.component';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -24,10 +23,9 @@ export class ProcessorTabMediaComponent implements OnInit {
   m_oImageToUpload: any = null;
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oImageService: ImageService,
-    private m_oNotificationService: NotificationDisplayService) { }
+    private m_oNotificationDisplayService: NotificationDisplayService) { }
 
   ngOnInit(): void { }
 
@@ -40,12 +38,12 @@ export class ProcessorTabMediaComponent implements OnInit {
 
     this.m_oImageService.uploadProcessorLogo(this.m_oProcessor.processorId, this.m_oProcessorLogo).subscribe({
       next: oResponse => {
-        this.m_oNotificationService.openSnackBar("PROCESSOR LOGO UPDATED", "Close", "right", "bottom");
-        // this.m_oAlertDialog.openDialog(4000, "PROCESSOR LOGO UPDATED")
+        this.m_oNotificationDisplayService.openSnackBar("PROCESSOR LOGO UPDATED", "Close", "right", "bottom");
+        // this.m_oNotificationDisplayService.openAlertDialog( "PROCESSOR LOGO UPDATED")
         // this.onDismiss();
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>THERE WAS AN ERROR UPDATING PROCESSOR LOGO");
+        this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION<br>THERE WAS AN ERROR UPDATING PROCESSOR LOGO");
       }
     });
     return true;
@@ -60,7 +58,7 @@ export class ProcessorTabMediaComponent implements OnInit {
     this.m_oImageService.uploadProcessorImage(this.m_oProcessor.processorId, this.m_oApplicationImage).subscribe({
       next: oResponse => {
         this.m_oProcessor.images.push(oResponse.stringValue);
-        this.m_oAlertDialog.openDialog(4000, "PROCESSOR IMAGE ADDED");
+        this.m_oNotificationDisplayService.openAlertDialog( "PROCESSOR IMAGE ADDED");
       },
       error: oError => { }
     })
@@ -76,10 +74,10 @@ export class ProcessorTabMediaComponent implements OnInit {
         this.m_oProcessor.images = this.m_oProcessor.images.filter(function (oImage) {
           return oImage !== sImage;
         });
-        this.m_oAlertDialog.openDialog(4000, "PROCESSOR IMAGE REMOVED");
+        this.m_oNotificationDisplayService.openAlertDialog( "PROCESSOR IMAGE REMOVED");
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>THERE WAS AN ERROR DELETING THE IMAGE")
+        this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION<br>THERE WAS AN ERROR DELETING THE IMAGE")
       }
     });
   }
@@ -100,6 +98,15 @@ export class ProcessorTabMediaComponent implements OnInit {
     }
   }
 
+  getSelectedLogo(oEvent: any) {
+    this.m_sProcessorLogoName = oEvent.name;
+    this.m_oProcessorLogo = oEvent.file;
+  }
+
+  getSelectedAppImage(oEvent: any) {
+    this.m_sApplicaitonImageName = oEvent.name;
+    this.m_oApplicationImage = oEvent.file;
+  }
   onDismiss() {
     this.m_oDialogRef.close();
   }

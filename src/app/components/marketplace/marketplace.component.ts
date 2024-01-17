@@ -11,8 +11,8 @@ import { TranslateService } from '@ngx-translate/core';
 
 //Angular Material Imports:
 import { MatDialog } from "@angular/material/dialog"
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 interface AppFilter {
   categories: any[];
@@ -63,8 +63,8 @@ export class MarketplaceComponent implements OnInit {
 
   m_sDeveloperSearch: string = "";
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oImageService: ImageService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService,
     private m_oTranslate: TranslateService,
@@ -90,14 +90,13 @@ export class MarketplaceComponent implements OnInit {
     this.m_oProcessorMediaService.getCategories().subscribe(
       {
         next: oResponse => {
-          console.log(oResponse)
           if (oResponse.length === 0) {
-            this.m_oAlertDialog.openDialog(4000, sCategoriesError);
+            this.m_oNotificationDisplayService.openAlertDialog( sCategoriesError);
           }
           this.m_asCategoryOptions = oResponse;
         },
         error: oError => {
-          this.m_oAlertDialog.openDialog(4000, sCategoriesError);
+          this.m_oNotificationDisplayService.openAlertDialog( sCategoriesError);
         }
       })
   }
@@ -116,11 +115,11 @@ export class MarketplaceComponent implements OnInit {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoPublishers = oResponse;
         } else {
-          this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
       }
     });
   }
@@ -154,12 +153,12 @@ export class MarketplaceComponent implements OnInit {
             this.m_bLoadMoreEnabled = false;
           }
         } else {
-          this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
         }
         this.m_bWaiting = false;
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
         this.m_bWaiting = false;
       }
     })
@@ -231,11 +230,11 @@ export class MarketplaceComponent implements OnInit {
             this.m_bLoadMoreEnabled = false;
           }
         } else {
-          this.m_oAlertDialog.openDialog(4000, sMessage);
+          this.m_oNotificationDisplayService.openAlertDialog( sMessage);
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog( sMessage);
       }
     });
   }

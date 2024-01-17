@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 //Angular Material Import: 
 import { MatDialogRef } from '@angular/material/dialog';
@@ -25,7 +25,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   templateUrl: './import-dialog.component.html',
   styleUrls: ['./import-dialog.component.css']
 })
-export class ImportDialogComponent {
+export class ImportDialogComponent implements OnInit {
   //Font Awesome Icon Imports
   faUpload = faUpload;
   faX = faX;
@@ -54,6 +54,8 @@ export class ImportDialogComponent {
 
   m_bIsAccountCreated: boolean = false;
 
+  m_bIsReadOnly: boolean = true;
+
 
   constructor(
     private m_oAuthService: AuthService,
@@ -62,8 +64,10 @@ export class ImportDialogComponent {
     private m_oDialogRef: MatDialogRef<ImportDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
-    private m_oStyleService: StyleService) {
+    private m_oStyleService: StyleService) { }
 
+  ngOnInit(): void {
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getStyles();
     this.isCreatedAccountUpload();
   }
@@ -85,12 +89,9 @@ export class ImportDialogComponent {
   }
 
   /*************** UPLOAD ***************/
-  onFileSelect(input: any) {
-    if (input.files && input.files[0]) {
-      this.m_sFileName = input.files[0].name
-      this.m_oFile = new FormData();
-      this.m_oFile.append('file', input.files[0]);
-    }
+  getSelectedFile(oEvent) {
+    this.m_sFileName = oEvent.name;
+    this.m_oFile = oEvent.file
   }
 
   onUploadFile() {
@@ -101,6 +102,10 @@ export class ImportDialogComponent {
     //Add paywalling in this area on subscriptions
     if (this.m_oConstantsService.checkProjectSubscriptionsValid() === false) {
       return false;
+    }
+
+    if (this.m_bIsReadOnly === true) {
+      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to import products to this workspace.");
     }
 
     //Check for active workspace:

@@ -1,8 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 //Service Imports: 
+import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { GlobeService } from 'src/app/services/globe.service';
+import { MapService } from 'src/app/services/map.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,9 +19,8 @@ import { Product } from 'src/app/shared/models/product.model';
 
 //Utilities Imports: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
-import { Title } from '@angular/platform-browser';
-import { GlobeService } from 'src/app/services/globe.service';
+
+import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 
 @Component({
   selector: 'app-edit',
@@ -27,112 +32,266 @@ export class EditComponent implements OnInit, OnDestroy {
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,
-    private m_oAlertDialog: AlertDialogTopService,
+    private m_oConsoleService: ConsoleService,
     private m_oConstantsService: ConstantsService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oNotificationsQueueService: NotificationsQueueService,
     private m_oProductService: ProductService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oRouter: Router,
     private m_oTitleService: Title,
-    private m_oTranslateService: TranslateService,
+    private m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
-    private m_oGlobeService: GlobeService) { }
+    private m_oGlobeService: GlobeService,
+    private m_oMapService: MapService) { }
 
-  //Map Status: 2D (true) or 3D (false): 
+  /**
+   * Map Status: 2D (true) or 3D (false): 
+   */
   m_b2DMapModeOn: boolean = true;
-  //Has first zoom on band been done? 
+
+  /**
+   * Has first zoom on band been done? 
+   */
   m_bFirstZoomOnBandDone: boolean = false;
 
-  //Query Search filter text (product tree): 
+  /**
+   * Query Search filter text (product tree): 
+   */
   m_sTextQueryFilter: string = '';
+  /**
+   * Flag to understand if the tree is applying a filter or not
+   */
   m_bIsFilteredTree: false;
 
+  /**
+   * Flag to detect if the tree is loading
+   */
   m_bTreeIsLoading: boolean = true;
 
-  //Array of Products in Workspace
-  m_aoProducts: Product[];
+  /**
+   * Flag to define if Jupyter is ready or not
+   */
+  m_bJupyterIsReady: boolean = false;
 
-  //WorkspaceId is necessary. If null, create a new one.
+  /**
+   * Array of Products in Workspace
+   */
+  m_aoProducts: Product[] = [];
+
+  /**
+   * WorkspaceId is necessary. If null, create a new one.
+   */
   m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+
+  /**
+   * Local reference to Active Workspace
+   */
   m_oActiveWorkspace: any;
 
-  // Actual User
+  /**
+   * Actual User
+   */
   m_oUser = this.m_oConstantsService.getUser();
-  //{}
-  m_aoProductsLayersIn3DMapArentGeoreferenced = [];
-  //default sort by value
+
+  
+  /**
+   * default sort by value
+   */
   sSortType = 'default';
 
-  //boolean value for Jupyter Notebook 
-  m_bNotebookIsReady = false;
-
-  //Array for Processes
+  /**
+   * Array for Processes in the workspace
+   */
   m_aoProcessesRunning: any[] = []
 
+  /**
+   * Search String
+   */
   m_sSearchString: string;
 
-  m_aoVisibleBands;
+  /**
+   * List of visible bands
+   */
+  m_aoVisibleBands = [];
+
+  /**
+   * Flag to know if it is loading products
+   */
+  m_bIsLoadingProducts: boolean = true;
+
+  /**
+   * Name of the product in download
+   */
+  m_sDownloadProductName: string = "";
+
+  /**
+   * Flag to show or not the product in download
+   */
+  m_bShowProductDownload: boolean = false;
 
   ngOnInit(): void {
-    console.log("EditComponent.ngOnInit")
+    FadeoutUtils.verboseLog("EditComponent.ngOnInit")
 
     //What to do if workspace undefined: 
     if (!this.m_oActiveWorkspace) {
+
       //Check route for workspace id
       if (this.m_oActivatedRoute.snapshot.params['workspaceId']) {
         //Assign and set new workspace id
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
-        
+
         console.log("edit.component.ngOnInit: call open Workspace ")
 
         this.openWorkspace(this.m_sWorkspaceId);
-      } 
+      }
       else {
         //If unable to identify workspace, re-route to workspaces tab
         this.m_oRouter.navigateByUrl('/workspaces')
       }
-    } else {
+    } 
+    else {
       //If workspace is defined => Load Processes
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
       this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
-      this.subscribeToRabbit();
+      this._subscribeToRabbit();
       //load Products
       this.getProductList();
     }
+
+    this.m_oRabbitStompService.setMessageCallback(this.recievedRabbitMessage);
+    this.m_oRabbitStompService.setActiveController(this);
   }
 
   ngOnDestroy(): void {
-    console.log("EditComponent.ngOnInit")
+    FadeoutUtils.verboseLog("EditComponent.ngOnDestroy")
+    
     this.m_oRabbitStompService.unsubscribe();
     this.m_oGlobeService.clearGlobe();
+    this.m_oMapService.clearMap();
+  }  
+
+  recievedRabbitMessage(oMessage, oController) {
+    // Check if the message is valid
+    if (oMessage == null) return;
+
+    // Check the Result
+    if (oMessage.messageResult == "KO") {
+
+      var sOperation = "null";
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.messageCode) === false) sOperation = oMessage.messageCode;
+
+      var sErrorDescription = "";
+
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
+
+      oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription);
+
+      if (oMessage.messageCode == "PUBLISHBAND") {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
+            // var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
+            // this.setTreeNodeAsDeselected(sNodeName);
+          }
+        }
+      }
+
+      return;
+    }
+
+    // Switch the Code
+    switch (oMessage.messageCode) {
+      case "PUBLISH":
+        oController.receivedPublishMessage(oMessage);
+        break;
+      case "PUBLISHBAND":
+        oController.receivedPublishBandMessage(oMessage);
+        break;
+      case "DOWNLOAD":
+      case "GRAPH":
+      case "INGEST":
+      case "MOSAIC":
+      case "SUBSET":
+      case "MULTISUBSET":
+      case "RASTERGEOMETRICRESAMPLE":
+      case "REGRID":
+      case "SHARE":
+        oController.receivedNewProductMessage(oMessage);
+        break;
+      case "DELETE":
+        //oController.getProductListByWorkspace();
+        break;
+    }
+
+    WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate, oController);
   }
 
+  receivedNewProductMessage(oMessage) {
+
+    let sMessage = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED");
+
+    // Alert the user
+    this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+
+    // Update product list
+    this.getProductList();
+
+  };
+
+  receivedPublishMessage(oMessage) {
+    if (oMessage == null) {
+      return;
+    }
+    if (oMessage.messageResult == "KO") {
+      let sMessage = this.m_oTranslate.instant("MSG_PUBLISH_ERROR");
+      this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+      return;
+    }
+  };
+
+  _subscribeToRabbit() {
+    if (this.m_oRabbitStompService.isSubscrbed() == false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
+      let _this = this;
+      this.m_oRabbitStompService.waitServiceIsReady()
+      console.log('EditorController: Web Stomp is ready --> subscribe');
+      _this.m_oRabbitStompService.subscribe(_this.m_oActiveWorkspace.workspaceId);
+    }
+  }
+
+  /**
+   * Open a Workspace. Call the get Workspace Editor View Model
+   * If all is ok, it set the Active Workspace, subscribe to rabbit and get the full product list
+   * @param sWorkspaceId 
+   */
   openWorkspace(sWorkspaceId: string) {
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           if (oResponse.workspaceId === null || oResponse.activeNode === false) {
             this.m_oRouter.navigateByUrl('/workspaces');
-            let sMessage = this.m_oTranslateService.instant("MSG_FORBIDDEN")
-            this.m_oAlertDialog.openDialog(4000, sMessage)
-          }
+            let sMessage = this.m_oTranslate.instant("MSG_FORBIDDEN")
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage)
+          } 
           else {
 
-            console.log("edit.component.ngOnInit: Received open Workspace View Model ")
-
+            FadeoutUtils.verboseLog("edit.component.openWorkspace: Received open Workspace View Model ")
             this.m_oConstantsService.setActiveWorkspace(oResponse);
             this.m_oActiveWorkspace = oResponse;
-            this.subscribeToRabbit();
 
-            console.log("edit.component.ngOnInit: CALL get product list ")
-
-            this.getProductList();
             this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
+
+            this._subscribeToRabbit();
+            FadeoutUtils.verboseLog("edit.component.openWorkspace: CALL get product list ")
+            this.getProductList();
+            
+            this.getJupyterIsReady(this.m_oActiveWorkspace.workspaceId);
           }
         }
       },
       error: oError => {
-        let sMessage = this.m_oTranslateService.instant("MSG_ERROR_READING_WS");
-        this.m_oAlertDialog.openDialog(4000, sMessage);
+        let sMessage = this.m_oTranslate.instant("MSG_ERROR_READING_WS");
+        this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       }
     })
   }
@@ -140,12 +299,27 @@ export class EditComponent implements OnInit, OnDestroy {
   getProductList() {
     this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe({
       next: oResponse => {
-        console.log("edit.component.ngOnInit: RECEIVED got the product list ")
+        console.log("edit.component.getProductList: RECEIVED got the product list ")
         this.m_aoProducts = oResponse
+        this.m_bIsLoadingProducts = false;
       },
       error: oError => {
 
       }
+    })
+  }
+
+  getJupyterIsReady(sWorkspaceId) {
+    this.m_oConsoleService.isConsoleReady(sWorkspaceId).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === true) {
+          this.m_oNotificationDisplayService.openAlertDialog("Error in getting Jupyter Notebook Status");
+          return false;
+        }
+        this.m_bJupyterIsReady = oResponse.boolValue;
+        return true;
+      },
+      error: oError => { }
     })
   }
 
@@ -176,8 +350,25 @@ export class EditComponent implements OnInit, OnDestroy {
    * Listen for changes in Product Information from the Product Tree:
    */
   getProductsChange(oEvent: any) {
-    if (oEvent === true) {
+    this.getProductList();
+    if (oEvent) {
       this.getProductList();
     }
+  }
+
+  getProductDownloadStatus(oEvent) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+
+      if (oEvent.downloadStatus === 'incomplete') {
+        this.m_bShowProductDownload = true;
+        this.m_sDownloadProductName = oEvent.productName;
+      } else {
+        this.m_bShowProductDownload = false;
+      }
+    }
+  }
+
+  rabbitMessageHook(oRabbitMessage, oController) {
+
   }
 }

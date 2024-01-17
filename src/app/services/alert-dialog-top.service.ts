@@ -1,17 +1,20 @@
 import { Component, Inject, Injectable } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertDialogTopService {
 
-  constructor(private m_oDialog: MatDialog) { }
+  constructor(private m_oDialog: MatDialog,
+    private m_oSanitizer: DomSanitizer) { }
 
-  openDialog(iTimeoutInput: number, sMessage: string): void {
+  openDialog(iTimeoutInput: number, sMessage: any): void {
     let iTimeout: number = iTimeoutInput;
+    sMessage =  this.m_oSanitizer.bypassSecurityTrustHtml(sMessage.replace(/\n/g, "<br />"))
     let oDialogRef = this.m_oDialog.open(AlertDialog, {
-      width: '300px', 
+      width: '300px',
       data: sMessage
     });
 
@@ -24,14 +27,12 @@ export class AlertDialogTopService {
   }
 }
 
+// Alert Dialog Component
 @Component({
   selector: 'AlertDialog',
   template: `
-  <div class="p-1">Alert</div>
-  <div class="d-flex flex-column p-1" mat-dialog-actions>
-    {{m_oData}}
-    <button class="btn btn-secondary btn-sm align-self-end" mat-button (click)="closeDialog()">Close</button>
-  </div>`
+  <p class="d-flex flex-column p-1" mat-dialog-actions [innerHTML]="m_oData"></p>
+<button class="btn btn-secondary btn-sm align-self-end" mat-button (click)="closeDialog()">Close</button>`
 })
 export class AlertDialog {
   constructor(

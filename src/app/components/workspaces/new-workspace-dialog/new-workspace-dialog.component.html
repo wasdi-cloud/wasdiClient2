@@ -13,7 +13,7 @@
             {{"DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" | translate}}
         </label>
         <input class="form-control my-2" type="text" name="m_sWorkspaceName" placeholder="Workspace Name"
-            [(ngModel)]="m_sWorkspaceName">
+          (keyup)="onWorkspaceInput($event)"  [(ngModel)]="m_sWorkspaceName">
     </div>
     <div mat-dialog-actions class="d-flex flex-row gap-1 justify-content-end">
         <!-- Add New Workspace -->

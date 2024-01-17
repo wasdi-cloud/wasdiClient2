@@ -4,6 +4,8 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { MatDialog } from '@angular/material/dialog';
+import { NotificationDisplayService } from '../notification-display.service';
 
 export interface Process {
   fileSize: string,
@@ -31,8 +33,8 @@ export class ProcessWorkspaceService {
   _m_aoProcessesRunning$ = this.m_aoProcessesRunning.asObservable();
   m_aoProcessesStopped: Array<Process> = [];
 
-  updateProcessBarMsg: BehaviorSubject<string> = new BehaviorSubject<string>("Intial Status");
-  updatePrcoessBarMsg$ = this.updateProcessBarMsg.asObservable();
+  updateProcessBarMsg: BehaviorSubject<any> = new BehaviorSubject<any>({ message: "Intial Status" });
+  updateProcessBarMsg$ = this.updateProcessBarMsg.asObservable();
 
   //Days
   COOKIE_EXPIRE_TIME_DAYS: number = 1;
@@ -42,14 +44,18 @@ export class ProcessWorkspaceService {
   //ORDER OF PROCESSES IS IMPORTANT
   TYPE_OF_PROCESS: Array<string> = ["DOWNLOAD", "PUBLISHBAND", "PUBLISH", "UPDATEPROCESSES"];
 
-  constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
+  constructor(
+    private oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private oHttp: HttpClient) { }
 
   /**
     * Load the last 5 processes of a workspace
     * @param sWorkSpaceId
     */
   loadProcessesFromServer(sWorkspaceId: string) {
-    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace = this.oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
     if (oWorkspace !== null && oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
@@ -60,7 +66,7 @@ export class ProcessWorkspaceService {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
         // this.m_aoProcessesRunning = oResponse; 
         this.setProcessesRunning(oResponse.reverse());
-        this.updateProcessesBar("m_aoProcessesRunning:updated");
+        this.updateProcessesBar("m_aoProcessesRunning:updated", true);
       }
     });
   };
@@ -167,6 +173,7 @@ export class ProcessWorkspaceService {
    * @returns {boolean}
    */
   removeProcessInServer(sPidInput: string, sWorkSpaceId: string, oProcess: Process) {
+    let oService = this;
     if (!sPidInput) {
       return false;
     }
@@ -178,14 +185,27 @@ export class ProcessWorkspaceService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    // this.oHttp.get(sUrl + '/process/delete?procws=' + sPidInput).then(function (data, status) {
-    //   if (utilsIsObjectNullOrUndefined(sWorkSpaceId) === false) {
-    //     oProcess.status = "stopped";
-    //     oService.m_aoProcessesStopped.push(oProcess);
-    //     oService.loadProcessesFromServer(sWorkSpaceId);
-    //   }
+    this.oHttp.get<any>(sUrl + '/process/delete?procws=' + sPidInput).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(sWorkSpaceId) === false) {
+          oProcess.status = "stopped";
+          this.m_aoProcessesStopped.push(oProcess);
+          this.loadProcessesFromServer(sWorkSpaceId);
+        }
+      },
+      error: oError => {
+        oService.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS")
+      }
+    }
+    );
+
+
+
+    //   function (data, status) {
+    //
     // }, (function (data, status) {
-    //   utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS");
+    //  
+    //   // FadeoutUtils.utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS");
     // }));
     return true;
   };
@@ -201,10 +221,10 @@ export class ProcessWorkspaceService {
   /**
    * Triggers the update of the WASDI process bar
    */
-  updateProcessesBar(sMessage: string) {
+  updateProcessesBar(sMessage: string, oData: boolean) {
     //send a message to RootController for update the bar of processes
     // $rootScope.$broadcast('m_aoProcessesRunning:updated', true);
-    this.updateProcessBarMsg.next(sMessage);
+    this.updateProcessBarMsg.next({ message: sMessage, data: true });
   };
 
   /**
@@ -314,6 +334,13 @@ export class ProcessWorkspaceService {
     let oController = this;
     let oWorkspace = this.oConstantsService.getActiveWorkspace();
 
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog("Are you sure you want to kill this process?");
+
+    bConfirmResult.subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.removeProcessInServer(oProcessInput.processObjId, oWorkspace.workspaceId, oProcessInput)
+      }
+    })
     // this.m_oModalService.showModal({
     //   templateUrl: "dialogs/delete_process/DeleteProcessDialog.html",
     //   controller: "DeleteProcessController"
@@ -346,6 +373,14 @@ export class ProcessWorkspaceService {
 
     return this.oHttp.get(sUrl);
   };
+
+  getProcessWorkspaceTimeByUser(){
+    return this.oHttp.get<any>(this.APIURL + '/process/runningtimeproject/byuser');
+  }
+
+  getProcessWorkspaceTimeByProject() {
+    return this.oHttp.get<any>(this.APIURL + '/process/runningtimeproject');
+  }
 
   getQueuesStatus(sNodeCode: string, sStatuses: string) {
     let sUrl: string = this.APIURL + '/process/queuesStatus?';

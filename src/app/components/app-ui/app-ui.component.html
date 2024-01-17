@@ -3,15 +3,18 @@
 
     <form class="workspace-options-container d-flex flex-row align-items-center col-auto gap-2" name="workspaceForm"
         #f="ngForm" (ngSubmit)="f.form && runApplication()">
-        <input type="text" name="newWorkspaceName" id="" class="form-control"
-            placeholder="{{'WAP_NEW_WORKSPACE' | translate}}" [(ngModel)]="workspaceForm.sNewWorkspaceName">
-        <select class="form-select" name="existingWorkspace" [(ngModel)]="workspaceForm.sExistingWorkspace"
+        <input type="text" name="newWorkspaceName" id="" class="form-control" style="width: 15rem"
+            placeholder="{{'WAP_NEW_WORKSPACE' | translate}}" [(ngModel)]="workspaceForm.sNewWorkspaceName"/>
+        <select class="form-select" name="existingWorkspace" style="width: 20rem;"
             (change)="getSelectedWorkspaceId($event)">
-            <option value="null" disabled="true" [selected]="true">{{'WAP_OPEN_WORKSPACE' | translate}}</option>
-            <option value="" *ngFor="let oWorkspace of m_aoExistingWorkspaces" value="{{oWorkspace.workspaceName}}">
+            <option *ngIf="!m_oActiveWorkspace.workspaceName" value="null" disabled="true" [selected]="true">
+                {{'WAP_OPEN_WORKSPACE' |
+                translate}}</option>
+            <option value="" [selected]="m_oActiveWorkspace.workspaceId === oWorkspace.workspaceId? true : false"
+                *ngFor="let oWorkspace of m_aoExistingWorkspaces">
                 {{oWorkspace.workspaceName}}</option>
         </select>
-        <button type="submit" class="btn btn-secondary form-control">{{'WAP_RUN' | translate}}</button>
+        <button type="submit" class="btn btn-success">{{'WAP_RUN' | translate}}</button>
     </form>
 </div>
 <div class="app-info-container d-flex flex-row justify-content-between pt-3 px-3" style="height:13vh">
@@ -20,8 +23,10 @@
         <p>{{'WAP_PUBLISHER' | translate}}: {{processorInformation.publisher}}</p>
     </div>
     <div>
-        <p *ngIf="isCollapsed === true" class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP_MORE' | translate }}</p>
-        <p *ngIf="isCollapsed === false" class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP_LESS' | translate }}</p>
+        <p *ngIf="isCollapsed === true" class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP_MORE' | translate }}
+        </p>
+        <p *ngIf="isCollapsed === false" class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP_LESS' | translate
+            }}</p>
     </div>
 </div>
 <div class="collapsible d-flex flex-row justify-content-between py-2 px-3" [@collapse]="isCollapsed">

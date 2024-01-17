@@ -1,0 +1,10 @@
+<div class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)">
+    <input type="file" class="dropzone-input" name="m_oSelectedFile" id=""
+        (change)="onFileSelect($event.target)">
+    <h3>Drag and Drop Processor File</h3>
+    <h3>or</h3>
+    <label class="dropzone-label" for="m_oSelectedFile">Browse For File</label>
+    <div *ngIf="m_sSelectedFileName">
+        {{m_sSelectedFileName}}
+    </div>
+</div>

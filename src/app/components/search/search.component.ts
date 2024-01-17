@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { SearchService } from 'src/app/search.service';
@@ -12,9 +12,9 @@ import { Subject } from 'rxjs'
 import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
 import { ResultOfSearchService } from 'src/app/services/result-of-search.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspaces-list-dialog.component';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-search',
@@ -22,7 +22,7 @@ import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspac
   styleUrls: ['./search.component.css'],
   host: { 'class': 'flex-fill' }
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   //Font Awesome Imports:
   faPlus = faPlus;
 
@@ -90,11 +90,11 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,
-    private m_oAlertDialogService: AlertDialogTopService,
     private m_oConfigurationService: ConfigurationService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oMapService: MapService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oPageService: PagesService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oResultsOfSearchService: ResultOfSearchService,
@@ -106,8 +106,13 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    FadeoutUtils.verboseLog("SearchComponent.ngOnInit")
     this.m_oPageService.setFunction(this.executeSearch, this);
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+  }
+
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("SearchComponent.ngOnDestroy")
   }
 
   m_fUtcDateConverter(oDate) {
@@ -129,6 +134,8 @@ export class SearchComponent implements OnInit {
     }
 
     if (this.m_aoSelectedProviders.length > 0) {
+      //Clear Providers After Count before executing Search and Count
+      this.m_aoProvidersAfterCount = [];
       this.m_aoSelectedProviders.forEach(oProvider => {
         this.searchAndCount(oProvider);
       })
@@ -166,7 +173,6 @@ export class SearchComponent implements OnInit {
   }
 
   searchAndCount(oProvider) {
-
     //If there is no provider selected, return false
     if (this.thereIsAtLeastOneProvider() === false) {
       return false;
@@ -231,7 +237,7 @@ export class SearchComponent implements OnInit {
         oProvider.isLoaded = true;
       },
       error: oError => {
-        this.m_oAlertDialogService.openDialog(4000, "GURU MEDITATION<br>ERROR IN OPEN SEARCH REQUEST");
+        this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR IN OPEN SEARCH REQUEST");
         oProvider.isLoaded = false;
       }
     });
@@ -285,7 +291,7 @@ export class SearchComponent implements OnInit {
         oProvider.isLoaded = true;
       },
       error: oError => {
-        oController.m_oAlertDialogService.openDialog(4000, sMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sMessage);
         oProvider.isLoaded = true;
       }
     })

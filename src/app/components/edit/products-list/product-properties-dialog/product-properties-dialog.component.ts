@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { StyleService } from 'src/app/services/api/style.service';
@@ -45,13 +44,13 @@ export class ProductPropertiesDialogComponent {
   m_bLoadingStyle: boolean = true;
   m_bProductChanged: boolean = false;
   m_sWorkspaceId: string;
+  m_bIsReadOnly: boolean = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialogRef: MatDialogRef<ProductPropertiesDialogComponent>,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
     private m_oStyleService: StyleService
   ) {
@@ -61,6 +60,7 @@ export class ProductPropertiesDialogComponent {
     this.m_oEditProduct.friendlyName = this.m_oData.product.productFriendlyName;
     this.m_oEditProduct.description = this.m_oData.product.description;
     this.m_oEditProduct.style = this.m_oData.product.style;
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
   /**
@@ -71,13 +71,13 @@ export class ProductPropertiesDialogComponent {
       {
         next: oResponse => {
           if (oResponse.length === 0) {
-            this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>ERROR GETTING STYLES")
+            this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION<br>ERROR GETTING STYLES")
           } else {
             this.m_asStyles = oResponse;
           }
         },
         error: oError => {
-          this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>ERROR GETTING STYLES");
+          this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION<br>ERROR GETTING STYLES");
         }
       })
   }
@@ -116,12 +116,12 @@ export class ProductPropertiesDialogComponent {
     this.m_oProductService.updateProduct(oUpdatedViewModel, this.m_sWorkspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          this.m_oNotificationService.openSnackBar("Product Updated", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("Product Updated", "Close", "right", "bottom");
           this.onDismiss();
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, "GURU MEDITATION<br>ERROR: IMPOSSIBLE TO UPDATE THE PRODUCT");
+        this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION<br>ERROR: IMPOSSIBLE TO UPDATE THE PRODUCT");
         return false;
       }
     })

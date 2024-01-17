@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { ConstantsService } from '../constants.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 export interface WorkspaceViewModel {
   activeNode: boolean;
@@ -12,6 +13,7 @@ export interface WorkspaceViewModel {
   name: string;
   nodeCode: string;
   processesCount: string;
+  readOnly: boolean;
   sharedUsers: string[];
   slaLink: string;
   userId: string;
@@ -57,12 +59,12 @@ export class WorkspaceService {
     return this.oHttp.post(this.APIURL + '/ws/update', oWorkspace);
   };
 
-  deleteWorkspace(oWorkspace: WorkspaceViewModel, bDeleteFile: boolean, bDeleteLayer: boolean) {
+  deleteWorkspace(oWorkspace: any, bDeleteFile: boolean, bDeleteLayer: boolean) {
 
     let sUrl: string = this.APIURL;
 
     if (oWorkspace) {
-      if (oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
         sUrl = oWorkspace.apiUrl;
       }
 

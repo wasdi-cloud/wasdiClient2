@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -6,22 +6,20 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './confirmation-dialog.component.html',
   styleUrls: ['./confirmation-dialog.component.css']
 })
-export class ConfirmationDialogComponent implements OnInit {
-  title: string;
-  message: string;
+export class ConfirmationDialogComponent {
+  m_sTitle: string;
+  m_sMessage: string;
 
-  constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmationDialogModel) {
-      this.title = data.title;
-      this.message = data.message;
-     }
-
-  ngOnInit() { }
+    this.m_sTitle = data.title;
+    this.m_sMessage = data.message;
+  }
 
   onConfirm(): void {
     this.dialogRef.close(true)
   }
-
   onDismiss(): void {
     this.dialogRef.close(false);
   }

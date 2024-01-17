@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 //Import Services: 
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 import { ProjectService } from 'src/app/services/api/project.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Import Font Awesome Icons: 
-import { faComment, faArrowLeft, faBook, faFloppyDisk, faCalendar, faMagnifyingGlass, faGlobe, faGears, faRocket, faUserAstronaut, faGauge, faArrowRightFromBracket, faCertificate, faStar, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faArrowLeft, faBook, faFloppyDisk, faCalendar, faMagnifyingGlass, faGlobe, faGears, faRocket, faUserAstronaut, faGauge, faArrowRightFromBracket, faCertificate, faStar, faBars, faEnvelope, faX } from '@fortawesome/free-solid-svg-icons';
 
 //Import Dialog Components:
 import { MatDialog } from '@angular/material/dialog';
+import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { UserSettingsDialogComponent } from './header-dialogs/user-settings-dialog/user-settings-dialog.component';
 
 //Import Models:
@@ -23,7 +24,6 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Import Utilities: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { HeaderService } from 'src/app/services/header.service';
 
 @Component({
@@ -53,6 +53,10 @@ export class HeaderComponent implements OnInit {
   } = { title: null, message: null }
 
   m_oRouterEvents: any;
+  m_bHasNotificationsSubscription: any;
+  m_bHasNotifications: boolean = false;
+  m_aoNotificationsSubscription: any;
+  m_aoNotifications: Array<any> = [];
 
   m_sLocation: string = null;
 
@@ -72,9 +76,10 @@ export class HeaderComponent implements OnInit {
   faLogout = faArrowRightFromBracket;
   faCertificate = faCertificate;
   faStar = faStar;
+  faEnvelope = faEnvelope;
+  faX = faX;
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
@@ -82,6 +87,7 @@ export class HeaderComponent implements OnInit {
     private m_oProjectService: ProjectService,
     private m_oRouter: Router,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oNotificationsQueueService: NotificationsQueueService,
     public m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
   ) {
@@ -99,7 +105,7 @@ export class HeaderComponent implements OnInit {
               this.m_oActiveWorkspace = oResponse;
             },
             error: oError => {
-              this.m_oAlertDialog.openDialog(4000, "Error in retreiving Workspace Information")
+              this.m_oNotificationDisplayService.openAlertDialog("Error in retreiving Workspace Information")
             }
           })
         } else {
@@ -122,15 +128,42 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    console.log(this.m_oActiveWorkspace);
     this.m_oUser = this.m_oConstantsService.getUser();
     this.initializeProjectsInfo();
     this.getAccountType();
+    this.m_oConstantsService.m_oActiveWorkspaceSubscription.subscribe(oResponse => {
+      if (oResponse) {
+        if (!oResponse.workspaceId) {
+          this.sActiveWorkspaceId = "";
+        } else {
+          this.sActiveWorkspaceId = oResponse.workspaceId;
+        }
+      }
+    })
+
+    this.m_aoNotificationsSubscription = this.m_oNotificationsQueueService.m_aoNotificationsSubscription.subscribe(oResponse => {
+      if (oResponse.length > 0) {
+        this.m_aoNotifications = oResponse;
+        FadeoutUtils.verboseLog("header.componenet: ngOnInit: " + this.m_aoNotifications)
+      }
+    })
+
+    this.m_bHasNotificationsSubscription = this.m_oNotificationsQueueService.m_bHasNotifications.subscribe(oResponse => {
+      this.m_bHasNotifications = oResponse;
+    })
   }
 
   logout() {
     this.m_oConstantsService.logOut();
     this.m_oRouter.navigateByUrl("login");
+  }
+
+  clearNotification() {
+    setTimeout(() => {
+      if(this.m_bHasNotifications === true) {
+        this.m_bHasNotifications = false;
+      }
+    }, 1000)
   }
 
   openUserSettings(event: MouseEvent) {
@@ -139,7 +172,7 @@ export class HeaderComponent implements OnInit {
       width: '80vw'
     })
     event.preventDefault();
-}
+  }
 
   sendFeedback() {
     if (typeof this.m_oFeedback === undefined || !this.m_oFeedback.title || !this.m_oFeedback.message) {
@@ -195,7 +228,7 @@ export class HeaderComponent implements OnInit {
           }
           this.m_bLoadingProjects = false;
         } else {
-          this.m_oAlertDialog.openDialog(4000, "Error in getting your projects");
+          this.m_oNotificationDisplayService.openAlertDialog("Error in getting your projects");
           this.m_bLoadingProjects = false;
           this.m_oProject = oFirstProjectElement;
 
@@ -204,7 +237,7 @@ export class HeaderComponent implements OnInit {
       error: oError => {
         let sErrorMessage = "Error in getting your projects";
         this.m_oProject = oFirstProjectElement;
-        this.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
       }
     })
 

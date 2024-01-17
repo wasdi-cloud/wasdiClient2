@@ -78,10 +78,20 @@
         <tbody>
             <tr *ngFor="let oProcess of m_aoProcessesRunning">
                 <td>
-                    <span>{{oProcess.status}}</span>
+                    <mat-progress-spinner
+                        *ngIf="oProcess.status === 'RUNNING' || oProcess.status === 'WAITING' || oProcess.status === 'READY'"
+                        [diameter]="15" [mode]="'indeterminate'"></mat-progress-spinner>
+                    <span class="badge text-bg-info"
+                        *ngIf="oProcess.status === 'CREATED'">{{"DIALOG_PROCESSES_LOGS_WAIT"|translate}}</span>
+                    <span class="badge text-bg-warning"
+                        *ngIf="oProcess.status === 'DONE'">{{"DIALOG_PROCESSES_LOGS_LOG"|translate}}</span>
+                    <span class="badge text-bg-danger"
+                        *ngIf="oProcess.status === 'STOPPED'">{{"DIALOG_PROCESSES_LOGS_STOP"|translate}}</span>
+                    <span class="badge text-bg-danger"
+                        *ngIf="oProcess.status === 'ERROR'">{{"DIALOG_PROCESSES_LOGS_ERR"|translate}}</span>
                 </td>
                 <td title={{oProcess.operationType}}>
-                    {{oProcess.operationType}}
+                    {{getOperationDescription(oProcess)}}
                 </td>
                 <td title={{oProcess.productName}}>
                     {{oProcess.productName}}
@@ -106,6 +116,12 @@
                     </div>
                 </td>
                 <td>{{getDuration(oProcess)}}</td>
+                <td>
+                    <div (click)="deleteProcess(oProcess)"
+                        *ngIf="oProcess.status === 'RUNNING' || oProcess.status === 'WAITING' || oProcess.status === 'READY'">
+                        <fa-icon [icon]="faCircleX"></fa-icon>
+                    </div>
+                </td>
                 <td class="d-flex flex-row gap-3">
                     <a class="" title="Logs" (click)="openLogsDialog(oProcess)">
                         <fa-icon [icon]="faFile"></fa-icon>

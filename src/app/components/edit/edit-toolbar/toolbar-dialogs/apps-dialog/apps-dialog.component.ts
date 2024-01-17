@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 //Angular Materials Modules: 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -9,25 +9,26 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProductService } from 'src/app/services/api/product.service';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Font Awesome Icons: 
 import { faBook, faDownload, faEdit, faPaintBrush, faPlay, faPlus, faQuestionCircle, faRocket, faX } from '@fortawesome/free-solid-svg-icons';
 
 //Components Imports:
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
 import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
+
 @Component({
   selector: 'app-apps-dialog',
   templateUrl: './apps-dialog.component.html',
   styleUrls: ['./apps-dialog.component.css']
 })
-export class AppsDialogComponent {
+export class AppsDialogComponent implements OnInit, OnDestroy {
   //Font Awesome Icon Imports
   faBook = faBook;
   faDownload = faDownload;
@@ -39,18 +40,25 @@ export class AppsDialogComponent {
   faRun = faPlay;
   faX = faX;
 
-  m_sActiveUserId: string = ""
+  m_sActiveUserId: string = "";
   m_aoWorkspaceList: any[] = [];
   m_aWorkspacesName: any[] = [];
   m_aoSelectedWorkspaces: any[] = [];
   m_sFileName: string = "";
   m_aoProcessorList: any[] = [];
-  m_bIsLoadingProcessorList: boolean = false;
+  m_bIsLoadingProcessorList: boolean = true;
   m_bIsJsonEditModeActive: boolean = false;
   m_sJson: any = {};
   m_sMyJsonString: string = "";
   m_sSearchString = ""
   m_oSelectedProcessor: any;
+  m_bIsReadonly: boolean = true;
+
+  m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
+    "DELETEPROCESSOR",
+    this,
+    this.rabbitMessageHook
+  )
 
 
   constructor(
@@ -61,25 +69,35 @@ export class AppsDialogComponent {
     private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oProductService: ProductService,
+    private m_oRabbitStompService: RabbitStompService,
     private m_oWorkspaceService: WorkspaceService,
-  ) {
-    this.m_sActiveUserId = this.m_oConstantsService.getUserId();
-    this.getProcessorsList();
+  ) { }
 
+  ngOnInit(): void {
+    this.m_sActiveUserId = this.m_oConstantsService.getUserId();
+    this.m_bIsReadonly = this.m_oConstantsService.getActiveWorkspace().readOnly;
+    this.getProcessorsList();
+  }
+
+  ngOnDestroy(): void {
+    this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
   }
 
   /**
    * Get the list of processors from the server
    */
   getProcessorsList() {
-    this.m_bIsLoadingProcessorList = true;
-
-    this.m_oProcessorService.getProcessorsList().subscribe(oResponse => {
-      if (oResponse) {
-        this.m_aoProcessorList = this.setDefaultImages(oResponse);
-        this.m_bIsLoadingProcessorList = false;
-      } else {
-        //ERROR DIALOG
+    this.m_oProcessorService.getProcessorsList().subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          this.m_aoProcessorList = this.setDefaultImages(oResponse);
+          this.m_bIsLoadingProcessorList = false;
+        } else {
+          this.m_oNotificationDisplayService.openAlertDialog("Error in getting processors");
+        }
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Error in getting processors");
       }
     });
   }
@@ -194,28 +212,26 @@ export class AppsDialogComponent {
     let sConfirmOwner = `Are you sure you want to delete ${oProcessor.processorName}?`;
     let sConfirmShared = `Are you sure you want to remove your permissions from ${oProcessor.processorName}?`
 
-    let oDialogData: ConfirmationDialogModel;
+    let bConfirmResult: any;
+
     if (oProcessor.sharedWithMe) {
-      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmShared)
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared);
     } else {
-      oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmOwner)
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner);
     }
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: oDialogData
-    })
-
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
-      this.m_bIsLoadingProcessorList = true
-      if (oDialogResult === true) {
-        this.m_oProcessorService.deleteProcessor(oProcessor.processorId).subscribe(oResponse => {
-          this.m_bIsLoadingProcessorList = true;
-          this.getProcessorsList();
-        });
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
+        this.m_bIsLoadingProcessorList = true;
+        this.m_oProcessorService.deleteProcessor(oProcessor.processorId).subscribe({
+          next: oResponse => {
+            //Next actions are handled on RabbitMessageHook function
+          },
+          error: oError => { }
+        }
+        );
       }
-      this.m_bIsLoadingProcessorList = false;
-    });
+    })
     return true;
   }
 
@@ -230,35 +246,46 @@ export class AppsDialogComponent {
    * Execute the processor in the active workspace
    */
   runProcessor() {
-    if (this.m_oConstantsService.checkProjectSubscriptionsValid() === true) {
-      console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
-
-      let sJSON = this.m_sMyJsonString;
-
-      let sStringJSON = "";
-
-      if (typeof sJSON !== "string") {
-        sStringJSON = JSON.stringify(sJSON);
-      } else {
-        sStringJSON = sJSON;
-      }
-
-      try {
-        JSON.parse(sStringJSON);
-      } catch (oError) {
-        let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
-
-        console.log(sErrorMessage);
-      }
-
-      this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          let sNotificationMsg = "PROCESSOR SCHEDULED";
-          this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
-        }
-        this.m_oDialogRef.close();
-      })
+    if (this.m_oConstantsService.checkProjectSubscriptionsValid() === false) {
+      return false;
     }
+
+    if (this.m_bIsReadonly === true) {
+      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to edit this workspace.");
+      return false;
+    }
+    console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
+
+    let sJSON = this.m_sMyJsonString;
+
+    let sStringJSON = "";
+
+    if (typeof sJSON !== "string") {
+      sStringJSON = JSON.stringify(sJSON);
+    } else if (sJSON === '') {
+      sStringJSON = '{}'
+    } else {
+      sStringJSON = sJSON;
+    }
+
+    try {
+      JSON.parse(sStringJSON);
+    } catch (oError) {
+      let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
+
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+    }
+
+    this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+        let sNotificationMsg = "PROCESSOR SCHEDULED";
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
+      }
+      this.m_oDialogRef.close();
+    })
+
+    return true;
+
   }
 
   /**
@@ -293,5 +320,9 @@ export class AppsDialogComponent {
    */
   onDismiss() {
     this.m_oDialogRef.close();
+  }
+
+  rabbitMessageHook(oRabbitMessage: any, oController: any) {
+    oController.getProcessorsList();
   }
 }

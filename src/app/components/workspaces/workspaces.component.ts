@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 //Import Services:
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,7 +20,7 @@ import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Font Awesome Imports:
-import { faArrowsUpDown, faPlay, faPlus, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsUpDown, faPlay, faPlus, faStop, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 //Import Utilities: 
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
@@ -29,6 +29,9 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 //Declare Cesium: 
 declare let Cesium: any;
 
+/**
+ * Definitio of the Workspace View Mode obtained by the server
+ */
 export interface WorkspaceViewModel {
   activeNode: boolean;
   apiUrl: string;
@@ -38,6 +41,7 @@ export interface WorkspaceViewModel {
   name: string;
   nodeCode: string;
   processesCount: string;
+  readOnly: boolean;
   sharedUsers: string[];
   slaLink: string;
   userId: string;
@@ -56,22 +60,49 @@ export class WorkspacesComponent implements OnInit {
   faPlus = faPlus
   faPlay = faPlay;
   faStop = faStop;
+  faTrashcan = faTrash;
 
+  /**
+   * Array of available workspaces
+   */
   m_aoWorkspacesList: Workspace[] = []
-  activeWorkspace!: WorkspaceViewModel;
-  sharedUsers!: string[];
-  setInterval: any;
 
+  /**
+   * Workspace actually seletected
+   */
+  m_oActiveWorkspace!: WorkspaceViewModel;
+
+  /**
+   * List of the users that shares the workspace
+   */
+  m_asSharedUsers!: string[];
+
+  /**
+   * Reference to the timer function used to update satellilte positions
+   */
+  m_oSetIntervalReference: any;
+
+  /**
+   * Flag to know if we need to show satellites or not
+   */
   m_bShowSatellites: boolean;
-  m_aoSatelliateInputTracks: any[] = [];
+
+  /**
+   * Array of the input tracks for each satellite
+   */
+  m_aoSatelliteInputTracks: any[] = [];
+  /**
+   * Array of the actual position of each satellite
+   */
   m_aoSatellitePositions: any[] = [];
+
   m_oFakePosition: any = null;
   m_oUfoPointer: any;
   m_aoSateliteInputTraks: any[] = [];
 
   m_bLoadingWSFiles: boolean = false;
-  m_bIsVisibleFiles: boolean = false;
-  m_bIsOpenInfo: boolean = true;
+  
+
   m_aoProducts: Array<any> = [];
   m_oWorkspaceViewModel: any;
   m_oSelectedProduct: any;
@@ -107,11 +138,13 @@ export class WorkspacesComponent implements OnInit {
     }
   ]
   m_oActiveSortingOption: any = {}
+
+  m_aoSelectedWorkspaces: Array<Workspace> = [];
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oGlobeService: GlobeService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOpportunitySearchService: OpportunitySearchService,
     private m_oProductService: ProductService,
     private m_oTranslate: TranslateService,
@@ -125,10 +158,9 @@ export class WorkspacesComponent implements OnInit {
     this.getTrackSatellite();
     this.m_bShowSatellites = true;
 
-    this.setInterval = setInterval(() => {
+    this.m_oSetIntervalReference = setInterval(() => {
       this.updateSatellitesPositions();
     }, 15000)
-
   }
 
   ngOnDestroy(): void {
@@ -136,25 +168,31 @@ export class WorkspacesComponent implements OnInit {
     console.log("WorkspaceComponent.ngOnDestroy")
 
     //Destroy Interval after closing: 
-    if (this.setInterval) {
-      clearInterval(this.setInterval);
+    if (this.m_oSetIntervalReference) {
+      clearInterval(this.m_oSetIntervalReference);
     }
 
     this.m_oGlobeService.clearGlobe()
   }
 
+  /**
+   * Get the list of available workspaces
+   */
   fetchWorkspaceInfoList() {
+
     let sMessage: string;
     this.m_oTranslate.get("MSG_MKT_WS_OPEN_ERROR").subscribe(sResponse => {
       sMessage = sResponse
     })
 
     let oUser: User = this.m_oConstantsService.getUser();
+
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oUser) === false) {
+
       this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
         next: oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oAlertDialog.openDialog(4000, sMessage);
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
           } else {
             this.m_aoWorkspacesList = oResponse;
           }
@@ -164,18 +202,29 @@ export class WorkspacesComponent implements OnInit {
     }
   }
 
+  /**
+   * Refresh the list after the delete
+   * @param oWorkspace
+   */
   onDeleteWorkspace(oWorkspace: Workspace) {
     this.fetchWorkspaceInfoList();
   }
 
+  /**
+   * The user clicked on a workspace
+   * @param oWorkspace 
+   */
   onShowWorkspace(oWorkspace: Workspace) {
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
-      this.activeWorkspace = response
-      this.sharedUsers = response.sharedUsers
+      this.m_oActiveWorkspace = response
+      this.m_asSharedUsers = response.sharedUsers
+      this.loadProductList(oWorkspace);
     })
-    this.loadProductList(oWorkspace);
   }
 
+  /**
+   * Refresh the list of the products in the Properties section
+   */
   loadProductList(oWorkspace: Workspace) {
     this.m_bLoadingWSFiles = true;
 
@@ -187,43 +236,25 @@ export class WorkspacesComponent implements OnInit {
       return false;
     }
 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.activeWorkspace) === false) {
-      this.activeWorkspace.workspaceId = oWorkspace.workspaceId;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace) === false) {
+      this.m_oActiveWorkspace.workspaceId = oWorkspace.workspaceId;
       this.deselectWorkspace();
     }
 
-    this.m_bIsVisibleFiles = true;
-    this.m_bIsOpenInfo = false;
     let oWorkspaceId = oWorkspace.workspaceId;
-    this.m_bIsVisibleFiles = true;
-    let sError = this.m_oTranslate.instant("MSG_MKT_WS_OPEN_ERROR");
-
-    this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspaceId).subscribe({
-      next: oResponse => {
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oWorkspaceViewModel = oResponse;
-        }
-      },
-      error: oError => { }
-    });
 
     this.m_oProductService.getProductLightListByWorkspace(oWorkspaceId).subscribe({
       next: oResponse => {
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          for (let i = 0; i < this.m_aoProducts.length; i++) {
-            //this.m_oGlobeService.removeEntity(this.m_aoProducts[i].oRectangle)
-          }
 
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_aoProducts = [];
           for (let iIndex = 0; iIndex < oResponse.length; iIndex++) {
             this.m_aoProducts.push(oResponse[iIndex]);
           }
-          this.m_bIsOpenInfo = true;
-          //this.activeWorkspace = oWorkspace;
         }
 
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts) || this.m_aoProducts.length == 0) {
-          this.m_bIsVisibleFiles = false;
+          FadeoutUtils.verboseLog("WorkspacesComponent.loadProductList No products to show")
         } else {
           //add globe bounding box
           this.createBoundingBoxInGlobe();
@@ -238,7 +269,7 @@ export class WorkspacesComponent implements OnInit {
 
   createBoundingBoxInGlobe() {
     let oRectangle = null;
-    let aArraySplit = [];
+    let aiArraySplit = [];
     let iArraySplitLength = 0;
     let aiInvertedArraySplit = [];
 
@@ -253,19 +284,19 @@ export class WorkspacesComponent implements OnInit {
     // For each product
     for (let iIndexProduct = 0; iIndexProduct < iProductsLength; iIndexProduct++) {
       aiInvertedArraySplit = [];
-      aArraySplit = [];
+      aiArraySplit = [];
       // skip if there isn't the product bounding box
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts[iIndexProduct].bbox) === true) continue;
 
       // Split bbox string
-      aArraySplit = this.m_aoProducts[iIndexProduct].bbox.split(",");
-      iArraySplitLength = aArraySplit.length;
+      aiArraySplit = this.m_aoProducts[iIndexProduct].bbox.split(",");
+      iArraySplitLength = aiArraySplit.length;
 
       if (iArraySplitLength < 10) continue;
 
       let bHasNan = false;
-      for (let iValues = 0; iValues < aArraySplit.length; iValues++) {
-        if (isNaN(aArraySplit[iValues])) {
+      for (let iValues = 0; iValues < aiArraySplit.length; iValues++) {
+        if (isNaN(aiArraySplit[iValues])) {
           bHasNan = true;
           break;
         }
@@ -273,14 +304,24 @@ export class WorkspacesComponent implements OnInit {
 
       if (bHasNan) continue;
 
-      aoTotalArray.push.apply(aoTotalArray, aArraySplit);
+      aoTotalArray.push.apply(aoTotalArray, aiArraySplit);
 
       for (let iIndex = 0; iIndex < iArraySplitLength - 1; iIndex = iIndex + 2) {
-        aiInvertedArraySplit.push(aArraySplit[iIndex + 1]);
-        aiInvertedArraySplit.push(aArraySplit[iIndex]);
+        aiInvertedArraySplit.push(aiArraySplit[iIndex + 1]);
+        aiInvertedArraySplit.push(aiArraySplit[iIndex]);
       }
 
+
+      
+      for (let iIndex = 0; iIndex < aiInvertedArraySplit.length; iIndex = iIndex + 1) {
+        if (isNaN(aiInvertedArraySplit[iIndex])) {
+          bHasNan = true;
+          break;
+        }
+      }
+      
       oRectangle = this.m_oGlobeService.addRectangleOnGlobeParamArray(aiInvertedArraySplit);
+      
       this.m_aoProducts[iIndexProduct].oRectangle = oRectangle;
       this.m_aoProducts[iIndexProduct].aBounds = aiInvertedArraySplit;
     }
@@ -367,21 +408,21 @@ export class WorkspacesComponent implements OnInit {
   }
 
   getTrackSatellite() {
-    let iSat;
+    let iSat = 0;
 
-    this.m_aoSatelliateInputTracks = this.m_oGlobeService.getSatelliteTrackInputList();
+    this.m_aoSatelliteInputTracks = this.m_oGlobeService.getSatelliteTrackInputList();
 
     //Remove all old Entities from the map:
     this.m_oGlobeService.removeAllEntities();
 
-    for (let iSat = 0; iSat < this.m_aoSatelliateInputTracks.length; iSat++) {
-      let oActualSat = this.m_aoSatelliateInputTracks[iSat];
+    for (let iSat = 0; iSat < this.m_aoSatelliteInputTracks.length; iSat++) {
+      let oActualSat = this.m_aoSatelliteInputTracks[iSat];
 
-      this.m_oOpportunitySearchService.getTrackSatellite(this.m_aoSatelliateInputTracks[iSat].name).subscribe(oResponse => {
+      this.m_oOpportunitySearchService.getTrackSatellite(this.m_aoSatelliteInputTracks[iSat].name).subscribe(oResponse => {
         if (oResponse) {
-          for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliateInputTracks.length; iOriginalSat++) {
-            if (this.m_aoSatelliateInputTracks[iOriginalSat].name === oResponse.code) {
-              oActualSat = this.m_aoSatelliateInputTracks[iOriginalSat];
+          for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliteInputTracks.length; iOriginalSat++) {
+            if (this.m_aoSatelliteInputTracks[iOriginalSat].name === oResponse.code) {
+              oActualSat = this.m_aoSatelliteInputTracks[iOriginalSat];
               break;
             }
           }
@@ -406,10 +447,7 @@ export class WorkspacesComponent implements OnInit {
 
               iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
               let aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
-              //aoMoonPosition [0] = 0.0;
-              //aoMoonPosition[1] = 0.0;
               aoMoonPosition[2] = 384400000;
-              //aoMoonPosition[2] = 3844000;
 
               this.m_oGlobeService.drawPointWithImage(aoMoonPosition, "assets/icons/sat_death.svg", "Moon", "-");
 
@@ -425,7 +463,7 @@ export class WorkspacesComponent implements OnInit {
       return false;
     }
 
-    this.m_aoSatelliateInputTracks = this.m_oGlobeService.getSatelliteTrackInputList();
+    this.m_aoSatelliteInputTracks = this.m_oGlobeService.getSatelliteTrackInputList();
 
     this.updatePosition();
 
@@ -434,8 +472,8 @@ export class WorkspacesComponent implements OnInit {
 
   updatePosition() {
     let sSatellites: string = "";
-    for (let iSat = 0; iSat < this.m_aoSatelliateInputTracks.length; iSat++) {
-      sSatellites += this.m_aoSatelliateInputTracks[iSat].name + "-";
+    for (let iSat = 0; iSat < this.m_aoSatelliteInputTracks.length; iSat++) {
+      sSatellites += this.m_aoSatelliteInputTracks[iSat].name + "-";
     }
 
     this.m_oOpportunitySearchService.getUpdatedTrackSatellite(sSatellites).subscribe(
@@ -459,7 +497,7 @@ export class WorkspacesComponent implements OnInit {
   }
 
   getIndexActualSatellitePositions(sCode: string) {
-    for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliateInputTracks.length; iOriginalSat++) {
+    for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliteInputTracks.length; iOriginalSat++) {
       if (this.m_aoSateliteInputTraks[iOriginalSat]) {
         if (this.m_aoSateliteInputTraks[iOriginalSat].name === sCode) {
           return iOriginalSat;
@@ -516,5 +554,52 @@ export class WorkspacesComponent implements OnInit {
       });
     }
 
+  }
+
+  selectAllWorkspaces(oEvent) {
+    if (oEvent.checked === true) {
+      this.m_aoWorkspacesList.forEach(oWorkspace => {
+        oWorkspace['checked'] = true;
+      })
+      this.m_aoSelectedWorkspaces = this.m_aoWorkspacesList;
+    } else if (oEvent.checked === false) {
+      this.m_aoWorkspacesList.forEach(oWorkspace => {
+        oWorkspace['checked'] = false;
+      })
+      this.m_aoSelectedWorkspaces = [];
+    }
+  }
+
+  getWorkspaceSelectionChange(oEvent) {
+    if (oEvent.checked === true) {
+      this.m_aoSelectedWorkspaces.push(oEvent);
+    } else if (oEvent.checked === false) {
+      this.m_aoSelectedWorkspaces = this.m_aoSelectedWorkspaces.filter(oWorkspace => oWorkspace.workspaceId !== oEvent.workspaceId)
+    }
+  }
+
+  deleteMultipleWorkspaces() {
+    let sConfirmMsg = `Are you sure you want to delete ${this.m_aoSelectedWorkspaces.length} workspaces?`;
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
+    bConfirmResult.subscribe(oDialogResult => {
+      if (oDialogResult === true) {
+        this.m_aoSelectedWorkspaces.forEach((oWorkspace, iIndex) => {
+          if(oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
+            this.m_oActiveWorkspace = null;
+          }
+          this.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
+            next: oResponse => {
+              this.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
+              if (iIndex === this.m_aoSelectedWorkspaces.length - 1) {
+                this.fetchWorkspaceInfoList();
+              }
+            },
+            error: oError => {
+              this.m_oNotificationDisplayService.openAlertDialog(`Error in deleting ${oWorkspace.workspaceName}`);
+            }
+          })
+        })
+      }
+    })
   }
 }

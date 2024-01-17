@@ -2,8 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LegendPosition } from '@swimlane/ngx-charts';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 
 
@@ -55,22 +55,13 @@ export class PayloadDialogComponent implements OnInit {
   /**
    * Show yAxis label (title):
    */
-  showYAxisLabel: boolean = true;
+  m_bShowYAxisLabel: boolean = false;
 
   /**
    * Show xAxis label (title):
    */
-  showXAxisLabel: boolean = true;
+  m_bShowXAxisLabel: boolean = false;
 
-  /**
-   * xAxis Label (title):
-   */
-  xAxisLabel: string;
-
-  /**
-   * xAxis label (title): 
-   */
-  yAxisLabel: string;
 
   /**
    * Show Timeline: display a timeline control under the chart. Only available if a the x scale is linear or time
@@ -83,10 +74,10 @@ export class PayloadDialogComponent implements OnInit {
   legendPosition: LegendPosition = LegendPosition.Right
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
+    @Inject(MAT_DIALOG_DATA) public m_oData: any,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<PayloadDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public m_oData: any
+    private m_oNotificationDisplayService: NotificationDisplayService
   ) { }
 
   ngOnInit(): void {
@@ -110,7 +101,7 @@ export class PayloadDialogComponent implements OnInit {
         let sPrettyPrint = JSON.stringify(oParsed, null, 2);
         this.m_sPayloadString = sPrettyPrint;
       } catch (error) {
-        this.m_oAlertDialog.openDialog(4000, "Problem getting Payload String");
+        this.m_oNotificationDisplayService.openAlertDialog( "Problem getting Payload String");
       }
 
     }
@@ -123,6 +114,15 @@ export class PayloadDialogComponent implements OnInit {
       console.log(oPayload.wasdi_dashboard)
       this.m_aoChartsInformation = oPayload.wasdi_dashboard;
       this.m_sActiveTab = 'dashboard';
+      oPayload.wasdi_dashboard.forEach(oChart => {
+        console.log(oChart)
+        if (oChart['x-axis-name'] !== false) {
+          this.m_bShowXAxisLabel = true;
+        }
+        if (oChart['y-axis-name'] !== false) {
+          this.m_bShowYAxisLabel = true;
+        }
+      });
       console.log(this.m_aoChartsInformation);
     } else {
       this.getPayloadString();

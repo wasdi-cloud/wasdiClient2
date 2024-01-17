@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 //Service Imports:
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { MapService } from 'src/app/services/map.service';
@@ -18,6 +17,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 //Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 
 @Component({
@@ -26,7 +26,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   styleUrls: ['./search-orbit.component.css'],
   host: { 'class': 'flex-fill' }
 })
-export class SearchOrbit implements OnInit {
+export class SearchOrbit implements OnInit, OnDestroy {
   //Font Awesome Icons: 
   faSearch = faSearch;
 
@@ -57,10 +57,10 @@ export class SearchOrbit implements OnInit {
   }
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
     private m_oMapService: MapService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOpportunitySearchService: OpportunitySearchService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oProductService: ProductService,
@@ -70,8 +70,13 @@ export class SearchOrbit implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    FadeoutUtils.verboseLog("PlanComponent.ngOnInit")
     this.getSatellitesResources();
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+  }
+  
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("PlanComponent.ngOnDestroy")
   }
 
   /**
@@ -85,11 +90,11 @@ export class SearchOrbit implements OnInit {
         if (oResponse.length > 0) {
           this.m_aoSatelliteResources = this.setDisabledAllOpportunities(oResponse);
         } else {
-          this.m_oAlertDialog.openDialog(4000, sMessage);
+          this.m_oNotificationDisplayService.openAlertDialog( sMessage);
         }
       },
       error: oError => {
-        this.m_oAlertDialog.openDialog(4000, sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog( sMessage);
       }
     });
   }
@@ -100,13 +105,13 @@ export class SearchOrbit implements OnInit {
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON)) {
       sErrorMsg += this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
-      this.m_oAlertDialog.openDialog(4000, sErrorMsg);
+      this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
       return false;
     }
 
     // Dates emitted when satellite resource selected - if none
     if (!this.m_oOrbitSearch.acquisitionStartTime || !this.m_aoSelectedSatelliteNodes) {
-      this.m_oAlertDialog.openDialog(4000, "Please select at least one Satellite Resource");
+      this.m_oNotificationDisplayService.openAlertDialog( "Please select at least one Satellite Resource");
       return false;
     }
 

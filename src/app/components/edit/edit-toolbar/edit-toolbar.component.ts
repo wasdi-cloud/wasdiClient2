@@ -16,6 +16,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/workflows-dialog.component';
 import { Product } from 'src/app/shared/models/product.model';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+
 
 @Component({
   selector: 'app-edit-toolbar',
@@ -37,6 +39,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   @Input() m_oActiveWorkspace: Workspace;
   @Input() m_aoProducts: Product[];
+  @Input() m_bJupyterIsReady: boolean = false;
   @Output() m_sSearchString = new EventEmitter();
 
   m_bNotebookIsReady: boolean = false;
@@ -48,6 +51,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     private m_oConsoleService: ConsoleService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oRabbitStompService: RabbitStompService
   ) { }
 
@@ -59,7 +63,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex); 
+    this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
   }
 
   openWorkspaceInfo(event: MouseEvent) {
@@ -117,7 +121,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   openImportDialog(event: MouseEvent) {
     let oDialog = this.m_oDialog.open(ImportDialogComponent, {
-      height: '40vh',
+      height: '60vh',
       width: '50vw'
     })
   }
@@ -130,20 +134,17 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     } else {
       //If user has subscription and project, prepare notebook:
       this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
+        let sMessage = "WASDI is preparing your notebook."
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
+
           if (oResponse.stringValue.includes("http")) {
             window.open(oResponse.stringValue, '_blank');
+          } else {
+            sMessage = sMessage + "<BR>" + oResponse.stringValue;
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
           }
-        } else {
-          let sMessage = "WASDI is preparing your notebook."
+          }
 
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.stringValue) === false) {
-              sMessage = sMessage + "<BR>" + oResponse.stringValue;
-            }
-          }
-          this.m_bNotebookIsReady = true;
-        }
       });
       return true;
     }
@@ -167,6 +168,8 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   rabbitMessageHook(oRabbitMessage, oController) {
-
+    if (oRabbitMessage.messageResult === "OK") {
+      oController.m_bJupyterIsReady = true;
+    }
   }
 }

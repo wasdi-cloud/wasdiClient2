@@ -3,11 +3,12 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { faDownload, faEdit, faLaptopCode, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { Workflow } from 'src/app/shared/models/workflow.model';
 import { Product } from 'src/app/shared/models/product.model';
 import { FormControl } from '@angular/forms';
 import { EditWorkflowDialogComponent } from './edit-workflow-dialog/edit-workflow-dialog.component';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-workflows-dialog',
@@ -22,7 +23,6 @@ export class WorkflowsDialogComponent implements OnInit {
   faPlus = faPlus;
   faX = faX;
 
-
   m_aoWorkflows: any[];
   m_aoProducts: any[];
   m_asProductNames: string[];
@@ -30,6 +30,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   m_bIsUploadingWorkflow: boolean = false;
   m_bIsLoadingWorkdlow: boolean = false;
+  m_bShowExtension: boolean = false;
 
   m_oSelectedWorkflow: Workflow = {} as Workflow;
   m_oSelectedMultiInputWorkflow: any = null;
@@ -48,12 +49,14 @@ export class WorkflowsDialogComponent implements OnInit {
 
   m_sUserId: string;
   m_sWorkspaceId: string;
-
+  m_sSearchString: string = "";
+  m_bIsReadOnly: boolean = true;
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oMatDialogRef: MatDialogRef<WorkflowsDialogComponent>,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oWorkflowService: WorkflowService
   ) { }
 
@@ -62,6 +65,7 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_sUserId = this.m_oConstantsService.getUserId();
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_aoProducts = this.m_oData.products;
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
   setActiveTab(sTabName: string) {
@@ -98,7 +102,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   openEditWorkflowDialog(oWorkflow?) {
     let oDialog;
-    if (oWorkflow) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkflow) === false) {
       oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
         height: '70vh',
         width: '70vw',
@@ -108,36 +112,37 @@ export class WorkflowsDialogComponent implements OnInit {
         }
       })
     } else {
+      console.log(oWorkflow)
       oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
         height: '70vh',
         width: '70vw',
         data: {
-          editmode: false,
+          editMode: false,
           workflow: {}
         }
       })
     }
-    oDialog.afterClosed(this.getWorkflowsByUser());
+    oDialog.afterClosed().subscribe(oDialogResult => {
+      this.getWorkflowsByUser();
+    });
   }
 
   removeWorkflow(oWorkflow) {
     if (!oWorkflow) {
       return false;
     }
-    let oDialogData = new ConfirmationDialogModel("Confirm Removal", "Are you sure you want to delete " + oWorkflow.name);
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      data: oDialogData
-    });
+    let sConfirmMsg = "Are you sure you want to delete " + oWorkflow.name;
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
 
-    oDialogRef.afterClosed().subscribe(bDialogResult => {
+    bConfirmResult.subscribe(bDialogResult => {
       if (bDialogResult === true) {
         this.m_oWorkflowService.deleteWorkflow(oWorkflow.workflowId).subscribe({
           next: oResponse => {
-            console.log(oResponse);
             this.getWorkflowsByUser();
-
           },
-          error: oError => { }
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog("Error in Removing this Workflow");
+          }
         });
       }
     })
@@ -157,6 +162,10 @@ export class WorkflowsDialogComponent implements OnInit {
    * Execute processing on single product input (Previously: runMultiInputWorkflow)
   */
   runSingleInputWorkflow() {
+    if (this.m_bIsReadOnly === true) {
+      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to execute a workflow in this workspace");
+      return false;
+    }
     // this.addProductInputInNode();  
     let oSnapWorkflowViewModel = this.getObjectExecuteGraph(this.m_oSelectedWorkflow);
     console.log(oSnapWorkflowViewModel);
@@ -174,6 +183,10 @@ export class WorkflowsDialogComponent implements OnInit {
    * Execute processing on multiple product input (Previously: runWorkflowPerProducts)
   */
   runMultiInputWorkflow() {
+    if (this.m_bIsReadOnly === true) {
+      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to execute a workflow in this workspace");
+      return false;
+    }
     let iNumberOfProducts = this.m_aoSelectedProducts.length;
     console.log(this.m_aoSelectedProducts);
     for (let iSelectedProductIndex = 0; iSelectedProductIndex < iNumberOfProducts; iSelectedProductIndex++) {
@@ -187,7 +200,7 @@ export class WorkflowsDialogComponent implements OnInit {
         console.log("Error in executing workflow");
       }
     }
-
+    return true;
   }
 
   getObjectExecuteGraph(oWorkflow: Workflow, asInputFile?: Array<string>) {
@@ -246,6 +259,7 @@ export class WorkflowsDialogComponent implements OnInit {
       asProductNames.push(oProduct.fileName);
     });
     this.m_oSelectedWorkflow.inputFileNames = asProductNames;
+    console.log(this.m_oSelectedWorkflow.inputFileNames);
   }
 
   getEmptyObjectExecuteGraph() {

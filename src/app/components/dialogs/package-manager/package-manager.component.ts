@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 
 //Service Imports:
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { PackageManagerService } from 'src/app/services/api/package-manager.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 
@@ -12,7 +13,7 @@ import { faArrowUp, faFolder, faTrashCan, faX } from '@fortawesome/free-solid-sv
 
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+
 
 @Component({
   selector: 'app-package-manager',
@@ -41,12 +42,13 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
 
   m_iHookIndex: number;
 
-  m_sPackageSearch: string; 
+  m_sPackageSearch: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<PackageManagerComponent>,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oPackageManagerService: PackageManagerService,
     private m_oRabbitStompService: RabbitStompService) { }
 
@@ -111,25 +113,18 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
     console.log(sPackageName);
     let sConfirmationMessage = `Are you sure you want to remove ${sPackageName}?`;
 
-    let oDialogData: ConfirmationDialogModel;
-    oDialogData = new ConfirmationDialogModel("Confirm Removal", sConfirmationMessage);
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: oDialogData
-    });
-
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
-      if (oDialogResult === true) {
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
         this.m_oPackageManagerService.deleteLibrary(sProcessorId, sPackageName).subscribe({
           next: oResponse => {
             this.m_bIsLoading = true;
           },
           error: oError => {
-            console.log("error removing package");
+            this.m_oNotificationDisplayService.openAlertDialog(`Error removing ${sPackageName}`);
           }
         })
-
       }
     })
   }
@@ -155,21 +150,15 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
     }
 
     let sConfirmationMessage = `Are you sure you wish to add ${sPackageInfoName}?`;
-    let oDialogData: ConfirmationDialogModel;
 
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sPackageInfoVersion) === false) {
+
+      let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
+
       sAddCommand = sPackageInfoName + "/" + sPackageInfoVersion;
-      oDialogData = new ConfirmationDialogModel("Confrim Addition", sConfirmationMessage);
 
-      let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-        maxWidth: "400px",
-        data: oDialogData
-      });
-
-      oDialogRef.afterClosed().subscribe(oDialogResult => {
-        this.m_sPackageToAdd = "";
-        if (oDialogResult === true) {
-
+      bConfirmResult.subscribe(bDialogResult => {
+        if (bDialogResult === true) {
           this.m_oPackageManagerService.addLibrary(sProcessorId, sAddCommand).subscribe({
             next: oResponse => {
               this.m_bIsLoading = true;
@@ -178,28 +167,23 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
               console.log("Error uploading your package");
             }
           })
-
         }
-      })
+      });
     } else {
-      oDialogData = new ConfirmationDialogModel("Confirm Addition", sConfirmationMessage); 
+      let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
 
-      let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-        maxWidth: "400px", 
-        data: oDialogData
-      }); 
-
-      oDialogRef.afterClosed().subscribe(oDialogResult => {
-        this.m_sPackageToAdd = "";
-        if(oDialogResult === true) {
+      bConfirmResult.subscribe(bDialogResult => {
+        if (bDialogResult === true) {
           this.m_oPackageManagerService.addLibrary(sProcessorId, sPackageName).subscribe({
             next: oResponse => {
               this.m_bIsLoading = true;
-            }, 
-            error: oError => {}
+            },
+            error: oError => {
+              console.log("Error uploading your package");
+            }
           })
         }
-      })
+      });
     }
   }
 
@@ -209,11 +193,10 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   updateLibraryList(sProcessorId: string) {
     this.m_oPackageManagerService.addLibrary(sProcessorId, null).subscribe({
       next: oResponse => {
-        console.log(oResponse);
         this.m_bIsLoading = true;
       },
       error: oError => {
-        console.log("Error in Refresing Packages.")
+        this.m_oNotificationDisplayService.openAlertDialog("Error in refreshing your packages");
       }
     })
   }
@@ -223,27 +206,22 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
    */
   updatePackage(sProcessorId: string, sPackageName: string, sPackageLatestVersion: string) {
     let sConfirmationMessage = `Are you sure you wish to update ${sPackageName}?`
+    let sErrorMsg = `Error upgrading ${sPackageName}`
 
-    let oDialogData: ConfirmationDialogModel;
-    oDialogData = new ConfirmationDialogModel("Confirm Upgrade", sConfirmationMessage);
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: oDialogData
-    });
-
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
-      if (oDialogResult === true) {
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
         this.m_oPackageManagerService.upgradeLibrary(sProcessorId, sPackageName, sPackageLatestVersion).subscribe({
           next: oResponse => {
             this.m_bIsLoading = true;
           },
           error: oError => {
-            console.log(`Error upgrading ${sPackageName}`);
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
           }
         })
       }
-    })
+    });
   }
 
   /**

@@ -4,7 +4,6 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dial
 
 import { faX } from '@fortawesome/free-solid-svg-icons';
 
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -41,12 +40,11 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<WorkspacesListDialogComponent>,
     private m_oFileBufferService: FileBufferService,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService,
     private m_oWorkflowsService: WorkflowService,
     private m_oWorkspaceService: WorkspaceService
@@ -173,7 +171,7 @@ export class WorkspacesListDialogComponent implements OnInit {
       oController.m_oSelectedProduct.isDisabledToDoDownload = true;
       let sUrl: string = this.m_oSelectedProduct.link;
       let oError = function (data, status) {
-        oController.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
         oController.m_oSelectedProduct.isDisabledToDoDownload = false;
       };
 
@@ -215,14 +213,13 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   downloadProduct(sUrl: string, sFileName: string, sWorkspaceId: string, sBounds: string, oProvider: any, oCallback: any, oError: any) {
     let sMessage: string;
+    let oController = this;
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oCallback) === true) {
       this.m_oTranslate.get('MSG_IMPORTING').subscribe(sResponse => {
         sMessage = sResponse;
       });
       oCallback = function (data, status) {
-        console.log(sMessage)
-        //var oDialog = FadeoutUtils.utilsVexDialogAlertBottomRightCorner(sMessage);
-        //FadeoutUtils.utilsVexCloseDialogAfter("3000", oDialog);
+        oController.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "bottom", "right");
       }
     }
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oError) === true) {
@@ -230,9 +227,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         sMessage = sResponse;
       });
       oError = function (data, status) {
-        console.log(sMessage);
-        //FadeoutUtils.utilsVexDialogAlertTop(sMessage);
-        // oProduct.isDisabledToDoDownload = false;
+        oController.m_oNotificationDisplayService.openAlertDialog( sMessage);
       };
     }
     this.m_oFileBufferService.download(sUrl, sFileName, sWorkspaceId, sBounds, oProvider).subscribe({
@@ -256,7 +251,7 @@ export class WorkspacesListDialogComponent implements OnInit {
       oProduct.isDisabledToDoDownload = true;
       var sUrl = oProduct.link;
       var oError = function (data, status) {
-        oController.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
         oProduct.isDisabledToDoDownload = false;
       };
 
@@ -272,10 +267,10 @@ export class WorkspacesListDialogComponent implements OnInit {
 
       oController.m_oFileBufferService.share(sOriginWorkspaceId, sDestinationWorkspaceId, sProductName).subscribe({
         next: oResponse => {
-          oController.m_oNotificationService.openSnackBar(sMessage, "Close", "right", "bottom")
+          oController.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom")
         },
         error: oError => {
-          oController.m_oAlertDialog.openDialog(4000, sErrorMessage);
+          oController.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
         }
       });
     }

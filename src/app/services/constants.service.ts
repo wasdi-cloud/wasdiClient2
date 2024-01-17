@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 //Import Services:
-import { AlertDialogTopService } from './alert-dialog-top.service';
+import { NotificationDisplayService } from './notification-display.service';
+
 
 //Import enviornment information: 
 import { environment } from 'src/environments/environment';
@@ -13,6 +15,7 @@ import { Workspace } from '../shared/models/workspace.model';
 
 //Import Utilities:
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
+import { Title } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +40,11 @@ export class ConstantsService {
 
   m_oUser: User = {} as User;
 
+  // m_oActiveWorkspace: Workspace = {} as Workspace;
+  m_oActiveWorkspaceSubscription: BehaviorSubject<Workspace> = new BehaviorSubject<Workspace>({} as Workspace);
+
+  _m_oActiveWorkspaceSubscription$ = this.m_oActiveWorkspaceSubscription.asObservable();
+
   m_oActiveWorkspace: Workspace = {} as Workspace;
 
   m_sRabbitUser: string = secrets.RABBIT_USER;
@@ -60,7 +68,8 @@ export class ConstantsService {
   m_sAccountType: string = "";
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTitleService: Title
   ) { }
 
   // isMobile() {
@@ -157,7 +166,12 @@ export class ConstantsService {
 
   /*------------- WORKSPACES --------------*/
   setActiveWorkspace(oWorkspace: Workspace) {
-    this.m_oActiveWorkspace = oWorkspace;
+    this.m_oActiveWorkspace = oWorkspace
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) || !oWorkspace.workspaceId) {
+      this.m_oTitleService.setTitle("WASDI 2.0");
+    }
+    //Set Workspace Subscription for Subscribed Components
+    this.m_oActiveWorkspaceSubscription.next(oWorkspace);
   }
 
   getActiveWorkspace() {
@@ -244,7 +258,7 @@ export class ConstantsService {
   }
 
   /*------------- SUBSCRIPTIONS --------------*/
-  
+
   /**
    * Return array of user's active subscriptions
    * @returns  {aoSubscriptions}
@@ -300,14 +314,14 @@ export class ConstantsService {
     console.log(this.m_oActiveProject);
     if (this.m_aoActiveSubscriptions.length === 0) {
       sMessage = "You do not have an Active Subscription at the moment";
-      this.m_oAlertDialog.openDialog(4000, sMessage);
+      this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       return false;
     }
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProject) === true || this.m_oActiveProject.projectId === null) {
       sMessage = "You do not have an Active Project at the moment. Please select one in the navbar";
       console.log(this.m_oActiveProject);
-      this.m_oAlertDialog.openDialog(4000, sMessage);
+      this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       return false;
     }
 

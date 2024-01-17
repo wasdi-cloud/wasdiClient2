@@ -86,6 +86,7 @@
     "WORKSPACES_OWNER": "Owner",
     "WORKSPACES_NODE_CODE": "Node Code",
     "WORKSPACES_PRODUCTS": "Products",
+    "WORKSPACES_NAME": "Name",
     "WORKSPACES_ID": "Workspace ID",
     "WORKSPACES_PROC_COUNT": "Processes Executed",
     "WORKSPACES_SHARED_WITH": "Shared with",

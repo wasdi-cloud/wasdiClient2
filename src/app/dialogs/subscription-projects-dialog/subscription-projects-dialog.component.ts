@@ -4,9 +4,9 @@ import { faEdit, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProjectService } from 'src/app/services/api/project.service';
 import { ProjectInfoDialogComponent } from '../project-info-dialog/project-info-dialog.component';
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 
 @Component({
   selector: 'app-subscription-projects-dialog',
@@ -25,8 +25,9 @@ export class SubscriptionProjectsDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
     private m_oDialogRef: MatDialogRef<SubscriptionProjectsDialogComponent>,
     private m_oDialog: MatDialog,
-    private m_oNotificationService: NotificationDisplayService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProjectService: ProjectService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oTranslate: TranslateService
   ) { }
 
@@ -42,10 +43,51 @@ export class SubscriptionProjectsDialogComponent implements OnInit {
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_aoProjects = oResponse;
-          console.log(oResponse);
+          this.m_oProcessWorkspaceService.getProcessWorkspaceTimeByProject().subscribe({
+            next: oResponse => {
+              if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === true) {
+                this.m_oNotificationDisplayService.openAlertDialog("Error in getting total processing time for your projects");
+                return false;
+              } else {
+                this.m_aoProjects.forEach(oProject => {
+                  oResponse.forEach(oProjectInfo => {
+                    if (oProject.projectId === oProjectInfo.projectId) {
+                      oProject["totalProcessingTime"] = oProjectInfo.computingTime;
+                    }
+                  })
+                })
+                return true;
+              }
+            },
+            error: oError => {
+              this.m_oNotificationDisplayService.openAlertDialog("Error in getting total processing time for your projects");
+            }
+          })
+          this.m_oProcessWorkspaceService.getProcessWorkspaceTimeByUser().subscribe({
+            next: oResponse => {
+              if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === true) {
+                this.m_oNotificationDisplayService.openAlertDialog("Error in getting individual processing time for your projects");
+                return false;
+              } else {
+                this.m_aoProjects.forEach(oProject => {
+                  oResponse.forEach(oProjectInfo => {
+                    if (oProject.projectId === oProjectInfo.projectId) {
+                      oProject["individualProcessingTime"] = oProjectInfo.computingTime;
+                    }
+                  })
+                })
+                return true;
+              }
+            },
+            error: oError => {
+              this.m_oNotificationDisplayService.openAlertDialog("Error in getting individual processing time for your projects");
+            }
+          })
         }
       },
-      error: oError => { }
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Error in getting your projects");
+      }
     })
   }
 
@@ -67,22 +109,17 @@ export class SubscriptionProjectsDialogComponent implements OnInit {
   }
 
   removeProject(oProject) {
-    let oDialogData: ConfirmationDialogModel;
-    oDialogData = new ConfirmationDialogModel("Confirm Removal", `Are you sure you want to delete ${oProject.name}`);
 
-    let oDialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      data: oDialogData
-    });
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(`Are you sure you want to delete ${oProject.name}`);
 
-    oDialogRef.afterClosed().subscribe(oDialogResult => {
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_oProjectService.deleteProject(oProject.projectId).subscribe({
           next: oResponse => {
             if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.status === 200) {
-              this.m_oNotificationService.openSnackBar("Project Deleted", "Close", "bottom", "right");
+              this.m_oNotificationDisplayService.openSnackBar("Project Deleted", "Close", "bottom", "right");
             } else {
-              this.m_oNotificationService.openSnackBar("Error in Deleting Project", "Close", "bottom", "right");
+              this.m_oNotificationDisplayService.openSnackBar("Error in Deleting Project", "Close", "bottom", "right");
             }
             this.getProjects();
           },
@@ -92,7 +129,7 @@ export class SubscriptionProjectsDialogComponent implements OnInit {
               sErrorMsg = this.m_oTranslate.instant(oError.message);
             }
 
-            this.m_oNotificationService.openSnackBar(sErrorMsg, "Close", "bottom", "right");
+            this.m_oNotificationDisplayService.openSnackBar(sErrorMsg, "Close", "bottom", "right");
           }
         })
       }

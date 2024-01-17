@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Product } from 'src/app/shared/models/product.model';
+import { HttpEventType } from '@angular/common/http';
 
 //Angular Material Imports:
 import { MatDialog } from '@angular/material/dialog';
@@ -19,7 +20,6 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck, faBoxOpen, faSearch, faPlus, faChevronRight, faChevronDown, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 //Component Imports: 
-import { ConfirmationDialogComponent, ConfirmationDialogModel } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ImportDialogComponent } from '../edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
 import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
 
@@ -28,8 +28,10 @@ import * as L from "leaflet";
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Router } from '@angular/router';
 import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
-import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { GlobeService } from 'src/app/services/globe.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
+
 declare let Cesium: any;
 
 @Component({
@@ -38,13 +40,16 @@ declare let Cesium: any;
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent implements OnChanges, OnInit {
-  @Input() m_aoWorkspaceProductsList: Product[];
+  @Input() m_aoWorkspaceProductsList: Product[] = [];
   @Input() m_b2DMapMode: boolean = true;
   @Output() m_oProductArrayOutput = new EventEmitter();
   @Input() map: any;
   @Input() m_sSearchString: string;
   @Output() m_aoVisibleBandsOutput = new EventEmitter();
   @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
+  @Output() m_oDownloadProgress: EventEmitter<any> = new EventEmitter();
+
+  @Input() m_bIsLoadingProducts: boolean = true;
 
   //font awesome icons: 
   faBox = faBoxOpen;
@@ -60,13 +65,15 @@ export class ProductsListComponent implements OnChanges, OnInit {
   faSearch = faSearch;
   faPlus = faPlus;
 
-  m_oActiveBand;
-  m_oActiveWorkspace;
+  m_oActiveWorkspace: any;
   m_oProductsTreeControl: NestedTreeControl<any>
   m_oProductsTreeDataSource: MatTreeNestedDataSource<any>
   m_aoDisplayBands: any[];
   m_oDisplayMap: L.Map | null;
   m_aoVisibleBands: any[] = [];
+  m_aoSelectedProducts: Array<any> = [];
+  m_bIsReadOnly: boolean = true;
+  m_aoProductsLayersIn3DMapArentGeoreferenced: Array<any> = [];
 
   constructor(
     private m_oCatalogService: CatalogService,
@@ -76,38 +83,38 @@ export class ProductsListComponent implements OnChanges, OnInit {
     private m_oGlobeService: GlobeService,
     private m_oMapService: MapService,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oNotificationsQueueService: NotificationsQueueService,
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    private m_oRabbitStompService: RabbitStompService,
+    private m_oTranslate: TranslateService,
     private m_oRouter: Router
-  ) {
-    this.m_oProductsTreeControl = new NestedTreeControl<any>(node => {
-      if (node.bandsGroups) {
-        return node.bandsGroups.bands
-      }
-    });
-    this.m_oProductsTreeDataSource = new MatTreeNestedDataSource();
+  ) { }
+
+  /**
+   * Initializes the Component
+   */
+  ngOnInit(): void { 
+
   }
 
-  ngOnInit(): void {
-    this.m_oRabbitStompService.setMessageCallback(this.receivedRabbitMessage);
-    this.m_oRabbitStompService.setActiveController(this);
-  }
 
   ngOnChanges() {
-    console.log("ProductListComponent.ngOnChanges: call filter products ")
+
+    FadeoutUtils.verboseLog("ProductListComponent.ngOnChanges: call filter products ")
+
     this.filterProducts();
-    console.log("ProductListComponent.ngOnChanges: done filter Products ")
+
+    FadeoutUtils.verboseLog("ProductListComponent.ngOnChanges: done filter Products ")
 
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
   filterProducts() {
 
-    let aoFilteredProducts = this.m_aoWorkspaceProductsList;
-
-    if (!FadeoutUtils.utilsIsObjectNullOrUndefined) {
-      if (!FadeoutUtils.utilsIsStrNullOrEmpty) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoWorkspaceProductsList)) {
+      if (!FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sSearchString)) {
 
         console.log("ProductListComponent.filterProducts: m_sSearchString = " + this.m_sSearchString)
 
@@ -125,40 +132,44 @@ export class ProductsListComponent implements OnChanges, OnInit {
         })
       }
     }
-
-    console.log("ProductListComponent.filterProducts: filter done, assign the data source")
-
-    this.m_oProductsTreeDataSource.data = aoFilteredProducts
-
-    console.log("ProductListComponent.filterProducts: data source assigned")
   }
 
-  trackByIndex(index: number): number {
-    return index;
-  }
-
-  hasChild(_: number, node: Product) {
-    if (!node.bandsGroups) {
-      return !!node
+  /**
+   * Adds or Removes a product to the selected List once the user clicks on the associated checkbox
+   * @param oEvent 
+   * @param oProduct 
+   */
+  addProductToSelectedProducts(oEvent: any, oProduct: Product) {
+    if (oEvent.currentTarget.checked === true) {
+      //Add the Product to the Selected Products Array
+      this.m_aoSelectedProducts.push(oProduct);
     } else {
-      //Add id to child nodes (bands)
-      if (node.bandsGroups.bands) {
-        node.bandsGroups.bands.forEach(band => {
-          band.nodeIndex = _
-        })
-      }
-      return !!node.bandsGroups.bands && node.bandsGroups.bands.length > 0
+      //Remove Product from the Selected Products Array
+      this.m_aoSelectedProducts = this.m_aoSelectedProducts.filter((oProductInput) => {
+        return oProductInput.fileName !== oProduct.fileName
+      });
     }
-  };
-
-  findProductByName(node) {
-    let oFoundProduct = this.m_aoWorkspaceProductsList.find(oProduct => oProduct.fileName === node.fileName);
-    return oFoundProduct
   }
 
-  isProductShown() {
+  /**
+   * Handle the click on the select (de-select) all button
+   * @param oEvent 
+   */
+  selectAllProducts(oEvent) {
+    if (oEvent.currentTarget.checked === true) {
+      this.m_aoWorkspaceProductsList.forEach(oProduct => {
+        oProduct['checked'] = true;
+      })
 
+      this.m_aoSelectedProducts = this.m_aoWorkspaceProductsList;
+    } else {
+      this.m_aoWorkspaceProductsList.forEach(oProduct => {
+        oProduct['checked'] = false;
+      })
+      this.m_aoSelectedProducts = [];
+    }
   }
+
   /**
    * Called from the Product list tree and executes a download of the product
    * @param node 
@@ -167,6 +178,17 @@ export class ProductsListComponent implements OnChanges, OnInit {
     if (node.fileName) {
       this.downloadProductByName(node.fileName)
     }
+  }
+
+  /**
+   * Called from the Product List tree when the user wants to download many products at once.
+   */
+  downloadMultipleProducts() {
+
+    this.m_aoSelectedProducts.forEach(oProduct => {
+      this.downloadProduct(oProduct);
+    })
+
   }
 
   /**
@@ -183,17 +205,35 @@ export class ProductsListComponent implements OnChanges, OnInit {
       sUrl = this.m_oConstantsService.getActiveWorkspace().apiUrl;
     }
 
-    this.m_oCatalogService.newDownloadByName(sFileName, this.m_oActiveWorkspace.workspaceId, sUrl).subscribe(blob => {
-      const a = document.createElement('a');
-      const objectUrl = URL.createObjectURL(blob);
-      a.href = objectUrl;
-      a.download = sFileName;
-      a.click();
-      URL.revokeObjectURL(objectUrl);
-    })
+    this.m_oCatalogService.newDownloadByName(sFileName, this.m_oActiveWorkspace.workspaceId, sUrl).subscribe({
+      next: oResponse => {
+        if (oResponse.type === HttpEventType.DownloadProgress) {
+          this.m_oDownloadProgress.emit({ downloadStatus: "incomplete", productName: sFileName })
+        }
+        if (oResponse.type === HttpEventType.Response) {
+          this.m_oDownloadProgress.emit({ downloadStatus: "complete", productName: sFileName })
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(oResponse.body);
+          a.href = objectUrl;
+          a.download = sFileName;
+          a.click();
+          URL.revokeObjectURL(objectUrl);
+          this.m_oNotificationDisplayService.openSnackBar("Download Complete", "Close", "right", "bottom");
+        }
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Problem in getting Product Download");
+      }
+    });
+
     return true;
   }
 
+  /**
+   * Open the Product Properties Dialog
+   * @param event 
+   * @param node 
+   */
   openProductProperties(event: MouseEvent, node: any) {
     const oDialogRef = this.m_oDialog.open(ProductPropertiesDialogComponent, {
       data: {
@@ -208,6 +248,10 @@ export class ProductsListComponent implements OnChanges, OnInit {
     })
   }
 
+  /**
+   * Open the send to ftp dialog
+   * @param oNode 
+   */
   openSendToFTP(oNode: any) {
     const oDialogRef = this.m_oDialog.open(FTPDialogComponent, {
       data: {
@@ -216,11 +260,12 @@ export class ProductsListComponent implements OnChanges, OnInit {
       height: '75vh',
       width: '60vw'
     });
-    // oDialogRef.afterClosed().subscribe(oDialogResponse => {
-    //   console.log()
-    // })
   }
 
+  /**
+   * Delete Product command: ask for confirmatio and, in case, calls the API to delete a product
+   * @param node 
+   */
   deleteProduct(node: any) {
 
     let bDeleteLayer = true;
@@ -230,19 +275,14 @@ export class ProductsListComponent implements OnChanges, OnInit {
     let oFoundProduct = this.m_aoWorkspaceProductsList.find(oProduct => oProduct.fileName === node.fileName);
     let sMessage = "Are you sure you wish to delete " + oFoundProduct.name;
 
-    let dialogData = new ConfirmationDialogModel("Confirm Deletion", sMessage);
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
 
-    //Open confirmation dialog for Product Removal
-    let dialogRef = this.m_oDialog.open(ConfirmationDialogComponent, {
-      maxWidth: "400px",
-      data: dialogData
-    })
-
-    dialogRef.afterClosed().subscribe(oDialogResult => {
+    bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === false) {
         return false;
-      } else {
-        //Call m_oProductService.deleteProductFromWorkspace()
+      } 
+      else {
+        //Call the API
         this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
           if (oResponse.boolValue) {
             this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
@@ -252,19 +292,59 @@ export class ProductsListComponent implements OnChanges, OnInit {
         });
         return true;
       }
-    })
-
+    });
     //in subscription, 
 
     //if deletion successful, reload product tree
 
     //if deletion unsuccessful show dialog
-
   }
 
+  /**
+   * Delete Multiple products (ask for confirmation before)
+   */
+  deleteMultipleProducts() {
+    let bDeleteLayer = true;
+    let bDeleteFile = true;
+
+    let sMessage = "Are you sure you wish to delete " + this.m_aoSelectedProducts.length + " products?";
+
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
+
+    bConfirmResult.subscribe(oDialogResult => {
+      if (oDialogResult === false) {
+        return;
+      } else {
+        this.m_aoSelectedProducts.forEach(oProduct => {
+          this.m_oProductService.deleteProductFromWorkspace(oProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe({
+            next: oResponse => {
+              if (oResponse.boolValue) {
+                this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
+                this.m_aoSelectedProducts = [];
+                return true;
+              } else {
+                this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
+                return false;
+              }
+            },
+            error: oError => {
+              this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
+              return false;
+            }
+          })
+        })
+      }
+    })
+  }
+
+  /**
+   * Handle the click on a band to add or remove it from the layer list
+   * @param oBand 
+   * @param iIndex 
+   */
   setBandImage(oBand: any, iIndex: number) {
-    this.m_oActiveBand = oBand;
-    if (this.m_aoVisibleBands.indexOf(this.m_oActiveBand) !== -1) {
+
+    if (this.m_aoVisibleBands.indexOf(oBand) !== -1) {
       this.removeBandImage(oBand)
     } else {
       this.openBandImage(oBand, iIndex);
@@ -280,7 +360,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
   openBandImage(oBand: any, iIndex: number) {
     let sFileName = this.m_aoWorkspaceProductsList[iIndex].fileName;
     let bAlreadyPublished = oBand.published;
-    this.m_oActiveBand = oBand;
 
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
       if (!bAlreadyPublished) {
@@ -288,44 +367,45 @@ export class ProductsListComponent implements OnChanges, OnInit {
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
       }
 
-      //   if (this.m_aoVisibleBands.length === 0) {
-
-      //   }
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
-          this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
+          this.receivedPublishBandMessage(oResponse, oBand);
 
-        } else {
+        } 
+        else {
           this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
         }
-        this.m_oActiveBand['productName'] = oResponse.payload.productName
-        this.m_aoVisibleBands.push(this.m_oActiveBand);
+        oBand['productName'] = oResponse.payload.productName
+        this.m_aoVisibleBands.push(oBand);
 
         this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
-        if(this.m_b2DMapMode === true) {
+        if (this.m_b2DMapMode === true) {
 
           this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
         } else {
           this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
         }
-      } else {
-        // var sMessage = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
-        // utilsVexDialogAlertTop(sMessage + oBand.name);
-        // oController.setTreeNodeAsDeselected(oBand.productName + "_" + oBand.name);
-        let sNotificationMsg = "ERROR PUBLISHING BAND";
+      } 
+      else {
+        let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
 
 
       }
       //It is publishing; we will receieve a Rabbit Message
       if (oResponse.messageCode === "WAITFORRABBIT") {
-        console.log("WAITING FOR RABBIT");
+        FadeoutUtils.verboseLog("ProductListComponent.OpenBandImage: WAITING FOR RABBIT");
       }
     })
 
   }
 
+  /**
+   * Removes the band from the internal list of m_aoVisibleBandsOutput that is used to draw the
+   * layers panel
+   * @param oBand 
+   */
   removeBandImageFromVisibleList(oBand) {
     let iVisibleBandCount = 0;
 
@@ -343,26 +423,31 @@ export class ProductsListComponent implements OnChanges, OnInit {
     }
   }
 
+  /**
+   * Removes a Band from the map
+   * @param oBand 
+   * @returns 
+   */
   removeBandImage(oBand) {
+
     if (!oBand) {
-      console.log("Error in removing band image");
+      console.log("ProductsListComponent.Error in removing band image");
       return false;
     }
-    this.m_oActiveBand = null;
+
     let sLayerId = 'wasdi:' + oBand.layerId;
 
-    //if(this.m_b2DMapModeOn) {}
-
     let oMap2D = this.m_oMapService.getMap()
-    oMap2D.eachLayer(layer => {
-      let sMapLayer = layer.options.layers;
-      let sMapLayer2 = "wasdi:" + layer.options.layers;
+
+    oMap2D.eachLayer(oLayer => {
+      let sMapLayer = oLayer.options.layers;
+      let sMapLayer2 = "wasdi:" + oLayer.options.layers;
 
       if (sLayerId && sMapLayer === sLayerId) {
-        oMap2D.removeLayer(layer);
+        oMap2D.removeLayer(oLayer);
       }
       if (sLayerId && sMapLayer2 === sLayerId) {
-        oMap2D.removeLayer(layer);
+        oMap2D.removeLayer(oLayer);
       }
     })
 
@@ -370,70 +455,20 @@ export class ProductsListComponent implements OnChanges, OnInit {
     return true;
   }
 
-  receivedRabbitMessage(oMessage, oController) {
-    // Check if the message is valid
-    if (oMessage == null) return;
-
-    // Check the Result
-    if (oMessage.messageResult == "KO") {
-
-      var sOperation = "null";
-      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.messageCode) === false) sOperation = oMessage.messageCode;
-
-      var sErrorDescription = "";
-
-      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
-      if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
-
-      //  var oDialog = FadeoutUtils.utilsVexDialogAlertTop(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription);
-      //  FadeoutUtils.utilsVexCloseDialogAfter(10000, oDialog);
-
-      console.log(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription)
-
-      if (oMessage.messageCode == "PUBLISHBAND") {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
-            var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
-
-          }
-        }
-      }
-
-      return;
-    }
-
-    // Switch the Code
-    switch (oMessage.messageCode) {
-      case "PUBLISH":
-        oController.receivedPublishMessage(oMessage);
-        break;
-      case "PUBLISHBAND":
-        oController.receivedPublishBandMessage(oMessage);
-        break;
-      case "DOWNLOAD":
-      case "GRAPH":
-      case "INGEST":
-      case "MOSAIC":
-      case "SUBSET":
-      case "MULTISUBSET":
-      case "RASTERGEOMETRICRESAMPLE":
-      case "REGRID":
-        oController.receivedNewProductMessage(oMessage);
-        break;
-      case "DELETE":
-        //oController.getProductListByWorkspace();
-        break;
-    }
-
-    console.log(oMessage);
-
-    // FadeoutUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate);
-  }
-
+  /**
+   * Called when a band can be visualized on the map. 
+   * If a band has already been published, the API directly return this view model.
+   * If not WASDI triggers the publish band operation that will send this rabbit message when received.
+   * 
+   * @param oMessage 
+   * @param oActiveBand 
+   * @returns 
+   */
   receivedPublishBandMessage(oMessage: any, oActiveBand: any) {
     let oPublishedBand = oMessage.payload;
+
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPublishedBand)) {
-      console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
+      console.log("ProductListComponent.receivedPublishBandMessage: Error Published band is empty...");
       return false;
     }
     oActiveBand.bbox = oPublishedBand.boundingBox;
@@ -442,100 +477,63 @@ export class ProductsListComponent implements OnChanges, OnInit {
     oActiveBand.layerId = oPublishedBand.layerId;
     oActiveBand.published = true;
     oActiveBand.showLegend = false;
+    oActiveBand['bVisibleNow'] = true;
 
-    let sColor = "#000";
-    let sGeoserverBBox = oActiveBand.geoserverBoundingBox;
-    this.productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, oActiveBand.bbox, oActiveBand.layerId);
-    //if we are in 2D put it on the map
-    if (this.m_b2DMapMode === true) {
-      this.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
+    if (this.m_b2DMapMode === false) {
+      //if we are in 3D put the layer on the globe
+      this.m_oGlobeService.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
     } else {
-      //If we are in 3D put it on the globe
-      this.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
-
-    }
-    if (typeof oPublishedBand === undefined) {
-      console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
-      return false;
+      //if we are in 2D put it on the map
+      this.m_oMapService.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
     }
 
-    oActiveBand.opacity = 100;
     return true;
   }
 
-  productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, asBbox, sLayerId) {
-    if (this.m_oMapService.isProductGeoreferenced(asBbox, sGeoserverBBox) === false) {
-      let oRectangleBoundingBoxMap: L.Rectangle = this.m_oMapService.addRectangleByGeoserverBoundingBox(sGeoserverBBox, "", this.m_oMapService.getMap());
-
-      if (oRectangleBoundingBoxMap) {
-        oRectangleBoundingBoxMap.options.attribution = "wasdi:" + sLayerId;
-      }
-    }
-  }
-
-  addLayerMap2DByServer(sLayerId, sServer) {
-    if (sLayerId == null) {
-      return false;
-    }
-    if (sServer == null) {
-      sServer = this.m_oConstantsService.getWmsUrlGeoserver();
-    }
-
-    let oMap = this.m_oMapService.getMap();
-
-    let wmsLayer = L.tileLayer.wms(sServer, {
-      layers: sLayerId,
-      format: 'image/png',
-      transparent: true,
-      noWrap: true
-    });
-    wmsLayer.setZIndex(1000);
-    wmsLayer.addTo(oMap);
-    return true;
-
-  }
-
-  addLayerMap3DByServer(sLayerId, sServer) {
-    if (sLayerId == null) return false;
-    if (sServer == null) sServer = this.m_oConstantsService.getWmsUrlGeoserver();
-
-    var oGlobeLayers = this.m_oGlobeService.getGlobeLayers();
-
-    var oWMSOptions = { // wms options
-      transparent: true,
-      format: 'image/png'
-    };
-
-    // WMS get GEOSERVER
-    var oProvider = new Cesium.WebMapServiceImageryProvider({
-      url: sServer,
-      layers: sLayerId,
-      parameters: oWMSOptions
-
-    });
-
-    oGlobeLayers.addImageryProvider(oProvider);
-
-    return true
-  }
-
+  /**
+   * Get Product Metadata calling the API
+   * 
+   * @param sFileName 
+   */
   readMetadata(sFileName: string) {
     this.m_oProductService.getProductMetadata(sFileName, this.m_oActiveWorkspace.workspaceId);
   }
 
+  /**
+   * Trigger the Product Info Change
+   */
   emitProductInfoChange() {
     this.m_oProductInfoChange.emit(true);
   }
 
   /********** Handlers for no Products **********/
+
+  /**
+   * Moves the user in the Search Section
+   */
   navigateToSearchPage() {
     this.m_oRouter.navigateByUrl('/search');
   }
 
+  /**
+   * Open the Import Dialog
+   */
   openImportDialog() {
     let oDialog = this.m_oDialog.open(ImportDialogComponent, {
       height: '40vh',
       width: '50vw'
     })
+  }
+
+  /**
+   * Track By Function needed by angular to determine the uniquess of an item in the list
+   * This is used for the product list
+   * 
+   * @param iIndex 
+   * @param oItem 
+   * @returns 
+   */
+  trackByItem(iIndex: number, oItem: any) {
+    return oItem.fileName
   }
 }
