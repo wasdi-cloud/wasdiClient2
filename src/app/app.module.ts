@@ -152,6 +152,7 @@ import { SearchOrbitResultsComponent } from './components/plan/search-orbit-resu
 import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MarketSearchComponent } from './components/header/market-search/market-search.component';
+import { SearchBtnGrpComponent } from './shared/shared-components/search-btn-grp/search-btn-grp.component';
 
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
@@ -248,7 +249,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SearchOrbitResultsComponent,
     FTPDialogComponent,
     NavbarComponent,
-    MarketSearchComponent
+    MarketSearchComponent,
+    SearchBtnGrpComponent
   ],
   imports: [
     AppRoutingModule,
