@@ -45,6 +45,16 @@ Thumbs.db
 environment.ts
 environment.stage.ts
 environment.prod.ts
+keycloak.config.ts
 
 # Secrets File
 secrets.ts
+
+#sonarqube
+sonar-project.properties
+
+#postgres data 
+/postgres/data
+
+#mongodb data
+/mongo/data
