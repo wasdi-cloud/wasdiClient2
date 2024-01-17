@@ -38,7 +38,6 @@ export class NavLayersComponent implements OnInit, OnChanges {
 
 
   m_sActiveTab: string = 'nav';
-  m_oActiveBand: any;
   m_iOpacity: string;
 
   mapOptions: any;
@@ -156,7 +155,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
       console.log("NavLayersComponent.removeBandImage: Error in removing band image");
       return false;
     }
-    this.m_oActiveBand = null;
+    
     let sLayerId = 'wasdi:' + oBand.layerId;
 
     if (this.m_b2DMapModeOn) {

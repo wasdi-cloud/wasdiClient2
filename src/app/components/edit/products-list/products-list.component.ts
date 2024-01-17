@@ -28,10 +28,8 @@ import * as L from "leaflet";
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Router } from '@angular/router';
 import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
-import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { TranslateService } from '@ngx-translate/core';
-import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 
 declare let Cesium: any;
@@ -67,8 +65,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   faSearch = faSearch;
   faPlus = faPlus;
 
-  m_oActiveBand;
-  m_oActiveWorkspace;
+  m_oActiveWorkspace: any;
   m_oProductsTreeControl: NestedTreeControl<any>
   m_oProductsTreeDataSource: MatTreeNestedDataSource<any>
   m_aoDisplayBands: any[];
@@ -93,11 +90,21 @@ export class ProductsListComponent implements OnChanges, OnInit {
     private m_oRouter: Router
   ) { }
 
-  ngOnInit(): void { }
+  /**
+   * Initializes the Component
+   */
+  ngOnInit(): void { 
+
+  }
+
+
   ngOnChanges() {
-    console.log("ProductListComponent.ngOnChanges: call filter products ")
+
+    FadeoutUtils.verboseLog("ProductListComponent.ngOnChanges: call filter products ")
+
     this.filterProducts();
-    console.log("ProductListComponent.ngOnChanges: done filter Products ")
+
+    FadeoutUtils.verboseLog("ProductListComponent.ngOnChanges: done filter Products ")
 
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
 
@@ -294,7 +301,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   }
 
   /**
-   * Delete Multiple products
+   * Delete Multiple products (ask for confirmation before)
    */
   deleteMultipleProducts() {
     let bDeleteLayer = true;
@@ -330,10 +337,14 @@ export class ProductsListComponent implements OnChanges, OnInit {
     })
   }
 
-
+  /**
+   * Handle the click on a band to add or remove it from the layer list
+   * @param oBand 
+   * @param iIndex 
+   */
   setBandImage(oBand: any, iIndex: number) {
-    this.m_oActiveBand = oBand;
-    if (this.m_aoVisibleBands.indexOf(this.m_oActiveBand) !== -1) {
+
+    if (this.m_aoVisibleBands.indexOf(oBand) !== -1) {
       this.removeBandImage(oBand)
     } else {
       this.openBandImage(oBand, iIndex);
@@ -349,7 +360,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
   openBandImage(oBand: any, iIndex: number) {
     let sFileName = this.m_aoWorkspaceProductsList[iIndex].fileName;
     let bAlreadyPublished = oBand.published;
-    this.m_oActiveBand = oBand;
 
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
       if (!bAlreadyPublished) {
@@ -360,13 +370,14 @@ export class ProductsListComponent implements OnChanges, OnInit {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
-          this.receivedPublishBandMessage(oResponse, this.m_oActiveBand);
+          this.receivedPublishBandMessage(oResponse, oBand);
 
-        } else {
+        } 
+        else {
           this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
         }
-        this.m_oActiveBand['productName'] = oResponse.payload.productName
-        this.m_aoVisibleBands.push(this.m_oActiveBand);
+        oBand['productName'] = oResponse.payload.productName
+        this.m_aoVisibleBands.push(oBand);
 
         this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
         if (this.m_b2DMapMode === true) {
@@ -375,9 +386,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
         } else {
           this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
         }
-      } else {
-        // utilsVexDialogAlertTop(sMessage + oBand.name);
-        // oController.setTreeNodeAsDeselected(oBand.productName + "_" + oBand.name);
+      } 
+      else {
         let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
 
@@ -385,12 +395,17 @@ export class ProductsListComponent implements OnChanges, OnInit {
       }
       //It is publishing; we will receieve a Rabbit Message
       if (oResponse.messageCode === "WAITFORRABBIT") {
-        console.log("WAITING FOR RABBIT");
+        FadeoutUtils.verboseLog("ProductListComponent.OpenBandImage: WAITING FOR RABBIT");
       }
     })
 
   }
 
+  /**
+   * Removes the band from the internal list of m_aoVisibleBandsOutput that is used to draw the
+   * layers panel
+   * @param oBand 
+   */
   removeBandImageFromVisibleList(oBand) {
     let iVisibleBandCount = 0;
 
@@ -408,26 +423,31 @@ export class ProductsListComponent implements OnChanges, OnInit {
     }
   }
 
+  /**
+   * Removes a Band from the map
+   * @param oBand 
+   * @returns 
+   */
   removeBandImage(oBand) {
+
     if (!oBand) {
-      console.log("Error in removing band image");
+      console.log("ProductsListComponent.Error in removing band image");
       return false;
     }
-    this.m_oActiveBand = null;
+
     let sLayerId = 'wasdi:' + oBand.layerId;
 
-    //if(this.m_b2DMapModeOn) {}
-
     let oMap2D = this.m_oMapService.getMap()
-    oMap2D.eachLayer(layer => {
-      let sMapLayer = layer.options.layers;
-      let sMapLayer2 = "wasdi:" + layer.options.layers;
+
+    oMap2D.eachLayer(oLayer => {
+      let sMapLayer = oLayer.options.layers;
+      let sMapLayer2 = "wasdi:" + oLayer.options.layers;
 
       if (sLayerId && sMapLayer === sLayerId) {
-        oMap2D.removeLayer(layer);
+        oMap2D.removeLayer(oLayer);
       }
       if (sLayerId && sMapLayer2 === sLayerId) {
-        oMap2D.removeLayer(layer);
+        oMap2D.removeLayer(oLayer);
       }
     })
 
@@ -435,69 +455,20 @@ export class ProductsListComponent implements OnChanges, OnInit {
     return true;
   }
 
-  receivedRabbitMessage(oMessage, oController) {
-    // Check if the message is valid
-    if (oMessage == null) return;
-
-    // Check the Result
-    if (oMessage.messageResult == "KO") {
-
-      var sOperation = "null";
-      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.messageCode) === false) sOperation = oMessage.messageCode;
-
-      var sErrorDescription = "";
-
-      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
-      if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
-
-      //  var oDialog = FadeoutUtils.utilsVexDialogAlertTop(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription);
-      //  FadeoutUtils.utilsVexCloseDialogAfter(10000, oDialog);
-
-      console.log(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription)
-
-      if (oMessage.messageCode == "PUBLISHBAND") {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
-            var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
-
-          }
-        }
-      }
-
-      return;
-    }
-
-    // Switch the Code
-    switch (oMessage.messageCode) {
-      case "PUBLISH":
-        oController.receivedPublishMessage(oMessage);
-        break;
-      case "PUBLISHBAND":
-        oController.receivedPublishBandMessage(oMessage);
-        break;
-      case "DOWNLOAD":
-      case "GRAPH":
-      case "INGEST":
-      case "MOSAIC":
-      case "SUBSET":
-      case "MULTISUBSET":
-      case "RASTERGEOMETRICRESAMPLE":
-      case "REGRID":
-        oController.receivedNewProductMessage(oMessage);
-        break;
-      case "DELETE":
-        oController.getProductListByWorkspace();
-        break;
-    }
-
-    WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate, oController);
-  }
-
+  /**
+   * Called when a band can be visualized on the map. 
+   * If a band has already been published, the API directly return this view model.
+   * If not WASDI triggers the publish band operation that will send this rabbit message when received.
+   * 
+   * @param oMessage 
+   * @param oActiveBand 
+   * @returns 
+   */
   receivedPublishBandMessage(oMessage: any, oActiveBand: any) {
     let oPublishedBand = oMessage.payload;
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPublishedBand)) {
-      console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
+      console.log("ProductListComponent.receivedPublishBandMessage: Error Published band is empty...");
       return false;
     }
     oActiveBand.bbox = oPublishedBand.boundingBox;
@@ -528,14 +499,20 @@ export class ProductsListComponent implements OnChanges, OnInit {
       this.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
     }
     if (typeof oPublishedBand === undefined) {
-      console.log("EditorController.receivedPublishBandMessage: Error Published band is empty...");
+      console.log("ProductListComponent.receivedPublishBandMessage: Error Published band is empty...");
       return false;
     }
 
     return true;
   }
 
-  addLayerMap2DByServer(sLayerId, sServer) {
+  /**
+   * Adds a Layer to the 2D Map 
+   * @param sLayerId 
+   * @param sServer 
+   * @returns 
+   */
+  addLayerMap2DByServer(sLayerId: string, sServer: string) {
     if (sLayerId == null) {
       return false;
     }
@@ -545,16 +522,15 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     let oMap = this.m_oMapService.getMap();
 
-    let wmsLayer = L.tileLayer.wms(sServer, {
+    let oWmsLayer = L.tileLayer.wms(sServer, {
       layers: sLayerId,
       format: 'image/png',
       transparent: true,
       noWrap: true
     });
-    wmsLayer.setZIndex(1000);
-    wmsLayer.addTo(oMap);
+    oWmsLayer.setZIndex(1000);
+    oWmsLayer.addTo(oMap);
     return true;
-
   }
 
   addLayerMap3DByServer(sLayerId, sServer) {
