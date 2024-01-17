@@ -11,11 +11,11 @@
             </div>
             <div style="height: 50%">
                 <app-nav-layers [m_aoVisibleBands]="m_aoVisibleBands" [m_aoVisibleBands]="m_aoVisibleBands"
-                    [m_aoProducts]="m_aoProducts" [m_b2DMapModeOn]="m_b2DMapModeOn"></app-nav-layers>
+                    [m_aoProducts]="m_aoProducts" [b2DMapModeOn]="m_b2DMapModeOn"></app-nav-layers>
             </div>
         </div>
         <div style="height: 75vh; width: 100%">
-            <app-edit-map [m_aoProducts]="m_aoProducts" [m_aoVisibleBands]="m_aoVisibleBands"
+            <app-edit-map [aoProducts]="m_aoProducts" [m_aoVisibleBands]="m_aoVisibleBands" [bIsLoadingProducts]="m_bIsLoadingProducts"
                 (m_b2DMapModeOutput)="getMapMode($event)"></app-edit-map>
         </div>
     </div>

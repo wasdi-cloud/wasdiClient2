@@ -39,9 +39,9 @@
                 </button>
             </div>
         </div>
-        <ul *ngIf="(m_aoWorkspaceProductsList.length !== 0) && !m_bIsLoadingProducts"
+        <ul *ngIf="(m_aoFilteredProducts.length !== 0) && !m_bIsLoadingProducts"
             class="list-group list-group-flush">
-            <li *ngFor="let oProduct of m_aoWorkspaceProductsList; trackBy: trackByItem"
+            <li *ngFor="let oProduct of m_aoFilteredProducts; trackBy: trackByItem"
                 class="list-group-item p-2 d-flex flex-column" style="cursor: pointer;">
 
                 <input class="form-check-input me-1" type="checkbox" value="{{oProduct}}"

@@ -40,15 +40,39 @@ declare let Cesium: any;
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent implements OnChanges, OnInit {
-  @Input() m_aoWorkspaceProductsList: Product[] = [];
-  @Input() m_b2DMapMode: boolean = true;
-  @Output() m_oProductArrayOutput = new EventEmitter();
-  @Input() map: any;
-  @Input() m_sSearchString: string;
-  @Output() m_aoVisibleBandsOutput = new EventEmitter();
-  @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
-  @Output() m_oDownloadProgress: EventEmitter<any> = new EventEmitter();
 
+  /**
+   * List of products in the workspace, received from the API
+   */
+  @Input() m_aoWorkspaceProductsList: Product[] = [];
+
+  /**
+   * Flag to know if we are in 2D or 3D Mode: used to zoom on a layer after publish band
+   */
+  @Input() m_b2DMapMode: boolean = true;
+  /**
+   * Event to notify that the list of products changed (ie deleted a product?)
+   */
+  @Output() m_oProductArrayOutput = new EventEmitter();
+  /**
+   * Search String filter
+   */
+  @Input() m_sSearchString: string;
+  /**
+   * Event to notify the change of Visible Layers
+   */
+  @Output() m_aoVisibleBandsOutput = new EventEmitter();
+  /**
+   * Event to notify that the properties of a product are changed
+   */
+  @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
+  /**
+   * Event to notify about on going downloads
+   */
+  @Output() m_oDownloadProgress: EventEmitter<any> = new EventEmitter();
+  /**
+   * Flag to know if the products are still loading or not
+   */
   @Input() m_bIsLoadingProducts: boolean = true;
 
   //font awesome icons: 
@@ -65,15 +89,26 @@ export class ProductsListComponent implements OnChanges, OnInit {
   faSearch = faSearch;
   faPlus = faPlus;
 
+  /**
+   * Array of (potentially) filtered products to show
+   */
+  m_aoFilteredProducts: any[] = [];
+  /**
+   * Active Workspace, used mainly as argument to different API services
+   */
   m_oActiveWorkspace: any;
-  m_oProductsTreeControl: NestedTreeControl<any>
-  m_oProductsTreeDataSource: MatTreeNestedDataSource<any>
-  m_aoDisplayBands: any[];
-  m_oDisplayMap: L.Map | null;
+  /**
+   * List of the visible layers
+   */
   m_aoVisibleBands: any[] = [];
+  /**
+   * List of selected Products
+   */
   m_aoSelectedProducts: Array<any> = [];
+  /**
+   * Flag to know if the Workspace is in read only mode or not
+   */
   m_bIsReadOnly: boolean = true;
-  m_aoProductsLayersIn3DMapArentGeoreferenced: Array<any> = [];
 
   constructor(
     private m_oCatalogService: CatalogService,
@@ -99,15 +134,20 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
 
   ngOnChanges() {
-
-    FadeoutUtils.verboseLog("ProductListComponent.ngOnChanges: call filter products ")
-
-    this.filterProducts();
-
-    FadeoutUtils.verboseLog("ProductListComponent.ngOnChanges: done filter Products ")
+    // If we have products try to filter
+    if (this.m_aoWorkspaceProductsList != null) {
+      if (this.m_aoWorkspaceProductsList.length>0) {
+        this.filterProducts();
+      }
+      else {
+        this.m_aoFilteredProducts = [];
+      }
+    }
+    else {
+      this.m_aoFilteredProducts = [];
+    }
 
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
@@ -116,21 +156,29 @@ export class ProductsListComponent implements OnChanges, OnInit {
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoWorkspaceProductsList)) {
       if (!FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sSearchString)) {
 
-        console.log("ProductListComponent.filterProducts: m_sSearchString = " + this.m_sSearchString)
+        FadeoutUtils.verboseLog("ProductList.ngOnChanges: filtering products");
 
-        let aoFilteredProducts = [];
+        let aoFiltered = [];
 
         this.m_aoWorkspaceProductsList.forEach(oProduct => {
           if (oProduct.fileName.indexOf(this.m_sSearchString) !== -1 || oProduct.name.indexOf(this.m_sSearchString) !== -1) {
-            aoFilteredProducts.push(oProduct)
+            aoFiltered.push(oProduct)
           }
-          if (oProduct.productFriendlyName) {
+          else if (oProduct.productFriendlyName) {
             if (oProduct.productFriendlyName.indexOf(this.m_sSearchString) !== -1) {
-              aoFilteredProducts.push(oProduct)
+              aoFiltered.push(oProduct)
             }
           }
-        })
+        });
+
+        this.m_aoFilteredProducts = aoFiltered;
       }
+      else{
+        this.m_aoFilteredProducts = this.m_aoWorkspaceProductsList;
+      }
+    }
+    else {
+      this.m_aoFilteredProducts = []
     }
   }
 

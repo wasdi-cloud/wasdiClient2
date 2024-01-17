@@ -53,6 +53,7 @@ export interface WorkspaceViewModel {
   templateUrl: './workspaces.component.html',
   styleUrls: ['./workspaces.component.css']
 })
+
 export class WorkspacesComponent implements OnInit {
   //Icons: 
   faArrowsUpDown = faArrowsUpDown;
@@ -99,14 +100,31 @@ export class WorkspacesComponent implements OnInit {
   m_oUfoPointer: any;
   m_aoSateliteInputTraks: any[] = [];
 
-  m_bLoadingWSFiles: boolean = false;
-  
+  m_bLoadingWSFiles: boolean = false;  
 
+  /**
+   * List of the products in the selected workspace
+   */
   m_aoProducts: Array<any> = [];
+
+  /**
+   * View Model of the selected workspace
+   */
   m_oWorkspaceViewModel: any;
+
+  /**
+   * If a workspace is selected, if a product is selected, is hooked here
+   */
   m_oSelectedProduct: any;
 
+  /**
+   * Filter to the workspace list
+   */
   m_sWorkspaceSearchInput: string = '';
+
+  /**
+   * Available sorting options
+   */
   m_aoSortingOptions = [
     {
       title: "Newest",
@@ -136,7 +154,17 @@ export class WorkspacesComponent implements OnInit {
       direction: "asc"
     }
   ]
+
+  /**
+   * Actual Sorting Option
+   */
   m_oActiveSortingOption: any = {}
+
+  /**
+   * Flag to know if the component has been destroyed.
+   * It is used in case we receive "old" callbacks after the page changed
+   */
+  m_bDestroyCalled = false;
 
   m_aoSelectedWorkspaces: Array<Workspace> = [];
   constructor(
@@ -152,6 +180,7 @@ export class WorkspacesComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("WorkspaceComponent.ngOnInit")
+    this.m_bDestroyCalled = false;
     this.fetchWorkspaceInfoList();
     this.m_oGlobeService.initRotateGlobe('CesiumContainer3');
     this.getTrackSatellite();
@@ -165,6 +194,7 @@ export class WorkspacesComponent implements OnInit {
   ngOnDestroy(): void {
 
     console.log("WorkspaceComponent.ngOnDestroy")
+    this.m_bDestroyCalled = true;
 
     //Destroy Interval after closing: 
     if (this.m_oSetIntervalReference) {
@@ -214,6 +244,9 @@ export class WorkspacesComponent implements OnInit {
    * @param oWorkspace 
    */
   onShowWorkspace(oWorkspace: Workspace) {
+
+    this.m_oGlobeService.removeAllEntities();
+
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
       this.m_oActiveWorkspace = response
       this.m_asSharedUsers = response.sharedUsers
@@ -245,6 +278,8 @@ export class WorkspacesComponent implements OnInit {
     this.m_oProductService.getProductLightListByWorkspace(oWorkspaceId).subscribe({
       next: oResponse => {
 
+        if (this.m_bDestroyCalled) return;
+
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_aoProducts = [];
           for (let iIndex = 0; iIndex < oResponse.length; iIndex++) {
@@ -256,96 +291,13 @@ export class WorkspacesComponent implements OnInit {
           FadeoutUtils.verboseLog("WorkspacesComponent.loadProductList No products to show")
         } else {
           //add globe bounding box
-          this.createBoundingBoxInGlobe();
+          this.m_oGlobeService.addAllWorkspaceRectanglesOnGlobe(this.m_aoProducts);
         }
 
         this.m_bLoadingWSFiles = false;
       },
       error: oError => { }
     });
-    return true;
-  }
-
-  createBoundingBoxInGlobe() {
-    let oRectangle = null;
-    let aiArraySplit = [];
-    let iArraySplitLength = 0;
-    let aiInvertedArraySplit = [];
-
-    let aoTotalArray = [];
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts) === true) {
-      return false;
-    }
-
-    let iProductsLength = this.m_aoProducts.length;
-
-    // For each product
-    for (let iIndexProduct = 0; iIndexProduct < iProductsLength; iIndexProduct++) {
-      aiInvertedArraySplit = [];
-      aiArraySplit = [];
-      // skip if there isn't the product bounding box
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts[iIndexProduct].bbox) === true) continue;
-
-      // Split bbox string
-      aiArraySplit = this.m_aoProducts[iIndexProduct].bbox.split(",");
-      iArraySplitLength = aiArraySplit.length;
-
-      if (iArraySplitLength < 10) continue;
-
-      let bHasNan = false;
-      for (let iValues = 0; iValues < aiArraySplit.length; iValues++) {
-        if (isNaN(aiArraySplit[iValues])) {
-          bHasNan = true;
-          break;
-        }
-      }
-
-      if (bHasNan) continue;
-
-      aoTotalArray.push.apply(aoTotalArray, aiArraySplit);
-
-      for (let iIndex = 0; iIndex < iArraySplitLength - 1; iIndex = iIndex + 2) {
-        aiInvertedArraySplit.push(aiArraySplit[iIndex + 1]);
-        aiInvertedArraySplit.push(aiArraySplit[iIndex]);
-      }
-
-
-      
-      for (let iIndex = 0; iIndex < aiInvertedArraySplit.length; iIndex = iIndex + 1) {
-        if (isNaN(aiInvertedArraySplit[iIndex])) {
-          bHasNan = true;
-          break;
-        }
-      }
-      
-      oRectangle = this.m_oGlobeService.addRectangleOnGlobeParamArray(aiInvertedArraySplit);
-      
-      this.m_aoProducts[iIndexProduct].oRectangle = oRectangle;
-      this.m_aoProducts[iIndexProduct].aBounds = aiInvertedArraySplit;
-    }
-
-
-    let aoBounds = [];
-    for (let iIndex = 0; iIndex < aoTotalArray.length - 1; iIndex = iIndex + 2) {
-      aoBounds.push(new Cesium.Cartographic.fromDegrees(aoTotalArray[iIndex + 1], aoTotalArray[iIndex]));
-    }
-
-    let oWSRectangle = Cesium.Rectangle.fromCartographicArray(aoBounds);
-    let oWSCenter = Cesium.Rectangle.center(oWSRectangle);
-
-    //oGlobe.camera.setView({
-    this.m_oGlobeService.getGlobe().camera.flyTo({
-      destination: Cesium.Cartesian3.fromRadians(oWSCenter.longitude, oWSCenter.latitude, this.m_oGlobeService.getWorkspaceZoom()),
-      orientation: {
-        heading: 0.0,
-        pitch: -Cesium.Math.PI_OVER_TWO,
-        roll: 0.0
-      }
-    });
-
-    this.m_oGlobeService.stopRotationGlobe();
-
     return true;
   }
 

@@ -30,23 +30,38 @@ export class NavLayersComponent implements OnInit, OnChanges {
 
   //Set opacity to 100% by default
   m_iOpacityVal = 100;
-
-  @Input() m_b2DMapModeOn: boolean = true;
+  
+  /**
+   * Linked list of the visible bands
+   */
   @Input() m_aoVisibleBands: Array<any> = []
+  /**
+   * List of the products in the workspace
+   */
   @Input() m_aoProducts: Array<any> = [];
+  /**
+   * Event to notify that the list of visible bands is changed
+   */
   @Output() m_aoVisibleBandsChange = new EventEmitter();
 
-
+  /**
+   * Actually active tab
+   */
   m_sActiveTab: string = 'nav';
   m_iOpacity: string;
 
-  mapOptions: any;
-  m_oNavMap: any;
-  m_oNavGlobe: any;
-  layersControl: any;
-  layersControlOptions: any = { position: 'bottomleft' };
+  /**
+   * 2D/3D Flag: is a property linked the flag in edit component
+   */
+  private m_b2DMapModeOn: boolean = true;
 
-  oController = this;
+  public get b2DMapModeOn(): boolean {
+    return this.m_b2DMapModeOn;
+  }
+
+  @Input() public set b2DMapModeOn(bValue: boolean) {
+    this.m_b2DMapModeOn = bValue;
+  } 
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -55,48 +70,14 @@ export class NavLayersComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    console.log("NavLayersComponent.ngOnInit")
-    this.initMaps();
+    
   }
-
 
   ngOnChanges(): void {
-    console.log("NavLayersComponent.ngOnChanges")
     //Only set active tab to layers if it is the FIRST band published
     if (this.m_aoVisibleBands !== undefined && this.m_aoVisibleBands.length === 1) {
+      console.log("NavLayersComponent.ngOnChanges: swithc to layers tab")
       this.setActiveTab('layers');
-    }
-  }
-
-  /**
-   * Initializes the 2D and 3D maps 
-   */
-  initMaps() {
-    // The main map is 2D or 3D?
-    if (this.m_b2DMapModeOn === true && this.m_oNavGlobe === undefined) {
-      // The big map is 2D: we need to show here the little navigation globe
-      // clear the old globe (if present)
-      this.m_oGlobeService.clearGlobe();
-
-      // And create it in the small navigation tab
-      console.log("NavLayersComponent.initMaps: call init Globe")
-      this.m_oGlobeService.initGlobe('cesiumContainer2');
-
-      //Add the Products to the globe on load: 
-      this.m_oGlobeService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts);
-      this.m_oGlobeService.flyToWorkspaceBoundingBox(this.m_aoProducts);
-    }
-    else {
-      // The big map is 3d: here we need to show only the 2d map
-      this.m_oMapService.clearMap();
-      this.m_oMapService.initWasdiMap('navMap');
-
-      //Set timeout with Arrow function to preserve `this` context within `setTimeout`
-      setTimeout(() => {
-        this.m_oMapService.getMap().invalidateSize();
-        this.m_oMapService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts, '');
-        this.m_oMapService.flyToWorkspaceBoundingBox(this.m_aoProducts);
-      }, 500)
     }
   }
 
@@ -155,7 +136,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
       console.log("NavLayersComponent.removeBandImage: Error in removing band image");
       return false;
     }
-    
+
     let sLayerId = 'wasdi:' + oBand.layerId;
 
     if (this.m_b2DMapModeOn) {

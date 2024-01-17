@@ -19,7 +19,6 @@ import { Product } from 'src/app/shared/models/product.model';
 
 //Utilities Imports: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 
 @Component({
@@ -92,7 +91,6 @@ export class EditComponent implements OnInit, OnDestroy {
    * Actual User
    */
   m_oUser = this.m_oConstantsService.getUser();
-
   
   /**
    * default sort by value
@@ -130,8 +128,6 @@ export class EditComponent implements OnInit, OnDestroy {
   m_bShowProductDownload: boolean = false;
 
   ngOnInit(): void {
-    FadeoutUtils.verboseLog("EditComponent.ngOnInit")
-
     //What to do if workspace undefined: 
     if (!this.m_oActiveWorkspace) {
 
@@ -140,7 +136,7 @@ export class EditComponent implements OnInit, OnDestroy {
         //Assign and set new workspace id
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
 
-        console.log("edit.component.ngOnInit: call open Workspace ")
+        FadeoutUtils.verboseLog("edit.component.ngOnInit: call open Workspace ")
 
         this.openWorkspace(this.m_sWorkspaceId);
       }
@@ -150,6 +146,8 @@ export class EditComponent implements OnInit, OnDestroy {
       }
     } 
     else {
+      FadeoutUtils.verboseLog("EditComponent.ngOnInit: using active workspace")
+
       //If workspace is defined => Load Processes
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
       this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)

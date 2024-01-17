@@ -471,15 +471,11 @@ export class MapService {
       //mouse over event change rectangle style
       oRectangle.on("mouseover", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
         oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
-        console.log("on-mouse-over-rectangle")
-        // $rootScope.$broadcast('on-mouse-over-rectangle', { rectangle: oRectangle });
         oRectangle.getBounds();
       });
       //mouse out event set default value of style
       oRectangle.on("mouseout", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
         oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
-        console.log("on-mouse-leave-rectangle")
-        //$rootScope.$broadcast('on-mouse-leave-rectangle', { rectangle: oRectangle });
       });
     }
     return oRectangle;
@@ -515,24 +511,18 @@ export class MapService {
       //event on click
       if (sReferenceName) {
         oRectangle.on("click", function (event) {
-          //$rootScope.$broadcast('on-mouse-click-rectangle', { rectangle: oRectangle });\
-          console.log("on-mouse-click-rectangle")
         });
       }
 
       //mouse over event change rectangle style
       oRectangle.on("mouseover", function (event) {
         oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
-        console.log("on-mouse-over-rectangle")
-        //$rootScope.$broadcast('on-mouse-over-rectangle', { rectangle: oRectangle });
         oRectangle.getBounds();
       });
 
       //mouse out event set default value of style
       oRectangle.on("mouseout", function (event) {
         oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
-        console.log("on-mouse-leave-rectangle")
-        //$rootScope.$broadcast('on-mouse-leave-rectangle', { rectangle: oRectangle });
       });
       return oRectangle;
     } catch (e) {

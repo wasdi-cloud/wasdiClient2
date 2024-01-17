@@ -606,7 +606,7 @@ export class GlobeService {
    * @param aoProducts 
    * @returns 
    */
-  addAllWorkspaceRectanglesOnMap(aoProducts: any[]) {
+  addAllWorkspaceRectanglesOnGlobe(aoProducts: any[]) {
     try {
       let oRectangle: any = null;
       let aoArraySplit: any[] = [];
@@ -616,6 +616,7 @@ export class GlobeService {
 
       // Check we have products
       if (!aoProducts) {
+        FadeoutUtils.verboseLog("GlobeService.addAllWorkspaceRectanglesOnGlobe: aoProducts is null");
         return false;
       }
 
@@ -651,6 +652,26 @@ export class GlobeService {
         aoProducts[iIndexProduct].oRectangle = oRectangle;
         aoProducts[iIndexProduct].aBounds = aiInvertedArraySplit;
       }
+
+      let aoBounds = [];
+      for (let iIndex = 0; iIndex < aoTotalArray.length - 1; iIndex = iIndex + 2) {
+        aoBounds.push(new Cesium.Cartographic.fromDegrees(aoTotalArray[iIndex + 1], aoTotalArray[iIndex]));
+      }
+      let oWSRectangle = Cesium.Rectangle.fromCartographicArray(aoBounds);
+      let oWSCenter = Cesium.Rectangle.center(oWSRectangle);
+
+      //oGlobe.camera.setView({
+      this.getGlobe().camera.flyTo({
+        destination: Cesium.Cartesian3.fromRadians(oWSCenter.longitude, oWSCenter.latitude, this.GLOBE_WORKSPACE_ZOOM),
+        orientation: {
+          heading: 0.0,
+          pitch: -Cesium.Math.PI_OVER_TWO,
+          roll: 0.0
+        }
+      });
+
+      this.stopRotationGlobe();
+      
       return true;
     }
     catch (error) {
