@@ -614,14 +614,14 @@ export class GlobeService {
 
       let aoTotalArray: any[] = [];
 
+      // Clear the previous footprints
+      this.removeAllEntities();      
+
       // Check we have products
       if (!aoProducts) {
         FadeoutUtils.verboseLog("GlobeService.addAllWorkspaceRectanglesOnGlobe: aoProducts is null");
         return false;
       }
-
-      // Clear the previous footprints
-      this.removeAllEntities();
 
       let iProductsLength = aoProducts.length;
 
@@ -671,7 +671,7 @@ export class GlobeService {
       });
 
       this.stopRotationGlobe();
-      
+
       return true;
     }
     catch (error) {
