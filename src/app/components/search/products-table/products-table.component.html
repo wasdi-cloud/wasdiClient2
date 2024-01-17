@@ -1,6 +1,6 @@
 <div class="card" style="height: 100%">
     <div class="card-header d-flex flex-row gap-4">
-        <fa-icon [icon]="faBack" style="cursor:pointer" (click)=" navigateBackToFilters()"></fa-icon>
+        <fa-icon [icon]="faBack" style="cursor:pointer" (click)="navigateBackToFilters()"></fa-icon>
         Results
     </div>
     <div class="card-body flex-column" style="height: 90%">
@@ -40,12 +40,13 @@
         <div *ngIf="m_bIsVisibleListOfLayers" style="height:82%;">
             <!-- IF THE LIST OF LAYERS IS EMPTY -->
             <div class="d-flex flex-column justify-content-center align-items-center"
-                *ngIf="!m_oActiveProvider || (m_oActiveProvider.isLoaded === false || isProviderLayerListEmpty(m_oActiveProvider.name) === true)">
+                *ngIf="!m_oActiveProvider || (m_oActiveProvider.isLoaded === false && isProviderLayerListEmpty(m_oActiveProvider.name) === true)">
                 <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
             </div>
-            <div
+            <div class="d-flex flex-column align-items-center justify-content-center"
                 *ngIf="m_oActiveProvider && isProviderLayerListEmpty(m_oActiveProvider.name) &&  m_oActiveProvider.isLoaded === true">
-                empty
+                No Products Found.
+                <button (click)="navigateBackToFilters()" class="btn btn-primary">Try Again</button>
             </div>
             <!-- Product Cards -->
             <div *ngIf="m_oActiveProvider && isProviderLayerListEmpty(m_oActiveProvider.name) === false"

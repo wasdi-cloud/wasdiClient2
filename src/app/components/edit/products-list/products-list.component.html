@@ -43,6 +43,7 @@
             class="list-group list-group-flush">
             <li *ngFor="let oProduct of m_aoWorkspaceProductsList; let iIndex = index"
                 class="list-group-item p-2 d-flex flex-column" style="cursor: pointer;">
+
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     <div class="d-flex flex-row align-items-center gap-2">
                         <fa-icon [icon]="faPlusCircle" data-bs-toggle="collapse"
@@ -88,7 +89,6 @@
                                     (click)="setBandImage(oBand, iIndex)" [icon]="faCircleCheck"></fa-icon>
                                 {{oBand.name}}
                             </div>
-
                         </li>
                     </ul>
                 </div>

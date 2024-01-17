@@ -25,7 +25,7 @@
                 {{m_oApplicationInfo.price}}
             </div>
             <div class="description-container">
-                {{m_oApplicationInfo.processorDescription}}
+                {{m_oApplicationInfo.longDescription ? m_oApplicationInfo.longDescription : m_oApplicationInfo.processorDescription}}
             </div>
             <a class="open-application btn btn-dark" (click)="openAppUI(m_oApplicationInfo.processorName)">Open
                 Application</a>

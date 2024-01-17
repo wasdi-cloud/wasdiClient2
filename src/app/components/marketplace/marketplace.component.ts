@@ -89,7 +89,6 @@ export class MarketplaceComponent implements OnInit {
     this.m_oProcessorMediaService.getCategories().subscribe(
       {
         next: oResponse => {
-          console.log(oResponse)
           if (oResponse.length === 0) {
             this.m_oNotificationDisplayService.openAlertDialog( sCategoriesError);
           }

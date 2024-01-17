@@ -26,31 +26,44 @@ export class MapService {
 
   APIURL = this.m_oConstantsService.getAPIURL();
 
+  // Reference to the base Layers
+  m_oOSMBasic: any = null;
+  m_oOpenTopoMap: any = null;
+  m_oEsriWorldStreetMap: any = null;
+  m_oEsriWorldImagery: any = null;
+  m_oNASAGIBSViirsEarthAtNight2012: any = null;
 
-  //Layers
-  m_oOSMBasic: any;
-  m_oOpenTopoMap: any;
-  m_oEsriWorldStreetMap: any;
-  m_oEsriWorldImagery: any;
-  m_oNASAGIBSViirsEarthAtNight2012: any;
-
-  //Is the component toggle-albe to 3D map? 
+  /**
+   * Is the component toggle-albe to 3D map? 
+   */
   m_bIsToggle: boolean;
 
-  //declare object for Layers Control options
+  /**
+   * declare object for Layers Control options
+   */
   m_oLayersControl: any;
 
   m_oDrawnItems: L.FeatureGroup = new L.FeatureGroup();
 
+  /**
+   * Reference to the actual Leaflet map
+   */
   m_oWasdiMap: any = null;
 
-  //Actual Base Layer
+  /**
+   * Actual Base Layer
+   */
   m_oActiveBaseLayer: any;
 
-  //Default Leaflet options
+  /**
+   * Default Leaflet options
+   */
   m_oOptions: any;
 
-  GeocoderControl = new Geocoder();
+  /**
+   * Geocoder control
+   */
+  m_oGeocoderControl = new Geocoder();
 
   //Init options for leaflet-draw
   m_oDrawOptions: any = {
@@ -69,9 +82,11 @@ export class MapService {
       remove: false
     }
   }
+
   setMap(oMap: any) {
     this.m_oWasdiMap = oMap;
   }
+
   /**
    * Get the Map object
    * @returns {null | *}
@@ -84,7 +99,10 @@ export class MapService {
    * Initalize base layers
    */
   initTilelayer() {
-    this.m_oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+    FadeoutUtils.verboseLog("MapService.initTilelayer: initializing base layers");
+
+    this.m_oOSMBasic = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       maxZoom: 18,
       // this option disables loading tiles outside of the world bounds.
@@ -100,14 +118,11 @@ export class MapService {
     this.m_oEsriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
-    this.m_oNASAGIBSViirsEarthAtNight2012 = L.tileLayer('https://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}', {
-      attribution: 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
-      bounds: [[-85.0511287776, -179.999999975], [85.0511287776, 179.999999975]],
-      minZoom: 1,
-      maxZoom: 8,
-      //format: 'jpg',
-      //time: '',
-      //tilematrixset: 'GoogleMapsCompatible_Level'
+
+    this.m_oNASAGIBSViirsEarthAtNight2012 = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
+      minZoom: 0,
+      maxZoom: 20,
+      attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
     this.m_oLayersControl = {
@@ -132,9 +147,7 @@ export class MapService {
    * Initalize WASDI Map
    */
   initWasdiMap(sMapDiv: string) {
-    if (this.m_oWasdiMap !== null) {
-      this.initTilelayer();
-    }
+    FadeoutUtils.verboseLog("MapService.initWasdiMap: initializing Leaflet");
     this.m_oWasdiMap = this.initMap(sMapDiv);
   }
 
@@ -143,6 +156,9 @@ export class MapService {
    * @param sMapDiv 
    */
   initMap(sMapDiv) {
+
+    FadeoutUtils.verboseLog("MapService.initMap: creating the map");
+
     let oMap: L.Map = L.map(sMapDiv, {
       zoomControl: false,
       center: [0, 0],
@@ -180,6 +196,8 @@ export class MapService {
    * @param sMapDiv 
    */
   initMapSingleton(sMapDiv) {
+    FadeoutUtils.verboseLog("MapService.initMapSingleton: creating the singleton map");
+
     let oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
@@ -195,9 +213,6 @@ export class MapService {
       layers: [oOSMBasic],
       keyboard: false
     });
-
-    // coordinates in map find this plugin in lib folder
-    //L.control.mousePosition().addTo(oMap);
 
     //scale control
     L.control.scale({
@@ -219,6 +234,7 @@ export class MapService {
         'position': 'bottomright'
       }
     );
+
     oLayersControl.addTo(oMap);
 
     // center map
@@ -293,23 +309,23 @@ export class MapService {
     * @references https://github.com/perliedman/leaflet-control-geocoder
     */
   initGeoSearchPluginForOpenStreetMap() {
-    this.GeocoderControl.options.position = "bottomright";
+    this.m_oGeocoderControl.options.position = "bottomright";
 
   }
   /**
    * Clear Map 
    */
-  clearMap(sMapDiv: string) {
+  clearMap() {
+    
     if (this.m_oWasdiMap) {
+      FadeoutUtils.verboseLog("MapService.clearMap: cleaning the map instance")
+      this.m_oDrawnItems.clearLayers();
       this.m_oWasdiMap.remove();
+      this.m_oWasdiMap = null;
     }
-  }
-
-  /**
-   * 
-   */
-  deleteDrawShapeEditToolbar() {
-    this.m_oDrawnItems.clearLayers();
+    else{
+      FadeoutUtils.verboseLog("MapService.clearMap: map was already null")
+    }
   }
 
   /**

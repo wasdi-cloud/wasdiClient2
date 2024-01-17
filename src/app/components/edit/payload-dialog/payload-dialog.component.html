@@ -27,23 +27,31 @@
     <div *ngFor="let oChart of m_aoChartsInformation">
         <!-- Line Chart -->
         <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" [view]="view" [legend]="m_bLegend"
-            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel" [xAxisLabel]="oChart['x-axis-name']"
-            [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
+            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+            [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
             [results]="oChart['chart-data']"></ngx-charts-line-chart>
         <!-- Area Line Chart -->
         <ngx-charts-area-chart *ngIf="oChart['chart-type'] === 'line-area'" [view]="view" [legend]="m_bLegend"
-            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel" [xAxisLabel]="oChart['x-axis-name']"
-            [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
+            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+            [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
             [results]="oChart['chart-data']"></ngx-charts-area-chart>
+        <!-- Stacked Line Chart -->
+        <ngx-charts-area-chart-stacked *ngIf="oChart['chart-type'] === 'line-stacked'" [view]="view" [legend]="m_bLegend"
+        [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+        [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
+        [results]="oChart['chart-data']"></ngx-charts-area-chart-stacked>
         <!-- Horizontal Bar Chart -->
         <ngx-charts-bar-horizontal *ngIf="oChart['chart-type'] === 'bar-horizontal'" [view]="view" [legend]="m_bLegend"
-            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel" [xAxisLabel]="oChart['x-axis-name']"
-            [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data']"></ngx-charts-bar-horizontal>
+            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+            [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
+            [results]="oChart['chart-data'][0].series"></ngx-charts-bar-horizontal>
         <!-- Vertical Bar Chart -->
         <ngx-charts-bar-vertical *ngIf="oChart['chart-type'] === 'bar-vertical'" [view]="view" [legend]="m_bLegend"
-            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel" [xAxisLabel]="oChart['x-axis-name']"
-            [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data']"></ngx-charts-bar-vertical>
+            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+            [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
+            [results]="oChart['chart-data'][0].series"></ngx-charts-bar-vertical>
+            <!-- Pie Chart -->
+        <ngx-charts-pie-chart *ngIf="oChart['chart-type'] === 'pie'" [view]="view" [legend]="m_bLegend"
+            [doughnut]="false" [results]="oChart['chart-data'][0].series"></ngx-charts-pie-chart>
     </div>
 </div>

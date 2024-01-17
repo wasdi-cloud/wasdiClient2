@@ -1,4 +1,4 @@
-<div [formGroup]="m_oProcessorBasicInfo">
+<div *ngIf="m_oProcessorBasicInfo" [formGroup]="m_oProcessorBasicInfo">
     <div class="form d-flex flex-row justify-content-between align-items-center">
         <div class="d-flex flex-column gap-2" style="width: 65%">
             <div>

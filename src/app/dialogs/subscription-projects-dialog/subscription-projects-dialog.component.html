@@ -28,10 +28,14 @@
                     <td>{{oProject.name}}</td>
                     <td> {{oProject.activeProject ? "Active" :
                         "Inactive"}}</td>
-                    <td class="text-center">{{oProject.individualProcessingTime ?( oProject.individualProcessingTime | convertMsToTime) :
-                        '00:00:00'}}</td>
-                    <td class="text-center">{{oProject.totalProcessingTime ? (oProject.totalProcessingTime | convertMsToTime ): '00:00:00'}}</td>
-                    <td class="d-flex flex-row gap-2">
+                    <td class="text-center" *ngIf="oProject.individualProcessingTime">
+                        {{oProject.individualProcessingTime
+                        | convertMsToTime }}</td>
+                    <td class="text-center" *ngIf="!oProject.individualProcessingTime">00:00:00</td>
+                    <td class="text-center" *ngIf="oProject.totalProcessingTime">{{oProject.totalProcessingTime |
+                        convertMsToTime}}</td>
+                    <td class="text-center" *ngIf="!oProject.totalProcessingTime">00:00:00</td>
+                    <td class=" d-flex flex-row gap-2">
                         <button class="btn btn-sm btn-secondary"
                             (click)="openProjectInfoDialog(true, m_oSubscription, oProject)">
                             <fa-icon [icon]="faEdit"></fa-icon>

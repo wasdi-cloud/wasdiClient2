@@ -67,7 +67,6 @@ export class NavLayersComponent implements OnInit, OnChanges {
     if (this.m_aoVisibleBands !== undefined && this.m_aoVisibleBands.length === 1) {
       this.setActiveTab('layers');
     }
-    this.initMaps();
   }
 
   /**
@@ -80,7 +79,6 @@ export class NavLayersComponent implements OnInit, OnChanges {
       // clear the old globe (if present)
       this.m_oGlobeService.clearGlobe();
 
-
       // And create it in the small navigation tab
       console.log("NavLayersComponent.initMaps: call init Globe")
       this.m_oGlobeService.initGlobe('cesiumContainer2');
@@ -91,7 +89,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
     }
     else {
       // The big map is 3d: here we need to show only the 2d map
-      this.m_oMapService.clearMap('navMap');
+      this.m_oMapService.clearMap();
       this.m_oMapService.initWasdiMap('navMap');
 
       //Set timeout with Arrow function to preserve `this` context within `setTimeout`

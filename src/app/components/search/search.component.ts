@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { SearchService } from 'src/app/search.service';
@@ -21,7 +21,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   //Font Awesome Imports:
   faPlus = faPlus;
 
@@ -105,8 +105,13 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    FadeoutUtils.verboseLog("SearchComponent.ngOnInit")
     this.m_oPageService.setFunction(this.executeSearch, this);
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+  }
+
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("SearchComponent.ngOnDestroy")
   }
 
   m_fUtcDateConverter(oDate) {
@@ -128,6 +133,8 @@ export class SearchComponent implements OnInit {
     }
 
     if (this.m_aoSelectedProviders.length > 0) {
+      //Clear Providers After Count before executing Search and Count
+      this.m_aoProvidersAfterCount = [];
       this.m_aoSelectedProviders.forEach(oProvider => {
         this.searchAndCount(oProvider);
       })
@@ -165,7 +172,6 @@ export class SearchComponent implements OnInit {
   }
 
   searchAndCount(oProvider) {
-
     //If there is no provider selected, return false
     if (this.thereIsAtLeastOneProvider() === false) {
       return false;

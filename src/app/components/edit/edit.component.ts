@@ -6,6 +6,7 @@ import { Title } from '@angular/platform-browser';
 import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
+import { MapService } from 'src/app/services/map.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 import { ProductService } from 'src/app/services/api/product.service';
@@ -40,61 +41,104 @@ export class EditComponent implements OnInit, OnDestroy {
     private m_oTitleService: Title,
     private m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
-    private m_oGlobeService: GlobeService) { }
+    private m_oGlobeService: GlobeService,
+    private m_oMapService: MapService) { }
 
-  //Map Status: 2D (true) or 3D (false): 
+  /**
+   * Map Status: 2D (true) or 3D (false): 
+   */
   m_b2DMapModeOn: boolean = true;
-  //Has first zoom on band been done? 
+
+  /**
+   * Has first zoom on band been done? 
+   */
   m_bFirstZoomOnBandDone: boolean = false;
 
-  //Query Search filter text (product tree): 
+  /**
+   * Query Search filter text (product tree): 
+   */
   m_sTextQueryFilter: string = '';
+  /**
+   * Flag to understand if the tree is applying a filter or not
+   */
   m_bIsFilteredTree: false;
 
+  /**
+   * Flag to detect if the tree is loading
+   */
   m_bTreeIsLoading: boolean = true;
+
+  /**
+   * Flag to define if Jupyter is ready or not
+   */
   m_bJupyterIsReady: boolean = false;
 
-  //Array of Products in Workspace
+  /**
+   * Array of Products in Workspace
+   */
   m_aoProducts: Product[] = [];
 
-  //WorkspaceId is necessary. If null, create a new one.
+  /**
+   * WorkspaceId is necessary. If null, create a new one.
+   */
   m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+
+  /**
+   * Local reference to Active Workspace
+   */
   m_oActiveWorkspace: any;
 
-  // Actual User
+  /**
+   * Actual User
+   */
   m_oUser = this.m_oConstantsService.getUser();
-  //{}
+  
+  /**
+   * List of product layers not gerefenenced on 3D map
+   */
   m_aoProductsLayersIn3DMapArentGeoreferenced = [];
-  //default sort by value
+  
+  /**
+   * default sort by value
+   */
   sSortType = 'default';
 
-  //boolean value for Jupyter Notebook 
-  m_bNotebookIsReady = false;
-
-  //Array for Processes
+  /**
+   * Array for Processes in the workspace
+   */
   m_aoProcessesRunning: any[] = []
 
+  /**
+   * Search String
+   */
   m_sSearchString: string;
 
+  /**
+   * List of visible bands
+   */
   m_aoVisibleBands = [];
 
+  /**
+   * Flag to know if it is loading products
+   */
   m_bIsLoadingProducts: boolean = true;
 
-  m_iHookIndex: any;
-
+  /**
+   * Name of the product in download
+   */
   m_sDownloadProductName: string = "";
+
+  /**
+   * Flag to show or not the product in download
+   */
   m_bShowProductDownload: boolean = false;
 
   ngOnInit(): void {
-    console.log("EditComponent.ngOnInit")
-
-    //RabbitStomp Service Call
-    this.m_oRabbitStompService.addMessageHook("LAUNCHJUPYTERNOTEBOOK",
-      this,
-      this.rabbitMessageHook)
+    FadeoutUtils.verboseLog("EditComponent.ngOnInit")
 
     //What to do if workspace undefined: 
     if (!this.m_oActiveWorkspace) {
+
       //Check route for workspace id
       if (this.m_oActivatedRoute.snapshot.params['workspaceId']) {
         //Assign and set new workspace id
@@ -108,7 +152,8 @@ export class EditComponent implements OnInit, OnDestroy {
         //If unable to identify workspace, re-route to workspaces tab
         this.m_oRouter.navigateByUrl('/workspaces')
       }
-    } else {
+    } 
+    else {
       //If workspace is defined => Load Processes
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
       this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
@@ -120,6 +165,14 @@ export class EditComponent implements OnInit, OnDestroy {
     this.m_oRabbitStompService.setMessageCallback(this.recievedRabbitMessage);
     this.m_oRabbitStompService.setActiveController(this);
   }
+
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("EditComponent.ngOnDestroy")
+    
+    this.m_oRabbitStompService.unsubscribe();
+    this.m_oGlobeService.clearGlobe();
+    this.m_oMapService.clearMap();
+  }  
 
   recievedRabbitMessage(oMessage, oController) {
     // Check if the message is valid
@@ -200,12 +253,6 @@ export class EditComponent implements OnInit, OnDestroy {
     }
   };
 
-  ngOnDestroy(): void {
-    console.log("EditComponent.ngOnInit")
-    this.m_oRabbitStompService.unsubscribe();
-    this.m_oGlobeService.clearGlobe();
-  }
-
   _subscribeToRabbit() {
     if (this.m_oRabbitStompService.isSubscrbed() == false && !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace)) {
       let _this = this;
@@ -215,6 +262,11 @@ export class EditComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Open a Workspace. Call the get Workspace Editor View Model
+   * If all is ok, it set the Active Workspace, subscribe to rabbit and get the full product list
+   * @param sWorkspaceId 
+   */
   openWorkspace(sWorkspaceId: string) {
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe({
       next: oResponse => {
@@ -223,18 +275,19 @@ export class EditComponent implements OnInit, OnDestroy {
             this.m_oRouter.navigateByUrl('/workspaces');
             let sMessage = this.m_oTranslate.instant("MSG_FORBIDDEN")
             this.m_oNotificationDisplayService.openAlertDialog(sMessage)
-          } else {
+          } 
+          else {
 
-            console.log("edit.component.ngOnInit: Received open Workspace View Model ")
-
+            FadeoutUtils.verboseLog("edit.component.openWorkspace: Received open Workspace View Model ")
             this.m_oConstantsService.setActiveWorkspace(oResponse);
             this.m_oActiveWorkspace = oResponse;
-            this._subscribeToRabbit();
 
-            console.log("edit.component.ngOnInit: CALL get product list ")
-
-            this.getProductList();
             this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
+
+            this._subscribeToRabbit();
+            FadeoutUtils.verboseLog("edit.component.openWorkspace: CALL get product list ")
+            this.getProductList();
+            
             this.getJupyterIsReady(this.m_oActiveWorkspace.workspaceId);
           }
         }
@@ -249,7 +302,7 @@ export class EditComponent implements OnInit, OnDestroy {
   getProductList() {
     this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe({
       next: oResponse => {
-        console.log("edit.component.ngOnInit: RECEIVED got the product list ")
+        console.log("edit.component.getProductList: RECEIVED got the product list ")
         this.m_aoProducts = oResponse
         this.m_bIsLoadingProducts = false;
       },

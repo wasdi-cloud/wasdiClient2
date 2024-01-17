@@ -22,8 +22,8 @@ export class WapSelectAreaComponent implements OnInit {
   constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService) { }
 
   ngOnInit(): void {
-    this.m_oMapService.setDrawnItems();
-    this.m_oMapService.initTilelayer();
+    //this.m_oMapService.setDrawnItems();
+    //this.m_oMapService.initTilelayer();
     
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;

@@ -13,19 +13,45 @@ declare let Cesium: any;
 @Injectable({
   providedIn: 'root'
 })
+
 export class GlobeService {
+
+  /**
+   * Reference to the Cesium Globe Objecet
+   */
   m_oWasdiGlobe: any = null;
+
+  /**
+   * List of visible layers. It is a pointer to the this.m_oWasdiGlobe.imageryLayers Array
+   */
   m_aoLayers: any[] = null;
+  /**
+   * Default long for home view
+   */
   LONG_HOME: number = 0;
+  /**
+   * Default lat for home view
+   */
   LAT_HOME: number = 0;
-  HEIGHT_HOME: number = 20000000; //zoom
+  /**
+   * Default zoom for home view
+   */
+  HEIGHT_HOME: number = 20000000; 
+  /**
+   * Globe zoom
+   */
   GLOBE_LAYER_ZOOM: number = 2000000;
+  /**
+   * Workspaces default zoome
+   */
   GLOBE_WORKSPACE_ZOOM: number = 4000000;
+  /**
+   * Self reference to the controller (this)
+   */
   oController: any;
 
 
   oGlobeOptions = {
-    //imageryProvider : Cesium.createOpenStreetMapImageryProvider(),
     timeline: false,
     animation: false,
     baseLayerPicker: true,
@@ -39,9 +65,10 @@ export class GlobeService {
     scene3DOnly: true
   }
 
-  constructor(
-    private m_oMapService: MapService
-  ) { this.oController = this; }
+  constructor(private m_oMapService: MapService) 
+  { 
+    this.oController = this; 
+  }
 
   initGlobe(sGlobeDiv: string) {
     if (window.WebGL2RenderingContext) {
@@ -60,11 +87,17 @@ export class GlobeService {
           scene3DOnly: true
         };
         Cesium.Ion.defaultAccessToken = environment.cesiumToken;
+
+        FadeoutUtils.verboseLog("GlobeService.initGlobe: creating the globe")
+
+        if (this.m_oWasdiGlobe != null) {
+          FadeoutUtils.verboseLog("GlobeService.initGlobe: PROBLEM: the old globe is not null!!")
+        }
+
         this.m_oWasdiGlobe = new Cesium.Viewer(sGlobeDiv, oGlobeOptions);
 
-
         // Select OpenLayers and Cesium DEM Terrain by default
-        this.m_oWasdiGlobe.baseLayerPicker.viewModel.selectedImagery = this.m_oWasdiGlobe.baseLayerPicker.viewModel.imageryProviderViewModels[6];
+        this.m_oWasdiGlobe.baseLayerPicker.viewModel.selectedImagery = this.m_oWasdiGlobe.baseLayerPicker.viewModel.imageryProviderViewModels[14];
         this.m_oWasdiGlobe.baseLayerPicker.viewModel.selectedTerrain = this.m_oWasdiGlobe.baseLayerPicker.viewModel.terrainProviderViewModels[1];
 
         this.m_aoLayers = this.m_oWasdiGlobe.imageryLayers;
@@ -73,9 +106,8 @@ export class GlobeService {
         console.log("Error in Cesium Globe: " + error)
       }
     } else {
-      //TODO ERROR  browser doesn't support WebGL
+      // ERROR:  browser doesn't support WebGL
       console.log("Error in Cesium Globe: missing WebGl");
-      // ALERT DIALOG
     }
   }
 
@@ -84,7 +116,11 @@ export class GlobeService {
     if (this.m_oWasdiGlobe) {
       this.m_oWasdiGlobe.destroy();
       this.m_oWasdiGlobe = null;
-      console.log("GlobeService.clearGlobe: cleaned");
+      this.m_aoLayers = null;
+      FadeoutUtils.verboseLog("GlobeService.clearGlobe: cleaned");
+    }
+    else {
+      FadeoutUtils.verboseLog("GlobeService.clearGlobe: the globe reference was already null");
     }
   }
 
@@ -98,27 +134,6 @@ export class GlobeService {
 
   getGlobeLayers = function () {
     return this.m_aoLayers;
-  }
-
-  getMapCenter() {
-    //if(utilsIsObjectNullOrUndefined(this.m_oWasdiGlobe))
-    //    return
-    let windowPosition = new Cesium.Cartesian2(this.m_oWasdiGlobe.container.clientWidth / 2, this.m_oWasdiGlobe.container.clientHeight / 2);
-    let pickRay = this.m_oWasdiGlobe.scene.camera.getPickRay(windowPosition);
-    let pickPosition = this.m_oWasdiGlobe.scene.globe.pick(pickRay, this.m_oWasdiGlobe.scene);
-    let pickPositionCartographic = this.m_oWasdiGlobe.scene.globe.ellipsoid.cartesianToCartographic(pickPosition);
-    return [pickPositionCartographic.latitude * (180 / Math.PI), pickPositionCartographic.longitude * (180 / Math.PI)];
-  }
-
-  goHome() {
-    this.m_oWasdiGlobe.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(this.LONG_HOME, this.LAT_HOME, this.HEIGHT_HOME),
-      orientation: {
-        heading: 0.0,
-        pitch: -Cesium.Math.PI_OVER_TWO,
-        roll: 0.0
-      }
-    });
   }
 
   flyTo(long: number, lat: number, height: number) {
@@ -206,20 +221,33 @@ export class GlobeService {
     return null;
   }
 
-  addRectangleOnGlobeParamArray(aArray: any[]) {
+  addRectangleOnGlobeParamArray(aiArray: any[]) {
     // Safe Programming check
-    if (!aArray) {
+    if (!aiArray) {
       return false;
     }
     if (!this.m_oWasdiGlobe) {
       return false;
     }
 
+    let bHasNan = false;
+
+    for (let iIndex = 0; iIndex < aiArray.length; iIndex = iIndex + 1) {
+      if (isNaN(aiArray[iIndex])) {
+        bHasNan = true;
+        break;
+      }
+    }
+
+    if (bHasNan) {
+      return null;
+    }
+
     try {
 
       // Create the new Polygon
       let oNewPolygon = {
-        hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(aArray)),
+        hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(aiArray)),
         outline: true,
         outlineColor: Cesium.Color.RED.withAlpha(1),
         outlineWidth: 10,
@@ -266,7 +294,7 @@ export class GlobeService {
       // If we exit from the above cycle, there are no entities with the same poly, so add it.
       let oRectangle = this.m_oWasdiGlobe.entities.add({
         polygon: {
-          hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(aArray)),
+          hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(aiArray)),
           outline: true,
           outlineColor: Cesium.Color.RED.withAlpha(1),
           outlineWidth: 10,
@@ -314,9 +342,8 @@ export class GlobeService {
       }
     }
     else {
-      //TODO ERROR  browser doesn't support WebGL
+      // ERROR  browser doesn't support WebGL
       console.log("Error in Cesium Globe miss WebGl");
-      let errorMsg = "GURU MEDITATION<br>PLEASE UPDATE WEB GL<br>LINK: HTTPS://GET.WEBGL.ORG/";
     }
   }
 
