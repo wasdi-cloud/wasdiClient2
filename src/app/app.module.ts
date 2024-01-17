@@ -71,9 +71,6 @@ import { SessionInjectorInterceptor } from './services/interceptors/session-inje
 import { AuthService } from './services/auth/auth.service';
 import { ConstantsService } from './services/constants.service';
 
-import { WorkspacesMapComponent } from './components/workspaces/workspaces-map/workspaces-map.component';
-
-import { WorkspacesWorldwindComponent } from './components/workspaces/workspaces-worldwind-map/workspaces-worldwind.component';
 
 import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -159,7 +156,6 @@ import { AlertDialogComponent } from './shared/dialogs/alert-dialog/alert-dialog
 import { NotificationSnackbarComponent } from './shared/dialogs/notification-snackbar/notification-snackbar.component';
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 
-
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -175,8 +171,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WorkspacesComponent,
     LoginComponent,
     WorkspaceListItemComponent,
-    WorkspacesMapComponent,
-    WorkspacesWorldwindComponent,
     MarketplaceAppCardComponent,
     LanguageSwitchComponent,
     CourseDialogComponent,
