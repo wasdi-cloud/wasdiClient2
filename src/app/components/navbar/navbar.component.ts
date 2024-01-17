@@ -23,6 +23,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { faArrowLeft, faArrowRightFromBracket, faBars } from '@fortawesome/free-solid-svg-icons';
+import { HeaderService } from 'src/app/services/header.service';
 
 
 
@@ -65,6 +66,7 @@ export class NavbarComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
+    private m_oHeaderService: HeaderService,
     private m_oProjectService: ProjectService,
     private m_oRouter: Router,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -75,24 +77,7 @@ export class NavbarComponent implements OnInit {
     m_oTranslate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
     m_oTranslate.setDefaultLang('en');
 
-    this.m_oRouterEvents = this.m_oRouter.events.subscribe((oEvent: any) => {
-      if (oEvent instanceof NavigationEnd) {
-        if (oEvent.url.includes('edit')) {
-          this.sActiveWorkspaceId = oEvent.url.slice(6);
-          this.m_bEditIsActive = true;
-          this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.sActiveWorkspaceId).subscribe({
-            next: oResponse => {
-              this.m_oActiveWorkspace = oResponse;
-            },
-            error: oError => {
-              this.m_oAlertDialog.openDialog(4000, "Error in retreiving Workspace Information")
-            }
-          })
-        } else {
-          this.m_bEditIsActive = false;
-        }
-      }
-    })
+
   }
 
   translateLanguageTo(lang: string) {
@@ -109,10 +94,32 @@ export class NavbarComponent implements OnInit {
     this.initializeProjectsInfo();
     this.getAccountType();
     console.log(this.m_sUserAccount);
+
+    this.m_oRouterEvents = this.m_oRouter.events.subscribe((oEvent: any) => {
+      if (oEvent instanceof NavigationEnd) {
+
+        if (oEvent.url.includes('edit')) {
+          this.sActiveWorkspaceId = oEvent.url.slice(6);
+          this.m_bEditIsActive = true;
+          this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.sActiveWorkspaceId).subscribe({
+            next: oResponse => {
+              this.m_oActiveWorkspace = oResponse;
+            },
+            error: oError => {
+              this.m_oAlertDialog.openDialog(4000, "Error in retreiving Workspace Information")
+            }
+          })
+        } else {
+          this.m_bEditIsActive = false;
+          this.setActiveTab(oEvent.url.slice(1));
+        }
+      }
+    })
   }
 
   setActiveTab(sActiveTab: string) {
     this.m_sSelectedTab = sActiveTab;
+    this.m_oHeaderService.setLocation(sActiveTab);
   }
 
   logout() {

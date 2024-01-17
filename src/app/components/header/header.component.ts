@@ -24,6 +24,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 //Import Utilities: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
+import { HeaderService } from 'src/app/services/header.service';
 
 @Component({
   selector: 'app-header',
@@ -53,6 +54,8 @@ export class HeaderComponent implements OnInit {
 
   m_oRouterEvents: any;
 
+  m_sLocation: string = null;
+
   //Font Awesome Icons
   faBars = faBars;
   faUser = faUserAstronaut;
@@ -75,6 +78,7 @@ export class HeaderComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
+    private m_oHeaderService: HeaderService,
     private m_oProjectService: ProjectService,
     private m_oRouter: Router,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -101,6 +105,16 @@ export class HeaderComponent implements OnInit {
         } else {
           this.m_bEditIsActive = false;
         }
+      }
+    })
+
+    //Subscribe to Behaviour Subject from Header Service:
+    this.m_oHeaderService.m_oLocationSubscription.subscribe({
+      next: oResponse => {
+        this.m_sLocation = oResponse; 
+      }, 
+      error: oError => {
+        console.log("error getting location")
       }
     })
   }
