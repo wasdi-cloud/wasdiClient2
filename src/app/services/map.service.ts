@@ -83,6 +83,10 @@ export class MapService {
     }
   }
 
+  /**
+   * Set the map object (when created not by the service)
+   * @param oMap 
+   */
   setMap(oMap: any) {
     this.m_oWasdiMap = oMap;
   }
@@ -171,6 +175,7 @@ export class MapService {
       position: "bottomright",
       imperial: false
     }).addTo(oMap);
+    
     // center map
     let southWest = L.latLng(0, 0);
     let northEast = L.latLng(0, 0);
@@ -184,10 +189,10 @@ export class MapService {
 
     //add event on base change
     oMap.on('baselayerchange', function (e) {
-      // console.log(e);
       // e.layer.bringToBack();
       oActiveBaseLayer = e;
     });
+
     return oMap;
   }
 
@@ -288,21 +293,6 @@ export class MapService {
     }
   }
 
-
-  /**
-   * Init map Editor
-   * @param sMapDiv
-   * @returns {boolean}
-   */
-  initMapEditor(sMapDiv) {
-    if (!sMapDiv) {
-      return false;
-    }
-    this.initWasdiMap(sMapDiv)
-    return true;
-  }
-
-
   /**
     * Init geo search plugin, the search bar for geographical reference on the map
     * @param opt if present, the search bar is placed on the bottom right corner of the map.
@@ -361,30 +351,6 @@ export class MapService {
   /******* LAYER HANDLERS *******/
 
   /**
-   * Set basic map 
-   * @returns {boolean}
-   */
-  setBasicMap() {
-    if (!this.m_oOSMBasic) {
-      return false;
-    }
-    this.m_oWasdiMap.addLayer(this.m_oOSMBasic, true);
-    return true;
-  }
-
-  /**
-   * Remove basic map 
-   * @returns {boolean}
-   */
-  removeBasicMap() {
-    if (!this.m_oOSMBasic) {
-      return false;
-    }
-    this.removeLayerFromMap(this.m_oOSMBasic);
-    return true;
-  }
-
-  /**
    * Remove a layer from the map
    * @param oLayer
    * @returns {boolean}
@@ -395,14 +361,6 @@ export class MapService {
     }
     oLayer.remove();
     return true;
-  }
-  /**
-    * Remove all layers from the map
-    */
-  removeLayersFromMap() {
-    this.m_oWasdiMap.eachLayer(function (layer: any) {
-      this.m_oWasdiMap.removeLayer(layer);
-    });
   }
 
   /**
@@ -729,94 +687,6 @@ export class MapService {
   };
 
   /**
-   * This method works only for s1 products
-   * @param boundingBox The bounding box declared by product
-   * @param geoserverBoundingBox The bounding box declared by the Geo Server when a band has been published
-   * @returns {boolean}
-   */
-  isProductGeoreferenced(boundingBox, geoserverBoundingBox) {
-    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(boundingBox) === true) || (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox) === true)) {
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(boundingBox) === true) {
-        console.debug("Product bounding box is null");
-        // Impossible to assume if is correct or not. Assume true
-        return true;
-      }
-      else if (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox) === true) {
-        console.debug("Geoserver bounding box is null");
-      }
-
-      return false;
-    }
-
-    if ((FadeoutUtils.utilsIsStrNullOrEmpty(boundingBox) === true) || (FadeoutUtils.utilsIsStrNullOrEmpty(geoserverBoundingBox) === true)) {
-      if (FadeoutUtils.utilsIsStrNullOrEmpty(boundingBox) === true) {
-        console.debug("Product bounding box is null");
-        // Impossible to assume if is correct or not. Assume true
-        return true;
-      }
-      else if (FadeoutUtils.utilsIsStrNullOrEmpty(geoserverBoundingBox) === true) {
-        console.debug("Geoserver bounding box is null");
-      }
-      return false;
-    }
-
-    var oGeoserverBoundingBox = this.parseGeoserverBoundingBox(geoserverBoundingBox);
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oGeoserverBoundingBox)) return false;
-
-    var asBoundingBox = this.fromBboxToRectangleArray(boundingBox);
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(asBoundingBox)) return false;
-
-    var aoLatLngs = [];
-
-    for (var iPoints = 0; iPoints < asBoundingBox.length - 2; iPoints += 2) {
-      var oLatLon = [parseFloat(asBoundingBox[iPoints + 1]), parseFloat(asBoundingBox[iPoints])];
-      aoLatLngs.push(oLatLon);
-    }
-
-    var oBBPolygon = L.polygon(aoLatLngs, { color: 'red' });
-
-    var oBBCenter = oBBPolygon.getBounds().getCenter();
-
-    //it takes the center of the bounding box
-    var oMidPointGeoserverBoundingBox = FadeoutUtils.utilsGetMidPoint(oGeoserverBoundingBox.maxx, oGeoserverBoundingBox.maxy, oGeoserverBoundingBox.minx, oGeoserverBoundingBox.miny);
-    //var oMidPointBoundingBox = utilsGetMidPoint( parseFloat(asBoundingBox[0]), parseFloat(asBoundingBox[1]), parseFloat(asBoundingBox[4]), parseFloat(asBoundingBox[5]));
-    var oMidPointBoundingBox: any = {};
-    oMidPointBoundingBox.x = oBBCenter.lng;
-    oMidPointBoundingBox.y = oBBCenter.lat;
-    //TODO FIX IT
-    var isMidPointGeoserverBoundingBoxInBoundingBox = FadeoutUtils.utilsIsPointInsideSquare(oMidPointGeoserverBoundingBox.x, oMidPointGeoserverBoundingBox.y, oBBPolygon.getBounds().getEast(), oBBPolygon.getBounds().getNorth(), oBBPolygon.getBounds().getWest(), oBBPolygon.getBounds().getSouth());
-    var isMidPointBoundingBoxGeoserverBoundingBox = FadeoutUtils.utilsIsPointInsideSquare(oMidPointBoundingBox.x, oMidPointBoundingBox.y, oGeoserverBoundingBox.maxx, oGeoserverBoundingBox.maxy, oGeoserverBoundingBox.minx, oGeoserverBoundingBox.miny);
-    if ((isMidPointBoundingBoxGeoserverBoundingBox === true) && (isMidPointGeoserverBoundingBoxInBoundingBox === true)) {
-      return true;
-    }
-    return false;
-  };
-
-  /**
-   *
-   * @param geoserverBoundingBox
-   * @returns {null}
-   */
-  parseGeoserverBoundingBox(geoserverBoundingBox) {
-    // Check the input
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox)) {
-      console.log("geoserverBoundingBox: geoserverBoundingBox is null");
-      return null;
-    }
-
-    // Parse the bounding box
-    geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
-    var oBoundingBox = JSON.parse('{"miny":43.150066,"minx":-80.030044,"crs":"EPSG:4326","maxy":43.380082,"maxx":-79.710091}');
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oBoundingBox)) {
-      console.log("GlobeService.zoomBandImageOnGeoserverBoundingBox: parsing bouning box is null");
-      return null;
-    }
-    return oBoundingBox;
-  };
-
-  /**
    *
    * @param bbox
    * @returns {*}
@@ -870,21 +740,30 @@ export class MapService {
     return null;
   }
 
-
-  productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, asBbox, sLayerId) {
-    if (this.isProductGeoreferenced(asBbox, sGeoserverBBox) === true) {
-      var oRectangleBoundingBoxMap = this.addRectangleByGeoserverBoundingBox(sGeoserverBBox, sColor);
-
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangleBoundingBoxMap) === false) {
-        console.log(oRectangleBoundingBoxMap.options);
-        //the options.layers property is used for remove the rectangle to the map
-        oRectangleBoundingBoxMap.options["layers"] = "wasdi:" + sLayerId;
+    /**
+   * Adds a Layer to the 2D Map 
+   * @param sLayerId Layer Id
+   * @param sServer  Geoserver address. Of null the default one from Constant Service is taken
+   * @returns True if all is fine, False in case of error
+   */
+    addLayerMap2DByServer(sLayerId: string, sServer: string) {
+      if (sLayerId == null) {
+        return false;
       }
-    }
-    if (this.isProductGeoreferenced(asBbox, sGeoserverBBox) === true) {
+      if (sServer == null) {
+        sServer = this.m_oConstantsService.getWmsUrlGeoserver();
+      }
+  
+      let oMap = this.getMap();
+  
+      let oWmsLayer = L.tileLayer.wms(sServer, {
+        layers: sLayerId,
+        format: 'image/png',
+        transparent: true,
+        noWrap: true
+      });
+      oWmsLayer.setZIndex(1000);
+      oWmsLayer.addTo(oMap);
       return true;
-    } else {
-      return false
     }
-  }
 }

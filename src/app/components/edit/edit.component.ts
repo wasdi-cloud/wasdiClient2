@@ -92,11 +92,7 @@ export class EditComponent implements OnInit, OnDestroy {
    * Actual User
    */
   m_oUser = this.m_oConstantsService.getUser();
-  
-  /**
-   * List of product layers not gerefenenced on 3D map
-   */
-  m_aoProductsLayersIn3DMapArentGeoreferenced = [];
+
   
   /**
    * default sort by value

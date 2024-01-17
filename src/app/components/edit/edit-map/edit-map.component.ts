@@ -30,9 +30,7 @@ export class EditMapComponent implements OnInit {
   faGlobe = faGlobeAfrica;
   faMap = faMap;
 
-  m_aoProductsLayersIn3DMapArentGeoreferenced: Array<any> = [];
   m_aoExternalLayers: Array<any> = [];
-  m_oActiveBand: any = null;
   m_oSearchControl: Geocoder = new Geocoder;
   m_oMapOptions: any;
   m_oLayersControl: any;
@@ -61,40 +59,39 @@ export class EditMapComponent implements OnInit {
     // Changing the Displayed Map to the 3D Cesium Globe:
     if (this.m_b2DMapModeOn === false) {
 
+      FadeoutUtils.verboseLog("EditMapComponent.switch2D3DMode: moving 3D Globe in big view")
+
+      // Clean the old globe
       this.m_oGlobeService.clearGlobe();
-      console.log("EditMapComponent.switch2D3DMode: call init Globe")
+      // Init the new one in the bigger div
       this.m_oGlobeService.initGlobe('CesiumContainerEdit');
 
+      // Notify the change
       this.m_b2DMapModeOutput.emit(false);
 
-      //Load any exisiting layers onto the Globe
+      //Load any exisiting layers into the Globe
       for (let iIndexLayers = 0; iIndexLayers < this.m_aoVisibleBands.length; iIndexLayers++) {
+        
         // Check if it is a valid layer
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoVisibleBands[iIndexLayers].layerId)) {
-
-          var sGeoserverBBox = this.m_aoVisibleBands[iIndexLayers].geoserverBoundingBox;
-
-          let oRectangleIsNotGeoreferencedProduct = this.m_oGlobeService.productIsNotGeoreferencedRectangle3DMap(sGeoserverBBox, this.m_aoVisibleBands[iIndexLayers].bbox, this.m_aoVisibleBands[iIndexLayers].layerId);
-
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangleIsNotGeoreferencedProduct) === false) {
-            this.addLayerMap3DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);
-            let oLayer3DMap = {
-              id: this.m_aoVisibleBands[iIndexLayers].layerId,
-              rectangle: oRectangleIsNotGeoreferencedProduct
-            };
-            this.m_aoProductsLayersIn3DMapArentGeoreferenced.push(oLayer3DMap);
-          } else {
-            this.addLayerMap3DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);
-          }
+          this.m_oGlobeService.addLayerMap3DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);
         }
-
       }
-      this.m_oGlobeService.flyToWorkspaceBoundingBox(this.m_aoProducts);
+
+      this.goWorkspaceHome();
     }
     else {
+
+      FadeoutUtils.verboseLog("EditMapComponent.switch2D3DMode: moving 2D Map in big view")
+
+      // Clean the old map
       this.m_oMapService.clearMap();
+      // Init the new one in the bigger div
       this.m_oMapService.initWasdiMap('editMap');
+
+      // Notify the change
       this.m_b2DMapModeOutput.emit(true);
+
       //Set time out for Leaflet to animate:
       setTimeout(() => {
         this.m_oMapService.getMap().invalidateSize();
@@ -102,74 +99,25 @@ export class EditMapComponent implements OnInit {
         for (var iIndexLayers = 0; iIndexLayers < this.m_aoVisibleBands.length; iIndexLayers++) {
           // Check if it is a valid layer
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoVisibleBands[iIndexLayers].layerId)) {
-            var sColor = "#f22323";
-            var sGeoserverBBox = this.m_aoVisibleBands[iIndexLayers].geoserverBoundingBox;
-            this.m_oMapService.productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, this.m_aoVisibleBands[iIndexLayers].bbox, this.m_aoVisibleBands[iIndexLayers].layerId);
+            this.m_oMapService.addLayerMap2DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);            
           }
-          this.addLayerMap2DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);
         }
 
         // Load External Layers
         for (var iExternals = 0; iExternals < this.m_aoExternalLayers.length; iExternals++) {
           if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoExternalLayers[iExternals].Name)) {
-            this.addLayerMap2DByServer(this.m_aoExternalLayers[iExternals].Name, this.m_aoExternalLayers[iExternals].sServerLink);
+            this.m_oMapService.addLayerMap2DByServer(this.m_aoExternalLayers[iExternals].Name, this.m_aoExternalLayers[iExternals].sServerLink);
           }
         }
+        
         //  Add all bounding boxes to 3D Map
         this.m_oGlobeService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts);
-        // Zoom on the active band
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveBand) === false) {
-          this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(this.m_oActiveBand.geoserverBoundingBox);
-          this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(this.m_oActiveBand.geoserverBoundingBox);
 
-        } else {
-          // Zoom on the workspace
-          this.m_oMapService.flyToWorkspaceBoundingBox(this.m_aoProducts);
-        }
+        // Zoom on the workspace
+        this.goWorkspaceHome();
       }, 300)
     }
 
-  }
-
-
-
-  addLayerMap2DByServer(sLayerId, sServer) {
-    // Check input data
-    if (sLayerId == null) return false;
-    if (sServer == null) sServer = this.m_oConstantsService.getWmsUrlGeoserver();
-
-    var oMap = this.m_oMapService.getMap();
-
-    var wmsLayer = L.tileLayer.wms(sServer, {
-      layers: sLayerId,
-      format: 'image/png',
-      transparent: true,
-      noWrap: true
-    });
-    wmsLayer.setZIndex(1000);//it set the zindex of layer in map
-    wmsLayer.addTo(oMap);
-    return true;
-  }
-
-  addLayerMap3DByServer(sLayerId: string, sServer: string) {
-    if (sServer == null) sServer = this.m_oConstantsService.getWmsUrlGeoserver();
-
-    var oGlobeLayers = this.m_oGlobeService.getGlobeLayers();
-
-    var oWMSOptions = { // wms options
-      transparent: true,
-      format: 'image/png'
-    };
-
-    // WMS get GEOSERVER
-    var oProvider = new Cesium.WebMapServiceImageryProvider({
-      url: sServer,
-      layers: sLayerId,
-      parameters: oWMSOptions
-
-    });
-
-    oGlobeLayers.addImageryProvider(oProvider);
   }
 
   goWorkspaceHome() {

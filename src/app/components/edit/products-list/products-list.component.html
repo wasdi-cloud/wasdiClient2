@@ -41,8 +41,11 @@
         </div>
         <ul *ngIf="(m_aoWorkspaceProductsList.length !== 0) && !m_bIsLoadingProducts"
             class="list-group list-group-flush">
-            <li *ngFor="let oProduct of m_aoWorkspaceProductsList; let iIndex = index"
+            <li *ngFor="let oProduct of m_aoWorkspaceProductsList; trackBy: trackByItem"
                 class="list-group-item p-2 d-flex flex-column" style="cursor: pointer;">
+
+                <input class="form-check-input me-1" type="checkbox" value="{{oProduct}}"
+                [checked]="oProduct['checked']" (change)="addProductToSelectedProducts($event, oProduct)">
 
                 <span class="product-name">{{oProduct.name}}</span>
 

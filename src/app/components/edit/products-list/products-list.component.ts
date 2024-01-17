@@ -480,100 +480,60 @@ export class ProductsListComponent implements OnChanges, OnInit {
     oActiveBand['bVisibleNow'] = true;
 
     if (this.m_b2DMapMode === false) {
-      var oRectangleIsNotGeoreferencedProduct = this.m_oGlobeService.productIsNotGeoreferencedRectangle3DMap(oActiveBand.geoserverBoundingBox, oActiveBand.bbox, oActiveBand.layerId);
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangleIsNotGeoreferencedProduct) === false) {
-        this.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
-        var oLayer3DMap = {
-          id: oActiveBand.layerId,
-          rectangle: oRectangleIsNotGeoreferencedProduct
-        };
-        this.m_aoProductsLayersIn3DMapArentGeoreferenced.push(oLayer3DMap);
-      }
       //if we are in 3D put the layer on the globe
-      this.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
+      this.m_oGlobeService.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
     } else {
-      var sColor = "#f22323";
-      var sGeoserverBBox = oActiveBand.geoserverBoundingBox;
-      this.m_oMapService.productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, oActiveBand.bbox, oActiveBand.layerId);
       //if we are in 2D put it on the map
-      this.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
-    }
-    if (typeof oPublishedBand === undefined) {
-      console.log("ProductListComponent.receivedPublishBandMessage: Error Published band is empty...");
-      return false;
+      this.m_oMapService.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
     }
 
     return true;
   }
 
   /**
-   * Adds a Layer to the 2D Map 
-   * @param sLayerId 
-   * @param sServer 
-   * @returns 
+   * Get Product Metadata calling the API
+   * 
+   * @param sFileName 
    */
-  addLayerMap2DByServer(sLayerId: string, sServer: string) {
-    if (sLayerId == null) {
-      return false;
-    }
-    if (sServer == null) {
-      sServer = this.m_oConstantsService.getWmsUrlGeoserver();
-    }
-
-    let oMap = this.m_oMapService.getMap();
-
-    let oWmsLayer = L.tileLayer.wms(sServer, {
-      layers: sLayerId,
-      format: 'image/png',
-      transparent: true,
-      noWrap: true
-    });
-    oWmsLayer.setZIndex(1000);
-    oWmsLayer.addTo(oMap);
-    return true;
-  }
-
-  addLayerMap3DByServer(sLayerId, sServer) {
-    if (sLayerId == null) return false;
-    if (sServer == null) sServer = this.m_oConstantsService.getWmsUrlGeoserver();
-
-    var oGlobeLayers = this.m_oGlobeService.getGlobeLayers();
-
-    var oWMSOptions = { // wms options
-      transparent: true,
-      format: 'image/png'
-    };
-
-    // WMS get GEOSERVER
-    var oProvider = new Cesium.WebMapServiceImageryProvider({
-      url: sServer,
-      layers: sLayerId,
-      parameters: oWMSOptions
-
-    });
-
-    oGlobeLayers.addImageryProvider(oProvider);
-
-    return true
-  }
-
   readMetadata(sFileName: string) {
     this.m_oProductService.getProductMetadata(sFileName, this.m_oActiveWorkspace.workspaceId);
   }
 
+  /**
+   * Trigger the Product Info Change
+   */
   emitProductInfoChange() {
     this.m_oProductInfoChange.emit(true);
   }
 
   /********** Handlers for no Products **********/
+
+  /**
+   * Moves the user in the Search Section
+   */
   navigateToSearchPage() {
     this.m_oRouter.navigateByUrl('/search');
   }
 
+  /**
+   * Open the Import Dialog
+   */
   openImportDialog() {
     let oDialog = this.m_oDialog.open(ImportDialogComponent, {
       height: '40vh',
       width: '50vw'
     })
+  }
+
+  /**
+   * Track By Function needed by angular to determine the uniquess of an item in the list
+   * This is used for the product list
+   * 
+   * @param iIndex 
+   * @param oItem 
+   * @returns 
+   */
+  trackByItem(iIndex: number, oItem: any) {
+    return oItem.fileName
   }
 }
