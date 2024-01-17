@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -47,9 +47,6 @@ export class PlanMapComponent {
   @Output() m_oSearchInputhange = new EventEmitter;
 
   constructor(public m_oMapService: MapService) {
-    //this.m_oMapService.setDrawnItems();
-    //this.m_oMapService.initTilelayer();
-
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
     this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
@@ -62,6 +59,11 @@ export class PlanMapComponent {
     this.m_oMapService.setMap(oMap);
   }
 
+
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("PlanMapComponent.ngOnDestroy")
+    this.m_oMapService.setMap(null);
+  }    
 
   onDrawCreated(oEvent): void {
     let oLayer = oEvent.layer;

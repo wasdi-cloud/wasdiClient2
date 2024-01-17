@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MapService } from 'src/app/services/map.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -10,9 +10,9 @@ import * as L from 'leaflet';
   templateUrl: './search-map.component.html',
   styleUrls: ['./search-map.component.css']
 })
-export class SearchMapComponent implements OnInit {
+export class SearchMapComponent implements OnInit, OnDestroy {
   @Input() m_aoProducts: Observable<any>;
-  m_aoProductsList
+  m_aoProductsList: any;
   @Input() oMapInput: any = {
     maxArea: 0,
     maxRatioSide: 0,
@@ -37,9 +37,6 @@ export class SearchMapComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-    //this.m_oMapService.setDrawnItems();
-    //this.m_oMapService.initTilelayer();
 
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
@@ -68,6 +65,11 @@ export class SearchMapComponent implements OnInit {
       }
     })
   }
+
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("SearchMapComponent.ngOnDestroy")
+    this.m_oMapService.setMap(null);
+  }    
 
   onMapReady(oMap: L.Map) {
     this.m_oMapService.setMap(oMap);

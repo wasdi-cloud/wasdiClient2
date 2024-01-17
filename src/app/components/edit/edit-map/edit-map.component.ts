@@ -56,7 +56,8 @@ export class EditMapComponent implements OnInit {
   }
 
   /**
-   * Flag to know when the editor has loaded the Products list
+   * Flag to know when the editor has loaded the Products list.
+   * It is "read" from the editor component
    */
   private m_bIsLoadingProducts = true;
 
@@ -75,6 +76,7 @@ export class EditMapComponent implements OnInit {
       this.m_bIsLoadingProducts = value;
       if (this.m_b2DMapModeOn) {
         this.m_oGlobeService.addAllWorkspaceRectanglesOnGlobe(this.m_aoProducts);
+        this.goWorkspaceHome();
       }
       else {
         this.m_oMapService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts, "");
@@ -93,6 +95,10 @@ export class EditMapComponent implements OnInit {
    * By the default the 2D map is active.
    */
   m_b2DMapModeOn = true;
+
+  /**
+   * Event triggered when the Map Mode changes from 2D to 3D and vice versa
+   */
   @Output() m_b2DMapModeOutput = new EventEmitter();
 
   constructor(
@@ -101,11 +107,14 @@ export class EditMapComponent implements OnInit {
     private m_oMapService: MapService) { }
 
   ngOnInit(): void {
-
     FadeoutUtils.verboseLog("EditMapComponent.ngOnInit: initializing")
+    // As we enter, we go in 2D Mode by default
     this.init2DMode(false);
   }
 
+  /**
+   * Method to switch from 2D to 3D mode and vice versa
+   */
   switch2D3DMode() {
     this.m_b2DMapModeOn = !this.m_b2DMapModeOn;
 
@@ -113,16 +122,23 @@ export class EditMapComponent implements OnInit {
     this.m_oGlobeService.clearGlobe();
     this.m_oMapService.clearMap();
 
-    // Changing the Displayed Map to the 3D Cesium Globe:
+    
     if (this.m_b2DMapModeOn === false) {
+      // Changing the Displayed Map to the 3D Cesium Globe:
       this.init3DMode(true);
     }
     else {
+      // Changing the Displayed Map to the 2D Leaflet Map:
       this.init2DMode(true);
     }
 
+    this.goWorkspaceHome();
   }
 
+  /**
+   * Initializes the 2D Mode
+   * @param bAddFootPrints true to add the workspace footprints to the small map
+   */
   init2DMode(bAddFootPrints: boolean) {
     // Clear Both Map and Globe
     this.m_oGlobeService.clearGlobe();
@@ -139,31 +155,40 @@ export class EditMapComponent implements OnInit {
     //Set time out for Leaflet to animate:
     setTimeout(() => {
       this.m_oMapService.getMap().invalidateSize();
-      // Load Layers
+
+      // Load Visible Layers
       for (var iIndexLayers = 0; iIndexLayers < this.m_aoVisibleBands.length; iIndexLayers++) {
         // Check if it is a valid layer
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoVisibleBands[iIndexLayers].layerId)) {
+          // Add it to the 2D Map
           this.m_oMapService.addLayerMap2DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);            
         }
       }
 
       // Load External Layers
       for (var iExternals = 0; iExternals < this.m_aoExternalLayers.length; iExternals++) {
+        // Check if it is valid
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoExternalLayers[iExternals].Name)) {
+          // Add it to the 2D Map
           this.m_oMapService.addLayerMap2DByServer(this.m_aoExternalLayers[iExternals].Name, this.m_aoExternalLayers[iExternals].sServerLink);
         }
       }
 
-      console.log("EditMapComponent.init2DMode: Products Size = " + this.m_aoProducts.length);
-
+      // Init the Globe in the small container
       this.m_oGlobeService.initGlobe('smallMapContainer')
 
+      // If requested, add the foot print
       if (bAddFootPrints) {
+        // Note: this have also the "fly" included
         this.m_oGlobeService.addAllWorkspaceRectanglesOnGlobe(this.m_aoProducts);
       }
     }, 300);
   }
 
+  /**
+   * Initialize the 3D Mode
+   * @param bAddFootPrints true to add the workspace footprints to the small map
+   */
   init3DMode(bAddFootPrints: boolean) {
 
     // Changing the Displayed Map to the 3D Cesium Globe:
@@ -180,21 +205,23 @@ export class EditMapComponent implements OnInit {
       
       // Check if it is a valid layer
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoVisibleBands[iIndexLayers].layerId)) {
+        // Add the layer to the 3D Map
         this.m_oGlobeService.addLayerMap3DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);
       }
     }
 
-    console.log("EditMapComponent.init3DMode: Products Size = " + this.m_aoProducts.length);
-
+    // Initialize the small 2D map in the Nav Tab
     this.m_oMapService.initWasdiMap("smallMapContainer");
 
     //Set time out for Leaflet to animate:
     setTimeout(() => {
+      // Invalidate
       this.m_oMapService.getMap().invalidateSize();
+
+      // Add foot prints (and send all to the workspace view)
       if (bAddFootPrints) {
         this.m_oMapService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts, "");
         this.m_oMapService.flyToWorkspaceBoundingBox(this.m_aoProducts);
-        this.goWorkspaceHome();
       }
     }, 300);
   } 
