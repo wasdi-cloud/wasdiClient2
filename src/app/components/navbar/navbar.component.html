@@ -32,7 +32,7 @@
             </button>
         </li>
         <li>
-            <button class="" routerLink="/edit/{{sActiveWorkspaceId}}"
+            <button class="" routerLink="/edit/{{sActiveWorkspaceId}}" [disabled]="sActiveWorkspaceId ? false :true  "
                 matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}" [matTooltipPosition]="'right'"
                 [ngClass]="m_sSelectedTab === 'edit' ?  'active': ''" (click)="setActiveTab('edit')">
                 <img src="assets/svg/edit-icon.svg" alt="icon" />
