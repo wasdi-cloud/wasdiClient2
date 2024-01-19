@@ -4,14 +4,20 @@ import Geocoder from 'leaflet-control-geocoder';
 import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
 import { latLng, Map, tileLayer, featureGroup } from 'leaflet';
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
-import * as L from "leaflet";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ManualBoundingBoxComponent } from '../shared/shared-components/manual-bounding-box/manual-bounding-box.component';
+import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
+import { BehaviorSubject } from 'rxjs';
+// import * as L from "leaflet";
+
+declare const L: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
 
-  constructor(private m_oConstantsService: ConstantsService) {
+  constructor(private m_oConstantsService: ConstantsService, private m_oDialog: MatDialog) {
     this.initTilelayer();
     this.m_oOptions = {
       layers: [
@@ -65,6 +71,9 @@ export class MapService {
    */
   m_oGeocoderControl = new Geocoder();
 
+  m_oManualBoundingBoxSubscription: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  _m_oManualBoundingBoxSubscription$ = this.m_oManualBoundingBoxSubscription.asObservable();
+
   //Init options for leaflet-draw
   m_oDrawOptions: any = {
     position: 'topleft',
@@ -90,6 +99,8 @@ export class MapService {
   setMap(oMap: any) {
     this.m_oWasdiMap = oMap;
   }
+
+
 
   /**
    * Get the Map object
@@ -175,7 +186,7 @@ export class MapService {
       position: "bottomright",
       imperial: false
     }).addTo(oMap);
-    
+
     // center map
     let southWest = L.latLng(0, 0);
     let northEast = L.latLng(0, 0);
@@ -306,14 +317,14 @@ export class MapService {
    * Clear Map 
    */
   clearMap() {
-    
+
     if (this.m_oWasdiMap) {
       FadeoutUtils.verboseLog("MapService.clearMap: cleaning the map instance")
       this.m_oDrawnItems.clearLayers();
       this.m_oWasdiMap.remove();
       this.m_oWasdiMap = null;
     }
-    else{
+    else {
       FadeoutUtils.verboseLog("MapService.clearMap: map was already null")
     }
   }
@@ -730,30 +741,86 @@ export class MapService {
     return null;
   }
 
-    /**
-   * Adds a Layer to the 2D Map 
-   * @param sLayerId Layer Id
-   * @param sServer  Geoserver address. Of null the default one from Constant Service is taken
-   * @returns True if all is fine, False in case of error
-   */
-    addLayerMap2DByServer(sLayerId: string, sServer: string) {
-      if (sLayerId == null) {
-        return false;
-      }
-      if (sServer == null) {
-        sServer = this.m_oConstantsService.getWmsUrlGeoserver();
-      }
-  
-      let oMap = this.getMap();
-  
-      let oWmsLayer = L.tileLayer.wms(sServer, {
-        layers: sLayerId,
-        format: 'image/png',
-        transparent: true,
-        noWrap: true
-      });
-      oWmsLayer.setZIndex(1000);
-      oWmsLayer.addTo(oMap);
-      return true;
+  /**
+ * Adds a Layer to the 2D Map 
+ * @param sLayerId Layer Id
+ * @param sServer  Geoserver address. Of null the default one from Constant Service is taken
+ * @returns True if all is fine, False in case of error
+ */
+  addLayerMap2DByServer(sLayerId: string, sServer: string) {
+    if (sLayerId == null) {
+      return false;
     }
+    if (sServer == null) {
+      sServer = this.m_oConstantsService.getWmsUrlGeoserver();
+    }
+
+    let oMap = this.getMap();
+
+    let oWmsLayer = L.tileLayer.wms(sServer, {
+      layers: sLayerId,
+      format: 'image/png',
+      transparent: true,
+      noWrap: true
+    });
+    oWmsLayer.setZIndex(1000);
+    oWmsLayer.addTo(oMap);
+    return true;
+  } 
+
+
+addManualBbox(oMap: any) {
+  let oController = this;
+  L.Control.Button = L.Control.extend({
+    options: {
+      position: "topleft"
+    },
+    onAdd: function (map) {
+      let container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+      let button = L.DomUtil.create('a', 'leaflet-control-button', container);
+      L.DomEvent.disableClickPropagation(button);
+      L.DomEvent.on(button, 'click', function () {
+        let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent)
+        oDialog.afterClosed().subscribe(oResult => {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+            if (isNaN(oResult.north) || isNaN(oResult.south) || isNaN(oResult.east) || isNaN(oResult.west)) {
+              return;
+            } else {
+              let fNorth = parseFloat(oResult.north);
+              let fSouth = parseFloat(oResult.south);
+              let fEast = parseFloat(oResult.east);
+              let fWest = parseFloat(oResult.west);
+
+              let aoBounds = [[fNorth, fWest], [fSouth, fEast]];
+              oController.addManualBboxLayer(aoBounds);
+            }
+          }
+        })
+      });
+      button.innerHTML = 'M';
+      container.title = "Manual Bounding Box";
+
+      return container;
+    },
+    onRemove: function (map) { },
+  })
+  let oControl = new L.Control.Button();
+  oControl.addTo(oMap);
+}
+
+addManualBboxLayer(aoBounds) {
+  let oLayer = L.rectangle(aoBounds, { color: "#3388ff", weight: 1 });
+  // oController.m_oRectangleOpenSearch = oLayer;
+
+  //remove old shape
+  if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
+    this.m_oDrawnItems.clearLayers();
+  }
+
+  this.m_oDrawnItems.addLayer(oLayer);
+  this.zoomOnBounds(aoBounds);
+
+  //Emit bounding box to listening componenet:
+  this.m_oManualBoundingBoxSubscription.next(oLayer);
+}
 }

@@ -30,6 +30,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   m_sErrorMessage: string;
   m_bIsValid: boolean;
   m_oMapOptions: any;
+  m_oManualBboxSubscription: any;
 
   constructor(
     private m_oMapService: MapService,
@@ -64,6 +65,12 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         }
       }
     })
+
+    this.m_oManualBboxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+        this.formatManualBbox(oResult);
+      }
+    })
   }
 
   ngOnDestroy(): void {
@@ -73,13 +80,15 @@ export class SearchMapComponent implements OnInit, OnDestroy {
 
   onMapReady(oMap: L.Map) {
     this.m_oMapService.setMap(oMap);
+    let manualBbox = this.m_oMapService.addManualBbox(oMap);
+
   }
 
   onDrawCreated(oEvent: any) {
 
-     if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
-          this.m_oDrawnItems.clearLayers();
-        }
+    if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
+      this.m_oDrawnItems.clearLayers();
+    }
     let oDrawnItem = this.m_oMapService.onSearchDrawCreated(oEvent);
 
     //Add layer to map
@@ -191,4 +200,26 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     }
   }
 
+  formatManualBbox(oLayer) {
+    let sFilter = '( footprint:"intersects(POLYGON((';
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oLayer)) {
+      let iNumberOfPoints = oLayer._latlngs[0].length;
+      let aaLatLngs = oLayer._latlngs[0];
+      /*open search want the first point as end point */
+      let iLastlat = aaLatLngs[0].lat;
+      let iLastlng = aaLatLngs[0].lng;
+      for (let iIndexBounds = 0; iIndexBounds < iNumberOfPoints; iIndexBounds++) {
+
+        sFilter = sFilter + aaLatLngs[iIndexBounds].lng + " " + aaLatLngs[iIndexBounds].lat + ",";
+        //if(iIndexBounds != (iNumberOfPoints-1))
+        //    sFilter = sFilter + ",";
+      }
+      sFilter = sFilter + iLastlng + " " + iLastlat + ')))" )';
+    }
+    //(%20footprint:%22Intersects(POLYGON((5.972671999999995%2036.232811331264955,20.123062624999992%2036.232811331264955,20.123062624999992%2048.3321995971576,5.972671999999995%2048.3321995971576,5.972671999999995%2036.232811331264955)))%22%20)
+    //set filter
+
+    this.oMapInput = sFilter;
+    this.m_oMapInputChange.emit(this.oMapInput);
+  }
 }

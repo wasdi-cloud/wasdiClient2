@@ -1,6 +1,6 @@
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
-import { MapService } from 'src/app/services/map.service';
 
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { MapService } from 'src/app/services/map.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import * as L from 'leaflet';
 
@@ -9,7 +9,7 @@ import * as L from 'leaflet';
   templateUrl: './plan-map.component.html',
   styleUrls: ['./plan-map.component.css']
 })
-export class PlanMapComponent {
+export class PlanMapComponent implements OnInit {
 
   /**
    * Array of the elements drawn on the map
@@ -42,6 +42,11 @@ export class PlanMapComponent {
   m_sPolygon: string;
 
   /**
+   * Manual Bbox Input Subscription
+   */
+  m_aoManualBBoxSubscription: any;
+
+  /**
    * Event for the search params
    */
   @Output() m_oSearchInputhange = new EventEmitter;
@@ -55,8 +60,20 @@ export class PlanMapComponent {
     this.m_oDrawOptions.edit.featureGroup = this.m_aoDrawnItems;
   }
 
+  ngOnInit(): void {
+    this.m_aoManualBBoxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+        this.m_oGeoJSON = oResult.toGeoJSON();
+        this.m_sPolygon = this.getPolygon();
+
+        this.emitMapInputs();
+      }
+    })
+  }
+
   onMapReady(oMap: L.Map): void {
     this.m_oMapService.setMap(oMap);
+    this.m_oMapService.addManualBbox(oMap)
   }
 
 
