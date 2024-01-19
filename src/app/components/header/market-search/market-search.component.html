@@ -3,14 +3,14 @@
 </form>
 <ul class="d-flex flex-row">
     <li>
-        <div class="background-color">
+        <div class="background-color" (click)="setSearchFilter()">
             <img src="assets/svg/search-icon.svg" alt="search icon" />
             <label for="search-bar">Search</label>
         </div>
-        <input class="search-input" type="text" id="search-bar" name="search-bar" placeholder="Find Apps..." />
+        <input class="search-input" type="text" id="search-bar" name="search-bar" placeholder="Find Apps..." [(ngModel)]="m_sSearchInput" />
     </li>
 
-    <li>
+    <!-- <li>
         <button class="name-select" id="name">
             Name
         </button>
@@ -24,5 +24,5 @@
         <button class="name-select price-select" id="price">
             Price
         </button>
-    </li>
+    </li> -->
 </ul>
