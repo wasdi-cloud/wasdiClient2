@@ -1,74 +1,134 @@
-<main>
-    <div class="filters-container d-flex flex-row align-items-center justify-content-start" style="width: 100%">
-        <div class="col-1">
-            <h5 class="hbody-text">{{"MARKET_FILTERS" | translate }}:</h5>
-        </div>
-        <div class="d-flex flex-row flex-fill">
-            <div style="width: 15rem;">
-                <mat-select multiple class="form-control" [(ngModel)]="m_aoSelectedPublishers"
-                    placeholder='{{"MARKET_DEVELOPER" | translate}}' (selectionChange)="developerChanged($event)"
-                    style="width: 15rem;">
-                    <mat-option *ngFor="let oPublisher of m_aoPublishers" [value]="oPublisher.publisher">
-                        {{oPublisher.publisher}}
-                    </mat-option>
-                </mat-select>
+<main class="d-flex flex-row">
+    <div class="d-flex flex-row">
+        <section class="sub-menu">
+            <article class="sub-menu-grp">
+                <div class="title">
+                    <img src="assets/svg/category-icon.svg" alt="category" />
+                    <h3>Category</h3>
+                </div>
+                <div class="category-body ">
+                    <button *ngFor="let oCategory of m_asCategoryOptions" (click)="categoriesChanged(oCategory)"
+                        [ngClass]="m_aoSelectedCategories.indexOf(oCategory.id) !== -1 ? 'selected' :''">{{oCategory.category}}</button>
+                </div>
+            </article>
+            <article class="sub-menu-grp">
+                <div class="title">
+                    <img src="assets/svg/developer-icon.svg" alt="developer-icon" />
+                    <h3>Developer</h3>
+                </div>
+                <div class="sub-menu-body">
+                    <div class="sub-menu-search">
+                        <img src="assets/svg/search-icon.svg" alt="search icon" />
+                        <input type="text" placeholder="Find a developer" [(ngModel)]="m_sDeveloperSearch" />
+                    </div>
+                    <label class="d-flex flex-row align-items-center" for="dev-mail-{{oPublisher.publisher}}"
+                        *ngFor="let oPublisher of m_aoPublishers | filter: m_sDeveloperSearch">
+                        <input id="dev-mail-{{oPublisher.publisher}}" type="checkbox"
+                            (click)="developerChanged(oPublisher)" />
+                        <span class="checkmark"></span>
+                        <p class="p-0 m-0">{{oPublisher.publisher}}</p>
+                        <span class="num">({{oPublisher.appCount}})</span>
+                    </label>
+                </div>
+            </article>
+
+            <article class="sub-menu-grp">
+                <div class="title">
+                    <img src="assets/svg/rating-icon.svg" alt="rating icon" />
+                    <h3>Rating</h3>
+                </div>
+                <div class="sub-menu-body">
+                    <label for="all-ratings">
+                        <input id="all-ratings" type="radio" name="rating" (click)="ratingChanged(0)"
+                            checked="checked" />
+                        <span class="checkmark"></span>
+                        <p class="p-0 m-0">All Ratings</p>
+                    </label>
+                    <label for="star-rating-4">
+                        <input id="star-rating-4" type="radio" name="rating" (click)="ratingChanged(4)" />
+                        <span class="checkmark"></span>
+                        <p class="p-0 m-0">4+</p>
+                        <img style="padding-left: 0.3rem" src="assets/svg/yellow-star-icon.svg"
+                            alt="yellow-star-icon" />
+                        <img src="assets/svg/yellow-star-icon.svg" alt="yellow-star-icon" />
+                        <img src="assets/svg/yellow-star-icon.svg" alt="yellow-star-icon" />
+                        <img src="assets/svg/yellow-star-icon.svg" alt="yellow-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                    </label>
+                    <label for="star-rating-3">
+                        <input id="star-rating-3" type="radio" name="rating" (click)="ratingChanged(3)" />
+                        <span class="checkmark"></span>
+                        <p class="p-0 m-0">3+</p>
+                        <img style="padding-left: 0.3rem" src="assets/svg/yellow-star-icon.svg"
+                            alt="yellow-star-icon" />
+                        <img src="assets/svg/yellow-star-icon.svg" alt="yellow-star-icon" />
+                        <img src="assets/svg/yellow-star-icon.svg" alt="yellow-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                    </label>
+                    <label for="star-rating-2">
+                        <input id="star-rating-2" type="radio" name="rating" (click)="ratingChanged(2)" />
+                        <span class="checkmark"></span>
+                        <p class="p-0 m-0">2+</p>
+                        <img style="padding-left: 0.3rem" src="assets/svg/yellow-star-icon.svg"
+                            alt="yellow-star-icon" />
+                        <img src="assets/svg/yellow-star-icon.svg" alt="yellow-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                    </label>
+                    <label for="star-rating-1">
+                        <input id="star-rating-1" type="radio" name="rating" (click)="ratingChanged(1)" />
+                        <span class="checkmark"></span>
+                        <p class="p-0 m-0">1+</p>
+                        <img style="padding-left: 0.3rem" src="assets/svg/yellow-star-icon.svg"
+                            alt="yellow-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                        <img src="assets/svg/grey-star-icon.svg" alt="grey-star-icon" />
+                    </label>
+                </div>
+            </article>
+            <article class="sub-menu-grp">
+                <div class="title">
+                    <img src="assets/svg/price-icon.svg" alt="price icon" />
+                    <h3>Price</h3>
+                </div>
+                <!--div class="sub-menu-body">
+                    <div class="range">
+                        <div class="price-values-display">
+                            <p>0</p>
+                            <p class="min">70$</p>
+                            <p class="max">350$</p>
+                            <p>500</p>
+                        </div>
+                        <!-- the following div is used as input for the JS -->
+                <!-- Display: hidden: -->
+                <!-- <div class="range-price">
+                            <input type="number" name="min" value="300" />
+                            <input type="number" name="max" value="700" />
+                        </div>
+                        <div class="range-slider">
+                            <span class="range-selected"></span>
+                        </div>
+                        <div class="range-input">
+                            <input type="range" class="min" min="0" max="1000" value="300" step="10" />
+                            <input type="range" class="max" min="0" max="1000" value="700" step="10" />
+                        </div>
+                    </div>
+                </div> -->
+            </article>
+        </section>
+        <!-- Marketplace App Cards -->
+        <div class="processor-cards-container d-flex flex-column py-3">
+            <div class="col-12 d-flex flex-row flex-wrap justify-content-start px-3 gap-1">
+                <app-marketplace-app-card *ngFor="let oProcessor of m_aoApplications"
+                    [oProcessor]="oProcessor"></app-marketplace-app-card>
             </div>
-
-            <div style="width: 10rem">
-                <mat-select multiple placeholder="Categories" class="form-control" [(ngModel)]="m_aoSelectedCategories" (selectionChange)="categoriesChanged($event)" style="width: 10rem">
-                    <mat-option *ngFor="let oCategory of m_asCategoryOptions"
-                        [value]="oCategory.id">{{oCategory.category}}</mat-option>
-                </mat-select>
-            </div>
-
-            <div style="width: 12rem">
-                <mat-select name="" id="" class="form-control" (change)="ratingChanged($event)" [(ngModel)]="m_iSelectedStarRating"
-                    style="width: 12rem" placeholder='{{"MARKET_RATING" | translate}}'>
-                    <mat-option value="0">See All</mat-option>
-                    <mat-option value="1">1 Star and Above</mat-option>
-                    <mat-option value="2">2 Stars and Above</mat-option>
-                    <mat-option value="3">3 Stars and Above</mat-option>
-                    <mat-option value="4">4 Stars and Above</mat-option>
-                    <mat-option value="5">5 Stars Only</mat-option>
-                </mat-select>
-            </div>
-            <!-- Commented Unused/Inactive Filters -->
-            <!-- <div style="width: 10rem">
-                <mat-select name="" id="" class="form-control" placeholder='{{"MARKET_SUCCESS" | translate}}'
-                    style="width: 10rem">
-                    <mat-option value="">Show All</mat-option>
-                    <mat-option value="20">{{"MARKET_ABOVE" | translate}} 20%</mat-option>
-                    <mat-option value="40">{{"MARKET_ABOVE" | translate}} 40%</mat-option>
-                    <mat-option value="60">{{"MARKET_ABOVE" | translate}} 60%</mat-option>
-                    <mat-option value="80">{{"MARKET_ABOVE" | translate}} 80%</mat-option>
-                </mat-select>
-            </div> -->
-
-            <!-- <mat-select name="" id="" class="form-control">
-                <mat-option value="0">Show All</mat-option>
-                <mat-option value="mostUsed" selected>{{"MARKET_MOST_USED" | translate}}</mat-option>
-                <mat-option value="leastUsed">{{"MARKET_LEAST_USED" | translate}}</mat-option>
-            </mat-select> -->
-            <!-- <input type="text" name="" id="" class="form-control " placeholder="{{'MARKET_MAX_PRICE' | translate}}"
-                (change)="maxPriceChanged($event)"> -->
-        </div>
-
-        <!-- Search Bar Container -->
-        <div class="col-3 search search-container justify-self-end d-flex flex-row align-items-center ps-3">
-            <input type="text" name="" id="" class="form-control" placeholder="{{'MARKET_SEARCH_APP' | translate}}"
-                [(ngModel)]="m_sNameFilter" (keyup)="onSearchInput($event)">
-            <button class="btn btn-primary" id="searchBtn" (click)="onSearchInput($event)">Search</button>
-            <button class="btn btn-secondary" (click)="clearSearchInput($event)">Clear</button>
+            <button [disabled]="m_bLoadMoreEnabled === false" class="btn btn-lg btn-primary align-self-center"
+                (click)="loadMore()">Load More</button>
         </div>
     </div>
 
-    <!-- Marketplace App Cards -->
-    <div class="processor-cards-container d-flex flex-column pb-3">
-        <div class="col-12 d-flex flex-row flex-wrap justify-content-start px-3">
-            <app-marketplace-app-card class="col-xs-12 col-md-6 col-lg-3 px-1"
-                *ngFor="let oProcessor of m_aoApplications" [oProcessor]="oProcessor"></app-marketplace-app-card>
-        </div>
-        <button [disabled]="m_bLoadMoreEnabled === false" class="btn btn-lg btn-primary align-self-center"
-            (click)="loadMore()">Load More</button>
-    </div>
 </main>

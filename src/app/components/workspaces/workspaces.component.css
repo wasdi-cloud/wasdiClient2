@@ -1,5 +1,5 @@
-div.workspaces-header {
-    background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0));
+section.workspaces-container {
+    max-width: 95vw;
 }
 
 h4 {
@@ -9,10 +9,12 @@ h4 {
 
 div.workspace-properties-container {
     height: 80vh;
+    width: 40%;
 }
 
 div.workspace-globe-contaienr {
-    height: 80vh
+    height: 80vh;
+    width: 60vw;
 }
 
 div.workspaces-container,
@@ -25,4 +27,8 @@ div.workspaces-list-group {
     height: 100%;
     overflow: hidden;
     overflow-y: scroll;
+}
+
+li.workspace-product {
+    overflow: hidden;
 }

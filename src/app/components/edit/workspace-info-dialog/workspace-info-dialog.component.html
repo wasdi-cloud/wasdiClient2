@@ -10,10 +10,10 @@
         </div>
 
         <div>
-            Created:<span class="text-secondary">{{m_oWorkspace.creationDate}}</span>
+            Created:<span class="text-secondary"> {{m_oWorkspace.creationDate | date}}</span>
         </div>
         <div>
-            Last Update:<span class="text-secondary">{{m_oWorkspace.lastEditDate}}</span>
+            Last Update:<span class="text-secondary"> {{m_oWorkspace.lastEditDate | date}}</span>
         </div>
         <div>
             Workspace Id:<span class="text-secondary">{{m_oWorkspace.workspaceId}}</span>
@@ -22,7 +22,7 @@
         <!-- <div>
         Processes Executed:<span class="text-secondary">{{m_oWorkspace.processesCount}}</span>
     </div> -->
-        <div>
+        <div *ngIf="m_oWorkspace.sharedUsers.length > 0">
             Workspace Shared With:
             <ul>
                 <li *ngFor="let oSharedUser of m_oWorkspace.sharedUsers">
@@ -35,7 +35,8 @@
         <form #nodeCodeForm="ngForm" id="nodeCodeForm" (ngSubmit)="saveNodeCode()">
             <label for="m_sCurrentNode">Change Node: </label>
             <select class="form-contorl" name="m_sCurrentNode" [(ngModel)]="m_sCurrentNode" id="">
-                <option *ngFor="let oNode of m_asNodeCodes" value={{oNode}} [selected]="oNode === m_oWorkspace.nodeCode">{{oNode}}</option>
+                <option *ngFor="let oNode of m_asNodeCodes" value={{oNode}}
+                    [selected]="oNode === m_oWorkspace.nodeCode">{{oNode}}</option>
             </select>
         </form>
     </div>

@@ -1,12 +1,10 @@
-<div class="navbar bg-secondary d-flex flex-row gap-5 px-3"
-    style="position: absolute; bottom: 0; width: 100vw">
+<div class="processes-bar w-100 bg-secondary d-flex flex-row justify-content-end p-0 m-0">
     <div *ngIf="m_bShowDownloadProgress" class="text-light">
         Downloading: {{m_sDownloadProductName}}
         <mat-progress-bar [mode]="'indeterminate'" [color]="'success'" style="width: 300px;"></mat-progress-bar>
     </div>
-    <div class="d-flex flex-row gap-5 align-items-center justify-self-end " style="margin-left:auto">
-        <div class="py-2 px-3" style="border-radius: 100%;"
-            [ngClass]="m_iIsWebsocketConnected ? 'bg-success' : 'bg-danger'">
+    <div class="d-flex flex-row gap-5 align-items-center">
+        <div class="py-2 px-3" style="border-radius: 100%;" [ngClass]="m_iIsWebsocketConnected ? 'bg-success' : 'bg-danger'">
             <fa-icon class="text-light" [icon]="faPlug"></fa-icon>
         </div>
         <div class="d-flex flex-row align-items-center gap-1">

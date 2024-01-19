@@ -1,11 +1,20 @@
-<div class="workspaces-header py-3 px-4 my-0 bg-light d-flex flex-row justify-content-between align-items-center">
-    <input type="text" class="form-control" name="" id="" style="width: 16rem;" placeholder="Search Workspaces..."
-        [(ngModel)]="m_sWorkspaceSearchInput">
-    <button class="btn btn-primary" (click)="openNewWorkspaceDialog()">
-        <fa-icon [icon]="faPlus"></fa-icon>
-        {{"WORKSPACES_BUTTON_NEW_WORKSPACE" | translate}}</button>
-</div>
+<section class="workspaces-container">
+    <div class="workspaces-header py-3 px-4 my-0 d-flex flex-row justify-content-between align-items-center">
+        <input type="text" class="form-control" name="" id="" style="width: 16rem;" placeholder="Search Workspaces..."
+            [(ngModel)]="m_sWorkspaceSearchInput">
+        <button class="btn btn-primary" (click)="openNewWorkspaceDialog()">
+            <fa-icon [icon]="faPlus"></fa-icon>
+            {{"WORKSPACES_BUTTON_NEW_WORKSPACE" | translate}}</button>
+    </div>
 
+<!-- <<<<<<< HEAD -->
+    <div class="px-3 d-flex flex-row m-0">
+        <div class="workspace-properties-container d-flex flex-column justify-content-between align-items-center">
+            <div class="workspaces-container">
+                <div class="bg-secondary p-1 d-flex flex-row justify-content-between align-items-center">
+                    <h6 class="text-light p-0 m-0 ms-2">Workspaces <span class="badge rounded-pill text-bg-success">
+                            {{m_aoWorkspacesList.length}}</span></h6>
+<!-- =======
 <div class="row col-12 p-auto px-3 d-flex flex-row m-0">
     <div class="workspace-properties-container col-sm-5 d-flex flex-column justify-content-between align-items-center">
         <div class="workspaces-container">
@@ -17,7 +26,8 @@
                         (click)="deleteMultipleWorkspaces()" matTooltip="Delete Workspaces">
                         <fa-icon [icon]="faTrashcan"></fa-icon>
                     </button>
-                    <mat-checkbox (change)="selectAllWorkspaces($event)"></mat-checkbox>
+                    <mat-checkbox (change)="selectAllWorkspaces($event)"></mat-checkbox> -->
+<!-- >>>>>>> main -->
                     <div class="dropdown">
                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -31,11 +41,49 @@
                         </ul>
                     </div>
                 </div>
+
+            <ul class="list-group" style="height: 90%; overflow-y: scroll;">
+                    <app-workspace-list-item
+                        *ngFor="let oWorkspace of m_aoWorkspacesList | filter: m_sWorkspaceSearchInput"
+                        [workspace]="oWorkspace" (activeWorkspace)="onShowWorkspace($event)"
+                        (deletedWorkspace)="onDeleteWorkspace($event)">
+                    </app-workspace-list-item>
+                </ul>
+            </div>
+            <div class="properties-container border mt-3 overflow-auto">
+                <h4>{{"WORKSPACE_DETAILS_BOX" | translate}}</h4>
+                <div class="px-3 d-inline-block" *ngIf="m_oActiveWorkspace">
+                    <div class="d-flex flex-row justify-content-between gap-2">
+                        <p><strong>{{"WORKSPACES_OWNER" | translate}}: </strong>{{m_oActiveWorkspace.userId}}</p>
+                        <p><strong>{{"WORKSPACES_CLOUD" | translate}}: </strong>
+                            {{m_oActiveWorkspace.cloudProvider}}</p>
+                    </div>
+                    <p><strong>{{"WORKSPACES_NODE_CODE" | translate}}:</strong>{{m_oActiveWorkspace.nodeCode}}</p>
+                    <p><strong>{{"WORKSPACES_PRODUCTS" | translate}}:</strong> {{m_aoProducts.length}}</p>
+                    <p><strong>{{"WORKSPACES_NAME" | translate}}: </strong>{{m_oActiveWorkspace.name}}</p>
+                    <p><strong>{{"WORKSPACES_ID" | translate}}: </strong>
+                        {{m_oActiveWorkspace.workspaceId}}</p>
+                    <p><strong>{{"WORKSPACES_PROC_COUNT" | translate}}:
+                        </strong>{{m_oActiveWorkspace.processesCount}}</p>
+                    <strong>{{"WORKSPACES_SHARED_WITH" | translate}}: </strong>
+                    <ul>
+                        <li *ngFor="let user of m_oActiveWorkspace.sharedUsers">{{ user }}</li>
+                    </ul>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-action workspace-product" *ngFor="let oProduct of m_aoProducts"
+                            (click)="onSelectProduct(oProduct)">
+                            {{oProduct.name}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+                <!-- </div>
             </div>
 
             <ul class="list-group" style="height: 90%; overflow-y: scroll;">
                 <app-workspace-list-item *ngFor="let oWorkspace of m_aoWorkspacesList | filter: m_sWorkspaceSearchInput"
-                    [workspace]="oWorkspace" (activeWorkspace)="onShowWorkspace($event)"
+                    [workspace]="oWorkspace" (m_oActiveWorkspace)="onShowWorkspace($event)"
                     (m_oWorkspaceSelection)="getWorkspaceSelectionChange($event)"
                     (deletedWorkspace)="onDeleteWorkspace($event)">
                 </app-workspace-list-item>
@@ -70,27 +118,29 @@
             </div>
         </div>
     </div>
+>>>>>>> main -->
 
-    <div class="workspace-globe-container col-7">
-        <div style="height:80vh;" id="CesiumContainer3"></div>
-        <div class="toolbar-right-bottom" style="z-index: 999; display: block;
+        <div class="workspace-globe-container flex-fill">
+            <div style="height:80vh; width: 100%;" id="CesiumContainer3"></div>
+            <!-- <div class="toolbar-right-bottom" style="z-index: 999; display: block;
         position: absolute;
         right: 40px;
         bottom: 10px;">
-            <div class="checkbox" style="background: white; padding: 5px">
-                <label>
-                    <mat-checkbox [(ngModel)]="m_bShowSatellites" (click)=" deleteSentinel1a()"></mat-checkbox>
-                    Show Satellites
-                </label>
-            </div>
-            <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-success" (click)="stopGlobeRotation()">
-                    <fa-icon [icon]="faStop"></fa-icon>
-                </button>
-                <button type="button" class="btn btn-success" (click)="startGlobeRotation()">
-                    <fa-icon [icon]="faPlay"></fa-icon>
-                </button>
-            </div>
+                <div class="checkbox" style="background: white; padding: 5px">
+                    <label>
+                        <mat-checkbox [(ngModel)]="m_bShowSatellites" (click)=" deleteSentinel1a()"></mat-checkbox>
+                        Show Satellites
+                    </label>
+                </div>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-success" (click)="stopGlobeRotation()">
+                        <fa-icon [icon]="faStop"></fa-icon>
+                    </button>
+                    <button type="button" class="btn btn-success" (click)="startGlobeRotation()">
+                        <fa-icon [icon]="faPlay"></fa-icon>
+                    </button>
+                </div>
+            </div> -->
         </div>
     </div>
-</div>
+</section>

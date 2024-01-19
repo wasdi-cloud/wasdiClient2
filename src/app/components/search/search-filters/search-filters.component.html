@@ -1,15 +1,107 @@
-<div class="card h-100 " style="overflow-y:scroll;">
+<section class="sub-menu">
+    <article class="sub-menu-grp">
+        <div class="title">
+            <img src="./assets/svg/filter-icon.svg" alt="filter icon" />
+            <h3>{{"IMPORT_PANEL_HEAD_TITLE_FILTERS" | translate}}</h3>
+        </div>
+
+        <div class="sub-menu-body">
+            <button (click)="openAdvancedSearchFiltersDialog()">
+                <img src="./assets/svg/cron-icon.svg" alt="cron tab icon" />
+                {{"IMPORT_CRONTAB" | translate}}
+            </button>
+            <li class="search-input-container">
+                <div class="background-color">
+                    <img src="./assets/svg/search-icon.svg" alt="search icon" />
+                    <label for="search-bar">Search</label>
+                </div>
+                <input class="search-input" type="text" id="search-bar" name="search-bar" placeholder="Products name"
+                    [(ngModel)]="m_oMissionObject.textQuery" />
+            </li>
+        </div>
+        <hr />
+    </article>
+    <article class="provider">
+        <label for="wasdi">Provider:</label>
+        <mat-select class="name-select" multiple placeholder="{{'IMPORT_PROVIDERS' | translate}}"
+            [(ngModel)]=" m_aoUserProviderSelection" (selectionChange)="emitSelectedProviders($event)">
+            <mat-option *ngFor="let oProvider of m_aoListOfProviders" [value]="oProvider">
+                {{oProvider.description}}
+            </mat-option>
+        </mat-select>
+        <div class="date" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
+
+            <div>
+                <label for="startDate">{{'IMPORT_DATE_FROM'|translate}}</label>
+                <input class="date-select" style="width: 150px" type="date" name="" id="" class="form-control"
+                    [(ngModel)]="m_sDateFrom" (ngModelChange)="emitModelChanges()">
+            </div>
+            <div>
+                <label for="startDate">{{'IMPORT_DATE_TO'|translate}}</label>
+                <input class="date-select" style="width: 150px" type="date" name="" id="" class="form-control"
+                    [(ngModel)]="m_sDateTo" (ngModelChange)="emitModelChanges()">
+            </div>
+        </div>
+        <hr />
+    </article>
+    <article class="sub-menu-grp mission">
+        <!-- <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
+            <div class="d-flex flex-column " *ngFor="let oFilter of m_aoVisibleFilters">
+                <div style="width: 15rem">
+                    <label class="form-label" for="">{{oFilter.indexlabel}}</label>
+                    <mat-select *ngIf="oFilter.indexvalues !== ''" #auto="matSelect" class="form-control"
+                        placeholder="" (selectionChange)="getMissionInput($event, oFilter)"
+                        placeholder="{{oFilter.indexvalue}}">
+                        <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
+                            {{oOption}}
+                        </mat-option>
+                    </mat-select>
+                    <input class="form-control" type="text" *ngIf="oFilter.indexvalues === ''"
+                        placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}">
+                </div>
+            </div>
+        </div> -->
+        <div>
+            <label for="">{{"IMPORT_PRODUCT_SELECTED_MISSIONS"|translate}}</label>
+            <div class="category-body">
+                <button *ngFor="let oMission of m_aoMissions" (click)="setActiveMission(oMission)"
+                    [ngClass]="oMission.name === m_oActiveMission.name? 'selected' : ''">
+                    {{oMission.name}}
+                </button>
+            </div>
+        </div>
+        <hr />
+    </article>
+    <article class="">
+        <div class=" d-flex flex-row flex-wrap align-items-center pt-2 gap-2">
+            <div *ngFor="let oFilter of m_aoVisibleFilters">
+                <label for="">{{oFilter.indexlabel}}</label>
+                <mat-select class="input" *ngIf="oFilter.indexvalues !== ''" #auto="matSelect"
+                    placeholder="" (selectionChange)="getMissionInput($event, oFilter)"
+                    placeholder="{{oFilter.indexvalue}}">
+                    <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
+                        {{oOption}}
+                    </mat-option>
+                </mat-select>
+                <input class="input" type="text" *ngIf="oFilter.indexvalues === ''" placeholder="{{oFilter.indexhint}}"
+                    pattern="{{oFilter.regex}}">
+            </div>
+        </div>
+    </article>
+</section>
+
+<!-- <div class="card h-100 " style="overflow-y:scroll;">
     <div class="card-header">
         {{"IMPORT_PANEL_HEAD_TITLE_FILTERS" | translate}}
     </div>
-    <div class="card-body flex-column">
-        <!-- CronTab / Providers Buttons -->
-        <div class="d-flex flex-row justify-content-between align-items-center">
+    <div class="card-body flex-column"> -->
+<!-- CronTab / Providers Buttons -->
+<!-- <div class="d-flex flex-row justify-content-between align-items-center">
             <button class="btn btn-primary" (click)="openAdvancedSearchFiltersDialog()">{{"IMPORT_CRONTAB" |
-                translate}}</button>
+                translate}}</button> -->
 
-            <!-- Providers Multi-select -->
-            <div>
+<!-- Providers Multi-select -->
+<!-- <div>
                 <mat-select class="form-control" multiple placeholder="{{'IMPORT_PROVIDERS' | translate}}"
                     style="width: 20rem;" [(ngModel)]="m_aoUserProviderSelection"
                     (selectionChange)="emitSelectedProviders($event)">
@@ -19,10 +111,10 @@
                 </mat-select>
             </div>
 
-        </div>
+        </div> -->
 
-        <!-- From/to Date Pickers -->
-        <div class="d-flex flex-row justify-content-between gap-2" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
+<!-- From/to Date Pickers -->
+<!-- <div class="d-flex flex-row justify-content-between gap-2" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
             <div class="flex-fill">
                 <label for="startDate">{{'IMPORT_DATE_FROM'|translate}}</label>
                 <input type="date" name="" id="" class="form-control" [(ngModel)]="m_sDateFrom"
@@ -33,10 +125,10 @@
                 <input type="date" name="" id="" class="form-control" [(ngModel)]="m_sDateTo"
                     (ngModelChange)="emitModelChanges()">
             </div>
-        </div>
+        </div> -->
 
-        <!-- Time-series filters summary -->
-        <div *ngIf="m_sTypeOfFilterSelected === 'Time series' && m_oAdvancedFilter.savedData.length !== 0">
+<!-- Time-series filters summary -->
+<!-- <div *ngIf="m_sTypeOfFilterSelected === 'Time series' && m_oAdvancedFilter.savedData.length !== 0">
             <div class="col-v4-12">
                 <mat-chip-grid #chipGrid aria-label="time selection">
                     <mat-chip-row *ngFor="let oData of m_oAdvancedFilter.savedData">
@@ -48,17 +140,17 @@
                     </mat-chip-row>
                 </mat-chip-grid>
             </div>
-        </div>
+        </div> -->
 
-        <!-- Missions Selector and Advanced Filters -->
-        <div id="advanced-search-content h-50" class="d-flex flex-column">
-            <!-- Product Name Search -->
-            <div>
+<!-- Missions Selector and Advanced Filters -->
+<!-- <div id="advanced-search-content h-50" class="d-flex flex-column"> -->
+<!-- Product Name Search -->
+<!-- <div>
                 <label for="productName">{{"IMPORT_PRODUCT_NAME"|translate}}:</label>
                 <input type="text" name="" id="" class="form-control" [(ngModel)]="m_oMissionObject.textQuery">
-            </div>
-            <!-- Missions Tabs -->
-            <div>
+            </div> -->
+<!-- Missions Tabs -->
+<!-- <div>
                 <label for="">{{"IMPORT_PRODUCT_SELECTED_MISSIONS"|translate}}</label>
                 <ul class="d-flex flex-row flex-wrap border-bottom pb-2  nav nav-pills">
                     <li class="nav-item" *ngFor="let oMission of m_aoMissions" (click)="setActiveMission(oMission)">
@@ -66,9 +158,9 @@
                             [ngClass]="oMission.name === m_oActiveMission.name? 'active' : ''">{{oMission.name}}</a>
                     </li>
                 </ul>
-            </div>
-            <!-- Mission Search Form -->
-            <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
+            </div> -->
+<!-- Mission Search Form -->
+<!-- <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
                 <div class="d-flex flex-column " *ngFor="let oFilter of m_aoVisibleFilters">
                     <div style="width: 15rem">
                         <label class="form-label" for="">{{oFilter.indexlabel}}</label>
@@ -86,4 +178,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

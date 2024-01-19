@@ -23,7 +23,8 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 @Component({
   selector: 'app-search-orbit',
   templateUrl: './search-orbit.component.html',
-  styleUrls: ['./search-orbit.component.css']
+  styleUrls: ['./search-orbit.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class SearchOrbit implements OnInit, OnDestroy {
   //Font Awesome Icons: 

@@ -149,6 +149,9 @@ import { CommentEditorDialogComponent } from './components/app-details/app-revie
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
 import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { MarketSearchComponent } from './components/header/market-search/market-search.component';
+import { SearchBtnGrpComponent } from './shared/shared-components/search-btn-grp/search-btn-grp.component';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { DragAndDropComponent } from './shared/drag-and-drop/drag-and-drop.component';
 import { BuildLogsComponent } from './components/dialogs/build-logs/build-logs.component';
@@ -248,6 +251,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     CommentEditorDialogComponent,
     SearchOrbitResultsComponent,
     FTPDialogComponent,
+    NavbarComponent,
+    MarketSearchComponent,
+    SearchBtnGrpComponent,
     DragAndDropDirective,
     DragAndDropComponent,
     BuildLogsComponent,

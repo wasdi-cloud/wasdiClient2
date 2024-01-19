@@ -10,7 +10,8 @@ import { ErrorDialogComponent, ErrorDialogModel } from 'src/app/shared/dialogs/e
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class LoginComponent implements OnInit {
   form: any = {

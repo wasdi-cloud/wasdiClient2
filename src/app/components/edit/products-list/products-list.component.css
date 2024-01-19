@@ -1,7 +1,6 @@
 div.products-container {
   height: 35vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: scroll;
   width: 35vw;
 
 }

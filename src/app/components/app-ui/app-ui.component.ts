@@ -47,7 +47,8 @@ export interface application {
       transition('false => true', animate(500 + 'ms ease-in')),
       transition('true => false', animate(500 + 'ms ease-out'))
     ])
-  ]
+  ],
+  host: { "class": "flex-fill" }
 })
 export class AppUiComponent implements OnInit {
   @ViewChild(WapDirective, { static: true }) appWap!: WapDirective;
@@ -125,13 +126,13 @@ export class AppUiComponent implements OnInit {
         data: oDialogData
       })
     }
-  
-    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace(); 
-    if(this.m_oActiveWorkspace !== null) {
+
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    if (this.m_oActiveWorkspace !== null) {
       console.log("active workspace")
       this.workspaceForm.sExistingWorkspace = this.m_oActiveWorkspace.workspaceName;
       console.log(this.m_oActiveWorkspace)
-    }  
+    }
   }
 
   /**

@@ -34,7 +34,8 @@ export interface application {
 @Component({
   selector: 'app-app-details',
   templateUrl: './app-details.component.html',
-  styleUrls: ['./app-details.component.css']
+  styleUrls: ['./app-details.component.css'],
+  host: { "class": "flex-fill" }
 })
 export class AppDetailsComponent implements OnInit {
   m_sActiveApplicationName: string = this.m_oConstantsService.getSelectedApplication();

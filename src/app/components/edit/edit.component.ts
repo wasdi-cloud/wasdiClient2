@@ -24,7 +24,8 @@ import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css']
+  styleUrls: ['./edit.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class EditComponent implements OnInit, OnDestroy {
 

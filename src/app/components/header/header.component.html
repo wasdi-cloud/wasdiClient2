@@ -1,115 +1,14 @@
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid ">
-        <div class="d-flex align-items-center">
-            <a class="navbar-brand" href="#">
-                <img class="brand-logo" src="assets/images/wasdi_logo_header.png" alt="">
-            </a>
-            <input class="form-control new-workspace-name" type="text" *ngIf="m_bEditIsActive"
-                value="{{m_oActiveWorkspace.name}}" (click)="reNameWorkspace(m_oActiveWorkspace)" readonly>
-        </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto-sm ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/marketplace"><fa-icon [icon]="faSpaceShip"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_APPSTORE' | translate}}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/workspaces"><fa-icon [icon]="faFloppyDisk"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/plan"><fa-icon [icon]="faCalendar"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' |
-                        translate}}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/search"><fa-icon [icon]="faMagnifyingGlass"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_IMPORT' | translate}}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" [ngClass]="{'disabled' : !sActiveWorkspaceId}"
-                        routerLink="/edit/{{sActiveWorkspaceId}}"><fa-icon [icon]="faGlobe"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}</a>
-                </li>
-                <li class="nav-item">
-                    <a *ngIf="m_oUser.role !== 'USER'" class="nav-link" routerLink="/admin"><fa-icon
-                            [icon]="faGears"></fa-icon> {{'ROOT_VIEW_NAV_BAR_LINK_ADMIN' |
-                        translate}}</a>
+<header class="d-flex flex-row">
+    <a href="#"><img src="assets/svg/logo.svg" alt="logo" class="logo" /></a>
+    <ng-container [ngSwitch]="m_sLocation">
+        <img *ngSwitchCase="'marketplace'" src="assets/svg/space-market.svg" alt="space market decorative title" />
+    </ng-container>
 
-                </li>
-
-                <li class="nav-item dropdown-center">
-                    <a href="" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">Project:
-                        {{m_oSelectedProject.name}}</a>
-                    <ul class="dropdown-menu">
-                        <li style="cursor:pointer;" class="dropdown-item" *ngFor="let oProject of m_aoUserProjectsMap"
-                            (click)="setActiveProject(oProject)">
-                            {{oProject.name}}</li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" role="button" data-bs-toggle="dropdown" (click)="clearNotification()">
-                        <div class="position-relative">
-                            <fa-icon [icon]="faEnvelope"></fa-icon>
-                            <span *ngIf="m_bHasNotifications"
-                                class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle">
-                                <span class="visually-hidden">New alerts</span>
-                            </span>
-                        </div>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notifications">
-                        <li *ngIf="m_aoNotifications.length === 0" class="text-center">You have no notifications.</li>
-                        <li *ngFor="let oMessage of m_aoNotifications.reverse()"
-                            class="d-flex flex-row justify-content-between px-1 notification-container">
-                            <div class="d-flex flex-column">
-                                <div class="notification-text" [innerHTML]="oMessage.date + ' ' + oMessage.time"></div>
-                                <div class="notification-text" [innerHTML]="oMessage.displayMessage"></div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <!-- Account Type: -->
-                <li class="nav-item">
-                    <!-- User with brand new WASDI Account -->
-                    <a class="nav-link" routerLink="/subscriptions" href=""
-                        *ngIf="m_sUserAccount !== 'FREE' && m_sUserAccount !== 'PROFESSIONAL' && m_sUserAccount !==  'STANDARD'">PURCHASE
-                        SUBSCRIPTION</a>
-                    <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
-                        *ngIf="m_sUserAccount === 'FREE'">FREE</a>
-                    <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
-                        *ngIf="m_sUserAccount === 'PROFESSIONAL'"><fa-icon [icon]="faStar"></fa-icon> PRO</a>
-                    <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
-                        *ngIf="m_sUserAccount === 'STANDARD'"><fa-icon [icon]="faCertificate"></fa-icon> STND</a>
-                </li>
-                <app-language-switch></app-language-switch>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
-                        <fa-icon [icon]="faUser"></fa-icon>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a href="" class="dropdown-item" (click)="openUserSettings($event)"><fa-icon
-                                    [icon]="faGauge"></fa-icon> User Dashboard</a></li>
-                        <li><a href="https://wasdi.readthedocs.io/en/latest/index.html" target="_blank"
-                                class="dropdown-item"><fa-icon [icon]="faDocumentation"></fa-icon>
-                                Documentation</a></li>
-                        <li><a href="" class="dropdown-item" data-bs-toggle="offcanvas"
-                                data-bs-target="#feedbackOffcanvas" aria-controls="feedbackOffcanvas"><fa-icon
-                                    [icon]="faComment"></fa-icon> Send
-                                Feedback</a></li>
-                        <a class="dropdown-item" routerLink="" (click)="logout()"><fa-icon [icon]="faLogout"></fa-icon>
-                            Logout</a>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
+    <ng-container [ngSwitch]="m_sLocation">
+        <!-- Input filters for app marketplace -->
+        <app-market-search *ngSwitchCase="'marketplace'"></app-market-search>
+    </ng-container>
+</header>
 
 
 <!-- Feedback Form OffCanvas -->

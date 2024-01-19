@@ -30,7 +30,8 @@ export interface SearchFilter {
 @Component({
   selector: 'app-processes-bar',
   templateUrl: './processes-bar.component.html',
-  styleUrls: ['./processes-bar.component.css']
+  styleUrls: ['./processes-bar.component.css'],
+  host: { "class": "flex-fill" }
 })
 export class ProcessesBarComponent implements OnInit {
   @Input() m_oActiveWorkspace?: any = {};
@@ -81,6 +82,92 @@ export class ProcessesBarComponent implements OnInit {
     this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
       this.m_iIsWebsocketConnected = oResponse;
     });
+    this.m_oRabbitStompService.setMessageCallback(this.recievedRabbitMessage);
+  }
+
+  recievedRabbitMessage(oMessage: any) {
+    let oController = this;
+    if (oMessage === null) {
+      return false;
+    }
+
+    if (oMessage.oMessageResult === "KO") {
+      let sOperation = "null";
+      if (!FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.messageCode)) {
+        sOperation = oMessage.messageCode;
+      }
+
+      let sErrorDescription: string = "";
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) {
+        sErrorDescription = oMessage.payload;
+      }
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) {
+        sErrorDescription = "<br>" + sErrorDescription;
+      }
+
+      //ALERT DIALOG
+      // let oDialog = utilsVexDialogAlertTop(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription);
+      // utilsVexCloseDialogAfter(10000, oDialog);
+      if (oMessage.messageCode == "PUBLISHBAND") {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
+          }
+          //Deselect Node Name? 
+          //var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
+          // this.setTreeNodeAsDeselected(sNodeName);
+        }
+      }
+      return true;
+    }
+    // Switch the Code
+    switch (oMessage.messageCode) {
+      case "PUBLISH":
+        this.m_oRabbitStompService.receivedPublishMessage(oMessage);
+        break;
+      case "PUBLISHBAND":
+        this.m_oRabbitStompService.receivedPublishBandMessage(oMessage);
+        break;
+      case "DOWNLOAD":
+      case "GRAPH":
+      case "INGEST":
+      case "MOSAIC":
+      case "SUBSET":
+      case "MULTISUBSET":
+      case "RASTERGEOMETRICRESAMPLE":
+      case "REGRID":
+        oController.receivedNewProductMessage(oMessage);
+        break;
+      case "DELETE":
+        break;
+
+    }
+    let sNotificationMsg: string;
+
+    if (this.m_oTranslate) {
+      this.m_oTranslate.get(WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, this.m_oTranslate, this)).subscribe(oTranslation => {
+        console.log(oTranslation);
+        sNotificationMsg = oTranslation;
+      })
+    }
+    else {
+      console.log("ProcessesBarComponent.recievedRabbitMessage: m_oTranslate is null")
+    }
+    if (sNotificationMsg !== "") {
+      this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "bottom", "right");
+    }
+    return true;
+  }
+
+  /**
+   * Handler for messages that add a new product to the Workspace
+   * @param oMessage 
+   */
+  receivedNewProductMessage(oMessage: any) {
+    let sMessage: string = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED")
+    this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close");
+
+    //Emit the message payload and file name to parent: 
+
   }
 
   /**
@@ -123,7 +210,7 @@ export class ProcessesBarComponent implements OnInit {
 @Component({
   selector: 'processes-bar-content',
   templateUrl: 'processes-bar-content.html',
-  styleUrls: ['./processes-bar-content.css']
+  styleUrls: ['./processes-bar-content.css'],
 })
 export class ProcessesBarContent implements OnInit {
   faArrowDown = faArrowDown;

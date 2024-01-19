@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from "@angular/material/dialog"
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { HeaderService } from 'src/app/services/header.service';
 
 interface AppFilter {
   categories: any[];
@@ -56,12 +57,15 @@ export class MarketplaceComponent implements OnInit {
   m_bWaiting: boolean = true;
 
   m_sNameFilter!: string;
+  m_sNameFilterSubscription: any;
 
   m_aoSelectedPublishers: Array<any> = [];
   m_aoSelectedCategories: Array<any> = [];
   m_iSelectedStarRating: number = 0;
 
+  m_sDeveloperSearch: string = "";
   constructor(
+    private m_oHeaderService: HeaderService,
     private m_oImageService: ImageService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
@@ -70,6 +74,12 @@ export class MarketplaceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.m_sNameFilterSubscription = this.m_oHeaderService.m_oSearchFilterSubscription.subscribe(sResult => {
+      
+        this.m_sNameFilter = sResult;
+        this.refreshAppList();
+      
+    })
     this.getApplications();
     //Remove categories retrieval for ESA demo
     this.getCategories();
@@ -90,12 +100,12 @@ export class MarketplaceComponent implements OnInit {
       {
         next: oResponse => {
           if (oResponse.length === 0) {
-            this.m_oNotificationDisplayService.openAlertDialog( sCategoriesError);
+            this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
           }
           this.m_asCategoryOptions = oResponse;
         },
         error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog( sCategoriesError);
+          this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
         }
       })
   }
@@ -114,11 +124,11 @@ export class MarketplaceComponent implements OnInit {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoPublishers = oResponse;
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
       }
     });
   }
@@ -152,12 +162,12 @@ export class MarketplaceComponent implements OnInit {
             this.m_bLoadMoreEnabled = false;
           }
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
         }
         this.m_bWaiting = false;
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
         this.m_bWaiting = false;
       }
     })
@@ -229,11 +239,11 @@ export class MarketplaceComponent implements OnInit {
             this.m_bLoadMoreEnabled = false;
           }
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+          this.m_oNotificationDisplayService.openAlertDialog(sMessage);
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       }
     });
   }
@@ -276,6 +286,13 @@ export class MarketplaceComponent implements OnInit {
    * @returns {void}
    */
   developerChanged(oEvent): void {
+    console.log(oEvent);
+    let iDeveloperIndex = this.m_aoSelectedPublishers.indexOf(oEvent.publisher)
+    if (iDeveloperIndex === -1) {
+      this.m_aoSelectedPublishers.push(oEvent.publisher);
+    } else {
+      this.m_aoSelectedPublishers.splice(iDeveloperIndex, 1);
+    }
     //Add Selected Developers to the App Filter publishers and then get applicatinons
     this.m_oAppFilter.publishers = this.m_aoSelectedPublishers;
     this.m_oAppFilter.page = 0;
@@ -284,11 +301,17 @@ export class MarketplaceComponent implements OnInit {
   }
 
   categoriesChanged(oEvent): void {
+    let iCategoryIndex = this.m_aoSelectedCategories.indexOf(oEvent.id)
+
+    if (iCategoryIndex === -1) {
+      this.m_aoSelectedCategories.push(oEvent.id);
+    } else {
+      this.m_aoSelectedCategories.splice(iCategoryIndex, 1);
+    }
     //Add Selected Categories to the App Filter Categories and then get applications
     this.m_oAppFilter.categories = this.m_aoSelectedCategories;
     this.m_oAppFilter.page = 0;
     this.getApplications();
-
   }
 
   //TODO: Sort apps based on Success Rate
@@ -309,7 +332,7 @@ export class MarketplaceComponent implements OnInit {
   }
 
   ratingChanged(oEvent) {
-    this.m_oAppFilter.score = this.m_iSelectedStarRating;
+    this.m_oAppFilter.score = oEvent;
     this.m_oAppFilter.page = 0;
     this.getApplications();
 

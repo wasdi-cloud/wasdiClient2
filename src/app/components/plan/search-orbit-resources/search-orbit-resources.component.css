@@ -1,46 +1,76 @@
-div.products-container {
-    height: 35vh; 
-    overflow-y: scroll;
-    overflow-x: hidden;
-    width: 35vw; 
-  
-  }
-  h3.products-header {
-    width: 35vw;
-    z-index: 1; 
-  }
-  .tree-btn {
-    padding: 0; 
-  }
-  .tree-invisible {
-    display: none;
-  }
-  .tree-nested-node {
-    padding-left: 1rem;
-  }
-  
-  .mat-tree-node {
-    background-color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 0;
-  }
-  
-  span.product-name {
-    display: block; 
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 12rem;
-  }
-  
-  ul,
-  li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  li.tree-container {
-    border-bottom: 0;
-  }
+@import url(/src/app/components/marketplace/marketplace.component.css);
+
+.sub-menu {
+  height: 100%;
+  width: 500px;
+}
+
+.sub-menu-body {
+  margin-top: 1rem;
+}
+
+
+.search-input-container {
+  border: 1px solid rgba(67, 82, 107, 0.15);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sub-menu-grp {
+  max-width: 350px;
+  margin-top: 0;
+}
+
+.sub-menu label {
+  margin: 0;
+  padding-left: 0;
+}
+
+.sub-menu input {
+  width: 100px;
+  height: 24px;
+}
+
+.sub-menu input.date-select {
+  width: 150px;
+}
+
+.tree-btn {
+  padding: 0;
+}
+
+.tree-invisible {
+  display: none;
+}
+
+.tree-nested-node {
+  padding-left: 1rem;
+}
+
+.mat-tree-node {
+  background-color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+}
+
+span.product-name {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 12rem;
+}
+
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li.tree-container {
+  border-bottom: 0;
+}

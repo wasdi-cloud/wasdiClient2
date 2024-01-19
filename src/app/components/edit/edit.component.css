@@ -1,4 +1,2 @@
-div.productlist-navigation-container {
-    margin-right: 1rem; 
-    width: 35vw;
-}
+@import url(/src/app/components/marketplace/marketplace.component.css);
+@import url(/src/app/components/header/header.component.css);
