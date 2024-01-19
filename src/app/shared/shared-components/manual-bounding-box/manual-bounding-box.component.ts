@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ConstantsService } from 'src/app/services/constants.service';
 
 @Component({
@@ -18,10 +19,12 @@ export class ManualBoundingBoxComponent {
     private m_oDialogRef: MatDialogRef<ManualBoundingBoxComponent>) { }
 
   saveBoundingBox() {
-    console.log(this.m_oBBox);
+
+      this.m_oDialogRef.close(this.m_oBBox);
+    
   }
 
   onDismiss() {
-    this.m_oDialogRef.close(this.m_oBBox);
+    this.m_oDialogRef.close(null);
   }
 }

@@ -913,16 +913,19 @@ export class MapService {
         L.DomEvent.on(button, 'click', function () {
           let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent)
           oDialog.afterClosed().subscribe(oResult => {
-            let fNorth = parseFloat(oResult.north);
-            let fSouth = parseFloat(oResult.south);
-            let fEast = parseFloat(oResult.east);
-            let fWest = parseFloat(oResult.west);
-
-            if (isNaN(fNorth) || isNaN(fSouth) || isNaN(fEast) || isNaN(fWest)) {
-              return;
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+              if (isNaN(oResult.north) || isNaN(oResult.south) || isNaN(oResult.east) || isNaN(oResult.west)) {
+                return;
+              } else {
+                let fNorth = parseFloat(oResult.north);
+                let fSouth = parseFloat(oResult.south);
+                let fEast = parseFloat(oResult.east);
+                let fWest = parseFloat(oResult.west);
+  
+                let aoBounds = [[fNorth, fWest], [fSouth, fEast]];
+                oController.addManualBboxLayer(aoBounds);
+              }
             }
-            let aoBounds = [[fNorth, fWest], [fSouth, fEast]];
-            oController.addManualBboxLayer(aoBounds);
           })
         });
         button.innerHTML = 'M';
