@@ -140,16 +140,18 @@ export class MapService {
       attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
-    this.m_oLayersControl = {
-      baseLayers: {
+    this.m_oLayersControl = L.control.layers(
+     {
         'Standard': this.m_oOSMBasic,
         "OpenTopoMap": this.m_oOpenTopoMap,
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
         "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
-      }
-    }
-  }
+      }, 
+      {},
+      { 'position': 'bottomright' }
+    )
+}
 
   /**
    * Set Drawn Items
@@ -186,6 +188,8 @@ export class MapService {
       position: "bottomright",
       imperial: false
     }).addTo(oMap);
+
+    this.m_oLayersControl.addTo(oMap);
 
     // center map
     let southWest = L.latLng(0, 0);
