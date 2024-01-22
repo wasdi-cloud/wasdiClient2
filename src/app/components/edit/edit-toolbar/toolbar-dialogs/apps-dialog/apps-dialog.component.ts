@@ -302,24 +302,15 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
             let oHelp = JSON.parse(sHelpMessage);
 
             sHelpMessage = oHelp
-            console.log(sHelpMessage)
           } catch (oError) {
             sHelpMessage = oResponse.stringValue;
           }
         } else {
           sHelpMessage = "There isn't any help message."
         }
-        //If the message is empty from the server or is null
-        // if (sHelpMessage === "") {
-
-        // }
       } else {
         sHelpMessage = "The developer did not include a help message."
       }
-
-
-      console.log(sHelpMessage)
-
       this.m_oDialog.open(HelpDialogComponent, {
         maxHeight: '70vh',
         maxWidth: '50vw',
