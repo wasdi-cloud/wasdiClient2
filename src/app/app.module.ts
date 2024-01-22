@@ -159,6 +159,7 @@ import { AlertDialogComponent } from './shared/dialogs/alert-dialog/alert-dialog
 import { NotificationSnackbarComponent } from './shared/dialogs/notification-snackbar/notification-snackbar.component';
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 import { ManualBoundingBoxComponent } from './shared/shared-components/manual-bounding-box/manual-bounding-box.component';
+import { HelpDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/help-dialog/help-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -260,7 +261,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AlertDialogComponent,
     NotificationSnackbarComponent,
     ConvertMsToTimePipe,
-    ManualBoundingBoxComponent
+    ManualBoundingBoxComponent,
+    HelpDialogComponent
   ],
   imports: [
     AppRoutingModule,

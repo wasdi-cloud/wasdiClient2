@@ -21,6 +21,7 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
 
 @Component({
@@ -292,27 +293,42 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * Open the help dialog
    */
   openHelp() {
+    let sHelpMessage = ""
     this.m_oProcessorService.getHelpFromProcessor(this.m_oSelectedProcessor.processorName).subscribe(oResponse => {
       if (oResponse.stringValue) {
-        let sHelpMessage = oResponse.stringValue;
+        sHelpMessage = oResponse.stringValue;
         if (sHelpMessage) {
           try {
             let oHelp = JSON.parse(sHelpMessage);
 
-            sHelpMessage = oHelp.help
+            sHelpMessage = oHelp
+            console.log(sHelpMessage)
           } catch (oError) {
             sHelpMessage = oResponse.stringValue;
           }
         } else {
-          sHelpMessage = "";
-        }
-        //If the message is empty from the server or is null
-        if (sHelpMessage === "") {
           sHelpMessage = "There isn't any help message."
         }
+        //If the message is empty from the server or is null
+        // if (sHelpMessage === "") {
 
+        // }
+      } else {
+        sHelpMessage = "The developer did not include a help message."
       }
+
+
+      console.log(sHelpMessage)
+
+      this.m_oDialog.open(HelpDialogComponent, {
+        maxHeight: '70vh',
+        maxWidth: '50vw',
+        data: {
+          helpMsg: sHelpMessage
+        }
+      })
     })
+
   }
 
   /**
