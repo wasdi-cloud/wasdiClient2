@@ -123,10 +123,10 @@
                     </div>
                 </td>
                 <td class="d-flex flex-row gap-3">
-                    <a class="" title="Logs" (click)="openLogsDialog(oProcess)">
+                    <a class="button" title="Logs" (click)="openLogsDialog(oProcess)">
                         <fa-icon [icon]="faFile"></fa-icon>
                     </a>
-                    <a class="text-dark" title="Payload" *ngIf="oProcess.payload" (click)="openPayloadDialog(oProcess)">
+                    <a class="button" title="Payload" *ngIf="oProcess.payload" (click)="openPayloadDialog(oProcess)">
                         <fa-icon [icon]="faDatabase"></fa-icon>
                     </a>
 

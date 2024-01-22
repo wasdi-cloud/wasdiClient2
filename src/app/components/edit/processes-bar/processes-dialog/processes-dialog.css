@@ -18,3 +18,8 @@ td {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+a.button {
+    cursor: pointer;
+    color: #000000;
+}
