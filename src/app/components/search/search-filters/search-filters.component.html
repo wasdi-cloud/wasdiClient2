@@ -74,123 +74,34 @@
     </article>
     <article class="">
         <div class=" d-flex flex-row flex-wrap align-items-center pt-2 gap-2">
-            <div *ngFor="let oFilter of m_aoVisibleFilters">
-                <label for="">{{oFilter.indexlabel}}</label>
-                <mat-select class="input" *ngIf="oFilter.indexvalues !== ''" #auto="matSelect"
-                    placeholder="" (selectionChange)="getMissionInput($event, oFilter)"
-                    placeholder="{{oFilter.indexvalue}}">
-                    <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
-                        {{oOption}}
-                    </mat-option>
-                </mat-select>
-                <input class="input" type="text" *ngIf="oFilter.indexvalues === ''" placeholder="{{oFilter.indexhint}}"
-                    pattern="{{oFilter.regex}}">
-            </div>
-        </div>
-    </article>
-</section>
-
-<!-- <div class="card h-100 " style="overflow-y:scroll;">
-    <div class="card-header">
-        {{"IMPORT_PANEL_HEAD_TITLE_FILTERS" | translate}}
-    </div>
-    <div class="card-body flex-column"> -->
-<!-- CronTab / Providers Buttons -->
-<!-- <div class="d-flex flex-row justify-content-between align-items-center">
-            <button class="btn btn-primary" (click)="openAdvancedSearchFiltersDialog()">{{"IMPORT_CRONTAB" |
-                translate}}</button> -->
-
-<!-- Providers Multi-select -->
-<!-- <div>
-                <mat-select class="form-control" multiple placeholder="{{'IMPORT_PROVIDERS' | translate}}"
-                    style="width: 20rem;" [(ngModel)]="m_aoUserProviderSelection"
-                    (selectionChange)="emitSelectedProviders($event)">
-                    <mat-option *ngFor="let oProvider of m_aoListOfProviders" [value]="oProvider">
-                        {{oProvider.description}}
-                    </mat-option>
-                </mat-select>
-            </div>
-
-        </div> -->
-
-<!-- From/to Date Pickers -->
-<!-- <div class="d-flex flex-row justify-content-between gap-2" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
-            <div class="flex-fill">
-                <label for="startDate">{{'IMPORT_DATE_FROM'|translate}}</label>
-                <input type="date" name="" id="" class="form-control" [(ngModel)]="m_sDateFrom"
-                    (ngModelChange)="emitModelChanges()">
-            </div>
-            <div class="flex-fill">
-                <label for="startDate">{{'IMPORT_DATE_TO'|translate}}</label>
-                <input type="date" name="" id="" class="form-control" [(ngModel)]="m_sDateTo"
-                    (ngModelChange)="emitModelChanges()">
-            </div>
-        </div> -->
-
-<!-- Time-series filters summary -->
-<!-- <div *ngIf="m_sTypeOfFilterSelected === 'Time series' && m_oAdvancedFilter.savedData.length !== 0">
-            <div class="col-v4-12">
-                <mat-chip-grid #chipGrid aria-label="time selection">
-                    <mat-chip-row *ngFor="let oData of m_oAdvancedFilter.savedData">
-                        {{oData.name}}
-                        <button matChipRemove [attr.aria-label]="'remove ' + oData.name"
-                            (click)="removeSavedDataChip(oData)">
-                            <mat-icon>cancel</mat-icon>
-                        </button>
-                    </mat-chip-row>
-                </mat-chip-grid>
-            </div>
-        </div> -->
-
-<!-- Missions Selector and Advanced Filters -->
-<!-- <div id="advanced-search-content h-50" class="d-flex flex-column"> -->
-<!-- Product Name Search -->
-<!-- <div>
-                <label for="productName">{{"IMPORT_PRODUCT_NAME"|translate}}:</label>
-                <input type="text" name="" id="" class="form-control" [(ngModel)]="m_oMissionObject.textQuery">
-            </div> -->
-<!-- Missions Tabs -->
-<!-- <div>
-                <label for="">{{"IMPORT_PRODUCT_SELECTED_MISSIONS"|translate}}</label>
-                <ul class="d-flex flex-row flex-wrap border-bottom pb-2  nav nav-pills">
-                    <li class="nav-item" *ngFor="let oMission of m_aoMissions" (click)="setActiveMission(oMission)">
-                        <a class="nav-link"
-                            [ngClass]="oMission.name === m_oActiveMission.name? 'active' : ''">{{oMission.name}}</a>
-                    </li>
-                </ul>
-            </div> -->
-<!-- Mission Search Form -->
-<!-- <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
-                <div class="d-flex flex-column " *ngFor="let oFilter of m_aoVisibleFilters">
+            <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
+                <div *ngFor="let oFilter of m_aoVisibleFilters">
                     <div *ngIf="m_oActiveMission.name !== 'ERA5'" style="width: 15rem">
-                        <label class="form-label" for="">{{oFilter.indexlabel}}</label>
-                        <mat-select *ngIf="oFilter.indexvalues !== ''" #auto="matSelect" class="form-control"
-                            placeholder="" (selectionChange)="getMissionInput($event, oFilter)"
-                            placeholder="{{oFilter.indexvalue}}">
-                            <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
-                                {{oOption}}
-                            </mat-option>
-                        </mat-select>
-                        <input class="form-control" type="text" *ngIf="oFilter.indexvalues === ''"
-                            placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}">
-
-                    </div>
-                    <!--Special inputs for ERA5 Missions -->
-                    <div *ngIf="m_oActiveMission.name === 'ERA5'" style="width: 15rem">
-                        <label class="form-label" for="">{{oFilter.indexlabel}}</label>
-                        <mat-select
-                            *ngIf="oFilter.indexvalues !== '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
-                            #auto="matSelect" class="form-control" placeholder=""
+                        <label for="">{{oFilter.indexlabel}}</label>
+                        <mat-select class="input" *ngIf="oFilter.indexvalues !== ''" #auto="matSelect" placeholder=""
                             (selectionChange)="getMissionInput($event, oFilter)" placeholder="{{oFilter.indexvalue}}">
                             <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
                                 {{oOption}}
                             </mat-option>
                         </mat-select>
-                        <input class="form-control" type="text"
+                        <input class="input" type="text" *ngIf="oFilter.indexvalues === ''"
+                            placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}">
+                    </div>
+                    <div *ngIf="m_oActiveMission.name === 'ERA5'" style="width: 15rem">
+                        <label for="">{{oFilter.indexlabel}}</label>
+                        <mat-select
+                            *ngIf="oFilter.indexvalues !== '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
+                            #auto="matSelect" class="input" placeholder=""
+                            (selectionChange)="getMissionInput($event, oFilter)" placeholder="{{oFilter.indexvalue}}">
+                            <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
+                                {{oOption}}
+                            </mat-option>
+                        </mat-select>
+                        <input class="finput" type="text"
                             *ngIf="oFilter.indexvalues === '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
                             placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}">
                         <mat-select *ngIf="oFilter.indexname === 'pressureLevels' || oFilter.indexname ==='variables'"
-                            multiple class="form-control" #auto="matSelect"
+                            multiple class="input" #auto="matSelect"
                             (selectionChange)="getMultiSelectInput($event, oFilter)"
                             placeholder="{{oFilter.indexvalue}}">
                             <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)"
@@ -200,5 +111,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</div> -->
+    </article>
+</section>
