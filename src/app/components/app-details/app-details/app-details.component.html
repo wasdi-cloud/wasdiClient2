@@ -13,7 +13,7 @@
             <p>Reviews: {{m_oApplicationInfo.reviewsCount}}</p>
             <p *ngIf="!m_sActiveUser === m_oApplicationInfo.publisher">Published By: {{m_oApplicationInfo.publisher}}
             </p>
-            <div *ngIf="m_sActiveUser === m_oApplicationInfo.publisher"
+            <div *ngIf="m_sActiveUser === m_oApplicationInfo.publisher ||  m_oApplicationInfo.readOnly === false"
                 class="d-flex flex-row align-items-center gap-3">
                 <div>You are the Master!</div>
                 <button class="btn btn-sm btn-success" (click)="openEditAppDialog(m_oApplicationInfo)">Edit</button>
@@ -25,7 +25,8 @@
                 {{m_oApplicationInfo.price}}
             </div>
             <div class="description-container">
-                {{m_oApplicationInfo.longDescription ? m_oApplicationInfo.longDescription : m_oApplicationInfo.processorDescription}}
+                {{m_oApplicationInfo.longDescription ? m_oApplicationInfo.longDescription :
+                m_oApplicationInfo.processorDescription}}
             </div>
             <a class="open-application btn btn-dark" (click)="openAppUI(m_oApplicationInfo.processorName)">Open
                 Application</a>

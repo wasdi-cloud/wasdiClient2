@@ -22,8 +22,9 @@ import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { WapDirective } from 'src/app/directives/wap.directive';
 import { WapDisplayComponent } from './wap-display/wap-display.component';
+import { NewAppDialogComponent } from '../edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 
-export interface application {
+export interface Application {
   buyed: boolean,
   friendlyName: string,
   imgLink: string,
@@ -64,7 +65,7 @@ export class AppUiComponent implements OnInit {
     private oWorkspaceService: WorkspaceService) { }
   //Processor Information
   processorName: string = this.m_oConstantsService.getSelectedApplication();
-  processorInformation: any = {} as application;
+  processorInformation: any = {} as Application;
 
   workspaceForm: any = {
     sNewWorkspaceName: null,
@@ -107,7 +108,11 @@ export class AppUiComponent implements OnInit {
   //Active Workspace
   m_oActiveWorkspace = null;
 
+  //User ID
+  m_sUserId: string;
+
   ngOnInit(): void {
+    this.m_sUserId = this.m_oConstantsService.getUser().userId;
     this.fetchWorkspaces();
     if (this.processorName) {
       this.getProcessorDetails(this.processorName);
@@ -320,7 +325,6 @@ export class AppUiComponent implements OnInit {
     }
   }
 
-
   getSelectedWorkspaceId(event) {
     this.m_oSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === event.target.value);
 
@@ -371,6 +375,17 @@ export class AppUiComponent implements OnInit {
   marketplaceReturn() {
     this.changeActiveTab('')
     this.m_oRouter.navigateByUrl(`${this.processorName}/appDetails`)
+  }
+
+  openEditAppDialog() {
+    this.m_oDialog.open(NewAppDialogComponent, {
+      data: {
+        editMode: true,
+        inputProcessor: this.processorInformation
+      },
+      width: '70vw',
+      height: '70vh'
+    })
   }
 
 }

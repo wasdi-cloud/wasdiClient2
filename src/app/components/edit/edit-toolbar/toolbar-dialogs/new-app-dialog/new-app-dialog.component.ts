@@ -51,8 +51,6 @@ export class NewAppDialogComponent implements OnInit {
   m_oActiveWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
   m_oFile: any = null;
 
-
-
   /**
    * Creation for new form builder
    */
