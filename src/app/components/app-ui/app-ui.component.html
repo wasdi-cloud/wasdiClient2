@@ -103,7 +103,7 @@
             <!-- PROCESSOR JSON TAB -->
             <div class="scroll-bar" [ngClass]="m_sActiveTab === 'json_params' ? '' : 'd-none'">
                 <textarea readonly style="font-family:'Courier New',serif;font-size: 16px;width: 100%;" rows="40"
-                    placeholder="{{m_sJSONParam}}"></textarea>
+                    [(ngModel)]="m_sJSONParam"></textarea>
             </div>
         </div>
     </div>

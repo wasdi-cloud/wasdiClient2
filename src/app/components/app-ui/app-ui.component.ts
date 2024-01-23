@@ -178,6 +178,10 @@ export class AppUiComponent implements OnInit {
       this.showHistory();
     }
 
+    if (sTab === 'json_params') {
+      this.showParamsJSON();
+    }
+
   }
 
   /**
@@ -201,12 +205,12 @@ export class AppUiComponent implements OnInit {
   /**
    * Get JSON parameters from the UI 
    */
-  // showParamsJSON() {
-  //   let oProcessorInput = this.getProcessorUI();
-  //   console.log(oProcessorInput);
-  //   this.m_sJSONParam = JSON.stringify(oProcessorInput)
-  //   console.log(this.m_sJSONParam); 
-  // }
+  showParamsJSON() {
+    let oProcessorInput = this.createParams();
+    console.log(oProcessorInput)
+    this.m_sJSONParam = JSON.stringify(oProcessorInput, undefined, 4)
+    console.log(this.m_sJSONParam);
+  }
 
   /**
    * Get Processor details from server
@@ -358,7 +362,6 @@ export class AppUiComponent implements OnInit {
           oProcessorInput[key] = oParamsObj?.[key]
         });
       }
-
     }
     return oProcessorInput;
   }
