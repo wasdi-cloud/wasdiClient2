@@ -74,6 +74,7 @@ export class PlanMapComponent implements OnInit {
   onMapReady(oMap: L.Map): void {
     this.m_oMapService.setMap(oMap);
     this.m_oMapService.addManualBbox(oMap)
+    this.m_oMapService.setDrawnItems()
   }
 
 

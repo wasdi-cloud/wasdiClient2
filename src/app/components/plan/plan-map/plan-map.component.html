@@ -1,5 +1,5 @@
 <div class="map-frame" style="height: 100%; width: 100%;">
-    <div leaflet leafletDraw class="h-100 w-100" id="searchOrbit" [leafletOptions]="m_oMapOptions"
+    <div leaflet leafletDraw class="" style="height:80vh; min-width: 40vw; width: 60vw;" id="searchOrbit" [leafletOptions]="m_oMapOptions"
         (leafletMapReady)="onMapReady($event)" [leafletLayersControl]="m_oLayersControl"
         
         [leafletDrawOptions]="m_oDrawOptions" (leafletDrawCreated)="onDrawCreated($event)">

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, OnDestroy, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MapService } from 'src/app/services/map.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -38,7 +38,6 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
     this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
@@ -76,7 +75,8 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("SearchMapComponent.ngOnDestroy")
     this.m_oMapService.setMap(null);
-  }    
+    this.m_oMapService.setDrawnItems()   
+  }
 
   onMapReady(oMap: L.Map) {
     this.m_oMapService.setMap(oMap);
