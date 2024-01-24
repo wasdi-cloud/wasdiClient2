@@ -23,7 +23,7 @@
         <div class="d-flex flex-row align-items-center gap-2">
             <div>{{'WAP_PUBLISHER' | translate}}: {{processorInformation.publisher}}</div>
             <button class="btn btn-success btn-sm" (click)="openEditAppDialog()"
-                *ngIf="this.m_sUserId === processorInformation.publisher || processorInformation.readonly === false">Edit</button>
+                *ngIf="this.m_sUserId === processorInformation.publisher || processorInformation.readOnly === false">Edit</button>
         </div>
     </div>
     <div>
