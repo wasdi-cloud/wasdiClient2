@@ -4,7 +4,7 @@ import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 //Font Awesome Imports: 
-import { faDatabase, faFile, faFilter, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faDatabase, faFile, faFilter, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 //Service Imports: 
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -34,6 +34,7 @@ export class ProcessesDialog implements OnDestroy {
     faXmark = faXmark;
     faFile = faFile;
     faDatabase = faDatabase;
+    faCircleX = faCircleXmark;
 
     m_bHasError: boolean = false;
     m_aoProcessesRunning: any[] = [];

@@ -110,6 +110,10 @@
         </td>
         <td>{{getDuration(oProcess)}}</td>
         <td class="d-flex flex-row gap-3">
+          <div (click)="deleteProcess(oProcess)"
+            *ngIf="oProcess.status === 'RUNNING' || oProcess.status === 'WAITING' || oProcess.status === 'READY'">
+            <fa-icon [icon]="faCircleX"></fa-icon>
+          </div>
           <a class="button" title="Logs" (click)="openLogsDialog(oProcess)">
             <fa-icon [icon]="faFile"></fa-icon>
           </a>
