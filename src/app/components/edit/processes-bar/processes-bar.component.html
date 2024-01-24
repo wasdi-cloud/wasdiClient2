@@ -4,7 +4,8 @@
         <mat-progress-bar [mode]="'indeterminate'" [color]="'success'" style="width: 300px;"></mat-progress-bar>
     </div>
     <div class="d-flex flex-row gap-5 align-items-center">
-        <div class="py-2 px-3" style="border-radius: 100%;" [ngClass]="m_iIsWebsocketConnected ? 'bg-success' : 'bg-danger'">
+        <div class="py-2 px-3" style="border-radius: 100%;"
+            [ngClass]="m_iIsWebsocketConnected ? 'bg-success' : 'bg-danger'">
             <fa-icon class="text-light" [icon]="faPlug"></fa-icon>
         </div>
         <div class="d-flex flex-row align-items-center gap-1">
@@ -13,8 +14,13 @@
         <div class="d-flex flex-row align-items-center gap-1">
             RUNNING: <span class="badge rounded-pill bg-success">{{m_iNumberOfProcesses}} </span>
         </div>
-        <button class="btn btn-dark" style="border-radius: 100%;" (click)="openProcessesBar()">
-            <fa-icon [icon]="faArrowUp"></fa-icon>
-        </button>
+        <div class="d-flex flex-row align-items-center gap-2" (click)="openProcessesDialog()">
+            <button class="btn">
+                <fa-icon [icon]="faBars"></fa-icon>
+            </button>
+            <button class="btn btn-dark me-2" style="border-radius: 100%;" (click)="openProcessesBar()">
+                <fa-icon [icon]="faArrowUp"></fa-icon>
+            </button>
+        </div>
     </div>
 </div>

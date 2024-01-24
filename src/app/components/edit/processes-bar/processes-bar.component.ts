@@ -5,7 +5,7 @@ import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angul
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 //Font Awesome Imports: 
-import { faArrowDown, faArrowUp, faCircleXmark, faDatabase, faDownload, faFile, faFilter, faList, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faBars, faCircleXmark, faDatabase, faDownload, faFile, faFilter, faList, faListSquares, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 //Service Imports: 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -40,6 +40,7 @@ export class ProcessesBarComponent implements OnInit {
 
   //Fontawesome Icon Declarations
   faArrowUp = faArrowUp;
+  faBars = faListSquares;
   faPlug = faPlug;
 
   m_aoProcessesRunning: any[] = [];
@@ -52,6 +53,7 @@ export class ProcessesBarComponent implements OnInit {
 
   constructor(
     private _bottomSheet: MatBottomSheet,
+    private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
@@ -204,6 +206,13 @@ export class ProcessesBarComponent implements OnInit {
       }
     })
   }
+
+  /**
+   * Open Processes Dialog
+   */
+  openProcessesDialog(): void {
+    this.m_oDialog.open(ProcessesDialog)
+  }
 }
 
 //PROCESSES BAR CONTENT (WHEN BAR IS OPEN):
@@ -242,7 +251,7 @@ export class ProcessesBarContent implements OnInit {
 
   ngOnInit(): void {
     if (this.m_oActiveWorkspace.workspaceId) {
-      
+
       this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
 
       this.m_oProcessWorkspaceService.getProcessesRunning().subscribe({
@@ -253,7 +262,7 @@ export class ProcessesBarContent implements OnInit {
             this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
           }
         },
-        error: oError => { 
+        error: oError => {
           this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
         }
       });
