@@ -34,9 +34,9 @@
     <div>
         <form #nodeCodeForm="ngForm" id="nodeCodeForm" (ngSubmit)="saveNodeCode()">
             <label for="m_sCurrentNode">Change Node: </label>
-            <select class="form-contorl" name="m_sCurrentNode" [(ngModel)]="m_sCurrentNode" id="">
+            <select class="form-contorl" name="m_sCurrentNode" id="" (change)="setNodeInput($event)">
                 <option *ngFor="let oNode of m_asNodeCodes" value={{oNode}}
-                    [selected]="oNode === m_oWorkspace.nodeCode">{{oNode}}</option>
+                    [selected]="oNode === m_oWorkspace.nodeCode ? true : false">{{oNode}}</option>
             </select>
         </form>
     </div>

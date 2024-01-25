@@ -6,6 +6,7 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { NodeService } from 'src/app/services/api/node.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-workspace-info-dialog',
@@ -34,14 +35,14 @@ export class WorkspaceInfoDialogComponent {
    */
   getNodesList() {
     this.m_oNodeService.getNodesList().subscribe(oResponse => {
-      if (oResponse !== null && oResponse !== undefined) {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
         oResponse.forEach(oNode => {
           this.m_aoNodesList.push(oNode)
         });
         this.m_asNodeCodes = this.m_aoNodesList.map(oNode => {
           return oNode.nodeCode
         });
-        this.m_asNodeCodes.push('wasdi');
+
       }
     })
 
@@ -97,5 +98,10 @@ export class WorkspaceInfoDialogComponent {
         return this.m_oWorkspace.slaLink;
       }
     }
+  }
+
+  setNodeInput(oEvent: any) {
+    let sSelectedNode = oEvent.target.value;
+    this.m_sCurrentNode = sSelectedNode;
   }
 }
