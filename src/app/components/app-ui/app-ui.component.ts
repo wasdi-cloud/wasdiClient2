@@ -246,13 +246,18 @@ export class AppUiComponent implements OnInit {
       console.log("Either select workspace or create new one");
       return
     }
+
+    //If there is an active workspace: 
+    if (this.m_oActiveWorkspace.workspaceId && this.m_bOpenWorkspace === true) {
+      this.m_oSelectedWorkspace = this.m_oActiveWorkspace;
+    }
     // let asMessages = [];
     let oProcessorInput = this.createParams();
     let oController = this;
 
     let sApplicationName: string = this.m_oConstantsService.getSelectedApplication();
-    console.log(this.m_bOpenWorkspace)
-    console.log(this.m_oSelectedWorkspace)
+
+
     // If we are opening an existing workspace:
     if (this.m_bOpenWorkspace === true && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === false) {
       this.oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
