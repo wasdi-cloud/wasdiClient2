@@ -5,7 +5,7 @@ import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angul
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 //Font Awesome Imports: 
-import { faArrowDown, faArrowUp, faBars, faCircleXmark, faDatabase, faDownload, faFile, faFilter, faList, faListSquares, faPlug, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faBars, faCircleXmark, faDatabase, faDownload, faFile, faFilter, faList, faListSquares, faPlug, faPlugCircleBolt, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 //Service Imports: 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -155,6 +155,7 @@ export class ProcessesBarContent implements OnInit {
   faFile = faFile;
   faDatabase = faDatabase;
   faCircleX = faCircleXmark;
+  faPlug = faPlug; 
   //Filter inputs (form): 
   m_oFilter: any = {
     sStatus: "",
@@ -166,6 +167,10 @@ export class ProcessesBarContent implements OnInit {
   m_aoProcessesRunning: any[] = [];
   m_oActiveWorkspace?: any = this.data.workspace;
   m_aoAllProcessesLogs: any = [];
+  m_iWaitingProcesses: number = 0;
+  m_iNumberOfProcesses: number = 0;
+  m_iIsWebsocketConnected: number;
+  m_oProcessesBarSubscription: any;
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
@@ -173,6 +178,8 @@ export class ProcessesBarContent implements OnInit {
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oRabbitStompService: RabbitStompService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -193,6 +200,18 @@ export class ProcessesBarContent implements OnInit {
         }
       });
     }
+    this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
+      this.m_iIsWebsocketConnected = oResponse;
+    });
+    this.getSummary();
+    this.m_oProcessesBarSubscription = this.m_oProcessWorkspaceService.updateProcessBarMsg.subscribe(oResponse => {
+      if (oResponse.message === "m_aoProcessesRunning:updated" && oResponse.data === true) {
+        this.getSummary();
+      }
+    })
+    this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
+      this.m_iIsWebsocketConnected = oResponse;
+    });
   }
 
   refreshProcesses(event: MouseEvent) {
@@ -380,6 +399,28 @@ export class ProcessesBarContent implements OnInit {
     event.preventDefault();
   }
 
+  getSummary() {
+    let sMessage: string;
+
+    //ASYNC Translation in case of refresh (reloading translations):
+    this.m_oTranslate.get("MSG_SUMMARY_ERROR").subscribe(sTranslation => {
+      sMessage = sTranslation;
+      this.m_oProcessWorkspaceService.getSummary().subscribe({
+        next: oResponse => {
+          //If Response is undefined or is null:
+          if (!oResponse) {
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+          } else {
+            this.m_iNumberOfProcesses = oResponse.userProcessRunning;
+            this.m_iWaitingProcesses = oResponse.userProcessWaiting;
+          }
+        },
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog(sMessage)
+        }
+      });
+    });
+  }
 
   dismiss(event: MouseEvent): void {
     this.m_oBottomSheetRef.dismiss();
