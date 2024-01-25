@@ -23,6 +23,9 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import { WapDirective } from 'src/app/directives/wap.directive';
 import { WapDisplayComponent } from './wap-display/wap-display.component';
 import { NewAppDialogComponent } from '../edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 export interface Application {
   buyed: boolean,
@@ -59,9 +62,11 @@ export class AppUiComponent implements OnInit {
     private m_oActivatedRoute: ActivatedRoute,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
     private m_oProcessorWorkspaceService: ProcessWorkspaceService,
     private m_oRouter: Router,
+    private m_oTranslate: TranslateService,
     private oWorkspaceService: WorkspaceService) { }
   //Processor Information
   processorName: string = this.m_oConstantsService.getSelectedApplication();
@@ -110,6 +115,9 @@ export class AppUiComponent implements OnInit {
 
   //User ID
   m_sUserId: string;
+
+  //Does the user want to create a new workspace or open an existing?
+  m_bOpenWorkspace: boolean = true;
 
   ngOnInit(): void {
     this.m_sUserId = this.m_oConstantsService.getUser().userId;
@@ -230,11 +238,7 @@ export class AppUiComponent implements OnInit {
     let bCheck: boolean = this.checkParams();
 
     if (!bCheck) {
-      let oDialogData = new ErrorDialogModel("Error Running Application", this.m_sMessage);
-      let dialogRef = this.m_oDialog.open(ErrorDialogComponent, {
-        maxWidth: "400px",
-        data: oDialogData
-      })
+      this.m_oNotificationDisplayService.openAlertDialog("Error Running Application.")
       return;
     }
 
@@ -247,9 +251,19 @@ export class AppUiComponent implements OnInit {
     let oController = this;
 
     let sApplicationName: string = this.m_oConstantsService.getSelectedApplication();
-
-    if (this.m_oSelectedWorkspace === null) {
-      const { sNewWorkspaceName, sExistingWorkspace } = this.workspaceForm;
+    console.log(this.m_bOpenWorkspace)
+    console.log(this.m_oSelectedWorkspace)
+    // If we are opening an existing workspace:
+    if (this.m_bOpenWorkspace === true && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === false) {
+      this.oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
+        if (oResponse) {
+          this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, oResponse);
+        }
+      });
+      //If we are creating a new workspace:
+    } else if (this.m_bOpenWorkspace === true && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === true) {
+      this.m_oNotificationDisplayService.openAlertDialog("Please make a valid workspace selection");
+    } else {
       let sWorkspaceName: string;
       let sUserProvidedWorkspaceName: string = this.workspaceForm.sNewWorkspaceName;
       if (sUserProvidedWorkspaceName) {
@@ -261,41 +275,25 @@ export class AppUiComponent implements OnInit {
         sWorkspaceName = sApplicationName + "_" + sToday;
       }
       //ERROR MESSAGES: 
-      // let sOpenError = this.m_oTranslate.instant("MSG_MKT_WS_OPEN_ERROR");
-      // let sCreateError = this.m_oTranslate.instant("MSG_MKT_WS_CREATE_ERROR");
+      let sOpenError = this.m_oTranslate.instant("MSG_MKT_WS_OPEN_ERROR");
+      let sCreateError = this.m_oTranslate.instant("MSG_MKT_WS_CREATE_ERROR");
 
       //Create a new Workspace
       this.oWorkspaceService.createWorkspace(sWorkspaceName).subscribe(oResponse => {
         let sWorkspaceId = oResponse.stringValue;
 
         if (sWorkspaceId === null) {
-          let oDialogData = new ErrorDialogModel("Error!", "Problem creating workspace");
-          let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
-            maxWidth: '400px',
-            data: oDialogData
+          this.m_oNotificationDisplayService.openAlertDialog(sCreateError)
+        } else {
+          this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(response => {
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+              this.m_oNotificationDisplayService.openAlertDialog(sOpenError);
+            } else {
+              this.executeProcessorInWorkspace(oController, sApplicationName, oProcessorInput, response);
+            }
           })
-          return;
         }
-        this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(response => {
-          if (oResponse === null || oResponse === undefined) {
-            let oDialogData = new ErrorDialogModel("Error!", "Problem creating workspace");
-            let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
-              maxWidth: '400px',
-              data: oDialogData
-            });
-            return
-          }
-          this.executeProcessorInWorkspace(oController, sApplicationName, oProcessorInput, response);
-        })
       })
-    } else {
-      this.oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
-        if (oResponse) {
-          this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, oResponse);
-        }
-
-      })
-
     }
   }
 
@@ -335,6 +333,7 @@ export class AppUiComponent implements OnInit {
     if (this.m_oSelectedWorkspace?.workspaceId === undefined) {
       return false
     }
+    console.log(this.m_oSelectedWorkspace)
     return this.m_oSelectedWorkspace.workspaceId;
   }
 
@@ -389,6 +388,11 @@ export class AppUiComponent implements OnInit {
       width: '70vw',
       height: '70vh'
     })
+  }
+
+  setOpenNewWorkspace(oInput: any): void {
+    let parsedInput = JSON.parse(oInput.value.toLowerCase());
+    this.m_bOpenWorkspace = parsedInput;
   }
 
 }
