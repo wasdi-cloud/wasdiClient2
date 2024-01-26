@@ -1,3 +1,40 @@
+/* Custom Colour Sets */
+:root {
+  /* Main Colours */
+  --darkAccessible: #006526;
+  --wasdiGreen: #009036;
+  --wasdiBlue: #212F45;
+  --wasdiWarn: #FBAC00;
+  --wasdiDanger: #FF3D00;
+
+  /* Shade Variants */
+  --wasdiWarn10: #FEF5E0;
+  --wasdiDanger10: #FFE7E0;
+  --wasdiGreen10: #E0F1E6;
+  --wasdiBlue10: #E1EAFB;
+
+  /* Lighter Shade Variants */
+  --wasdiWarnLight: #FFF9EB;
+  --wasdiDangerLight: #FFF0EB;
+  --wasdiGreenLight: #EBF7EF;
+  --wasdiBluelight: #F0F5FD;
+  
+  /* Neutrals */
+  --neutral5: #ECEEF0;
+  --neutral10: #D9DCE1;
+  --neutral15: #C7CBD3;
+  --neutral20: #B4BAC4;
+  --neutral25: #8E97A6; 
+  --neutral30: #697589;
+  --neutral50Brand: #43526B;
+  --neutral60: #364256;
+  --neutral70: #283140;
+  --neutral80: #1B212B;
+  --neutral85: #141920;
+  --neutral90: #0D1015;
+  --neutral95: #07080B;
+}
+
 /* BROWSER RESETS */
 * {
   padding: 0;
@@ -13,14 +50,14 @@ body {
 }
 
 body {
-  font-family: "Inter", sans-serif;
+
   font-family: "Poppins", sans-serif;
 }
 
-main {
+/* main {
   width: 100%;
   height: 90vh;
-}
+} */
 
 .mat-bottom-sheet-container-medium,
 .mat-bottom-sheet-container-large,
