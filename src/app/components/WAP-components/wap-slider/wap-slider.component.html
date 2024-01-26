@@ -1,4 +1,4 @@
 <mat-slider style="width: 80%;" min={{oSliderInput.m_iMin}} max={{oSliderInput.m_iMax}} step="10"
-    showTickMarks discrete [displayWith]="formatLabel" (change)="getSliderInput($event)" >
-    <input matSliderThumb >
+    showTickMarks discrete [displayWith]="formatLabel" (change)="getSliderInput($event)">
+    <input matSliderThumb  value={{oSliderInput.m_iValue}}>
 </mat-slider>
