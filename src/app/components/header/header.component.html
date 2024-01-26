@@ -1,18 +1,23 @@
-<header class="d-flex flex-row">
-    <a href="#"><img src="assets/svg/logo.svg" alt="logo" class="logo" /></a>
-    <ng-container [ngSwitch]="m_sLocation">
-        <img *ngSwitchCase="'marketplace'" src="assets/svg/space-market.svg" alt="space market decorative title" />
-    </ng-container>
-
-    <ng-container [ngSwitch]="m_sLocation">
-        <!-- Input filters for app marketplace -->
-        <app-market-search *ngSwitchCase="'marketplace'"></app-market-search>
-    </ng-container>
+<header class="d-flex flex-row justify-content-between ps-4 pe-3">
+    <div class="header-logo-container d-flex flex-row align-items-center gap-1">
+        <img src="/assets/icons/logo-only.svg" alt="">
+        <img src="/assets/icons/logo-name.svg" alt="">
+    </div>
+    <div class="user-greeting-container d-flex flex-row align-items-center gap-2" (click)="openUserDashboard()">
+        <div class="d-flex flex-column align-items-end">
+            <span class="greeting">Welcome Back</span>
+            <span class="username">{{m_oUser.name}}</span>
+        </div>
+        <div class="user-icon">
+            <span class="material-symbols-outlined">
+                account_circle
+            </span>
+        </div>
+    </div>
 </header>
 
-
 <!-- Feedback Form OffCanvas -->
-<div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
+<!-- <div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
     <div class="offcanvas-header d-flex flex-row justify-content-start gap-3 p-0 m-0">
         <button type="button" class="btn btn-secondary close-feedback-btn" data-bs-dismiss="offcanvas"
             aria-label="Close">
@@ -49,4 +54,4 @@
             </div>
         </form>
     </div>
-</div>
+</div> -->
