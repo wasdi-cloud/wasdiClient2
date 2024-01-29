@@ -286,7 +286,6 @@ export class MarketplaceComponent implements OnInit {
    * @returns {void}
    */
   developerChanged(oEvent): void {
-    console.log(oEvent);
     let iDeveloperIndex = this.m_aoSelectedPublishers.indexOf(oEvent.publisher)
     if (iDeveloperIndex === -1) {
       this.m_aoSelectedPublishers.push(oEvent.publisher);
