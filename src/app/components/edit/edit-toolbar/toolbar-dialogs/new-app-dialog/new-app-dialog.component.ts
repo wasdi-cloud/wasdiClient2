@@ -121,7 +121,7 @@ export class NewAppDialogComponent implements OnInit {
   */
   m_oInputProcessor: {
     imgLink: string,
-    isPublic: string,
+    isPublic: any,
     minuteTimeout: number,
     paramsSample: string,
     processorDescription: string,
@@ -134,7 +134,7 @@ export class NewAppDialogComponent implements OnInit {
     type: string
   } = {
       imgLink: "",
-      isPublic: "0",
+      isPublic: 0,
       minuteTimeout: 180,
       paramsSample: "",
       processorDescription: "",
@@ -200,7 +200,7 @@ export class NewAppDialogComponent implements OnInit {
     }
   }
 
- initializeProcessorInformation(sProcessorId: string) {
+  initializeProcessorInformation(sProcessorId: string) {
     //Base Input 
     this.m_oProcessorService.getDeployedProcessor(sProcessorId).subscribe({
       next: oResponse => {
@@ -266,7 +266,7 @@ export class NewAppDialogComponent implements OnInit {
         sShortDescription: this.m_oInputProcessor.processorDescription,
         sJSONSample: this.m_sJSONSample,
         iMinuteTimeout: this.m_iMinuteTimeout,
-        bIsPublic: this.m_bPublic,
+        bIsPublic: this.m_oInputProcessor.isPublic,
         oSelectedFile: this.m_oSelectedFile,
         sSelectedFileName: ""
       }),
@@ -349,9 +349,9 @@ export class NewAppDialogComponent implements OnInit {
   setInputProcessorValues() {
     //Is processor public? 
     if (this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value === false) {
-      this.m_oInputProcessor.isPublic = "0";
+      this.m_oInputProcessor.isPublic = 0;
     } else {
-      this.m_oInputProcessor.isPublic = "1";
+      this.m_oInputProcessor.isPublic = 1;
     }
     //Set processor name: 
     this.m_oInputProcessor.processorName = this.m_oProcessorForm.get('processorBasicInfo.sProcessorName').value;
@@ -476,7 +476,6 @@ export class NewAppDialogComponent implements OnInit {
     }
 
     this.m_oInputProcessor.processorName = this.m_oInputProcessor.processorName.toLowerCase();
-
 
     let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value
     let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value

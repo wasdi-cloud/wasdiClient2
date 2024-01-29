@@ -39,9 +39,9 @@
             <label for="timeOut">Timeout (min)</label>
             <input class="form-control" type="number" name="" id="" formControlName="iMinuteTimeout">
 
-            <mat-checkbox formControlName="bIsPublic">
-                Make Application Public
-            </mat-checkbox>
+            <input type="checkbox" name="isPublic" [checked]="m_bIsPublic" (change)="onPublicChange($event)">
+            <label for="isPublic">Make Application Public</label>
+
         </div>
         <div style="width: 50%">
             <label for="jsonSample">JSON Sample:</label>

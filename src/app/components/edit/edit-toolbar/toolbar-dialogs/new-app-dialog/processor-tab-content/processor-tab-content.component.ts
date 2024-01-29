@@ -95,7 +95,7 @@ export class ProcessorTabContentComponent implements OnInit {
    */
   @Input() m_sProcessorName?: string = "";
 
-  @Input() m_sPublisher?: string = ""; 
+  @Input() m_sPublisher?: string = "";
 
 
   /**
@@ -116,7 +116,7 @@ export class ProcessorTabContentComponent implements OnInit {
     { name: "Ubuntu 22.04 + Python 3.10", id: "python_pip_2" },
     { name: "OGC Application Package", id: "eoepca" },
     //{ name: "Python 3.x Pip One Shot", id: "pip_oneshot" },
-    { name: "Ubuntu 20.04 + Python 3.8", id:"python_pip_2_ubuntu_20"},
+    { name: "Ubuntu 20.04 + Python 3.8", id: "python_pip_2_ubuntu_20" },
     { name: "IDL 3.7.2", id: "ubuntu_idl372" },
     { name: "OCTAVE 6.x", id: "octave" },
     { name: "Python 3.x Conda", id: "conda" },
@@ -141,7 +141,6 @@ export class ProcessorTabContentComponent implements OnInit {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
 
     this.displayProcessorType();
-    console.log(this.m_sPublisher)
     let sType = this.m_oProcessorBasicInfo.get('oType').value;
     this.m_aoProcessorTypes.forEach(type => {
       if (type.id === sType) {
@@ -149,6 +148,13 @@ export class ProcessorTabContentComponent implements OnInit {
         this.m_oProcessorBasicInfo.controls['oType'].setValue(sType)
       }
     })
+
+    //Set ui for isPublic flag
+    if (this.m_oProcessorBasicInfo.get('bIsPublic').value === 0) {
+      this.m_bIsPublic = false
+    } else {
+      this.m_bIsPublic = true
+    }
   }
 
   /**
@@ -303,5 +309,16 @@ export class ProcessorTabContentComponent implements OnInit {
     this.onFileSelect($event);
   }
 
-
+  onPublicChange(event) {
+    let oForm = this.m_oProcessorBasicInfo;
+    if (event.target.checked) {
+      oForm.patchValue({
+        bIsPublic: true
+      })
+    } else {
+      oForm.patchValue({
+        bIsPublic: false
+      })
+    }
+  }
 }

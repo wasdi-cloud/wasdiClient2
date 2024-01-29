@@ -149,8 +149,8 @@ export class ProcessorService {
      * @returns {*}
      */
   getProcessorLogs(oProcessId: object) {
-    var oWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    var sUrl = this.APIURL;
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
 
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
@@ -210,8 +210,6 @@ export class ProcessorService {
      * @returns {*}
      */
   updateProcessor(sProcessorId: string, oBody: object) {
-    console.log(oBody)
-
     return this.m_oHttp.post(this.APIURL + '/processors/update?processorId=' + encodeURI(sProcessorId), oBody);
   };
   /**
