@@ -22,7 +22,6 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 //Import Utilities: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
-import { faArrowLeft, faArrowRightFromBracket, faBars } from '@fortawesome/free-solid-svg-icons';
 import { HeaderService } from 'src/app/services/header.service';
 
 
@@ -33,9 +32,6 @@ import { HeaderService } from 'src/app/services/header.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  faBars = faBars;
-  faArrowLeft = faArrowLeft;
-  faLogout = faArrowRightFromBracket;
   m_bIsNavbarOpen: boolean = false;
 
   sActiveWorkspaceId: string | null = null;
@@ -134,23 +130,6 @@ export class NavbarComponent implements OnInit {
     })
     event.preventDefault();
   }
-  sendFeedback() {
-    if (typeof this.m_oFeedback === undefined || !this.m_oFeedback.title || !this.m_oFeedback.message) {
-      console.log("Error sending message");
-      return false;
-    }
-
-    this.m_oFeedbackService.sendFeedback(this.m_oFeedback).subscribe(oResponse => {
-      if (typeof oResponse !== null && typeof oResponse !== undefined && oResponse.boolValue === true) {
-        console.log("feedback sent")
-        return true;
-      } else {
-        console.log("error sending feedback");
-        return false;
-      }
-    });
-    return true;
-  }
 
   initializeProjectsInfo() {
     let oFirstProjectElement = { name: "No Active Project", projectId: null };
@@ -232,7 +211,30 @@ export class NavbarComponent implements OnInit {
   getAccountType() {
     this.m_sUserAccount = this.m_oUser.type;
   }
+
   openCloseNavbar() {
     this.m_bIsNavbarOpen = !this.m_bIsNavbarOpen;
+  }
+
+  sendFeedback() {
+    if (typeof this.m_oFeedback === undefined || !this.m_oFeedback.title || !this.m_oFeedback.message) {
+      console.log("Error sending message");
+      return false;
+    }
+
+    this.m_oFeedbackService.sendFeedback(this.m_oFeedback).subscribe(oResponse => {
+      if (typeof oResponse !== null && typeof oResponse !== undefined && oResponse.boolValue === true) {
+        console.log("feedback sent")
+        return true;
+      } else {
+        console.log("error sending feedback");
+        return false;
+      }
+    });
+    return true;
+  }
+
+  openDocs(sUrl: string) {
+    window.open(sUrl, "_blank");
   }
 }

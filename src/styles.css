@@ -18,13 +18,13 @@
   --wasdiDangerLight: #FFF0EB;
   --wasdiGreenLight: #EBF7EF;
   --wasdiBluelight: #F0F5FD;
-  
+
   /* Neutrals */
   --neutral5: #ECEEF0;
   --neutral10: #D9DCE1;
   --neutral15: #C7CBD3;
   --neutral20: #B4BAC4;
-  --neutral25: #8E97A6; 
+  --neutral25: #8E97A6;
   --neutral30: #697589;
   --neutral50Brand: #43526B;
   --neutral60: #364256;
@@ -52,6 +52,12 @@ body {
 body {
 
   font-family: "Poppins", sans-serif;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
 }
 
 /* main {
