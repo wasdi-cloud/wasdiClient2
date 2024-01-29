@@ -1,0 +1,32 @@
+<div class="wasdi-card">
+    <div class="card-price" [class]="m_oProcessor.price === 0 ? 'price-free': 'price-paid'">
+        {{m_oProcessor.price === 0 ? 'Free' : "€" +
+        m_oProcessor.price}}
+    </div>
+    <img class="card-img " src="{{m_oProcessor.imgLink}}"
+        alt="{{'Image accompanying the application '+ m_oProcessor.friendlyName}}" class="card-img">
+    <div class="app-stars d-flex flex-row align-items-center">
+        <div>
+            <span class="material-symbols-outlined" [class]="m_oProcessor.score> 0 ? 'star-filled' : 'star-grey'">
+                star
+            </span>
+            <span class="material-symbols-outlined" [class]="m_oProcessor.score > 1 ? 'star-filled' : 'star-grey'">
+                star
+            </span>
+            <span class="material-symbols-outlined" [class]="m_oProcessor.score> 2 ? 'star-filled' : 'star-grey'">
+                star
+            </span>
+            <span class="material-symbols-outlined" [class]="m_oProcessor.score> 3 ? 'star-filled' : 'star-grey'">
+                star
+            </span>
+            <span class="material-symbols-outlined" [class]="m_oProcessor.score> 4 ? 'star-filled' : 'star-grey'">
+                star
+            </span>
+        </div>
+        <span class="app-total-votes">({{m_oProcessor.votes}})</span>
+    </div>
+    <div class="app-title">{{m_oProcessor.friendlyName}}</div>
+    <div class="app-description">{{m_oProcessor.processorDescription ? m_oProcessor.processorDescription : ''}}</div>
+    <div class="card-divider"></div>
+    <div class="app-publisher">Published by: <span class="publisher-name">{{m_oProcessor.publisher}}</span></div>
+</div>
