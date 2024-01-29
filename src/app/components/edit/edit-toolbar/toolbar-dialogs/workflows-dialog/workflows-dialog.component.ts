@@ -37,6 +37,7 @@ export class WorkflowsDialogComponent implements OnInit {
   m_oWAPProudct: any = null;
   m_oSelectedProduct: Product;
   m_aoSelectedProducts: Array<Product>;
+  m_aoMultiInputSelectedProducts: any = {};
 
   m_oWorkflowFileData = {} as {
     workflowName: "",
@@ -72,11 +73,16 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_sActiveTab = sTabName;
   }
 
+  selectedMultiInputWorkflow(oWorkflow: Workflow) {
+    this.m_oSelectedMultiInputWorkflow = oWorkflow;
+    // create a dictionary
+    this.m_aoMultiInputSelectedProducts = {};
+  }
+
   getWorkflowsByUser() {
     this.m_oWorkflowService.getWorkflowsByUser().subscribe({
       next: oResponse => {
         if (oResponse.body) {
-          console.log(oResponse.body)
           this.m_aoWorkflows = oResponse.body
         }
       },
@@ -98,6 +104,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   setSelectedWorkflow(oWorkflow) {
     this.m_oSelectedWorkflow = oWorkflow;
+    this.selectedMultiInputWorkflow(oWorkflow);
   }
 
   openEditWorkflowDialog(oWorkflow?) {
@@ -112,7 +119,6 @@ export class WorkflowsDialogComponent implements OnInit {
         }
       })
     } else {
-      console.log(oWorkflow)
       oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
         height: '70vh',
         width: '70vw',
@@ -162,21 +168,27 @@ export class WorkflowsDialogComponent implements OnInit {
    * Execute processing on single product input (Previously: runMultiInputWorkflow)
   */
   runSingleInputWorkflow() {
+    //Todo: Add Check for active project/subscription
     if (this.m_bIsReadOnly === true) {
       this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to execute a workflow in this workspace");
       return false;
     }
     // this.addProductInputInNode();  
-    let oSnapWorkflowViewModel = this.getObjectExecuteGraph(this.m_oSelectedWorkflow);
-    console.log(oSnapWorkflowViewModel);
-    if (!oSnapWorkflowViewModel) {
-      console.log("Error in executing workflow");
-      return false
-    } else {
-      this.executeGraphFromWorkflowId(this.m_sWorkspaceId, oSnapWorkflowViewModel);
-      return true;
+    for (var sNodeName in this.m_aoMultiInputSelectedProducts) {
+      // check if the property/key is defined in the object itself, not in parent
+      if (this.m_aoMultiInputSelectedProducts.hasOwnProperty(sNodeName)) {
+        this.addProductInputInNode(sNodeName, this.m_aoMultiInputSelectedProducts[sNodeName].name);
+      }
     }
-
+    var oSnapWorkflowViewModel = this.getObjectExecuteGraph(this.m_oSelectedMultiInputWorkflow.workflowId, this.m_oSelectedMultiInputWorkflow.name, this.m_oSelectedMultiInputWorkflow.description,
+      this.m_oSelectedMultiInputWorkflow.inputNodeNames, this.m_oSelectedMultiInputWorkflow.inputFileNames, this.m_oSelectedMultiInputWorkflow.outputNodeNames,
+      this.m_oSelectedMultiInputWorkflow.outputFileNames);
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSnapWorkflowViewModel) === false) {
+      this.executeGraphFromWorkflowId(this.m_sWorkspaceId, oSnapWorkflowViewModel);
+    } else {
+      this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>YOU HAVE TO INSERT A PRODUCT FOR EACH INPUT NODE.");
+    }
+    return true;
   }
 
   /**
@@ -188,37 +200,37 @@ export class WorkflowsDialogComponent implements OnInit {
       return false;
     }
     let iNumberOfProducts = this.m_aoSelectedProducts.length;
-    console.log(this.m_aoSelectedProducts);
     for (let iSelectedProductIndex = 0; iSelectedProductIndex < iNumberOfProducts; iSelectedProductIndex++) {
       let aoSingleInputFiles: Array<string> = [];
       aoSingleInputFiles.push(this.m_oSelectedWorkflow.inputFileNames[iSelectedProductIndex]);
 
-      let oSnapWorkflowViewModel = this.getObjectExecuteGraph(this.m_oSelectedWorkflow)
-      if (oSnapWorkflowViewModel) {
+      let oSnapWorkflowViewModel = this.getObjectExecuteGraph(this.m_oSelectedMultiInputWorkflow.workflowId, this.m_oSelectedMultiInputWorkflow.name, this.m_oSelectedMultiInputWorkflow.description,
+        this.m_oSelectedMultiInputWorkflow.inputNodeNames, this.m_oSelectedMultiInputWorkflow.inputFileNames, this.m_oSelectedMultiInputWorkflow.outputNodeNames,
+        this.m_oSelectedMultiInputWorkflow.outputFileNames);
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSnapWorkflowViewModel) === false) {
         this.executeGraphFromWorkflowId(this.m_sWorkspaceId, oSnapWorkflowViewModel);
       } else {
-        console.log("Error in executing workflow");
+        this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>YOU HAVE TO INSERT A PRODUCT FOR EACH INPUT NODE.");
       }
     }
     return true;
   }
 
-  getObjectExecuteGraph(oWorkflow: Workflow, asInputFile?: Array<string>) {
-    if (this.areOkDataExecuteGraph(oWorkflow.workflowId, oWorkflow.name, oWorkflow.inputNodeNames, oWorkflow.inputFileNames) === false) {
+
+  getObjectExecuteGraph(sWorkflowId, sName, sDescription, asInputNodeNames,
+    asInputFileNames, asOutputNodeNames, asOutputFileNames) {
+    if (this.areOkDataExecuteGraph(sWorkflowId, sName, asInputNodeNames, asInputFileNames) === false) {
       return null;
     }
-    var oExecuteGraph = this.getEmptyObjectExecuteGraph();
-    oExecuteGraph.workflowId = oWorkflow.workflowId;
-    oExecuteGraph.name = oWorkflow.name;
-    oExecuteGraph.description = oWorkflow.description;
-    oExecuteGraph.inputNodeNames = oWorkflow.inputNodeNames;
-    if (asInputFile) {
-      oExecuteGraph.inputFileNames = asInputFile;
-    } else {
-      oExecuteGraph.inputFileNames = oWorkflow.inputFileNames;
-    }
-    oExecuteGraph.outputNodeNames = oWorkflow.outputNodeNames;
-    oExecuteGraph.outputFileNames = oWorkflow.outputFileNames;
+    let oExecuteGraph = this.getEmptyObjectExecuteGraph();
+    oExecuteGraph.workflowId = sWorkflowId;
+    oExecuteGraph.name = sName;
+    oExecuteGraph.description = sDescription;
+    oExecuteGraph.inputNodeNames = asInputNodeNames;
+    oExecuteGraph.inputFileNames = asInputFileNames;
+    oExecuteGraph.outputNodeNames = asOutputNodeNames;
+    oExecuteGraph.outputFileNames = asOutputFileNames;
+
     return oExecuteGraph;
   }
 
@@ -232,20 +244,36 @@ export class WorkflowsDialogComponent implements OnInit {
     return bReturnValue;
   }
 
-  addProductInputInNode() {
+  addProductInputInNode(sNode: string, sProduct: string) {
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sNode) || FadeoutUtils.utilsIsStrNullOrEmpty(sProduct)) {
+      return false;
+    }
 
+    let iIndexOfElement = FadeoutUtils.utilsFindObjectInArray(this.m_oSelectedMultiInputWorkflow.inputNodeNames, sNode)
+
+    if (iIndexOfElement === -1) {
+      return false;
+    }
+
+    // TODO: Refactoring del ciclo
+    for (let iProducts = 0; iProducts < this.m_aoProducts.length; iProducts++) {
+      if (this.m_aoProducts[iProducts].name === sProduct) {
+        this.m_oSelectedMultiInputWorkflow.inputFileNames[iIndexOfElement] = this.m_aoProducts[iProducts].fileName;
+        break;
+      }
+    }
+
+    return true;
   }
 
   /**
    * Set the value of the inputFileNames in the SelectedWorkflow based on SINGLE selection prodcut input
    * @param oEvent 
    */
-  getSingleSelection(oEvent: any) {
-    console.log(oEvent.value);
+  getSingleSelection(oEvent: any, oNode: any) {
     if (oEvent.value) {
       //Set the inputFileName value to reflect SINGLE input: 
       this.m_oSelectedWorkflow.inputFileNames = [oEvent.value.name];
-      console.log(this.m_oSelectedWorkflow);
     }
   }
 
@@ -253,13 +281,12 @@ export class WorkflowsDialogComponent implements OnInit {
    * Set the value of the inputFileNames in the SelectedWorkflow based on MULTIPLE selection product input
    * @param oEvent 
    */
-  getMultiSelection(oEvent: any) {
+  getMultiSelection(oEvent: any, oNode: any) {
     let asProductNames = [];
     oEvent.value.forEach(oProduct => {
       asProductNames.push(oProduct.fileName);
     });
     this.m_oSelectedWorkflow.inputFileNames = asProductNames;
-    console.log(this.m_oSelectedWorkflow.inputFileNames);
   }
 
   getEmptyObjectExecuteGraph() {
@@ -284,17 +311,16 @@ export class WorkflowsDialogComponent implements OnInit {
 
     this.m_oWorkflowService.executeGraphFromWorkflowId(sWorkspaceId, oWorkflowObject).subscribe({
       next: oResponse => {
-        console.log(oResponse);
         if (oResponse.boolValue === true) {
           this.onDismiss();
         } else {
           //ADD ALERT DIALOG: 
-          console.log("ERROR IN EXECUTING WORKFLOW");
+          this.m_oNotificationDisplayService.openAlertDialog("ERROR IN EXECUTING WORKFLOW");
         }
       },
       error: oError => {
         //ALERT DIALOG: 
-        console.log(oError);
+        this.m_oNotificationDisplayService.openAlertDialog("ERROR IN EXECUTING WORKFLOW");
       }
     });
     return true;

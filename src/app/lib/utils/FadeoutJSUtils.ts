@@ -182,4 +182,20 @@ export default class FadeoutUtils {
         }
     }
 
+    static utilsFindObjectInArray(oArray, oObject) {
+        //ERROR PARAMS == NULL OR UNDEFINED
+        if (this.utilsIsObjectNullOrUndefined(oArray) || this.utilsIsObjectNullOrUndefined(oObject))
+            return -1;
+        // 0 ELEMENTS IN ARRAY
+        if (oArray.length == 0)
+            return -1;
+
+        var iArrayLength = oArray.length;
+        for (var iIndex = 0; iIndex < iArrayLength; iIndex++) {
+            if (oArray[iIndex] == oObject)
+                return iIndex;
+        }
+        /* the object isn't inside array */
+        return -1;
+    }
 }

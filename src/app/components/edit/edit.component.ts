@@ -92,7 +92,7 @@ export class EditComponent implements OnInit, OnDestroy {
    * Actual User
    */
   m_oUser = this.m_oConstantsService.getUser();
-  
+
   /**
    * default sort by value
    */
@@ -145,7 +145,7 @@ export class EditComponent implements OnInit, OnDestroy {
         //If unable to identify workspace, re-route to workspaces tab
         this.m_oRouter.navigateByUrl('/workspaces')
       }
-    } 
+    }
     else {
       FadeoutUtils.verboseLog("EditComponent.ngOnInit: using active workspace")
 
@@ -157,34 +157,34 @@ export class EditComponent implements OnInit, OnDestroy {
       this.getProductList();
     }
 
-    this.m_oRabbitStompService.setMessageCallback(this.recievedRabbitMessage);
+    this.m_oRabbitStompService.setMessageCallback(this.receivedRabbitMessage);
     this.m_oRabbitStompService.setActiveController(this);
   }
 
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("EditComponent.ngOnDestroy")
-    
+
     this.m_oRabbitStompService.unsubscribe();
     this.m_oGlobeService.clearGlobe();
     this.m_oMapService.clearMap();
-  }  
+  }
 
-  recievedRabbitMessage(oMessage, oController) {
+  receivedRabbitMessage(oMessage, oController) {
     // Check if the message is valid
     if (oMessage == null) return;
 
     // Check the Result
     if (oMessage.messageResult == "KO") {
 
-      var sOperation = "null";
+      let sOperation = "null";
       if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.messageCode) === false) sOperation = oMessage.messageCode;
 
-      var sErrorDescription = "";
+      let sErrorDescription = "";
 
       if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
       if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
 
-      oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription);
+      oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription, 10000);
 
       if (oMessage.messageCode == "PUBLISHBAND") {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
@@ -194,7 +194,6 @@ export class EditComponent implements OnInit, OnDestroy {
           }
         }
       }
-
       return;
     }
 
@@ -218,7 +217,7 @@ export class EditComponent implements OnInit, OnDestroy {
         oController.receivedNewProductMessage(oMessage);
         break;
       case "DELETE":
-        //oController.getProductListByWorkspace();
+        // oController.getProductListByWorkspace();
         break;
     }
 
@@ -270,7 +269,7 @@ export class EditComponent implements OnInit, OnDestroy {
             this.m_oRouter.navigateByUrl('/workspaces');
             let sMessage = this.m_oTranslate.instant("MSG_FORBIDDEN")
             this.m_oNotificationDisplayService.openAlertDialog(sMessage)
-          } 
+          }
           else {
 
             FadeoutUtils.verboseLog("edit.component.openWorkspace: Received open Workspace View Model ")
@@ -282,7 +281,7 @@ export class EditComponent implements OnInit, OnDestroy {
             this._subscribeToRabbit();
             FadeoutUtils.verboseLog("edit.component.openWorkspace: CALL get product list ")
             this.getProductList();
-            
+
             this.getJupyterIsReady(this.m_oActiveWorkspace.workspaceId);
           }
         }

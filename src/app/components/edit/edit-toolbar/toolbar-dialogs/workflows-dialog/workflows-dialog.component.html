@@ -78,25 +78,29 @@
                         Show file extension: <mat-checkbox [color]="'success'"
                             [(ngModel)]="m_bShowExtension"></mat-checkbox>
                     </div>
-                    <label class="text-success form-label">Read:</label>
-                    <!-- Multi-select for Batch Processing -->
-                    <mat-select *ngIf="m_sActiveTab === 'batch'" class="form-control" [(ngModel)]="m_aoSelectedProducts"
-                        (selectionChange)="getMultiSelection($event)" multiple>
-                        <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
-                            [(ngModel)]="m_sSearchString">
-                        <mat-option *ngFor="let oProduct of m_aoProducts | filter: m_sSearchString" [value]="oProduct">
-                            {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
-                        </mat-option>
-                    </mat-select>
-                    <!-- Single Select for Single Processing -->
-                    <mat-select *ngIf="m_sActiveTab === 'execute'" class="form-control" [(ngModel)]="m_oSelectedProduct"
-                        (selectionChange)="getSingleSelection($event)">
-                        <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
-                            [(ngModel)]="m_sSearchString">
-                        <mat-option *ngFor="let oProduct of m_aoProducts | filter:m_sSearchString" [value]="oProduct">
-                            {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
-                        </mat-option>
-                    </mat-select>
+                    <div *ngFor="let oNode of m_oSelectedWorkflow.inputNodeNames">
+                        <label class="text-success form-label">Read:</label>
+                        <!-- Multi-select for Batch Processing -->
+                        <mat-select *ngIf="m_sActiveTab === 'batch'" class="form-control"
+                            [(ngModel)]="m_aoMultiInputSelectedProducts[oNode]" (selectionChange)="getMultiSelection($event, oNode)" multiple>
+                            <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
+                                [(ngModel)]="m_sSearchString">
+                            <mat-option *ngFor="let oProduct of m_aoProducts | filter: m_sSearchString"
+                                [value]="oProduct">
+                                {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- Single Select for Single Processing -->
+                        <mat-select *ngIf="m_sActiveTab === 'execute'" class="form-control"
+                            [(ngModel)]="m_aoMultiInputSelectedProducts[oNode]" (selectionChange)="getSingleSelection($event, oNode)">
+                            <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
+                                [(ngModel)]="m_sSearchString">
+                            <mat-option *ngFor="let oProduct of m_aoProducts | filter:m_sSearchString"
+                                [value]="oProduct">
+                                {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
+                            </mat-option>
+                        </mat-select>
+                    </div>
                     <!-- <button class="btn btn-success" (click)="runMultiInputWorkflow()">Run</button> -->
                     <button *ngIf="m_sActiveTab === 'execute'" class="btn btn-success"
                         (click)="runSingleInputWorkflow()" [disabled]="m_bIsReadOnly === true">Run</button>
