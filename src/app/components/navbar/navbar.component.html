@@ -5,40 +5,44 @@
         <div class="menu-list-container">
             <button class="menu-list-item" routerLink="/marketplace" [class.open]="m_bIsNavbarOpen === true"
                 (click)="setActiveTab('marketplace')" [class.active]="m_sSelectedTab === 'marketplace'"
-                aria-label="Marketplace">
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_APPSTORE' | translate}}">
                 <span class="material-symbols-sharp">
                     grid_on
                 </span>
                 <span [hidden]="!m_bIsNavbarOpen">Marketplace</span>
             </button>
             <button class="menu-list-item" routerLink="/workspaces" [class.open]="m_bIsNavbarOpen === true"
-                (click)="setActiveTab('workspaces')" [class.active]="m_sSelectedTab === 'workspaces'">
+                (click)="setActiveTab('workspaces')" [class.active]="m_sSelectedTab === 'workspaces'"
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}">
                 <span class="material-symbols-sharp">
                     workspaces
                 </span>
-                <span [hidden]="!m_bIsNavbarOpen">Workspaces</span>
+                <span [hidden]="!m_bIsNavbarOpen">{{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}</span>
             </button>
             <button class="menu-list-item" routerLink="/plan" [class.open]="m_bIsNavbarOpen === true"
-                (click)="setActiveTab('plan')" [class.active]="m_sSelectedTab === 'plan'">
+                (click)="setActiveTab('plan')" [class.active]="m_sSelectedTab === 'plan'"
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' | translate}}">
                 <span class="material-symbols-outlined">
                     calendar_month
                 </span>
                 <span [hidden]="!m_bIsNavbarOpen">Plan</span>
             </button>
             <button class="menu-list-item" routerLink="/search" [class.open]="m_bIsNavbarOpen === true"
-                (click)="setActiveTab('search')" [class.active]="m_sSelectedTab === 'search'">
+                (click)="setActiveTab('search')" [class.active]="m_sSelectedTab === 'search'"
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_IMPORT' | translate}}">
                 <span class="material-symbols-outlined">
                     search
                 </span>
-                <span [hidden]="!m_bIsNavbarOpen">Search</span>
+                <span [hidden]="!m_bIsNavbarOpen">{{"ROOT_VIEW_NAV_BAR_LINK_IMPORT" | translate}}</span>
             </button>
             <button class="menu-list-item" routerLink="/edit/{{sActiveWorkspaceId}}"
                 [class.open]="m_bIsNavbarOpen === true" (click)="setActiveTab('edit')"
-                [class.active]="m_sSelectedTab === 'edit'" [disabled]="m_bEditIsActive === false">
+                [class.active]="m_sSelectedTab === 'edit'" [disabled]="m_bEditIsActive === false"
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}">
                 <span class="material-symbols-outlined">
                     edit
                 </span>
-                <span [hidden]="!m_bIsNavbarOpen">Edit</span>
+                <span [hidden]="!m_bIsNavbarOpen">{{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}</span>
             </button>
             <button class="menu-list-item" [class.open]="m_bIsNavbarOpen === true" (click)="setActiveTab('settings')"
                 [class.active]="m_sSelectedTab === 'settings'">
@@ -54,7 +58,7 @@
                 <span class="material-symbols-sharp">
                     support
                 </span>
-                <span [hidden]="!m_bIsNavbarOpen">Help</span>
+                <span [hidden]="!m_bIsNavbarOpen">{{"ROOT_VIEW_LINK_HELP" | translate}}</span>
             </button>
         </div>
         <img class="logo-img" [class.open]="m_bIsNavbarOpen" src="/assets/icons/logo-only.svg" alt="">

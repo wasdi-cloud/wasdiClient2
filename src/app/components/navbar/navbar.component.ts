@@ -85,17 +85,15 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    console.log(this.m_oActiveWorkspace);
     this.m_oUser = this.m_oConstantsService.getUser();
     this.initializeProjectsInfo();
     this.getAccountType();
-    console.log(this.m_sUserAccount);
 
     this.m_oRouterEvents = this.m_oRouter.events.subscribe((oEvent: any) => {
       if (oEvent instanceof NavigationEnd) {
-
         if (oEvent.url.includes('edit')) {
           this.sActiveWorkspaceId = oEvent.url.slice(6);
+          this.setActiveTab("edit")
           this.m_bEditIsActive = true;
           this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.sActiveWorkspaceId).subscribe({
             next: oResponse => {

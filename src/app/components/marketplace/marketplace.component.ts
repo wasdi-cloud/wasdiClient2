@@ -74,12 +74,6 @@ export class MarketplaceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.m_sNameFilterSubscription = this.m_oHeaderService.m_oSearchFilterSubscription.subscribe(sResult => {
-      
-        this.m_sNameFilter = sResult;
-        this.refreshAppList();
-      
-    })
     this.getApplications();
     //Remove categories retrieval for ESA demo
     this.getCategories();
