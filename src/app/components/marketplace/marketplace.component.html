@@ -120,11 +120,11 @@
                 </div> -->
             </article>
         </section>
+
         <!-- Marketplace App Cards -->
-        <div class="processor-cards-container d-flex flex-column py-3">
-            <div class="col-12 d-flex flex-row flex-wrap justify-content-start px-3 gap-1">
-                <app-marketplace-app-card *ngFor="let oProcessor of m_aoApplications"
-                    [oProcessor]="oProcessor"></app-marketplace-app-card>
+        <div class="app-cards-container d-flex flex-column">
+            <div class="processor-cards-container d-flex flex-row flex-wrap justify-content-start">
+                <app-card *ngFor="let oProcessor of m_aoApplications" [m_oProcessor]="oProcessor"></app-card>
             </div>
             <button [disabled]="m_bLoadMoreEnabled === false" class="btn btn-lg btn-primary align-self-center"
                 (click)="loadMore()">Load More</button>

@@ -1,215 +1,85 @@
-<nav class="collapsed" *ngIf="m_bIsNavbarOpen === false">
-    <button class="maximise mx-auto" (click)="openCloseNavbar()">
-        <img src="assets/svg/bars.svg" alt="icon">
-    </button>
-    <menu class="navigation-menu">
-        <li>
-            <button routerLink="/marketplace" matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_APPSTORE' | translate}}"
-                [matTooltipPosition]="'right'" [ngClass]="m_sSelectedTab === 'marketplace' ?  'active': ''"
-                (click)="setActiveTab('marketplace')">
-                <img src="assets/svg/apps-icon.svg" alt="icon" />
-            </button>
-        </li>
-        <li>
-            <button class="" routerLink="/workspaces" matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}"
-                [matTooltipPosition]="'right'" [ngClass]="m_sSelectedTab === 'workspaces' ? 'active': ''"
-                (click)="setActiveTab('workspaces')">
-                <img src="assets/svg/workplace-icon.svg" alt="icon" />
-            </button>
-        </li>
-        <li>
-            <button class="" routerLink="/plan" matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' |
-            translate}}" [ngClass]="m_sSelectedTab === 'plan' ? 'active': ''" [matTooltipPosition]="'right'"
-                (click)="setActiveTab('plan')">
-                <img src="assets/svg/plan-icon.svg" alt="icon" />
-            </button>
-        </li>
-        <li>
-            <button class="" routerLink="/search" matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_IMPORT' | translate}}"
-                [matTooltipPosition]="'right'" [ngClass]="m_sSelectedTab === 'search' ?  'active': ''"
-                (click)="setActiveTab('search')">
-                <img src="assets/svg/search-fill.svg" alt="icon" />
-            </button>
-        </li>
-        <li>
-            <button class="" routerLink="/edit/{{sActiveWorkspaceId}}" [disabled]="sActiveWorkspaceId ? false :true  "
-                matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}" [matTooltipPosition]="'right'"
-                [ngClass]="m_sSelectedTab === 'edit' ?  'active': ''" (click)="setActiveTab('edit')">
-                <img src="assets/svg/edit-icon.svg" alt="icon" />
-            </button>
-        </li>
-        <li>
-            <button data-bs-toggle="offcanvas" data-bs-target="#feedbackOffcanvas" aria-controls="feedbackOffcanvas"
-                matTooltip="{{'ROOT_VIEW_NAV_BAR_LINK_FEEDBACK' | translate}}" [matTooltipPosition]="'right'">
-                <img src="assets/svg/chat-icon.svg" alt="icon" />
-            </button>
-        </li>
-        <li>
-            <button matTooltip="Languages" [matTooltipPosition]="'right'">
-                <img src="assets/svg/report-icon.svg" alt="icon" />
-            </button>
-        </li>
-        <li>
-            <button matTooltip="User Settings" [matTooltipPosition]="'right'" (click)="openUserSettings($event)">
-                <img src="assets/svg/alien-icon.svg" alt="icon" />
-            </button>
-        </li>
-        <li>
-            <button (click)="openCloseNavbar()" matTooltip="My Subscriptions" [matTooltipPosition]="'right'">
-                <img src="assets/svg/yellow-star-icon.svg" alt="star" />
-            </button>
+<div class="nav-container d-flex flex-row">
 
-        </li>
-        <li>
-            <button matTooltip="Documentation" [matTooltipPosition]="'right'">
-                <a class="documentation-btn" href="https://wasdi.readthedocs.io/en/latest/" target="_blank">
-                    <img src="assets/svg/help-book-icon.svg" alt="icon" />
-                </a>
+    <!-- Open Navbar -->
+    <nav class="d-flex flex-column justify-content-between" [class.collapsed]="m_bIsNavbarOpen === false">
+        <div class="menu-list-container">
+            <button class="menu-list-item" routerLink="/marketplace" [class.open]="m_bIsNavbarOpen === true"
+                (click)="setActiveTab('marketplace')" [class.active]="m_sSelectedTab === 'marketplace'"
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_APPSTORE' | translate}}">
+                <span class="material-symbols-sharp">
+                    grid_on
+                </span>
+                <span [hidden]="!m_bIsNavbarOpen">Marketplace</span>
             </button>
-        </li>
-        <li>
-            <button (click)="logout()" matTooltip="Logout" [matTooltipPosition]="'right'">
-                <fa-icon [icon]="faLogout"></fa-icon>
+            <button class="menu-list-item" routerLink="/workspaces" [class.open]="m_bIsNavbarOpen === true"
+                (click)="setActiveTab('workspaces')" [class.active]="m_sSelectedTab === 'workspaces'"
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}">
+                <span class="material-symbols-sharp">
+                    workspaces
+                </span>
+                <span [hidden]="!m_bIsNavbarOpen">{{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}</span>
+            </button>
+            <button class="menu-list-item" routerLink="/plan" [class.open]="m_bIsNavbarOpen === true"
+                (click)="setActiveTab('plan')" [class.active]="m_sSelectedTab === 'plan'"
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' | translate}}">
+                <span class="material-symbols-outlined">
+                    calendar_month
+                </span>
+                <span [hidden]="!m_bIsNavbarOpen">Plan</span>
+            </button>
+            <button class="menu-list-item" routerLink="/search" [class.open]="m_bIsNavbarOpen === true"
+                (click)="setActiveTab('search')" [class.active]="m_sSelectedTab === 'search'"
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_IMPORT' | translate}}">
+                <span class="material-symbols-outlined">
+                    search
+                </span>
+                <span [hidden]="!m_bIsNavbarOpen">{{"ROOT_VIEW_NAV_BAR_LINK_IMPORT" | translate}}</span>
+            </button>
+            <button class="menu-list-item" routerLink="/edit/{{sActiveWorkspaceId}}"
+                [class.open]="m_bIsNavbarOpen === true" (click)="setActiveTab('edit')"
+                [class.active]="m_sSelectedTab === 'edit'" [disabled]="m_bEditIsActive === false"
+                attr.aria-label="{{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}">
+                <span class="material-symbols-outlined">
+                    edit
+                </span>
+                <span [hidden]="!m_bIsNavbarOpen">{{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}</span>
+            </button>
+            <button class="menu-list-item" [class.open]="m_bIsNavbarOpen === true" (click)="setActiveTab('settings')"
+                [class.active]="m_sSelectedTab === 'settings'">
+                <span class="material-symbols-outlined">
+                    settings
+                </span>
+                <span [hidden]="!m_bIsNavbarOpen">Settings</span>
+            </button>
+        </div>
+        <div class="menu-list-container">
+            <button class="menu-list-item" [class.open]="m_bIsNavbarOpen === true"
+                (click)="openDocs('https://wasdi.readthedocs.io/en/latest/')">
+                <span class="material-symbols-sharp">
+                    support
+                </span>
+                <span [hidden]="!m_bIsNavbarOpen">{{"ROOT_VIEW_LINK_HELP" | translate}}</span>
+            </button>
+        </div>
+        <img class="logo-img" [class.open]="m_bIsNavbarOpen" src="/assets/icons/logo-only.svg" alt="">
+    </nav>
+    <div class="menu-control d-flex flex-column justify-content-center" (click)="openCloseNavbar()">
+        <span class="material-symbols-outlined" [hidden]="m_bIsNavbarOpen">
+            chevron_right
+        </span>
+        <span class="material-symbols-outlined" [hidden]="!m_bIsNavbarOpen">
+            chevron_left
+        </span>
+    </div>
+</div>
 
-            </button>
-        </li>
-    </menu>
-</nav>
-
-<!-- Open Navbar -->
-<nav *ngIf="m_bIsNavbarOpen=== true">
-    <button class="minimize" (click)="openCloseNavbar()">
-        <img src="assets/svg/hide-icon.svg" alt="" />
-    </button>
-    <menu class="navigation-menu">
-        <li>
-            <button routerLink="/marketplace" [ngClass]="m_sSelectedTab === 'marketplace' ?'active' : ''"
-                (click)="setActiveTab('marketplace')">
-                <img src="assets/svg/apps-icon.svg" alt="icon" />
-                {{'ROOT_VIEW_NAV_BAR_LINK_APPSTORE' | translate}}
-            </button>
-        </li>
-        <li>
-            <button routerLink="/workspaces" [ngClass]="m_sSelectedTab === 'workspaces' ?'active' : ''"
-                (click)="setActiveTab('workspaces')">
-                <img src="assets/svg/workplace-icon.svg" alt="apps icon" />
-                {{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}
-                <!-- <div class="notification-red"></div> -->
-            </button>
-        </li>
-        <li>
-            <button routerLink="/plan" [ngClass]="m_sSelectedTab === 'plan' ?'active' : ''"
-                (click)="setActiveTab('plan')">
-                <img src="assets/svg/plan-icon.svg" alt="icon" />
-                Plan
-                <!-- <div class="notification-green"></div> -->
-            </button>
-        </li>
-        <li>
-            <button routerLink="/search" [ngClass]="m_sSelectedTab === 'search' ?'active' : ''"
-                (click)="setActiveTab('search')">
-                <img src="assets/svg/search-fill.svg" alt="apps icon" />
-                Search
-            </button>
-        </li>
-        <li>
-            <button routerLink="/edit/{{sActiveWorkspaceId}}" [ngClass]="{'disabled' : !sActiveWorkspaceId}"
-                [ngClass]="m_sSelectedTab === 'edit' ?'active' : ''" (click)="setActiveTab('')">
-                <img src="assets/svg/edit-icon.svg" alt="icon" />
-                Edit
-            </button>
-        </li>
-        <li>
-            <button data-bs-toggle="offcanvas" data-bs-target="#feedbackOffcanvas" aria-controls="feedbackOffcanvas">
-                <img src="assets/svg/chat-icon.svg" alt="icon" />
-                Feedback
-            </button>
-        </li>
-        <li class="dropdown-center">
-            <button class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="assets/svg/report-icon.svg" alt="icon" />
-                Language
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li *ngFor="let language of m_oTranslate.getLangs()">
-                    <a (click)="translateLanguageTo(language)
-                        " class="dropdown-item">{{language | uppercase}}</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <button (click)="openUserSettings($event)">
-                <img src="assets/svg/alien-icon.svg" alt="icon" />
-                User Settings
-            </button>
-        </li>
-        <li>
-            <div class="upgrade-container"
-                *ngIf="m_sUserAccount !== 'FREE' && m_sUserAccount !== 'PROFESSIONAL' && m_sUserAccount !==  'STANDARD'">
-                <div class="upgrade-card">
-                    <div>
-                        <h2>Upgrade to Pro</h2>
-                        <img src="assets/svg/yellow-star-icon.svg" alt="star" />
-                    </div>
-                    <p>
-                        Your 3 Month Trial Period has Expired. Upgrade to WASDI PRO
-                    </p>
-                    <a routerLink="/subscriptions">Get Started</a>
-                </div>
-            </div>
-        </li>
-        <li>
-            <div class="upgrade-container"
-                *ngIf="m_sUserAccount === 'FREE' || m_sUserAccount === 'PROFESSIONAL' || m_sUserAccount ===  'STANDARD'">
-                <div class="upgrade-card">
-                    <div *ngIf="m_sUserAccount === 'PROFESSIONAL'">
-                        <img src="assets/svg/yellow-star-icon.svg" alt="star" />
-                        <h2>WASDI PRO</h2>
-                    </div>
-                    <div *ngIf="m_sUserAccount === 'STANDARD'">
-                        <img src="assets/svg/yellow-star-icon.svg" alt="star" />
-                        <h2>WASDI STND</h2>
-                    </div>
-                    <div *ngIf="m_sUserAccount === 'FREE'">
-                        <img src="assets/svg/yellow-star-icon.svg" alt="star" />
-                        <h2>WASDI FREE</h2>
-                    </div>
-                    <p class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Project :
-                        {{m_oSelectedProject.name}}
-                    </p>
-                    <ul class="dropdown-menu">
-                        <li style="cursor:pointer;" class="dropdown-item" *ngFor="let oProject of m_aoUserProjectsMap"
-                            (click)="setActiveProject(oProject)">
-                            {{oProject.name}}</li>
-                    </ul>
-                    <a routerLink="/subscriptions">Buy New Subscription</a>
-                </div>
-            </div>
-        </li>
-        <li>
-            <button>
-                <a class="documentation-btn" href="https://wasdi.readthedocs.io/en/latest/" target="_blank">
-                    <img src="assets/svg/help-book-icon.svg" alt="icon" />
-                    Documentation
-                </a>
-            </button>
-        </li>
-        <li>
-            <button (click)="logout()">
-                <fa-icon [icon]="faLogout"></fa-icon>
-                Logout
-            </button>
-        </li>
-    </menu>
-</nav>
 
 <!-- Feedback Form OffCanvas -->
 <div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
     <div class="offcanvas-header d-flex flex-row justify-content-start gap-3 p-0 m-0">
         <button type="button" class="btn btn-secondary close-feedback-btn" data-bs-dismiss="offcanvas"
             aria-label="Close">
-            <fa-icon [icon]="faArrowLeft"></fa-icon>
+            <!-- <fa-icon [icon]="faArrowLeft"></fa-icon> -->
         </button>
         <h5 class="offcanvas-title">Send Feedback to WASDI</h5>
     </div>

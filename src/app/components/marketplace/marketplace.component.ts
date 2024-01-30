@@ -74,12 +74,6 @@ export class MarketplaceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.m_sNameFilterSubscription = this.m_oHeaderService.m_oSearchFilterSubscription.subscribe(sResult => {
-      
-        this.m_sNameFilter = sResult;
-        this.refreshAppList();
-      
-    })
     this.getApplications();
     //Remove categories retrieval for ESA demo
     this.getCategories();
@@ -286,7 +280,6 @@ export class MarketplaceComponent implements OnInit {
    * @returns {void}
    */
   developerChanged(oEvent): void {
-    console.log(oEvent);
     let iDeveloperIndex = this.m_aoSelectedPublishers.indexOf(oEvent.publisher)
     if (iDeveloperIndex === -1) {
       this.m_aoSelectedPublishers.push(oEvent.publisher);

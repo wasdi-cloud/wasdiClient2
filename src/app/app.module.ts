@@ -36,6 +36,9 @@ import { NavLayersComponent } from './components/edit/nav-layers/nav-layers.comp
 import { WorkspaceInfoDialogComponent } from './components/edit/workspace-info-dialog/workspace-info-dialog.component';
 import { ShareDialogComponent } from './shared/dialogs/share-dialog/share-dialog.component';
 
+//Components
+import { CardComponent } from './components/marketplace/card/card.component';
+
 //Angular Materials Imports 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -56,7 +59,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatChipsModule } from '@angular/material/chips';
-import {MatProgressBarModule } from '@angular/material/progress-bar'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
 
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -262,7 +265,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     NotificationSnackbarComponent,
     ConvertMsToTimePipe,
     ManualBoundingBoxComponent,
-    HelpDialogComponent
+    HelpDialogComponent,
+    CardComponent
+
   ],
   imports: [
     AppRoutingModule,
@@ -301,7 +306,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatSnackBarModule,
     MatListModule,
     MatProgressSpinnerModule,
-    MatChipsModule, 
+    MatChipsModule,
     MatProgressBarModule,
     NgxChartsModule
   ],
