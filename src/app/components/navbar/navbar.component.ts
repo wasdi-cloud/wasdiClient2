@@ -36,7 +36,7 @@ export class NavbarComponent implements OnInit {
 
   sActiveWorkspaceId: string | null = null;
   sActiveRoute: string;
-  m_bEditIsActive: boolean;
+  m_bEditIsActive: boolean = false;
   m_oActiveWorkspace: Workspace;
   m_oUser: User;
 
@@ -65,8 +65,6 @@ export class NavbarComponent implements OnInit {
     //Register translation languages:
     m_oTranslate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
     m_oTranslate.setDefaultLang('en');
-
-
   }
 
   translateLanguageTo(lang: string) {
@@ -96,7 +94,7 @@ export class NavbarComponent implements OnInit {
             }
           })
         } else {
-          this.m_bEditIsActive = false;
+          // this.m_bEditIsActive = false;
           this.setActiveTab(oEvent.url.slice(1));
         }
       }

@@ -238,6 +238,7 @@ export class WorkspacesComponent implements OnInit {
    */
   onDeleteWorkspace(oWorkspace: Workspace) {
     this.fetchWorkspaceInfoList();
+    this.m_oActiveWorkspace = null;
   }
 
   /**
