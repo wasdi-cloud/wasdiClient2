@@ -19,7 +19,6 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
    this.m_oUser = this.m_oConstantsService.getUser()
-   console.log(this.m_oUser)
   }
 
   openUserDashboard() {
