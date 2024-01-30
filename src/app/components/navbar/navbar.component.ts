@@ -40,13 +40,6 @@ export class NavbarComponent implements OnInit {
   m_oActiveWorkspace: Workspace;
   m_oUser: User;
 
-  m_bLoadingProjects: boolean = false;
-
-  m_aoUserProjects: Array<any> = [];
-  m_aoUserProjectsMap: Array<any> = [];
-  m_oProject: any;
-  m_oSelectedProject: any = { name: "No Active Project", projectId: null };
-
   m_sUserAccount: string = "";
 
   m_oFeedback: {
@@ -86,7 +79,6 @@ export class NavbarComponent implements OnInit {
     this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     this.m_oUser = this.m_oConstantsService.getUser();
-    this.initializeProjectsInfo();
     this.getAccountType();
 
     this.m_oRouterEvents = this.m_oRouter.events.subscribe((oEvent: any) => {
@@ -127,73 +119,6 @@ export class NavbarComponent implements OnInit {
       width: '80vw'
     })
     event.preventDefault();
-  }
-
-  initializeProjectsInfo() {
-    let oFirstProjectElement = { name: "No Active Project", projectId: null };
-
-    this.m_oProjectService.getValidProjectsListByUser().subscribe({
-      next: oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          this.m_aoUserProjects = oResponse;
-
-          let aoProjects = [oFirstProjectElement].concat(oResponse);
-
-          this.m_aoUserProjectsMap = aoProjects.map(oProject => {
-            return ({ name: oProject.name, projectId: oProject.projectId });
-          });
-          let asSubscriptionNames: Array<string> = [];
-
-          this.m_oProject = oFirstProjectElement;
-
-          this.m_aoUserProjects.forEach((oValue) => {
-            //Add subscription name to the array
-            asSubscriptionNames.push(oValue.subscriptionName);
-            //FRONTEND FIX FOR NO ACTIVE PROJECT SELECT: 
-            if (oValue.projectId === this.m_oSelectedProject.projectId) {
-              this.m_oSelectedProject = oFirstProjectElement;
-            }
-            if (oValue.activeProject) {
-              this.m_oSelectedProject = oValue;
-              this.m_oConstantsService.setActiveProject(oValue);
-            };
-          });
-
-          this.m_oConstantsService.setActiveSubscriptions(asSubscriptionNames);
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedProject)) {
-            this.m_oSelectedProject = this.m_aoUserProjectsMap[0];
-          }
-          this.m_bLoadingProjects = false;
-        } else {
-          this.m_oAlertDialog.openDialog(4000, "Error in getting your projects");
-          this.m_bLoadingProjects = false;
-          this.m_oProject = oFirstProjectElement;
-
-        }
-      },
-      error: oError => {
-        let sErrorMessage = "Error in getting your projects";
-        this.m_oProject = oFirstProjectElement;
-        this.m_oAlertDialog.openDialog(4000, sErrorMessage);
-      }
-    });
-  }
-
-  setActiveProject(oProject: any) {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProject) === false) {
-      this.m_oProjectService.changeActiveProject(oProject.projectId).subscribe({
-        next: oResponse => {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-            this.m_oNotificationDisplayService.openSnackBar("Active Project Changed", "Close", "right", "bottom");
-
-            this.m_oSelectedProject = oProject;
-            this.m_oConstantsService.setActiveProject(oProject);
-            this.initializeProjectsInfo();
-          }
-        },
-        error: oError => { }
-      });
-    }
   }
 
   reNameWorkspace(oInputWorkspace) {
