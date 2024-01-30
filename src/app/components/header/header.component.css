@@ -3,7 +3,7 @@ header {
     border-bottom: 1px solid var(--neutral10);
     height: 3rem;
     position: sticky;
-    top:0;
+    top: 0;
     width: 100%;
     z-index: 2;
 }
@@ -54,6 +54,42 @@ header {
         'opsz' 24
 }
 
+.card-divider {
+    background: var(--neutral10);
+    width: 1px;
+    height: 36px;
+    max-height: 36px;
+
+}
+
+.dropdown>.btn {
+    background: var(--Colors-Neutrals-0, #FFF);
+    border: 1px solid var(--Colors-Neutrals-20, #B4BAC4);
+    border-radius: var(--Radius-or-Spacings-XS, 4px);
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    justify-content: space-between;
+    padding: 8px 8px;
+    width: 150px;
+}
+
+.dropdown-icon {
+    color: var(--neutral50Brand);
+    position: static;
+    width: var(--Radius-or-Spacings-M, 16px);
+    height: var(--Radius-or-Spacings-M, 16px);
+}
+
+a.dropdown-item {
+    cursor: pointer;
+    font-size: 14px;
+    /* 171.429% */
+}
+
+a.dropdown-item:hover {
+    background: var(--wasdiBlue10);
+}
 
 /* input.new-workspace-name {
     background: transparent;

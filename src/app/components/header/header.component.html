@@ -3,15 +3,35 @@
         <img src="/assets/icons/logo-only.svg" alt="">
         <img src="/assets/icons/logo-name.svg" alt="">
     </div>
-    <div class="user-greeting-container d-flex flex-row align-items-center gap-2" (click)="openUserDashboard()">
-        <div class="d-flex flex-column align-items-end">
-            <span class="greeting">Welcome Back</span>
-            <span class="username">{{m_oUser.name}}</span>
+    <div class="d-flex flex-row align-items-center gap-3">
+        <div class="project-selection-container">
+            <div class="dropdown">
+                <button class="btn" type="button" id="projectSelectButton" data-bs-toggle="dropdown"
+                    aria-expanded="false" aria-haspopup="true">
+                    {{m_oSelectedProject ? m_oSelectedProject.name : "Select Project"}}
+                    <div class="dropdown-icon material-symbols-outlined">
+                        expand_more
+                    </div>
+
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="projectSelectButton">
+                    <li><a class="dropdown-item" (click)="setActiveProject(oProject)"
+                            *ngFor="let oProject of m_aoUserProjectsMap">{{oProject.name}}</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="user-icon">
-            <span class="material-symbols-outlined">
-                account_circle
-            </span>
+        <div class="card-divider"></div>
+        <div class="user-greeting-container d-flex flex-row align-items-center gap-2" (click)="openUserDashboard()">
+            <div class="d-flex flex-column align-items-end">
+                <span class="greeting">Welcome Back</span>
+                <span class="username">{{m_oUser.name}}</span>
+            </div>
+            <div class="user-icon">
+                <span class="material-symbols-outlined">
+                    account_circle
+                </span>
+            </div>
         </div>
     </div>
 </header>
