@@ -1,3 +1,8 @@
+.app-cards-container {
+	overflow-y: scroll;
+}
+
+
 .sub-menu {
 	background-color: #fbfbfb;
 	border-right: 1px solid rgba(0, 0, 0, 0.13);
