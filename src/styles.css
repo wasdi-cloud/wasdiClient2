@@ -60,10 +60,10 @@ button {
   padding: 0;
 }
 
-/* main {
+main {
   width: 100%;
-  height: 90vh;
-} */
+  height: calc(100vh - 3rem);
+}
 
 .mat-bottom-sheet-container-medium,
 .mat-bottom-sheet-container-large,
