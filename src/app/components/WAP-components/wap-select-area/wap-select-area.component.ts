@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as L from 'leaflet';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { MapService } from 'src/app/services/map.service';
 
 @Component({
@@ -18,13 +19,15 @@ export class WapSelectAreaComponent implements OnInit {
   m_oDrawnItems: any;
   m_sErrorMessage: string;
   m_bIsValid: boolean;
-
+  m_aoManualBBoxSubscription: any;
+  m_oGeoJSON: any;
+  m_sPolygon: string;
   constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService) { }
 
   ngOnInit(): void {
     //this.m_oMapService.setDrawnItems();
     //this.m_oMapService.initTilelayer();
-    
+
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
     this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
@@ -34,6 +37,22 @@ export class WapSelectAreaComponent implements OnInit {
 
     this.m_sErrorMessage = "Error:"
     this.m_bIsValid = true;
+
+    this.m_aoManualBBoxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult)) {
+        this.m_oGeoJSON = oResult.toGeoJSON();
+        this.m_sPolygon = this.getPolygon();
+
+        this.oMapInputChange.emit({
+          geoJSON: this.m_oGeoJSON,
+          polygon: this.m_sPolygon
+        });
+      }
+    })
+  }
+
+  onMapReady(oMap) {
+    this.m_oMapService.addManualBbox(oMap)
   }
 
   onDrawCreated(event) {
@@ -108,5 +127,35 @@ export class WapSelectAreaComponent implements OnInit {
       this.m_bIsValid = false;
     }
     return this.m_bIsValid;
+  }
+
+  getPolygon(): string {
+    let sCoordinatesPolygon = "";
+    let iLengthCoordinates;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON.geometry)) {
+      return sCoordinatesPolygon;
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON.geometry.coordinates)) {
+      iLengthCoordinates = 0;
+    }
+    else {
+      iLengthCoordinates = this.m_oGeoJSON.geometry.coordinates.length;
+    }
+
+    for (let iLayerCount = 0; iLayerCount < iLengthCoordinates; iLayerCount++) {
+
+      let oLayer = this.m_oGeoJSON.geometry.coordinates[iLayerCount];
+      for (let iCoordCount = 0; iCoordCount < oLayer.length; iCoordCount++) {
+        if (oLayer[iCoordCount].length == 2) {
+          let x = oLayer[iCoordCount][0];
+          let y = oLayer[iCoordCount][1];
+          sCoordinatesPolygon += (x + " " + y);
+
+          if (iCoordCount + 1 < oLayer.length)
+            sCoordinatesPolygon += ',';
+        }
+      }
+    }
+    return sCoordinatesPolygon;
   }
 }
