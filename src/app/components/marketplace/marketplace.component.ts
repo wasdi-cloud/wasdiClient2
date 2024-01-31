@@ -31,7 +31,8 @@ interface AppFilter {
 @Component({
   selector: 'app-marketplace',
   templateUrl: './marketplace.component.html',
-  styleUrls: ['./marketplace.component.css']
+  styleUrls: ['./marketplace.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class MarketplaceComponent implements OnInit {
   m_sPublisher: string;
@@ -75,58 +76,7 @@ export class MarketplaceComponent implements OnInit {
 
   ngOnInit(): void {
     this.getApplications();
-    //Remove categories retrieval for ESA demo
-    this.getCategories();
-    this.getPublishers();
   }
-
-
-  /**
-   * Get Marketplace Categories
-   * @returns {void}
-   */
-  getCategories(): void {
-    let sCategoriesError;
-    this.m_oTranslate.get('MSG_WAPPS_CATEGORY_ERROR').subscribe(sResponse => {
-      sCategoriesError = sResponse;
-    })
-    this.m_oProcessorMediaService.getCategories().subscribe(
-      {
-        next: oResponse => {
-          if (oResponse.length === 0) {
-            this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
-          }
-          this.m_asCategoryOptions = oResponse;
-        },
-        error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
-        }
-      })
-  }
-
-  /**
-   * Get list of Publishers from the server
-   * @returns {void}
-   */
-  getPublishers(): void {
-    let sErrorMsg: string;
-    this.m_oTranslate.get("MSG_WAPPS_PUBLISHERS_ERROR").subscribe(sResponse => {
-      sErrorMsg = sResponse;
-    })
-    this.m_oProcessorMediaService.getPublishersFilterList().subscribe({
-      next: oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          this.m_aoPublishers = oResponse;
-        } else {
-          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
-        }
-      },
-      error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
-      }
-    });
-  }
-
 
   /**
    * Retrieve the applications list from the server
@@ -329,5 +279,10 @@ export class MarketplaceComponent implements OnInit {
     this.m_oAppFilter.page = 0;
     this.getApplications();
 
+  }
+
+  getAppFilter(oEvent) {
+    this.m_oAppFilter = oEvent;
+    this.getApplications();
   }
 }

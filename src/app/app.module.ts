@@ -163,6 +163,7 @@ import { NotificationSnackbarComponent } from './shared/dialogs/notification-sna
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 import { ManualBoundingBoxComponent } from './shared/shared-components/manual-bounding-box/manual-bounding-box.component';
 import { HelpDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/help-dialog/help-dialog.component';
+import { MarketplaceFiltersComponent } from './components/marketplace/marketplace-filters/marketplace-filters.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -266,7 +267,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ConvertMsToTimePipe,
     ManualBoundingBoxComponent,
     HelpDialogComponent,
-    CardComponent
+    CardComponent,
+    MarketplaceFiltersComponent
 
   ],
   imports: [
