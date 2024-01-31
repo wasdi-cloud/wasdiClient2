@@ -128,15 +128,13 @@ export class ProductsListComponent implements OnChanges, OnInit {
   /**
    * Initializes the Component
    */
-  ngOnInit(): void { 
-
-  }
+  ngOnInit(): void { }
 
 
   ngOnChanges() {
     // If we have products try to filter
     if (this.m_aoWorkspaceProductsList != null) {
-      if (this.m_aoWorkspaceProductsList.length>0) {
+      if (this.m_aoWorkspaceProductsList.length > 0) {
         this.filterProducts();
       }
       else {
@@ -172,8 +170,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         });
 
         this.m_aoFilteredProducts = aoFiltered;
-      }
-      else{
+      } else {
         this.m_aoFilteredProducts = this.m_aoWorkspaceProductsList;
       }
     }
@@ -205,13 +202,13 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   selectAllProducts(oEvent) {
     if (oEvent.currentTarget.checked === true) {
-      this.m_aoWorkspaceProductsList.forEach(oProduct => {
+      this.m_aoFilteredProducts.forEach(oProduct => {
         oProduct['checked'] = true;
       })
 
-      this.m_aoSelectedProducts = this.m_aoWorkspaceProductsList;
+      this.m_aoSelectedProducts = this.m_aoFilteredProducts;
     } else {
-      this.m_aoWorkspaceProductsList.forEach(oProduct => {
+      this.m_aoFilteredProducts.forEach(oProduct => {
         oProduct['checked'] = false;
       })
       this.m_aoSelectedProducts = [];
@@ -328,7 +325,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === false) {
         return false;
-      } 
+      }
       else {
         //Call the API
         this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
@@ -419,9 +416,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
           this.receivedPublishBandMessage(oResponse, oBand);
-
-        } 
-        else {
+        } else {
           this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
         }
         oBand['productName'] = oResponse.payload.productName
@@ -434,8 +429,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         } else {
           this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
         }
-      } 
-      else {
+      } else {
         let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
 
