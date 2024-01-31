@@ -31,7 +31,8 @@ interface AppFilter {
 @Component({
   selector: 'app-marketplace',
   templateUrl: './marketplace.component.html',
-  styleUrls: ['./marketplace.component.css']
+  styleUrls: ['./marketplace.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class MarketplaceComponent implements OnInit {
   m_sPublisher: string;
