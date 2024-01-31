@@ -31,7 +31,7 @@
             <div class="developers-container">
                 <div class="wasdi-checkbox-container" *ngFor=" let oPublisher of m_aoPublishers | filter:
                     m_sDeveloperSearch">
-                    <input class="wasdi-checkbox" type="checkbox" name="" id="">
+                    <input class="wasdi-checkbox" type="checkbox" name="" id="" (click)="developerChanged(oPublisher)">
                     <span class="wasdi-checkbox-label">{{oPublisher.publisher}}</span>
                 </div>
             </div>
@@ -41,7 +41,7 @@
             <div class="review-options">
                 <div class="review-option-container d-flex flex-row align-items-center gap-1"
                     *ngFor="let iRating of m_aiRatingsFilter">
-                    <input type="radio" name="reviewOption" id="">
+                    <input type="radio" name="reviewOption" id="" value="{{iRating}}" (click)="ratingChanged($event)">
                     <span class="material-symbols-outlined" [class]="iRating > 0 ? 'star-filled' : 'star-grey'">
                         star
                     </span>
