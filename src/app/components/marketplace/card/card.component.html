@@ -1,4 +1,4 @@
-<div class="wasdi-card">
+<div class="wasdi-card" (click)="openProcessorDetails(m_oProcessor.processorName)">
     <div class="card-price" [class]="m_oProcessor.price === 0 ? 'price-free': 'price-paid'">
         {{m_oProcessor.price === 0 ? 'Free' : "€" +
         m_oProcessor.price}}
