@@ -201,18 +201,6 @@ export class MarketplaceComponent implements OnInit {
     this.refreshAppList();
   }
 
-  /**
-   * Handle Changes to the Search Input field on Enter or if Search Button clicked
-   * @param oEvent 
-   * @returns {void}
-   */
-  onSearchInput(oEvent): void {
-    if (oEvent.keyCode === 13 || oEvent.target.attributes.id.nodeValue === "searchBtn") {
-      if (this.m_sNameFilter) {
-        this.refreshAppList();
-      }
-    }
-  }
 
   /**
    * Clear the Search Input Field

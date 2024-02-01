@@ -22,6 +22,8 @@ export class MarketplaceFiltersComponent implements OnInit {
 
   m_aiRatingsFilter: Array<number> = [4, 3, 2, 1];
 
+  m_sSearchInput: string = "";
+
   m_oAppFilter = {
     categories: [],
     publishers: [],
@@ -125,5 +127,20 @@ export class MarketplaceFiltersComponent implements OnInit {
     this.m_oAppFilter.score = oEvent.target.value;
     this.m_oAppFilter.page = 0;
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
+  }
+
+  
+  /**
+   * Handle Changes to the Search Input field on Enter or if Search Button clicked
+   * @param oEvent 
+   * @returns {void}
+   */
+  onSearchInput(oEvent): void {
+    if (oEvent.keyCode === 13) {
+      if (this.m_sSearchInput || this.m_sSearchInput === "") {
+        this.m_oAppFilter.name = this.m_sSearchInput
+        this.m_oAppFilterOutput.emit(this.m_oAppFilter);
+      }
+    }
   }
 }
