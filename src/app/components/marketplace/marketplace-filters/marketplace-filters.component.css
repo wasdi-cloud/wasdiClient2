@@ -2,13 +2,14 @@
     color: var(--neutral60);
     font-weight: 700;
     display: flex;
-    height: 100%;
+    max-height: 100%;
     padding: 32px 0px 32px 0px;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--Radius-or-Spacings-S, 8px);
     align-self: stretch;
     width: 20rem;
+    overflow-y: hidden;
 }
 
 .input-container {
@@ -65,6 +66,14 @@
     border: 1px solid var(--wasdiGreen);
     background: var(--wasdiGreen);
     color: #FFFFFF;
+}
+
+.developers-container {
+    display: flex;
+    flex-direction: column;
+    height: 5rem;
+    overflow-y: scroll;
+    width: 100%;
 }
 
 .review-option {
