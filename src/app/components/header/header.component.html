@@ -12,9 +12,7 @@
                     <div class="dropdown-icon material-symbols-outlined">
                         expand_more
                     </div>
-
                 </button>
-
                 <ul class="dropdown-menu" aria-labelledby="projectSelectButton">
                     <li><a class="dropdown-item" (click)="setActiveProject(oProject)"
                             *ngFor="let oProject of m_aoUserProjectsMap">{{oProject.name}}</a></li>
@@ -22,16 +20,23 @@
             </div>
         </div>
         <div class="card-divider"></div>
-        <div class="user-greeting-container d-flex flex-row align-items-center gap-2" (click)="openUserDashboard()">
-            <div class="d-flex flex-column align-items-end">
-                <span class="greeting">Welcome Back</span>
-                <span class="username">{{m_oUser.name}}</span>
+        <div class="dropdown">
+            <div class="user-greeting-container d-flex flex-row align-items-center gap-2" data-bs-toggle="dropdown"
+                aria-expanded="false" aria-haspopup="true">
+                <div class="d-flex flex-column align-items-end">
+                    <span class="greeting">Welcome Back</span>
+                    <span class="username">{{m_oUser.name}}</span>
+                </div>
+                <div class="user-icon">
+                    <span class="material-symbols-outlined">
+                        account_circle
+                    </span>
+                </div>
             </div>
-            <div class="user-icon">
-                <span class="material-symbols-outlined">
-                    account_circle
-                </span>
-            </div>
+            <ul class="dropdown-menu">
+                <li class=""><a class="dropdown-item" (click)="openUserDashboard()">User Dashboard</a></li>
+                <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+            </ul>
         </div>
     </div>
 </header>

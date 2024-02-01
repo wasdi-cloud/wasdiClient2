@@ -8,6 +8,7 @@ import { ProjectService } from 'src/app/services/api/project.service';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -25,9 +26,10 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProjectService: ProjectService,
-    private m_oDialog: MatDialog
+    private m_oRouter: Router
   ) { }
 
   ngOnInit(): void {
@@ -111,6 +113,11 @@ export class HeaderComponent implements OnInit {
   openUserDashboard() {
     this.m_oDialog.open(UserSettingsDialogComponent);
   }
+
+  logout() {
+    this.m_oConstantsService.logOut();
+    this.m_oRouter.navigateByUrl("login");
+  }
 }
 
 // m_oFeedback: {
@@ -123,11 +130,6 @@ export class HeaderComponent implements OnInit {
 //   //Register translation languages:
 //   m_oTranslate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
 //   m_oTranslate.setDefaultLang('en');
-
-// logout() {
-//   this.m_oConstantsService.logOut();
-//   this.m_oRouter.navigateByUrl("login");
-// }
 
 // sendFeedback() {
 //   if (typeof this.m_oFeedback === undefined || !this.m_oFeedback.title || !this.m_oFeedback.message) {
