@@ -23,8 +23,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { HeaderService } from 'src/app/services/header.service';
-
-
+import { MenuItems, Documentation } from './menu-list-item/menu-items';
 
 @Component({
   selector: 'app-navbar',
@@ -51,7 +50,11 @@ export class NavbarComponent implements OnInit {
 
   m_sSelectedTab: string = 'marketplace'
 
-  constructor(private m_oAlertDialog: AlertDialogTopService,
+  m_aoMenuItems = MenuItems;
+  m_oDocumentation = Documentation;
+
+  constructor(
+    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
@@ -71,7 +74,6 @@ export class NavbarComponent implements OnInit {
     console.log("TRANSLATE")
     this.m_oTranslate.use(lang)
   }
-
 
   ngOnInit(): void {
     this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
@@ -94,11 +96,10 @@ export class NavbarComponent implements OnInit {
             }
           })
         } else {
-          // this.m_bEditIsActive = false;
           this.setActiveTab(oEvent.url.slice(1));
         }
       }
-    })
+    });
   }
 
   setActiveTab(sActiveTab: string) {
@@ -153,9 +154,5 @@ export class NavbarComponent implements OnInit {
       }
     });
     return true;
-  }
-
-  openDocs(sUrl: string) {
-    window.open(sUrl, "_blank");
   }
 }
