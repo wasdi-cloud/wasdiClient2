@@ -1,5 +1,6 @@
 div.nav-container {
-	height: calc(100vh - 3rem);
+	/* max-height: calc(100vh - 3rem); */
+	height: 100%;
 	position: sticky;
 	top: 3rem;
 	overflow: hidden;
