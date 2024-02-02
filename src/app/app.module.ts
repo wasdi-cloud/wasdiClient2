@@ -165,6 +165,7 @@ import { ManualBoundingBoxComponent } from './shared/shared-components/manual-bo
 import { HelpDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/help-dialog/help-dialog.component';
 import { MarketplaceFiltersComponent } from './components/marketplace/marketplace-filters/marketplace-filters.component';
 import { MenuListItemComponent } from './components/navbar/menu-list-item/menu-list-item.component';
+import { ButtonComponent } from './shared/shared-components/button/button.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -270,7 +271,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     HelpDialogComponent,
     CardComponent,
     MarketplaceFiltersComponent,
-    MenuListItemComponent
+    MenuListItemComponent,
+    ButtonComponent
 
   ],
   imports: [
