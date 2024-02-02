@@ -373,7 +373,7 @@ export class ProcessesBarContent implements OnInit {
     })
   }
 
-  openProcessesModal(event: MouseEvent): void {
+  openProcessesDialog(): void {
     const oDialogRef = this.m_oDialog.open(ProcessesDialog, {
       height: '80vh',
     });

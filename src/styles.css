@@ -65,6 +65,10 @@ main {
   height: calc(100vh - 3rem);
 }
 
+.font-bold {
+  font-weight: 700;
+}
+
 .mat-bottom-sheet-container-medium,
 .mat-bottom-sheet-container-large,
 .mat-bottom-sheet-container-xlarge {

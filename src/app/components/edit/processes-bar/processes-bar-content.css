@@ -1,4 +1,11 @@
+@import url('./processes-bar.component.css');
+
 div.process-bar-header {
+    border-top: 1px solid var(--neutral20);
+    height: 48px;
+}
+
+/* div.process-bar-header {
     background-image: linear-gradient(180deg, #43516a8d, lightgray);
 }
 
@@ -22,4 +29,4 @@ td {
 a.button {
     cursor: pointer;
     color: #000000;
-}
+} */
