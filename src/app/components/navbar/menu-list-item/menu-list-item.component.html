@@ -1,7 +1,6 @@
 <button 
-    data-bs-toggle="tooltip" 
-    data-bs-placement="right" 
-    attr.data-bs-title="{{m_sMenuItemLabel }}"
+    [matTooltipPosition]="'right'" 
+    matTooltip="{{m_oMenuItemInfo.label | translate}}"
     class="menu-list-item"
     type="button" 
     [routerLink]="m_sRouterLink ? [m_sRouterLink] : []"

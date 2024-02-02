@@ -43,9 +43,8 @@ export class MenuListItemComponent implements OnInit {
     this.m_sRouterLink = this.m_oMenuItemInfo.routerLink;
     this.m_sMaterialIconText = this.m_oMenuItemInfo.materialIcon;
     this.m_oTranslate.get(this.m_oMenuItemInfo.label).subscribe(oResponse => {
-      this.m_sMenuItemLabel = oResponse
+      this.m_sMenuItemLabel = oResponse;
     })
-
     this.m_sName = this.m_oMenuItemInfo.name;
     // Bootstrap tooltip initialization
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
