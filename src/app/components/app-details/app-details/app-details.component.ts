@@ -51,6 +51,8 @@ export class AppDetailsComponent implements OnInit {
 
   m_asImages: Array<any> = [];
 
+  m_sViewImage: string = ""
+
   m_oAppStats = {
     done: 0,
     error: 0,
@@ -94,12 +96,16 @@ export class AppDetailsComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg);
         } else {
           this.m_oApplicationInfo = oResponse;
+          console.log(this.m_oApplicationInfo)
           this.getApplicationStats();
           if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oApplicationInfo.logo)) {
             this.m_asImages.push(this.m_oApplicationInfo.imgLink);
+            this.m_sViewImage = this.m_asImages[0]
           } else {
             let sUrl = this.m_oImageService.getImageLink(this.m_oApplicationInfo.logo);
             this.m_asImages.push(sUrl);
+            this.m_sViewImage = this.m_asImages[0]
+            console.log(this.m_asImages)
           }
 
           if (this.m_oApplicationInfo.images.length > 0) {
@@ -108,6 +114,7 @@ export class AppDetailsComponent implements OnInit {
               let sUrl = this.m_oImageService.getImageLink(sImageUrl);
               this.m_asImages.push(sUrl);
             }
+            this.m_sViewImage = this.m_asImages[0]
           }
         }
       },
@@ -155,6 +162,8 @@ export class AppDetailsComponent implements OnInit {
     return dPerc.toFixed(1);
   }
 
+  getCategories() {}
+
   /**
    * Return to the Marketplace
    * @returns {void}
@@ -181,5 +190,11 @@ export class AppDetailsComponent implements OnInit {
         inputProcessor: oProcessor
       }
     })
+  }
+
+  setViewImage(sImage) {
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sImage) === false) {
+      this.m_sViewImage = sImage;
+    }
   }
 }
