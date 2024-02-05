@@ -46,13 +46,8 @@ export class MenuListItemComponent implements OnInit {
       this.m_sMenuItemLabel = oResponse;
     })
     this.m_sName = this.m_oMenuItemInfo.name;
-    // Bootstrap tooltip initialization
-    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
   }
-
+  
   openDocs(sUrl) {
     window.open(sUrl, "_blank");
   }

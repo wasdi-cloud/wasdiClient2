@@ -95,6 +95,8 @@ export class NavbarComponent implements OnInit {
               this.m_oAlertDialog.openDialog(4000, "Error in retreiving Workspace Information")
             }
           })
+        } else if (oEvent.url.includes('appDetails') || oEvent.url.includes('appui')) {
+          this.setActiveTab('marketplace')
         } else {
           this.setActiveTab(oEvent.url.slice(1));
         }

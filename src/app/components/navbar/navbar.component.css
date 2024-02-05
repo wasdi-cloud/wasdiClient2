@@ -1,7 +1,8 @@
 div.nav-container {
-	height: calc(100vh - 3rem);
+	/* min-height: calc(100vh - 3rem); */
+	height:100%;
 	position: sticky;
-	top: 3rem;
+	/* top: 3rem; */
 	overflow: hidden;
 }
 
@@ -37,7 +38,7 @@ span.material-symbols-outlined {
 	position: absolute;
 	left: 2rem;
 
-	top: 85vh;
+	top: 87%;
 	width: 95.819px;
 	height: 93.926px;
 	transform: rotate(-30deg);
