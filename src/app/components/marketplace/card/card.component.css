@@ -60,14 +60,6 @@ span.publisher-name {
         'opsz' 24
 }
 
-.star-filled {
-    color: #FBAC00;
-}
-
-.star-grey {
-    color: #C7CBD3;
-}
-
 div.card-price {
     position: absolute;
     display: flex;
@@ -76,7 +68,7 @@ div.card-price {
     gap: 10px;
     right: 24px;
     top: -2px;
-    border-radius: 0px 0px var(--Radius-or-Spacings-XS, 4px) var(--Radius-or-Spacings-XS, 4px);
+    border-radius: 0px 0px 4px 4px;
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
