@@ -1,2 +1,3 @@
-@import url(/src/app/components/marketplace/marketplace.component.css);
-@import url(/src/app/components/header/header.component.css);
+main {
+	height: calc(100vh - 6rem);
+}
