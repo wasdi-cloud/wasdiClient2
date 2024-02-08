@@ -166,6 +166,9 @@ import { HelpDialogComponent } from './components/edit/edit-toolbar/toolbar-dial
 import { MarketplaceFiltersComponent } from './components/marketplace/marketplace-filters/marketplace-filters.component';
 import { MenuListItemComponent } from './components/navbar/menu-list-item/menu-list-item.component';
 import { ButtonComponent } from './shared/shared-components/button/button.component';
+import { LogsTableComponent } from './shared/shared-components/logs-table/logs-table.component';
+import { TableCellComponent } from './shared/shared-components/table-cell/table-cell.component';
+import { ProgressBarComponent } from './shared/shared-components/progress-bar/progress-bar.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -272,7 +275,10 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     CardComponent,
     MarketplaceFiltersComponent,
     MenuListItemComponent,
-    ButtonComponent
+    ButtonComponent,
+    LogsTableComponent,
+    TableCellComponent,
+    ProgressBarComponent
 
   ],
   imports: [
