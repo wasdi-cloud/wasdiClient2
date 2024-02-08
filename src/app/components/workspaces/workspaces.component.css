@@ -1,3 +1,6 @@
+main {
+      min-height: calc(100vh - 3rem);
+}
 h4 {
     color: #43516a;
     font-weight: bolder;
