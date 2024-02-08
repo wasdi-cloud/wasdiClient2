@@ -1,9 +1,8 @@
-<button class="wasdi-btn" 
-    [class.wasdi-btn-sm]="m_sSize === 'small'"
-    [class.wasdi-btn-lg]="m_sSize=== 'large'"
-    [class.btn-outline]="m_bOutline"
-    [class.btn-link]="m_bLink"
-    [class.btn-round]="m_bRounded"
-    [disabled]="m_bDisabled"
-    ><span class="material-symbols-outlined" *ngIf="m_sIcon">
-        {{m_sIcon}}</span>{{m_sLabel}}</button>
+<button class="wasdi-btn" [class.wasdi-btn-sm]="m_sSize === 'small'" [class.wasdi-btn-lg]="m_sSize=== 'large'"
+    [class.btn-outline]="m_bOutline" [class.btn-link]="m_bLink" [class.btn-round]="m_bRounded" [disabled]="m_bDisabled">
+    <span class="material-symbols-outlined" *ngIf="m_sIconLeft">
+        {{m_sIconLeft}}</span>
+    {{m_sLabel}}
+    <span class="material-symbols-outlined" *ngIf="m_sIconRight">
+        {{m_sIconRight}}</span>
+</button>

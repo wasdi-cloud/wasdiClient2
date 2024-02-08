@@ -96,7 +96,6 @@ export class AppDetailsComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg);
         } else {
           this.m_oApplicationInfo = oResponse;
-          console.log(this.m_oApplicationInfo)
           this.getApplicationStats();
           if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oApplicationInfo.logo)) {
             this.m_asImages.push(this.m_oApplicationInfo.imgLink);
@@ -105,7 +104,6 @@ export class AppDetailsComponent implements OnInit {
             let sUrl = this.m_oImageService.getImageLink(this.m_oApplicationInfo.logo);
             this.m_asImages.push(sUrl);
             this.m_sViewImage = this.m_asImages[0]
-            console.log(this.m_asImages)
           }
 
           if (this.m_oApplicationInfo.images.length > 0) {

@@ -85,3 +85,7 @@
 .wasdi-btn-sm>span.material-symbols-outlined {
     font-size: 20px !important;
 }
+
+.wasdi-btn>span.material-symbols-outlined {
+    font-size: 20px !important;
+}

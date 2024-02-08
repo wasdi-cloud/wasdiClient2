@@ -68,7 +68,10 @@
                 <h2>Description</h2>
                 {{m_oApplicationInfo.longDescription ? m_oApplicationInfo.longDescription :
                 m_oApplicationInfo.processorDescription}}
-                <button class="btn btn-success" (click)="openAppUI(m_oApplicationInfo.processorName)">Open application</button>
+                <app-button [m_sLabel]="'Open Application'" [m_sIconLeft]="'all_out'" [m_sIconRight]="'arrow_forward'"
+                    (click)="openAppUI(m_oApplicationInfo.processorName)" [m_sSize]="'large'"></app-button>
+                <!-- <button class="btn btn-success" (click)="openAppUI(m_oApplicationInfo.processorName)">Open
+                    application</button> -->
             </div>
             <div class="app-details d-flex flex-column">
                 <h2>Application details</h2>
@@ -76,7 +79,8 @@
                     <div class="app-details-col1">
                         <p>{{"WAP_PUBLISHER"|translate}}: <span
                                 class="wasdi-highlight">{{m_oApplicationInfo.publisher}}</span></p>
-                        <p>{{"WAP_CONTACT"|translate}}: <span class="wasdi-highlight">{{m_oApplicationInfo.email}}</span>
+                        <p>{{"WAP_CONTACT"|translate}}: <span
+                                class="wasdi-highlight">{{m_oApplicationInfo.email}}</span>
                         </p>
                         <p>{{"WAP_WEB"|translate}} <span class="wasdi-highlight">{{m_oApplicationInfo.link}}</span></p>
                     </div>

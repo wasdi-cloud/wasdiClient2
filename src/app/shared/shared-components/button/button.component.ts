@@ -37,7 +37,12 @@ export class ButtonComponent {
   @Input() m_bOutline?: boolean = false;
 
   /**
-   * Id there an icon?
+   * Id there an icon on the left side?
    */
-  @Input() m_sIcon?: string = "";
+  @Input() m_sIconLeft?: string = "";
+  
+   /**
+   * Id there an icon on the right side?
+   */
+   @Input() m_sIconRight?: string = "";
 }
