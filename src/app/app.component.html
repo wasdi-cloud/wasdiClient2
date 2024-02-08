@@ -5,6 +5,6 @@
         <router-outlet></router-outlet>
     </div>
     <div *ngIf="m_sLocation === 'edit' || m_sLocation=== 'plan' || m_sLocation === 'search'">
-        <app-processes-bar ></app-processes-bar>
+        <app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>
     </div>
 </div>

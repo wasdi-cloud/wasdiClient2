@@ -365,14 +365,6 @@ export class ProcessesBarContent implements OnInit {
     })
   }
 
-  openLogsDialog(oProcess: any) {
-    let oDialogRef = this.m_oDialog.open(ProcessLogsDialogComponent, {
-      height: '80vh',
-      width: '70vw',
-      data: { process: oProcess }
-    })
-  }
-
   openProcessesDialog(): void {
     const oDialogRef = this.m_oDialog.open(ProcessesDialog, {
       height: '80vh',

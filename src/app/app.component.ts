@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   m_bIsRabbitConnected: boolean = false;
   m_oRouterEvents: any;
   m_sLocation: string;
+  m_oActiveWorkspace: any
 
   constructor(
     public m_oConstantsService: ConstantsService,
@@ -23,6 +24,9 @@ export class AppComponent implements OnInit {
     this.m_oRabbitStompService.initWebStomp();
     this.updateConnectionState("");
 
+    this.m_oConstantsService.m_oActiveWorkspaceSubscription.subscribe(oResponse => {
+      this.m_oActiveWorkspace = oResponse;
+    });
     this.m_oRouterEvents = this.m_oRouter.events.subscribe((oEvent: any) => {
       if (oEvent instanceof NavigationEnd) {
         if (oEvent.url.includes('edit')) {

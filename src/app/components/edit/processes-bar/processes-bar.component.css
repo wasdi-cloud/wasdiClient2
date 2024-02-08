@@ -2,6 +2,7 @@ div.processes-bar {
     background: #FFFFFF;
     border-top: 1px solid var(--neutral20);
     height: 48px;
+    width: 100vw;
 }
 
 .rabbit-connect {
@@ -38,5 +39,4 @@ div.processes-bar {
     width: 1px;
     height: 24px;
     max-height: 24px;
-
 }
