@@ -82,6 +82,11 @@ export class NavbarComponent implements OnInit {
     this.m_oUser = this.m_oConstantsService.getUser();
     this.getAccountType();
 
+    this.m_oConstantsService.m_oActiveWorkspaceSubscription.subscribe(oWorkspace => {
+      this.m_oActiveWorkspace = oWorkspace;
+      this.sActiveWorkspaceId = oWorkspace.workspaceId;
+    })
+
     this.m_oRouterEvents = this.m_oRouter.events.subscribe((oEvent: any) => {
       if (oEvent instanceof NavigationEnd) {
         if (oEvent.url.includes('edit')) {

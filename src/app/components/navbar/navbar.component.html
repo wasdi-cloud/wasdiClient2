@@ -3,7 +3,7 @@
     <nav class="d-flex flex-column justify-content-between" [class.collapsed]="m_bIsNavbarOpen === false">
         <div class="menu-list-container">
             <app-menu-list-item *ngFor="let oMenuItem of m_aoMenuItems" [m_oMenuItemInfo]="oMenuItem"
-                [m_bIsNavbarOpen]="m_bIsNavbarOpen" [m_sSelectedTab]="m_sSelectedTab"
+                [m_bIsNavbarOpen]="m_bIsNavbarOpen" [m_sSelectedTab]="m_sSelectedTab" [m_sActiveWorkspaceId]="sActiveWorkspaceId"
                 [m_bEditIsActive]="m_bEditIsActive"></app-menu-list-item>
         </div>
         <div class="menu-list-container">
