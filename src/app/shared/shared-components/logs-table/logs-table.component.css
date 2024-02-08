@@ -1,0 +1,18 @@
+table {
+    width: 98%;
+    margin: auto;
+}
+
+tr.table-heading-container {
+    border-bottom: 1px solid #D1D5DB;
+
+}
+
+td>span.material-symbols-outlined {
+    color: var(--wasdiGreen);
+    cursor: pointer;
+}
+
+td, th {
+    padding: 6px 12px 6px 8px;
+}

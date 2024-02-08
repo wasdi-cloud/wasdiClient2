@@ -1,7 +1,10 @@
-<div>
+<div class="app-outlet">
     <app-header *ngIf="m_oConstantsService.getUser().userId"></app-header>
     <div class="d-flex flex-row">
         <app-navbar *ngIf="m_oConstantsService.getUser().userId"></app-navbar>
         <router-outlet></router-outlet>
+    </div>
+    <div *ngIf="m_sLocation === 'edit' || m_sLocation=== 'plan' || m_sLocation === 'search'">
+        <app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>
     </div>
 </div>

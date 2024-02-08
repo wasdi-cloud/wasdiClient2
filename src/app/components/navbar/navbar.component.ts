@@ -19,11 +19,12 @@ import { UserSettingsDialogComponent } from '../header/header-dialogs/user-setti
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
-//Import Utilities: 
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { HeaderService } from 'src/app/services/header.service';
 import { MenuItems, Documentation } from './menu-list-item/menu-items';
+
+//Import Utilities: 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-navbar',

@@ -1,0 +1,87 @@
+/* Default Buttons */
+.wasdi-btn {
+    align-items: center;
+    background: var(--Colors-Neutrals-50---Brand, #43526B);
+    border-radius: var(--Radius-or-Spacings-XS, 4px);
+    color: #FFFFFF;
+    display: inline-flex;
+    gap: 6px;
+    flex-shrink: 0;
+    font-size: 16px;
+    height: 32px;
+    padding: var(--Radius-or-Spacings-S, 8px);
+}
+
+.btn-outline {
+    color: #141920;
+    background-color: #FFFFFF;
+    border: 1px solid var(--Colors-Neutrals-85, #141920);
+}
+
+.btn-link {
+    background: transparent;
+    color: #141920;
+    text-decoration: none;
+}
+
+.btn-round {
+    border-radius: var(--Radius-or-Spacings-FULL, 100px);
+    background: var(--Colors-Primary-10, #009036);
+}
+
+
+/* Size Dimensions */
+.wasdi-btn-sm {
+    height: 24px;
+    font-size: 12px;
+}
+
+.wasdi-btn-lg {
+    padding: 8px 20px;
+    height: 48px;
+}
+
+/* Disabled Button */
+.wasdi-btn:disabled {
+    cursor: not-allowed;
+    background-color: var(--Colors-Neutrals-25, #8E97A6);
+}
+
+.btn-outline:disabled {
+    border: 1px solid var(--Colors-Neutrals-25, #8E97A6);
+    background: var(--Colors-Neutrals-5, #ECEEF0);
+    color: #8E97A6;
+}
+
+.btn-link:disabled {
+    background: transparent;
+    color: #8E97A6;
+}
+
+/* WASDI Button Hover States */
+
+.wasdi-btn:hover:not([disabled]) {
+    background: var(--Colors-Primary-10, #009036);
+    transition: ease-out 300ms;
+}
+
+.btn-outline:hover:not([disabled]) {
+    color: #009036;
+    border: 1px solid var(--Colors-Primary-10, #009036);
+    background: var(--Colors-Shades-30---Light, #EBF7EF);
+}
+
+.btn-link:hover:not([disabled]) {
+    background: transparent;
+    color: #006526;
+}
+
+.btn-round:hover:not([disabled]) {
+    border-radius: var(--Radius-or-Spacings-FULL, 100px);
+    background: var(--Colors-Shades-30---Dark-Accessible, #006526);
+    transition: ease-out 300ms;
+}
+
+.wasdi-btn-sm>span.material-symbols-outlined {
+    font-size: 20px !important;
+}

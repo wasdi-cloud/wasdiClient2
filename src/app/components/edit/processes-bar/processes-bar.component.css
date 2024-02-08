@@ -1,3 +1,42 @@
 div.processes-bar {
-    height: 100%;
+    background: #FFFFFF;
+    border-top: 1px solid var(--neutral20);
+    height: 48px;
+    width: 100vw;
+}
+
+.rabbit-connect {
+    border-radius: 100%;
+    color: #FFFFFF;
+    font-size: 16px;
+    height: 24px;
+    width: 24px;
+}
+
+.rabbit-connected {
+    background: var(--wasdiGreen);
+}
+
+.rabbit-not-connected {
+    background: var(--wasdiDanger);
+}
+
+.rabbit-connect>.material-symbols-outlined {
+    font-size: 14px;
+    position: relative;
+    left: 5px;
+
+    top: 1px;
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
+.card-divider {
+    background: var(--neutral15);
+    width: 1px;
+    height: 24px;
+    max-height: 24px;
 }

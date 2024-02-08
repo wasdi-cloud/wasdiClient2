@@ -61,8 +61,16 @@ button {
 
 main {
   width: 100%;
-  min-height: calc(100vh - 3rem);
+  /* min-height: calc(100vh - 3rem); */
   height:100%;
+}
+
+div.app-outlet {
+  min-height: 100vh;
+}
+
+.font-bold {
+  font-weight: 700;
 }
 
 .mat-bottom-sheet-container-medium,
@@ -171,4 +179,49 @@ main {
 
 .star-grey {
   color: #C7CBD3;
+}
+/* Formatting for WASDI Tags (e.g., in Table and marketplace) */
+.category-tag {
+  border-radius: 4px;
+  border: 1px solid var(--neutral50Brand);
+  background: #FFFFFF;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  padding: 8px;
+  line-height: 12px;
+}
+
+.category-tag:hover {
+  background: var(--wasdiGreenLight);
+  transition: ease-out 300ms;
+}
+
+.category-tag.active {
+  border: 1px solid var(--wasdiGreen);
+  background: var(--wasdiGreen);
+  color: #FFFFFF;
+}
+
+.category-tag.yellow,
+.category-tag.red,
+.category-tag.green {
+  border: none;
+  color: #FFFFFF;
+  cursor: default !important;
+}
+
+.category-tag.yellow {
+  background: var(--wasdiWarn);
+  color: #000000;
+}
+
+.category-tag.red {
+  background: var(--wasdiDanger);
+}
+
+.category-tag.green {
+  background: var(--wasdiGreen);
 }

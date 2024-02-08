@@ -131,28 +131,28 @@ export default class WasdiUtils {
         }
 
         if (sOperation == "RUNPROCESSOR") {
-            sDescription = "APP"
+            sDescription = "App"
         }
         else if (sOperation == "RUNIDL") {
-            sDescription = "APP"
+            sDescription = "App"
         }
         else if (sOperation == "RUNMATLAB") {
-            sDescription = "APP"
+            sDescription = "App"
         }
         else if (sOperation == "INGEST") {
-            sDescription = "INGEST"
+            sDescription = "Ingest"
         }
         else if (sOperation == "DOWNLOAD") {
-            sDescription = "FETCH"
+            sDescription = "Fetch"
         }
         else if (sOperation == "PUBLISHBAND") {
-            sDescription = "PUBLISH"
+            sDescription = "Publish"
         }
         else if (sOperation == "GRAPH") {
-            sDescription = "WORKFLOW"
+            sDescription = "Workflow"
         }
         else if (sOperation == "DEPLOYPROCESSOR") {
-            sDescription = "DEPLOY"
+            sDescription = "Deploy"
         }
 
         sDescription = sDescription + sSubType;
