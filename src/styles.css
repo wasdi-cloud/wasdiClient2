@@ -50,7 +50,7 @@ body {
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif !important;
 }
 
 button {
@@ -170,4 +170,51 @@ div.app-outlet {
   font-size: 14px;
   font-weight: 400;
   line-height: 24px;
+}
+
+/* Formatting for WASDI Tags (e.g., in Table and marketplace) */
+.category-tag {
+  border-radius: 4px;
+  border: 1px solid var(--neutral50Brand);
+  background: #FFFFFF;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  padding: 8px;
+  line-height: 12px;
+}
+
+.category-tag:hover {
+  background: var(--wasdiGreenLight);
+  transition: ease-out 300ms;
+}
+
+.category-tag.active {
+  border: 1px solid var(--wasdiGreen);
+  background: var(--wasdiGreen);
+  color: #FFFFFF;
+}
+
+.category-tag.yellow,
+.category-tag.red,
+.category-tag.green {
+  border: none;
+  color: #FFFFFF;
+  cursor: default !important;
+}
+
+.category-tag.yellow {
+  background: var(--wasdiWarn);
+  color: #000000;
+}
+
+.category-tag.red {
+  background: var(--wasdiDanger);
+}
+
+.category-tag.green {
+  background: var(--wasdiGreen);
+
 }
