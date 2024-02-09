@@ -61,7 +61,7 @@ button {
 
 main {
   width: 100%;
-  height:100%;
+  height: 100%;
 }
 
 div.app-outlet {
@@ -179,6 +179,7 @@ div.app-outlet {
 .star-grey {
   color: #C7CBD3;
 }
+
 /* Formatting for WASDI Tags (e.g., in Table and marketplace) */
 .category-tag {
   border-radius: 4px;
@@ -223,4 +224,40 @@ div.app-outlet {
 
 .category-tag.green {
   background: var(--wasdiGreen);
+}
+
+/* Custom Styling for WASDI Checkbox - Angular Materials OVERRIDES! */
+.mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background {
+  border-color: #009036 !important;
+  background-color: #009036 !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background {
+  border-color: #009036 !important;
+  background-color: #009036 !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control[disabled]:checked~.mdc-checkbox__background {
+  background-color: #B4BAC4 !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control[disabled]:indeterminate~.mdc-checkbox__background {
+  background-color: #B4BAC4 !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control[disabled]:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+  border-color: #B4BAC4 !important;
+}
+
+.mat-ripple {
+  display: none !important;
+}
+
+.mdc-checkbox__ripple {
+  height: 0px;
+  width: 0px;
+}
+
+.mdc-checkbox {
+  flex: 0 0 8px !important;
 }
