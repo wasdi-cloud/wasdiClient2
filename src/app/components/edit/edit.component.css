@@ -1,3 +1,36 @@
 main {
 	height: calc(100vh - 6rem);
 }
+
+.editor-sidebar {
+	/* display: flex; 
+	flex-direction: column; */
+	gap: 8px;
+	width: 378px;
+	height: 100%;
+	padding: 32px;
+	padding-left: 0px;
+	padding-bottom: 0px;
+	/* border: 1px solid black; */
+}
+
+.workspace-location {
+	font-weight: 700;
+}
+
+.workspace-subheading {
+	color: var(--neutral50Brand);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.workspace-name {
+	font-size: 20px;
+	line-height: 30px;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	/* number of lines to show */
+	line-clamp: 2;
+	-webkit-box-orient: vertical;
+}

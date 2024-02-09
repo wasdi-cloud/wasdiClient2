@@ -1,5 +1,5 @@
 <div class="parent">
-    <ul class="nav nav-tabs bg-secondary pt-1 px-1" style="width: 100%;">
+    <ul class="nav nav-tabs" style="width: 100%;">
         <li class="nav-item">
             <a class="nav-link" (click)="setActiveTab('nav')"
                 ngClass="{{m_sActiveTab === 'nav' ? 'active text-dark' : 'text-light'}}">
@@ -14,7 +14,7 @@
         </li>
     </ul>
     <!-- Navigation and Layers content -->
-    <div class="map-container-panel" [hidden]="m_sActiveTab !== 'nav'" style="height: 100%">
+    <div class="map-container-panel" [hidden]="m_sActiveTab !== 'nav'" style="height: 87%">
         <div class="h-100 w-100" id="smallMapContainer"></div>
     </div>
     <div class="layers-tab" *ngIf="m_sActiveTab === 'layers'">

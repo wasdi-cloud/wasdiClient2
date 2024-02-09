@@ -1,28 +1,5 @@
-div.parent {
+.parent {
     height: 100%;
 }
-div.nav-layers-bar {
-    position: absolute;
-    bottom: 0;
-}
 
-li.nav-item {
-    cursor: pointer;
-}
 
-div.layers-tab {
-    height: 100%;
-    overflow-y: scroll;
-}
-
-label {
-    font-size: 10px;
-}
-
-span.product-name {
-    display: block; 
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 12rem;
-}
