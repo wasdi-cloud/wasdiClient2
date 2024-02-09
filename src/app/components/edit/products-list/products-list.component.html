@@ -1,9 +1,14 @@
-<div class="product-tree-container" style="height: 100%;">
+<div class="product-tree-container">
     <!-- Product Tree Header -->
-    <div
-        class="products-header bg-secondary text-light d-flex flex-row justify-content-between align-items-center px-1">
-        <h3 class="p-0 m-0">{{'EDITOR_TITLE_PANEL_PRODUCTS' | translate}}</h3>
-
+    <div class="products-header">
+        <h3>Products ({{m_aoFilteredProducts.length}})</h3>
+        <div class="form-group has-search">
+            <span class="material-symbols-outlined  form-control-feedback">
+                search
+            </span>
+            <input type="text" class="search-input" placeholder="Search in product list">
+        </div>
+        <!-- <h3 class="p-0 m-0">{{'EDITOR_TITLE_PANEL_PRODUCTS' | translate}}</h3>
         <div class="d-flex flex-row align-items-center gap-2">
             <span *ngIf="m_bIsReadOnly === true" class="badge badge-sm bg-warning">Read Only</span>
             <input type="checkbox" name="" id="" matTooltip="Select All" (change)="selectAllProducts($event)">
@@ -18,15 +23,18 @@
             </div>
             <div class="badge rounded-pill text-bg-success" *ngIf="m_aoFilteredProducts">
                 {{m_aoFilteredProducts.length}}</div>
-        </div>
+        </div> -->
     </div>
-    <!-- Product Tree Scrollable content -->
-    <div class="products-container d-flex flex-column" style="height:83%">
-        <div *ngIf="m_bIsLoadingProducts === true" class="d-flex flex-column align-items-center pt-3">
+    <!-- Product Tree -> Scrollable -->
+    <div class="products-container">
+        <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts"
+            [m_oProduct]="oProduct"></app-product-list-item>
+    </div>
+    <!-- <div *ngIf="m_bIsLoadingProducts === true" class="d-flex flex-column align-items-center pt-3">
             <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
-        </div>
-        <!-- Buttons to import/search for products if there is no product -->
-        <div *ngIf="(!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0) && !m_bIsLoadingProducts">
+        </div> -->
+    <!-- Buttons to import/search for products if there is no product -->
+    <!-- <div *ngIf="(!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0) && !m_bIsLoadingProducts">
             <p>{{'EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT' | translate}}</p>
             <div class="d-flex flex-row justify-content-around" style="width:50%">
                 <button class="btn btn-lg btn-primary" (click)="navigateToSearchPage()">
@@ -38,8 +46,8 @@
                     Import
                 </button>
             </div>
-        </div>
-        <ul *ngIf="(m_aoFilteredProducts.length !== 0) && !m_bIsLoadingProducts"
+        </div> -->
+    <!-- <ul *ngIf="(m_aoFilteredProducts.length !== 0) && !m_bIsLoadingProducts"
             class="list-group list-group-flush">
             <li *ngFor="let oProduct of m_aoFilteredProducts; trackBy: trackByItem"
                 class="list-group-item p-2 d-flex flex-column" style="cursor: pointer;">
@@ -47,9 +55,9 @@
                 <input class="form-check-input me-1" type="checkbox" value="{{oProduct}}"
                 [checked]="oProduct['checked']" (change)="addProductToSelectedProducts($event, oProduct)">
 
-                <span class="product-name">{{oProduct.name}}</span>
+                <span class="product-name">{{oProduct.name}}</span> -->
 
-                <!--div class="d-flex flex-row justify-content-between align-items-center">
+    <!--div class="d-flex flex-row justify-content-between align-items-center">
                     <div class="d-flex flex-row align-items-center gap-2">
                         <fa-icon [icon]="faPlusCircle" data-bs-toggle="collapse"
                             [attr.data-bs-target]="'#collapseExample' + iIndex" aria-expanded="false"
@@ -84,7 +92,7 @@
                         </button>
                     </div>
                 </div-->
-                <!--div class="collapse" id="{{'collapseExample' + iIndex}}">
+    <!--div class="collapse" id="{{'collapseExample' + iIndex}}">
                     <ul class="list-group list-group-flush ps-4">
                         <li *ngFor="let oBand of oProduct.bandsGroups.bands" class="d-flex flex-row gap-2">
                             <div>
@@ -97,7 +105,6 @@
                         </li>
                     </ul>
                 </div-->
-            </li>
-        </ul>
-    </div>
+    <!-- </li>
+        </ul> -->
 </div>

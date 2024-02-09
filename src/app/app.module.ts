@@ -169,6 +169,7 @@ import { ButtonComponent } from './shared/shared-components/button/button.compon
 import { LogsTableComponent } from './shared/shared-components/logs-table/logs-table.component';
 import { TableCellComponent } from './shared/shared-components/table-cell/table-cell.component';
 import { ProgressBarComponent } from './shared/shared-components/progress-bar/progress-bar.component';
+import { ProductListItemComponent } from './components/edit/products-list/product-list-item/product-list-item.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -278,7 +279,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ButtonComponent,
     LogsTableComponent,
     TableCellComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    ProductListItemComponent
 
   ],
   imports: [

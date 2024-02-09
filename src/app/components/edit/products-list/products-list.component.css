@@ -1,47 +1,22 @@
-div.products-container {
-  height: 35vh;
-  overflow: scroll;
+ div.products-tree-container {
+   padding: 8px 0px 0px 0px;
+ }
 
-}
+ .products-container {
+   max-height: 200px;
+   overflow-y: auto;
+ }
 
-h3.products-header {
+ h3 {
+   color: var(--neutral60);
+   font-size: 16px;
+   font-weight: 700;
+   line-height: 24px;
+   letter-spacing: 0em;
+ }
 
-  z-index: 1;
-}
+ input {
+  width: 100%;
+  margin-bottom: 1rem;
+ }
 
-.tree-btn {
-  border: 0;
-  padding: 0;
-}
-
-.tree-invisible {
-  display: none;
-}
-
-.tree-nested-node {
-  padding-left: 1rem;
-}
-
-
-.mat-tree-node {
-  background-color: #FFFFFF;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 0;
-}
-
-span.product-name {
-  display: block;
-  white-space: nowrap;
-}
-
-ul,
-li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-li.tree-container {
-  border-bottom: 0;
-}

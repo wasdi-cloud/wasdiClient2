@@ -1,0 +1,40 @@
+<div class="product d-flex flex-row align-items-center justify-content-between">
+    <div class=" d-flex flex-row align-items-center">
+        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()" *ngIf="m_bIsOpen === true">
+            arrow_drop_down
+        </span>
+        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()" *ngIf="m_bIsOpen === false">
+            arrow_right
+        </span>
+        <mat-checkbox class="d-flex flex-row"></mat-checkbox>
+        <span class="product-label-icon material-symbols-outlined">
+            satellite_alt
+        </span>
+        <p class="product-label">
+            {{m_oProduct.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
+    </div>
+    <span class="display-more-icon material-symbols-outlined" (click)="openProductProperties()">
+        more_vert
+    </span>
+</div>
+<!-- Opened dropdown component for Bands and Metadata -->
+<div class="product-bands-container" *ngIf="m_bIsOpen">
+    <ul class="container first-list">
+        <li>
+            <p> <span class="bands-icon material-symbols-outlined">
+                    code
+                </span>Metadata</p>
+        </li>
+        <li [class.container]="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands === true">
+            <p [class.disabled-label]="m_oProduct.bandsGroups.bands.length === 0" (click)="openShopwBands()"><span
+                    class="bands-icon material-symbols-outlined">
+                    pin_drop
+                </span>Bands</p>
+            <ul *ngIf="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands">
+                <li *ngFor="let oBand of m_oProduct.bandsGroups.bands">
+                    <p>{{oBand.name}} <span class="category-tag outlined">RUN</span></p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
