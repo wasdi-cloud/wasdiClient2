@@ -74,6 +74,8 @@ export class SearchFiltersComponent implements OnInit {
   m_sDateFrom: string = '';
   m_sTypeOfFilterSelected: string = '';
 
+  m_bUseCronTab: boolean = false;
+
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,
     private m_oDialog: MatDialog,
@@ -100,6 +102,7 @@ export class SearchFiltersComponent implements OnInit {
   setFilterTypeAsTimePeriod() {
     this.m_sTypeOfFilterSelected = "Time period";
     this.m_oTypeOfFilterSelected.emit(this.m_sTypeOfFilterSelected);
+    this.m_bUseCronTab = false;
   }
   /**
    * Set the type of filter selected as "Time series"
@@ -107,6 +110,7 @@ export class SearchFiltersComponent implements OnInit {
   setFilterTypeAsTimeSeries() {
     this.m_sTypeOfFilterSelected = "Time series";
     this.m_oTypeOfFilterSelected.emit(this.m_sTypeOfFilterSelected);
+    this.m_bUseCronTab = true;
   }
 
   /**
@@ -210,6 +214,7 @@ export class SearchFiltersComponent implements OnInit {
     //this.m_oAdvancedSearchService.setAdvancedSearchFilter(advancedFilter, this.m_oModel);
     this.m_oSearchService.setAdvancedFilter(sFilterQuery); //this.m_oAdvancedSearchService.getAdvancedSearchFilter()
   }
+
 
   /**
    * Create the Date Filter for the Search Query
@@ -427,4 +432,6 @@ export class SearchFiltersComponent implements OnInit {
     }
     return true;
   }
+
+
 }
