@@ -1,5 +1,7 @@
-<div class="product d-flex flex-row align-items-center justify-content-between">
-    <div class=" d-flex flex-row align-items-center">
+<div class="product d-flex flex-row align-items-center">
+    <input type="checkbox" name="" id="">
+    {{m_oProduct.name}}
+    <!-- <div class=" d-flex flex-row align-items-center">
         <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()" *ngIf="m_bIsOpen === true">
             arrow_drop_down
         </span>
@@ -15,10 +17,10 @@
     </div>
     <span class="display-more-icon material-symbols-outlined" (click)="openProductProperties()">
         more_vert
-    </span>
+    </span> --> 
 </div>
 <!-- Opened dropdown component for Bands and Metadata -->
-<div class="product-bands-container" *ngIf="m_bIsOpen">
+<!-- <div class="product-bands-container" *ngIf="m_bIsOpen">
     <ul class="container first-list">
         <li>
             <p> <span class="bands-icon material-symbols-outlined">
@@ -37,4 +39,4 @@
             </ul>
         </li>
     </ul>
-</div>
+</div> -->
