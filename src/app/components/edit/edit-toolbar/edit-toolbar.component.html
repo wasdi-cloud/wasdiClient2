@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg d-flex flex-row justify-content-between px-3">
-    <form class="d-flex gap-2" #filterTextForm="ngForm" (ngSubmit)="getFilterText()">
+    <!-- <form class="d-flex gap-2" #filterTextForm="ngForm" (ngSubmit)="getFilterText()">
         <input class="form-control me-2" type="search" placeholder="{{'EDITOR_PRODUCTS_FILTER'|translate}}"
             aria-label="Search" name="m_sFilterText" [(ngModel)]="m_sFilterText">
         <button class="btn btn-outline-primary" type="submit"
@@ -14,7 +14,7 @@
             matTooltip="{{'EDITOR_PRODUCTS_WS_INFO' | translate}}" [matTooltipPosition]="'above'">
             <fa-icon [icon]="faInfo"></fa-icon>
         </button>
-    </form>
+    </form> -->
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" aria-current="page" (click)="openAppsDialog($event)"><fa-icon

@@ -1,4 +1,7 @@
-
+nav.navbar {
+    background: #FFFFFF !important;
+    border-radius: 32px;
+}
 
 a:hover {
     background-color: #00903759;

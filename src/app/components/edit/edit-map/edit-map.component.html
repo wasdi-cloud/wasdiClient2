@@ -1,8 +1,15 @@
 <div class="map-frame h-100 w-100" style="position: relative">
-    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups to control Map settings" style="z-index: 999; display: block;
+    <div class="mb-3" role="toolbar" aria-label="Toolbar with button groups to control Map settings" style="z-index: 999; display: block;
     position: absolute;
-    left: 10px;
+    left: 15%;
     top: 10px;">
+        <app-edit-toolbar></app-edit-toolbar>
+
+    </div>
+    <div class="mb-3" role="toolbar" aria-label="Toolbar with button groups to control Map settings" style="z-index: 999; display: block;
+    position: absolute;
+    left: 2%;
+    bottom: 1%;">
         <div class="btn-group me-2" role="group" aria-label="First group">
             <button type="button" class="btn btn-secondary" (click)="switch2D3DMode()">
                 <span *ngIf="m_b2DMapModeOn === false">
