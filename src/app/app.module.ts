@@ -170,6 +170,8 @@ import { LogsTableComponent } from './shared/shared-components/logs-table/logs-t
 import { TableCellComponent } from './shared/shared-components/table-cell/table-cell.component';
 import { ProgressBarComponent } from './shared/shared-components/progress-bar/progress-bar.component';
 import { ProductListItemComponent } from './components/edit/products-list/product-list-item/product-list-item.component';
+import { DropdownComponent } from './shared/shared-components/dropdown/dropdown.component';
+import { InputFieldComponent } from './shared/shared-components/input-field/input-field.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -280,7 +282,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     LogsTableComponent,
     TableCellComponent,
     ProgressBarComponent,
-    ProductListItemComponent
+    ProductListItemComponent,
+    DropdownComponent,
+    InputFieldComponent
 
   ],
   imports: [

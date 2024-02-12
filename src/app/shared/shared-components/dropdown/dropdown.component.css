@@ -1,0 +1,70 @@
+mat-select {
+    /* Set width by default to 100% of parent */
+    width: 100%;
+    border: 1px solid #B4BAC4;
+    color: #000000;
+    height: 32px;
+    padding-top: 3px;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: none;
+    box-shadow: none;
+}
+
+.mat-search-container {
+    padding: 8px 4px;
+    background: #D9DCE1;
+}
+
+.mat-select-search {
+    background: #FFFFFF;
+    width: 100%;
+    border-radius: 4px;
+    padding: 4px 8px;
+    top: 0;
+}
+
+::ng-deep div.mat-mdc-select-panel {
+    padding: 0 !important;
+    border-radius: 4px !important;
+    right: 50px !important;
+    transform: translate(-12px, 2px) !important;
+}
+
+::ng-deep mat-option {
+    background: #FFFFFF !important;
+}
+
+::ng-deep .mat-mdc-option {
+    height: 34px !important;
+    padding: 12px !important;
+    /* Override min-height imposed by Angular Materials */
+    min-height: 0px !important;
+}
+
+::ng-deep .mat-mdc-option:hover {
+    background-color: #ECEEF0 !important;
+}
+
+::ng-deep .mat-mdc-option.divider {
+    box-sizing: border-box;
+    height: 1px !important;
+    padding: 0px 16px !important;
+    width: 100% !important;
+    background: #D9DCE1 !important;
+}
+
+::ng-deep .mat-mdc-option.divider:hover {
+    height: 1px !important;
+
+}
+
+::ng-deep .mat-ripple {
+    display: none !important;
+}
+
+::ng-deep .mat-pseudo-checkbox-checked.mat-pseudo-checkbox-full {
+    background-color: var(--wasdiGreen);
+}
