@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-input-field',
@@ -55,4 +55,23 @@ export class InputFieldComponent {
    * Optional Pattern input
    */
   @Input() m_sPattern?: string = "";
+
+  /**
+   * Optional Input Value
+   */
+  @Input() m_sInputValue?: string = "";
+
+  /**
+   * Event Emitter the input change to listening parent
+   */
+  @Output() m_oInputChange: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * Emit the changes to the input to listening parent component
+   * @param oEvent
+   */
+
+  emitInputChange(oEvent) {
+    this.m_oInputChange.emit(oEvent)
+  }
 }

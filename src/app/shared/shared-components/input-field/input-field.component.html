@@ -7,7 +7,8 @@
         </span>
     </div>
     <input type="{{m_sInputType}}" class="form-control" name="{{m_sInputName}}" placeholder="{{m_sPlacehodler}}"
-        [readOnly]="m_bIsReadonly" aria-label="InputField" aria-describedby="basic-addon1" pattern="{{m_sPattern}}">
+        [readOnly]="m_bIsReadonly" aria-label="InputField" aria-describedby="basic-addon1" pattern="{{m_sPattern}}"
+        [value]="m_sInputValue" (change)="emitInputChange($event)">
     <div class="input-group-append" *ngIf="m_sIconRight">
         <span class="material-symbols-outlined input-group-text" [class.invalid]="!m_bIsValid">
             {{m_sIconRight}}
