@@ -6,10 +6,11 @@
         <div>
             <label for="">Providers</label>
             <app-dropdown [m_bIsMultiSelect]="true" [m_aoDropdownItems]="m_aoListOfProviders"
-                [m_aoSelectedItems]="m_aoUserProviderSelection"></app-dropdown>
+                [m_aoSelectedItems]="m_aoUserProviderSelection" (m_oSelectionChange)="emitSelectedProviders($event)"></app-dropdown>
         </div>
         <!-- Product Name Input -->
-        <app-input-field [m_sLabel]="'Product name'" [m_sIconLeft]="'search'"></app-input-field>
+        <app-input-field [m_sLabel]="'Product name'" [m_sIconLeft]="'search'"
+            (m_oInputChange)="setMissionTextQuery($event)"></app-input-field>
     </div>
     <div class="filters-container container">
         <div class="d-flex flex-row justify-content-between align-items-center">
@@ -17,95 +18,93 @@
                 (click)="setFilterTypeAsTimeSeries()"></app-button>
             <app-button [m_sLabel]="'USE DATES'" [m_sSize]="'small'" *ngIf="m_bUseCronTab=== true"
                 (click)="setFilterTypeAsTimePeriod()"></app-button>
-            <p class="clear-btn">CLEAR</p>
+            <div *ngIf="m_sTypeOfFilterSelected === 'Time series'" class="d-flex flex-row gap-2">
+                <p class="clear-btn" (click)="removeSavedData()">CLEAR</p>
+                <p class="clear-btn" (click)="addFiltersData()">ADD</p>
+            </div>
         </div>
 
         <div class="crontab-container container" *ngIf="m_sTypeOfFilterSelected === 'Time series'">
             <div class="row">
                 <div class="col-6">
                     <label for="">Year</label>
-                    <app-dropdown></app-dropdown>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfYears" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedYears($event)"></app-dropdown>
                 </div>
                 <div class="col-6">
                     <label for="">Season</label>
-                    <app-dropdown></app-dropdown>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfSeasons" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedSeasons($event)"></app-dropdown>
                 </div>
             </div>
             <div class="row">
                 <div class="col-6">
                     <label for="">Month</label>
-                    <app-dropdown></app-dropdown>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfMonths" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedMonths($event)"></app-dropdown>
                 </div>
                 <div class="col-6">
                     <label for="">Date</label>
-                    <app-dropdown></app-dropdown>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfDays" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedDays($event)"></app-dropdown>
                 </div>
             </div>
+            <!-- Chip Output Container -->
             <div class="row">
-
+                <app-chip *ngFor="let oSavedData of m_oAdvancedFilter.savedData" [m_sLabel]="oSavedData.name"
+                    (click)="removeSavedDataChip(oSavedData)"></app-chip>
             </div>
         </div>
         <div class="dates-input-container row" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
             <div class="col-6">
-                <app-input-field [m_sInputType]="'date'" [m_sLabel]="'From'"></app-input-field>
+                <app-input-field [m_sInputType]="'date'" [m_sLabel]="'From'" [m_sInputValue]="m_sDateFrom"
+                    (m_oInputChange)="emitModelChanges()"></app-input-field>
             </div>
             <div class="col-6">
-                <app-input-field class="col" [m_sInputType]="'date'" [m_sLabel]="'To'"></app-input-field>
+                <app-input-field class="col" [m_sInputType]="'date'" [m_sLabel]="'To'" [m_sInputValue]="m_sDateTo"
+                    (m_oInputChange)="emitModelChanges()"></app-input-field>
             </div>
         </div>
     </div>
 
     <div class="filters-container">
         <!-- Mission Input -->
-        <div class="filters-header">Select Mission</div>
-        <app-dropdown [m_aoDropdownItems]="m_aoMissions"></app-dropdown>
+        <div class="">Select Mission</div>
+        <label for="">Mission Type</label>
+        <app-dropdown [m_aoDropdownItems]="m_aoMissions" [m_aoSelectedItems]="m_oActiveMission"
+            (m_oSelectionChange)="setActiveMission($event.value)"></app-dropdown>
     </div>
     <div class="satellite-options-container">
         <div class=" d-flex flex-row flex-wrap align-items-center justify-content-between pt-2 gap-2">
             <div *ngFor="let oFilter of m_aoVisibleFilters" style="width: 48%">
                 <div *ngIf="m_oActiveMission.name !== 'ERA5'">
                     <label *ngIf="oFilter.indexvalues !== ''" for="">{{oFilter.indexlabel}}</label>
-                    <app-dropdown *ngIf="oFilter.indexvalues !== ''"
-                        [m_aoDropdownItems]="prepMissionFilter(oFilter)"></app-dropdown>
-                    <app-input-field *ngIf="oFilter.indexvalues === ''"
-                        [m_sPlacehodler]="oFilter.indexhint"></app-input-field>
-                    <!-- <mat-select class="input" *ngIf="oFilter.indexvalues !== ''" #auto="matSelect" placeholder=""
-                            (selectionChange)="getMissionInput($event, oFilter)" placeholder="{{oFilter.indexvalue}}">
-                            <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
-                                {{oOption}}
-                            </mat-option>
-                        </mat-select>
-                        <input class="input" type="text" *ngIf="oFilter.indexvalues === ''"
-                            placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}"> -->
+                    <app-dropdown *ngIf="oFilter.indexvalues !== ''" [m_aoDropdownItems]="prepMissionFilter(oFilter)"
+                        (m_oSelectionChange)="getMissionInput($event, oFilter)"
+                        [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
+                    <app-input-field *ngIf="oFilter.indexvalues === ''" [m_sPlacehodler]="oFilter.indexhint"
+                        [m_sPattern]="oFilter.regex"></app-input-field>
                 </div>
-                <!-- <div *ngIf="m_oActiveMission.name === 'ERA5'" style="width: 15rem">
-                        <label for="">{{oFilter.indexlabel}}</label>
-                        <mat-select
-                            *ngIf="oFilter.indexvalues !== '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
-                            #auto="matSelect" class="input" placeholder=""
-                            (selectionChange)="getMissionInput($event, oFilter)" placeholder="{{oFilter.indexvalue}}">
-                            <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
-                                {{oOption}}
-                            </mat-option>
-                        </mat-select>
-                        <input class="finput" type="text"
-                            *ngIf="oFilter.indexvalues === '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
-                            placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}">
-                        <mat-select *ngIf="oFilter.indexname === 'pressureLevels' || oFilter.indexname ==='variables'"
-                            multiple class="input" #auto="matSelect"
-                            (selectionChange)="getMultiSelectInput($event, oFilter)"
-                            placeholder="{{oFilter.indexvalue}}">
-                            <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)"
-                                [value]="oOption">{{oOption}}</mat-option>
-                        </mat-select>
-                    </div> -->
-
+                <div *ngIf="m_oActiveMission.name === 'ERA5'">
+                    <label *ngIf="oFilter.indexvalues !== ''" for="">{{oFilter.indexlabel}}</label>
+                    <app-dropdown
+                        *ngIf="oFilter.indexvalues !== '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
+                        [m_aoDropdownItems]="prepMissionFilter(oFilter)"
+                        (m_oSelectionChange)="getMissionInput($event, oFilter)"
+                        [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
+                    <app-dropdown *ngIf="oFilter.indexname === 'pressureLevels' || oFilter.indexname ==='variables'"
+                        (m_oSelectionChange)="getMultiSelectInput($event, oFilter)" [m_bIsMultiSelect]="true"
+                        [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
+                    <app-input-field
+                        *ngIf="oFilter.indexvalues === '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
+                        [m_sPlacehodler]="oFilter.indexhint" [m_sPattern]="oFilter.regex"></app-input-field>
+                </div>
             </div>
         </div>
     </div>
 
-    <app-button class="align-self-stretch" [m_sLabel]="'Search'" [m_sSize]="'large'"
-        [m_sIconLeft]="'search'"></app-button>
+    <app-button class="align-self-stretch" [m_sLabel]="'Search'" [m_sSize]="'large'" [m_sIconLeft]="'search'"
+        (click)="emitModelChanges()"></app-button>
 </div>
 
 <!-- <section class="sub-menu">

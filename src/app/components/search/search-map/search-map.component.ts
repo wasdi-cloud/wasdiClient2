@@ -48,23 +48,6 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     this.m_sErrorMessage = "Error:"
     this.m_bIsValid = true;
 
-    this.m_aoProductsList = this.m_aoProducts.subscribe(oResponse => {
-      if (oResponse.length > 0) {
-        let aaoAllBounds = [];
-        oResponse.forEach((oProduct, index) => {
-
-          let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(oProduct.bounds, null, index);
-          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
-            oProduct.rectangle = oRectangle;
-          }
-          aaoAllBounds.push(oProduct.bounds);
-        })
-        if (aaoAllBounds.length > 0 && aaoAllBounds[0] && aaoAllBounds[0].length) {
-          this.m_oMapService.zoomOnBounds(aaoAllBounds);
-        }
-      }
-    })
-
     this.m_oManualBboxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
         this.formatManualBbox(oResult);

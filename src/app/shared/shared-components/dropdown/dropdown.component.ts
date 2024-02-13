@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.css']
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent {
   /**
    * The input array: 
    */
@@ -41,9 +41,5 @@ export class DropdownComponent implements OnInit {
    */
   emitSelectionChange(oEvent) {
     this.m_oSelectionChange.emit(oEvent);
-  }
-
-  ngOnInit() {
-    console.log(this.m_aoSelectedItems)
   }
 }

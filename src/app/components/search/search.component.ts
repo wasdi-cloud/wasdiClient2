@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { SearchService } from 'src/app/search.service';
@@ -498,26 +498,23 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   deleteProducts(sProviderName: string) {
     //check if layers list is empty
-    if (this.isEmptyProductsList()) return false;
-    var iLengthProductsList = this.m_aoProductsList.length;
-    var oMap = this.m_oMapService.getMap();
-    /* remove rectangle in map*/
-    for (var iIndexProductsList = 0; iIndexProductsList < iLengthProductsList; iIndexProductsList++) {
-      if ((FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProductsList[iIndexProductsList].provider) === false) && (this.m_aoProductsList[iIndexProductsList].provider === sProviderName)) {
-        var oRectangle = this.m_aoProductsList[iIndexProductsList].rectangle;
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle))
-          oRectangle.removeFrom(oMap);
-        if (iIndexProductsList > -1) {
-          this.m_aoProductsList.splice(iIndexProductsList, 1);
-          iLengthProductsList--;
-          iIndexProductsList--;
+    if (!this.isEmptyProductsList()) {
+      const oMap = this.m_oMapService.getMap();
+      /* remove rectangle in map*/
+      for (let oProduct of this.m_aoProductsList) {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.provider) && oProduct.provider === sProviderName) {
+          let oRectangle = oProduct.rectangle;
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
+            this.m_oMapService.removeLayerFromMap(oRectangle);
+          }
         }
       }
-
+      //delete layers list
+      this.m_aoProductsList = [];
+      return true;
+    } else {
+      return false;
     }
-    //delete layers list
-    this.m_aoProductsList = [];
-    return true;
   }
 
   isEmptyProductsList() {
@@ -552,6 +549,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.m_oSearchModel.missionFilter = oEvent.missionFilter;
       this.m_oSearchModel.sensingPeriodFrom = oEvent.sensingPeriodFrom;
       this.m_oSearchModel.sensingPeriodTo = oEvent.sensingPeriodTo;
+    }
+
+    if (this.m_sTypeOfFilterSelected === 'Time period') {
+      this.searchAllSelectedProviders();
+    }
+
+    if (this.m_sTypeOfFilterSelected === 'Time series') {
+      this.searchListAllSelectedProviders();
     }
   }
 

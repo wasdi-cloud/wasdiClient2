@@ -142,14 +142,14 @@ export class ProductsTableComponent implements OnInit {
     for (let iIndexData = 0; iIndexData < this.m_aoProductsList.length; iIndexData++) {
       if (this.m_aoProductsList[iIndexData].provider !== sProvider) continue;
 
-      var oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(this.m_aoProductsList[iIndexData].bounds, null, iIndexData);
+      let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(this.m_aoProductsList[iIndexData].bounds, null, iIndexData);
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
         this.m_aoProductsList[iIndexData].rectangle = oRectangle
       }
       aaoAllBounds.push(this.m_aoProductsList[iIndexData].bounds);
     }
 
-    if (aaoAllBounds.length > 0 && aaoAllBounds[0] && aaoAllBounds[0].length) {
+    if (aaoAllBounds.length > 0 && aaoAllBounds[0]?.length) {
       this.m_oMapService.zoomOnBounds(aaoAllBounds);
     }
   }
