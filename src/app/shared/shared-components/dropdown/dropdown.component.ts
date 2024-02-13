@@ -1,11 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.css']
 })
-export class DropdownComponent {
+export class DropdownComponent implements OnInit {
   /**
    * The input array: 
    */
@@ -27,9 +27,23 @@ export class DropdownComponent {
   @Input() m_bHasSearch: boolean = false;
 
   /**
+   * An optional placeholder text
+   */
+  @Input() m_sPlaceholder?: string = "";
+
+  /**
+   * Emit the selection to listening parent
+   */
+  @Output() m_oSelectionChange: EventEmitter<any> = new EventEmitter()
+
+  /**
    * Emit selection change to listening parent component
    */
-  emitSelectionChange() {
+  emitSelectionChange(oEvent) {
+    this.m_oSelectionChange.emit(oEvent);
+  }
 
+  ngOnInit() {
+    console.log(this.m_aoSelectedItems)
   }
 }

@@ -31,6 +31,15 @@ mat-select {
     border-radius: 4px !important;
     right: 50px !important;
     transform: translate(-12px, 2px) !important;
+    max-width: 150%;
+}
+
+::ng-deep .mdc-menu-surface.mat-mdc-select-panel {
+    min-width: 100% !important;
+}
+
+::ng-deep .cdk-overlay-pane {
+    width: fit-content !important;
 }
 
 ::ng-deep mat-option {
