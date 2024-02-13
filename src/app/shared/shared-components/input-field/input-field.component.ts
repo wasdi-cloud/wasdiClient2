@@ -50,4 +50,9 @@ export class InputFieldComponent {
  * String text for Icon appearing on the Right. If null, there is no icon
  */
   @Input() m_sIconRight: string | null = null;
+
+  /**
+   * Optional Pattern input
+   */
+  @Input() m_sPattern?: string = "";
 }
