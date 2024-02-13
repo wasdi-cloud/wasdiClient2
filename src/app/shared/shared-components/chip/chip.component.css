@@ -1,0 +1,46 @@
+.chip {
+    border-radius: 32px;
+    display: inline-flex;
+    font-size: 12px;
+    font-weight: 400;
+    height: var(--Radius-or-Spacings-M, 16px);
+    padding: var(--Radius-or-Spacings-XS, 4px) var(--Radius-or-Spacings-S, 8px);
+    align-items: center;
+    gap: var(--Radius-or-Spacings-XS, 4px);
+    flex-shrink: 0;
+}
+
+.primary {
+    color: #FFFFFF;
+    background: #43526B;
+}
+
+.mid-grey {
+    background: #C7CBD3;
+    color: #000000;
+}
+
+.dark-grey {
+    background: #0D1015;
+    color: #FFFFFF;
+}
+
+.success {
+    background: #009036;
+    color: #FFFFFF;
+}
+
+.info {
+    background: #FBAC00;
+    color: #000000;
+}
+
+.warning {
+    background: #FF3D00;
+    color: #FFFFFF;
+}
+
+.chip-close {
+    cursor: pointer;
+    font-size: 12px;
+}
