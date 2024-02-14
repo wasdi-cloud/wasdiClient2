@@ -1,0 +1,55 @@
+<div class="list-item-container d-flex flex-row gap-2" [class.parent-item]="m_bParentItem"
+    [class.product-item]="m_bProductItem">
+    <!-- Contents if List Item is of Parent Type: -->
+    <div class="d-flex flex-row justify-content-between align-items-center w-100" *ngIf="m_bParentItem">
+        <div>
+            {{"Provider: " + m_sLabel}} | {{(m_sDescription === 0 || m_sDescription === -1)? 0 : m_sDescription + "
+            Results"}}
+        </div>
+        <span class="material-symbols-outlined" *ngIf="m_bParentIsOpen === false">
+            expand_more
+        </span>
+        <span class="material-symbols-outlined" *ngIf="m_bParentIsOpen === true">
+            expand_less
+        </span>
+    </div>
+    <!-- Contents if the List item is of Product Type: -->
+    <div class="product-item-container d-flex flex-row justify-content-between align-items-start w-100"
+        *ngIf="m_bProductItem">
+        <div class="pe-1 d-flex flex-column align-items-center text-center">
+            <span class="material-symbols-outlined">
+                {{m_sIcon}}
+            </span>
+            <span class="img-size">
+                {{m_oProductListItem.summary.Size}}
+            </span>
+        </div>
+        <div class="product-info-container">
+            <p class="d-flex flex-row gap-1">Name:<span>{{m_oProductListItem.title}}</span></p>
+            <p>Rel Orbit: <span>{{m_oProductListItem.properties.relativeOrbitNumber}}</span></p>
+            <p>Provider: <span>{{m_oProductListItem.provider}}</span></p>
+            <p>Product Type: <span>{{m_oProductListItem.properties.productType}}</span></p>
+        </div>
+        <div class="toolbar d-flex flex-row gap-1">
+            <span class="material-symbols-outlined">
+                info
+            </span>
+            <span class="material-symbols-outlined">
+                zoom_in
+            </span>
+            <span class="material-symbols-outlined">
+                add_box
+            </span>
+        </div>
+    </div>
+    <div *ngIf="m_bParentItem === false" class="d-flex flex-column align-items-center">
+
+    </div>
+    <!-- <div class="d-flex flex-column justify-content-between">
+        <div class="d-flex flex-row justify-content-between">
+            <div class="simple-header">{{m_sLabel}}</div>
+            <div class="toolbar" *ngIf="m_bParentItem === false">toolbar</div>
+        </div>
+        <div class="simple-description" *ngIf="m_bParentItem === false">{{m_sDescription}}</div>
+    </div> -->
+</div>
