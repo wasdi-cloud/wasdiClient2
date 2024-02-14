@@ -1,3 +1,14 @@
+.secondary-nav {
+    width: 400px;
+    padding-right: 24px;
+    overflow-x: hidden;
+}
+
 a.nav-link {
-    cursor: pointer; 
+    cursor: pointer;
+}
+
+.results-container {
+    height: 70%;
+    overflow-y: scroll;
 }
