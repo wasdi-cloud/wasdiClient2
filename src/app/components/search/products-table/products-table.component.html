@@ -1,20 +1,69 @@
-<div class="card" style="height: 100%; width: 500px">
-    <div class="card-header d-flex flex-row gap-4">
-        <fa-icon [icon]="faBack" style="cursor:pointer" (click)="navigateBackToFilters()"></fa-icon>
-        Results
+<div class="secondary-nav">
+    <div class="location-header">Search Results</div>
+    <app-button [m_sLabel]="'Back to Search'" [m_bOutline]="true" [m_sSize]="'small'" [m_sIconLeft]="'arrow_back'"
+        class="align-self-start" (click)="navigateBackToFilters()"></app-button>
+    <div class="d-flex flex-row justify-content-between">
+        <!-- <app-button class="align-self-start" [m_sLabel]="'Select All'" [m_bOutline]="true"
+            (click)="selectAllProducts()"></app-button> -->
+        <app-button [m_sLabel]="'Add to Workspace'" [m_bOutline]="true" (click)="openAddToWorkspaceDialog()"
+            *ngIf="m_aoSelectedProducts.length > 0"></app-button>
     </div>
-    <div class="card-body flex-column" style="height: 90%">
-        <!-- Mission Tabs -->
-        <ul class="d-flex flex-row flex-wrap border-bottom pb-2  nav nav-pills">
+    <div class="results-container">
+        <div *ngFor="let oProvider of m_aoProvidersList">
+            <div class="mb-1">
+                <app-list-item [m_bParentItem]="true" [m_sLabel]="oProvider.name"
+                    [m_sDescription]="oProvider.totalOfProducts"
+                    [m_bParentIsOpen]="m_oActiveProvider.name === oProvider.name"
+                    (click)="setActiveProvider(oProvider)"></app-list-item>
+                <!-- If there are no products -->
+                <div class="ps-1" *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts <= 0">
+                    Could not find any products.
+                </div>
+                <ul *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 10" class="pagination pagination text-align-center mb-0">
+                    <li class="page-item" (click)="minusOnePage()">
+                        <span class="page-link">Prev</span>
+                    </li>
+                    <li class="page-item"><a class="page-link">{{getCurrentPage()}}</a></li>
+                    <li class="page-item disabled" aria-current="page">
+                        <span class="page-link">...</span>
+                    </li>
+                    <li class="page-item"><a class="page-link">{{getMaxPage()}}</a></li>
+                    <li class="page-item" (click)="plusOnePage()">
+                        <a class="page-link">Next</a>
+                    </li>
+                </ul>
+    
+                <div *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 0">
+                    <app-list-item *ngFor="let oProduct of m_aoProductsList" [m_bProductItem]="true"
+                        [m_oProductListItem]="oProduct" [m_bIsSelected]="oProduct.selected"
+                        [m_oInfoCallbackFn]="openProductInfoDialog" [m_oZoomCallbackFn]="zoomToProduct"
+                        [m_oAddCallbackFn]="sendSingleProductToWorkspace"
+                        (mouseover)="changeRectangleStyleMouseOver(oProduct.rectangle)"
+                        (mouseleave)="changeRectangleStyleMouseLeave(oProduct.rectangle)"
+                        (click)="addProductSelectedProducts(oProduct)"></app-list-item>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class=" card" style="height: 100%; width: 500px">
+                    <div class="card-header d-flex flex-row gap-4">
+                        <fa-icon [icon]="faBack" style="cursor:pointer" (click)="navigateBackToFilters()"></fa-icon>
+                        Results
+                    </div>
+                    <div class="card-body flex-column" style="height: 90%"> -->
+<!-- Mission Tabs -->
+<!-- <ul class="d-flex flex-row flex-wrap border-bottom pb-2  nav nav-pills">
             <li class="nav-item" *ngFor="let oProvider of m_aoProvidersList">
                 <a class="nav-link" [ngClass]="m_oActiveProvider.name === oProvider.name? 'active' : '' "
                     (click)="setActiveProvider(oProvider)">{{oProvider.name}} <span
                         class="badge rounded-pill bg-secondary">{{oProvider.totalOfProducts !== 0 &&
                         oProvider.totalOfProducts !== -1 ? oProvider.totalOfProducts : 0}}</span></a>
             </li>
-        </ul>
-        <!-- Pagination and Products Per Page -->
-        <div *ngIf="m_bIsVisibleListOfLayers === true && m_bIsPaginatedList === true"
+        </ul> -->
+<!-- Pagination and Products Per Page -->
+<!-- <div *ngIf="m_bIsVisibleListOfLayers === true && m_bIsPaginatedList === true"
             class="d-flex flex-row justify-content-between align-items-center py-2 gap-2">
             <mat-select (selectionChange)="changeNumberOfProductsPerPage($event)" class="form-control"
                 placeholder="Products Per Page">
@@ -37,9 +86,9 @@
             </ul>
 
         </div>
-        <div *ngIf="m_bIsVisibleListOfLayers" style="height:82%;">
-            <!-- IF THE LIST OF LAYERS IS EMPTY -->
-            <div class="d-flex flex-column justify-content-center align-items-center"
+        <div *ngIf="m_bIsVisibleListOfLayers" style="height:82%;"> -->
+<!-- IF THE LIST OF LAYERS IS EMPTY -->
+<!-- <div class="d-flex flex-column justify-content-center align-items-center"
                 *ngIf="!m_oActiveProvider || (m_oActiveProvider.isLoaded === false && isProviderLayerListEmpty(m_oActiveProvider.name) === true)">
                 <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
             </div>
@@ -47,19 +96,19 @@
                 *ngIf="m_oActiveProvider && isProviderLayerListEmpty(m_oActiveProvider.name) &&  m_oActiveProvider.isLoaded === true">
                 No Products Found.
                 <button (click)="navigateBackToFilters()" class="btn btn-primary">Try Again</button>
-            </div>
-            <!-- Product Cards -->
-            <div *ngIf="m_oActiveProvider && isProviderLayerListEmpty(m_oActiveProvider.name) === false"
+            </div> -->
+<!-- Product Cards -->
+<!-- <div *ngIf="m_oActiveProvider && isProviderLayerListEmpty(m_oActiveProvider.name) === false"
                 class="product-card-container list-group d-flex flex-column gap-2"
-                style="height:100%; overflow-y: scroll;">
-                <!-- Product Date/Time -->
-                <!-- Product Card -->
-                <div *ngFor="let oProduct of m_aoProductsList | filter: m_oActiveProvider.name"
+                style="height:100%; overflow-y: scroll;"> -->
+<!-- Product Date/Time -->
+<!-- Product Card -->
+<!-- <div *ngFor="let oProduct of m_aoProductsList | filter: m_oActiveProvider.name"
                     class="product-card list-group-item list-group-item-action d-flex flex-row"
                     style="height:15rem; width: 100%;" (mouseover)=" changeRectangleStyleMouseOver(oProduct.rectangle)"
-                    (mouseleave)=" changeRectangleStyleMouseLeave(oProduct.rectangle)">
-                    <!-- Product button group -->
-                    <div class="btn-group-vertical">
+                    (mouseleave)=" changeRectangleStyleMouseLeave(oProduct.rectangle)"> -->
+<!-- Product button group -->
+<!-- <div class="btn-group-vertical">
                         <button type="button" class="btn btn-sm btn-secondary"
                             title="{{'IMPORT_TOOLTIP_CHECK'|translate}}">
                             <input class="form-check-input p-0 m-0" type="checkbox" value="{{oProduct}}"
@@ -79,25 +128,26 @@
                             title="{{'IMPORT_TOOLTIP_INFO'|translate}}" (click)="openProductInfoDialog(oProduct)">
                             <fa-icon [icon]="faInfoCircle"></fa-icon>
                         </button>
-                    </div>
+                    </div> -->
 
-                    <!-- Product Icon and Size -->
-                    <div class="oProduct-size-preview d-flex flex-column align-items-center">
-                        <div>
-                            <!-- Mode -->
-                            <span class="badge bg-success"
-                                *ngIf="oProduct.summary && oProduct.summary.Mode">{{oProduct.summary.Mode}}</span>
-                            <!-- Insturment -->
-                            <span class="badge bg-success" *ngIf="oProduct.summary && oProduct.summary.Instrument">
+<!-- Product Icon and Size -->
+<!-- <div class="oProduct-size-preview d-flex flex-column align-items-center">
+                        <div> -->
+<!-- Mode -->
+<!-- <span class="badge bg-success"
+                                *ngIf="oProduct.summary && oProduct.summary.Mode">{{oProduct.summary.Mode}}</span> -->
+<!-- Insturment -->
+<!-- <span class="badge bg-success" *ngIf="oProduct.summary && oProduct.summary.Instrument">
                                 {{oProduct.summary.Instrument}}</span>
                         </div>
                         <div class="preview-oProduct-image"><img src={{oProduct.preview}} alt="Image"
                                 style="height: 82px;width: 82px; "></div>
                         <span class="badge bg-secondary"
-                            *ngIf="oProduct.summary && oProduct.summary.Size">{{oProduct.summary.Size}}</span><!--Size-->
-                    </div>
-                    <!-- Product Information -->
-                    <!-- <div *ngIf="oProduct" class="d-flex flex-column">
+                            *ngIf="oProduct.summary && oProduct.summary.Size">{{oProduct.summary.Size}}</span> -->
+<!--Size-->
+<!-- </div> -->
+<!-- Product Information -->
+<!-- <div *ngIf="oProduct" class="d-flex flex-column">
                     {{oProduct.properties.endDate? "Start Date:" : ""}}
                     {{oProduct.properties.endDate? oProduct.properties.startDate: "" |date:'medium': 'GMT'}}
                     <br *ngIf="oProduct.properties.endDate">
@@ -105,20 +155,20 @@
                     {{ oProduct.properties.endDate? oProduct.properties.endDate:
                     oProduct.summary.Date|date:'medium': 'GMT'}}
                 </div> -->
-                    <div class="d-flex flex-column">
+<!-- <div class="d-flex flex-column">
 
                         <div *ngIf="oProduct.title">
                             <span>{{'IMPORT_PRODUCT_LIST_NAME'|translate}}</span>
                             <span><b style=" overflow-wrap: break-word;  
                                 word-wrap: break-word; 
                                 word-break: break-word;">{{oProduct.title}}</b></span>
-                        </div>
+                        </div> -->
 
-                        <!-- <div *ngIf="oProduct.summary && oProduct.summary.Mode">
+<!-- <div *ngIf="oProduct.summary && oProduct.summary.Mode">
                     <span>{{'IMPORT_PRODUCT_LIST_POLARIZATION'|translate}}</span>
                     <span><b>{{oProduct.summary.Mode}}</b></span>
                 </div> -->
-                        <div *ngIf="oProduct.properties && oProduct.properties.relativeorbitnumber">
+<!-- <div *ngIf="oProduct.properties && oProduct.properties.relativeorbitnumber">
                             <span>{{'IMPORT_PRODUCT_LIST_ORBIT'|translate}}</span>
                             <span><b>{{oProduct.properties.relativeorbitnumber}}</b></span>
                         </div>
@@ -159,4 +209,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

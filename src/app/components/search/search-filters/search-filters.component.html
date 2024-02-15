@@ -1,4 +1,113 @@
-<section class="sub-menu">
+<div class="secondary-nav">
+    <div class="location-header">Search</div>
+    <div class="filters-header">Filters</div>
+    <div class="filters-container d-flex flex-column gap-2">
+        <!-- Providers Input -->
+        <div>
+            <label for="">Providers</label>
+            <app-dropdown [m_bIsMultiSelect]="true" [m_aoDropdownItems]="m_aoListOfProviders"
+                [m_aoSelectedItems]="m_aoUserProviderSelection" (m_oSelectionChange)="emitSelectedProviders($event)"></app-dropdown>
+        </div>
+        <!-- Product Name Input -->
+        <app-input-field [m_sLabel]="'Product name'" [m_sIconLeft]="'search'"
+            (m_oInputChange)="setMissionTextQuery($event)"></app-input-field>
+    </div>
+    <div class="filters-container container">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+            <app-button [m_sLabel]="'USE CRONTAB'" [m_sSize]="'small'" *ngIf="m_bUseCronTab=== false"
+                (click)="setFilterTypeAsTimeSeries()"></app-button>
+            <app-button [m_sLabel]="'USE DATES'" [m_sSize]="'small'" *ngIf="m_bUseCronTab=== true"
+                (click)="setFilterTypeAsTimePeriod()"></app-button>
+            <div *ngIf="m_sTypeOfFilterSelected === 'Time series'" class="d-flex flex-row gap-2">
+                <p class="clear-btn" (click)="removeSavedData()">CLEAR</p>
+                <p class="clear-btn" (click)="addFiltersData()">ADD</p>
+            </div>
+        </div>
+
+        <div class="crontab-container container" *ngIf="m_sTypeOfFilterSelected === 'Time series'">
+            <div class="row">
+                <div class="col-6">
+                    <label for="">Year</label>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfYears" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedYears($event)"></app-dropdown>
+                </div>
+                <div class="col-6">
+                    <label for="">Season</label>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfSeasons" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedSeasons($event)"></app-dropdown>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label for="">Month</label>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfMonths" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedMonths($event)"></app-dropdown>
+                </div>
+                <div class="col-6">
+                    <label for="">Date</label>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfDays" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedDays($event)"></app-dropdown>
+                </div>
+            </div>
+            <!-- Chip Output Container -->
+            <div class="row">
+                <app-chip *ngFor="let oSavedData of m_oAdvancedFilter.savedData" [m_sLabel]="oSavedData.name"
+                    (click)="removeSavedDataChip(oSavedData)"></app-chip>
+            </div>
+        </div>
+        <div class="dates-input-container row" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
+            <div class="col-6">
+                <app-input-field [m_sInputType]="'date'" [m_sLabel]="'From'" [m_sInputValue]="m_sDateFrom"
+                    (m_oInputChange)="emitModelChanges()"></app-input-field>
+            </div>
+            <div class="col-6">
+                <app-input-field class="col" [m_sInputType]="'date'" [m_sLabel]="'To'" [m_sInputValue]="m_sDateTo"
+                    (m_oInputChange)="emitModelChanges()"></app-input-field>
+            </div>
+        </div>
+    </div>
+
+    <div class="filters-container">
+        <!-- Mission Input -->
+        <div class="">Select Mission</div>
+        <label for="">Mission Type</label>
+        <app-dropdown [m_aoDropdownItems]="m_aoMissions" [m_aoSelectedItems]="m_oActiveMission"
+            (m_oSelectionChange)="setActiveMission($event.value)"></app-dropdown>
+    </div>
+    <div class="satellite-options-container">
+        <div class=" d-flex flex-row flex-wrap align-items-center justify-content-between pt-2 gap-2">
+            <div *ngFor="let oFilter of m_aoVisibleFilters" style="width: 48%">
+                <div *ngIf="m_oActiveMission.name !== 'ERA5'">
+                    <label *ngIf="oFilter.indexvalues !== ''" for="">{{oFilter.indexlabel}}</label>
+                    <app-dropdown *ngIf="oFilter.indexvalues !== ''" [m_aoDropdownItems]="prepMissionFilter(oFilter)"
+                        (m_oSelectionChange)="getMissionInput($event, oFilter)"
+                        [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
+                    <app-input-field *ngIf="oFilter.indexvalues === ''" [m_sPlacehodler]="oFilter.indexhint"
+                        [m_sPattern]="oFilter.regex"></app-input-field>
+                </div>
+                <div *ngIf="m_oActiveMission.name === 'ERA5'">
+                    <label *ngIf="oFilter.indexvalues !== ''" for="">{{oFilter.indexlabel}}</label>
+                    <app-dropdown
+                        *ngIf="oFilter.indexvalues !== '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
+                        [m_aoDropdownItems]="prepMissionFilter(oFilter)"
+                        (m_oSelectionChange)="getMissionInput($event, oFilter)"
+                        [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
+                    <app-dropdown *ngIf="oFilter.indexname === 'pressureLevels' || oFilter.indexname ==='variables'"
+                        (m_oSelectionChange)="getMultiSelectInput($event, oFilter)" [m_bIsMultiSelect]="true"
+                        [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
+                    <app-input-field
+                        *ngIf="oFilter.indexvalues === '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
+                        [m_sPlacehodler]="oFilter.indexhint" [m_sPattern]="oFilter.regex"></app-input-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-button class="align-self-stretch" [m_sLabel]="'Search'" [m_sSize]="'large'" [m_sIconLeft]="'search'"
+        (click)="emitModelChanges()"></app-button>
+</div>
+
+<!-- <section class="sub-menu">
     <article class="sub-menu-grp">
         <div class="title">
             <img src="./assets/svg/filter-icon.svg" alt="filter icon" />
@@ -44,8 +153,8 @@
         </div>
         <hr />
     </article>
-    <article class="sub-menu-grp mission">
-        <!-- <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
+    <article class="sub-menu-grp mission"> -->
+<!-- <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
             <div class="d-flex flex-column " *ngFor="let oFilter of m_aoVisibleFilters">
                 <div style="width: 15rem">
                     <label class="form-label" for="">{{oFilter.indexlabel}}</label>
@@ -61,7 +170,7 @@
                 </div>
             </div>
         </div> -->
-        <div>
+<!-- <div>
             <label for="">{{"IMPORT_PRODUCT_SELECTED_MISSIONS"|translate}}</label>
             <div class="category-body">
                 <button *ngFor="let oMission of m_aoMissions" (click)="setActiveMission(oMission)"
@@ -71,8 +180,8 @@
             </div>
         </div>
         <hr />
-    </article>
-    <article class="">
+    </article> -->
+<!-- <article class="">
         <div class=" d-flex flex-row flex-wrap align-items-center pt-2 gap-2">
             <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
                 <div *ngFor="let oFilter of m_aoVisibleFilters">
@@ -112,4 +221,4 @@
             </div>
         </div>
     </article>
-</section>
+</section> -->

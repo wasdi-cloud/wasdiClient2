@@ -1,0 +1,63 @@
+.list-item-container {
+    border: 1px solid #D9DCE1;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 12px;
+    width: 100%;
+}
+
+.parent-item {
+    background: var(--neutral70);
+    color: #FFFFFF;
+}
+
+.simple-header {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.simple-description {
+    font-size: 14px;
+}
+
+span.bold {
+    font-weight: 700;
+}
+
+.material-symbols-outlined {
+    font-size: 30px;
+}
+
+.img-size {
+    font-size: 12px;
+    line-height: 18px;
+}
+
+
+.product-info-container {
+    font-size: 12px;
+    max-width: 70%;
+    overflow: hidden;
+}
+
+.product-info-container>p {
+    margin: 0 !important;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.product-info-container>p>span {
+    font-weight: 400;
+}
+
+.toolbar>.material-symbols-outlined {
+    font-size: 18px;
+}
+
+.selected {
+    border-color: var(--wasdiGreen);
+    background: var(--wasdiGreen10);
+}

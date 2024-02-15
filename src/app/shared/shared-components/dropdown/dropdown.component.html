@@ -1,0 +1,7 @@
+<mat-select [multiple]="m_bIsMultiSelect" class="form-control" placeholder="Hint" name="dropdown" [(ngModel)]="m_aoSelectedItems"
+    disableOptionCentering="'false'" (selectionChange)="emitSelectionChange($event)" placeholder="{{m_sPlaceholder}}" >
+    <div *ngIf="m_bHasSearch" class="mat-search-container">
+        <input type="text" name="m_sStyle" placeholder="Search..." class="mat-select-search">
+    </div>
+    <mat-option *ngFor="let oItem of m_aoDropdownItems" [value]="oItem">{{oItem.name ? oItem.name : oItem}}</mat-option>
+</mat-select>

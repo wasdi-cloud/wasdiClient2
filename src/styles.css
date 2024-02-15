@@ -101,6 +101,32 @@ div.app-outlet {
   background: #43526b;
 }
 
+/* Secondary Nav (Filters) Styling */
+.secondary-nav {
+  color: var(--neutral60);
+  font-weight: 700;
+  display: flex;
+  max-height: 100%;
+  padding: 32px 0px 32px 0px;
+  flex-direction: column;
+  gap: var(--Radius-or-Spacings-S, 8px);
+  align-self: stretch;
+  width: 20rem;
+  overflow-y: hidden;
+}
+
+.location-header {
+  color: var(--neutral50Brand);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.filters-header {
+  color: #000000;
+  font-size: 20px;
+  font-weight: 700;
+}
+
 
 /* Custom Search Input with Search Icon */
 .search-input {
@@ -115,7 +141,6 @@ div.app-outlet {
   padding: 8px;
   width: 314px;
   padding-left: 24px;
-  font-family: Poppins;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
