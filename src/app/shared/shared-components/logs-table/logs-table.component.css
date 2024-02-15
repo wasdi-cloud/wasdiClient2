@@ -1,6 +1,7 @@
 table {
     width: 98%;
     margin: auto;
+
 }
 
 tr.table-heading-container {
@@ -15,4 +16,8 @@ td>span.material-symbols-outlined {
 
 td, th {
     padding: 6px 12px 6px 8px;
+    width: fit-content;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
