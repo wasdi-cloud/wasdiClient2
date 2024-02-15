@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MapService } from 'src/app/services/map.service';
 
 @Component({
   selector: 'app-list-item',
@@ -32,8 +34,13 @@ export class ListItemComponent {
   @Input() m_bParentIsOpen?: boolean = false;
 
   /**
- * Label that appears in bold for "simple list item"
- */
+   * If the list item is selected
+   */
+  @Input() m_bIsSelected?: boolean = true;
+
+  /**
+   * Label that appears in bold for "simple list item"
+   */
   @Input() m_sLabel: string = "EdriftListflood";
 
   /**
@@ -49,4 +56,16 @@ export class ListItemComponent {
   @Input() m_sIcon?: string = "image";
 
   @Input() m_sImageSize?: string = "1.65GB";
+
+  @Input() m_oInfoCallbackFn?: (args: any) => void;
+
+  @Input() m_oZoomCallbackFn?: (args: any) => void;
+
+  @Input() m_oAddCallbackFn?: (args: any) => void;
+
+
+  constructor(
+    private m_oDialog: MatDialog,
+    private m_oMapService: MapService
+  ) { }
 }

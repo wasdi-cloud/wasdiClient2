@@ -2,7 +2,12 @@
     <div class="location-header">Search Results</div>
     <app-button [m_sLabel]="'Back to Search'" [m_bOutline]="true" [m_sSize]="'small'" [m_sIconLeft]="'arrow_back'"
         class="align-self-start" (click)="navigateBackToFilters()"></app-button>
-    <app-button class="align-self-start" [m_sLabel]="'Select All'" [m_bOutline]="true"></app-button>
+    <div class="d-flex flex-row justify-content-between">
+        <!-- <app-button class="align-self-start" [m_sLabel]="'Select All'" [m_bOutline]="true"
+            (click)="selectAllProducts()"></app-button> -->
+        <app-button [m_sLabel]="'Add to Workspace'" [m_bOutline]="true" (click)="openAddToWorkspaceDialog()"
+            *ngIf="m_aoSelectedProducts.length > 0"></app-button>
+    </div>
     <div class="results-container">
         <div *ngFor="let oProvider of m_aoProvidersList">
             <div class="mb-1">
@@ -14,11 +19,28 @@
                 <div class="ps-1" *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts <= 0">
                     Could not find any products.
                 </div>
+                <ul *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 10" class="pagination pagination text-align-center mb-0">
+                    <li class="page-item" (click)="minusOnePage()">
+                        <span class="page-link">Prev</span>
+                    </li>
+                    <li class="page-item"><a class="page-link">{{getCurrentPage()}}</a></li>
+                    <li class="page-item disabled" aria-current="page">
+                        <span class="page-link">...</span>
+                    </li>
+                    <li class="page-item"><a class="page-link">{{getMaxPage()}}</a></li>
+                    <li class="page-item" (click)="plusOnePage()">
+                        <a class="page-link">Next</a>
+                    </li>
+                </ul>
+    
                 <div *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 0">
                     <app-list-item *ngFor="let oProduct of m_aoProductsList" [m_bProductItem]="true"
-                        [m_oProductListItem]="oProduct" 
+                        [m_oProductListItem]="oProduct" [m_bIsSelected]="oProduct.selected"
+                        [m_oInfoCallbackFn]="openProductInfoDialog" [m_oZoomCallbackFn]="zoomToProduct"
+                        [m_oAddCallbackFn]="sendSingleProductToWorkspace"
                         (mouseover)="changeRectangleStyleMouseOver(oProduct.rectangle)"
-                        (mouseleave)="changeRectangleStyleMouseLeave(oProduct.rectangle)" (click)="addProductSelectedProducts($event, oProduct)"></app-list-item>
+                        (mouseleave)="changeRectangleStyleMouseLeave(oProduct.rectangle)"
+                        (click)="addProductSelectedProducts(oProduct)"></app-list-item>
                 </div>
             </div>
         </div>

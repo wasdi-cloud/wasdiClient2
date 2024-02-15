@@ -38,8 +38,10 @@ export class ProductsTableComponent implements OnInit {
 
   m_aoSelectedProducts: Array<any> = [];
 
+  m_bAllSelected: boolean = false;
+
   constructor(
-    private m_oDialog: MatDialog,
+    public m_oDialog: MatDialog,
     private m_oMapService: MapService,
     private m_oPageService: PagesService
   ) { }
@@ -92,6 +94,7 @@ export class ProductsTableComponent implements OnInit {
     this.updateLayerListForActiveTab(oProvider)
     this.m_oActiveProviderChange.emit(this.m_oActiveProvider);
     console.log(this.m_oActiveProvider)
+
     return true;
   }
 
@@ -221,21 +224,25 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Add checked product to selected products array
    */
-  addProductSelectedProducts(oEvent, oInputProduct) {
-    console.log(oEvent);
-    
+  addProductSelectedProducts(oInputProduct) {
+    oInputProduct.selected = !oInputProduct.selected
 
-
-    // if (oEvent.currentTarget.checked === true) {
-    //   //Add the Product to the Selected Products Array
-    //   this.m_aoSelectedProducts.push(oInputProduct);
-    // } else {
-    //   //Remove Product from the Selected Products Array
-    //   this.m_aoSelectedProducts = this.m_aoSelectedProducts.filter(oProduct => oProduct.id != oInputProduct.id);
-    // }
+    if (oInputProduct.selected === true) {
+      //Add the Product to the Selected Products Array
+      this.m_aoSelectedProducts.push(oInputProduct);
+    } else {
+      //Remove Product from the Selected Products Array
+      this.m_aoSelectedProducts = this.m_aoSelectedProducts.filter(oProduct => oProduct.id != oInputProduct.id);
+    }
     this.m_oSelectedProducts.emit(this.m_aoSelectedProducts);
   }
 
+  // selectAllProducts() {
+  //   this.m_bAllSelected = !this.m_bAllSelected;
+  //   for (let oProduct of this.m_aoProductsList) {
+  //     this.m_bAllSelected ? oProduct.selected = true : oProduct.select = false;
+  //   }
+  // }
   /**
    * Open dialog to add single product to a workspace
    */
@@ -272,7 +279,7 @@ export class ProductsTableComponent implements OnInit {
    * Open the information dialog for product
    */
   openProductInfoDialog(oProduct) {
-    let oDialog = this.m_oDialog.open(ProductInfoComponent, {
+    this.m_oDialog.open(ProductInfoComponent, {
       height: "60vh",
       width: '60vw',
       data: {
@@ -310,6 +317,24 @@ export class ProductsTableComponent implements OnInit {
       return false;
     }
     oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
+    return true;
+  }
+
+  /********** OPEN DIALOG HANDLERS **********/
+  openAddToWorkspaceDialog() {
+    let aoListOfSelectedProducts = this.m_aoSelectedProducts;
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoListOfSelectedProducts) === true) {
+      return false;
+    }
+
+    this.m_oDialog.open(WorkspacesListDialogComponent, {
+      height: "55vh",
+      width: '60vw',
+      data: {
+        products: aoListOfSelectedProducts
+      }
+    })
     return true;
   }
 

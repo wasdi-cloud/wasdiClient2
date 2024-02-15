@@ -56,3 +56,8 @@ span.bold {
 .toolbar>.material-symbols-outlined {
     font-size: 18px;
 }
+
+.selected {
+    border-color: var(--wasdiGreen);
+    background: var(--wasdiGreen10);
+}
