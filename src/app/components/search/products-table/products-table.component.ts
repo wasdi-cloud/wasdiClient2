@@ -66,8 +66,10 @@ export class ProductsTableComponent implements OnInit {
     this.m_aoProducts.subscribe(oResponse => {
       if (oResponse.length > 0) {
         this.m_aoProductsList = oResponse;
-        if (this.m_oActiveProvider.name) {
-          this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
+        if(FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProvider) === false) {
+          if (this.m_oActiveProvider.name) {
+            this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
+          }
         }
       }
     });

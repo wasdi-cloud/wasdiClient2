@@ -31,13 +31,13 @@
             <p>Product Type: <span>{{m_oProductListItem.properties.productType}}</span></p>
         </div>
         <div class="toolbar d-flex flex-row gap-1">
-            <span class="material-symbols-outlined" (click)="m_oInfoCallbackFn(m_oProductListItem)">
+            <span class="material-symbols-outlined" (click)="m_oInfoCallbackFn(m_oProductListItem)" matTooltip="Properties">
                 info
             </span>
-            <span class="material-symbols-outlined" (click)="m_oZoomCallbackFn(m_oProductListItem.rectangle)">
+            <span class="material-symbols-outlined" (click)="m_oZoomCallbackFn(m_oProductListItem.rectangle)" matTooltip="Zoom to Product">
                 zoom_in
             </span>
-            <span class="material-symbols-outlined" (click)="m_oAddCallbackFn(m_oProductListItem)">
+            <span class="material-symbols-outlined" (click)="m_oAddCallbackFn(m_oProductListItem)" matTooltip="Add to Workspace">
                 add_box
             </span>
         </div>
