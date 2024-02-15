@@ -62,6 +62,10 @@ header {
 
 }
 
+.dropdown-menu {
+    z-index: 1;
+}
+
 .dropdown>.btn {
     background: var(--Colors-Neutrals-0, #FFF);
     border: 1px solid var(--Colors-Neutrals-20, #B4BAC4);

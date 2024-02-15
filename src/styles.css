@@ -286,3 +286,7 @@ div.app-outlet {
 .mdc-checkbox {
   flex: 0 0 8px !important;
 }
+
+.map-container {
+  z-index: -1;
+}
