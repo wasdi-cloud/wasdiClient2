@@ -63,6 +63,7 @@ export class WorkspacesListDialogComponent implements OnInit {
     if (this.m_oData.products) {
       this.m_aoSelectedProducts = this.m_oData.products;
     }
+    console.log(this.m_aoSelectedProducts)
   }
 
   /********** API CALLS **********/
