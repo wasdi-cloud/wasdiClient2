@@ -49,7 +49,6 @@ export class ProductsTableComponent implements OnInit {
   ngOnInit(): void {
     //Set the selected providers array and set the first selected Provider as the active provider
     this.m_aoSelectedProviders.subscribe(oResponse => {
-      console.log(oResponse)
       if (oResponse.length > 0) {
         oResponse.forEach(oProvider => {
           if (!this.m_aoProvidersList.includes(oProvider)) {
@@ -65,7 +64,6 @@ export class ProductsTableComponent implements OnInit {
     });
     //Set the products array value
     this.m_aoProducts.subscribe(oResponse => {
-      console.log(oResponse)
       if (oResponse.length > 0) {
         this.m_aoProductsList = oResponse;
         if (this.m_oActiveProvider.name) {
@@ -93,8 +91,6 @@ export class ProductsTableComponent implements OnInit {
     this.getNumberOfProductsByProdvider(oProvider);
     this.updateLayerListForActiveTab(oProvider)
     this.m_oActiveProviderChange.emit(this.m_oActiveProvider);
-    console.log(this.m_oActiveProvider)
-
     return true;
   }
 
