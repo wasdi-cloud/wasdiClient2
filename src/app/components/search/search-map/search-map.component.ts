@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output, OnChanges, SimpleChanges, AfterViewChecked } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MapService } from 'src/app/services/map.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -10,7 +10,7 @@ import * as L from 'leaflet';
   templateUrl: './search-map.component.html',
   styleUrls: ['./search-map.component.css']
 })
-export class SearchMapComponent implements OnInit, OnDestroy {
+export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() m_aoProducts: Observable<any>;
   m_aoProductsList: any;
   @Input() oMapInput: any = {
@@ -31,20 +31,21 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   m_bIsValid: boolean;
   m_oMapOptions: any;
   m_oManualBboxSubscription: any;
+  m_oMap: any;
 
   constructor(
     private m_oMapService: MapService,
     private m_oTranslate: TranslateService
-  ) { }
-
-  ngOnInit(): void {
+  ) {
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
     this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
     this.m_oDrawnItems = this.m_oMapService.m_oDrawnItems;
 
     this.m_oDrawOptions.edit.featureGroup = this.m_oDrawnItems;
+  }
 
+  ngOnInit(): void {
     this.m_sErrorMessage = "Error:"
     this.m_bIsValid = true;
 
@@ -55,16 +56,21 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     })
   }
 
+
+  ngAfterViewChecked(): void {
+    this.m_oMap.invalidateSize();
+  }
+
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("SearchMapComponent.ngOnDestroy")
     this.m_oMapService.setMap(null);
-    this.m_oMapService.setDrawnItems()   
+    this.m_oMapService.setDrawnItems()
   }
 
   onMapReady(oMap: L.Map) {
+    this.m_oMap = oMap;
     this.m_oMapService.setMap(oMap);
-    let manualBbox = this.m_oMapService.addManualBbox(oMap);
-
+    this.m_oMapService.addManualBbox(oMap);
   }
 
   onDrawCreated(oEvent: any) {

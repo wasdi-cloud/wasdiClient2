@@ -390,6 +390,13 @@ export class SearchFiltersComponent implements OnInit {
     }
 
     //Update Results of Search Service:
+
+  }
+
+  /**
+   * Notification to Parent on when to execute the search
+   */
+  executeSearch() {
     this.m_oSearchFilter.emit(this.m_oMissionObject);
   }
 

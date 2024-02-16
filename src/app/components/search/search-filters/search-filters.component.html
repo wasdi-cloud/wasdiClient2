@@ -6,7 +6,8 @@
         <div>
             <label for="">Providers</label>
             <app-dropdown [m_bIsMultiSelect]="true" [m_aoDropdownItems]="m_aoListOfProviders"
-                [m_aoSelectedItems]="m_aoUserProviderSelection" (m_oSelectionChange)="emitSelectedProviders($event)"></app-dropdown>
+                [m_aoSelectedItems]="m_aoUserProviderSelection"
+                (m_oSelectionChange)="emitSelectedProviders($event)"></app-dropdown>
         </div>
         <!-- Product Name Input -->
         <app-input-field [m_sLabel]="'Product name'" [m_sIconLeft]="'search'"
@@ -104,7 +105,7 @@
     </div>
 
     <app-button class="align-self-stretch" [m_sLabel]="'Search'" [m_sSize]="'large'" [m_sIconLeft]="'search'"
-        (click)="emitModelChanges()"></app-button>
+        (click)="executeSearch()"></app-button>
 </div>
 
 <!-- <section class="sub-menu">
