@@ -174,6 +174,7 @@ import { DropdownComponent } from './shared/shared-components/dropdown/dropdown.
 import { InputFieldComponent } from './shared/shared-components/input-field/input-field.component';
 import { ChipComponent } from './shared/shared-components/chip/chip.component';
 import { ListItemComponent } from './shared/shared-components/list-item/list-item.component';
+import { WorkspacesMenuComponent } from './components/workspaces/workspaces-menu/workspaces-menu.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -288,7 +289,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     DropdownComponent,
     InputFieldComponent,
     ChipComponent,
-    ListItemComponent
+    ListItemComponent,
+    WorkspacesMenuComponent
 
   ],
   imports: [
