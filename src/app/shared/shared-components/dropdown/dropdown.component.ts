@@ -8,11 +8,11 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.css']
 })
-export class DropdownComponent implements OnInit{
+export class DropdownComponent implements OnInit {
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oWorkspaceService: WorkspaceService
-  ){}
+  ) { }
   /**
    * The input array: 
    */
@@ -55,10 +55,11 @@ export class DropdownComponent implements OnInit{
   }
 
   ngOnInit(): void {
-      console.log(this.m_aoDropdownItems)
+    console.log(this.m_aoDropdownItems)
   }
-  
+
   getValues(oValues) {
+    console.log(oValues)
     let aoNewValues = [];
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oValues) === false) {
       if (this.m_bIsMultiSelect === true) {
@@ -68,10 +69,10 @@ export class DropdownComponent implements OnInit{
           }
         });
       } else {
-        aoNewValues = oValues.name ? oValues.name : oValues.workspaceName;
+        aoNewValues = oValues.name ? oValues.name : oValues.workspaceName ? oValues.workspaceName : oValues;
       }
     }
     return aoNewValues;
   }
-  
+
 }
