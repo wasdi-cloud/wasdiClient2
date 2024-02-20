@@ -1,6 +1,7 @@
 div.nav-container {
 	height: 100%;
 	overflow: hidden;
+	position: sticky;
 }
 
 nav {
