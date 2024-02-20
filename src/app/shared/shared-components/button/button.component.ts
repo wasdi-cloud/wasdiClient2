@@ -37,12 +37,17 @@ export class ButtonComponent {
   @Input() m_bOutline?: boolean = false;
 
   /**
-   * Id there an icon on the left side?
+   * Is there an icon on the left side?
    */
   @Input() m_sIconLeft?: string = "";
-  
-   /**
-   * Id there an icon on the right side?
+
+  /**
+  * Is there an icon on the right side?
+  */
+  @Input() m_sIconRight?: string = "";
+
+  /**
+   * Is the button "muted" (i.e., "white")?
    */
-   @Input() m_sIconRight?: string = "";
+  @Input() m_bMuted?: boolean = false;
 }
