@@ -1,0 +1,37 @@
+/* @import url(/src/app/shared/shared-components/input-field/input-field.component.css); */
+
+div.floating-menu {
+    border-radius: 16px;
+    padding: 20px;
+    width: 16rem;
+}
+
+.menu-header {
+    color: var(--neutral80);
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.property-tag {
+    color: var(--neutral90);
+    font-size: 14px;
+    line-height: 21px;
+}
+
+
+
+input.form-control {
+    border-right: none;
+    background: var(--neutral10);
+}
+
+.icon-left {
+    background: var(--neutral10) !important;
+    border-bottom-right-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    cursor: pointer;
+}
+
+.green-text {
+    color: var(--wasdiGreen) !important;
+}

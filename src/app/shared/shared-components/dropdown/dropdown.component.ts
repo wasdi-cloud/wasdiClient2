@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-dropdown',
@@ -7,6 +9,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   styleUrls: ['./dropdown.component.css']
 })
 export class DropdownComponent {
+  constructor(
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oWorkspaceService: WorkspaceService
+  ){}
   /**
    * The input array: 
    */
@@ -32,6 +38,10 @@ export class DropdownComponent {
    */
   @Input() m_sPlaceholder?: string = "";
 
+  @Input() m_oController?: any;
+
+  @Input() m_oDeleteFn?: (args: any, controller: any) => void;
+
   /**
    * Emit the selection to listening parent
    */
@@ -41,7 +51,6 @@ export class DropdownComponent {
    * Emit selection change to listening parent component
    */
   emitSelectionChange(oEvent) {
-    console.log(this.m_aoSelectedItems)
     this.m_oSelectionChange.emit(oEvent);
   }
 
@@ -61,7 +70,4 @@ export class DropdownComponent {
     return aoNewValues;
   }
   
-  deleteFn() {
-    console.log("delete")
-  }
 }

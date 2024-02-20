@@ -92,3 +92,7 @@ mat-select {
 ::ng-deep mat-pseudo-checkbox {
     display: none !important;
 }
+
+::ng-deep .mat-mdc-option.mdc-list-item:hover {
+    background: var(--wasdiBlue10) !important;
+}

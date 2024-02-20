@@ -14,16 +14,10 @@
                 {{oItem.name ? oItem.name : oItem.workspaceName?
                 oItem.workspaceName : oItem}}
             </span>
-            <span *ngIf="oItem.workspaceName" class="material-symbols-outlined" (click)="deleteFn()">
+            <span *ngIf="oItem.workspaceName" class="material-symbols-outlined"
+                (click)="m_oDeleteFn(oItem, m_oController)">
                 delete
             </span>
         </div>
     </mat-option>
-    <!-- <mat-select-trigger>
-        {{oItem.name ? oItem.name : oItem.workspaceName?
-        oItem.workspaceName : oItem}}
-        <span *ngIf="oItem.workspaceName" class="material-symbols-outlined" (click)="deleteFn()">
-            delete
-        </span>
-    </mat-select-trigger> -->
 </mat-select>

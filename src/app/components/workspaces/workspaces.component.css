@@ -1,9 +1,14 @@
 main {
     min-height: calc(100vh - 3rem);
+    position: relative;
 }
 
 .globe-container {
     height: calc(100vh - 3rem);
+    width: calc(100% + 1.5rem);
+    position: absolute;
+    left: -1.5rem;
+    z-index: 0;
 }
 
 h4 {

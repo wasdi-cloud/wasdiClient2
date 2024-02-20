@@ -182,7 +182,6 @@ export class WorkspacesComponent implements OnInit {
   ngOnInit(): void {
     console.log("WorkspaceComponent.ngOnInit")
     this.m_bDestroyCalled = false;
-    this.fetchWorkspaceInfoList();
     this.m_oGlobeService.initRotateGlobe('CesiumContainer3');
     this.getTrackSatellite();
     this.m_bShowSatellites = true;
@@ -203,42 +202,6 @@ export class WorkspacesComponent implements OnInit {
     }
 
     this.m_oGlobeService.clearGlobe()
-  }
-
-  /**
-   * Get the list of available workspaces
-   */
-  fetchWorkspaceInfoList() {
-
-    let sMessage: string;
-    this.m_oTranslate.get("MSG_MKT_WS_OPEN_ERROR").subscribe(sResponse => {
-      sMessage = sResponse
-    })
-
-    let oUser: User = this.m_oConstantsService.getUser();
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oUser) === false) {
-
-      this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
-        next: oResponse => {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
-          } else {
-            this.m_aoWorkspacesList = oResponse;
-          }
-        },
-        error: oError => { }
-      });
-    }
-  }
-
-  /**
-   * Refresh the list after the delete
-   * @param oWorkspace
-   */
-  onDeleteWorkspace(oWorkspace: Workspace) {
-    this.fetchWorkspaceInfoList();
-    this.m_oActiveWorkspace = null;
   }
 
   /**
@@ -272,7 +235,6 @@ export class WorkspacesComponent implements OnInit {
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace) === false) {
       this.m_oActiveWorkspace.workspaceId = oWorkspace.workspaceId;
-      this.deselectWorkspace();
     }
 
     let oWorkspaceId = oWorkspace.workspaceId;
@@ -340,24 +302,6 @@ export class WorkspacesComponent implements OnInit {
     });
 
     return true;
-  }
-
-  deselectWorkspace() {
-
-  }
-
-  openNewWorkspaceDialog() {
-    let oDialogRef = this.m_oDialog.open(NewWorkspaceDialogComponent, {
-      width: '30vw'
-    })
-  }
-
-  stopGlobeRotation() {
-    this.m_oGlobeService.stopRotationGlobe();
-  }
-
-  startGlobeRotation() {
-    this.m_oGlobeService.startRotationGlobe(3);
   }
 
   getTrackSatellite() {
@@ -461,98 +405,81 @@ export class WorkspacesComponent implements OnInit {
     return -1;
   }
 
-  deleteSentinel1a() {
-    if (this.m_bShowSatellites) {
-      this.getTrackSatellite();
-    } else {
-      for (let i = 0; i < this.m_aoSatellitePositions.length; i++) {
-        this.m_oGlobeService.removeEntity(this.m_aoSatellitePositions[i]);
-      }
+  // setSorting(oSortingOption) {
+  //   let bIsDescending: boolean = false;
+  //   let propertyName: string = '';
+  //   //Set Active Sorting Option: 
+  //   if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSortingOption) === false) {
+  //     this.m_oActiveSortingOption = oSortingOption;
+  //     oSortingOption.direction === 'asc' ? bIsDescending = true : bIsDescending = false;
+  //     oSortingOption.column === 'date' ? propertyName = 'creationDate' : oSortingOption.column === 'workspace' ? propertyName = 'workspaceName' : propertyName = 'ownerUserId';
+  //   }
+  //   if (propertyName === 'ownerUserId' || propertyName === 'workspaceName') {
+  //     this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
+  //       if (oWorkspace1[propertyName].toLowerCase() < oWorkspace2[propertyName].toLowerCase()) {
+  //         return bIsDescending ? 1 : -1;
+  //       }
+  //       if (oWorkspace1[propertyName].toLowerCase() > oWorkspace2[propertyName].toLowerCase()) {
+  //         return bIsDescending ? -1 : 1;
+  //       }
+  //       return 0;
+  //     });
+  //   }
+  //   if (propertyName === 'creationDate') {
+  //     this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
+  //       if (bIsDescending === true) {
+  //         return <any>new Date(oWorkspace2[propertyName]) - <any>new Date(oWorkspace1[propertyName]);
+  //       } else {
+  //         return <any>new Date(oWorkspace1[propertyName]) - <any>new Date(oWorkspace2[propertyName]);
+  //       }
+  //     });
+  //   }
 
-      this.m_oGlobeService.removeEntity(this.m_oUfoPointer);
-      this.m_oUfoPointer = null;
-      this.m_oFakePosition = null;
+  // }
 
-      this.m_aoSatellitePositions = [];
-    }
-  }
+  // selectAllWorkspaces(oEvent) {
+  //   if (oEvent.checked === true) {
+  //     this.m_aoWorkspacesList.forEach(oWorkspace => {
+  //       oWorkspace['checked'] = true;
+  //     })
+  //     this.m_aoSelectedWorkspaces = this.m_aoWorkspacesList;
+  //   } else if (oEvent.checked === false) {
+  //     this.m_aoWorkspacesList.forEach(oWorkspace => {
+  //       oWorkspace['checked'] = false;
+  //     })
+  //     this.m_aoSelectedWorkspaces = [];
+  //   }
+  // }
 
-  setSorting(oSortingOption) {
-    let bIsDescending: boolean = false;
-    let propertyName: string = '';
-    //Set Active Sorting Option: 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSortingOption) === false) {
-      this.m_oActiveSortingOption = oSortingOption;
-      oSortingOption.direction === 'asc' ? bIsDescending = true : bIsDescending = false;
-      oSortingOption.column === 'date' ? propertyName = 'creationDate' : oSortingOption.column === 'workspace' ? propertyName = 'workspaceName' : propertyName = 'ownerUserId';
-    }
-    if (propertyName === 'ownerUserId' || propertyName === 'workspaceName') {
-      this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
-        if (oWorkspace1[propertyName].toLowerCase() < oWorkspace2[propertyName].toLowerCase()) {
-          return bIsDescending ? 1 : -1;
-        }
-        if (oWorkspace1[propertyName].toLowerCase() > oWorkspace2[propertyName].toLowerCase()) {
-          return bIsDescending ? -1 : 1;
-        }
-        return 0;
-      });
-    }
-    if (propertyName === 'creationDate') {
-      this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
-        if (bIsDescending === true) {
-          return <any>new Date(oWorkspace2[propertyName]) - <any>new Date(oWorkspace1[propertyName]);
-        } else {
-          return <any>new Date(oWorkspace1[propertyName]) - <any>new Date(oWorkspace2[propertyName]);
-        }
-      });
-    }
+  // getWorkspaceSelectionChange(oEvent) {
+  //   if (oEvent.checked === true) {
+  //     this.m_aoSelectedWorkspaces.push(oEvent);
+  //   } else if (oEvent.checked === false) {
+  //     this.m_aoSelectedWorkspaces = this.m_aoSelectedWorkspaces.filter(oWorkspace => oWorkspace.workspaceId !== oEvent.workspaceId)
+  //   }
+  // }
 
-  }
-
-  selectAllWorkspaces(oEvent) {
-    if (oEvent.checked === true) {
-      this.m_aoWorkspacesList.forEach(oWorkspace => {
-        oWorkspace['checked'] = true;
-      })
-      this.m_aoSelectedWorkspaces = this.m_aoWorkspacesList;
-    } else if (oEvent.checked === false) {
-      this.m_aoWorkspacesList.forEach(oWorkspace => {
-        oWorkspace['checked'] = false;
-      })
-      this.m_aoSelectedWorkspaces = [];
-    }
-  }
-
-  getWorkspaceSelectionChange(oEvent) {
-    if (oEvent.checked === true) {
-      this.m_aoSelectedWorkspaces.push(oEvent);
-    } else if (oEvent.checked === false) {
-      this.m_aoSelectedWorkspaces = this.m_aoSelectedWorkspaces.filter(oWorkspace => oWorkspace.workspaceId !== oEvent.workspaceId)
-    }
-  }
-
-  deleteMultipleWorkspaces() {
-    let sConfirmMsg = `Are you sure you want to delete ${this.m_aoSelectedWorkspaces.length} workspaces?`;
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
-    bConfirmResult.subscribe(oDialogResult => {
-      if (oDialogResult === true) {
-        this.m_aoSelectedWorkspaces.forEach((oWorkspace, iIndex) => {
-          if(oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
-            this.m_oActiveWorkspace = null;
-          }
-          this.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
-            next: oResponse => {
-              this.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
-              if (iIndex === this.m_aoSelectedWorkspaces.length - 1) {
-                this.fetchWorkspaceInfoList();
-              }
-            },
-            error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog(`Error in deleting ${oWorkspace.workspaceName}`);
-            }
-          })
-        })
-      }
-    })
-  }
+  // deleteMultipleWorkspaces() {
+  //   let sConfirmMsg = `Are you sure you want to delete ${this.m_aoSelectedWorkspaces.length} workspaces?`;
+  //   let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
+  //   bConfirmResult.subscribe(oDialogResult => {
+  //     if (oDialogResult === true) {
+  //       this.m_aoSelectedWorkspaces.forEach((oWorkspace, iIndex) => {
+  //         if(oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
+  //           this.m_oActiveWorkspace = null;
+  //         }
+  //         this.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
+  //           next: oResponse => {
+  //             this.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
+  //             if (iIndex === this.m_aoSelectedWorkspaces.length - 1) {
+  //             }
+  //           },
+  //           error: oError => {
+  //             this.m_oNotificationDisplayService.openAlertDialog(`Error in deleting ${oWorkspace.workspaceName}`);
+  //           }
+  //         })
+  //       })
+  //     }
+  //   })
+  // }
 }
