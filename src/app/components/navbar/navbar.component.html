@@ -11,7 +11,7 @@
         </div>
         <img class="logo-img" [class.open]="m_bIsNavbarOpen" src="/assets/icons/logo-only.svg" alt="">
     </nav>
-    <div class="menu-control d-flex flex-column justify-content-center" (click)="openCloseNavbar()">
+    <div class="menu-control d-flex flex-column justify-content-center" [class.text-white]="m_sSelectedTab === 'workspaces'" (click)="openCloseNavbar()">
         <span class="material-symbols-outlined" [hidden]="m_bIsNavbarOpen">
             chevron_right
         </span>

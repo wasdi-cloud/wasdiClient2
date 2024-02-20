@@ -2,6 +2,7 @@ div.nav-container {
 	height: 100%;
 	overflow: hidden;
 	position: sticky;
+	z-index: 999;
 }
 
 nav {
@@ -13,24 +14,30 @@ nav {
 	padding-bottom: 24px;
 	width: 250px;
 	overflow: hidden;
+	z-index: 1;
+
+}
+
+div.menu-control {
+	background: transparent;
+
+}
+
+.text-light {
+	color: #FFFFFF;
 }
 
 nav.collapsed {
 	width: 64px;
 }
 
-div.menu-control {
-	background: transparent;
-	z-index: 1000;
-}
-
 span.material-symbols-outlined {
 	cursor: pointer;
 }
 
-.menu-list-container {
+/* .menu-list-container {
 	z-index: 1000;
-}
+} */
 
 .logo-img {
 	position: absolute;
@@ -40,7 +47,7 @@ span.material-symbols-outlined {
 	height: 135.033px;
 	transform: rotate(-30deg);
 	filter: brightness(0) saturate(100%) invert(24%) sepia(8%) saturate(1917%) hue-rotate(179deg) brightness(96%) contrast(91%);
-	z-index: 0;
+	z-index: -1;
 }
 
 .logo-img.open {

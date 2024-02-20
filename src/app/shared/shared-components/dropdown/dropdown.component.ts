@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -8,7 +8,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.css']
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent {
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oWorkspaceService: WorkspaceService
@@ -54,12 +54,7 @@ export class DropdownComponent implements OnInit {
     this.m_oSelectionChange.emit(oEvent);
   }
 
-  ngOnInit(): void {
-    console.log(this.m_aoDropdownItems)
-  }
-
   getValues(oValues) {
-    console.log(oValues)
     let aoNewValues = [];
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oValues) === false) {
       if (this.m_bIsMultiSelect === true) {
