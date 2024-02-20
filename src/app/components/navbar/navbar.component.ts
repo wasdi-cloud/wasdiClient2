@@ -103,6 +103,8 @@ export class NavbarComponent implements OnInit {
           })
         } else if (oEvent.url.includes('appDetails') || oEvent.url.includes('appui')) {
           this.setActiveTab('marketplace')
+        } else if (oEvent.urlAfterRedirects === "/marketplace") {
+          this.setActiveTab('marketplace')
         } else {
           this.setActiveTab(oEvent.url.slice(1));
         }
