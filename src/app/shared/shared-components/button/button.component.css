@@ -42,6 +42,14 @@
     height: 48px;
 }
 
+/* Muted BUtton */
+.muted {
+    color: #141920;
+    background-color: #FFFFFF;
+}
+
+
+
 /* Disabled Button */
 .wasdi-btn:disabled {
     cursor: not-allowed;
@@ -81,6 +89,13 @@
     border-radius: var(--Radius-or-Spacings-FULL, 100px);
     background: var(--Colors-Shades-30---Dark-Accessible, #006526);
     transition: ease-out 300ms;
+}
+
+
+.muted:hover {
+    color: #009036 !important;
+    border: 1px solid var(--Colors-Primary-10, #009036) !important;
+    background: var(--Colors-Shades-30---Light, #EBF7EF) !important;
 }
 
 .wasdi-btn-sm>span.material-symbols-outlined {

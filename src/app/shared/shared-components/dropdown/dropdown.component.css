@@ -77,3 +77,22 @@ mat-select {
 ::ng-deep .mat-pseudo-checkbox-checked.mat-pseudo-checkbox-full {
     background-color: var(--wasdiGreen);
 }
+
+::ng-deep .mdc-list-item__primary-text {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 150% !important;
+}
+
+.material-symbols-outlined {
+    color: var(--wasdiGreen);
+}
+
+::ng-deep mat-pseudo-checkbox {
+    display: none !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item:hover {
+    background: var(--wasdiBlue10) !important;
+}

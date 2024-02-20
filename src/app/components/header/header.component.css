@@ -75,7 +75,7 @@ header {
     font-size: 14px;
     justify-content: space-between;
     padding: 8px 8px;
-    width: 150px;
+    width:fit-content;
 }
 
 .dropdown-icon {

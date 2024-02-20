@@ -64,9 +64,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar'
 //Import FontAwesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-//Workspaces Page Components
-import { WorkspaceListItemComponent } from './components/workspaces/workspace-list-item/workspace-list-item.component';
-
 //Import Interceptor
 import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
 
@@ -174,6 +171,7 @@ import { DropdownComponent } from './shared/shared-components/dropdown/dropdown.
 import { InputFieldComponent } from './shared/shared-components/input-field/input-field.component';
 import { ChipComponent } from './shared/shared-components/chip/chip.component';
 import { ListItemComponent } from './shared/shared-components/list-item/list-item.component';
+import { WorkspacesMenuComponent } from './components/workspaces/workspaces-menu/workspaces-menu.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -189,7 +187,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SearchComponent,
     WorkspacesComponent,
     LoginComponent,
-    WorkspaceListItemComponent,
     MarketplaceAppCardComponent,
     LanguageSwitchComponent,
     CourseDialogComponent,
@@ -288,7 +285,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     DropdownComponent,
     InputFieldComponent,
     ChipComponent,
-    ListItemComponent
+    ListItemComponent,
+    WorkspacesMenuComponent
 
   ],
   imports: [

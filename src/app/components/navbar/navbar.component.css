@@ -1,25 +1,26 @@
 div.nav-container {
 	height: 100%;
-	position: sticky;
 	overflow: hidden;
+	position: sticky;
 }
 
 nav {
+	position: relative;
 	background: var(--neutral50Brand);
 	border-top-right-radius: 8px;
 	height: 100%;
 	padding-top: 16px;
 	padding-bottom: 24px;
 	width: 250px;
+	overflow: hidden;
 }
 
 nav.collapsed {
 	width: 64px;
-	overflow-x: hidden;
 }
 
 div.menu-control {
-	background: #FFFFFF;
+	background: transparent;
 	z-index: 1000;
 }
 
@@ -34,10 +35,9 @@ span.material-symbols-outlined {
 .logo-img {
 	position: absolute;
 	left: 2rem;
-
 	top: 87%;
-	width: 95.819px;
-	height: 93.926px;
+	width: 137.754px;
+	height: 135.033px;
 	transform: rotate(-30deg);
 	filter: brightness(0) saturate(100%) invert(24%) sepia(8%) saturate(1917%) hue-rotate(179deg) brightness(96%) contrast(91%);
 	z-index: 0;
@@ -47,5 +47,4 @@ span.material-symbols-outlined {
 	width: 137.754px;
 	height: 135.033px;
 	transform: rotate(-30deg);
-
 }
