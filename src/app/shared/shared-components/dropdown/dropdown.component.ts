@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-dropdown',
@@ -40,6 +41,27 @@ export class DropdownComponent {
    * Emit selection change to listening parent component
    */
   emitSelectionChange(oEvent) {
+    console.log(this.m_aoSelectedItems)
     this.m_oSelectionChange.emit(oEvent);
+  }
+
+  getValues(oValues) {
+    let aoNewValues = [];
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oValues) === false) {
+      if (this.m_bIsMultiSelect === true) {
+        oValues.forEach(oElement => {
+          if (oElement.name) {
+            aoNewValues.push(oElement.name)
+          }
+        });
+      } else {
+        aoNewValues = oValues.name ? oValues.name : oValues.workspaceName;
+      }
+    }
+    return aoNewValues;
+  }
+  
+  deleteFn() {
+    console.log("delete")
   }
 }

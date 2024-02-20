@@ -1,7 +1,29 @@
-<mat-select [multiple]="m_bIsMultiSelect" class="form-control" placeholder="Hint" name="dropdown" [(ngModel)]="m_aoSelectedItems"
-    disableOptionCentering="'false'" (selectionChange)="emitSelectionChange($event)" placeholder="{{m_sPlaceholder}}" >
+<mat-select [multiple]="m_bIsMultiSelect" class="form-control" name="dropdown" [(value)]="m_aoSelectedItems"
+    disableOptionCentering="'false'" (selectionChange)="emitSelectionChange($event)" placeholder="{{m_sPlaceholder}}"
+    type="text">
     <div *ngIf="m_bHasSearch" class="mat-search-container">
         <input type="text" name="m_sStyle" placeholder="Search..." class="mat-select-search">
     </div>
-    <mat-option *ngFor="let oItem of m_aoDropdownItems" [value]="oItem">{{oItem.name ? oItem.name : oItem}}</mat-option>
+    <mat-select-trigger>
+        {{getValues(m_aoSelectedItems)}}
+    </mat-select-trigger>
+    <mat-option class="d-flex flex-row justify-content-between gap-2" *ngFor="let oItem of m_aoDropdownItems"
+        [value]="oItem">
+        <div class="w-100 d-flex flex-row justify-content-between gap-2">
+            <span>
+                {{oItem.name ? oItem.name : oItem.workspaceName?
+                oItem.workspaceName : oItem}}
+            </span>
+            <span *ngIf="oItem.workspaceName" class="material-symbols-outlined" (click)="deleteFn()">
+                delete
+            </span>
+        </div>
+    </mat-option>
+    <!-- <mat-select-trigger>
+        {{oItem.name ? oItem.name : oItem.workspaceName?
+        oItem.workspaceName : oItem}}
+        <span *ngIf="oItem.workspaceName" class="material-symbols-outlined" (click)="deleteFn()">
+            delete
+        </span>
+    </mat-select-trigger> -->
 </mat-select>
