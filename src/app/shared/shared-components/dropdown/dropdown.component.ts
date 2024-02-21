@@ -45,7 +45,9 @@ export class DropdownComponent {
   /**
    * Emit the selection to listening parent
    */
-  @Output() m_oSelectionChange: EventEmitter<any> = new EventEmitter()
+  @Output() m_oSelectionChange: EventEmitter<any> = new EventEmitter();
+
+  m_sSearchString: string = ""; 
 
   /**
    * Emit selection change to listening parent component

@@ -2,12 +2,12 @@
     disableOptionCentering="'false'" (selectionChange)="emitSelectionChange($event)" placeholder="{{m_sPlaceholder}}"
     type="text">
     <div *ngIf="m_bHasSearch" class="mat-search-container">
-        <input type="text" name="m_sStyle" placeholder="Search..." class="mat-select-search">
+        <input type="text" name="m_sStyle" placeholder="Search..." class="mat-select-search" [(ngModel)]="m_sSearchString">
     </div>
     <mat-select-trigger>
         {{getValues(m_aoSelectedItems)}}
     </mat-select-trigger>
-    <mat-option class="d-flex flex-row justify-content-between gap-2" *ngFor="let oItem of m_aoDropdownItems"
+    <mat-option class="d-flex flex-row justify-content-between gap-2" *ngFor="let oItem of m_aoDropdownItems | filter: m_sSearchString"
         [value]="oItem">
         <div class="w-100 d-flex flex-row justify-content-between gap-2">
             <span>
