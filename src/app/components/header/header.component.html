@@ -34,7 +34,30 @@
                 </div>
             </div>
             <ul class="dropdown-menu">
-                <li class=""><a class="dropdown-item" (click)="openUserDashboard()">User Dashboard</a></li>
+                <li class=""><a class="dropdown-item" (click)="openUserDashboard()"><span
+                            class="material-symbols-outlined">
+                            settings
+                        </span>User Dashboard</a></li>
+                <li class=""><a class="dropdown-item" (click)="goToSubscriptions()"><span
+                            class="material-symbols-outlined">
+                            rocket_launch
+                        </span>Subscription</a></li>
+                <!-- Open Off Canvas Feedback Form -->
+                <li class=""><a class="dropdown-item" data-bs-toggle="offcanvas" href="#feedbackOffcanvas" role="button" aria-controls="feedbackOffcanvas"><span
+                            class="material-symbols-outlined">
+                            chat
+                        </span>Send Feedback</a></li>
+                <li class=""><a class="dropdown-item" (click)="openDocs()"><span
+                            class="material-symbols-outlined">
+                            support
+                        </span>
+                        <div class="help-btn">Help</div> <span class="material-symbols-outlined align-self-end">
+                            open_in_new
+                        </span>
+                    </a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
                 <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
             </ul>
         </div>
@@ -42,11 +65,10 @@
 </header>
 
 <!-- Feedback Form OffCanvas -->
-<!-- <div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
+<div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
     <div class="offcanvas-header d-flex flex-row justify-content-start gap-3 p-0 m-0">
         <button type="button" class="btn btn-secondary close-feedback-btn" data-bs-dismiss="offcanvas"
             aria-label="Close">
-            <fa-icon [icon]="faArrowLeft"></fa-icon>
         </button>
         <h5 class="offcanvas-title">Send Feedback to WASDI</h5>
     </div>
@@ -79,4 +101,4 @@
             </div>
         </form>
     </div>
-</div> -->
+</div>

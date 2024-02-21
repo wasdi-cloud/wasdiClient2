@@ -42,7 +42,7 @@ header {
     color: #FFFFFF;
 }
 
-.material-symbols-outlined {
+.user-icon > .material-symbols-outlined {
     position: absolute;
     left: 4px;
 
@@ -86,9 +86,18 @@ header {
 }
 
 a.dropdown-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--neutral50Brand);
     cursor: pointer;
     font-size: 14px;
     /* 171.429% */
+}
+
+.help-btn {
+    flex-grow: 1;
 }
 
 a.dropdown-item:hover {
