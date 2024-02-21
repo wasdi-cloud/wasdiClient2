@@ -2,7 +2,7 @@ div.nav-container {
 	height: 100%;
 	overflow: hidden;
 	position: sticky;
-	z-index: 999;
+	z-index: 2;
 }
 
 nav {
@@ -20,11 +20,21 @@ nav {
 
 div.menu-control {
 	background: transparent;
-
+	cursor: pointer;
 }
 
-.text-light {
+div.menu-control:hover {
+	background: var(--neutral5);
+	transition: ease-in 300ms;
+}
+
+
+.text-white {
 	color: #FFFFFF;
+}
+
+div.menu-control.text-white:hover {
+	color: #000000 !important;
 }
 
 nav.collapsed {
