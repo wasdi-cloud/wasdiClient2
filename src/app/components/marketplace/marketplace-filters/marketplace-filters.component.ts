@@ -129,13 +129,14 @@ export class MarketplaceFiltersComponent implements OnInit {
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
 
-  
+
   /**
    * Handle Changes to the Search Input field on Enter or if Search Button clicked
    * @param oEvent 
    * @returns {void}
    */
   onSearchInput(oEvent): void {
+    console.log(oEvent.target.value)
     if (oEvent.keyCode === 13) {
       if (this.m_sSearchInput || this.m_sSearchInput === "") {
         this.m_oAppFilter.name = this.m_sSearchInput
@@ -143,4 +144,13 @@ export class MarketplaceFiltersComponent implements OnInit {
       }
     }
   }
+
+  getSearchInput(oEvent) {
+    this.m_sSearchInput = oEvent.target.value;
+  }
+
+  getDeveloperInput(oEvent) {
+    this.m_sDeveloperSearch = oEvent.target.value;
+  }
+
 }

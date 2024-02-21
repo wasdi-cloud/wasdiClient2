@@ -1,9 +1,7 @@
 .input-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: var(--Radius-or-Spacings-M, 16px);
-    align-self: stretch;
 }
 
 .input-container:not(:first-child) {
