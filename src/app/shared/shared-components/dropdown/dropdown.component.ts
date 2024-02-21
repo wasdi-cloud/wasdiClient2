@@ -60,7 +60,9 @@ export class DropdownComponent {
       if (this.m_bIsMultiSelect === true) {
         oValues.forEach(oElement => {
           if (oElement.name) {
-            aoNewValues.push(oElement.name)
+            aoNewValues.push(oElement.name);
+          } else {
+            aoNewValues.push(oElement);
           }
         });
       } else {
