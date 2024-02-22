@@ -1,3 +1,9 @@
+label {
+    color: var(--neutral95);
+    font-size: 14px;
+    font-weight: 400;
+}
+
 .list-item-container {
     border: 1px solid #D9DCE1;
     border-radius: 8px;
