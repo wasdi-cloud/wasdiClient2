@@ -29,6 +29,8 @@
             <p>Rel Orbit: <span>{{m_oProductListItem.properties.relativeOrbitNumber}}</span></p>
             <p>Provider: <span>{{m_oProductListItem.provider}}</span></p>
             <p>Product Type: <span>{{m_oProductListItem.properties.productType}}</span></p>
+            <p>Date: <span>{{m_oProductListItem.properties.date | date: 'short'}}</span>
+            </p>
         </div>
         <div class="toolbar d-flex flex-row gap-1">
             <span class="material-symbols-outlined" (click)="m_oInfoCallbackFn(m_oProductListItem)" matTooltip="Properties">

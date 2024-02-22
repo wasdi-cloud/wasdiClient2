@@ -63,7 +63,6 @@ export class ListItemComponent {
 
   @Input() m_oAddCallbackFn?: (args: any) => void;
 
-
   constructor(
     private m_oDialog: MatDialog,
     private m_oMapService: MapService
