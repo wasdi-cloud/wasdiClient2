@@ -11,7 +11,7 @@ export const MenuItems = [
         label: "ROOT_VIEW_NAV_BAR_LINK_WORKSPACES",
         name: "workspaces",
         routerLink: "/workspaces",
-        materialIcon: "workspaces"
+        materialIcon: "folder"
     },
 
     //Plan: 
