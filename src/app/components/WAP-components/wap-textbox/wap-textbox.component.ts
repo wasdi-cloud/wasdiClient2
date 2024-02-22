@@ -10,6 +10,7 @@ export class WapTextboxComponent {
   @Output() oTextboxInfoChange = new EventEmitter<any>(); 
 
   getUserInput(oEvent: any) {
+    console.log(oEvent.target.value)
     this.oTextboxInfo.m_sText = oEvent.target.value
   }
 }
