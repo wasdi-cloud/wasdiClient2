@@ -1,7 +1,7 @@
 <main class="workspaces-container">
     <div class="globe-container">
         <div style=" height: calc(100vh - 3rem); width: 100%;" id="CesiumContainer3"></div>
-        <app-workspaces-menu  style="z-index: 999;
+        <app-workspaces-menu [m_aoProducts]="m_aoProducts" (m_oActiveWorkspaceOutput)="getSelectedWorkspace($event)" style="z-index: 999;
         position: absolute;
         left: 2.5%;
         top: 3%;"></app-workspaces-menu>

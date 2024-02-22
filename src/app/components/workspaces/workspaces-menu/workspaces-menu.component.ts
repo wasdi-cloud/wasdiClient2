@@ -1,12 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { NewWorkspaceDialogComponent } from '../new-workspace-dialog/new-workspace-dialog.component';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { ConstantsService } from 'src/app/services/constants.service';
 
 @Component({
   selector: 'app-workspaces-menu',
@@ -18,6 +18,9 @@ export class WorkspacesMenuComponent implements OnInit {
 
   m_oActiveWorkspace = null;
 
+  @Input() m_aoProducts: Array<any> = [];
+
+  @Output() m_oActiveWorkspaceOutput: EventEmitter<any> = new EventEmitter<any>();
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
@@ -46,6 +49,7 @@ export class WorkspacesMenuComponent implements OnInit {
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_oActiveWorkspace = oResponse;
+          this.m_oActiveWorkspaceOutput.emit(this.m_oActiveWorkspace);
         }
       }
     })
@@ -87,8 +91,8 @@ export class WorkspacesMenuComponent implements OnInit {
   }
 
   /**
- * Get the list of available workspaces
- */
+   * Get the list of available workspaces
+   */
   fetchWorkspaceInfoList() {
     let sMessage: string;
     this.m_oTranslate.get("MSG_MKT_WS_OPEN_ERROR").subscribe(sResponse => {

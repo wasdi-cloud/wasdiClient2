@@ -101,7 +101,7 @@ export class WorkspacesComponent implements OnInit {
   m_oUfoPointer: any;
   m_aoSateliteInputTraks: any[] = [];
 
-  m_bLoadingWSFiles: boolean = false;  
+  m_bLoadingWSFiles: boolean = false;
 
   /**
    * List of the products in the selected workspace
@@ -161,6 +161,8 @@ export class WorkspacesComponent implements OnInit {
    */
   m_oActiveSortingOption: any = {}
 
+  m_oSelectedWorkspace: any = {}
+
   /**
    * Flag to know if the component has been destroyed.
    * It is used in case we receive "old" callbacks after the page changed
@@ -211,12 +213,7 @@ export class WorkspacesComponent implements OnInit {
   onShowWorkspace(oWorkspace: Workspace) {
 
     this.m_oGlobeService.removeAllEntities();
-
-    this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
-      this.m_oActiveWorkspace = response
-      this.m_asSharedUsers = response.sharedUsers
-      this.loadProductList(oWorkspace);
-    })
+    this.loadProductList(oWorkspace)
   }
 
   /**
@@ -403,6 +400,11 @@ export class WorkspacesComponent implements OnInit {
 
     }
     return -1;
+  }
+
+  getSelectedWorkspace(oEvent) {
+    this.m_oSelectedWorkspace = oEvent;
+    this.onShowWorkspace(this.m_oSelectedWorkspace);
   }
 
   // setSorting(oSortingOption) {
