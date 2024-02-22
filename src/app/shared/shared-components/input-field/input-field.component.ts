@@ -61,6 +61,10 @@ export class InputFieldComponent {
    */
   @Input() m_sInputValue?: string = "";
 
+  @Input() m_sMaxValue?: any = "";
+
+  @Input() m_sMinValue?: any = "";
+
   /**
    * Event Emitter the input change to listening parent
    */

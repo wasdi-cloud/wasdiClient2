@@ -17,7 +17,7 @@
         (getSelections)="logOutput($event)"></app-wap-list-box>
 
     <!-- WAP Numeric Box -->
-    <app-wap-numeric-box #numericBox *ngIf="oControl.type ==='numeric'" [(inputText)]="oControl.m_sText"
+    <app-wap-numeric-box #numericBox *ngIf="oControl.type ==='numeric'" [(oNumericInfo)]="getTabControls()[i]"
         (getUserInput)="logOutput($event)"></app-wap-numeric-box>
 
     <!-- Wap Combo Products List  -->
