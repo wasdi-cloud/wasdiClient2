@@ -72,6 +72,13 @@ export class InputFieldComponent {
    */
 
   emitInputChange(oEvent) {
-    this.m_oInputChange.emit(oEvent)
+    if (this.m_sInputType) {
+      this.m_oInputChange.emit({
+        label: this.m_sLabel,
+        event: oEvent
+      })
+    } else {
+      this.m_oInputChange.emit(oEvent)
+    }
   }
 }

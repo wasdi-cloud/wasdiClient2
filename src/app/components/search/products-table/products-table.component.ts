@@ -215,6 +215,7 @@ export class ProductsTableComponent implements OnInit {
    * 
    */
   navigateBackToFilters() {
+    this.m_aoProvidersList = [];
     this.m_oNavigateBackOutput.emit(false);
   }
 

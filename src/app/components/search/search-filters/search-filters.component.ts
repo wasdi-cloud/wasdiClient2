@@ -362,7 +362,7 @@ export class SearchFiltersComponent implements OnInit {
     this.m_oSearchService.setMissionFilter(this.m_oMissionObject.missionFilter);
 
     //Emit Mission Model Changes to Search Component
-    this.emitModelChanges();
+    // this.emitModelChanges();
   }
 
   /**
@@ -379,18 +379,22 @@ export class SearchFiltersComponent implements OnInit {
   /**
    * Emit changes to the Mission Object to the Parent - will set m_oModel Variable
    */
-  emitModelChanges() {
+  emitModelChanges(oEvent) {
     // Get long form date from User Input: 
-    this.m_oMissionObject.sensingPeriodFrom = new Date(this.m_sDateFrom);
-    this.m_oMissionObject.sensingPeriodTo = new Date(this.m_sDateTo);
-
+    if (oEvent.label === 'From') {
+      this.m_sDateFrom = oEvent.event.target.value
+      this.m_oMissionObject.sensingPeriodFrom = new Date(this.m_sDateFrom);
+    } else if (oEvent.label === 'To') {
+      this.m_sDateTo = oEvent.event.target.value
+      this.m_oMissionObject.sensingPeriodTo = new Date(this.m_sDateTo);
+    }
     //Ensure value is initalized before executing setAdvancedSearchFilter()
     if (this.m_sDateFrom !== '' && this.m_sDateTo !== '') {
       this.setAdvancedSearchFilter();
     }
 
     //Update Results of Search Service:
-
+    
   }
 
   /**
@@ -405,11 +409,9 @@ export class SearchFiltersComponent implements OnInit {
    */
   emitSelectedProviders(oEvent: MatSelectChange) {
     let oSelectedProvders = oEvent.value;
-    console.log(oSelectedProvders);
     oSelectedProvders.forEach(oProvider => {
       oProvider.selected = true;
     })
-
     this.m_aoProviderSelection.emit(oSelectedProvders);
   }
 

@@ -415,9 +415,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (this.m_aoSelectedProviders.length > 0) {
       return true;
     } else {
-      // return false;
-
-      return true; //uncomment before commit
+      return false;
     }
   }
 
