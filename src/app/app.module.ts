@@ -172,6 +172,8 @@ import { InputFieldComponent } from './shared/shared-components/input-field/inpu
 import { ChipComponent } from './shared/shared-components/chip/chip.component';
 import { ListItemComponent } from './shared/shared-components/list-item/list-item.component';
 import { WorkspacesMenuComponent } from './components/workspaces/workspaces-menu/workspaces-menu.component';
+import { TextareaComponent } from './shared/shared-components/textarea/textarea.component';
+import { AppUiMenuComponent } from './components/app-ui/app-ui-menu/app-ui-menu.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -286,7 +288,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     InputFieldComponent,
     ChipComponent,
     ListItemComponent,
-    WorkspacesMenuComponent
+    WorkspacesMenuComponent,
+    TextareaComponent,
+    AppUiMenuComponent
 
   ],
   imports: [

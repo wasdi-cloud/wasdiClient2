@@ -1,0 +1,22 @@
+<div class="menu-container">
+    <div>
+        <div class="menu-header">App User Interface</div>
+        <ul>
+            <li *ngFor="let oTab of m_aoTabs" [class.active]="m_sActiveTab === oTab.name"
+                (click)="setActiveTab(oTab.name)">{{oTab.name}}</li>
+            <li [class.active]="m_sActiveTab === 'help'" (click)="setActiveTab('help')">Help</li>
+            <li [class.active]="m_sActiveTab === 'history'" (click)="setActiveTab('history')">History</li>
+            <li [class.active]="m_sActiveTab === 'json'" (click)="setActiveTab('json')">JSON</li>
+        </ul>
+    </div>
+    <div>
+        <div class="menu-header">Run App</div>
+        <div class="run-app-container">
+            <label for="">Workspace</label>
+            <app-dropdown [m_sPlaceholder]="'Select Workspace'" [m_aoDropdownItems]="m_aoWorkspaces"></app-dropdown>
+            <app-button [m_sLabel]="'Run app'" [m_sIconLeft]="'rocket_launch'" [m_sSize]="'large'"></app-button>
+            <app-button [m_sLabel]="'New Workspace'" [m_sSize]="'large'" [m_bMuted]="true"
+                (click)="openNewWorkspaceDialog()"></app-button>
+        </div>
+    </div>
+</div>
