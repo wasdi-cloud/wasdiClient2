@@ -99,7 +99,6 @@ import { WapSelectAreaComponent } from './components/WAP-components/wap-select-a
 import { WapSliderComponent } from './components/WAP-components/wap-slider/wap-slider.component';
 import { WapTableComponent } from './components/WAP-components/wap-table/wap-table.component';
 import { WapTextboxComponent } from './components/WAP-components/wap-textbox/wap-textbox.component';
-import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap-tooltip.component';
 import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
 import { ShareUiComponent } from './shared/dialogs/share-dialog/share-ui/share-ui.component';
 import { StylesDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
@@ -174,6 +173,7 @@ import { ListItemComponent } from './shared/shared-components/list-item/list-ite
 import { WorkspacesMenuComponent } from './components/workspaces/workspaces-menu/workspaces-menu.component';
 import { TextareaComponent } from './shared/shared-components/textarea/textarea.component';
 import { AppUiMenuComponent } from './components/app-ui/app-ui-menu/app-ui-menu.component';
+import { SliderComponent } from './shared/shared-components/slider/slider.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -213,7 +213,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WapSliderComponent,
     WapTableComponent,
     WapTextboxComponent,
-    WapTooltipComponent,
     WapDisplayComponent,
     EditToolbarComponent,
     PlanMapComponent,
@@ -290,7 +289,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ListItemComponent,
     WorkspacesMenuComponent,
     TextareaComponent,
-    AppUiMenuComponent
+    AppUiMenuComponent,
+    SliderComponent
 
   ],
   imports: [
