@@ -38,6 +38,8 @@ export class DropdownComponent {
    */
   @Input() m_sPlaceholder?: string = "";
 
+  @Input() m_sLabel?: string = "";
+
   @Input() m_oController?: any;
 
   @Input() m_oDeleteFn?: (args: any, controller: any) => void;

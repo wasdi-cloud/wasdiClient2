@@ -1,3 +1,9 @@
+label {
+    color: var(--neutral95);
+    font-size: 14px;
+    font-weight: 400;
+}
+
 mat-select {
     /* Set width by default to 100% of parent */
     width: 100%;

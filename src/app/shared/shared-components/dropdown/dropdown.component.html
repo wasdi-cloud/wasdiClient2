@@ -1,3 +1,4 @@
+<label for="" *ngIf="m_sLabel">{{m_sLabel}}</label>
 <mat-select [multiple]="m_bIsMultiSelect" class="form-control" name="dropdown" [(value)]="m_aoSelectedItems"
     disableOptionCentering="'false'" (selectionChange)="emitSelectionChange($event)" placeholder="{{m_sPlaceholder}}"
     type="text">
