@@ -5,7 +5,7 @@
         (getOutput)="logOutput($event)"></app-wap-check-box>
 
     <!-- WAP Date Time Picker -->
-    <app-wap-date-time-picker *ngIf="oControl.type === 'date'" [(inputtedDate)]="oControl.m_sDate"
+    <app-wap-date-time-picker *ngIf="oControl.type === 'date'" [(m_oDateControl)]="getTabControls()[i]"
         (getDate)="logOutput($event)"></app-wap-date-time-picker>
 
     <!-- WAP Dropdown -->
