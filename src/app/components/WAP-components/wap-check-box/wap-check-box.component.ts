@@ -10,8 +10,7 @@ export class WapCheckBoxComponent {
   @Output() oCheckboxDetailsChange = new EventEmitter<any>(); 
 
   getOutput(oEvent) {
-    console.log(oEvent.checked)
-    this.oCheckboxDetails.m_bValue = oEvent.checked
+    this.oCheckboxDetails.m_bValue = oEvent.target.checked
     this.oCheckboxDetailsChange.emit(this.oCheckboxDetails); 
   }
 }

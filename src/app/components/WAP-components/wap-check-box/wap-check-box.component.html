@@ -1,3 +1,4 @@
-<div class="d-flex flex-row w-100 gap-2">
-    <mat-slide-toggle class="primary" (change)="getOutput($event)"checked="{{oCheckboxDetails.m_bValue}}"></mat-slide-toggle>
+<div class="d-flex flex-row gap-2 align-items-center" matTooltip="{{oCheckboxDetails.tooltip}}">
+    <input class="wasdi-checkbox" type="checkbox" name="{{oCheckboxDetails.label}}" id="" (change)="getOutput($event)">
+    <label for="{{oCheckboxDetails.label}}">{{oCheckboxDetails.label}}</label>
 </div>
