@@ -50,6 +50,8 @@ export class FilterPipe implements PipeTransform {
       }
       else if (item.publisher) {
         return item.publisher.toLocaleLowerCase().includes(searchText);
+      } else {
+        return item.toLocaleLowerCase().includes(searchText);
       }
 
     })
