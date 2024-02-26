@@ -92,7 +92,6 @@ import { WapCheckBoxComponent } from './components/WAP-components/wap-check-box/
 import { WapDropdownComponent } from './components/WAP-components/wap-dropdown/wap-dropdown.component';
 import { WapListBoxComponent } from './components/WAP-components/wap-list-box/wap-list-box.component';
 import { WapNumericBoxComponent } from './components/WAP-components/wap-numeric-box/wap-numeric-box.component';
-import { WapProductListComponent } from './components/WAP-components/wap-product-list/wap-product-list.component';
 import { WapProductsComboComponent } from './components/WAP-components/wap-products-combo/wap-products-combo.component';
 import { WapSearchEoImageComponent } from './components/WAP-components/wap-search-eo-image/wap-search-eo-image.component';
 import { WapSelectAreaComponent } from './components/WAP-components/wap-select-area/wap-select-area.component';
@@ -206,7 +205,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WapDropdownComponent,
     WapListBoxComponent,
     WapNumericBoxComponent,
-    WapProductListComponent,
     WapProductsComboComponent,
     WapSearchEoImageComponent,
     WapSelectAreaComponent,
