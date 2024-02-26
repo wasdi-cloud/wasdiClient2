@@ -5,8 +5,9 @@
     <nav aria-label="marketplace breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a routerLink="/marketplace">Marketplace</a></li>
-            <li class="breadcrumb-item"><a routerLink="/{{m_oProcessorInformation.processorName}}/appDetails">App
-                    Details</a></li>
+            <li class="breadcrumb-item"><a
+                    routerLink="/{{m_oProcessorInformation.processorName}}/appDetails">{{m_oProcessorInformation.friendlyName}}</a>
+            </li>
             <li class="breadcrumb-item active" attr.aria-current="{{m_oProcessorInformation.friendlyName + ' page'}}">
                 <a>Application Interface</a>
             </li>
@@ -14,12 +15,13 @@
     </nav>
     <div class="app-ui-container d-flex flex-row gap-4">
         <!-- Menu Component -->
-        <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)" [m_sActiveTab]="m_sActiveTab" [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
+        <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)"
+            (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" [m_sActiveTab]="m_sActiveTab"
+            [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
         <!-- WAPP Component outlet -->
         <app-wap-display [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " class="flex-fill"
             *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " [wapData]="oTab"
-            [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"
-            ></app-wap-display>
+            [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
 
         <!-- PROCESSOR HELP TAB -->
         <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">

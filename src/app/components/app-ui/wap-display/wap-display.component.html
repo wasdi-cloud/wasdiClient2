@@ -21,8 +21,8 @@
         (getUserInput)="logOutput($event)"></app-wap-numeric-box>
 
     <!-- Wap Combo Products List  -->
-    <app-wap-products-combo *ngIf="oControl.type==='productscombo'" [productsArray]="m_asProductNames"
-        [(oControlSelection)]="getTabControls()[i]"></app-wap-products-combo>
+    <app-wap-products-combo *ngIf="oControl.type==='productscombo'" [m_aoProducts]="m_aoProductsArray"
+        [(m_oControlSelection)]="getTabControls()[i]"></app-wap-products-combo>
 
     <!-- WAP Product List -->
     <app-wap-product-list *ngIf="oControl.type ==='productlist'"></app-wap-product-list>

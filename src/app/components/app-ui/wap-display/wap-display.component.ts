@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { ViewElementFactory } from 'src/app/shared/wap-components/view-element.factory';
@@ -15,7 +16,7 @@ export class WapDisplayComponent implements OnInit {
 
   m_aoViewElements: any[];
 
-  m_aoProductsArray: any[];
+  m_aoProductsArray: any[] = [];
   m_asProductNames: string[];
 
   constructor(private m_oProcessorService: ProcessorService, private m_oProductService: ProductService) { }
@@ -84,14 +85,14 @@ export class WapDisplayComponent implements OnInit {
 
   /**
    * Get products for workspace and pass to ProductsCombo child
-   * 
    */
   getWorkspaceProducts(): any {
-    if (this.workspaceId === null || this.workspaceId === undefined) {
-      return this.m_aoProductsArray;
-
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.workspaceId)) {
+      return [];
     } else {
       this.m_oProductService.getProductLightListByWorkspace(this.workspaceId).subscribe(oResponse => {
+
+
         this.m_aoProductsArray = oResponse
 
         return this.m_asProductNames = this.m_aoProductsArray.map(element => {

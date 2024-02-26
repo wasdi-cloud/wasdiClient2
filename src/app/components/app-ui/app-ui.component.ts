@@ -335,14 +335,14 @@ export class AppUiComponent implements OnInit {
     }
   }
 
-  getSelectedWorkspaceId(event) {
-    this.m_oSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === event.target.value);
-
-    if (this.m_oSelectedWorkspace?.workspaceId === undefined) {
-      return false
+  getSelectedWorkspaceId(oEvent) {
+    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
+      return false;
+    } else {
+      this.m_oActiveWorkspace = oEvent; 
+      this.m_oSelectedWorkspace = oEvent;
+      return true;
     }
-    console.log(this.m_oSelectedWorkspace)
-    return this.m_oSelectedWorkspace.workspaceId;
   }
 
   checkParams() {
