@@ -61,7 +61,7 @@ button {
 
 main {
   width: 100%;
-  min-height: calc(100vh - 3rem);
+  min-height: calc(100vh - 6rem);
 }
 
 div.app-outlet {
@@ -298,3 +298,19 @@ div.app-outlet {
 .floating-menu {
   background: #FFFFFF;
 }
+/* 
+.leaflet-bar a {
+  background-color: rgba(13, 16, 21, 0.8) !important;
+  color: #006526 !important;
+  border-radius: 50% !important;
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+  border: none !important;
+  border-radius: 50% !important;
+}
+
+.leaflet-touch .leaflet-control-layers .leaflect-control-layers-expanded{
+  border-radius: none !important;
+} */
