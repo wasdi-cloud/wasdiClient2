@@ -408,7 +408,7 @@ export class NewAppDialogComponent implements OnInit {
       next: oResponse => {
         this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oProcessorDetails).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("Processor Data Updated", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar("Processor Data Updated<br>Rebuild ongoing", "Close", "right", "bottom");
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog(`Error in updating ${this.m_oInputProcessor.processorName}`);
