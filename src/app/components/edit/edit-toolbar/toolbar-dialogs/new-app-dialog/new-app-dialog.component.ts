@@ -490,7 +490,19 @@ export class NewAppDialogComponent implements OnInit {
       this.m_oInputProcessor.isPublic,
       oSelectedFile).subscribe({
         next: oResponse => {
-          this.m_oNotificationDisplayService.openSnackBar(`Deployment of ${this.m_oInputProcessor.processorName} has started`, "Close");
+
+          let bOk = false;
+
+          if (oResponse != null) {
+            bOk = oResponse.boolValue
+          }
+
+          if (bOk) {
+            this.m_oNotificationDisplayService.openSnackBar(`Deployment of ${this.m_oInputProcessor.processorName} has started`, "Close");
+          }
+          else {
+            this.m_oNotificationDisplayService.openSnackBar(`Error: ${oResponse.stringValue} `, "Close");
+          }
           this.onDismiss();
         },
         error: oError => {
