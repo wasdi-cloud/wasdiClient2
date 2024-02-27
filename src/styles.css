@@ -61,7 +61,7 @@ button {
 
 main {
   width: 100%;
-  height: fit-content;
+  min-height: calc(100vh - 3rem);
 }
 
 div.app-outlet {

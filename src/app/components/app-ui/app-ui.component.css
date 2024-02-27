@@ -5,6 +5,8 @@ main {
 
 div.hero-image {
     background-image: url("src/assets/images/hero-images/hero-img1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     position: relative;
     left: -1.5rem;
     height: 200px;
