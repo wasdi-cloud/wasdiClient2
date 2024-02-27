@@ -1,8 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import * as L from 'leaflet';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { MapService } from 'src/app/services/map.service';
+import { TranslateService } from '@ngx-translate/core';
+
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
+import Geocoder from 'leaflet-control-geocoder';
+import * as L from 'leaflet';
+
 
 @Component({
   selector: 'app-wap-select-area',
@@ -22,11 +26,13 @@ export class WapSelectAreaComponent implements OnInit {
   m_aoManualBBoxSubscription: any;
   m_oGeoJSON: any;
   m_sPolygon: string;
+
+  m_sMapId: string = `${Date.now() + Math.random()}`;
   constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService) { }
 
   ngOnInit(): void {
-    //this.m_oMapService.setDrawnItems();
-    //this.m_oMapService.initTilelayer();
+    this.m_oMapService.setDrawnItems();
+    this.m_oMapService.initTilelayer();
 
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
     this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
@@ -39,7 +45,7 @@ export class WapSelectAreaComponent implements OnInit {
     this.m_bIsValid = true;
 
     this.m_aoManualBBoxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult)) {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
         this.m_oGeoJSON = oResult.toGeoJSON();
         this.m_sPolygon = this.getPolygon();
 
@@ -48,11 +54,19 @@ export class WapSelectAreaComponent implements OnInit {
           polygon: this.m_sPolygon
         });
       }
-    })
-  }
+    });
 
-  onMapReady(oMap) {
-    this.m_oMapService.addManualBbox(oMap)
+    let oController = this;
+
+    setTimeout(function () {
+      console.log(oController.m_sMapId)
+      // this.m_sMapId = ;
+      let oMap = oController.m_oMapService.initMapSingleton(oController.m_sMapId);
+      oController.addBoundingBoxDrawerOnMap(oMap);
+      // console.log()
+      //is it an option?
+
+    }, 500);
   }
 
   onDrawCreated(event) {
@@ -94,11 +108,12 @@ export class WapSelectAreaComponent implements OnInit {
   }
 
   checkArea(layer) {
+    let oController = this
     /**
      The following happens in this.onDrawCreated():  
-      oController.boundingBox.northEast = layer._bounds._northEast;
-      oController.boundingBox.southWest = layer._bounds._southWest;
-    */
+     */
+    this.oMapInput.oBoundingBox.northEast = layer._bounds._northEast;
+    this.oMapInput.oBoundingBox.southWest = layer._bounds._southWest;
 
     let latlngs = layer.getLatLngs();
     // height and width respectively
@@ -158,4 +173,85 @@ export class WapSelectAreaComponent implements OnInit {
     }
     return sCoordinatesPolygon;
   }
+
+  addBoundingBoxDrawerOnMap(oMap) {
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMap)) {
+      return null;
+    }
+
+    this.m_oDrawnItems = new L.FeatureGroup();
+
+    oMap.addLayer(this.m_oDrawnItems);
+
+    var oOptions = {
+
+
+      edit: {
+        featureGroup: this.m_oDrawnItems,//draw items are the "voice" of menu
+        edit: false,// hide edit button
+        remove: false// hide remove button
+      }
+    };
+
+    let oDrawControl = new L.Control.Draw();
+
+    oDrawControl.setPosition('topright');
+
+    oDrawControl.setDrawingOptions({
+      // what kind of shapes are disable/enable
+      marker: false,
+      polyline: false,
+      circle: false,
+      circlemarker: false,
+      polygon: false,
+      rectangle: <any>{ showArea: false }
+    })
+
+    oMap.addControl(oDrawControl);
+
+    //Without this.m_oWasdiMap.on() the shape isn't saved on map
+    let oController = this;
+    oMap.on(L.Draw.Event.CREATED, function (event) {
+      // Clear out old layer: 
+      oController.m_oDrawnItems.clearLayers();
+      let oLayer = event.layer;
+      console.log(oLayer)
+      let bIsValid = true;
+      let oResult = oController.checkArea(oLayer);
+
+      bIsValid = oResult;
+
+
+      if (!bIsValid) {
+        //show error message
+        // turn the bounding box red
+        oLayer.options.color = "#ff0000";
+        // erase the bounding box
+        oController.oMapInput.oBoundingBox.northEast = "";
+        oController.oMapInput.oBoundingBox.southWest = "";
+      }
+      //save new shape in map
+      oController.m_oDrawnItems.addLayer(oLayer);
+      oController.oMapInputChange.emit(oController.oMapInput);
+    });
+
+
+
+    oMap.on(L.Draw.Event.DELETESTOP, function (event) {
+      console.log("DELETE STOP")
+      // oController.m_oDrawOptions.clearLayers();
+      // let layer = event.layers;
+    });
+
+    this.m_oMapService.addManualBbox(oMap)
+
+    let oGeocoder = new Geocoder({
+      position: 'topleft'
+    });
+
+    oGeocoder.addTo(oMap);
+    return oMap;
+  }
+
 }

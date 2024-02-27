@@ -141,17 +141,17 @@ export class MapService {
     });
 
     this.m_oLayersControl = L.control.layers(
-     {
+      {
         'Standard': this.m_oOSMBasic,
         "OpenTopoMap": this.m_oOpenTopoMap,
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
         "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
-      }, 
+      },
       {},
       { 'position': 'bottomright' }
     )
-}
+  }
 
   /**
    * Set Drawn Items
@@ -216,23 +216,26 @@ export class MapService {
    * @param sMapDiv 
    */
   initMapSingleton(sMapDiv) {
-    FadeoutUtils.verboseLog("MapService.initMapSingleton: creating the singleton map");
-
-    let oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    var oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       maxZoom: 18,
       // this map option disables world wrapping. by default, it is false.
-      //continuousWorld: false,
+      continuousWorld: false,
       // this option disables loading tiles outside of the world bounds.
-      //noWrap: true
+      noWrap: true
     });
 
-    let oMap = L.map(sMapDiv, {
+    var oMap = L.map(sMapDiv, {
       zoomControl: false,
+      //layers: [this.m_oOSMBasic, this.m_oOpenTopoMap, this.m_oEsriWorldStreetMap, this.m_oEsriWorldImagery, this.m_oNASAGIBSViirsEarthAtNight2012],
       layers: [oOSMBasic],
       keyboard: false
+      //maxZoom: 22
     });
+
+    // coordinates in map find this plugin in lib folder
+    // L.control.mousePosition().addTo(oMap);
 
     //scale control
     L.control.scale({
@@ -241,7 +244,7 @@ export class MapService {
     }).addTo(oMap);
 
     //layers control
-    let oLayersControl = L.control.layers(
+    var oLayersControl = L.control.layers(
       {
         "Standard": this.m_oOSMBasic,
         "OpenTopoMap": this.m_oOpenTopoMap,
@@ -254,23 +257,21 @@ export class MapService {
         'position': 'bottomright'
       }
     );
-
     oLayersControl.addTo(oMap);
 
     // center map
-    let southWest = L.latLng(0, 0),
+    var southWest = L.latLng(0, 0),
       northEast = L.latLng(0, 0),
       oBoundaries = L.latLngBounds(southWest, northEast);
 
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
-    let oActiveBaseLayer = oOSMBasic;
 
     //add event on base change
     oMap.on('baselayerchange', function (e) {
       // console.log(e);
-      // e.layer.bringToBack();
+      //e.layer.bringToBack();
       // oActiveBaseLayer = e;
     });
 
@@ -770,61 +771,61 @@ export class MapService {
     oWmsLayer.setZIndex(1000);
     oWmsLayer.addTo(oMap);
     return true;
-  } 
-
-
-addManualBbox(oMap: any) {
-  let oController = this;
-  L.Control.Button = L.Control.extend({
-    options: {
-      position: "topleft"
-    },
-    onAdd: function (map) {
-      let container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
-      let button = L.DomUtil.create('a', 'leaflet-control-button', container);
-      L.DomEvent.disableClickPropagation(button);
-      L.DomEvent.on(button, 'click', function () {
-        let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent)
-        oDialog.afterClosed().subscribe(oResult => {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
-            if (isNaN(oResult.north) || isNaN(oResult.south) || isNaN(oResult.east) || isNaN(oResult.west)) {
-              return;
-            } else {
-              let fNorth = parseFloat(oResult.north);
-              let fSouth = parseFloat(oResult.south);
-              let fEast = parseFloat(oResult.east);
-              let fWest = parseFloat(oResult.west);
-
-              let aoBounds = [[fNorth, fWest], [fSouth, fEast]];
-              oController.addManualBboxLayer(aoBounds);
-            }
-          }
-        })
-      });
-      button.innerHTML = 'M';
-      container.title = "Manual Bounding Box";
-
-      return container;
-    },
-    onRemove: function (map) { },
-  })
-  let oControl = new L.Control.Button();
-  oControl.addTo(oMap);
-}
-
-addManualBboxLayer(aoBounds) {
-  let oLayer = L.rectangle(aoBounds, { color: "#3388ff", weight: 1 });
-  // oController.m_oRectangleOpenSearch = oLayer;
-
-  //remove old shape
-  if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
-    this.m_oDrawnItems.clearLayers();
   }
 
-  this.m_oDrawnItems.addLayer(oLayer);
-  this.zoomOnBounds(aoBounds);
 
-  //Emit bounding box to listening componenet:
-  this.m_oManualBoundingBoxSubscription.next(oLayer);
-}
+  addManualBbox(oMap: any) {
+    let oController = this;
+    L.Control.Button = L.Control.extend({
+      options: {
+        position: "topright"
+      },
+      onAdd: function (map) {
+        let container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+        let button = L.DomUtil.create('a', 'leaflet-control-button', container);
+        L.DomEvent.disableClickPropagation(button);
+        L.DomEvent.on(button, 'click', function () {
+          let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent)
+          oDialog.afterClosed().subscribe(oResult => {
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+              if (isNaN(oResult.north) || isNaN(oResult.south) || isNaN(oResult.east) || isNaN(oResult.west)) {
+                return;
+              } else {
+                let fNorth = parseFloat(oResult.north);
+                let fSouth = parseFloat(oResult.south);
+                let fEast = parseFloat(oResult.east);
+                let fWest = parseFloat(oResult.west);
+
+                let aoBounds = [[fNorth, fWest], [fSouth, fEast]];
+                oController.addManualBboxLayer(aoBounds);
+              }
+            }
+          })
+        });
+        button.innerHTML = 'M';
+        container.title = "Manual Bounding Box";
+
+        return container;
+      },
+      onRemove: function (map) { },
+    })
+    let oControl = new L.Control.Button();
+    oControl.addTo(oMap);
+  }
+
+  addManualBboxLayer(aoBounds) {
+    let oLayer = L.rectangle(aoBounds, { color: "#3388ff", weight: 1 });
+    // oController.m_oRectangleOpenSearch = oLayer;
+
+    //remove old shape
+    if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
+      this.m_oDrawnItems.clearLayers();
+    }
+
+    this.m_oDrawnItems.addLayer(oLayer);
+    this.zoomOnBounds(aoBounds);
+
+    //Emit bounding box to listening componenet:
+    this.m_oManualBoundingBoxSubscription.next(oLayer);
+  }
 }
