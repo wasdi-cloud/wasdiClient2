@@ -1,21 +1,19 @@
 div.nav-container {
 	height: 100%;
+	max-height: calc(100vh - 3rem);
 	overflow: hidden;
 	position: sticky;
+	top: 3rem;
 	z-index: 2;
 }
 
 nav {
-	position: relative;
 	background: var(--neutral50Brand);
 	border-top-right-radius: 8px;
-	height: 100%;
-	padding-top: 16px;
-	padding-bottom: 24px;
-	width: 250px;
+	position: relative;
 	overflow: hidden;
+	width: 250px;
 	z-index: 1;
-
 }
 
 div.menu-control {

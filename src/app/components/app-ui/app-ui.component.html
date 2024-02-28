@@ -1,123 +1,62 @@
-<div class="toolbar-container d-flex flex-row justify-content-between pt-3 px-3">
-    <a (click)="marketplaceReturn()" class="btn btn-success col-auto">{{'WAP_BACK' | translate}}</a>
-
-    <form class="workspace-options-container d-flex flex-row align-items-center col-auto gap-2" name="workspaceForm"
-        #f="ngForm" (ngSubmit)="f.form && runApplication()">
-        <div class="d-flex flex-column">
-            <div class="d-flex flex-row gap-1">
-                <input type="radio" name="openWorkspace" id="newWorkspace" value="false"
-                    (change)="setOpenNewWorkspace($event.target)" [checked]="m_bOpenWorkspace === false">
-                <label for="newWorkspace">New Workspace</label>
-            </div>
-            <div class="d-flex flex-row gap-1">
-                <input type="radio" name="openWorkspace" id="openWorkspace" value="true"
-                    (change)="setOpenNewWorkspace($event.target)" [checked]="m_bOpenWorkspace === true">
-                <label for="openWorkspace">Open Workspace</label>
-            </div>
-        </div>
-        <input *ngIf="m_bOpenWorkspace === false" type="text" name="newWorkspaceName" id="" class="form-control"
-            style="width: 15rem" placeholder="{{'WAP_NEW_WORKSPACE' | translate}}"
-            [(ngModel)]="workspaceForm.sNewWorkspaceName" />
-        <select *ngIf="m_bOpenWorkspace === true" class="form-select" name="existingWorkspace" style="width: 20rem;"
-            (change)="getSelectedWorkspaceId($event)">
-            <option *ngIf="!m_oActiveWorkspace.workspaceName" value="null" disabled="true" [selected]="true">
-                {{'WAP_OPEN_WORKSPACE' |
-                translate}}</option>
-            <option value="{{oWorkspace.workspaceName}}" [selected]="m_oActiveWorkspace.workspaceId === oWorkspace.workspaceId? true : false"
-                *ngFor="let oWorkspace of m_aoExistingWorkspaces">
-                {{oWorkspace.workspaceName}}</option>
-        </select>
-        <button type="submit" class="btn btn-success">{{'WAP_RUN' | translate}}</button>
-    </form>
-</div>
-<div class="app-info-container d-flex flex-row justify-content-between pt-3 px-3" style="height:13vh">
-    <div class="">
-        <h2>{{processorInformation.friendlyName}}</h2>
-        <div class="d-flex flex-row align-items-center gap-2">
-            <div>{{'WAP_PUBLISHER' | translate}}: {{processorInformation.publisher}}</div>
-            <button class="btn btn-success btn-sm" (click)="openEditAppDialog()"
-                *ngIf="this.m_sUserId === processorInformation.publisher || processorInformation.readOnly === false">Edit</button>
+<main>
+    <div class="hero-image d-flex flex-column justify-content-center align-items-center">
+        <div class="hero-text text-light text-center">
+            <h1 class="font-bold">{{m_oProcessorInformation.friendlyName}}</h1>
+            <p class="font-bold">Publisher: <span class="font-light">{{m_oProcessorInformation.publisher}}</span></p>
         </div>
     </div>
-    <div>
-        <p *ngIf="isCollapsed === true" class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP_MORE' | translate }}
-        </p>
-        <p *ngIf="isCollapsed === false" class="btn btn-secondary" (click)="toggleCollapse()">{{'WAP_LESS' | translate
-            }}</p>
-    </div>
-</div>
-<div class="collapsible d-flex flex-row justify-content-between py-2 px-3" [@collapse]="isCollapsed">
-    <div class="description-container">
-        <p>{{'WAP_DESCRIPTION2' | translate}}:</p>
-        <p>{{processorInformation.processorDescription}}</p>
-    </div>
-    <div class="contact-container">
-        <p>{{'WAP_CONTACT' | translate}}: <span>{{processorInformation.email ? processorInformation.email :
-                processorInformation.publisher}}</span></p>
-        <p>{{'WAP_WEB' | translate}}: <span>{{processorInformation.link}}</span></p>
-        <p>{{'WAP_LAST_UPDATE' | translate}}: <span>{{processorInformation.updateDate}}</span></p>
-    </div>
-</div>
-<div class="controls-container" style="height:67vh">
-    <div class="d-flex flex-row px-3">
-        <div class="side-menu col-3 bg-primary">
-            <ul class="list-group">
-                <li class="list-group-item list-group-item-action list-group-item-primary"
-                    *ngFor="let oTab of m_aoTabs; let i = index" (click)='changeActiveTab(oTab.name)'
-                    [ngClass]="m_sActiveTab === oTab.name ? 'active': '' ">
-                    {{oTab.name | uppercase}}
-                </li>
-                <li class="list-group-item list-group-item-action list-group-item-primary"
-                    (click)="changeActiveTab('help')" [ngClass]="m_sActiveTab === 'help'? 'active': '' ">
-                    HELP
-                </li>
-                <li class="list-group-item list-group-item-action list-group-item-primary"
-                    (click)="changeActiveTab('history')" [ngClass]="m_sActiveTab === 'history'? 'active': '' ">
-                    HISTORY
-                </li>
-                <li class="list-group-item list-group-item-action list-group-item-primary"
-                    (click)="changeActiveTab('json_params')" [ngClass]="m_sActiveTab === 'json_params'? 'active': '' ">
-                    JSON
-                </li>
-            </ul>
+    <!-- Breadcrumb navigation -->
+    <nav aria-label="marketplace breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/marketplace">Marketplace</a></li>
+            <li class="breadcrumb-item"><a
+                    routerLink="/{{m_oProcessorInformation.processorName}}/appDetails">{{m_oProcessorInformation.friendlyName}}</a>
+            </li>
+            <li class="breadcrumb-item active" attr.aria-current="{{m_oProcessorInformation.friendlyName + ' page'}}">
+                <a>Application Interface</a>
+            </li>
+        </ol>
+    </nav>
+    <div class="app-ui-container d-flex flex-row gap-4">
+        <!-- Menu Component -->
+        <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)"
+            (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)"
+            [m_sActiveTab]="m_sActiveTab" [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
+        <!-- WAPP Component outlet -->
+        <app-wap-display [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " class="flex-fill"
+            *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " [wapData]="oTab"
+            [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
+
+        <!-- PROCESSOR HELP TAB -->
+        <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
         </div>
-        <div class="control-panel overflow-scroll col-9">
-            <app-wap-display *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' "
-                [wapData]="oTab" [renderAsStrings]="m_bRenderAsStrings"
-                [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
 
-            <!-- PROCESSOR HELP TAB -->
-            <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown"
-                [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
-            </div>
-
-            <!-- PROCESSOR HISTORY TABLE TAB -->
-            <div class="history-container table-wrapper-scroll scroll-bar"
-                [ngClass]="m_sActiveTab === 'history'? '': 'd-none' ">
-                <table class="history-table table">
-                    <thead class="bg-primary" style="position: sticky;
+        <!-- PROCESSOR HISTORY TABLE TAB -->
+        <div class="history-container table-wrapper-scroll scroll-bar"
+            [ngClass]="m_sActiveTab === 'history'? '': 'd-none' ">
+            <table class="history-table table">
+                <thead class="bg-primary" style="position: sticky;
                 top: 0;
                 z-index: 1;">
-                        <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Workspace</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let historyLog of processorHistory">
-                            <td>{{historyLog.operationDate}}</td>
-                            <td>{{historyLog.status}}</td>
-                            <td>{{historyLog.workspaceName}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- PROCESSOR JSON TAB -->
-            <div class="scroll-bar" [ngClass]="m_sActiveTab === 'json_params' ? '' : 'd-none'">
-                <textarea readonly style="font-family:'Courier New',serif;font-size: 16px;width: 100%;" rows="40"
-                    [(ngModel)]="m_sJSONParam"></textarea>
-            </div>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Workspace</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let historyLog of processorHistory">
+                        <td>{{historyLog.operationDate}}</td>
+                        <td>{{historyLog.status}}</td>
+                        <td>{{historyLog.workspaceName}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- PROCESSOR JSON TAB -->
+        <div class="scroll-bar" [ngClass]="m_sActiveTab === 'json_params' ? '' : 'd-none'">
+            <textarea readonly style="font-family:'Courier New',serif;font-size: 16px;width: 100%;" rows="40"
+                [(ngModel)]="m_sJSONParam"></textarea>
         </div>
     </div>
-</div>
+</main>

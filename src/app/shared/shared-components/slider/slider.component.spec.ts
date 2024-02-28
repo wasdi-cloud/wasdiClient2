@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WapProductListComponent } from './wap-product-list.component';
+import { SliderComponent } from './slider.component';
 
-describe('WapProductListComponent', () => {
-  let component: WapProductListComponent;
-  let fixture: ComponentFixture<WapProductListComponent>;
+describe('SliderComponent', () => {
+  let component: SliderComponent;
+  let fixture: ComponentFixture<SliderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WapProductListComponent ]
+      declarations: [ SliderComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(WapProductListComponent);
+    fixture = TestBed.createComponent(SliderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

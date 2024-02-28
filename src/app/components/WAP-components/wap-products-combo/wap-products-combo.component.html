@@ -1,7 +1,4 @@
-    <input type="text" placeholder="{{productsArray === undefined ? 'Select a Workspace from top form' : 'Select a Product'}}"
-        [matAutocomplete]="auto" class="form-control">
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getUserInput($event)">
-        <mat-option *ngFor="let product of productsArray" [value]="product">
-            {{product}}
-        </mat-option>
-    </mat-autocomplete>
+<app-dropdown [m_bHasSearch]="true"
+    [m_sPlaceholder]="m_aoProducts.length > 0 ? 'Select a Product' : 'Select a Workspace with Products'"
+    [m_aoDropdownItems]="m_aoProducts" [m_sLabel]="m_oControlSelection.label"
+    (m_oSelectionChange)="getUserInput($event)" [m_bFileExt]="true"></app-dropdown>

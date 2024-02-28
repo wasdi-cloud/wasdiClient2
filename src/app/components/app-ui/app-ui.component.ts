@@ -69,8 +69,8 @@ export class AppUiComponent implements OnInit {
     private m_oTranslate: TranslateService,
     private oWorkspaceService: WorkspaceService) { }
   //Processor Information
-  processorName: string = this.m_oConstantsService.getSelectedApplication();
-  processorInformation: any = {} as Application;
+  m_sProcessorName: string = this.m_oConstantsService.getSelectedApplication();
+  m_oProcessorInformation: any = {} as Application;
 
   workspaceForm: any = {
     sNewWorkspaceName: null,
@@ -122,15 +122,15 @@ export class AppUiComponent implements OnInit {
   ngOnInit(): void {
     this.m_sUserId = this.m_oConstantsService.getUser().userId;
     this.fetchWorkspaces();
-    if (this.processorName) {
-      this.getProcessorDetails(this.processorName);
-      this.getProcessorUI(this.processorName);
+    if (this.m_sProcessorName) {
+      this.getProcessorDetails(this.m_sProcessorName);
+      this.getProcessorUI(this.m_sProcessorName);
     }
     else if (this.m_oActivatedRoute.snapshot.params['processorName']) {
-      this.processorName = this.m_oActivatedRoute.snapshot.params['processorName'];
-      this.m_oConstantsService.setSelectedApplication(this.processorName);
-      this.getProcessorDetails(this.processorName);
-      this.getProcessorUI(this.processorName);
+      this.m_sProcessorName = this.m_oActivatedRoute.snapshot.params['processorName'];
+      this.m_oConstantsService.setSelectedApplication(this.m_sProcessorName);
+      this.getProcessorDetails(this.m_sProcessorName);
+      this.getProcessorUI(this.m_sProcessorName);
     }
     else {
       let oDialogData = new ErrorDialogModel("Error!", "Problem retrieving Processor Name");
@@ -142,9 +142,7 @@ export class AppUiComponent implements OnInit {
 
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     if (this.m_oActiveWorkspace !== null) {
-      console.log("active workspace")
       this.workspaceForm.sExistingWorkspace = this.m_oActiveWorkspace.workspaceName;
-      console.log(this.m_oActiveWorkspace)
     }
   }
 
@@ -170,23 +168,25 @@ export class AppUiComponent implements OnInit {
     })
   }
 
+
   /**
    * Change Active Tab
    */
-  changeActiveTab(sTab) {
+  getSelectedTab(sTab) {
+    console.log(this.m_sActiveTab)
     if (this.m_sActiveTab !== sTab) {
       this.m_sActiveTab = sTab;
     }
 
     if (sTab === 'help') {
-      this.getHelpFromProcessor(this.processorName);
+      this.getHelpFromProcessor(this.m_sProcessorName);
     }
 
     if (sTab === 'history') {
       this.showHistory();
     }
 
-    if (sTab === 'json_params') {
+    if (sTab === 'json') {
       this.showParamsJSON();
     }
 
@@ -205,7 +205,7 @@ export class AppUiComponent implements OnInit {
    * Load the history of this user with this application
    */
   showHistory() {
-    this.m_oProcessorWorkspaceService.getProcessesByProcessor(this.processorName).subscribe(response => {
+    this.m_oProcessorWorkspaceService.getProcessesByProcessor(this.m_sProcessorName).subscribe(response => {
       this.processorHistory = response
     })
   }
@@ -225,7 +225,7 @@ export class AppUiComponent implements OnInit {
    */
   getProcessorDetails(processorName: string) {
     return this.m_oProcessorService.getMarketplaceDetail(processorName).subscribe(response => {
-      this.processorInformation = response;
+      this.m_oProcessorInformation = response;
     })
   }
 
@@ -332,14 +332,14 @@ export class AppUiComponent implements OnInit {
     }
   }
 
-  getSelectedWorkspaceId(event) {
-    this.m_oSelectedWorkspace = this.m_aoExistingWorkspaces.find(oWorkspace => oWorkspace.workspaceName === event.target.value);
-
-    if (this.m_oSelectedWorkspace?.workspaceId === undefined) {
-      return false
+  getSelectedWorkspaceId(oEvent) {
+    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
+      return false;
+    } else {
+      this.m_oActiveWorkspace = oEvent; 
+      this.m_oSelectedWorkspace = oEvent;
+      return true;
     }
-    console.log(this.m_oSelectedWorkspace)
-    return this.m_oSelectedWorkspace.workspaceId;
   }
 
   checkParams() {
@@ -380,15 +380,14 @@ export class AppUiComponent implements OnInit {
   }
 
   marketplaceReturn() {
-    this.changeActiveTab('')
-    this.m_oRouter.navigateByUrl(`${this.processorName}/appDetails`)
+    this.m_oRouter.navigateByUrl(`${this.m_sProcessorName}/appDetails`)
   }
 
   openEditAppDialog() {
     this.m_oDialog.open(NewAppDialogComponent, {
       data: {
         editMode: true,
-        inputProcessor: this.processorInformation
+        inputProcessor: this.m_oProcessorInformation
       },
       width: '70vw',
       height: '70vh'
@@ -398,6 +397,10 @@ export class AppUiComponent implements OnInit {
   setOpenNewWorkspace(oInput: any): void {
     let parsedInput = JSON.parse(oInput.value.toLowerCase());
     this.m_bOpenWorkspace = parsedInput;
+  }
+
+  getExecuteEvent(oEvent) {
+    this.runApplication();
   }
 
 }

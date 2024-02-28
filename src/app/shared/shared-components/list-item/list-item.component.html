@@ -16,7 +16,7 @@
     <!-- Contents if the List item is of Product Type: -->
     <div class="product-item-container d-flex flex-row justify-content-between align-items-start w-100"
         *ngIf="m_bProductItem">
-        <div class="pe-1 d-flex flex-column align-items-center text-center">
+        <div *ngIf="!m_oProductListItem.preview" class="pe-1 d-flex flex-column align-items-center text-center">
             <span class="material-symbols-outlined">
                 {{m_sIcon}}
             </span>
@@ -24,22 +24,44 @@
                 {{m_oProductListItem.summary.Size}}
             </span>
         </div>
-        <div class="product-info-container">
-            <p class="d-flex flex-row gap-1">Name:<span>{{m_oProductListItem.title}}</span></p>
-            <p>Rel Orbit: <span>{{m_oProductListItem.properties.relativeOrbitNumber}}</span></p>
-            <p>Provider: <span>{{m_oProductListItem.provider}}</span></p>
-            <p>Product Type: <span>{{m_oProductListItem.properties.productType}}</span></p>
-            <p>Date: <span>{{m_oProductListItem.properties.date | date: 'short'}}</span>
-            </p>
+        <div *ngIf="m_oProductListItem.preview" class=" preview-layer-image">
+            <img src={{m_oProductListItem.preview}} alt="Image" style="height: 82px;width: 82px; ">
         </div>
-        <div class="toolbar d-flex flex-row gap-1">
-            <span class="material-symbols-outlined" (click)="m_oInfoCallbackFn(m_oProductListItem)" matTooltip="Properties">
+        <div class="product-info-container flex-fill">
+            <p class="d-flex flex-row gap-1">Name:<span>{{m_oProductListItem.title}}</span></p>
+            <p *ngIf="m_bIsLightProduct === true">{{"IMPORT_PRODUCT_LIST_POLARIZATION"|translate}}
+                <span>{{m_oProductListItem.properties.polarisationmode
+                    }}</span>
+            </p>
+            <p>Rel Orbit: <span>{{m_oProductListItem.properties.relativeOrbitNumber?
+                    m_oProductListItem.properties.relativeOrbitNumber :
+                    m_oProductListItem.properties.relativeorbitnumber}}</span></p>
+            <p *ngIf="m_bIsLightProduct === true">Platform Name:
+                <span>{{m_oProductListItem.properties.platformname}}</span>
+            </p>
+            <p *ngIf="m_bIsLightProduct === true">{{"IMPORT_PRODUCT_LIST_SENSOR"|translate}}
+                <span>{{m_oProductListItem.properties.sensoroperationalmode}}</span>
+            </p>
+            <p *ngIf="m_bIsLightProduct === false">Provider: <span>{{m_oProductListItem.provider}}</span></p>
+            <p *ngIf="m_bIsLightProduct === false">Product Type:
+                <span>{{m_oProductListItem.properties.productType}}</span>
+            </p>
+            <p *ngIf="m_bIsLightProduct === false">Date: <span>{{m_oProductListItem.properties.date | date:
+                    'short'}}</span>
+            </p>
+
+        </div>
+        <div *ngIf="m_bIsLightProduct === false" class="toolbar d-flex flex-row gap-1">
+            <span class="material-symbols-outlined" (click)="m_oInfoCallbackFn(m_oProductListItem)"
+                matTooltip="Properties">
                 info
             </span>
-            <span class="material-symbols-outlined" (click)="m_oZoomCallbackFn(m_oProductListItem.rectangle)" matTooltip="Zoom to Product">
+            <span class="material-symbols-outlined" (click)="m_oZoomCallbackFn(m_oProductListItem.rectangle)"
+                matTooltip="Zoom to Product">
                 zoom_in
             </span>
-            <span class="material-symbols-outlined" (click)="m_oAddCallbackFn(m_oProductListItem)" matTooltip="Add to Workspace">
+            <span class="material-symbols-outlined" (click)="m_oAddCallbackFn(m_oProductListItem)"
+                matTooltip="Add to Workspace">
                 add_box
             </span>
         </div>

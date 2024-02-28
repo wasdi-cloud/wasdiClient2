@@ -6,12 +6,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./wap-numeric-box.component.css']
 })
 export class WapNumericBoxComponent {
-  @Input() inputText!: string; 
-  @Output()inputTextChange = new EventEmitter<string>(); 
+  @Input() oNumericInfo: any;
+  @Output() oNumericInfoChange = new EventEmitter<string>();
 
   getUserInput(value: string) {
-    this.inputText = value; 
-    console.log(this.inputText)
-    this.inputTextChange.emit(this.inputText)
+    this.oNumericInfo.m_sText = value;
+    this.oNumericInfoChange.emit(this.oNumericInfo);
   }
 }

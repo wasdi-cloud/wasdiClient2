@@ -1,0 +1,64 @@
+.wasdi-slider {
+    width: 100%
+}
+
+.wasdi-slider {
+    --mdc-slider-active-track-color: #009036;
+    --mdc-slider-inactive-track-color: #C7CBD3;
+    --mdc-slider-disabled-active-track-color: #697589;
+    --mat-mdc-focus-indicator-color: green;
+
+    --mat-slider-focus-state-layer-color: rgba(0, 144, 54, 0.12);
+}
+
+.wasdi-slider:disabled {
+    --mdc-slider-active-track-color: #697589;
+}
+
+::ng-deep.wasdi-slider .mdc-slider__thumb .mdc-slider__thumb-knob {
+    border: 2px solid #009036;
+    border-radius: 50%;
+    color: #FFFFFF;
+    background-color: #FFFFFF;
+    height: 16px;
+    width: 16px;
+}
+
+::ng-deep .mat-ripple {
+    width: 4px;
+}
+
+::ng-deep .mat-mdc-focus-indicator {
+    position: relative;
+    top: 10px;
+    left: 10px;
+    border-radius: 50%;
+}
+
+::ng-deep.wasdi-slider .mat-mdc-slider-visual-thumb .mat-ripple {
+    height: 28px;
+    width: 28px;
+}
+
+::ng-deep .mat-mdc-slider .mdc-slider__thumb--focused .mdc-slider__thumb-knob {
+    background-color: #FFFFFF !important;
+    border: 2px solid #009036 !important;
+    z-index: 999;
+}
+
+::ng-deep .mat-mdc-slider.mdc-slider--disabled .mdc-slider__thumb-knob {
+    background-color: #FFFFFF !important;
+    border: 2px solid #697589 !important;
+}
+
+::ng-deep.wasdi-slider.no-handle .mdc-slider__thumb .mdc-slider__thumb-knob {
+    display: none;
+}
+
+::ng-deep .mat-mdc-slider.mdc-slider--disabled .mdc-slider__track--inactive {
+    background-color: #697589 !important;
+}
+
+::ng-deep .mat-mdc-slider.mdc-slider--disabled .mdc-slider__track--active_fill {
+    background-color: #697589 !important;
+}

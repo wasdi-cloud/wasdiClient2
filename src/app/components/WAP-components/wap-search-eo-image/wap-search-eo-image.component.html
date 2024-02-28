@@ -1,1 +1,20 @@
-<p>wap-search-eo-image works!</p>
+<div [hidden]="m_bAreVisibleProducts">
+    <div>{{m_oControlInput.label}}</div>
+    <app-wap-select-area [(oMapInput)]="m_oControlInput.oSelectArea"></app-wap-select-area>
+    <div class="d-flex flex-row align-items-center justify-content-between">
+        <div class="d-flex flex-row gap-2">
+            <app-input-field [m_sInputType]="'date'" [m_sLabel]="'From'"
+                (m_oInputChange)="getDateInput($event)"></app-input-field>
+            <app-input-field [m_sInputType]="'date'" [m_sLabel]="'To'"
+                (m_oInputChange)="getDateInput($event)"></app-input-field>
+        </div>
+        <app-button [m_sLabel]="'Search'" [m_sIconLeft]="'search'"
+            [m_bDisabled]="!m_oControlInput.oSelectArea.oBoundingBox.northEast" (click)="lightSearch()"></app-button>
+    </div>
+</div>
+
+<!-- Search Results Container -->
+<div *ngIf="m_bAreVisibleProducts">
+    <app-list-item *ngFor="let oProduct of m_oControlInput.oTableOfProducts.aoProducts" [m_bParentItem]="false"
+        [m_bProductItem]="true" [m_sLabel]="" [m_bIsSelected]="false" [m_oProductListItem]="oProduct" [m_bIsLightProduct]="true"></app-list-item>
+</div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 
 @Component({
@@ -6,20 +6,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './wap-slider.component.html',
   styleUrls: ['./wap-slider.component.css']
 })
-export class WapSliderComponent {
+export class WapSliderComponent implements OnInit{
   @Input() oSliderInput: any;
   @Output() oSliderInputChange = new EventEmitter<any>();
 
-  formatLabel(iValue: number): string {
-    if (iValue >= 1000) {
-      return Math.round(iValue / 1000) + 'k';
-    }
-    return `${iValue}`;
+  ngOnInit(): void {
   }
 
-  getSliderInput(oEvent: any) {
-    this.oSliderInput.m_iValue = oEvent.srcElement.value;
-
+  getSelectionChange(oEvent) {
+    this.oSliderInput.m_iValue = oEvent
     this.oSliderInputChange.emit(this.oSliderInput); 
   }
 }

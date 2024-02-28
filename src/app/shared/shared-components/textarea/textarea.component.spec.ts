@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WapTooltipComponent } from './wap-tooltip.component';
+import { TextareaComponent } from './textarea.component';
 
-describe('WapTooltipComponent', () => {
-  let component: WapTooltipComponent;
-  let fixture: ComponentFixture<WapTooltipComponent>;
+describe('TextareaComponent', () => {
+  let component: TextareaComponent;
+  let fixture: ComponentFixture<TextareaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WapTooltipComponent ]
+      declarations: [ TextareaComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(WapTooltipComponent);
+    fixture = TestBed.createComponent(TextareaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,13 @@
+<label for="validationTextarea" class="form-label" for="" [class.disabled]="m_bIsDisabled"
+    [class.readonly]="m_bIsReadonly">{{m_sLabel}}</label>
+<div class="has-validation">
+    <textarea class="form-control" [class.is-invalid]="m_bShowInvalid" [class.is-valid]="m_bShowValid"
+        [class.readonly]="m_bIsReadonly" id="validationTextarea" name="" id="" cols="30" rows="1"
+        [disabled]="m_bIsDisabled" [readOnly]="m_bIsReadonly" [value]="m_sInputString"></textarea>
+    <div id="validationTextareaFeedback" class="invalid-feedback">
+        {{m_sHelperText}}
+    </div>
+    <div class="valid-feedback">
+        {{m_sHelperText}}
+    </div>
+</div>

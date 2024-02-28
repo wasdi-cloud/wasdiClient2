@@ -92,14 +92,12 @@ import { WapCheckBoxComponent } from './components/WAP-components/wap-check-box/
 import { WapDropdownComponent } from './components/WAP-components/wap-dropdown/wap-dropdown.component';
 import { WapListBoxComponent } from './components/WAP-components/wap-list-box/wap-list-box.component';
 import { WapNumericBoxComponent } from './components/WAP-components/wap-numeric-box/wap-numeric-box.component';
-import { WapProductListComponent } from './components/WAP-components/wap-product-list/wap-product-list.component';
 import { WapProductsComboComponent } from './components/WAP-components/wap-products-combo/wap-products-combo.component';
 import { WapSearchEoImageComponent } from './components/WAP-components/wap-search-eo-image/wap-search-eo-image.component';
 import { WapSelectAreaComponent } from './components/WAP-components/wap-select-area/wap-select-area.component';
 import { WapSliderComponent } from './components/WAP-components/wap-slider/wap-slider.component';
 import { WapTableComponent } from './components/WAP-components/wap-table/wap-table.component';
 import { WapTextboxComponent } from './components/WAP-components/wap-textbox/wap-textbox.component';
-import { WapTooltipComponent } from './components/WAP-components/wap-tooltip/wap-tooltip.component';
 import { WapDisplayComponent } from './components/app-ui/wap-display/wap-display.component';
 import { ShareUiComponent } from './shared/dialogs/share-dialog/share-ui/share-ui.component';
 import { StylesDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
@@ -172,6 +170,9 @@ import { InputFieldComponent } from './shared/shared-components/input-field/inpu
 import { ChipComponent } from './shared/shared-components/chip/chip.component';
 import { ListItemComponent } from './shared/shared-components/list-item/list-item.component';
 import { WorkspacesMenuComponent } from './components/workspaces/workspaces-menu/workspaces-menu.component';
+import { TextareaComponent } from './shared/shared-components/textarea/textarea.component';
+import { AppUiMenuComponent } from './components/app-ui/app-ui-menu/app-ui-menu.component';
+import { SliderComponent } from './shared/shared-components/slider/slider.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -204,14 +205,12 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WapDropdownComponent,
     WapListBoxComponent,
     WapNumericBoxComponent,
-    WapProductListComponent,
     WapProductsComboComponent,
     WapSearchEoImageComponent,
     WapSelectAreaComponent,
     WapSliderComponent,
     WapTableComponent,
     WapTextboxComponent,
-    WapTooltipComponent,
     WapDisplayComponent,
     EditToolbarComponent,
     PlanMapComponent,
@@ -286,7 +285,10 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     InputFieldComponent,
     ChipComponent,
     ListItemComponent,
-    WorkspacesMenuComponent
+    WorkspacesMenuComponent,
+    TextareaComponent,
+    AppUiMenuComponent,
+    SliderComponent
 
   ],
   imports: [

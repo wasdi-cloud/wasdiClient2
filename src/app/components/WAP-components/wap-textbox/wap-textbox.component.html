@@ -1,5 +1,1 @@
-<p>textbox</p>
-<mat-form-field  style="width: 80%">
-    <mat-label>DESCRIPTION</mat-label>
-    <textarea matInput (keyup)="getUserInput($event)" ></textarea>
-</mat-form-field>
+<app-textarea [m_sLabel]="oTextboxInfo.label" matTooltip="{{oTextboxInfo.tooltip}}" (keyup)="getUserInput($event)"></app-textarea>

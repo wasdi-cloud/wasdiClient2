@@ -62,6 +62,16 @@ export class InputFieldComponent {
   @Input() m_sInputValue?: string = "";
 
   /**
+   * Optional Input for Maximum Value (Numeric Inputs)
+   */
+  @Input() m_sMaxValue?: any = "";
+
+  /**
+   * Optional Input for Minimum Value (Numeric Inputs)
+   */
+  @Input() m_sMinValue?: any = "";
+
+  /**
    * Event Emitter the input change to listening parent
    */
   @Output() m_oInputChange: EventEmitter<any> = new EventEmitter();
