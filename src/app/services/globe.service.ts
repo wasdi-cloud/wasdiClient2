@@ -501,12 +501,12 @@ export class GlobeService {
         label: "LS8",
         description: "NASA LANDSAT 8"
       },
-      {
+/*      {
         name: "PROBAV",
         icon: "assets/icons/sat_05.svg",
         label: "PROBA-V",
         description: "PROBA VEGETATION"
-      },
+      },*/
       {
         name: "GEOEYE",
         icon: "assets/icons/sat_06.svg",

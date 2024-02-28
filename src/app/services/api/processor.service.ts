@@ -236,7 +236,7 @@ export class ProcessorService {
     let oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     let sWorkspaceId;
 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sWorkspaceId) == false) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oActiveWorkspace) == false) {
       sWorkspaceId = oActiveWorkspace.workspaceId;
     }
     else {

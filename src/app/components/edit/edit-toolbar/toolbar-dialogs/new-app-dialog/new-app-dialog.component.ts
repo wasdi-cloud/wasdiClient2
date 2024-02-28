@@ -408,7 +408,7 @@ export class NewAppDialogComponent implements OnInit {
       next: oResponse => {
         this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oProcessorDetails).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("Processor Data Updated", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar("Processor Data Updated<br>Rebuild ongoing", "Close", "right", "bottom");
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog(`Error in updating ${this.m_oInputProcessor.processorName}`);
@@ -490,7 +490,19 @@ export class NewAppDialogComponent implements OnInit {
       this.m_oInputProcessor.isPublic,
       oSelectedFile).subscribe({
         next: oResponse => {
-          this.m_oNotificationDisplayService.openSnackBar(`Deployment of ${this.m_oInputProcessor.processorName} has started`, "Close");
+
+          let bOk = false;
+
+          if (oResponse != null) {
+            bOk = oResponse.boolValue
+          }
+
+          if (bOk) {
+            this.m_oNotificationDisplayService.openSnackBar(`Deployment of ${this.m_oInputProcessor.processorName} has started`, "Close");
+          }
+          else {
+            this.m_oNotificationDisplayService.openSnackBar(`Error: ${oResponse.stringValue} `, "Close");
+          }
           this.onDismiss();
         },
         error: oError => {

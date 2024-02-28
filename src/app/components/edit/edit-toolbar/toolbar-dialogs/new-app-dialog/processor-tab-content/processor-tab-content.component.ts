@@ -115,7 +115,7 @@ export class ProcessorTabContentComponent implements OnInit {
   m_aoProcessorTypes = [
     { name: "Ubuntu 22.04 + Python 3.10", id: "python_pip_2" },
     { name: "OGC Application Package", id: "eoepca" },
-    //{ name: "Python 3.x Pip One Shot", id: "pip_oneshot" },
+    { name: "Python 3.x Pip One Shot", id: "pip_oneshot" },
     { name: "Ubuntu 20.04 + Python 3.8", id: "python_pip_2_ubuntu_20" },
     { name: "IDL 3.7.2", id: "ubuntu_idl372" },
     { name: "OCTAVE 6.x", id: "octave" },
