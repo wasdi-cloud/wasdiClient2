@@ -24,8 +24,9 @@
     <app-wap-products-combo *ngIf="oControl.type==='productscombo'" [m_aoProducts]="m_aoProductsArray"
         [(m_oControlSelection)]="getTabControls()[i]"></app-wap-products-combo>
 
-    <!-- WAP Search EO Image --> 
-    <app-wap-search-eo-image *ngIf="oControl.type ==='searcheoimage'"></app-wap-search-eo-image>
+    <!-- WAP Search EO Image -->
+    <app-wap-search-eo-image *ngIf="oControl.type ==='searcheoimage'"
+        [(m_oControlInput)]="getTabControls()[i]"></app-wap-search-eo-image>
 
     <!-- WAP Select Area -->
     <app-wap-select-area *ngIf="oControl.type ==='bbox'" [(oMapInput)]="getTabControls()[i]"></app-wap-select-area>
