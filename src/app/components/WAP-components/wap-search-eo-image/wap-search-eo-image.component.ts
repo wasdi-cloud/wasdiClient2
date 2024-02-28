@@ -203,16 +203,16 @@ export class WapSearchEoImageComponent {
       return null;
     }
     let iNumberOfMissions = this.m_aoMissions.length;
-    let iNumberOfInputSelectedMissions = oController.m_oControlInput.aoMissionsFilters.length;
+    // let iNumberOfInputSelectedMissions = oController.m_oControlInput.aoMissionsFilters.length;
 
-    for (let iIndexMission = 0; iIndexMission < iNumberOfMissions; iIndexMission++) {
-      for (let iIndexInputMission = 0; iIndexInputMission < iNumberOfInputSelectedMissions; iIndexInputMission++) {
-        if (this.m_aoMissions[iIndexMission].indexvalue.toLowerCase() ===
-          this.m_oControlInput.aoMissionsFilters[iIndexInputMission].name.toLowerCase()) {
-          this.m_aoMissions[iIndexMission].selected = true;
-        }
-      }
-    }
+    // for (let iIndexMission = 0; iIndexMission < iNumberOfMissions; iIndexMission++) {
+    //   for (let iIndexInputMission = 0; iIndexInputMission < iNumberOfInputSelectedMissions; iIndexInputMission++) {
+    //     if (this.m_aoMissions[iIndexMission].indexvalue.toLowerCase() ===
+    //       this.m_oControlInput.aoMissionsFilters[iIndexInputMission].name.toLowerCase()) {
+    //       this.m_aoMissions[iIndexMission].selected = true;
+    //     }
+    //   }
+    // }
   };
 
   selectedProducts = function () {

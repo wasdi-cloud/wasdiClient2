@@ -11,7 +11,6 @@ export class WapSliderComponent implements OnInit{
   @Output() oSliderInputChange = new EventEmitter<any>();
 
   ngOnInit(): void {
-      console.log(this.oSliderInput)
   }
 
   getSelectionChange(oEvent) {

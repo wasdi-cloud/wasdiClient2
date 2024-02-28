@@ -59,7 +59,6 @@ export class WapSelectAreaComponent implements OnInit {
     let oController = this;
 
     setTimeout(function () {
-      console.log(oController.m_sMapId)
       // this.m_sMapId = ;
       let oMap = oController.m_oMapService.initMapSingleton(oController.m_sMapId);
       oController.addBoundingBoxDrawerOnMap(oMap);

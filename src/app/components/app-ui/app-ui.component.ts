@@ -142,9 +142,7 @@ export class AppUiComponent implements OnInit {
 
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     if (this.m_oActiveWorkspace !== null) {
-      console.log("active workspace")
       this.workspaceForm.sExistingWorkspace = this.m_oActiveWorkspace.workspaceName;
-      console.log(this.m_oActiveWorkspace)
     }
   }
 
