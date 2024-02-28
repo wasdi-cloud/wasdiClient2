@@ -1,5 +1,9 @@
 <main>
-    <div class="hero-image">
+    <div class="hero-image d-flex flex-column justify-content-center align-items-center">
+        <div class="hero-text text-light text-center">
+            <h1 class="font-bold">{{m_oProcessorInformation.friendlyName}}</h1>
+            <p class="font-bold">Publisher: <span class="font-light">{{m_oProcessorInformation.publisher}}</span></p>
+        </div>
     </div>
     <!-- Breadcrumb navigation -->
     <nav aria-label="marketplace breadcrumb">
@@ -16,8 +20,8 @@
     <div class="app-ui-container d-flex flex-row gap-4">
         <!-- Menu Component -->
         <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)"
-            (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)" [m_sActiveTab]="m_sActiveTab"
-            [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
+            (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)"
+            [m_sActiveTab]="m_sActiveTab" [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
         <!-- WAPP Component outlet -->
         <app-wap-display [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " class="flex-fill"
             *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " [wapData]="oTab"

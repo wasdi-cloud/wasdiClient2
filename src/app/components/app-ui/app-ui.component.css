@@ -4,7 +4,7 @@ main {
 }
 
 div.hero-image {
-    background-image: url("src/assets/images/hero-images/hero-img1.jpg");
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url("src/assets/images/hero-images/hero-img1.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
@@ -12,6 +12,8 @@ div.hero-image {
     height: 200px;
     width: calc(100% + 1.5rem);
 }
+
+
 
 nav,
 div.app-ui-container {
