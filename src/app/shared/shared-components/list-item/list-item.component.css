@@ -46,7 +46,7 @@ span.bold {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200px;
+    /* max-width: 200px; */
 }
 
 .product-info-container>p>span {
