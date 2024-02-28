@@ -11,13 +11,9 @@ nav {
 	background: var(--neutral50Brand);
 	border-top-right-radius: 8px;
 	position: relative;
-	height: 100%;
-	padding-bottom: 24px;
-	padding-top: 16px;
 	overflow: hidden;
 	width: 250px;
 	z-index: 1;
-
 }
 
 div.menu-control {
