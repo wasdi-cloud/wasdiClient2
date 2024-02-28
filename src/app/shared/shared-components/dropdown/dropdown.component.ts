@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -42,6 +42,11 @@ export class DropdownComponent {
 
   @Input() m_oController?: any;
 
+  /**
+   * Does the dropdown have a file extension checkbox? 
+   */
+  @Input() m_bFileExt: boolean = false;
+
   @Input() m_oDeleteFn?: (args: any, controller: any) => void;
 
   /**
@@ -49,7 +54,9 @@ export class DropdownComponent {
    */
   @Output() m_oSelectionChange: EventEmitter<any> = new EventEmitter();
 
-  m_sSearchString: string = ""; 
+  m_sSearchString: string = "";
+
+  m_bShowFileExtension: boolean = false;
 
   /**
    * Emit selection change to listening parent component
@@ -76,4 +83,8 @@ export class DropdownComponent {
     return aoNewValues;
   }
 
+
+  switchFileExtension(oEvent) {
+    this.m_bShowFileExtension = oEvent.target.checked;
+  }
 }
