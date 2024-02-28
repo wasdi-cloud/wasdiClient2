@@ -57,6 +57,8 @@ export class ListItemComponent {
 
   @Input() m_sImageSize?: string = "1.65GB";
 
+  @Input() m_bIsLightProduct?: boolean = false;
+
   @Input() m_oInfoCallbackFn?: (args: any) => void;
 
   @Input() m_oZoomCallbackFn?: (args: any) => void;
