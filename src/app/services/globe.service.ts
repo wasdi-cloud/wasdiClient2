@@ -628,6 +628,9 @@ export class GlobeService {
       // For each product
       for (let iIndexProduct = 0; iIndexProduct < iProductsLength; iIndexProduct++) {
 
+        if (aoProducts[iIndexProduct]==null) continue;
+        if (aoProducts[iIndexProduct].bbox==null) continue;
+
         // Split bbox string
         aoArraySplit = aoProducts[iIndexProduct].bbox.split(",");
         let iArraySplitLength = aoArraySplit.length;
@@ -660,17 +663,18 @@ export class GlobeService {
       let oWSRectangle = Cesium.Rectangle.fromCartographicArray(aoBounds);
       let oWSCenter = Cesium.Rectangle.center(oWSRectangle);
 
-      //oGlobe.camera.setView({
-      this.getGlobe().camera.flyTo({
-        destination: Cesium.Cartesian3.fromRadians(oWSCenter.longitude, oWSCenter.latitude, this.GLOBE_WORKSPACE_ZOOM),
-        orientation: {
-          heading: 0.0,
-          pitch: -Cesium.Math.PI_OVER_TWO,
-          roll: 0.0
-        }
-      });
+      if (this.getGlobe()!=null) {
+        this.getGlobe().camera.flyTo({
+          destination: Cesium.Cartesian3.fromRadians(oWSCenter.longitude, oWSCenter.latitude, this.GLOBE_WORKSPACE_ZOOM),
+          orientation: {
+            heading: 0.0,
+            pitch: -Cesium.Math.PI_OVER_TWO,
+            roll: 0.0
+          }
+        });  
 
-      this.stopRotationGlobe();
+        this.stopRotationGlobe();
+      }
 
       return true;
     }

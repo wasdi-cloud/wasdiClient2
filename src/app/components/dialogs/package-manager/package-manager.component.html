@@ -17,9 +17,9 @@
                         <input class="form-control" type="text" name="m_sPackageToAdd" id="" placeholder="Package Name"
                             [(ngModel)]="m_sPackageToAdd">
                     </div>
-                    <button class="btn btn-secondary" type="submit">Add
-                        Package</button>
+                    <button class="btn btn-secondary" type="submit">Add Package</button>
                     <button class="btn btn-secondary" (click)="updateLibraryList(m_sProcessorId)">Refresh List</button>
+                    <button class="btn btn-secondary" (click)="resetActionList(m_sProcessorId)">Reset Actions</button>
                 </form>
                 <div class="input-field w-30">
                     <input class="form-control" type="text" name="" id="" placeholder="Search Packages" [(ngModel)]="m_sPackageSearch">

@@ -77,4 +77,20 @@ export class PackageManagerService {
     return this.oHttp.get(this.APIURL + this.m_sResource + "/environmentupdate?processorId=" + sProcessorId + "&workspace=" + sWorkspaceId + "&updateCommand=upgradePackage/" + sLibraryName + "/" + sLatestVersion + "/"
     );
   };
+
+  /**
+   * Reset the action list of a processor
+   * @param sProcessorId Name of the processor
+   * @returns 
+   */
+  resetActions(sProcessorId: string) {
+    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let sWorkspaceId = "-";
+
+    if (oWorkspace.workspaceId) {
+      sWorkspaceId = oWorkspace.workspaceId;
+    }
+
+    return this.oHttp.get(this.APIURL + this.m_sResource + "/reset?processorId=" + sProcessorId + "&workspace=" + sWorkspaceId);
+  };
 }
