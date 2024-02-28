@@ -153,7 +153,6 @@ export class AppUiComponent implements OnInit {
    */
   getProcessorUI(sApplicationName: string) {
     this.m_oProcessorService.getProcessorUI(sApplicationName).subscribe(oResponse => {
-      console.log(oResponse)
       for (let iTabs = 0; iTabs < oResponse.tabs.length; iTabs++) {
         let oTab = oResponse.tabs[iTabs];
 
@@ -400,6 +399,10 @@ export class AppUiComponent implements OnInit {
   setOpenNewWorkspace(oInput: any): void {
     let parsedInput = JSON.parse(oInput.value.toLowerCase());
     this.m_bOpenWorkspace = parsedInput;
+  }
+
+  getExecuteEvent(oEvent) {
+    this.runApplication();
   }
 
 }

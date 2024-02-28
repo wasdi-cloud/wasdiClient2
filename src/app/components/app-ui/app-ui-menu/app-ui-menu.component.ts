@@ -15,6 +15,7 @@ export class AppUiMenuComponent implements AfterViewChecked {
   @Input() m_aoWorkspaces: Array<any> = [];
   @Output() m_sSelectedTab: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oSelectedWorkspace: EventEmitter<any> = new EventEmitter<any>();
+  @Output() m_oExecuteAppEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
     private m_oDialog: MatDialog,
@@ -43,5 +44,7 @@ export class AppUiMenuComponent implements AfterViewChecked {
     }
   }
 
-  executeApp() { }
+  executeApp() {
+    this.m_oExecuteAppEmitter.emit(true);
+  }
 }
