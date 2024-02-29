@@ -11,33 +11,27 @@ main {
     z-index: 1;
 }
 
-h4 {
-    color: #43516a;
-    font-weight: bolder;
-}
-
-div.workspace-properties-container {
-    height: 80vh;
-    width: 40%;
-}
-
-div.workspace-globe-contaienr {
-    height: 80vh;
-    width: 60vw;
-}
-
-div.workspaces-container,
-div.properties-container {
-    height: 40vh;
+div.cesium-container {
+    height: calc(100vh - 3rem);
     width: 100%;
 }
 
-div.workspaces-list-group {
-    height: 100%;
-    overflow: hidden;
-    overflow-y: scroll;
+.workspaces-menu {
+    z-index: 999;
+    position: absolute;
+    left: 2.5%;
+    top: 3%;
 }
 
-li.workspace-product {
-    overflow: hidden;
+div.workspace-name-card {
+    border-radius: 24px;
+    bottom: 3%;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 8px 12px;
+    position: absolute;
+    right: 0;
+    width: fit-content;
+    z-index: 999;
 }

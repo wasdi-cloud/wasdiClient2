@@ -171,14 +171,11 @@ export class WorkspacesComponent implements OnInit {
 
   m_aoSelectedWorkspaces: Array<Workspace> = [];
   constructor(
-    private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog,
+
     private m_oGlobeService: GlobeService,
-    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOpportunitySearchService: OpportunitySearchService,
     private m_oProductService: ProductService,
-    private m_oTranslate: TranslateService,
-    private m_oWorkspaceService: WorkspaceService) { }
+    ) { }
 
 
   ngOnInit(): void {
