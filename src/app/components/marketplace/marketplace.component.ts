@@ -245,6 +245,10 @@ export class MarketplaceComponent implements OnInit {
     this.getApplications();
   }
 
+  /**
+   * Handler for Sorting Apps: 
+   */
+
   //TODO: Sort apps based on Success Rate
   successChanged() {
 
@@ -272,5 +276,19 @@ export class MarketplaceComponent implements OnInit {
   getAppFilter(oEvent) {
     this.m_oAppFilter = oEvent;
     this.getApplications();
+  }
+
+  setSorting(sColumn: string) {
+    if (this.m_oAppFilter.orderBy === sColumn) {
+      if (this.m_oAppFilter.orderDirection === 1) this.m_oAppFilter.orderDirection = -1;
+      else if (this.m_oAppFilter.orderDirection === -1) this.m_oAppFilter.orderDirection = 1;
+      else this.m_oAppFilter.orderDirection = 1;
+    }
+
+    this.m_oAppFilter.orderBy = sColumn;
+    this.m_oAppFilter.page = 0;
+
+
+    this.refreshAppList();
   }
 }

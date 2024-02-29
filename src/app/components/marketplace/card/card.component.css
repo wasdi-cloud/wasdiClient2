@@ -11,7 +11,7 @@ div.wasdi-card {
     height: 400px;
     padding: 16px;
     position: relative;
-    width: 250px;
+    width: 300px;
 }
 
 img.card-img {
@@ -27,7 +27,7 @@ div.app-title {
 div.app-description {
     color: #283140;
     font-size: 14px;
-    height: 55px; 
+    height: 55px;
     overflow: hidden;
 }
 
@@ -83,4 +83,10 @@ div.card-price {
 
 .price-paid {
     background: #FBAC00;
+}
+
+@media only screen and (min-width: 1200px) {
+    div.wasdi-card {
+        width: 250px;
+    }
 }

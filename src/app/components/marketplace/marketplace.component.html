@@ -1,46 +1,53 @@
 <main class="d-flex flex-row flex-fill">
     <div class="d-flex flex-row flex-fill">
         <app-marketplace-filters (m_oAppFilterOutput)="getAppFilter($event)"></app-marketplace-filters>
-        <!-- <section class="sub-menu">
-            <article class="sub-menu-grp">
-                <div class="title">
-                    <img src="assets/svg/price-icon.svg" alt="price icon" />
-                    <h3>Price</h3>
-                </div>
-                <!--div class="sub-menu-body">
-                    <div class="range">
-                        <div class="price-values-display">
-                            <p>0</p>
-                            <p class="min">70$</p>
-                            <p class="max">350$</p>
-                            <p>500</p>
-                        </div>
-                        <!-- the following div is used as input for the JS -->
-                <!-- Display: hidden: -->
-                <!-- <div class="range-price">
-                            <input type="number" name="min" value="300" />
-                            <input type="number" name="max" value="700" />
-                        </div>
-                        <div class="range-slider">
-                            <span class="range-selected"></span>
-                        </div>
-                        <div class="range-input">
-                            <input type="range" class="min" min="0" max="1000" value="300" step="10" />
-                            <input type="range" class="max" min="0" max="1000" value="700" step="10" />
-                        </div>
-                    </div>
-                </div> -->
-            <!-- </article>
-        </section> --> 
-
         <!-- Marketplace App Cards -->
-        <div class="app-cards-container d-flex flex-column justify-content-start align-items-start">
-            <div class="processor-cards-container d-flex flex-row flex-wrap justify-content-start">
-                <app-card *ngFor="let oProcessor of m_aoApplications" [m_oProcessor]="oProcessor"></app-card>
+        <div class="app-cards-container w-100 ">
+            <!-- Sorting Container -->
+            <div class="d-flex flex-row pb-2 gap-2 justify-content-end align-items-center">
+                <p class="font-bold m-0 p-0">Sort by:</p>
+                <div class="category-tag flex-row align-items-center gap-1" (click)="setSorting('name')"
+                    [class.active]="m_oAppFilter.orderBy === 'name'">
+                    <span class="material-symbols-outlined">
+                        sort_by_alpha
+                    </span>
+                    <p>Name</p>
+                    <span *ngIf="m_oAppFilter.orderBy === 'name'" class="material-symbols-outlined">
+                        {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                    </span>
+                </div>
+                <div class="category-tag d-flex flex-row align-items-center gap-1" (click)="setSorting('date')"
+                    [class.active]="m_oAppFilter.orderBy === 'date'">
+                    <span class="material-symbols-outlined">
+                        sort_by_alpha
+                    </span>
+                    <p>Date</p>
+                    <span *ngIf="m_oAppFilter.orderBy === 'date'" class="material-symbols-outlined">
+                        {{m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                    </span>
+                </div>
+                <div class="category-tag flex-row align-items-center gap-1" (click)="setSorting('price')"
+                    [class.active]="m_oAppFilter.orderBy === 'price'">
+                    <span class="material-symbols-outlined">
+                        sort_by_alpha
+                    </span>
+                    <p>Price</p>
+
+                    <span *ngIf="m_oAppFilter.orderBy === 'price'" class="material-symbols-outlined">
+                        {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                    </span>
+                </div>
             </div>
-            <button [disabled]="m_bLoadMoreEnabled === false" class="btn btn-lg btn-primary align-self-center"
-                (click)="loadMore()">Load More</button>
+
+            <div class="processor-cards-container">
+                <app-card class="" *ngFor="let oProcessor of m_aoApplications" [m_oProcessor]="oProcessor"></app-card>
+            </div>
+
+            <div class="d-flex flex-row justify-content-center my-3">
+
+                <app-button class="m-auto" [m_sLabel]="'Load More'" [m_bDisabled]="m_bLoadMoreEnabled"
+                    (click)="loadMore()"></app-button>
+            </div>
         </div>
     </div>
-
 </main>

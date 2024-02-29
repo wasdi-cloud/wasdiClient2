@@ -111,14 +111,16 @@ div.app-outlet {
 
 /* Secondary Nav (Filters) Styling */
 .secondary-nav {
+  align-self: stretch;
   color: var(--neutral60);
+  border-right: 1px solid #D9DCE1;
   font-weight: 700;
   display: flex;
+  height: 100%;
   max-height: 100%;
-  padding: 32px 0px 32px 8px;
+  padding: 16px 16px 16px 8px;
   flex-direction: column;
   gap: var(--Radius-or-Spacings-S, 8px);
-  align-self: stretch;
   width: 22rem;
   overflow-y: hidden;
 }
