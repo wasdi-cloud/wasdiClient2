@@ -76,6 +76,10 @@ div.app-outlet {
   font-weight: 400;
 }
 
+.text-white {
+  color: #FFFFFF;
+}
+
 .mat-bottom-sheet-container-medium,
 .mat-bottom-sheet-container-large,
 .mat-bottom-sheet-container-xlarge {
@@ -298,6 +302,7 @@ div.app-outlet {
 .floating-menu {
   background: #FFFFFF;
 }
+
 /* 
 .leaflet-bar a {
   background-color: rgba(13, 16, 21, 0.8) !important;

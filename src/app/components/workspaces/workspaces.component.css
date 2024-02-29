@@ -5,9 +5,9 @@ main {
 
 .globe-container {
     height: calc(100vh - 3rem);
-    width: calc(100% + 1.5rem);
+    width: calc(100% + 2rem);
     position: absolute;
-    left: -1.5rem;
+    left: -2rem;
     z-index: 1;
 }
 
