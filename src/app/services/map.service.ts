@@ -380,14 +380,21 @@ export class MapService {
   }
 
   /**
-   * Convert boundaries
-   * @param sBoundaries
+   * Convert boundaries in an array of points
+   * @param sBbox
    * @returns {Array}
    */
   convertBboxInBoundariesArray(sBbox) {
+
+    let aoReturnValues = [];
+
+    if (sBbox==null) {
+      return aoReturnValues;
+    }
+
     let asBoundaries = sBbox.split(",");
     let iNumberOfBoundaries = asBoundaries.length;
-    let aoReturnValues = [];
+    
     let iIndexReturnValues = 0;
     for (let iBoundaryIndex = 0; iBoundaryIndex < iNumberOfBoundaries; iBoundaryIndex++) {
       if (iBoundaryIndex % 2 === 0) {
@@ -565,10 +572,19 @@ export class MapService {
 
       for (let iProducts = 0; iProducts < aoProducts.length; iProducts++) {
         let oProduct = aoProducts[iProducts];
-        let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
-        aoBounds = aoBounds.concat(aoProductBounds);
+
+        if (oProduct != null) {
+          if (!FadeoutUtils.utilsIsStrNullOrEmpty(oProduct.bbox)) {
+            let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
+            aoBounds = aoBounds.concat(aoProductBounds);    
+          }
+        }
       }
-      this.m_oWasdiMap.flyToBounds([aoBounds]);
+
+      if (aoBounds.length > 0) {
+        this.m_oWasdiMap.flyToBounds([aoBounds]);
+      }
+
       return true;
     }
     catch (e) {

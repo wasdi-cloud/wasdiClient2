@@ -77,7 +77,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   fetchPackageManagerInfo(sWorkspaceName: string) {
     this.m_oPackageManagerService.getPackageManagerInfo(sWorkspaceName).subscribe({
       next: oResponse => {
-        console.log(oResponse);
+        //console.log(oResponse);
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_sPackageManagerName = oResponse.name;
           this.m_sPackageManagerVersion = oResponse.version;
@@ -96,7 +96,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoPackages = oResponse;
           this.m_bIsLoading = false;
-          console.log(this.m_aoPackages)
+          //console.log(this.m_aoPackages)
         }
       },
       error: oError => {
@@ -110,7 +110,6 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
    * Remove a Package (library): 
    */
   removeLibrary(sProcessorId: string, sPackageName: string) {
-    console.log(sPackageName);
     let sConfirmationMessage = `Are you sure you want to remove ${sPackageName}?`;
 
     let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
@@ -127,6 +126,27 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
         })
       }
     })
+  }
+
+  resetActionList(sProcessorId: string) {
+
+    let sConfirmationMessage = `Are you sure you want to reset all your past actions on this app ?`;
+
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
+
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
+        this.m_oPackageManagerService.resetActions(sProcessorId).subscribe({
+          next: oResponse => {
+            this.m_oNotificationDisplayService.openSnackBar("All the past actions on this app have been deleted", "Close");
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openSnackBar("There was an error resetting the past actions", "Close");
+          }
+        })
+      }
+    })    
+    
   }
 
   /**
@@ -230,6 +250,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
    * @param oController 
    */
   rabbitMessageHook(oRabbitMessage, oController) {
+    oController.m_oNotificationDisplayService.openSnackBar(oRabbitMessage.payload, "Close");
     oController.fetchPackages();
     oController.m_bIsLoading = false
   }
