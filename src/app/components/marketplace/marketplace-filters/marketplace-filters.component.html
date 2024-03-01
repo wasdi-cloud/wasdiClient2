@@ -1,10 +1,11 @@
 <div class="secondary-nav">
     <div class="location-header">Marketplace</div>
     <div class="filters-header">Filters</div>
-    <div class="filters-container">
-        <app-input-field [m_sIconLeft]="'search'" [m_sPlacehodler]="'Search Apps'"
-            (m_oInputChange)="getSearchInput($event)" [m_sLabel]="'Search App'"
-            (keyup)="onSearchInput($event)"></app-input-field>
+    <div class="filters-container" style="height: 90%">
+        <div class="input-container">
+            <app-input-field [m_sIconLeft]="'search'" [m_sPlacehodler]="'Search Apps'" [m_sInputValue]="m_sSearchInput"
+                (m_oInputChange)="getSearchInput($event)" [m_sLabel]="'Search App'"></app-input-field>
+        </div>
         <div class="input-container">
             <div class="search-header">Category</div>
             <div class="categories-container">
@@ -21,7 +22,8 @@
             <div class="developers-container">
                 <div class="wasdi-checkbox-container" *ngFor=" let oPublisher of m_aoPublishers | filter:
                     m_sDeveloperSearch">
-                    <input class="wasdi-checkbox" type="checkbox" name="" id="" (click)="developerChanged(oPublisher)">
+                    <input class="wasdi-checkbox" type="checkbox" name="" id="" (click)="developerChanged(oPublisher)"
+                        [checked]=" this.m_aoSelectedPublishers.indexOf(oPublisher.publisher) !== -1">
                     <span class="wasdi-checkbox-label">{{oPublisher.publisher}}</span>
                 </div>
             </div>
@@ -31,7 +33,8 @@
             <div class="review-options">
                 <div class="review-option-container d-flex flex-row align-items-center gap-1"
                     *ngFor="let iRating of m_aiRatingsFilter">
-                    <input type="radio" name="reviewOption" id="" value="{{iRating}}" (click)="ratingChanged($event)">
+                    <input type="radio" name="reviewOption" id="" value="{{iRating}}" (click)="ratingChanged($event)"
+                        [(ngModel)]="m_oAppFilter.score">
                     <span class="material-symbols-outlined" [class]="iRating > 0 ? 'star-filled' : 'star-grey'">
                         star
                     </span>
@@ -51,8 +54,15 @@
                 </div>
             </div>
         </div>
+
         <div class="input-container">
-            <!-- <div class="search-header">Price</div> -->
+            <div class="search-header">Price</div>
+            <app-slider [m_bHasThumbLabel]="true"></app-slider>
         </div>
+
+    </div>
+    <div class="floating-buttons d-flex flex-row gap-2 justify-content-between">
+        <app-button [m_bMuted]="true" [m_sLabel]="'Clear Filters'" (click)="clearFilters()"></app-button>
+        <app-button class="flex-fill" [m_sLabel]="'Search'" [m_sIconLeft]="'search'" (click)="onSearchInput($event)"></app-button>
     </div>
 </div>
