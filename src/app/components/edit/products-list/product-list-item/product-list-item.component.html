@@ -1,26 +1,35 @@
-<div class="product d-flex flex-row align-items-center">
-    <input type="checkbox" name="" id="">
-    {{m_oProduct.name}}
-    <!-- <div class=" d-flex flex-row align-items-center">
-        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()" *ngIf="m_bIsOpen === true">
+<div class="product d-flex flex-row align-items-center" (mouseenter)="mouseHovering()" (mouseleave)="mouseLeaving()">
+    <div class=" d-flex flex-row align-items-center" *ngIf="m_bIsOpen">
+        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()" >
             arrow_drop_down
         </span>
-        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()" *ngIf="m_bIsOpen === false">
-            arrow_right
-        </span>
-        <mat-checkbox class="d-flex flex-row"></mat-checkbox>
+        <input type="checkbox" name="" id="">
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
         <p class="product-label">
-            {{m_oProduct.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
+            {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
     </div>
-    <span class="display-more-icon material-symbols-outlined" (click)="openProductProperties()">
-        more_vert
-    </span> --> 
+    <div class=" d-flex flex-row align-items-center" *ngIf="m_bIsOpen === false">
+        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()" >
+            arrow_right
+        </span>
+        <input type="checkbox" name="" id="">
+        <span class="product-label-icon material-symbols-outlined">
+            satellite_alt
+        </span>
+        <p class="product-label">
+            {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
+    </div>    
+    <span class="material-symbols-outlined" *ngIf="m_bIsHovering">
+        <button (click)="downloadProduct()">download</button >
+        <button (click)="deleteProduct()">delete</button >
+        <button (click)="openProductProperties()">more_vert</button >
+    </span>
 </div>
+
 <!-- Opened dropdown component for Bands and Metadata -->
-<!-- <div class="product-bands-container" *ngIf="m_bIsOpen">
+<div class="product-bands-container" *ngIf="m_bIsOpen">
     <ul class="container first-list">
         <li>
             <p> <span class="bands-icon material-symbols-outlined">
@@ -28,7 +37,7 @@
                 </span>Metadata</p>
         </li>
         <li [class.container]="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands === true">
-            <p [class.disabled-label]="m_oProduct.bandsGroups.bands.length === 0" (click)="openShopwBands()"><span
+            <p [class.disabled-label]="m_oProduct.bandsGroups.bands.length === 0" (click)="openShowBands()"><span
                     class="bands-icon material-symbols-outlined">
                     pin_drop
                 </span>Bands</p>
@@ -39,4 +48,4 @@
             </ul>
         </li>
     </ul>
-</div> -->
+</div>

@@ -26,7 +26,7 @@ div.product:hover {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 250px;
+    width: 330px;
     padding: 0;
     margin: 0;
 }

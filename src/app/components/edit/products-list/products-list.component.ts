@@ -267,7 +267,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Problem in getting Product Download");
+        this.m_oNotificationDisplayService.openAlertDialog("There was an error dowloading the product");
       }
     });
 

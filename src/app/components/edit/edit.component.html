@@ -3,7 +3,7 @@
     <div class="editor-sidebar d-flex flex-column">
         <div class="workspace-location">
             <div class="workspace-subheading">You are currently inside:</div>
-            <div class="workspace-name">{{m_oActiveWorkspace.name}}</div>
+            <div class="workspace-name">{{m_oActiveWorkspace?.name}}</div>
         </div>
         <div class="products-list-container">
             <app-products-list [m_aoWorkspaceProductsList]="m_aoProducts" [m_sSearchString]="m_sSearchString"

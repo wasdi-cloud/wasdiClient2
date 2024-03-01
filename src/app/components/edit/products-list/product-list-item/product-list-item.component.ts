@@ -1,7 +1,13 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+
+import { ConstantsService } from 'src/app/services/constants.service';
+import { CatalogService } from 'src/app/services/api/catalog.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 import { ProductPropertiesDialogComponent } from '../product-properties-dialog/product-properties-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { ProductsListComponent } from '../products-list.component'
 
 @Component({
   selector: 'app-product-list-item',
@@ -11,30 +17,77 @@ import { MatDialog } from '@angular/material/dialog';
 export class ProductListItemComponent {
   @Input() m_oProduct: any = null;
 
+  /**
+   * Flag to know if the actual product is open or closed.
+   */
   m_bIsOpen: boolean = false;
 
+  /**
+   * Flag to know if the bands are shown or not
+   */
   m_bShowBands: boolean = false;
+
+  /**
+   * Flag to know if the user is hovering with the mouse on this specific element
+   */
+  m_bIsHovering: boolean = false;
 
   @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(
-    private m_oDialog: MatDialog
-  ) { }
+  constructor( 
+    @Inject(ProductsListComponent) private m_oParentProductList: ProductsListComponent,
+    private m_oDialog: MatDialog,
+    private m_oConstantsService: ConstantsService,
+    private m_oCatalogService: CatalogService,
+    private m_oNotificationDisplayService: NotificationDisplayService )
+  { 
+
+  }
+
+  /**
+   * Clicked on the expand button
+   */
   openProductBands() {
     this.m_bIsOpen = !this.m_bIsOpen;
   }
 
-  openShopwBands() {
+  /**
+   * Clicked on the show bands button
+   */
+  openShowBands() {
     this.m_bShowBands = !this.m_bShowBands;
   }
 
-  openDropdown() { }
+  /**
+   * Mouse entering on the item
+   */
+  mouseHovering() {
+      this.m_bIsHovering = true;
+  }
 
+  /**
+   * Mouse leaving the item
+   */
+  mouseLeaving() {
+      this.m_bIsHovering = false;
+  }  
+
+  /**
+   * Open Product Properties
+   */
   openProductProperties() {
     this.m_oDialog.open(ProductPropertiesDialogComponent, {
       data: { product: this.m_oProduct }
     })
   }
+
+  downloadProduct() {
+    this.m_oParentProductList.downloadProductByName(this.m_oProduct.fileName);
+  }
+
+  deleteProduct() {
+    this.m_oParentProductList.deleteProduct(this.m_oProduct);
+  }  
 
   emitProductInfoChange() { }
 

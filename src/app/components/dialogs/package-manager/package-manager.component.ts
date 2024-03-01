@@ -154,6 +154,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
    */
   addLibrary(sProcessorId: string, sPackageName: string) {
     if (!sPackageName) {
+      this.m_oNotificationDisplayService.openSnackBar("Package name missing, we cannot proceed","Close");
       return;
     }
     let aPackageInfo = sPackageName.split("==");
@@ -171,40 +172,27 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
 
     let sConfirmationMessage = `Are you sure you wish to add ${sPackageInfoName}?`;
 
+    sAddCommand = sPackageName;
+
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sPackageInfoVersion) === false) {
-
-      let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
-
       sAddCommand = sPackageInfoName + "/" + sPackageInfoVersion;
+    } 
+    
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
 
-      bConfirmResult.subscribe(bDialogResult => {
-        if (bDialogResult === true) {
-          this.m_oPackageManagerService.addLibrary(sProcessorId, sAddCommand).subscribe({
-            next: oResponse => {
-              this.m_bIsLoading = true;
-            },
-            error: oError => {
-              console.log("Error uploading your package");
-            }
-          })
-        }
-      });
-    } else {
-      let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
-
-      bConfirmResult.subscribe(bDialogResult => {
-        if (bDialogResult === true) {
-          this.m_oPackageManagerService.addLibrary(sProcessorId, sPackageName).subscribe({
-            next: oResponse => {
-              this.m_bIsLoading = true;
-            },
-            error: oError => {
-              console.log("Error uploading your package");
-            }
-          })
-        }
-      });
-    }
+    bConfirmResult.subscribe(bDialogResult => {
+      if (bDialogResult === true) {
+        this.m_oPackageManagerService.addLibrary(sProcessorId, sAddCommand).subscribe({
+          next: oResponse => {
+            this.m_bIsLoading = true;
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openSnackBar("Error adding your package. Are you sure about the name used?","Close");
+          }
+        })
+      }
+    });
+  
   }
 
   /**
@@ -216,7 +204,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
         this.m_bIsLoading = true;
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in refreshing your packages");
+        this.m_oNotificationDisplayService.openAlertDialog("Error refreshing your packages");
       }
     })
   }
