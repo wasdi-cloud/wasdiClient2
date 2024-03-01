@@ -14,9 +14,27 @@ div.wasdi-card {
     width: 300px;
 }
 
-img.card-img {
+.wasdi-card:hover {
+    box-shadow: 4px 0px 32px 0px rgba(0, 0, 0, 0.29);
+}
+
+.wasdi-card:hover>.card-img>.overlay {
+    transition: width 0.3s ease;
+    width: 100%;
+}
+
+.wasdi-card:hover>.card-img>.overlay>img {
+    animation: fly 2s linear;
+    opacity: 0;
+    width: 100px;
+    height: 100px;
+}
+
+div.card-img {
     height: 155px;
     object-fit: cover;
+    background-position: center;
+    background-size: cover;
 }
 
 div.app-title {
@@ -60,6 +78,7 @@ span.publisher-name {
         'opsz' 24
 }
 
+
 div.card-price {
     position: absolute;
     display: flex;
@@ -77,6 +96,18 @@ div.card-price {
 
 }
 
+.overlay {
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0.7;
+    overflow: hidden;
+    width: 0%;
+    height: 100%;
+    transition: width 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .price-free {
     background: #009036;
 }
@@ -88,5 +119,38 @@ div.card-price {
 @media only screen and (min-width: 1200px) {
     div.wasdi-card {
         width: 250px;
+    }
+}
+
+
+@keyframes fly {
+    0% {
+        opacity: 1;
+        transform-origin: center center;
+        transform: rotate(10deg) translate(22px, 10px) scale(0);
+    }
+
+    25% {
+        opacity: 1;
+        transform-origin: center center;
+        transform: rotate(-20deg) translate(-20px, 12px) scale(0.33);
+    }
+
+    50% {
+        opacity: 1;
+        transform-origin: center center;
+        transform: rotate(5deg) translate(-12px, -12px) scale(0.66);
+    }
+
+    75% {
+        transform-origin: center center;
+        transform: rotate(-30deg) translate(18px, -10px) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform-origin: center center;
+        transform: rotate(-20deg) translate(12px, -5px) scale(1.5);
+        opacity: 0;
     }
 }

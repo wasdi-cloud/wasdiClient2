@@ -3,8 +3,13 @@
         {{m_oProcessor.price === 0 ? 'Free' : "€" +
         m_oProcessor.price}}
     </div>
-    <img class="card-img " src="{{m_oProcessor.imgLink}}"
-        alt="{{'Image accompanying the application '+ m_oProcessor.friendlyName}}" class="card-img">
+    <div class="card-img" style="background-image: url({{m_oProcessor.imgLink}})">
+        <div class="overlay">
+            <img src="assets/svg/market-ship.svg" class="scalein" alt="scalein">
+        </div>
+    </div>
+    <!-- <img class="card-img overlay" src="{{m_oProcessor.imgLink}}"
+        alt="{{'Image accompanying the application '+ m_oProcessor.friendlyName}}" class="card-img"> -->
     <div class="app-stars d-flex flex-row align-items-center">
         <div>
             <span class="material-symbols-outlined" [class]="m_oProcessor.score> 0 ? 'star-filled' : 'star-grey'">
