@@ -64,7 +64,6 @@ export class MarketplaceFiltersComponent implements OnInit {
             this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
           }
           this.m_asCategoryOptions = oResponse;
-          console.log(this.m_asCategoryOptions)
         },
         error: oError => {
           this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
@@ -94,6 +93,8 @@ export class MarketplaceFiltersComponent implements OnInit {
       this.m_aoSelectedPublishers.splice(iDeveloperIndex, 1);
     }
     //Add Selected Developers to the App Filter publishers and then get applicatinons
+
+
     this.m_oAppFilter.publishers = this.m_aoSelectedPublishers;
     this.m_oAppFilter.page = 0;
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
@@ -123,9 +124,6 @@ export class MarketplaceFiltersComponent implements OnInit {
   }
 
   ratingChanged(oEvent) {
-    console.log(oEvent.target.value)
-    this.m_oAppFilter.score = oEvent.target.value;
-    this.m_oAppFilter.page = 0;
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
 
@@ -136,21 +134,35 @@ export class MarketplaceFiltersComponent implements OnInit {
    * @returns {void}
    */
   onSearchInput(oEvent): void {
-    console.log(oEvent.target.value)
-    if (oEvent.keyCode === 13) {
-      if (this.m_sSearchInput || this.m_sSearchInput === "") {
-        this.m_oAppFilter.name = this.m_sSearchInput
-        this.m_oAppFilterOutput.emit(this.m_oAppFilter);
-      }
-    }
+    this.m_oAppFilter.name = this.m_sSearchInput
+    this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
 
   getSearchInput(oEvent) {
-    this.m_sSearchInput = oEvent.target.value;
+    this.m_sSearchInput = oEvent.event.target.value;
   }
 
   getDeveloperInput(oEvent) {
-    this.m_sDeveloperSearch = oEvent.target.value;
+    this.m_sDeveloperSearch = oEvent.event.target.value;
+  }
+
+  clearFilters() {
+    this.m_oAppFilter = {
+      categories: [],
+      publishers: [],
+      name: "",
+      score: 0,
+      minPrice: -1,
+      maxPrice: 1000,
+      itemsPerPage: 12,
+      page: 0,
+      orderBy: "name",
+      orderDirection: 1
+    }
+    this.m_aoSelectedCategories = []
+    this.m_aoSelectedPublishers = [];
+    this.m_sSearchInput = "";
+    this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
 
 }
