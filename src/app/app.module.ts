@@ -174,6 +174,7 @@ import { TextareaComponent } from './shared/shared-components/textarea/textarea.
 import { AppUiMenuComponent } from './components/app-ui/app-ui-menu/app-ui-menu.component';
 import { SliderComponent } from './shared/shared-components/slider/slider.component';
 import { InvaderComponent } from './shared/shared-components/invader/invader.component';
+import { TabComponent } from './shared/shared-components/tab/tab.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -290,7 +291,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     TextareaComponent,
     AppUiMenuComponent,
     SliderComponent,
-    InvaderComponent
+    InvaderComponent,
+    TabComponent
 
   ],
   imports: [
