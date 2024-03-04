@@ -173,6 +173,7 @@ import { WorkspacesMenuComponent } from './components/workspaces/workspaces-menu
 import { TextareaComponent } from './shared/shared-components/textarea/textarea.component';
 import { AppUiMenuComponent } from './components/app-ui/app-ui-menu/app-ui-menu.component';
 import { SliderComponent } from './shared/shared-components/slider/slider.component';
+import { InvaderComponent } from './shared/shared-components/invader/invader.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -288,7 +289,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WorkspacesMenuComponent,
     TextareaComponent,
     AppUiMenuComponent,
-    SliderComponent
+    SliderComponent,
+    InvaderComponent
 
   ],
   imports: [

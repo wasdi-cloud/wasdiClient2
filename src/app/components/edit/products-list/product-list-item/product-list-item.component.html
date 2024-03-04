@@ -1,30 +1,31 @@
-<div class="product d-flex flex-row align-items-center" (mouseenter)="mouseHovering()" (mouseleave)="mouseLeaving()">
+<div class="product d-flex flex-row align-items-center gap-4" [class.item-hover]="m_bIsHovering"
+    (mouseenter)="mouseHovering()" (mouseleave)="mouseLeaving()">
     <div class=" d-flex flex-row align-items-center" *ngIf="m_bIsOpen">
-        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()" >
+        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
             arrow_drop_down
         </span>
-        <input type="checkbox" name="" id="">
+        <input class="wasdi-checkbox" type="checkbox" name="" id="">
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
         <p class="product-label">
             {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
     </div>
-    <div class=" d-flex flex-row align-items-center" *ngIf="m_bIsOpen === false">
-        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()" >
+    <div class="d-flex flex-row align-items-center" *ngIf="m_bIsOpen === false">
+        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
             arrow_right
         </span>
-        <input type="checkbox" name="" id="">
+        <input class="wasdi-checkbox" type="checkbox" name="" id="">
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
         <p class="product-label">
             {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
-    </div>    
-    <span class="material-symbols-outlined" *ngIf="m_bIsHovering">
-        <button (click)="downloadProduct()">download</button >
-        <button (click)="deleteProduct()">delete</button >
-        <button (click)="openProductProperties()">more_vert</button >
+    </div>
+    <span class="hover-menu d-flex flex-row gap-1" *ngIf="m_bIsHovering">
+        <button class="button-icon material-symbols-outlined" (click)="downloadProduct()">download</button>
+        <button class="button-icon material-symbols-outlined" (click)="deleteProduct()">delete</button>
+        <button class="button-icon material-symbols-outlined" (click)="openProductProperties()">more_vert</button>
     </span>
 </div>
 
@@ -37,13 +38,22 @@
                 </span>Metadata</p>
         </li>
         <li [class.container]="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands === true">
-            <p [class.disabled-label]="m_oProduct.bandsGroups.bands.length === 0" (click)="openShowBands()"><span
-                    class="bands-icon material-symbols-outlined">
+            <p [class.disabled-label]="m_oProduct.bandsGroups.bands.length === 0" (click)="openShowBands()">
+                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowBands === false">
+                    arrow_right
+                </span>
+                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowBands === true">
+                    arrow_drop_down
+                </span>
+                <span class="bands-icon material-symbols-outlined">
                     pin_drop
-                </span>Bands</p>
+                </span>Bands
+            </p>
             <ul *ngIf="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands">
                 <li *ngFor="let oBand of m_oProduct.bandsGroups.bands">
-                    <p>{{oBand.name}} <span class="category-tag outlined">RUN</span></p>
+                    <p>{{oBand.name}} <span *ngIf="oBand.published === false" class="category-tag outlined">RUN</span>
+                        <span *ngIf="oBand.published === true" class="category-tag outlined red">REMOVE</span>
+                    </p>
                 </li>
             </ul>
         </li>

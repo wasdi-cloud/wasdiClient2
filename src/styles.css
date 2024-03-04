@@ -244,7 +244,7 @@ div.app-outlet {
 .category-tag.red,
 .category-tag.green {
   border: none;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   cursor: default !important;
 }
 
@@ -260,6 +260,18 @@ div.app-outlet {
 .category-tag.green {
   background: var(--wasdiGreen);
 }
+
+.category-tag.outlined.red {
+  background: #FFFFFF !important;
+  border: 1px solid var(--wasdiDanger) !important;
+  color: var(--wasdiDanger) !important;
+  cursor: pointer !important;
+}
+
+.category-tag.outlined.red:hover {
+  background: var(--wasdiDangerLight) !important;
+}
+
 
 /* Custom Styling for WASDI Checkbox - Angular Materials OVERRIDES! */
 .mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background {

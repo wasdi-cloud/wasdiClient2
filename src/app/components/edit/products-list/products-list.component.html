@@ -25,86 +25,21 @@
                 {{m_aoFilteredProducts.length}}</div>
         </div> -->
     </div>
+    <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
     <!-- Product Tree -> Scrollable -->
-    <div class="products-container">
+    <div class="products-container" *ngIf="m_bIsLoadingProducts === false">
         <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts"
             [m_oProduct]="oProduct"></app-product-list-item>
     </div>
-    <!-- <div *ngIf="m_bIsLoadingProducts === true" class="d-flex flex-column align-items-center pt-3">
-            <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
-        </div> -->
+
     <!-- Buttons to import/search for products if there is no product -->
-    <!-- <div *ngIf="(!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0) && !m_bIsLoadingProducts">
-            <p>{{'EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT' | translate}}</p>
-            <div class="d-flex flex-row justify-content-around" style="width:50%">
-                <button class="btn btn-lg btn-primary" (click)="navigateToSearchPage()">
-                    <fa-icon [icon]="faSearch"></fa-icon>
-                    Search
-                </button>
-                <button class="btn btn-lg btn-primary" (click)="openImportDialog()">
-                    <fa-icon [icon]="faPlus"></fa-icon>
-                    Import
-                </button>
-            </div>
-        </div> -->
-    <!-- <ul *ngIf="(m_aoFilteredProducts.length !== 0) && !m_bIsLoadingProducts"
-            class="list-group list-group-flush">
-            <li *ngFor="let oProduct of m_aoFilteredProducts; trackBy: trackByItem"
-                class="list-group-item p-2 d-flex flex-column" style="cursor: pointer;">
-
-                <input class="form-check-input me-1" type="checkbox" value="{{oProduct}}"
-                [checked]="oProduct['checked']" (change)="addProductToSelectedProducts($event, oProduct)">
-
-                <span class="product-name">{{oProduct.name}}</span> -->
-
-    <!--div class="d-flex flex-row justify-content-between align-items-center">
-                    <div class="d-flex flex-row align-items-center gap-2">
-                        <fa-icon [icon]="faPlusCircle" data-bs-toggle="collapse"
-                            [attr.data-bs-target]="'#collapseExample' + iIndex" aria-expanded="false"
-                            aria-controls="collapseExample"
-                            [ngClass]="oProduct.bandsGroups.bands ? 'text-primary' : 'text-secondary'"></fa-icon>
-
-                        <input class="form-check-input me-1" type="checkbox" value="{{oProduct}}"
-                            [checked]="oProduct['checked']" (change)="addProductToSelectedProducts($event, oProduct)">
-                        <span class="product-name">{{oProduct.name}}</span>
-                    </div>
-
-                    <div class="d-flex flex-row gap-2 mr-2" *ngIf="oProduct.bandsGroups">
-                        <button class="tree-btn btn" matTooltip="{{'MENU_METADATA'| translate}}"
-                            (click)="readMetadata(oProduct.fileName)">
-                            <fa-icon [icon]="faBox"></fa-icon>
-                        </button>
-                        <button class="tree-btn btn" matTooltip="{{'MENU_DOWNLOAD' | translate}}">
-                            <fa-icon [icon]="faDownload" (click)="downloadProduct(oProduct)"></fa-icon>
-                        </button>
-                        <button class="tree-btn btn" matTooltip="{{'MENU_SHARE_PRODUCT' | translate}}"
-                            (click)="openSendToFTP(oProduct)">
-                            <fa-icon [icon]="faShare" title="Share Product"></fa-icon>
-                        </button>
-                        <button class="tree-btn btn" matTooltip="{{'MENU_PROPERTIES' | translate}}">
-                            <fa-icon [icon]="faInfoCircle" title="Properties"
-                                (click)="openProductProperties($event, oProduct)"></fa-icon>
-                        </button>
-                        <button class="tree-btn btn" matTooltip="{{'MENU_DELETE' | translate}}"
-                        [disabled]="m_bIsReadOnly === true">
-                            <fa-icon [icon]="faTrash" title="Delete Product"
-                                (click)="deleteProduct(oProduct)"></fa-icon>
-                        </button>
-                    </div>
-                </div-->
-    <!--div class="collapse" id="{{'collapseExample' + iIndex}}">
-                    <ul class="list-group list-group-flush ps-4">
-                        <li *ngFor="let oBand of oProduct.bandsGroups.bands" class="d-flex flex-row gap-2">
-                            <div>
-                                <fa-icon class="btn text-secondary" *ngIf="m_aoVisibleBands.indexOf(oBand) === -1"
-                                    [icon]="faCircleX" (click)="setBandImage(oBand, iIndex)"></fa-icon>
-                                <fa-icon class="btn text-success" *ngIf="m_aoVisibleBands.indexOf(oBand) !== -1"
-                                    (click)="setBandImage(oBand, iIndex)" [icon]="faCircleCheck"></fa-icon>
-                                {{oBand.name}}
-                            </div>
-                        </li>
-                    </ul>
-                </div-->
-    <!-- </li>
-        </ul> -->
+    <div *ngIf="(!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0) && !m_bIsLoadingProducts">
+        <p>{{'EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT' | translate}}</p>
+        <div class="d-flex flex-row gap-2">
+            <app-button [m_sLabel]="'Search'" [m_sIconLeft]="'search'" [m_sSize]="'large'"
+                (click)="navigateToSearchPage()"></app-button>
+            <app-button [m_sLabel]="'Import'" [m_sIconLeft]="'add'" [m_sSize]="'large'"
+                (click)="openImportDialog()"></app-button>
+        </div>
+    </div>
 </div>

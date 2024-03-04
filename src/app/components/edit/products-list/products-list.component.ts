@@ -170,12 +170,14 @@ export class ProductsListComponent implements OnChanges, OnInit {
         });
 
         this.m_aoFilteredProducts = aoFiltered;
+        this.m_bIsLoadingProducts = false;
       } else {
         this.m_aoFilteredProducts = this.m_aoWorkspaceProductsList;
       }
     }
     else {
-      this.m_aoFilteredProducts = []
+      this.m_aoFilteredProducts = [];
+      this.m_bIsLoadingProducts = false;
     }
   }
 
