@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
@@ -14,7 +14,7 @@ import { ProductsListComponent } from '../products-list.component'
   templateUrl: './product-list-item.component.html',
   styleUrls: ['./product-list-item.component.css']
 })
-export class ProductListItemComponent implements OnInit {
+export class ProductListItemComponent {
   @Input() m_oProduct: any = null;
 
   /**
@@ -42,10 +42,6 @@ export class ProductListItemComponent implements OnInit {
     private m_oNotificationDisplayService: NotificationDisplayService )
   { 
 
-  }
-
-  ngOnInit(): void {
-      console.log(this.m_oProduct);
   }
   /**
    * Clicked on the expand button

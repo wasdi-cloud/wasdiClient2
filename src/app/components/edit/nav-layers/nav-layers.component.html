@@ -1,21 +1,13 @@
-<div class="parent">
-    <ul class="nav nav-tabs" style="width: 100%;">
-        <li class="nav-item">
-            <a class="nav-link" (click)="setActiveTab('nav')"
-                ngClass="{{m_sActiveTab === 'nav' ? 'active text-dark' : 'text-light'}}">
-                Navigation
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" (click)="setActiveTab('layers')"
-                ngClass="{{m_sActiveTab === 'layers' ? 'active text-dark' : 'text-light'}}">
-                Layers
-            </a>
-        </li>
-    </ul>
+<div class="parent d-flex flex-column gap-3">
+    <div class="d-flex flex-row">
+        <app-tab [m_sLabel]="'Navigation'" [m_bIsDisabled]="false" [m_bIsActive]="m_sActiveTab === 'nav'"
+            (click)="setActiveTab('nav')"></app-tab>
+        <app-tab [m_sLabel]="'Layers'" [m_bIsDisabled]="false" [m_bIsActive]="m_sActiveTab === 'layers'"
+            (click)="setActiveTab('layers')"></app-tab>
+    </div>
     <!-- Navigation and Layers content -->
-    <div class="map-container-panel" [hidden]="m_sActiveTab !== 'nav'" style="height: 90%">
-        <div class="h-100 w-100" id="smallMapContainer"></div>
+    <div class="map-container-panel flex-fill" [hidden]="m_sActiveTab !== 'nav'" style="height: 100%;">
+        <div class="" id="smallMapContainer" class="" style="height: 97.5%"></div>
     </div>
     <div class="layers-tab" *ngIf="m_sActiveTab === 'layers'">
         <ul class="list-group pt-3">
@@ -51,5 +43,4 @@
             </li>
         </ul>
     </div>
-
 </div>

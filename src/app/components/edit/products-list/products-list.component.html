@@ -1,4 +1,4 @@
-<div class="product-tree-container">
+<div class="product-tree-container d-flex flex-column">
     <!-- Product Tree Header -->
     <div class="products-header">
         <h3>Products ({{m_aoFilteredProducts.length}})</h3>
@@ -27,7 +27,7 @@
     </div>
     <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
     <!-- Product Tree -> Scrollable -->
-    <div class="products-container" *ngIf="m_bIsLoadingProducts === false">
+    <div class="products-container flex-fill" *ngIf="m_bIsLoadingProducts === false">
         <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts"
             [m_oProduct]="oProduct"></app-product-list-item>
     </div>

@@ -3,8 +3,8 @@ div.products-tree-container {
 }
 
 .products-container {
-  max-height: 200px;
-  overflow-y: auto;
+  max-height: 14rem;
+  overflow-y: scroll;
 }
 
 h3 {
