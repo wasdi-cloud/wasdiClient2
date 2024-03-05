@@ -92,15 +92,16 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
    */
   openAppsDialog(oEvent: MouseEvent) {
     oEvent.preventDefault();
-    let dialogRef = this.m_oDialog.open(AppsDialogComponent, {
-      height: '80vh',
-      width: '80vw'
+    this.m_oDialog.open(AppsDialogComponent, {
+      height: '90vh',
+      width: '90vw',
+      maxWidth: '100vw'
     })
   }
 
   openWorkflowsDialog(event: MouseEvent) {
     event.preventDefault();
-    let dialogRef = this.m_oDialog.open(WorkflowsDialogComponent, {
+    this.m_oDialog.open(WorkflowsDialogComponent, {
       height: '80vh',
       width: '80vw',
       data: {
@@ -111,7 +112,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   openNewAppDialog(oEvent: MouseEvent) {
     oEvent.preventDefault();
-    let dialogRef = this.m_oDialog.open(NewAppDialogComponent, {
+    this.m_oDialog.open(NewAppDialogComponent, {
       height: '90vh',
       width: '90vw',
       data: { editMode: false }
@@ -119,7 +120,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   }
 
-  openImportDialog(event: MouseEvent) {
+  openImportDialog(oEvent: MouseEvent) {
     let oDialog = this.m_oDialog.open(ImportDialogComponent, {
       height: '60vh',
       width: '50vw'

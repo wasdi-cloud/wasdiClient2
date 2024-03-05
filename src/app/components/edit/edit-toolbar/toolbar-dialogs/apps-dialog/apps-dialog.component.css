@@ -1,4 +1,4 @@
-div.processor-cards-container {
+/* div.processor-cards-container {
     height: 80%;
     overflow-y: scroll;
 }
@@ -6,4 +6,52 @@ div.processor-cards-container {
 p.processor-description {
     font-size: 1rem;
     margin-bottom: 0;
+} */
+
+div.apps-dialog {
+    padding: 24px;
+    height: 80vh;
+    width: 100%;
+}
+
+.dialog-header {
+    font-size: 20px;
+    line-height: 30px;
+    padding-bottom: 16px;
+}
+
+.search-header {
+    color: var(--neutral60);
+    font-size: 16px;
+}
+
+.apps-container,
+.json-container {
+    width: 49.5%
+}
+
+.json-container {
+    background: var(--neutral10);
+    border-radius: 8px;
+    height: 100%;
+    padding-top: 32px;
+}
+
+.json-header,
+.json-body {
+    padding: 0px 32px;
+}
+
+.json-body{
+    padding-bottom: 1rem;
+}
+
+p {
+    font-size: 14px;
+
+}
+
+.footer {
+    background-color: #FFFFFF;
+    padding: 16px 32px;
 }

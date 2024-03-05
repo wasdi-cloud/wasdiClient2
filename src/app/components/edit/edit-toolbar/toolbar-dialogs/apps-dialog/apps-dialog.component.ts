@@ -22,6 +22,7 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
+import { Application } from 'src/app/components/app-ui/app-ui.component';
 
 
 @Component({
@@ -52,7 +53,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
   m_sJson: any = {};
   m_sMyJsonString: string = "";
   m_sSearchString = ""
-  m_oSelectedProcessor: any;
+  m_oSelectedProcessor: any = {} as Application;
   m_bIsReadonly: boolean = true;
 
   m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
@@ -119,6 +120,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     for (let iIndexProcessor = 0; iIndexProcessor < iNumberOfProcessors; iIndexProcessor++) {
       if (!aoProcessorList.imgLink) {
         aoProcessorList[iIndexProcessor].imgLink = sDefaultImage
+
       }
     }
     return aoProcessorList;
@@ -153,8 +155,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @param oEvent 
    * @param oProcessor 
    */
-  openParametersDialog(oEvent: MouseEvent, oProcessor) {
-    oEvent.preventDefault();
+  openParametersDialog(oProcessor) {
     let oDialog = this.m_oDialog.open(ParamsLibraryDialogComponent, {
       height: '80vh',
       width: '80vw',
@@ -174,10 +175,10 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @param oProcessor 
    * @returns 
    */
-  downloadProcessor(oEvent: MouseEvent, oProcessor: any) {
-    oEvent.preventDefault();
-    if (!oProcessor) {
-      return false;
+  downloadProcessor(oProcessor: any) {
+    console.log(oProcessor)
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oProcessor)) {
+      // return false;
     }
 
     return this.m_oProcessorService.downloadProcessor(oProcessor.processorId);
@@ -188,8 +189,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @param oEvent 
    * @param oProcessor 
    */
-  openEditProcessorDialog(oEvent: MouseEvent, oProcessor: any) {
-    let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
+  openEditProcessorDialog(oProcessor: any) {
+    this.m_oDialog.open(NewAppDialogComponent, {
       height: '80vh',
       width: '80vw',
       data: {
@@ -205,7 +206,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @param oProcessor 
    * @returns 
    */
-  removeProcessor(oEvent: MouseEvent, oProcessor: any) {
+  removeProcessor(oProcessor: any) {
     if (!oProcessor) {
       return false;
     }
@@ -319,9 +320,27 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
         }
       })
     })
-
   }
 
+  handleToolbarClick(oEvent, oProcessor) {
+    switch (oEvent) {
+      case 'params':
+        this.openParametersDialog(oProcessor);
+        break;
+      case 'download':
+        this.downloadProcessor(oProcessor);
+        break;
+      case 'edit':
+        this.openEditProcessorDialog(oProcessor);
+        break;
+      default:
+        this.removeProcessor(oProcessor)
+    }
+  }
+
+  handleSearchChange(oEvent) {
+    this.m_sSearchString = oEvent.event.target.value;
+  }
   /**
    * Close the Apps Dialog
    */

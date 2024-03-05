@@ -317,6 +317,9 @@ div.app-outlet {
   background: #FFFFFF;
 }
 
+span.close-btn {
+  cursor: pointer;
+}
 /* 
 .leaflet-bar a {
   background-color: rgba(13, 16, 21, 0.8) !important;
