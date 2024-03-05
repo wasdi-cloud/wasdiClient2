@@ -1,4 +1,4 @@
-<div class="product-tree-container d-flex flex-column">
+<div class="product-tree-container d-flex flex-column h-100">
     <!-- Product Tree Header -->
     <div class="products-header">
         <h3>Products ({{m_aoFilteredProducts.length}})</h3>
@@ -8,28 +8,12 @@
             </span>
             <input type="text" class="search-input" placeholder="Search in product list">
         </div>
-        <!-- <h3 class="p-0 m-0">{{'EDITOR_TITLE_PANEL_PRODUCTS' | translate}}</h3>
-        <div class="d-flex flex-row align-items-center gap-2">
-            <span *ngIf="m_bIsReadOnly === true" class="badge badge-sm bg-warning">Read Only</span>
-            <input type="checkbox" name="" id="" matTooltip="Select All" (change)="selectAllProducts($event)">
-            <div *ngIf="m_aoSelectedProducts.length > 0">
-                <button class="btn btn-sm text-light" matTooltip="Download Selected"
-                    (click)="downloadMultipleProducts()">
-                    <fa-icon [icon]="faDownload"></fa-icon>
-                </button>
-                <button class="btn btn-sm text-light" matTooltip="Delete Selected" (click)="deleteMultipleProducts()">
-                    <fa-icon [icon]="faTrash"></fa-icon>
-                </button>
-            </div>
-            <div class="badge rounded-pill text-bg-success" *ngIf="m_aoFilteredProducts">
-                {{m_aoFilteredProducts.length}}</div>
-        </div> -->
     </div>
     <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
     <!-- Product Tree -> Scrollable -->
     <div class="products-container flex-fill" *ngIf="m_bIsLoadingProducts === false">
-        <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts"
-            [m_oProduct]="oProduct"></app-product-list-item>
+        <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts; let iIndex = index"
+            [m_oProduct]="oProduct" (m_oProductChange)="handleBandSelection($event, iIndex)"></app-product-list-item>
     </div>
 
     <!-- Buttons to import/search for products if there is no product -->

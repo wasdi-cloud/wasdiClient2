@@ -3,7 +3,6 @@ div.products-tree-container {
 }
 
 .products-container {
-  max-height: 14rem;
   overflow-y: scroll;
 }
 

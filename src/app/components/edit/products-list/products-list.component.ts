@@ -4,8 +4,6 @@ import { HttpEventType } from '@angular/common/http';
 
 //Angular Material Imports:
 import { MatDialog } from '@angular/material/dialog';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { NestedTreeControl } from '@angular/cdk/tree';
 
 //Service Imports:
 import { CatalogService } from 'src/app/services/api/catalog.service';
@@ -16,8 +14,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProductService } from 'src/app/services/api/product.service';
 
-//Font Awesome Icons:
-import { faDownload, faShareAlt, faTrash, faInfoCircle, faMap, faGlobeEurope, faCircleXmark, faCircleCheck, faBoxOpen, faSearch, faPlus, faChevronRight, faChevronDown, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+
 
 //Component Imports: 
 import { ImportDialogComponent } from '../edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
@@ -50,44 +47,41 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * Flag to know if we are in 2D or 3D Mode: used to zoom on a layer after publish band
    */
   @Input() m_b2DMapMode: boolean = true;
-  /**
-   * Event to notify that the list of products changed (ie deleted a product?)
-   */
-  @Output() m_oProductArrayOutput = new EventEmitter();
-  /**
-   * Search String filter
-   */
-  @Input() m_sSearchString: string;
-  /**
-   * Event to notify the change of Visible Layers
-   */
-  @Output() m_aoVisibleBandsOutput = new EventEmitter();
-  /**
-   * Event to notify that the properties of a product are changed
-   */
-  @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
-  /**
-   * Event to notify about on going downloads
-   */
-  @Output() m_oDownloadProgress: EventEmitter<any> = new EventEmitter();
+
   /**
    * Flag to know if the products are still loading or not
    */
   @Input() m_bIsLoadingProducts: boolean = true;
 
-  //font awesome icons: 
-  faBox = faBoxOpen;
-  faPlusCircle = faPlusCircle;
-  faCircleCheck = faCircleCheck;
-  faCircleX = faCircleXmark;
-  faDownload = faDownload;
-  faShare = faShareAlt;
-  faTrash = faTrash;
-  faInfoCircle = faInfoCircle;
-  faGlobe = faGlobeEurope;
-  faMap = faMap;
-  faSearch = faSearch;
-  faPlus = faPlus;
+  /**
+   * Search String filter
+   */
+  @Input() m_sSearchString: string;
+
+  /**
+   * List of the visible layers
+   */
+  @Input() m_aoVisibleBands: any[] = [];
+
+  /**
+   * Event to notify that the list of products changed (ie deleted a product?)
+   */
+  @Output() m_oProductArrayOutput = new EventEmitter();
+
+  /**
+   * Event to notify the change of Visible Layers
+   */
+  @Output() m_aoVisibleBandsOutput = new EventEmitter();
+
+  /**
+   * Event to notify that the properties of a product are changed
+   */
+  @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * Event to notify about on going downloads
+   */
+  @Output() m_oDownloadProgress: EventEmitter<any> = new EventEmitter();
 
   /**
    * Array of (potentially) filtered products to show
@@ -97,10 +91,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * Active Workspace, used mainly as argument to different API services
    */
   m_oActiveWorkspace: any;
-  /**
-   * List of the visible layers
-   */
-  m_aoVisibleBands: any[] = [];
   /**
    * List of selected Products
    */
@@ -150,7 +140,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
   }
 
   filterProducts() {
-
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoWorkspaceProductsList)) {
       if (!FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sSearchString)) {
 
@@ -310,7 +299,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   }
 
   /**
-   * Delete Product command: ask for confirmatio and, in case, calls the API to delete a product
+   * Delete Product command: ask for confirmation and, in case, calls the API to delete a product
    * @param node 
    */
   deleteProduct(node: any) {
@@ -389,14 +378,12 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * @param oBand 
    * @param iIndex 
    */
-  setBandImage(oBand: any, iIndex: number) {
-
+  handleBandSelection(oBand: any, iIndex) {
     if (this.m_aoVisibleBands.indexOf(oBand) !== -1) {
       this.removeBandImage(oBand)
     } else {
       this.openBandImage(oBand, iIndex);
     }
-
   }
 
   /**
@@ -563,7 +550,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * Open the Import Dialog
    */
   openImportDialog() {
-    let oDialog = this.m_oDialog.open(ImportDialogComponent, {
+    this.m_oDialog.open(ImportDialogComponent, {
       height: '40vh',
       width: '50vw'
     })

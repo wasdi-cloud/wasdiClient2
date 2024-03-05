@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
@@ -16,6 +16,7 @@ import { ProductsListComponent } from '../products-list.component'
 })
 export class ProductListItemComponent {
   @Input() m_oProduct: any = null;
+  @Output() m_oProductChange: EventEmitter<any> = new EventEmitter();
 
   /**
    * Flag to know if the actual product is open or closed.
@@ -32,16 +33,17 @@ export class ProductListItemComponent {
    */
   m_bIsHovering: boolean = false;
 
-  @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
 
-  constructor( 
+  constructor(
     @Inject(ProductsListComponent) private m_oParentProductList: ProductsListComponent,
     private m_oDialog: MatDialog,
     private m_oConstantsService: ConstantsService,
     private m_oCatalogService: CatalogService,
-    private m_oNotificationDisplayService: NotificationDisplayService )
-  { 
+    private m_oNotificationDisplayService: NotificationDisplayService) {
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+      
   }
   /**
    * Clicked on the expand button
@@ -61,15 +63,15 @@ export class ProductListItemComponent {
    * Mouse entering on the item
    */
   mouseHovering() {
-      this.m_bIsHovering = true;
+    this.m_bIsHovering = true;
   }
 
   /**
    * Mouse leaving the item
    */
   mouseLeaving() {
-      this.m_bIsHovering = false;
-  }  
+    this.m_bIsHovering = false;
+  }
 
   /**
    * Open Product Properties
@@ -80,14 +82,30 @@ export class ProductListItemComponent {
     })
   }
 
+  /**
+   * Event to show product on Map
+   */
+  showBandsOnMap(oSelectedBand, bShowOnMap: boolean) {
+    this.emitBandSelectionChange(oSelectedBand)
+    //Find Band in Product's bandsGroups Array
+    this.m_oProduct.bandsGroups.bands.forEach(oBand => {
+      //Set Band.published = true
+      if (oBand.name === oSelectedBand.name) {
+        oBand.published = bShowOnMap
+      }
+    });
+
+  }
+
   downloadProduct() {
     this.m_oParentProductList.downloadProductByName(this.m_oProduct.fileName);
   }
 
   deleteProduct() {
     this.m_oParentProductList.deleteProduct(this.m_oProduct);
-  }  
+  }
 
-  emitProductInfoChange() { }
-
+  emitBandSelectionChange(oBand: any): void {
+    this.m_oProductChange.emit(oBand);
+  }
 }

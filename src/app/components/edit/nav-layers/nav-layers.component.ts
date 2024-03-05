@@ -30,7 +30,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
 
   //Set opacity to 100% by default
   m_iOpacityVal = 100;
-  
+
   /**
    * Linked list of the visible bands
    */
@@ -111,14 +111,16 @@ export class NavLayersComponent implements OnInit, OnChanges {
    */
   removeBandImageFromVisibleList(oBand): void {
     let iVisibleBandCount = 0;
+    let oRemovedBand;
 
     if (this.m_aoVisibleBands.length > 0) {
       iVisibleBandCount = this.m_aoVisibleBands.length;
     }
     for (let iIndex = 0; iIndex < iVisibleBandCount;) {
       if (this.m_aoVisibleBands[iIndex].layerId == oBand.layerId && this.m_aoVisibleBands[iIndex].name == oBand.name) {
+        oRemovedBand = oBand;
         this.m_aoVisibleBands.splice(iIndex, 1);
-        this.m_aoVisibleBandsChange.emit(this.m_aoVisibleBands);
+        this.m_aoVisibleBandsChange.emit({ visibleBands: this.m_aoVisibleBands, removedBand: oRemovedBand });
         iVisibleBandCount--;
       } else {
         iIndex++;

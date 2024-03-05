@@ -51,8 +51,10 @@
             </p>
             <ul *ngIf="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands">
                 <li *ngFor="let oBand of m_oProduct.bandsGroups.bands">
-                    <p>{{oBand.name}} <span *ngIf="oBand.published === false" class="category-tag outlined">RUN</span>
-                        <span *ngIf="oBand.published === true" class="category-tag outlined red">REMOVE</span>
+                    <p>{{oBand.name}} <span *ngIf="oBand.published === false" class="category-tag outlined"
+                            (click)="showBandsOnMap(oBand, true)">RUN</span>
+                        <span *ngIf="oBand.published === true" class="category-tag outlined red"
+                            (click)="showBandsOnMap(oBand, false)">REMOVE</span>
                     </p>
                 </li>
             </ul>

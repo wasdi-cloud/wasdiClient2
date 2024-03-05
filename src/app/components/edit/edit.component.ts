@@ -325,7 +325,14 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   getVisibleBands(event: any) {
-    this.m_aoVisibleBands = event;
+    if (event.visibleBands) {
+      // When handling from Nav/layers component:
+      this.m_aoVisibleBands = event.visibleBands;
+      this.setPublishedSetting(event.removedBand);
+    } else {
+    //When handling from Products List:p
+      this.m_aoVisibleBands = event;
+    }
   }
 
   getMapMode(event: any) {
@@ -363,6 +370,19 @@ export class EditComponent implements OnInit, OnDestroy {
         this.m_bShowProductDownload = false;
       }
     }
+  }
+
+  setPublishedSetting(oInputBand) {
+    this.m_aoProducts.forEach(oProduct => {
+      if (oProduct.name === oInputBand.productName) {
+        console.log(oProduct.bandsGroups.bands)
+        oProduct.bandsGroups.bands.forEach(oBand => {
+          if (oBand.name === oInputBand.name) {
+            oBand.published = false;
+          }
+        })
+      }
+    })
   }
 
   rabbitMessageHook(oRabbitMessage, oController) {

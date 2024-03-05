@@ -5,32 +5,17 @@
             <div class="workspace-subheading">You are currently inside:</div>
             <div class="workspace-name">{{m_oActiveWorkspace?.name}}</div>
         </div>
-        <app-products-list class="product-list-container" style="height: 20rem" [m_aoWorkspaceProductsList]="m_aoProducts" [m_sSearchString]="m_sSearchString"
-            [m_bIsLoadingProducts]="m_bIsLoadingProducts" [m_b2DMapMode]="m_b2DMapModeOn"
-            (m_aoVisibleBandsOutput)="getVisibleBands($event)" (m_oProductInfoChange)="getProductsChange($event)"
-            (m_oProductArrayOutput)="getProductsChange($event)"
+        <app-products-list class="product-list-container" style="height: 20rem"
+            [m_aoWorkspaceProductsList]="m_aoProducts" [m_sSearchString]="m_sSearchString"
+            [m_aoVisibleBands]="m_aoVisibleBands" [m_bIsLoadingProducts]="m_bIsLoadingProducts"
+            [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
+            (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)"
+            (m_oProductInfoChange)="getProductsChange($event)"
             (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
-        <app-nav-layers class="flex-fill" [m_aoVisibleBands]="m_aoVisibleBands" [m_aoVisibleBands]="m_aoVisibleBands"></app-nav-layers>
+        <app-nav-layers class="flex-fill" [m_aoVisibleBands]="m_aoVisibleBands"
+            (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
     </div>
     <!-- Map Container with Floating Nav-->
-    <!-- <div> -->
-    <!-- <div style="height: 8%;">
-            <app-edit-toolbar [m_oActiveWorkspace]="m_oActiveWorkspace" [m_aoProducts]="m_aoProducts"
-                (m_sSearchString)="getSearchString($event)"></app-edit-toolbar>
-        </div> -->
-    <!-- <div class="d-flex flex-row gap-1"> -->
-    <!-- <div class="productlist-navigation-container d-flex flex-column gap-1" style="height: 100%; width: 40%;">
-                <div style="height: 40%; width: 100%;">
-                    <app-products-list [m_aoWorkspaceProductsList]="m_aoProducts" [m_sSearchString]="m_sSearchString"
-                    [m_bIsLoadingProducts]="m_bIsLoadingProducts"
-                        [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
-                        (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)" (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
-                </div>
-                <div style="height: 45%;">
-                    <app-nav-layers [m_aoVisibleBands]="m_aoVisibleBands" [m_aoVisibleBands]="m_aoVisibleBands"
-                    [m_aoProducts]="m_aoProducts" [b2DMapModeOn]="m_b2DMapModeOn"></app-nav-layers>
-                </div>
-            </div> -->
     <div class="map map-container flex-fill">
         <app-edit-map [aoProducts]="m_aoProducts" [m_aoVisibleBands]="m_aoVisibleBands"
             [bIsLoadingProducts]="m_bIsLoadingProducts" (m_b2DMapModeOutput)="getMapMode($event)"></app-edit-map>
