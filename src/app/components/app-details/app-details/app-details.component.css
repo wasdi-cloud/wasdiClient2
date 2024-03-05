@@ -3,7 +3,7 @@ main {
 }
 
 div.hero-image {
-    background-image: url("src/assets/images/hero-images/hero-img7.png");
+    background-image: url("src/assets/images/hero-images/hero-img7.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
