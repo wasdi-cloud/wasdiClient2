@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ProcessorService } from 'src/app/services/api/processor.service';
 import { MapService } from 'src/app/services/map.service';
 
 @Component({
@@ -22,6 +23,8 @@ export class ListItemComponent {
    * Is the list item for a product? e.g., in the Import Search Results page.
    */
   @Input() m_bProductItem?: boolean = false;
+
+  @Input() m_bProcessorItem?: boolean = false;
 
   /**
    * Is there a toolbar component in the list item?
@@ -48,8 +51,9 @@ export class ListItemComponent {
    */
   @Input() m_sDescription: string | number = "";
 
+
   /**
-   * Product input for
+   * Product input for List item
    */
   @Input() m_oProductListItem?: any = {};
 
@@ -65,8 +69,15 @@ export class ListItemComponent {
 
   @Input() m_oAddCallbackFn?: (args: any) => void;
 
+  @Output() m_oEmitClickEvent: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(
     private m_oDialog: MatDialog,
-    private m_oMapService: MapService
+    private m_oMapService: MapService,
+    private m_oProcessorService: ProcessorService
   ) { }
+
+  emitToolbarClick(sLocation: string) {
+    this.m_oEmitClickEvent.emit(sLocation)
+  }
 }

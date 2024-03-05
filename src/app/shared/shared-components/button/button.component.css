@@ -45,7 +45,8 @@
 /* Muted BUtton */
 .muted {
     color: #141920;
-    background:transparent;
+    border: 1px solid #ffffff;
+    background: transparent;
 }
 
 

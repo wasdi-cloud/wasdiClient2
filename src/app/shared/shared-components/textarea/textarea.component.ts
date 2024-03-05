@@ -34,12 +34,12 @@ export class TextareaComponent {
   /**
    * Label
    */
-  @Input() m_sLabel: string = "Label"
+  @Input() m_sLabel: string = "";
 
   /**
    * Helper text provided by invalid and valid inputs
    */
   @Input() m_sHelperText?: string = "Helper text"
 
-  
+
 }

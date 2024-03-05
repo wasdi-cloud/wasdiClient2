@@ -24,7 +24,7 @@ export class InputFieldComponent {
   /**
    * The label to appear *above* the input field
    */
-  @Input() m_sLabel: string = "Label"
+  @Input() m_sLabel: string = ""
 
   /**
    * The placeholder text to appear inside the input field

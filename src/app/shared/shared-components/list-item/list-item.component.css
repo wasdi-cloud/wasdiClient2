@@ -6,6 +6,10 @@
     width: 100%;
 }
 
+.hover:hover {
+    background: var(--neutral10);
+}
+
 .parent-item {
     background: var(--neutral70);
     color: #FFFFFF;
@@ -60,4 +64,22 @@ span.bold {
 .selected {
     border-color: var(--wasdiGreen);
     background: var(--wasdiGreen10);
+}
+
+.preview-img {
+    border-radius: 8px;
+    height: 46px;
+    width: 65px;
+    background-size: auto;
+}
+
+.processor-description {
+    color: var(--neutral80);
+    font-size: 14px;
+    line-height: 21px;
+}
+
+
+div.processor-toolbar>span.material-symbols-outlined {
+    font-size: 16px;
 }
