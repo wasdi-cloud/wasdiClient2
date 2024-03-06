@@ -12,9 +12,6 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
-//Font Awesome Icons: 
-import { faBook, faDownload, faEdit, faPaintBrush, faPlay, faPlus, faQuestionCircle, faRocket, faX } from '@fortawesome/free-solid-svg-icons';
-
 //Components Imports:
 import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
 import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
@@ -31,17 +28,6 @@ import { Application } from 'src/app/components/app-ui/app-ui.component';
   styleUrls: ['./apps-dialog.component.css']
 })
 export class AppsDialogComponent implements OnInit, OnDestroy {
-  //Font Awesome Icon Imports
-  faBook = faBook;
-  faDownload = faDownload;
-  faEdit = faEdit;
-  faHelp = faQuestionCircle;
-  faPaintBrush = faPaintBrush;
-  faPlus = faPlus;
-  faRocket = faRocket;
-  faRun = faPlay;
-  faX = faX;
-
   m_sActiveUserId: string = "";
   m_aoWorkspaceList: any[] = [];
   m_aWorkspacesName: any[] = [];
