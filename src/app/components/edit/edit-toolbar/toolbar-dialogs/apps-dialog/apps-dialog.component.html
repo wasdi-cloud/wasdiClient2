@@ -11,7 +11,10 @@
                 <app-input-field [m_sPlacehodler]="'Search app'" [m_sIconLeft]="'search'"
                     (m_oInputChange)="handleSearchChange($event)"></app-input-field>
             </div>
-            <div class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1" style="overflow-y:scroll">
+            <div *ngIf="m_bIsLoadingProcessorList === true">
+                <app-invader></app-invader>
+            </div>
+            <div *ngIf="m_bIsLoadingProcessorList === false" class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1" style="overflow-y:scroll">
                 <app-list-item *ngFor="let oProcessor of m_aoProcessorList | filter: m_sSearchString"
                     [m_bIsSelected]="oProcessor.processorName === m_oSelectedProcessor.processorName"
                     [m_bSimpleItem]="true" [m_bProcessorItem]="true" [m_sLabel]="oProcessor.processorName"
@@ -28,7 +31,8 @@
                 <p *ngIf="m_oSelectedProcessor.publisher">Publisher: {{m_oSelectedProcessor.publisher}}</p>
             </div>
 
-            <app-textarea class="json-body flex-fill" [m_sInputString]="m_sMyJsonString" (keyup)="getJSONInput($event)"></app-textarea>
+            <app-textarea class="json-body flex-fill" [m_sInputString]="m_sMyJsonString"
+                (keyup)="getJSONInput($event)"></app-textarea>
 
             <div class="footer d-flex flex-row justify-content-between">
                 <div>
