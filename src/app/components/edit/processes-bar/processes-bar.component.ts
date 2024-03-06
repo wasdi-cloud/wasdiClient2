@@ -4,13 +4,9 @@ import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-//Font Awesome Imports: 
-import { faArrowDown, faArrowUp, faBars, faCircleXmark, faDatabase, faDownload, faFile, faFilter, faList, faListSquares, faPlug, faPlugCircleBolt, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons';
-
 //Service Imports: 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
-import { ProcessLogsDialogComponent } from '../process-logs-dialog/process-logs-dialog.component';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -38,10 +34,6 @@ export class ProcessesBarComponent implements OnInit {
   @Input() m_sDownloadProductName?: string = "";
   @Input() m_bShowDownloadProgress: boolean = false;
 
-  //Fontawesome Icon Declarations
-  faArrowUp = faArrowUp;
-  faBars = faListSquares;
-  faPlug = faPlug;
 
   m_aoProcessesRunning: any[] = [];
   m_iNumberOfProcesses: number = 0;
@@ -50,6 +42,7 @@ export class ProcessesBarComponent implements OnInit {
   m_iIsWebsocketConnected: any;
   m_oSummary: any;
   m_oProcessesBarSubscription: any;
+  m_bIsProcessRunning: boolean = false; 
 
   constructor(
     private _bottomSheet: MatBottomSheet,
@@ -60,9 +53,9 @@ export class ProcessesBarComponent implements OnInit {
     private m_oTranslate: TranslateService) {
     setTimeout(() => {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProcessesRunning) && this.m_aoProcessesRunning.length != 0) {
-        var iNumberOfProcesses = this.m_aoProcessesRunning.length;
+        let iNumberOfProcesses = this.m_aoProcessesRunning.length;
 
-        for (var iIndexProcess = 0; iIndexProcess < iNumberOfProcesses; iIndexProcess++) {
+        for (let iIndexProcess = 0; iIndexProcess < iNumberOfProcesses; iIndexProcess++) {
           if (this.m_aoProcessesRunning[iIndexProcess].status === "RUNNING" ||
             this.m_aoProcessesRunning[iIndexProcess].status === "WAITING" ||
             this.m_aoProcessesRunning[iIndexProcess].status === "READY") {
@@ -85,6 +78,8 @@ export class ProcessesBarComponent implements OnInit {
       this.m_iIsWebsocketConnected = oResponse;
     });
   }
+
+  
 
   /**
    * Handler for messages that add a new product to the Workspace
@@ -148,14 +143,6 @@ export class ProcessesBarComponent implements OnInit {
   styleUrls: ['./processes-bar-content.css'],
 })
 export class ProcessesBarContent implements OnInit {
-  faArrowDown = faArrowDown;
-  faDownload = faDownload;
-  faRefresh = faRefresh;
-  faList = faList;
-  faFile = faFile;
-  faDatabase = faDatabase;
-  faCircleX = faCircleXmark;
-  faPlug = faPlug; 
   //Filter inputs (form): 
   m_oFilter: any = {
     sStatus: "",
@@ -279,74 +266,6 @@ export class ProcessesBarContent implements OnInit {
     let sText = this.makeStringLogFile();
     let oFile = this.generateFile(sText);
     return oFile;
-  }
-
-  getDuration(oProcess: any) {
-    let sStartDate = oProcess.operationStartDate;
-    if (!oProcess.operationStartDate.endsWith("Z")) {
-      sStartDate += "Z";
-    }
-
-    // start time by server
-    let oStartTime: any = new Date(sStartDate);
-    // still running -> assign "now"
-    let oEndTime: any = new Date();
-    // reassign in case the process is already ended
-    if (oProcess.operationEndDate) {
-
-      if (!oProcess.operationEndDate.endsWith("Z")) {
-        oProcess.operationEndDate += "Z";
-      }
-
-      oEndTime = new Date(oProcess.operationEndDate);
-    }
-
-    if (!oEndTime.getTime()) {
-      oEndTime = new Date(oProcess.lastChangeDate);
-    }
-
-    if (!oEndTime.getTime()) {
-      oEndTime = new Date();
-    }
-
-    //pick time
-    let iMilliseconds = Math.abs(oEndTime - oStartTime);
-
-    //approximate result
-    let iSecondsTimeSpan = Math.ceil(iMilliseconds / 1000);
-
-    if (!iSecondsTimeSpan || iSecondsTimeSpan < 0) {
-      iSecondsTimeSpan = 0;
-    }
-
-    // Calculate number of hours
-    let iHours = Math.trunc(iSecondsTimeSpan / (3600));
-
-    let iMinutesReminder = iSecondsTimeSpan - (iHours * 3600);
-    let iMinutes = Math.trunc(iMinutesReminder / 60);
-    let iSeconds = iMinutesReminder - (iMinutes * 60);
-
-    let sTimeSpan = this.renderTwoDigitNumber(iHours) + ":" + this.renderTwoDigitNumber(iMinutes) + ":" + this.renderTwoDigitNumber(iSeconds);
-
-    // var oDate = new Date(1970, 0, 1);
-    // oDate.setSeconds(0 + iSecondsTimeSpan);
-
-    // return oDate;
-    return sTimeSpan;
-  }
-
-  renderTwoDigitNumber(iNumber: number) {
-    let sNumber = "00";
-
-    if (iNumber > 0) {
-      if (iNumber < 10) {
-        sNumber = "0" + String(iNumber);
-      } else {
-        sNumber = String(iNumber);
-      }
-    }
-
-    return sNumber;
   }
 
   deleteProcess(oProcessInput: any) {

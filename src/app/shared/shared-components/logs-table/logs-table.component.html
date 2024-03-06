@@ -18,17 +18,19 @@
         <td>
             <app-table-cell [m_sLabel]="getOperationDescription(oProcessLog)"></app-table-cell>
         </td>
-        <td style="  ">{{oProcessLog.productName}}</td>
+        <td>{{oProcessLog.productName}}</td>
         <td>{{oProcessLog.userId}}</td>
         <td>{{oProcessLog.operationDate | date:'dd-MM-yyyy hh:mm:ss'}}</td>
         <td>{{oProcessLog.operationStartDate | date:'dd-MM-yyyy hh:mm:ss'}}</td>
         <td>
             <app-progress-bar [m_iProgressPerc]="oProcessLog.progressPerc"></app-progress-bar>
         </td>
-        <td></td>
+        <td>
+            {{getDuration(oProcessLog)}}
+        </td>
         <td class="d-flex flex-row">
             <span class="material-symbols-outlined" matTooltip="Payload" *ngIf="oProcessLog.payload"
-            (click)="openPayloadDialog(oProcessLog)">
+                (click)="openPayloadDialog(oProcessLog)">
                 subtitles
             </span>
             <span class="material-symbols-outlined" matTooltip="Logs" (click)="openLogsDialog(oProcessLog)">
