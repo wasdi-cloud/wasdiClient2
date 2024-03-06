@@ -28,7 +28,7 @@
                 <p *ngIf="m_oSelectedProcessor.publisher">Publisher: {{m_oSelectedProcessor.publisher}}</p>
             </div>
 
-            <app-textarea class="json-body flex-fill" [m_sInputString]="m_sMyJsonString"></app-textarea>
+            <app-textarea class="json-body flex-fill" [m_sInputString]="m_sMyJsonString" (keyup)="getJSONInput($event)"></app-textarea>
 
             <div class="footer d-flex flex-row justify-content-between">
                 <div>

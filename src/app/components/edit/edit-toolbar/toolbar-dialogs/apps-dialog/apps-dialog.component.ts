@@ -241,7 +241,11 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * Format the JSON textbox
    */
   formatJSON() {
-    this.m_sMyJsonString = JSON.stringify(JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')), null, 2);
+    try {
+      this.m_sMyJsonString = JSON.stringify(JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')), null, 3);
+    } catch (oError) {
+      this.m_oNotificationDisplayService.openAlertDialog("Could not format your JSON Input. Please ensure it is a valid JSON.")
+    }
   }
 
   /**
@@ -340,6 +344,11 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
 
   handleSearchChange(oEvent) {
     this.m_sSearchString = oEvent.event.target.value;
+  }
+
+  getJSONInput(oEvent) {
+
+    this.m_sMyJsonString = oEvent.target.value;
   }
   /**
    * Close the Apps Dialog
