@@ -2,8 +2,7 @@
     <div class="menu-header font-bold">Workspaces</div>
     <div class="menu-dropdown">
         <div>Workspace</div>
-        <app-dropdown [m_aoDropdownItems]="m_aoWorkspacesList" [m_sPlaceholder]="'Select Workspace'" [m_oDeleteFn]="deleteWorkspace" [m_oController]="this"
-            (m_oSelectionChange)="setActiveWorkspace($event)" [m_bHasSearch]="true"></app-dropdown>
+        <app-autocomplete [m_sPlaceholder]="'Select Workspace'" [m_aoInputs]="m_aoWorkspacesList" (m_oSelectionChange)="setActiveWorkspace($event)" ></app-autocomplete>
     </div>
     <app-button [m_sLabel]="'Open Workspace'" [m_sSize]="'large'" [m_bDisabled]="m_oActiveWorkspace === null"
         (click)="openWorkspace(m_oActiveWorkspace)"></app-button>
@@ -18,7 +17,8 @@
         <div class="property-tag font-bold">{{"WORKSPACES_NODE_CODE" | translate}}:
             <span class="font-light">{{m_oActiveWorkspace.nodeCode}}</span>
         </div>
-        <div class="property-tag font-bold">{{"WORKSPACES_PRODUCTS" | translate}}: <span class="font-light">{{m_aoProducts.length}}</span>
+        <div class="property-tag font-bold">{{"WORKSPACES_PRODUCTS" | translate}}: <span
+                class="font-light">{{m_aoProducts.length}}</span>
         </div>
         <div class="property-tag font-bold">{{"WORKSPACES_PROC_COUNT" | translate}}:
             <span class="font-light">{{m_oActiveWorkspace.processesCount}}</span>

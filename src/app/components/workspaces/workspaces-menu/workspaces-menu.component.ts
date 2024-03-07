@@ -45,7 +45,7 @@ export class WorkspacesMenuComponent implements OnInit {
    * Set the Active Workspace upon workspace selection (Reveals the Properties Component)
    */
   setActiveWorkspace(oEvent: any) {
-    this.m_oWorkspaceService.getWorkspaceEditorViewModel(oEvent.value.workspaceId).subscribe({
+    this.m_oWorkspaceService.getWorkspaceEditorViewModel(oEvent.workspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_oActiveWorkspace = oResponse;
