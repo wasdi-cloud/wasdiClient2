@@ -5,10 +5,8 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
-import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
 import { ImportDialogComponent } from './toolbar-dialogs/import-dialog/import-dialog.component';
 import { AppsDialogComponent } from './toolbar-dialogs/apps-dialog/apps-dialog.component';
-import { NewAppDialogComponent } from './toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
@@ -101,13 +99,6 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
       });
       return true;
     }
-  }
-
-  openStylesDialog(): void {
-    this.m_oDialog.open(StylesDialogComponent, {
-      height: '80vh',
-      width: '80vw'
-    })
   }
 
   openShareDialog(): void {

@@ -186,14 +186,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
       oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription, 10000);
 
-      if (oMessage.messageCode == "PUBLISHBAND") {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
-            // var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
-            // this.setTreeNodeAsDeselected(sNodeName);
-          }
-        }
-      }
       return;
     }
 
@@ -203,7 +195,7 @@ export class EditComponent implements OnInit, OnDestroy {
         oController.receivedPublishMessage(oMessage);
         break;
       case "PUBLISHBAND":
-        oController.receivedPublishBandMessage(oMessage);
+        //oController.receivedPublishBandMessage(oMessage);
         break;
       case "DOWNLOAD":
       case "GRAPH":
@@ -386,6 +378,5 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   rabbitMessageHook(oRabbitMessage, oController) {
-
   }
 }

@@ -13,8 +13,7 @@ import { MapService } from 'src/app/services/map.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProductService } from 'src/app/services/api/product.service';
-
-
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 
 //Component Imports: 
 import { ImportDialogComponent } from '../edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
@@ -100,6 +99,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   m_bIsReadOnly: boolean = true;
 
+  m_iHookIndex: number = -1;
+
   constructor(
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
@@ -111,6 +112,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     private m_oNotificationsQueueService: NotificationsQueueService,
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oRabbitStompService: RabbitStompService,
     private m_oTranslate: TranslateService,
     private m_oRouter: Router
   ) { }
@@ -118,8 +120,44 @@ export class ProductsListComponent implements OnChanges, OnInit {
   /**
    * Initializes the Component
    */
-  ngOnInit(): void { }
+  ngOnInit() {
+    //RabbitStomp service call 
+    this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("PUBLISHBAND",
+      this,
+      this.publishBandMessageHook, false);
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+  }
 
+  ngOnDestroy(): void {
+    this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
+  }
+
+  getBandByProductAndBandName(sProductName, sBandName) {
+    if (this.m_aoWorkspaceProductsList != null) {
+
+      for (let iProducts = 0; iProducts<this.m_aoWorkspaceProductsList.length; iProducts++) {
+        let oProduct = this.m_aoWorkspaceProductsList[iProducts];
+
+        if (oProduct.name == sProductName) {
+          let aoBands = oProduct.bandsGroups.bands;
+
+          for (let iBands = 0; iBands < aoBands.length; iBands++) {
+            if (aoBands[iBands].name == sBandName) {
+              return aoBands[iBands];
+            }
+          }
+        }
+      }
+    }
+
+    return null;
+  }
+
+  publishBandMessageHook(oRabbitMessage, oController) {
+    let oPublishedBand = oRabbitMessage.payload;
+    let oBand = oController.getBandByProductAndBandName(oPublishedBand.productName, oPublishedBand.bandName);
+    oController.receivedPublishBandMessage(oRabbitMessage, oBand);
+  }
 
   ngOnChanges() {
     // If we have products try to filter
@@ -393,40 +431,24 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   openBandImage(oBand: any, iIndex: number) {
     let sFileName = this.m_aoWorkspaceProductsList[iIndex].fileName;
-    let bAlreadyPublished = oBand.published;
 
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
-      if (!bAlreadyPublished) {
-        let sNotificationMsg = "PUBLISHING BAND";
-        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
-      }
 
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
           this.receivedPublishBandMessage(oResponse, oBand);
-        } else {
+        } 
+        else {
+          let sNotificationMsg = "PUBLISHING BAND";
+          this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
+  
           this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
         }
-        oBand['productName'] = oResponse.payload.productName
-        this.m_aoVisibleBands.push(oBand);
-
-        this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
-        if (this.m_b2DMapMode === true) {
-
-          this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
-        } else {
-          this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oResponse.payload.geoserverBoundingBox);
-        }
-      } else {
+      } 
+      else {
         let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
-
-
-      }
-      //It is publishing; we will receieve a Rabbit Message
-      if (oResponse.messageCode === "WAITFORRABBIT") {
-        FadeoutUtils.verboseLog("ProductListComponent.OpenBandImage: WAITING FOR RABBIT");
       }
     })
 
@@ -510,12 +532,19 @@ export class ProductsListComponent implements OnChanges, OnInit {
     oActiveBand.showLegend = false;
     oActiveBand['bVisibleNow'] = true;
 
+    oActiveBand['productName'] = oPublishedBand.productName
+    this.m_aoVisibleBands.push(oActiveBand);
+
+    this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
+
     if (this.m_b2DMapMode === false) {
       //if we are in 3D put the layer on the globe
       this.m_oGlobeService.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
+      this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oPublishedBand.geoserverBoundingBox);
     } else {
       //if we are in 2D put it on the map
       this.m_oMapService.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
+      this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oPublishedBand.geoserverBoundingBox);
     }
 
     return true;
