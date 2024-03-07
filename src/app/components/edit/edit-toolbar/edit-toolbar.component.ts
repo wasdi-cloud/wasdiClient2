@@ -31,7 +31,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   m_bNotebookIsReady: boolean = false;
   m_sFilterText: string;
 
-  m_iHookIndex;
+  m_iHookIndex: number = 0;
 
   constructor(
     private m_oConsoleService: ConsoleService,

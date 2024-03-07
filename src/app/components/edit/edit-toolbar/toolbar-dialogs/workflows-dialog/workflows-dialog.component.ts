@@ -5,7 +5,6 @@ import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workflow } from 'src/app/shared/models/workflow.model';
 import { Product } from 'src/app/shared/models/product.model';
-import { FormControl } from '@angular/forms';
 import { EditWorkflowDialogComponent } from './edit-workflow-dialog/edit-workflow-dialog.component';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
