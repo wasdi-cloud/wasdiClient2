@@ -99,6 +99,9 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   m_bIsReadOnly: boolean = true;
 
+  /**
+   * Message hook to receive the Publish Band Message from Rabbit
+   */
   m_iHookIndex: number = -1;
 
   constructor(
@@ -121,17 +124,28 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * Initializes the Component
    */
   ngOnInit() {
-    //RabbitStomp service call 
+    // Register the handler for publis band
     this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("PUBLISHBAND",
       this,
       this.publishBandMessageHook, false);
+
+    // Save the reference to the active workspace
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
+  /**
+   * Keep clean: remove the message hook when we exit
+   */
   ngOnDestroy(): void {
     this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
   }
 
+  /**
+   * Search a Band Object from the the name of the product and of the band
+   * @param sProductName Name of the product
+   * @param sBandName Name of the band
+   * @returns Band Object
+   */
   getBandByProductAndBandName(sProductName, sBandName) {
     if (this.m_aoWorkspaceProductsList != null) {
 
@@ -153,9 +167,17 @@ export class ProductsListComponent implements OnChanges, OnInit {
     return null;
   }
 
+  /**
+   * We received a publish band rabbit message!
+   * @param oRabbitMessage Rabbit Message
+   * @param oController Reference to this controller (in this call "this" is rabbit service so we need the reference to our original controller!)
+   */
   publishBandMessageHook(oRabbitMessage, oController) {
+    // Get the payload
     let oPublishedBand = oRabbitMessage.payload;
+    // Find the band object
     let oBand = oController.getBandByProductAndBandName(oPublishedBand.productName, oPublishedBand.bandName);
+    // Call received Publish Band Message
     oController.receivedPublishBandMessage(oRabbitMessage, oBand);
   }
 
@@ -537,14 +559,20 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
 
+    let bAutoZoom = false;
+
+    if (this.m_aoVisibleBands.length==1) {
+      bAutoZoom=true;
+    }
+
     if (this.m_b2DMapMode === false) {
       //if we are in 3D put the layer on the globe
       this.m_oGlobeService.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
-      this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oPublishedBand.geoserverBoundingBox);
+      if (bAutoZoom) this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oPublishedBand.geoserverBoundingBox);
     } else {
       //if we are in 2D put it on the map
       this.m_oMapService.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
-      this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oPublishedBand.geoserverBoundingBox);
+      if (bAutoZoom) this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oPublishedBand.geoserverBoundingBox);
     }
 
     return true;
