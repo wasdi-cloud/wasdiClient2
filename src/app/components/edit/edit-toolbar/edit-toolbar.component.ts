@@ -73,15 +73,6 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     })
   }
 
-  openNewAppDialog(): void {
-    this.m_oDialog.open(NewAppDialogComponent, {
-      height: '90vh',
-      width: '90vw',
-      data: { editMode: false }
-    })
-
-  }
-
   openImportDialog(): void {
     this.m_oDialog.open(ImportDialogComponent, {
       height: '60vh',

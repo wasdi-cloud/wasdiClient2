@@ -186,6 +186,14 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     })
   }
 
+  openNewAppDialog(): void {
+    this.m_oDialog.open(NewAppDialogComponent, {
+      height: '90vh',
+      width: '90vw',
+      data: { editMode: false }
+    })
+  }
+
   /**
    * Either Delete the processor or remove user permissions
    * @param oEvent 

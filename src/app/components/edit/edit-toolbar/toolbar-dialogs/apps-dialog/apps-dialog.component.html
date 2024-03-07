@@ -1,8 +1,10 @@
 <div class="apps-dialog d-flex flex-column" style="height: 100%;">
-    <div class="dialog-header d-flex flex-row justify-content-between font-bold">Wasdi apps <span
-            class="close-btn material-symbols-outlined" (click)="onDismiss()">
-            close
-        </span></div>
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">Wasdi apps 
+        
+        <span class="close-btn material-symbols-outlined" (click)="openNewAppDialog()"> add_box</span>
+
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+    </div>
     <div class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between "
         style="height: 100%; overflow: hidden;">
         <div class="apps-container d-flex flex-column">
