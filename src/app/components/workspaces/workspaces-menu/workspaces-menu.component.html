@@ -2,7 +2,7 @@
     <div class="menu-header font-bold">Workspaces</div>
     <div class="menu-dropdown">
         <div>Workspace</div>
-        <app-autocomplete [m_sPlaceholder]="'Select Workspace'" [m_aoInputs]="m_aoWorkspacesList" (m_oSelectionChange)="setActiveWorkspace($event)" ></app-autocomplete>
+        <app-autocomplete [m_sPlaceholder]="'Select Workspace'" [m_aoInputs]="m_aoWorkspacesList" (m_oSelectionChange)="setActiveWorkspace($event)" [m_oController]="this" [m_oDeleteFn]="deleteWorkspace"></app-autocomplete>
     </div>
     <app-button [m_sLabel]="'Open Workspace'" [m_sSize]="'large'" [m_bDisabled]="m_oActiveWorkspace === null"
         (click)="openWorkspace(m_oActiveWorkspace)"></app-button>

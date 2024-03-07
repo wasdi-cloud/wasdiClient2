@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-autocomplete',
@@ -21,27 +22,22 @@ export class AutocompleteComponent implements OnChanges {
 
   m_sSearchString: string = "";
 
+  constructor(
+    private m_oNotificationDisplayService: NotificationDisplayService
+  ) { }
+
   ngOnChanges(changes: SimpleChanges): void {
-    this.getStringNames()
+    this.m_sSearchString = "";
   }
 
-  getStringNames() {
-    this.m_asInputsMap = this.m_aoInputs.map(oElement => {
-      if (oElement.workspaceName) {
-        return oElement.workspaceName;
-      }
-    })
-  }
-
-  getOptionText(option) {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(option)) {
+  getOptionText(oOption) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oOption)) {
       return "";
     }
-    return option.workspaceName
+    return oOption.workspaceName
   }
 
   emitSelectionChange(oEvent) {
-    console.log(oEvent.option.value)
     this.m_oSelectionChange.emit(oEvent.option.value);
   }
 }
