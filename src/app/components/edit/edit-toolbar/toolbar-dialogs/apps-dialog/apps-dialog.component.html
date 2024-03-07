@@ -20,7 +20,7 @@
                 <app-list-item *ngFor="let oProcessor of m_aoProcessorList | filter: m_sSearchString"
                     [m_bIsSelected]="oProcessor.processorName === m_oSelectedProcessor.processorName"
                     [m_bSimpleItem]="true" [m_bProcessorItem]="true" [m_sLabel]="oProcessor.processorName"
-                    [m_sDescription]="oProcessor.processorDescription"
+                    [m_sDescription]="oProcessor.processorDescription" [m_sIcon]="oProcessor.imgLink"
                     [m_bHasToolbar]="oProcessor.sharedWithMe === true || m_sActiveUserId === oProcessor.publisher"
                     (m_oEmitClickEvent)="handleToolbarClick($event, oProcessor)"
                     (click)="selectProcessor(oProcessor)"></app-list-item>

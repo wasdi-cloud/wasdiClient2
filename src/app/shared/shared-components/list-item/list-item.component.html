@@ -68,8 +68,8 @@
     </div>
 
     <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100">
-        <div class="preview-img" style="background: url('/assets/images/hero-images/hero-img1.jpg');">
-        </div>
+        <!--div class="preview-img" style="background: url('/assets/images/hero-images/hero-img1.jpg');"-->
+        <div class="preview-img" style="background-image: url({{m_sIcon}})"></div>
         <div class="flex-fill">
             <div class="d-flex flex-row w-100 justify-content-between">
                 <div class="font-bold">{{m_sLabel}}</div>

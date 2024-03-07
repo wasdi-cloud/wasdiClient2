@@ -7,10 +7,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
-import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { ProductService } from 'src/app/services/api/product.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { ImageService } from 'src/app/services/api/image.service';
 
 //Components Imports:
 import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
@@ -55,10 +53,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    private m_oProductService: ProductService,
     private m_oRabbitStompService: RabbitStompService,
-    private m_oWorkspaceService: WorkspaceService,
+    private m_oImageService: ImageService
   ) { }
 
   ngOnInit(): void {
@@ -100,14 +96,14 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
       return aoProcessorList;
     }
 
-    let sDefaultImage = "";
+    let sDefaultImage = "assets/wasdi/miniLogoWasdi.png";
     let iNumberOfProcessors = aoProcessorList.length;
 
     for (let iIndexProcessor = 0; iIndexProcessor < iNumberOfProcessors; iIndexProcessor++) {
-      if (!aoProcessorList.imgLink) {
+      if (!aoProcessorList[iIndexProcessor].imgLink) {
         aoProcessorList[iIndexProcessor].imgLink = sDefaultImage
-
       }
+      this.m_oImageService.updateProcessorLogoImageUrl(aoProcessorList[iIndexProcessor]);
     }
     return aoProcessorList;
   }
