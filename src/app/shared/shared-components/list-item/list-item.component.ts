@@ -44,7 +44,7 @@ export class ListItemComponent {
   /**
    * Label that appears in bold for "simple list item"
    */
-  @Input() m_sLabel: string = "EdriftListflood";
+  @Input() m_sLabel: string = "Name";
 
   /**
    * Description that appears for "simple list item"
