@@ -93,6 +93,7 @@ div.card-price {
     font-weight: 700;
     line-height: normal;
     color: var(--Colors-Neutrals-0, #FFF);
+    z-index: 999;
 
 }
 

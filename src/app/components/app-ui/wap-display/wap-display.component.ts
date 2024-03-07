@@ -90,9 +90,7 @@ export class WapDisplayComponent implements OnInit {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.workspaceId)) {
       return [];
     } else {
-      this.m_oProductService.getProductLightListByWorkspace(this.workspaceId).subscribe(oResponse => {
-
-
+      this.m_oProductService.getProductListByWorkspace(this.workspaceId).subscribe(oResponse => {
         this.m_aoProductsArray = oResponse
 
         return this.m_asProductNames = this.m_aoProductsArray.map(element => {
