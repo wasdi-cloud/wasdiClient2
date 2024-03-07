@@ -175,6 +175,7 @@ import { AppUiMenuComponent } from './components/app-ui/app-ui-menu/app-ui-menu.
 import { SliderComponent } from './shared/shared-components/slider/slider.component';
 import { InvaderComponent } from './shared/shared-components/invader/invader.component';
 import { TabComponent } from './shared/shared-components/tab/tab.component';
+import { AutocompleteComponent } from './shared/shared-components/autocomplete/autocomplete.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -292,7 +293,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AppUiMenuComponent,
     SliderComponent,
     InvaderComponent,
-    TabComponent
+    TabComponent,
+    AutocompleteComponent
 
   ],
   imports: [
