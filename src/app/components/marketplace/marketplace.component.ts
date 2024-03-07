@@ -159,6 +159,9 @@ export class MarketplaceComponent implements OnInit {
       sMessage = sResponse;
     });
 
+    if (this.m_sNameFilter == undefined) this.m_sNameFilter = "";
+    if (this.m_oAppFilter.name == undefined) this.m_oAppFilter.name = "";
+
     if (this.m_sNameFilter !== this.m_oAppFilter.name) {
       this.m_oAppFilter.page = 0;
       this.m_oAppFilter.name = this.m_sNameFilter;
