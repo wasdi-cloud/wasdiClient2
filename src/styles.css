@@ -90,23 +90,24 @@ div.app-outlet {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #43526b;
+  background: rgba(0, 0, 0, 0.32);
   border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #43526b;
+  background: rgba(0, 0, 0, 0.32);
 }
 
 /* Secondary Nav (Filters) Styling */
