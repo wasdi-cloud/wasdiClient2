@@ -7,9 +7,9 @@ div.hero-image {
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
-    left: -1.5rem;
+    left: -2rem;
     height: 200px;
-    width: calc(100% + 1.5rem);
+    width: calc(100% + 2rem);
 }
 
 nav,
