@@ -4,10 +4,11 @@ main {
 
 .editor-sidebar {
 	width: 478px;
-	height: 100%;
+	height: calc(100vh - 6rem);
 	padding: 10px;
 	padding-left: 0px;
 	padding-bottom: 0px;
+	overflow: hidden;
 }
 
 .workspace-location {
@@ -29,4 +30,8 @@ main {
 	/* number of lines to show */
 	line-clamp: 2;
 	-webkit-box-orient: vertical;
+}
+
+.product-list-container {
+	max-height: 40%;
 }

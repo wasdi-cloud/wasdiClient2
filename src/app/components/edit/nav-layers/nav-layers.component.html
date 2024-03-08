@@ -1,19 +1,36 @@
-<div class="parent d-flex flex-column gap-3">
-    <div class="d-flex flex-row">
+<div class="parent d-flex flex-column">
+    <div class="d-flex flex-row pb-3">
         <app-tab [m_sLabel]="'Navigation'" [m_bIsDisabled]="false" [m_bIsActive]="m_sActiveTab === 'nav'"
             (click)="setActiveTab('nav')"></app-tab>
         <app-tab [m_sLabel]="'Layers'" [m_bIsDisabled]="false" [m_bIsActive]="m_sActiveTab === 'layers'"
             (click)="setActiveTab('layers')"></app-tab>
     </div>
     <!-- Navigation and Layers content -->
-    <div class="map-container-panel flex-fill" [hidden]="m_sActiveTab !== 'nav'" style="height: 100%;">
+    <div class="map-container-panel flex-fill h-100" [hidden]="m_sActiveTab !== 'nav'">
         <div class="" id="smallMapContainer" class="" style="height: 97.5%"></div>
     </div>
     <div class="layers-tab" *ngIf="m_sActiveTab === 'layers'">
         <ul class="list-group pt-3">
-            <li *ngFor="let oBand of m_aoVisibleBands" style="width: 100%;"
-                class="list-group-item d-flex flex-column py-3">
-                <div class="d-flex flex-row align-items-center justify-content-between">
+            <li *ngFor="let oBand of m_aoVisibleBands" style="width: 100%;" class="list-group-item d-flex flex-column">
+                <div class="layer-title">
+                    <div class="legend-container"></div>
+                    <div class="band-title d-flex flex-row gap-1">
+                        <div>{{oBand.name}}</div>
+                        <div>{{oBand.productName}}</div>
+                    </div>
+                    <div class="button-options">
+
+                    </div>
+                </div>
+                <div class="font-bold">
+                    Layer opacity
+                    <div class="slider-container d-flex flex-column"
+                        style="height: fit-content; width: 100%;">
+                        <app-slider [m_bHasThumbLabel]="true"></app-slider>
+
+                    </div>
+                </div>
+                <!-- <div class="d-flex flex-row align-items-center justify-content-between">
                     <div style="width: 50%">
                         <p class="product-name" style="word-wrap: break-word;">
                             {{oBand.productName}}
@@ -39,7 +56,7 @@
                 </div>
                 <div *ngIf="oBand.showLegend">
                     <img src="{{oBand.legendUrl}}" />
-                </div>
+                </div> -->
             </li>
         </ul>
     </div>

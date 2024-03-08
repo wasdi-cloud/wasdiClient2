@@ -1,21 +1,21 @@
 <main class="d-flex flex-row flex-fill">
     <!-- Side Bar Container -->
-    <div class="editor-sidebar d-flex flex-column">
+    <div class="editor-sidebar d-flex flex-column justify-content-between">
         <div class="workspace-location">
             <div class="workspace-subheading">You are currently inside:</div>
             <div class="workspace-name">{{m_oActiveWorkspace?.name}}</div>
         </div>
-        <app-products-list class="product-list-container" style="height: 20rem"
+        <app-products-list class="product-list-container"
             [m_aoWorkspaceProductsList]="m_aoProducts" [m_sSearchString]="m_sSearchString"
             [m_aoVisibleBands]="m_aoVisibleBands" [m_bIsLoadingProducts]="m_bIsLoadingProducts"
             [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
             (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)"
             (m_oProductInfoChange)="getProductsChange($event)"
             (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
-        <app-nav-layers class="flex-fill" [m_aoVisibleBands]="m_aoVisibleBands" (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
+        <app-nav-layers class="flex-fill" style="height: 60%;" [m_aoVisibleBands]="m_aoVisibleBands" (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
     </div>
     <!-- Map Container with Floating Nav-->
-    <div class="map map-container flex-fill">
+    <div class="map map-container flex-grow-1">
         <app-edit-map [aoProducts]="m_aoProducts" [m_aoVisibleBands]="m_aoVisibleBands"
             [bIsLoadingProducts]="m_bIsLoadingProducts" (m_b2DMapModeOutput)="getMapMode($event)"></app-edit-map>
     </div>
