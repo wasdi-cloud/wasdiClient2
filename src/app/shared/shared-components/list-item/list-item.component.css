@@ -68,15 +68,22 @@ span.bold {
 
 .preview-img {
     border-radius: 8px;
-    height: 46px;
-    width: 65px;
-    background-size: auto;
+    height: 50px;
+    width: 12%;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
-.processor-description {
+p.processor-description {
     color: var(--neutral80);
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 12px;
+
+    margin: 0 !important;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 

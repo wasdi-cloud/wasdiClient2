@@ -1,5 +1,6 @@
 <div class="list-item-container d-flex flex-row gap-2" [class.parent-item]="m_bParentItem"
-    [class.product-item]="m_bProductItem" [class.hover]="m_bProcessorItem || m_bProcessorItem" [class.selected]="m_bIsSelected && !m_bParentItem">
+    [class.product-item]="m_bProductItem" [class.hover]="m_bProcessorItem || m_bProcessorItem"
+    [class.selected]="m_bIsSelected && !m_bParentItem">
     <!-- Contents if List Item is of Parent Type: -->
     <div class="d-flex flex-row justify-content-between align-items-center w-100" *ngIf="m_bParentItem">
         <div>
@@ -67,29 +68,34 @@
         </div>
     </div>
 
-    <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100">
+    <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100" matTooltip="{{m_sDescription}}" [matTooltipPosition]="'below'">
         <!--div class="preview-img" style="background: url('/assets/images/hero-images/hero-img1.jpg');"-->
-        <div class="preview-img" style="background-image: url({{m_sIcon}})"></div>
-        <div class="flex-fill">
+        <div class="preview-img d-flex flex-column align-items-center" style="background-image: url({{m_sIcon}})"></div>
+        <div class="d-flex flex-column flex-fill" style="width: 85%;">
             <div class="d-flex flex-row w-100 justify-content-between">
                 <div class="font-bold">{{m_sLabel}}</div>
                 <div *ngIf="m_bHasToolbar" class="processor-toolbar d-flex flex-row align-items-center gap-2">
-                    <span class="material-symbols-outlined" matTooltip="Parameters Library" (click)="emitToolbarClick('params')">
+                    <span class="material-symbols-outlined" matTooltip="Parameters Library"
+                        (click)="emitToolbarClick('params')">
                         data_object
                     </span>
-                    <span class="material-symbols-outlined" matTooltip="Download" (click)="emitToolbarClick('download')">
+                    <span class="material-symbols-outlined" matTooltip="Download"
+                        (click)="emitToolbarClick('download')">
                         download
                     </span>
                     <span class="material-symbols-outlined" matTooltip="Open Editor" (click)="emitToolbarClick('edit')">
                         edit_square
                     </span>
-                    <span class="material-symbols-outlined" matTooltip="Remove Processor" (click)="emitToolbarClick('delete')">
+                    <span class="material-symbols-outlined" matTooltip="Remove Processor"
+                        (click)="emitToolbarClick('delete')">
                         delete
                     </span>
                 </div>
             </div>
-            <div class="processor-description">
-                {{m_sDescription}}
+            <div class="">
+                <p class="processor-description">
+                    {{m_sDescription}}
+                </p>
             </div>
         </div>
     </div>
