@@ -2,6 +2,10 @@
     height: 100%;
 }
 
+div.layer-title {
+    width: 100%;
+}
+
 div.legend-container {
     border: 1px solid var(--neutral10);
     border-radius: 16px;
@@ -28,12 +32,14 @@ div.dot-3 {
 
 .band-title {
     font-size: 14px;
+    max-width: 65%;
 }
 
 p.band-info {
-    max-width: 88%;
+    width: 100%;
     white-space: nowrap;
     text-overflow: ellipsis;
+    overflow: hidden;
     padding: 0;
     margin: 0;
 }

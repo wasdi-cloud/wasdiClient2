@@ -12,7 +12,7 @@
     <div class="layers-tab" *ngIf="m_sActiveTab === 'layers'">
         <ul class="list-group pt-3">
             <li *ngFor="let oBand of m_aoVisibleBands" style="width: 100%;" class="list-group-item d-flex flex-column">
-                <div class="layer-title d-flex flex-row gap-2">
+                <div class="layer-title d-flex flex-row  justify-content-between gap-2">
                     <div class="legend-container justify-self-start align-self-start d-flex flex-row"
                         matTooltip="Layer Style Options" (click)="showLayerLegend(oBand)">
                         <div class="legend-dot"></div>
@@ -24,6 +24,8 @@
                         <p class="band-info">{{oBand.name}}</p>
                     </div>
                     <div class="button-options d-flex flex-row gap-1">
+                        <app-button [m_bMuted]="true" [m_sIconLeft]="'imagesearch_roller'" [m_sSize]="'small'"
+                            (click)="zoomOnBandImage(oBand.geoserverBoundingBox)"></app-button>
                         <app-button [m_bMuted]="true" [m_sIconLeft]="'fullscreen'" [m_sSize]="'small'"
                             (click)="zoomOnBandImage(oBand.geoserverBoundingBox)"></app-button>
                         <app-button [m_bMuted]="true" [m_sIconLeft]="'close'" [m_sSize]="'small'"
