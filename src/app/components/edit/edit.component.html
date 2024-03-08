@@ -12,8 +12,7 @@
             (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)"
             (m_oProductInfoChange)="getProductsChange($event)"
             (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
-        <app-nav-layers class="flex-fill" [m_aoVisibleBands]="m_aoVisibleBands"
-            (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
+        <app-nav-layers class="flex-fill" [m_aoVisibleBands]="m_aoVisibleBands" (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
     </div>
     <!-- Map Container with Floating Nav-->
     <div class="map map-container flex-fill">

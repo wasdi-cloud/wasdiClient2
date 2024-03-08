@@ -186,24 +186,14 @@ export class EditComponent implements OnInit, OnDestroy {
 
       oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription, 10000);
 
-      if (oMessage.messageCode == "PUBLISHBAND") {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) == false) {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.productName) == false && FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload.bandName) == false) {
-            // var sNodeName = oMessage.payload.productName + "_" + oMessage.payload.bandName;
-            // this.setTreeNodeAsDeselected(sNodeName);
-          }
-        }
-      }
       return;
     }
 
     // Switch the Code
     switch (oMessage.messageCode) {
       case "PUBLISH":
-        oController.receivedPublishMessage(oMessage);
         break;
       case "PUBLISHBAND":
-        oController.receivedPublishBandMessage(oMessage);
         break;
       case "DOWNLOAD":
       case "GRAPH":
@@ -234,17 +224,6 @@ export class EditComponent implements OnInit, OnDestroy {
     // Update product list
     this.getProductList();
 
-  };
-
-  receivedPublishMessage(oMessage) {
-    if (oMessage == null) {
-      return;
-    }
-    if (oMessage.messageResult == "KO") {
-      let sMessage = this.m_oTranslate.instant("MSG_PUBLISH_ERROR");
-      this.m_oNotificationDisplayService.openAlertDialog(sMessage);
-      return;
-    }
   };
 
   _subscribeToRabbit() {
@@ -383,9 +362,5 @@ export class EditComponent implements OnInit, OnDestroy {
         })
       }
     })
-  }
-
-  rabbitMessageHook(oRabbitMessage, oController) {
-
   }
 }

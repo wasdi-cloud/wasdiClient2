@@ -3,11 +3,10 @@ import { Component, Inject } from '@angular/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { StyleService } from 'src/app/services/api/style.service';
-
+import { StylesDialogComponent } from 'src/app/components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
 import { Product } from 'src/app/shared/models/product.model';
 
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -52,7 +51,8 @@ export class ProductPropertiesDialogComponent {
     private m_oDialogRef: MatDialogRef<ProductPropertiesDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
-    private m_oStyleService: StyleService
+    private m_oStyleService: StyleService,
+    private m_oDialog: MatDialog,
   ) {
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.getStyles();
@@ -80,6 +80,13 @@ export class ProductPropertiesDialogComponent {
           this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION<br>ERROR GETTING STYLES");
         }
       })
+  }
+
+  openStylesDialog(): void {
+    this.m_oDialog.open(StylesDialogComponent, {
+      height: '80vh',
+      width: '80vw'
+    })
   }
 
   /**
