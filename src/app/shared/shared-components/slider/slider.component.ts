@@ -57,7 +57,7 @@ export class SliderComponent {
 
   @Input() m_iStep?: number;
 
-  m_iValue: number; 
+  @Input() m_iValue: number; 
 
 
   @Output() m_oSelectionChange: EventEmitter<any> = new EventEmitter<any>();

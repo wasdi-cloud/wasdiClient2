@@ -2,4 +2,38 @@
     height: 100%;
 }
 
+div.legend-container {
+    border: 1px solid var(--neutral10);
+    border-radius: 16px;
+    cursor: pointer;
+    padding: 4px;
+    gap: 2px;
+}
 
+div.legend-dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: var(--neutral25);
+}
+
+div.dot-2 {
+    background-color: var(--wasdiWarn);
+}
+
+div.dot-3 {
+
+    background-color: var(--wasdiDanger);
+}
+
+.band-title {
+    font-size: 14px;
+}
+
+p.band-info {
+    max-width: 88%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 0;
+    margin: 0;
+}

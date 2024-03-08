@@ -12,51 +12,34 @@
     <div class="layers-tab" *ngIf="m_sActiveTab === 'layers'">
         <ul class="list-group pt-3">
             <li *ngFor="let oBand of m_aoVisibleBands" style="width: 100%;" class="list-group-item d-flex flex-column">
-                <div class="layer-title">
-                    <div class="legend-container"></div>
-                    <div class="band-title d-flex flex-row gap-1">
-                        <div>{{oBand.name}}</div>
-                        <div>{{oBand.productName}}</div>
+                <div class="layer-title d-flex flex-row gap-2">
+                    <div class="legend-container justify-self-start align-self-start d-flex flex-row"
+                        matTooltip="Layer Style Options" (click)="showLayerLegend(oBand)">
+                        <div class="legend-dot"></div>
+                        <div class="legend-dot dot-2"></div>
+                        <div class="legend-dot dot-3"></div>
                     </div>
-                    <div class="button-options">
-
+                    <div class="band-title d-flex flex-column gap-1">
+                        <p class="band-info">{{oBand.productName}}</p>
+                        <p class="band-info">{{oBand.name}}</p>
+                    </div>
+                    <div class="button-options d-flex flex-row gap-1">
+                        <app-button [m_bMuted]="true" [m_sIconLeft]="'fullscreen'" [m_sSize]="'small'"
+                            (click)="zoomOnBandImage(oBand.geoserverBoundingBox)"></app-button>
+                        <app-button [m_bMuted]="true" [m_sIconLeft]="'close'" [m_sSize]="'small'"
+                            (click)="removeBandImage(oBand)"></app-button>
                     </div>
                 </div>
                 <div class="font-bold">
                     Layer opacity
-                    <div class="slider-container d-flex flex-column"
-                        style="height: fit-content; width: 100%;">
-                        <app-slider [m_bHasThumbLabel]="true"></app-slider>
-
-                    </div>
-                </div>
-                <!-- <div class="d-flex flex-row align-items-center justify-content-between">
-                    <div style="width: 50%">
-                        <p class="product-name" style="word-wrap: break-word;">
-                            {{oBand.productName}}
-                        </p>
-                        <p>
-                            {{oBand.name}}
-                        </p>
-                    </div>
-                    <div class="d-flex flex-row">
-                        <mat-slider *ngIf="b2DMapModeOn === true" [min]="0" [max]="100" discrete>
-                            <input matSliderThumb [ngModel]="m_iOpacityVal" (input)="setOpacity($event, oBand.layerId)">
-                        </mat-slider>
-                        <button class="btn" (click)="zoomOnBandImage(oBand.geoserverBoundingBox)">
-                            <fa-icon [icon]="faExpand"></fa-icon>
-                        </button>
-                        <button class="btn" (click)="showLayerLegend(oBand)">
-                            <fa-icon [icon]="faList"></fa-icon>
-                        </button>
-                        <button class="btn text-danger" (click)="removeBandImage(oBand)">
-                            <fa-icon [icon]="faX"></fa-icon>
-                        </button>
+                    <div class="slider-container d-flex flex-column" style="padding-left: 2px; width: 100%;">
+                        <app-slider [m_bHasThumbLabel]="true" [m_iValue]="m_iOpacityVal"
+                            (m_oSelectionChange)="setOpacity($event, oBand.layerId)"></app-slider>
                     </div>
                 </div>
                 <div *ngIf="oBand.showLegend">
                     <img src="{{oBand.legendUrl}}" />
-                </div> -->
+                </div>
             </li>
         </ul>
     </div>

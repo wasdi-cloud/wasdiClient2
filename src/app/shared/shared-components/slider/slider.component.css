@@ -1,5 +1,5 @@
 .wasdi-slider {
-    width: 100%
+    width: 100%;
 }
 
 .wasdi-slider {
@@ -33,6 +33,10 @@
     top: 10px;
     left: 10px;
     border-radius: 50%;
+}
+
+::ng-deep.mat-mdc-slider {
+    margin: 0 !important;
 }
 
 ::ng-deep.wasdi-slider .mat-mdc-slider-visual-thumb .mat-ripple {
