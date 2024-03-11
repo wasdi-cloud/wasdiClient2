@@ -1,5 +1,6 @@
 div.products-tree-container {
   padding: 8px 0px 0px 0px;
+  min-height: 100%;
 }
 
 .products-container {

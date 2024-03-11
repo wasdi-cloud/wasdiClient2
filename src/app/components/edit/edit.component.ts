@@ -104,11 +104,6 @@ export class EditComponent implements OnInit, OnDestroy {
   m_aoProcessesRunning: any[] = []
 
   /**
-   * Search String
-   */
-  m_sSearchString: string;
-
-  /**
    * List of visible bands
    */
   m_aoVisibleBands = [];
@@ -297,10 +292,6 @@ export class EditComponent implements OnInit, OnDestroy {
       },
       error: oError => { }
     })
-  }
-
-  getSearchString(event: string) {
-    this.m_sSearchString = event;
   }
 
   getVisibleBands(event: any) {

@@ -55,7 +55,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   /**
    * Search String filter
    */
-  @Input() m_sSearchString: string;
+ m_sSearchString: string = "";
 
   /**
    * List of the visible layers
@@ -104,6 +104,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   m_iHookIndex: number = -1;
 
+  /**
+   * Flag to track whether or not a search has been executed (filtering products);
+   */
+  m_bSearchExecuted: boolean = false;
+
   constructor(
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
@@ -149,7 +154,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   getBandByProductAndBandName(sProductName, sBandName) {
     if (this.m_aoWorkspaceProductsList != null) {
 
-      for (let iProducts = 0; iProducts<this.m_aoWorkspaceProductsList.length; iProducts++) {
+      for (let iProducts = 0; iProducts < this.m_aoWorkspaceProductsList.length; iProducts++) {
         let oProduct = this.m_aoWorkspaceProductsList[iProducts];
 
         if (oProduct.name == sProductName) {
@@ -208,11 +213,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
         let aoFiltered = [];
 
         this.m_aoWorkspaceProductsList.forEach(oProduct => {
-          if (oProduct.fileName.indexOf(this.m_sSearchString) !== -1 || oProduct.name.indexOf(this.m_sSearchString) !== -1) {
+          if (oProduct.fileName.toLowerCase().indexOf(this.m_sSearchString.toLowerCase()) !== -1 || oProduct.name.toLowerCase().indexOf(this.m_sSearchString.toLowerCase()) !== -1) {
             aoFiltered.push(oProduct)
           }
           else if (oProduct.productFriendlyName) {
-            if (oProduct.productFriendlyName.indexOf(this.m_sSearchString) !== -1) {
+            if (oProduct.productFriendlyName.toLowerCase().indexOf(this.m_sSearchString.toLowerCase()) !== -1) {
               aoFiltered.push(oProduct)
             }
           }
@@ -460,14 +465,14 @@ export class ProductsListComponent implements OnChanges, OnInit {
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
           this.receivedPublishBandMessage(oResponse, oBand);
-        } 
+        }
         else {
           let sNotificationMsg = "PUBLISHING BAND";
           this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
-  
+
           this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
         }
-      } 
+      }
       else {
         let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
@@ -561,8 +566,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     let bAutoZoom = false;
 
-    if (this.m_aoVisibleBands.length==1) {
-      bAutoZoom=true;
+    if (this.m_aoVisibleBands.length == 1) {
+      bAutoZoom = true;
     }
 
     if (this.m_b2DMapMode === false) {
@@ -623,5 +628,28 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   trackByItem(iIndex: number, oItem: any) {
     return oItem.fileName
+  }
+
+
+  getSearchString(oEvent: any) {
+    // If the Enter key is hit, execute the search
+    if (oEvent.code === 'Enter') {
+      this.executeSearch()
+      console.log(oEvent.code)
+    } else {
+      // Set the search string
+      this.m_sSearchString = oEvent.target.value
+    }
+  }
+
+  executeSearch() {
+    this.m_bSearchExecuted = true;
+    this.filterProducts();
+  }
+
+  clearSearch() {
+    this.m_bSearchExecuted = false;
+    this.m_sSearchString = "";
+    this.filterProducts();
   }
 }
