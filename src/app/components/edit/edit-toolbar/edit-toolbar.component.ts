@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workspace } from 'src/app/shared/models/workspace.model';
@@ -24,7 +24,6 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   @Input() m_oActiveWorkspace: Workspace;
   @Input() m_aoProducts: Product[];
   @Input() m_bJupyterIsReady: boolean = false;
-  @Output() m_sSearchString = new EventEmitter();
 
   m_bNotebookIsReady: boolean = false;
   m_sFilterText: string;

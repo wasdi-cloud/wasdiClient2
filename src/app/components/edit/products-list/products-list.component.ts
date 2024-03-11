@@ -55,7 +55,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   /**
    * Search String filter
    */
-  @Input() m_sSearchString: string;
+  m_sSearchString: string = "";
 
   /**
    * List of the visible layers
@@ -104,6 +104,18 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   m_iHookIndex: number = -1;
 
+  /**
+   * Flag to track whether or not a search has been executed (filtering products);
+   */
+  m_bSearchExecuted: boolean = false;
+
+  /**
+   * Counter to track the amount of times the "sort" button has been clicked (max 3);
+   */
+  m_iSortClick: number = 0;
+
+  m_aoDefaultOrder = [];
+
   constructor(
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
@@ -131,6 +143,29 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     // Save the reference to the active workspace
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    this.m_aoDefaultOrder = this.m_aoWorkspaceProductsList;
+  }
+
+  ngOnChanges() {
+    // If we have products try to filter
+    if (this.m_aoWorkspaceProductsList != null) {
+      if (this.m_aoWorkspaceProductsList.length > 0) {
+        this.filterProducts();
+      }
+      else {
+        this.m_aoFilteredProducts = [];
+      }
+    }
+    else {
+      this.m_aoFilteredProducts = [];
+    }
+
+    if (this.m_aoDefaultOrder.length === 0) {
+      this.m_aoDefaultOrder = this.m_aoWorkspaceProductsList;
+      console.log(this.m_aoDefaultOrder)
+    }
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
   /**
@@ -149,7 +184,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   getBandByProductAndBandName(sProductName, sBandName) {
     if (this.m_aoWorkspaceProductsList != null) {
 
-      for (let iProducts = 0; iProducts<this.m_aoWorkspaceProductsList.length; iProducts++) {
+      for (let iProducts = 0; iProducts < this.m_aoWorkspaceProductsList.length; iProducts++) {
         let oProduct = this.m_aoWorkspaceProductsList[iProducts];
 
         if (oProduct.name == sProductName) {
@@ -181,23 +216,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     oController.receivedPublishBandMessage(oRabbitMessage, oBand);
   }
 
-  ngOnChanges() {
-    // If we have products try to filter
-    if (this.m_aoWorkspaceProductsList != null) {
-      if (this.m_aoWorkspaceProductsList.length > 0) {
-        this.filterProducts();
-      }
-      else {
-        this.m_aoFilteredProducts = [];
-      }
-    }
-    else {
-      this.m_aoFilteredProducts = [];
-    }
 
-    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
-  }
 
   filterProducts() {
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoWorkspaceProductsList)) {
@@ -208,11 +227,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
         let aoFiltered = [];
 
         this.m_aoWorkspaceProductsList.forEach(oProduct => {
-          if (oProduct.fileName.indexOf(this.m_sSearchString) !== -1 || oProduct.name.indexOf(this.m_sSearchString) !== -1) {
+          if (oProduct.fileName.toLowerCase().indexOf(this.m_sSearchString.toLowerCase()) !== -1 || oProduct.name.toLowerCase().indexOf(this.m_sSearchString.toLowerCase()) !== -1) {
             aoFiltered.push(oProduct)
           }
           else if (oProduct.productFriendlyName) {
-            if (oProduct.productFriendlyName.indexOf(this.m_sSearchString) !== -1) {
+            if (oProduct.productFriendlyName.toLowerCase().indexOf(this.m_sSearchString.toLowerCase()) !== -1) {
               aoFiltered.push(oProduct)
             }
           }
@@ -460,14 +479,14 @@ export class ProductsListComponent implements OnChanges, OnInit {
         //If the Band is already published: 
         if (oResponse.messageCode === "PUBLISHBAND") {
           this.receivedPublishBandMessage(oResponse, oBand);
-        } 
+        }
         else {
           let sNotificationMsg = "PUBLISHING BAND";
           this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
-  
+
           this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
         }
-      } 
+      }
       else {
         let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
@@ -504,7 +523,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * @returns 
    */
   removeBandImage(oBand) {
-
     if (!oBand) {
       console.log("ProductsListComponent.Error in removing band image");
       return false;
@@ -561,8 +579,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     let bAutoZoom = false;
 
-    if (this.m_aoVisibleBands.length==1) {
-      bAutoZoom=true;
+    if (this.m_aoVisibleBands.length == 1) {
+      bAutoZoom = true;
     }
 
     if (this.m_b2DMapMode === false) {
@@ -623,5 +641,58 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   trackByItem(iIndex: number, oItem: any) {
     return oItem.fileName
+  }
+
+
+  getSearchString(oEvent: any) {
+    // If the Enter key is hit, execute the search
+    if (oEvent.code === 'Enter') {
+      this.executeSearch()
+      console.log(oEvent.code)
+    } else {
+      // Set the search string
+      this.m_sSearchString = oEvent.target.value
+    }
+  }
+
+  executeSearch() {
+    this.m_bSearchExecuted = true;
+    this.filterProducts();
+  }
+
+  clearSearch() {
+    this.m_bSearchExecuted = false;
+    this.m_sSearchString = "";
+    this.filterProducts();
+  }
+
+  productSort() {
+    this.m_iSortClick += 1;
+    console.log(this.m_iSortClick);
+
+    if (this.m_iSortClick === 1) {
+      // Sort Alphabetically
+      this.sortAlpha();
+    } else if (this.m_iSortClick === 2) {
+      //Sort Reverse Alphabetically
+      this.m_aoFilteredProducts.reverse();
+    } else {
+      //Give default sorting and reset counter
+      this.m_oProductService.getProductListByWorkspace(this.m_oActiveWorkspace.workspaceId).subscribe({
+        next: oResponse => {
+          this.m_aoFilteredProducts = oResponse;
+        }
+      })
+      this.m_iSortClick = 0;
+
+    }
+  }
+  /**
+   * Sort products alphabetically
+   */
+  sortAlpha() {
+    this.m_aoFilteredProducts.sort(function (oProductA, oProductB) {
+      return oProductA.name.localeCompare(oProductB.name);
+    })
   }
 }

@@ -104,11 +104,6 @@ export class EditComponent implements OnInit, OnDestroy {
   m_aoProcessesRunning: any[] = []
 
   /**
-   * Search String
-   */
-  m_sSearchString: string;
-
-  /**
    * List of visible bands
    */
   m_aoVisibleBands = [];
@@ -215,12 +210,9 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   receivedNewProductMessage(oMessage) {
-
     let sMessage = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED");
-
     // Alert the user
     this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
-
     // Update product list
     this.getProductList();
 
@@ -297,10 +289,6 @@ export class EditComponent implements OnInit, OnDestroy {
       },
       error: oError => { }
     })
-  }
-
-  getSearchString(event: string) {
-    this.m_sSearchString = event;
   }
 
   getVisibleBands(event: any) {

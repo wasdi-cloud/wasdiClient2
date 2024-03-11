@@ -1,19 +1,25 @@
-<div class="product-tree-container d-flex flex-column h-100">
+<div class="product-tree-container d-flex flex-column h-100" style="min-height: 10rem;">
     <!-- Product Tree Header -->
     <div class="products-header">
-        <h3>Products ({{m_aoFilteredProducts.length}})</h3>
-        <div class="form-group has-search">
-            <span class="material-symbols-outlined  form-control-feedback">
-                search
-            </span>
-            <input type="text" class="search-input" placeholder="Search in product list">
+        <div class="d-flex flex-row justify-content-between mb-2">
+            <h3>Products ({{m_aoFilteredProducts.length}})</h3>
+            <div class="d-flex flex-row gap-2 align-items-center">
+                <app-button *ngIf="m_bSearchExecuted === true" [m_bOutline]="true" [m_sLabel]="'CLEAR'"
+                    [m_sSize]="'small'" (click)="clearSearch()"></app-button>
+                <app-button [m_bOutline]="true" [m_sSize]="'small'" [m_sIconLeft]="'sort_by_alpha'" (click)="productSort()"></app-button>
+            </div>
+        </div>
+        <div class="d-flex flex-row gap-2">
+            <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlacehodler]="'Search products'"
+                [m_sInputValue]="m_sSearchString" (keyup)="getSearchString($event);"></app-input-field>
+            <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
         </div>
     </div>
     <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
     <!-- Product Tree -> Scrollable -->
     <div class="products-container flex-fill" *ngIf="m_bIsLoadingProducts === false">
-        <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts; let iIndex = index"
-            [m_oProduct]="oProduct" (m_oProductChange)="handleBandSelection($event, iIndex)"></app-product-list-item>
+        <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts; let iIndex = index" [m_oProduct]="oProduct"
+            (m_oProductChange)="handleBandSelection($event, iIndex)"></app-product-list-item>
     </div>
 
     <!-- Buttons to import/search for products if there is no product -->
