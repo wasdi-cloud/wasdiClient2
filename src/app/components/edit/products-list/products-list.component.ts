@@ -114,8 +114,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   m_iSortClick: number = 0;
 
-  m_aoDefaultOrder = [];
-
   constructor(
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
@@ -124,7 +122,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
     private m_oGlobeService: GlobeService,
     private m_oMapService: MapService,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oNotificationsQueueService: NotificationsQueueService,
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
@@ -143,7 +140,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     // Save the reference to the active workspace
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    this.m_aoDefaultOrder = this.m_aoWorkspaceProductsList;
   }
 
   ngOnChanges() {
@@ -158,11 +154,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
     }
     else {
       this.m_aoFilteredProducts = [];
-    }
-
-    if (this.m_aoDefaultOrder.length === 0) {
-      this.m_aoDefaultOrder = this.m_aoWorkspaceProductsList;
-      console.log(this.m_aoDefaultOrder)
     }
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
@@ -648,7 +639,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
     // If the Enter key is hit, execute the search
     if (oEvent.code === 'Enter') {
       this.executeSearch()
-      console.log(oEvent.code)
     } else {
       // Set the search string
       this.m_sSearchString = oEvent.target.value
@@ -668,7 +658,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   productSort() {
     this.m_iSortClick += 1;
-    console.log(this.m_iSortClick);
 
     if (this.m_iSortClick === 1) {
       // Sort Alphabetically
