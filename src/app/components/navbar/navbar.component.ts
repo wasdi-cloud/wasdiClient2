@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
 
@@ -31,7 +31,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnChanges {
   m_bIsNavbarOpen: boolean = false;
 
   sActiveWorkspaceId: string | null = null;
@@ -83,8 +83,13 @@ export class NavbarComponent implements OnInit {
     this.getAccountType();
 
     this.m_oConstantsService.m_oActiveWorkspaceSubscription.subscribe(oWorkspace => {
-      this.m_oActiveWorkspace = oWorkspace;
-      this.sActiveWorkspaceId = oWorkspace.workspaceId;
+      if(FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace)) {
+        this.m_oActiveWorkspace = null;
+        this.m_bEditIsActive = false;
+      } else {
+        this.m_oActiveWorkspace = oWorkspace;
+        this.sActiveWorkspaceId = oWorkspace.workspaceId;
+      }
     })
 
     this.m_oRouterEvents = this.m_oRouter.events.subscribe((oEvent: any) => {
@@ -110,6 +115,10 @@ export class NavbarComponent implements OnInit {
         }
       }
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+      
   }
 
   setActiveTab(sActiveTab: string) {

@@ -82,6 +82,7 @@ export class WorkspacesMenuComponent implements OnInit {
             if (oReponse === null) {
               oController.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
               oController.m_oActiveWorkspace = null;
+              oController.m_oConstantsService.setActiveWorkspace(null);
               oController.fetchWorkspaceInfoList();
             }
           }
