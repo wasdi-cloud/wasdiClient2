@@ -60,6 +60,7 @@ export class WorkspacesMenuComponent implements OnInit {
    * @param oWorkspace 
    */
   openWorkspace(oWorkspace) {
+    this.m_oConstantsService.setActiveWorkspace(oWorkspace);
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
@@ -81,9 +82,14 @@ export class WorkspacesMenuComponent implements OnInit {
           next: oReponse => {
             if (oReponse === null) {
               oController.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
+              // Clear workspace information displayed in the UI
               oController.m_oActiveWorkspace = null;
-              oController.m_oConstantsService.setActiveWorkspace(null);
+              // Refresh workspaces list:
               oController.fetchWorkspaceInfoList();
+              // Only clear the workspace in the constants service if it is the one removed:
+              if (oWorkspace.workspaceId === this.m_oConstantsService.getActiveWorkspace().workspaceId) {
+                oController.m_oConstantsService.setActiveWorkspace(null);
+              }
             }
           }
         })
