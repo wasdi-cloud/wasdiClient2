@@ -55,7 +55,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   /**
    * Search String filter
    */
- m_sSearchString: string = "";
+  m_sSearchString: string = "";
 
   /**
    * List of the visible layers
@@ -109,6 +109,13 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   m_bSearchExecuted: boolean = false;
 
+  /**
+   * Counter to track the amount of times the "sort" button has been clicked (max 3);
+   */
+  m_iSortClick: number = 0;
+
+  m_aoDefaultOrder = [];
+
   constructor(
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
@@ -136,6 +143,29 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     // Save the reference to the active workspace
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    this.m_aoDefaultOrder = this.m_aoWorkspaceProductsList;
+  }
+
+  ngOnChanges() {
+    // If we have products try to filter
+    if (this.m_aoWorkspaceProductsList != null) {
+      if (this.m_aoWorkspaceProductsList.length > 0) {
+        this.filterProducts();
+      }
+      else {
+        this.m_aoFilteredProducts = [];
+      }
+    }
+    else {
+      this.m_aoFilteredProducts = [];
+    }
+
+    if (this.m_aoDefaultOrder.length === 0) {
+      this.m_aoDefaultOrder = this.m_aoWorkspaceProductsList;
+      console.log(this.m_aoDefaultOrder)
+    }
+    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
   /**
@@ -186,23 +216,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     oController.receivedPublishBandMessage(oRabbitMessage, oBand);
   }
 
-  ngOnChanges() {
-    // If we have products try to filter
-    if (this.m_aoWorkspaceProductsList != null) {
-      if (this.m_aoWorkspaceProductsList.length > 0) {
-        this.filterProducts();
-      }
-      else {
-        this.m_aoFilteredProducts = [];
-      }
-    }
-    else {
-      this.m_aoFilteredProducts = [];
-    }
 
-    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
-  }
 
   filterProducts() {
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoWorkspaceProductsList)) {
@@ -509,7 +523,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * @returns 
    */
   removeBandImage(oBand) {
-
     if (!oBand) {
       console.log("ProductsListComponent.Error in removing band image");
       return false;
@@ -651,5 +664,35 @@ export class ProductsListComponent implements OnChanges, OnInit {
     this.m_bSearchExecuted = false;
     this.m_sSearchString = "";
     this.filterProducts();
+  }
+
+  productSort() {
+    this.m_iSortClick += 1;
+    console.log(this.m_iSortClick);
+
+    if (this.m_iSortClick === 1) {
+      // Sort Alphabetically
+      this.sortAlpha();
+    } else if (this.m_iSortClick === 2) {
+      //Sort Reverse Alphabetically
+      this.m_aoFilteredProducts.reverse();
+    } else {
+      //Give default sorting and reset counter
+      this.m_oProductService.getProductListByWorkspace(this.m_oActiveWorkspace.workspaceId).subscribe({
+        next: oResponse => {
+          this.m_aoFilteredProducts = oResponse;
+        }
+      })
+      this.m_iSortClick = 0;
+
+    }
+  }
+  /**
+   * Sort products alphabetically
+   */
+  sortAlpha() {
+    this.m_aoFilteredProducts.sort(function (oProductA, oProductB) {
+      return oProductA.name.localeCompare(oProductB.name);
+    })
   }
 }

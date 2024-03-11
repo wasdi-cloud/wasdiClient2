@@ -210,12 +210,9 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   receivedNewProductMessage(oMessage) {
-
     let sMessage = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED");
-
     // Alert the user
     this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
-
     // Update product list
     this.getProductList();
 
