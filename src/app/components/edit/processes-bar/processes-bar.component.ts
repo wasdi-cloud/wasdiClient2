@@ -34,15 +34,17 @@ export class ProcessesBarComponent implements OnInit {
   @Input() m_sDownloadProductName?: string = "";
   @Input() m_bShowDownloadProgress: boolean = false;
 
-
   m_aoProcessesRunning: any[] = [];
+
+  m_bIsProcessRunning: boolean = false;
+
+  m_iIsWebsocketConnected: any;
   m_iNumberOfProcesses: number = 0;
   m_iWaitingProcesses: number = 0;
+
   m_oLastProcesses: any = null;
-  m_iIsWebsocketConnected: any;
-  m_oSummary: any;
   m_oProcessesBarSubscription: any;
-  m_bIsProcessRunning: boolean = false; 
+  m_oSummary: any;
 
   constructor(
     private _bottomSheet: MatBottomSheet,
@@ -71,15 +73,21 @@ export class ProcessesBarComponent implements OnInit {
     this.getSummary();
     this.m_oProcessesBarSubscription = this.m_oProcessWorkspaceService.updateProcessBarMsg.subscribe(oResponse => {
       if (oResponse.message === "m_aoProcessesRunning:updated" && oResponse.data === true) {
-        this.getSummary();
+        let aoProcessesRunning = this.m_oProcessWorkspaceService.getProcesses().value;
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(aoProcessesRunning)) {
+          this.getSummary();
+          this.m_oLastProcesses = this.findLastProcess(aoProcessesRunning)
+
+        }
       }
     })
+
     this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
       this.m_iIsWebsocketConnected = oResponse;
     });
   }
 
-  
+
 
   /**
    * Handler for messages that add a new product to the Workspace
@@ -133,6 +141,24 @@ export class ProcessesBarComponent implements OnInit {
    */
   openProcessesDialog(): void {
     this.m_oDialog.open(ProcessesDialog)
+  }
+
+  findLastProcess(aoProcessesRunning) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoProcessesRunning) === true) {
+      return null;
+    }
+
+    let oLastProcessRunning = null;
+    let iTotalProcessesNumber = aoProcessesRunning.length;
+    // Search the last one that is in running state
+    for (let iIndexNewProcess = 0; iIndexNewProcess < iTotalProcessesNumber; iIndexNewProcess++) {
+      if (aoProcessesRunning[iIndexNewProcess].status === "RUNNING" ||
+        aoProcessesRunning[iIndexNewProcess].status === "WAITING" ||
+        aoProcessesRunning[iIndexNewProcess].status === "READY") {
+        oLastProcessRunning = aoProcessesRunning[iIndexNewProcess];
+      }
+    }
+    return oLastProcessRunning;
   }
 }
 

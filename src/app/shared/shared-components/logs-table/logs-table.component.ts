@@ -20,9 +20,7 @@ export class LogsTableComponent implements OnChanges {
     private m_oProcessWorkspaceService: ProcessWorkspaceService
   ) { }
 
-  ngOnChanges(): void {
-    console.log(this.m_aoTableData);
-  }
+  ngOnChanges(): void {  }
 
   /**
    * Get the converted version of the Operation Description 

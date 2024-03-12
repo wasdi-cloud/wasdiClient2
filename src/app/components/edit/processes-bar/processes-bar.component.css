@@ -1,7 +1,11 @@
-div.processes-bar {
-    background: #FFFFFF;
+div.processes-bar-container {
     border-top: 1px solid var(--neutral20);
     height: 48px;
+
+}
+
+div.processes-bar {
+    background: #FFFFFF;
     width: 100vw;
 }
 
