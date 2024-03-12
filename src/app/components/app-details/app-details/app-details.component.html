@@ -75,8 +75,6 @@
                 </div>
                 <app-button [m_sLabel]="'Open Application'" [m_sIconLeft]="'all_out'" [m_sIconRight]="'arrow_forward'"
                     (click)="openAppUI(m_oApplicationInfo.processorName)" [m_sSize]="'large'"></app-button>
-                <!-- <button class="btn btn-success" (click)="openAppUI(m_oApplicationInfo.processorName)">Open
-                    application</button> -->
             </div>
             <div class="app-details d-flex flex-column">
                 <h2>Application details</h2>
@@ -108,54 +106,3 @@
         </div>
     </div>
 </main>
-<!-- <div class="info-container d-flex flex-column align-items-center justify-content-center py-2">
-    <div class="d-flex flex-row col-10">
-        <div class="processor-img col" style="background-image: url({{m_asImages[0]}});"></div>
-        <div class="processor-info mx-4 col">
-            <h3>{{m_oApplicationInfo.friendlyName}}</h3>
-            <p>Reviews: {{m_oApplicationInfo.reviewsCount}}</p>
-            <p *ngIf="!m_sActiveUser === m_oApplicationInfo.publisher">Published By: {{m_oApplicationInfo.publisher}}
-            </p>
-            <div *ngIf="m_sActiveUser === m_oApplicationInfo.publisher ||  m_oApplicationInfo.readOnly === false"
-                class="d-flex flex-row align-items-center gap-3">
-                <div>You are the Master!</div>
-                <button class="btn btn-sm btn-success" (click)="openEditAppDialog(m_oApplicationInfo)">Edit</button>
-            </div>
-            <div class="categories-container">
-                <span>Categories</span>
-            </div>
-            <div class="price-container">
-                {{m_oApplicationInfo.price}}
-            </div>
-            <div class="description-container">
-                {{m_oApplicationInfo.longDescription ? m_oApplicationInfo.longDescription :
-                m_oApplicationInfo.processorDescription}}
-            </div>
-            <a class="open-application btn btn-dark" (click)="openAppUI(m_oApplicationInfo.processorName)">Open
-                Application</a>
-        </div>
-    </div>
-    <div class="application-details row col-10 d-flex flex-row justify-content-between py-4">
-        <div class="publisher-info-col col-5">
-            <p>{{"WAP_PUBLISHER"|translate}}: <span class="text-success">{{m_oApplicationInfo.publisher}}</span></p>
-            <p>{{"WAP_CONTACT"|translate}}: <span class="text-success">{{m_oApplicationInfo.email}}</span></p>
-            <p>{{"WAP_WEB"|translate}} <span class="text-success">{{m_oApplicationInfo.link}}</span></p>
-        </div>
-        <div class="application-info-col col-5">
-            <p>{{"WAP_PUBBLICATION_DATE"|translate}} <span class="text-success">{{m_oApplicationInfo.publishDate |
-                    date}}</span></p>
-            <p>{{"WAP_LAST_UPDATE"|translate}} <span class="text-success">{{m_oApplicationInfo.updateDate |
-                    date}}</span></p>
-            <p>{{"WAP_EXECUTIONS"|translate}} <span class="text-success">{{m_oAppStats.runs}}</span></p>
-            <p>{{"WAP_SUCCESS_RATE"|translate}} <span class="text-success">{{getStatSuccess()}}</span></p>
-            <p>{{"WAP_MEDIUM_TIME"|translate}} <span class="text-success">{{m_oAppStats.mediumTime}}</span></p>
-        </div>
-    </div>
-</div>
-<div class="reviews-container d-flex flex-column align-items-center border-top pt-3">
-    <div class="reveiw-header row col-10">
-        <h4>Reviews</h4>
-        <app-app-reviews [oProcessor]="m_oApplicationInfo"></app-app-reviews>
-    </div>
-
-</div> -->
