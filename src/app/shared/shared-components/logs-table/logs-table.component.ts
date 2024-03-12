@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { PayloadDialogComponent } from 'src/app/components/edit/payload-dialog/payload-dialog.component';
 import { ProcessLogsDialogComponent } from 'src/app/components/edit/process-logs-dialog/process-logs-dialog.component';
 
@@ -15,7 +16,8 @@ export class LogsTableComponent implements OnChanges {
   @Input() m_aoTableData: any = [];
 
   constructor(
-    private m_oDialog: MatDialog
+    private m_oDialog: MatDialog,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService
   ) { }
 
   ngOnChanges(): void {
@@ -121,5 +123,12 @@ export class LogsTableComponent implements OnChanges {
       width: '70vw',
       data: { process: oProcess }
     })
+  }
+
+  /**
+   * Handle Click for delete process
+   */
+  deleteProcess(oProcess: any): void {
+    this.m_oProcessWorkspaceService.deleteProcess(oProcess);
   }
 }

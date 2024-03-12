@@ -3,7 +3,7 @@
     <tr class="table-heading-container">
         <th>Status</th>
         <th>Operation</th>
-        <th style="width: 100px;overflow: hidden;">Name</th>
+        <th>Name</th>
         <th>User</th>
         <th>Created</th>
         <th>Started</th>
@@ -31,10 +31,14 @@
         <td class="d-flex flex-row">
             <span class="material-symbols-outlined" matTooltip="Payload" *ngIf="oProcessLog.payload"
                 (click)="openPayloadDialog(oProcessLog)">
-                subtitles
+                data_object
             </span>
             <span class="material-symbols-outlined" matTooltip="Logs" (click)="openLogsDialog(oProcessLog)">
-                cloud_sync
+                subtitles
+            </span>
+            <span class="cancel-icon material-symbols-outlined" matTooltip="Delete"
+                *ngIf="oProcessLog.status === 'RUNNING'" (click)="deleteProcess(oProcessLog)">
+                cancel
             </span>
         </td>
     </tr>
