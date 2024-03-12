@@ -54,9 +54,12 @@
                             <span>({{m_oApplicationInfo.reviewsCount}} reviews)</span>
                         </div>
                     </div>
-                    <div class="info-tag">
+                    <div class="info-tag d-flex flex-row">
                         <span class="info-tag">Publisher: </span>
                         <span class="info-tag-content">{{m_oApplicationInfo.publisher}}</span>
+                        <app-button class="ms-2" *ngIf="m_oApplicationInfo.isMine" [m_sSize]="'small'"
+                            [m_sLabel]="'Edit'" [m_bOutline]="true"
+                            (click)="openEditAppDialog(m_oApplicationInfo)"></app-button>
                     </div>
                     <div class="d-flex flex-row flex-wrap gap-1">
                         <div class="category-tag" *ngFor="let sCategory of m_oApplicationInfo.categoryNames">
@@ -66,8 +69,10 @@
             </div>
             <div class="description-container d-flex flex-column align-items-start">
                 <h2>Description</h2>
-                {{m_oApplicationInfo.longDescription ? m_oApplicationInfo.longDescription :
-                m_oApplicationInfo.processorDescription}}
+                <div class="font-light mb-2">
+                    {{m_oApplicationInfo.longDescription ? m_oApplicationInfo.longDescription :
+                    m_oApplicationInfo.processorDescription}}
+                </div>
                 <app-button [m_sLabel]="'Open Application'" [m_sIconLeft]="'all_out'" [m_sIconRight]="'arrow_forward'"
                     (click)="openAppUI(m_oApplicationInfo.processorName)" [m_sSize]="'large'"></app-button>
                 <!-- <button class="btn btn-success" (click)="openAppUI(m_oApplicationInfo.processorName)">Open

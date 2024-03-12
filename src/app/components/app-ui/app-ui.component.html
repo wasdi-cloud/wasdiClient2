@@ -2,7 +2,12 @@
     <div class="hero-image d-flex flex-column justify-content-center align-items-center">
         <div class="hero-text text-light text-center">
             <h1 class="font-bold">{{m_oProcessorInformation.friendlyName}}</h1>
-            <p class="font-bold">Publisher: <span class="font-light">{{m_oProcessorInformation.publisher}}</span></p>
+            <div class="d-flex flex-row gap-3 justify-content-center">
+                <p class="font-bold">Publisher: <span class="font-light">{{m_oProcessorInformation.publisher}}</span>
+                </p>
+                <app-button *ngIf="m_oProcessorInformation.isMine" [m_sSize]="'small'" [m_sLabel]="'Edit'"
+                    (click)="openEditAppDialog()"></app-button>
+            </div>
         </div>
     </div>
     <!-- Breadcrumb navigation -->
