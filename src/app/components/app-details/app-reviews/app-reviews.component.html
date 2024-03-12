@@ -1,127 +1,53 @@
+<div class="d-flex flex-row justify-content-between align-items-center pb-2">
+    <h2>Reviews</h2>
+    <app-button *ngIf="m_bUserHasReviewed === false && !m_bIsOwner" [m_sLabel]="'Add Review'"
+        (click)="showReviewInput()"></app-button>
+</div>
 <div class="reviews-container d-flex flex-row gap-4 mb-2">
-        <!-- Average Star Rating -->
-        <!-- <div class="average-star-rating d-flex flex-column">
-            <div>
-                <fa-icon [icon]="m_oReviewsInfo.avgVote> 0.25 &&m_oReviewsInfo.avgVote< 0.75 ? faStarHalf : faStar"
-                    [ngClass]="m_oReviewsInfo.avgVote >= 0.25 ? 'text-warning' : 'text-secondary'">
-                </fa-icon>
-                <fa-icon [icon]="m_oReviewsInfo.avgVote> 1.25 &&m_oReviewsInfo.avgVote< 1.75 ? faStarHalf : faStar"
-                    [ngClass]="m_oReviewsInfo.avgVote >= 1.25 ? 'text-warning' : 'text-secondary'">
-                </fa-icon>
-                <fa-icon [icon]="m_oReviewsInfo.avgVote> 2.25 &&m_oReviewsInfo.avgVote< 2.75 ? faStarHalf : faStar"
-                    [ngClass]="m_oReviewsInfo.avgVote >= 2.25 ? 'text-warning' : 'text-secondary'">
-                </fa-icon>
-                <fa-icon [icon]="m_oReviewsInfo.avgVote> 3.25 &&m_oReviewsInfo.avgVote< 3.75 ? faStarHalf : faStar"
-                    [ngClass]="m_oReviewsInfo.avgVote >= 3.25 ? 'text-warning' : 'text-secondary'">
-                </fa-icon>
-                <fa-icon [icon]="m_oReviewsInfo.avgVote> 4.25 &&m_oReviewsInfo.avgVote< 4.75 ? faStarHalf : faStar"
-                    [ngClass]="m_oReviewsInfo.avgVote >= 4.25 ? 'text-warning' : 'text-secondary'">
-                </fa-icon>
-            </div>
-            <span *ngIf="m_oReviewsInfo.avgVote > -1">{{m_oReviewsInfo.avgVote}} {{"WAP_STARS_TOT" | translate}}</span>
-            <span *ngIf="m_oReviewsInfo.avgVote === -1">Be the first to rate this app</span>
-        </div> -->
-        <!-- Star Rating Breakdown -->
-        <!-- <div class="star-ratings">
-            <div id="five-star-rating" class="star-rating">
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <span>({{m_oReviewsInfo.numberOfFiveStarVotes}})</span>
-            </div>
-            <div id="four-star-rating" class="star-rating">
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <span>({{m_oReviewsInfo.numberOfFourStarVotes}})</span>
-            </div>
-            <div id="three-star-rating" class="star-rating">
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <span>({{m_oReviewsInfo.numberOfThreeStarVotes}})</span>
-            </div>
-            <div id="two-star-rating" class="star-rating">
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <span>({{m_oReviewsInfo.numberOfTwoStarVotes}})</span>
-            </div>
-            <div id="one-star-rating" class="star-rating">
-                <fa-icon [icon]="faStar" class="text-warning"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <fa-icon [icon]="faStar" class="text-secondary"></fa-icon>
-                <span>({{m_oReviewsInfo.numberOfOneStarVotes}})</span>
-            </div>
-        </div>
-
-
-        <button *ngIf="m_bUserHasReviewed === false" class="btn btn-success" (click)="addNewReview()">
-            Add Review
-        </button>
-        <button *ngIf="m_bUserHasReviewed === true" class="btn btn-success" disabled>
-            Already Reviewed
-        </button> -->
     <div class="flex-fill d-flex flex-column">
+        <app-review-input *ngIf="m_bShowReviewBox" [m_sUserId]="m_sUserId" [m_oProcessor]="m_oSelectedProcessor"></app-review-input>
         <div *ngFor="let oReview of m_oReviewsInfo.reviews">
             <div class="d-flex flex-row align-items-center justify-content-between">
                 <div class="d-flex flex-row gap-2">
-                        <div class="user-icon">
-                            <span class="material-symbols-outlined user-icon-symbol">
-                                account_circle
-                            </span>
-                        </div>
+                    <div class="user-icon">
+                        <span class="material-symbols-outlined user-icon-symbol">
+                            account_circle
+                        </span>
+                    </div>
                     <div class="reviews-name">{{oReview.userId}}</div>
                 </div>
-                <!-- <div *ngIf="isMineReview(oReview)" class="d-flex justify-content-end gap-1">
-                    <div class="delete-btn ml-3 btn btn-secondary btn-sm" (click)="updateReview(oReview)">
-                        <fa-icon [icon]="faEdit"></fa-icon>
-                        {{"WAP_UPDATE"|translate}}
-                    </div>
+                <!-- 
                     <div class="delete-btn ml-3 btn btn-secondary btn-sm" (click)="deleteReview(oReview)">
                         <fa-icon [icon]="faTrash"></fa-icon>
                         {{"WAP_DELETE"|translate}}
                     </div>
                 </div> -->
                 <div class="review-option-container d-flex flex-row align-items-center gap-1">
-                    <span class="material-symbols-outlined"
-                        [class]="oReview.vote > 0 ? 'star-filled' : 'star-grey'">
+                    <app-button *ngIf="isMineReview(oReview)" class="me-2" [m_sSize]="'small'"
+                        [m_sLabel]="'EDIT COMMENT'" [m_bOutline]="true" (click)="updateReview(oReview)"></app-button>
+                    <span class="material-symbols-outlined" [class]="oReview.vote > 0 ? 'star-filled' : 'star-grey'">
                         star
                     </span>
-                    <span class="material-symbols-outlined"
-                        [class]="oReview.vote > 1? 'star-filled' : 'star-grey'">
+                    <span class="material-symbols-outlined" [class]="oReview.vote > 1? 'star-filled' : 'star-grey'">
                         star
                     </span>
-                    <span class="material-symbols-outlined"
-                        [class]="oReview.vote > 2 ? 'star-filled' : 'star-grey'">
+                    <span class="material-symbols-outlined" [class]="oReview.vote > 2 ? 'star-filled' : 'star-grey'">
                         star
                     </span>
-                    <span class="material-symbols-outlined"
-                        [class]="oReview.vote > 3 ? 'star-filled' : 'star-grey'">
+                    <span class="material-symbols-outlined" [class]="oReview.vote > 3 ? 'star-filled' : 'star-grey'">
                         star
                     </span>
-                    <span class="material-symbols-outlined"
-                        [class]="oReview.vote > 4 ? 'star-filled' : 'star-grey'">
+                    <span class="material-symbols-outlined" [class]="oReview.vote > 4 ? 'star-filled' : 'star-grey'">
                         star
                     </span>
-            </div>
+                </div>
 
 
             </div>
             <div class="review-date py-2">{{oReview.date | date: 'dd/MM/yyyy'}}</div>
             <!-- <p>{{oReview.title}}</p> -->
             <p class="review-content">{{oReview.comment}}</p>
-          
+
             <!-- <div class="d-flex flex-row justify-content-end gap-1">
                 <button class="btn btn-secondary btn-sm" (click)="addNewComment(oReview)">Add Comment</button>
                 <button class="btn btn-secondary btn-sm" (click)="getComments(oReview)">Show Comments</button>
@@ -138,18 +64,18 @@
                             <div class="d-flex flex-row gap-2">
                                 <!-- <div class="user-iamge mr-3"
                                     style="background-image: url('assets/img/placeholder/user-placeholder.png')"></div> -->
-                                <fa-icon class="text-success" [icon]="faAlien"></fa-icon>
+
                                 <div class="reviews-name">{{oComment.userId}}</div>
                             </div>
                             <div *ngIf="isMineComment(oComment)" class="d-flex justify-content-end gap-1">
                                 <div class="delete-btn ml-3 btn btn-secondary btn-sm"
                                     (click)="updateComment(oComment, oReview)">
-                                    <fa-icon [icon]="faEdit"></fa-icon>
+
                                     {{"WAP_UPDATE"|translate}}
                                 </div>
                                 <div class="delete-btn ml-3 btn btn-secondary btn-sm"
                                     (click)="deleteComment(oComment, oReview)">
-                                    <fa-icon [icon]="faTrash"></fa-icon>
+
                                     {{"WAP_DELETE"|translate}}
                                 </div>
                             </div>
@@ -160,9 +86,8 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary align-self-center my-3" [disabled]="m_bShowLoadMoreReviews === false"
-            (click)="loadMoreReviews()">Load
-            More</button>
+        <app-button class="align-self-center" [m_bDisabled]="!m_bShowLoadMoreReviews" (click)="loadMoreReviews()"
+            [m_sLabel]="'Load More'"></app-button>
     </div>
 
 </div>

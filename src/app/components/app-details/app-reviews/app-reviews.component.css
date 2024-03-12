@@ -2,14 +2,6 @@
     color: var(--neutral80);
 }
 
-.review-option-container>.material-symbols-outlined {
-    font-variation-settings:
-        'FILL' 1,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24
-}
-
 .user-icon {
     background: var(--neutral50Brand);
     color: #FFFFFF;
@@ -39,4 +31,11 @@
 
 .review-content {
     font-size: 14px;
+}
+
+h2 {
+    color: var(--neutral80);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 30px;
 }

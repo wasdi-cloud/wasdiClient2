@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { AfterViewChecked, Component, Input, OnChanges } from '@angular/core';
 
 //Angular Materials Imports
 import { MatDialog } from '@angular/material/dialog';
@@ -13,9 +13,6 @@ import { TranslateService } from '@ngx-translate/core';
 //Component Imports:
 import { CommentEditorDialogComponent } from './comment-editor-dialog/comment-editor-dialog.component';
 
-//Font Awesome Improts:
-import { faEdit, faSpaghettiMonsterFlying, faStar, faStarHalf, faStarHalfAlt, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-
 //Import Utilities:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
@@ -24,14 +21,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   templateUrl: './app-reviews.component.html',
   styleUrls: ['./app-reviews.component.css']
 })
-export class AppReviewsComponent implements OnChanges {
-  faAlien = faSpaghettiMonsterFlying;
-  faEdit = faEdit;
-  faStarHalf = faStarHalf;
-  faStarHalfAlt = faStarHalfAlt;
-  faStar = faStar;
-  faStarRegular = faStar;
-  faTrash = faTrashCan;
+export class AppReviewsComponent implements OnChanges, AfterViewChecked {
 
   @Input() oProcessor: any;
 
@@ -60,6 +50,12 @@ export class AppReviewsComponent implements OnChanges {
 
   m_aoComments: any = [];
 
+  m_bIsOwner: boolean = false;
+
+  m_bShowReviewBox: boolean = false;
+
+  m_sUserId: string = "";
+
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
@@ -73,6 +69,13 @@ export class AppReviewsComponent implements OnChanges {
     if (this.oProcessor.processorId) {
       this.m_oSelectedProcessor = this.oProcessor;
       this.getReviews();
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    this.m_sUserId = this.m_oConstantsService.getUserId();
+    if (this.oProcessor.publisher === this.m_sUserId) {
+      this.m_bIsOwner = true;
     }
   }
 
@@ -341,5 +344,10 @@ export class AppReviewsComponent implements OnChanges {
     } else {
       return false
     }
+  }
+
+  showReviewInput() {
+    console.log("click")
+    this.m_bShowReviewBox = !this.m_bShowReviewBox;
   }
 }
