@@ -176,6 +176,7 @@ import { SliderComponent } from './shared/shared-components/slider/slider.compon
 import { InvaderComponent } from './shared/shared-components/invader/invader.component';
 import { TabComponent } from './shared/shared-components/tab/tab.component';
 import { AutocompleteComponent } from './shared/shared-components/autocomplete/autocomplete.component';
+import { DurationPipe } from './shared/pipes/duration.pipe';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -294,7 +295,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SliderComponent,
     InvaderComponent,
     TabComponent,
-    AutocompleteComponent
+    AutocompleteComponent,
+    DurationPipe
 
   ],
   imports: [
