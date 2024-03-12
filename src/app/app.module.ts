@@ -177,6 +177,7 @@ import { InvaderComponent } from './shared/shared-components/invader/invader.com
 import { TabComponent } from './shared/shared-components/tab/tab.component';
 import { AutocompleteComponent } from './shared/shared-components/autocomplete/autocomplete.component';
 import { DurationPipe } from './shared/pipes/duration.pipe';
+import { ReviewInputComponent } from './components/app-details/app-reviews/review-input/review-input.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -296,7 +297,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     InvaderComponent,
     TabComponent,
     AutocompleteComponent,
-    DurationPipe
+    DurationPipe,
+    ReviewInputComponent
 
   ],
   imports: [

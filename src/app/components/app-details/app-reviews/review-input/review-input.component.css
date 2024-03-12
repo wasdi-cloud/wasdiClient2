@@ -1,0 +1,41 @@
+.editor-container {
+    width: 100%;
+    background: var(--neutral5);
+    padding: 16px;
+    border-radius: 8px;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
+.user-icon {
+    background: var(--neutral50Brand);
+    color: #FFFFFF;
+    border-radius: 50%;
+    height: 1.5rem;
+    width: 1.5rem;
+    position: relative;
+}
+
+.user-icon-symbol {
+    font-size: 20px;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+}
+
+.reviews-name {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.star-icon {
+    cursor: pointer;
+}
+
+.material-symbols-outlined.star-icon {
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
