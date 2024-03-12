@@ -140,6 +140,11 @@ export class MarketplaceFiltersComponent implements OnInit {
 
   getSearchInput(oEvent) {
     this.m_sSearchInput = oEvent.event.target.value;
+
+    // Handle user hitting enter to execute the search
+    if(oEvent.event.key === 'Enter'){
+      this.onSearchInput(oEvent)
+    }
   }
 
   getDeveloperInput(oEvent) {
@@ -164,5 +169,4 @@ export class MarketplaceFiltersComponent implements OnInit {
     this.m_sSearchInput = "";
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
-
 }
