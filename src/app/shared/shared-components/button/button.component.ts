@@ -50,4 +50,9 @@ export class ButtonComponent {
    * Is the button "muted" (i.e., "white")?
    */
   @Input() m_bMuted?: boolean = false;
+
+  /**
+   * Is the button a delete button (i.e., should it be RED)? 
+   */
+  @Input() m_bIsDelete?: boolean = false;
 }

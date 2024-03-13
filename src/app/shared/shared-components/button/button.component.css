@@ -107,3 +107,7 @@
 .icon-only-sm {
     padding: 12px 2px;
 }
+
+.btn-delete {
+    background-color: var(--wasdiDanger);
+}

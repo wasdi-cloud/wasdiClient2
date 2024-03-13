@@ -4,90 +4,12 @@
         (click)="showReviewInput()"></app-button>
 </div>
 <div class="reviews-container d-flex flex-row gap-4 mb-2">
-    <div class="flex-fill d-flex flex-column">
-        <app-review-input *ngIf="m_bShowReviewBox" [m_sUserId]="m_sUserId" [m_oProcessor]="m_oSelectedProcessor"></app-review-input>
+    <div class="flex-fill d-flex flex-column gap-3">
         <div *ngFor="let oReview of m_oReviewsInfo.reviews">
-            <div class="d-flex flex-row align-items-center justify-content-between">
-                <div class="d-flex flex-row gap-2">
-                    <div class="user-icon">
-                        <span class="material-symbols-outlined user-icon-symbol">
-                            account_circle
-                        </span>
-                    </div>
-                    <div class="reviews-name">{{oReview.userId}}</div>
-                </div>
-                <!-- 
-                    <div class="delete-btn ml-3 btn btn-secondary btn-sm" (click)="deleteReview(oReview)">
-                        <fa-icon [icon]="faTrash"></fa-icon>
-                        {{"WAP_DELETE"|translate}}
-                    </div>
-                </div> -->
-                <div class="review-option-container d-flex flex-row align-items-center gap-1">
-                    <app-button *ngIf="isMineReview(oReview)" class="me-2" [m_sSize]="'small'"
-                        [m_sLabel]="'EDIT COMMENT'" [m_bOutline]="true" (click)="updateReview(oReview)"></app-button>
-                    <span class="material-symbols-outlined" [class]="oReview.vote > 0 ? 'star-filled' : 'star-grey'">
-                        star
-                    </span>
-                    <span class="material-symbols-outlined" [class]="oReview.vote > 1? 'star-filled' : 'star-grey'">
-                        star
-                    </span>
-                    <span class="material-symbols-outlined" [class]="oReview.vote > 2 ? 'star-filled' : 'star-grey'">
-                        star
-                    </span>
-                    <span class="material-symbols-outlined" [class]="oReview.vote > 3 ? 'star-filled' : 'star-grey'">
-                        star
-                    </span>
-                    <span class="material-symbols-outlined" [class]="oReview.vote > 4 ? 'star-filled' : 'star-grey'">
-                        star
-                    </span>
-                </div>
-
-
-            </div>
-            <div class="review-date py-2">{{oReview.date | date: 'dd/MM/yyyy'}}</div>
-            <!-- <p>{{oReview.title}}</p> -->
-            <p class="review-content">{{oReview.comment}}</p>
-
-            <!-- <div class="d-flex flex-row justify-content-end gap-1">
-                <button class="btn btn-secondary btn-sm" (click)="addNewComment(oReview)">Add Comment</button>
-                <button class="btn btn-secondary btn-sm" (click)="getComments(oReview)">Show Comments</button>
-            </div> -->
-            <div *ngIf="m_bShowComments" class="mt-1">
-                <div *ngIf="m_aoComments.length === 0" class="reviews-list p-3 mb-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        {{"WAP_NO_COMMENTS"|translate}}
-                    </div>
-                </div>
-                <div *ngIf="m_aoComments.length > 0" class="reviews-list gap-2">
-                    <div class="d-flex flex-column gap-1 border p-3 mt-3" *ngFor="let oComment of m_aoComments">
-                        <div class="d-flex flex-row align-items-center justify-content-between">
-                            <div class="d-flex flex-row gap-2">
-                                <!-- <div class="user-iamge mr-3"
-                                    style="background-image: url('assets/img/placeholder/user-placeholder.png')"></div> -->
-
-                                <div class="reviews-name">{{oComment.userId}}</div>
-                            </div>
-                            <div *ngIf="isMineComment(oComment)" class="d-flex justify-content-end gap-1">
-                                <div class="delete-btn ml-3 btn btn-secondary btn-sm"
-                                    (click)="updateComment(oComment, oReview)">
-
-                                    {{"WAP_UPDATE"|translate}}
-                                </div>
-                                <div class="delete-btn ml-3 btn btn-secondary btn-sm"
-                                    (click)="deleteComment(oComment, oReview)">
-
-                                    {{"WAP_DELETE"|translate}}
-                                </div>
-                            </div>
-                        </div>
-                        <div>{{oComment.text}}</div>
-                        <div class="text-success">{{oComment.date | date: 'dd/MM/yyyy'}}</div>
-                    </div>
-                </div>
-            </div>
+            <app-review *ngIf="!m_bIsEditing" [m_oReview]="oReview"
+                [m_oSelectedProcessor]="m_oSelectedProcessor"></app-review>
         </div>
-        <app-button class="align-self-center" [m_bDisabled]="!m_bShowLoadMoreReviews" (click)="loadMoreReviews()"
+        <app-button class="align-self-center my-3" [m_bDisabled]="!m_bShowLoadMoreReviews" (click)="loadMoreReviews()"
             [m_sLabel]="'Load More'"></app-button>
     </div>
-
 </div>

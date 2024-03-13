@@ -9,7 +9,8 @@
             <div class="reviews-name font-bold">{{m_sUserId}}</div>
 
         </div>
-        <div class="d-flex-flex-row">
+        <!-- Show star rating input if a REVIEW -->
+        <div *ngIf="m_bIsReview" class="d-flex-flex-row">
             <span class="material-symbols-outlined star-icon"
                 [ngClass]="m_oUserReview.vote >= 1 || m_iPreviewRating >= 1 ? 'star-filled' : 'star-grey'"
                 (click)="m_oUserReview.vote = 1" (mouseover)="m_iPreviewRating = 1" (mouseout)="m_iPreviewRating= 0">
@@ -38,7 +39,21 @@
         </div>
     </div>
     <div class="editor-textarea-wrapper">
-        <app-textarea (keyup)="getUserInput($event)"></app-textarea>
+        <app-textarea (keyup)="getUserInput($event)" [m_sInputString]="m_sReviewText"></app-textarea>
     </div>
-    <app-button class="align-self-end" [m_sLabel]="'POST REVIEW'" (click)="addReview()"></app-button>
+    <!-- Review Handling Buttons -->
+    <div *ngIf="m_bIsReview" class="d-flex flex-row justify-content-end gap-2">
+        <app-button *ngIf="!m_bIsEditing" [m_sLabel]="'POST REVIEW'" (click)="addReview()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'DELETE'" [m_bIsDelete]="true"
+            (click)="deleteReview()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'UPDATE REVIEW'" (click)="updateReview()"></app-button>
+    </div>
+
+    <!-- Comment Handling Buttons -->
+    <div *ngIf="!m_bIsReview" class="d-flex flex-row justify-content-end gap-2">
+        <app-button *ngIf="!m_bIsEditing" [m_sLabel]="'POST COMMENT'" (click)="addComment()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'DELETE'" [m_bIsDelete]="true"
+            (click)="deleteComment()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'UPDATE REVIEW'" (click)="updateComment()"></app-button>
+    </div>
 </div>

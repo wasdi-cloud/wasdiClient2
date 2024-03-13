@@ -1,0 +1,77 @@
+<app-review-input *ngIf="m_bIsEditing && m_bEditingReview" [m_bIsEditing]="m_bIsEditing" [m_sUserId]="m_oReview.userId"
+    [m_oProcessor]="m_oSelectedProcessor" [m_oReview]="m_oReview"
+    (m_oReviewEmit)="refreshReview($event)"></app-review-input>
+
+<app-review-input *ngIf="m_bIsEditing && m_bIsEditingComment" [m_bIsEditing]="m_bIsEditing" [m_bIsReview]="false"
+    [m_sUserId]="m_oComment.userId" [m_oComment]="m_oComment"></app-review-input>
+
+<div class="d-flex flex-row gap-2 mb-2" *ngIf="!m_bIsEditing || !m_bIsEditingComment">
+    <!-- Icon -->
+    <div class="user-icon">
+        <span class="material-symbols-outlined user-icon-symbol">
+            account_circle
+        </span>
+    </div>
+    <div class="flex-fill">
+        <div class="d-flex flex-row align-items-center justify-content-between">
+            <div class="d-flex flex-row gap-2">
+                <div class="reviews-name">{{m_oReview? m_oReview.userId : m_oComment.userId}}</div>
+            </div>
+            <app-button *ngIf="m_oComment && isMineComment()" class="me-2" [m_sSize]="'small'"
+                [m_sLabel]="'EDIT COMMENT'" [m_bOutline]="true" (click)="updateComment()"></app-button>
+            <div *ngIf="m_oReview" class="review-option-container d-flex flex-row align-items-center gap-1">
+                <app-button *ngIf="isMineReview()" class="me-2" [m_sSize]="'small'" [m_sLabel]="'EDIT REVIEW'"
+                    [m_bOutline]="true" (click)="updateReview()"></app-button>
+                <span class="material-symbols-outlined star-icon"
+                    [class]="m_oReview.vote > 0 ? 'star-filled' : 'star-grey'">
+                    star
+                </span>
+                <span class="material-symbols-outlined star-icon"
+                    [class]="m_oReview.vote > 1? 'star-filled' : 'star-grey'">
+                    star
+                </span>
+                <span class="material-symbols-outlined star-icon"
+                    [class]="m_oReview.vote > 2 ? 'star-filled' : 'star-grey'">
+                    star
+                </span>
+                <span class="material-symbols-outlined star-icon"
+                    [class]="m_oReview.vote > 3 ? 'star-filled' : 'star-grey'">
+                    star
+                </span>
+                <span class="material-symbols-outlined star-icon"
+                    [class]="m_oReview.vote > 4 ? 'star-filled' : 'star-grey'">
+                    star
+                </span>
+            </div>
+        </div>
+        <div class="review-date py-2">{{m_oReview? m_oReview.date : m_oComment.date | date: 'dd/MM/yyyy'}}</div>
+        <!-- <p>{{oReview.title}}</p> -->
+        <p class="review-content">{{m_oReview? m_oReview.comment : m_oComment.text}}</p>
+        <div *ngIf="m_oReview" class="d-flex flex-row justify-content-end gap-2">
+            <app-button [m_sSize]="'small'" [m_sLabel]="'Add Comment'" [m_bOutline]="true"
+                (click)="addNewComment()"></app-button>
+            <app-button *ngIf="!m_bShowComments" [m_sSize]="'small'" [m_sLabel]="'Show Comments'" [m_bOutline]="true"
+                (click)="getComments()"></app-button>
+            <app-button *ngIf="m_bShowComments" [m_sSize]="'small'" [m_sLabel]="'Hide Comments'" [m_bOutline]="true"
+                (click)="m_bShowComments = !m_bShowComments"></app-button>
+        </div>
+    </div>
+</div>
+
+<app-review-input *ngIf="m_bAddComment" [m_sUserId]="m_sUser" [m_bIsReview]="false"
+    [m_oComment]="m_oComment"></app-review-input>
+
+<!-- Comments Container -->
+<div *ngIf="m_bShowComments" class="mt-1 ps-5">
+    <div class="reviews-list p-3 mb-4">
+        <!-- If no comments, show message -->
+        <div *ngIf="!m_aoComments.length" class="d-flex align-items-center justify-content-between">
+            There are no comments
+        </div>
+    </div>
+    <!-- Comments -->
+    <div *ngIf="m_aoComments.length">
+        <app-review *ngFor="let oComment of m_aoComments" [m_oComment]="oComment" [m_bIsReview]="false"
+            [m_sReviewId]="m_oReview.id"></app-review>
+    </div>
+</div>

@@ -25,11 +25,12 @@ export class ReviewEditorDialogComponent implements OnInit {
   m_oSelectedProcessor: any;
 
 
+
   m_bIsEditing: boolean;
 
   m_iPreviewRating: number = 0;
 
-  m_oUserReview = {
+  m_oUserReview: any = {
     vote: -1,
     title: "",
     comment: "",
