@@ -42,7 +42,7 @@ export class EditWorkflowDialogComponent implements OnInit {
       this.m_sWorkflowName = this.m_oWorkflow.name;
       this.m_sWorkflowDescription = this.m_oWorkflow.Description;
       this.m_bWorkflowIsPublic = this.m_oWorkflow.public;
-      // this.getWorkflowXML(this.m_oWorkflow.workflowId);
+      this.getWorkflowXML(this.m_oWorkflow.workflowId);
     }
   }
 
@@ -157,7 +157,7 @@ export class EditWorkflowDialogComponent implements OnInit {
 
   saveWorkflowChanges() {
     if (this.m_bXMLEdited === true && this.m_sActiveTab === 'xml') {
-      //this.updateWorkflowXML();
+      this.updateWorkflowXML();
     }
     if (this.m_sActiveTab === 'workflow') {
       if (this.m_bEditMode === true) {
