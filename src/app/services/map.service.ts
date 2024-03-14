@@ -142,25 +142,31 @@ export class MapService {
    */
   initTilelayer() {
 
-    FadeoutUtils.verboseLog("MapService.initTilelayer: initializing base layers");
-
+    // Basic OSM Layer
     this.m_oOSMBasic = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       maxZoom: 18,
       // this option disables loading tiles outside of the world bounds.
       noWrap: true
     });
+
+    // Topo Map
     this.m_oOpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
       maxZoom: 17,
       attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
     });
+
+    // Esri Streets
     this.m_oEsriWorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
     });
+
+    // Esri Images
     this.m_oEsriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
 
+    // Stadi Dark
     this.m_oStadiMapDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
       minZoom: 0,
       maxZoom: 20,
@@ -168,6 +174,7 @@ export class MapService {
 	    ext: 'png'
     });
 
+    // Add all to the layers control
     this.m_oLayersControl = L.control.layers(
       {
         'Standard': this.m_oOSMBasic,
@@ -194,6 +201,7 @@ export class MapService {
     FadeoutUtils.verboseLog("MapService.initWasdiMap: initializing Leaflet");
     this.m_oWasdiMap = this.initMap(sMapDiv);
     this.addMousePositionAndScale();
+    this.initGeoSearchPluginForOpenStreetMap();
   }
 
   /**
@@ -359,9 +367,17 @@ export class MapService {
     * @references https://github.com/perliedman/leaflet-control-geocoder
     */
   initGeoSearchPluginForOpenStreetMap() {
-    this.m_oGeocoderControl.options.position = "bottomright";
 
+    if (this.m_oGeocoderControl==null) {
+      this.m_oGeocoderControl = L.geocoder();
+    }
+
+    if (this.m_oGeocoderControl!=null) {
+      this.m_oGeocoderControl.options.position = "topright";
+      this.m_oGeocoderControl.addTo(this.m_oWasdiMap); 
+    }
   }
+
   /**
    * Clear Map 
    */
