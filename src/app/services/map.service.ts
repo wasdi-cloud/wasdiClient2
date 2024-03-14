@@ -201,7 +201,6 @@ export class MapService {
     FadeoutUtils.verboseLog("MapService.initWasdiMap: initializing Leaflet");
     this.m_oWasdiMap = this.initMap(sMapDiv);
     this.addMousePositionAndScale();
-    this.initGeoSearchPluginForOpenStreetMap();
   }
 
   /**
@@ -241,6 +240,8 @@ export class MapService {
     });
 
     this.m_oOSMBasic.addTo(oMap)
+
+    this.initGeoSearchPluginForOpenStreetMap(oMap);
 
     this.m_oLayersControl.addTo(oMap);
 
@@ -357,7 +358,6 @@ export class MapService {
     if (layerType === "rectangle") {
       const rectangleCoordinates = layer._latlngs
       this.m_oDrawnItems.addLayer(layer);
-
       return rectangleCoordinates;
     }
   }
@@ -366,15 +366,19 @@ export class MapService {
     * Init geo search plugin, the search bar for geographical reference on the map
     * @references https://github.com/perliedman/leaflet-control-geocoder
     */
-  initGeoSearchPluginForOpenStreetMap() {
+  initGeoSearchPluginForOpenStreetMap(oMap) {
+
+    if (oMap == null) {
+      oMap = this.m_oWasdiMap;
+    }
 
     if (this.m_oGeocoderControl==null) {
       this.m_oGeocoderControl = L.geocoder();
     }
 
     if (this.m_oGeocoderControl!=null) {
-      this.m_oGeocoderControl.options.position = "topright";
-      this.m_oGeocoderControl.addTo(this.m_oWasdiMap); 
+      //this.m_oGeocoderControl.options.position = "topright";
+      this.m_oGeocoderControl.addTo(oMap); 
     }
   }
 

@@ -72,7 +72,7 @@ export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.m_oMapService.setMap(oMap);
     this.m_oMapService.addManualBbox(oMap);
     this.m_oMapService.addMousePositionAndScale();
-    this.m_oMapService.initGeoSearchPluginForOpenStreetMap();
+    this.m_oMapService.initGeoSearchPluginForOpenStreetMap(oMap);
   }
 
   onDrawCreated(oEvent: any) {
