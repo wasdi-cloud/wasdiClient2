@@ -5,16 +5,17 @@
                 (click)="openAppsDialog()"></app-button>
         </li>
         <li class="nav-item">
-            <app-button [m_sLabel]="'WORKFLOWS'" [m_sIconRight]="'low_priority'" [m_bMuted]="true"
+            <app-button [m_sLabel]="'WORKFLOWS'" [m_sIconRight]="'account_tree'" [m_bMuted]="true"
                 (click)="openWorkflowsDialog()" [m_sSize]="'small'"></app-button>
-        </li>
-        <li class="nav-item">
-            <app-button [m_sLabel]="'IMPORT'" [m_sIconRight]="'upload'" [m_bMuted]="true"
-                (click)="openImportDialog()" [m_sSize]="'small'"></app-button>
         </li>
         <li class="nav-item">
             <app-button [m_sLabel]="'NOTEBOOK'" [m_sIconRight]="'laptop_mac'" [m_bMuted]="true" (click)="openJupyterNotebookPage()"
                 [m_sSize]="'small'"></app-button>
+        </li>
+
+        <li class="nav-item">
+            <app-button [m_sIconRight]="'upload'" [m_bMuted]="true"
+                (click)="openImportDialog()" [m_sSize]="'small'"></app-button>
         </li>
         <li class="nav-item">
             <app-button [m_sIconRight]="'share'" [m_bMuted]="true" (click)="openShareDialog()" [m_sSize]="'small'"></app-button>
