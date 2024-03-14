@@ -17,8 +17,20 @@
                 [m_sSize]="'small'"></app-button>
         </li>
         <li class="nav-item">
-            <app-button [m_sIconRight]="'share'" [m_bMuted]="true" (click)="openShareDialog()"
-            [m_sSize]="'small'"></app-button>
+            <app-button [m_sIconRight]="'share'" [m_bMuted]="true" (click)="openShareDialog()" [m_sSize]="'small'"></app-button>
         </li>
+
+        <li class="nav-item" *ngIf="!m_b2DMapModeOn">
+            <app-button [m_sIconRight]="'map'" [m_bMuted]="true" (click)="switch2D3DMode()" [m_sSize]="'small'"></app-button>
+        </li>
+
+        <li class="nav-item" *ngIf="m_b2DMapModeOn">
+            <app-button [m_sIconRight]="'globe'" [m_bMuted]="true" (click)="switch2D3DMode()" [m_sSize]="'small'"></app-button>
+        </li>
+
+        <li class="nav-item">
+            <app-button [m_sIconRight]="'info'" [m_bMuted]="true" (click)="switch2D3DMode()" [m_sSize]="'small'"></app-button>
+        </li>
+
     </ul>
 </nav>

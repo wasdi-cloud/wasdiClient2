@@ -8,11 +8,9 @@ import { GlobeService } from 'src/app/services/globe.service';
 import { faGlobeAfrica, faHome, faInfoCircle, faLocationArrow, faMap, faNavicon } from '@fortawesome/free-solid-svg-icons';
 
 //Leaflet Imports: 
-import Geocoder from 'leaflet-control-geocoder';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 declare let Cesium: any;
 
-import * as L from "leaflet";
 import { ConstantsService } from 'src/app/services/constants.service';
 
 @Component({
@@ -95,6 +93,20 @@ export class EditMapComponent implements OnInit {
    * By the default the 2D map is active.
    */
   m_b2DMapModeOn = true;
+
+  /**
+   * Getter of the aoProduct Property
+   */
+  public get b2DMapModeOn(): boolean {
+    return this.m_b2DMapModeOn;
+  }
+
+  /**
+   * Setter of teh aoProduct Property
+   */
+  @Input() public set b2DMapModeOn(value: boolean) {
+    this.m_b2DMapModeOn = value;
+  }  
 
   /**
    * Event triggered when the Map Mode changes from 2D to 3D and vice versa

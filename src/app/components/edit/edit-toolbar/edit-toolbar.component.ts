@@ -24,6 +24,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   @Input() m_oActiveWorkspace: Workspace;
   @Input() m_aoProducts: Product[];
   @Input() m_bJupyterIsReady: boolean = false;
+  @Input() m_b2DMapModeOn: boolean = true;
 
   m_bNotebookIsReady: boolean = false;
   m_sFilterText: string;
@@ -113,4 +114,9 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
       oController.m_bJupyterIsReady = true;
     }
   }
+
+  switch2D3DMode(): void {
+
+  }
+
 }

@@ -4,7 +4,7 @@ export const MenuItems = [
         label: "ROOT_VIEW_NAV_BAR_LINK_APPSTORE",
         name: "marketplace",
         routerLink: "/marketplace",
-        materialIcon: "grid_on"
+        materialIcon: "rocket_launch"
     },
     // Workspaces:
     {
