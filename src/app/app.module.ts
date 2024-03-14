@@ -141,8 +141,6 @@ import { ProductsTableComponent } from './components/search/products-table/produ
 import { WorkspacesListDialogComponent } from './components/search/workspaces-list-dialog/workspaces-list-dialog.component';
 import { ProductInfoComponent } from './components/search/product-info/product-info.component';
 import { AdvancedFiltersComponent } from './components/search/advanced-filters/advanced-filters.component';
-import { ReviewEditorDialogComponent } from './components/app-details/app-reviews/review-editor-dialog/review-editor-dialog.component';
-import { CommentEditorDialogComponent } from './components/app-details/app-reviews/comment-editor-dialog/comment-editor-dialog.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
@@ -264,8 +262,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WorkspacesListDialogComponent,
     ProductInfoComponent,
     AdvancedFiltersComponent,
-    ReviewEditorDialogComponent,
-    CommentEditorDialogComponent,
     SearchOrbitResultsComponent,
     FTPDialogComponent,
     NavbarComponent,
