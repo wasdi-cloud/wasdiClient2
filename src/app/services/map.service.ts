@@ -200,16 +200,17 @@ export class MapService {
   initWasdiMap(sMapDiv: string) {
     FadeoutUtils.verboseLog("MapService.initWasdiMap: initializing Leaflet");
     this.m_oWasdiMap = this.initMap(sMapDiv);
-    this.addMousePositionAndScale();
+    this.addMousePositionAndScale(this.m_oWasdiMap);
   }
 
   /**
    * Adds Mouse Position and Scale to the actual map
    * @returns 
    */
-  addMousePositionAndScale() {
+  addMousePositionAndScale(oMap) {
 
-    if (this.m_oWasdiMap==null) {
+    if (oMap==null) {
+      oMap = this.m_oWasdiMap;
       return;
     }
 
@@ -217,13 +218,13 @@ export class MapService {
     let oMousePosition = L.control.mousePosition();
 
     if (oMousePosition!=null) {
-      oMousePosition.addTo(this.m_oWasdiMap);
+      oMousePosition.addTo(oMap);
     }
 
     L.control.scale({
       position: "bottomright",
       imperial: false
-    }).addTo(this.m_oWasdiMap);
+    }).addTo(oMap);
   }
 
   /**
@@ -269,6 +270,7 @@ export class MapService {
    * @param sMapDiv 
    */
   initMapSingleton(sMapDiv) {
+
     var oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
@@ -280,23 +282,12 @@ export class MapService {
     });
 
     var oMap = L.map(sMapDiv, {
-      zoomControl: false,
+      zoomControl: true,
       layers: [oOSMBasic],
       keyboard: false
     });
 
-    //scale control
-    L.control.scale({
-      position: "bottomright",
-      imperial: false
-    }).addTo(oMap);
-
-    // coordinates in map find this plugin in lib folder
-    let oMousePosition = L.control.mousePosition();
-
-    if (oMousePosition!=null) {
-      oMousePosition.addTo(oMap);
-    }
+    this.initGeoSearchPluginForOpenStreetMap(oMap);
 
     //layers control
     var oLayersControl = L.control.layers(
@@ -307,11 +298,9 @@ export class MapService {
         "EsriWorldImagery": this.m_oEsriWorldImagery,
         "Stadi Map Dark": this.m_oStadiMapDark
       },
-      {},
-      {
-        'position': 'bottomright'
-      }
+      {}
     );
+
     oLayersControl.addTo(oMap);
 
     // center map
@@ -322,12 +311,9 @@ export class MapService {
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
-    //add event on base change
-    oMap.on('baselayerchange', function (e) {
-      // console.log(e);
-      //e.layer.bringToBack();
-      // oActiveBaseLayer = e;
-    });
+    this.addMousePositionAndScale(oMap);
+
+    this.addManualBbox(oMap);
 
     return oMap;
   }

@@ -17,8 +17,6 @@ export class WapSelectAreaComponent implements OnInit {
   @Input() oMapInput;
   @Output() oMapInputChange = new EventEmitter;
 
-  m_oMapOptions: any;
-  m_oLayersControl: any;
   m_oDrawOptions: any;
   m_oDrawnItems: any;
   m_sErrorMessage: string;
@@ -31,15 +29,6 @@ export class WapSelectAreaComponent implements OnInit {
   constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService) { }
 
   ngOnInit(): void {
-    this.m_oMapService.setDrawnItems();
-    this.m_oMapService.initTilelayer();
-
-    this.m_oMapOptions = this.m_oMapService.m_oOptions;
-    this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
-    this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
-    this.m_oDrawnItems = this.m_oMapService.m_oDrawnItems;
-
-    this.m_oDrawOptions.edit.featureGroup = this.m_oDrawnItems;
 
     this.m_sErrorMessage = "Error:"
     this.m_bIsValid = true;
@@ -184,8 +173,6 @@ export class WapSelectAreaComponent implements OnInit {
     oMap.addLayer(this.m_oDrawnItems);
 
     var oOptions = {
-
-
       edit: {
         featureGroup: this.m_oDrawnItems,//draw items are the "voice" of menu
         edit: false,// hide edit button
@@ -195,7 +182,7 @@ export class WapSelectAreaComponent implements OnInit {
 
     let oDrawControl = new L.Control.Draw();
 
-    oDrawControl.setPosition('topright');
+    oDrawControl.setPosition('topleft');
 
     oDrawControl.setDrawingOptions({
       // what kind of shapes are disable/enable
@@ -235,21 +222,12 @@ export class WapSelectAreaComponent implements OnInit {
       oController.oMapInputChange.emit(oController.oMapInput);
     });
 
-
-
     oMap.on(L.Draw.Event.DELETESTOP, function (event) {
       console.log("DELETE STOP")
       // oController.m_oDrawOptions.clearLayers();
       // let layer = event.layers;
     });
 
-    this.m_oMapService.addManualBbox(oMap)
-
-    let oGeocoder = new Geocoder({
-      position: 'topleft'
-    });
-
-    oGeocoder.addTo(oMap);
     return oMap;
   }
 
