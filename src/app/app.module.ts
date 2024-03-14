@@ -177,6 +177,7 @@ import { AutocompleteComponent } from './shared/shared-components/autocomplete/a
 import { DurationPipe } from './shared/pipes/duration.pipe';
 import { ReviewInputComponent } from './components/app-details/app-reviews/review-input/review-input.component';
 import { ReviewComponent } from './components/app-details/app-reviews/review/review.component';
+import { PlanTreeComponent } from './components/plan/plan-tree/plan-tree.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -296,7 +297,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AutocompleteComponent,
     DurationPipe,
     ReviewInputComponent,
-    ReviewComponent
+    ReviewComponent,
+    PlanTreeComponent
 
   ],
   imports: [

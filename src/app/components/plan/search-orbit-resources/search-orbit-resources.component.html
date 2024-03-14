@@ -1,4 +1,43 @@
-<section class="sub-menu">
+<div class="secondary-nav d-flex flex-column justify-content-between">
+    <div class="d-flex flex-column filters-container">
+        <div class="location-header">Plan</div>
+        <div class="filters-header">Filters</div>
+        <div class="filter-instructions d-flex flex-column gap-2">
+            <div class="font-light">
+                Select <span class="font-bold">a date range</span>
+            </div>
+            <div class="font-light">
+                Select <span class="font-bold">at least one satellite</span>
+            </div>
+            <div class="font-light">
+                Draw an <span class="font-bold">area on the map</span>
+            </div>
+        </div>
+        <div class="input-container my-3">
+            <div class="search-header">Date Range</div>
+            <div class="dates-input-container d-flex flex-row gap-1">
+                <div class="col-6">
+                    <app-input-field [m_sInputType]="'date'" [m_sLabel]="'From'"></app-input-field>
+                </div>
+                <div class="col-6">
+                    <app-input-field class="" [m_sInputType]="'date'" [m_sLabel]="'To'"></app-input-field>
+                </div>
+            </div>
+        </div>
+        <div class="satellite-container flex-fill">
+            <div class="search-header">Satellites</div>
+            <div class="plan-tree-container">
+                <app-plan-tree *ngFor="let oSatellite of m_aoSatelliteResources"
+                    [m_oSatellite]="oSatellite"></app-plan-tree>
+            </div>
+        </div>
+    </div>
+    <div class="floating-buttons d-flex flex-row gap-2 w-100 justify-content-between">
+        <app-button [m_bMuted]="true" [m_sLabel]="'Clear Filters'"></app-button>
+        <app-button class="flex-fill" [m_sLabel]="'Search'" [m_sIconLeft]="'search'"></app-button>
+    </div>
+</div>
+<!-- <section class="sub-menu">
     <article class="sub-menu-grp">
         <div class="title">
             <img src="./assets/svg/filter-icon.svg" alt="filter icon" />
@@ -6,16 +45,16 @@
         </div>
 
         <div class="sub-menu-body">
-            <div class="d-flex flex-row gap-2 align-items-center justify-content-between px-2">
-                <!---------------------- TIME PICKER START -------------------->
-                <div class="date-time-wrapper date-select" style="width: 50%">
+            <div class="d-flex flex-row gap-2 align-items-center justify-content-between px-2"> -->
+<!---------------------- TIME PICKER START -------------------->
+<!-- <div class="date-time-wrapper date-select" style="width: 50%">
                     <label for="startDate">{{'PLAN_FROM'|translate}}</label>
                     <input type="date" name="acquisitionStartDate" id="" class="form-control"
                         matTooltip="Select acquisition Start Date" [(ngModel)]="m_oStartDate"
                         (ngModelChange)="emitDateChange()">
-                </div>
-                <!---------------------- TIME PICKER END -------------------->
-                <div class="date-time-wrapper date-select" style="width: 50%">
+                </div> -->
+<!---------------------- TIME PICKER END -------------------->
+<!-- <div class="date-time-wrapper date-select" style="width: 50%">
                     <label for="acquisitionEndDate">{{"PLAN_TO"|translate}}</label>
                     <input type="date" name="acquisitionEndDate" id="" class="form-control"
                         matTooltip="Select acquisition End Date" [(ngModel)]="m_oEndDate"
@@ -58,4 +97,4 @@
             </mat-tree>
         </div>
     </article>
-</section>
+</section> -->

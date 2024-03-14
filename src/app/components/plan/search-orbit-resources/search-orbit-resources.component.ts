@@ -51,6 +51,7 @@ export class SearchOrbitResourcesComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     //Set default Date Data: 
     this.setDefaultDateData();
+    console.log(this.m_aoSatelliteResources)
   }
 
 

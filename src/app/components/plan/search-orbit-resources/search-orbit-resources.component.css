@@ -1,76 +1,35 @@
-@import url(/src/app/components/marketplace/marketplace.component.css);
-
-.sub-menu {
-  height: 100%;
-  width: 500px;
+.secondary-nav {
+  height: calc(100vh - 6rem);
 }
 
-.sub-menu-body {
-  margin-top: 1rem;
+.filters-container {
+  height: calc(100vh - 9rem);
 }
 
-
-.search-input-container {
-  border: 1px solid rgba(67, 82, 107, 0.15);
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.satellite-container {
+  height: 60%;
 }
 
-.sub-menu-grp {
-  max-width: 350px;
-  margin-top: 0;
-}
-
-.sub-menu label {
-  margin: 0;
-  padding-left: 0;
-}
-
-.sub-menu input {
-  width: 100px;
-  height: 24px;
-}
-
-.sub-menu input.date-select {
-  width: 150px;
-}
-
-.tree-btn {
-  padding: 0;
-}
-
-.tree-invisible {
-  display: none;
-}
-
-.tree-nested-node {
-  padding-left: 1rem;
-}
-
-.mat-tree-node {
-  background-color: #FFFFFF;
+.filter-instructions {
+  background: var(--wasdiGreenLight);
+  border-radius: 4px 3px;
+  color: #000000;
   font-size: 14px;
-  font-weight: 600;
-  padding: 0;
+  padding: 1rem;
 }
 
-span.product-name {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 12rem;
+.date-inputs {
+  max-width: 100%;
 }
 
-ul,
-li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+div.floating-buttons {
+  background: #FFFFFF;
+  bottom: 0px;
+  width: 22rem;
+  position: sticky;
 }
 
-li.tree-container {
-  border-bottom: 0;
+div.plan-tree-container {
+  height: 85%;
+  overflow:scroll;
 }

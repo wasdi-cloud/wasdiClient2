@@ -10,10 +10,6 @@ div.product:hover {
     background: var(--neutral5);
 }
 
-div.product:hover>div>p.product-label {
-    width: 300px;
-}
-
 .arrow-icon {
     color: var(--neutral50Brand);
     cursor: pointer;
@@ -26,6 +22,8 @@ div.product:hover>div>p.product-label {
 }
 
 .product-label {
+    font-weight: 400;
+    color: #000;
     white-space: nowrap;
     /* width: 330px; */
     overflow: hidden;
@@ -137,8 +135,4 @@ li ul {
 ul li:last-child ul {
     border-left: 1px solid #FFFFFF !important;
     margin-left: -17px;
-}
-
-li.last-child {
-    border-bottom: none !important;
 }

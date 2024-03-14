@@ -1,0 +1,44 @@
+<div class="product d-flex flex-row align-items-center gap-4">
+    <div class=" d-flex flex-row align-items-center">
+        <span class="arrow-icon material-symbols-outlined" *ngIf="!m_bIsOpen" (click)="openSatelliteSensors()">
+            arrow_right
+        </span>
+        <span class="arrow-icon material-symbols-outlined" *ngIf="m_bIsOpen" (click)="openSatelliteSensors()">
+            arrow_drop_down
+        </span>
+        <input class="wasdi-checkbox" type="checkbox" name="" id="">
+        <span class="product-label-icon material-symbols-outlined">
+            satellite_alt
+        </span>
+        <p class="product-label">
+            {{m_oSatellite.satelliteName}}</p>
+    </div>
+</div>
+<div class="product-bands-container" *ngIf="m_bIsOpen">
+    <ul class="container first-list">
+        <li [class.last-child]="m_bIsOpenChild" *ngFor="let oSensor of m_oSatellite.satelliteSensors">
+            <p class="product-label">
+                <span class="arrow-icon material-symbols-outlined" (click)="openSensorModes(oSensor)">
+                    arrow_right
+                </span>
+                <!-- <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowBands === true">
+                    arrow_drop_down
+                </span> -->
+                <input type="checkbox" class="wasdi-checkbox" name="" id="">
+                {{oSensor.description}}
+            </p>
+            <div class="product-bands-container"
+                *ngIf="m_bIsOpenChild && m_oOpenParent.description === oSensor.description">
+                <ul class="container first-list">
+                    <li class="last-child" *ngFor="let oSensorMode of oSensor.sensorModes">
+                        <p class="product-label">
+                            <input type="checkbox" class="wasdi-checkbox ps-1" name="" id="">
+                            {{oSensorMode.name}}
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+<!--  -->

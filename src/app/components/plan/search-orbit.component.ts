@@ -89,6 +89,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
       next: oResponse => {
         if (oResponse.length > 0) {
           this.m_aoSatelliteResources = this.setDisabledAllOpportunities(oResponse);
+          console.log(this.m_aoSatelliteResources)
         } else {
           this.m_oNotificationDisplayService.openAlertDialog( sMessage);
         }
