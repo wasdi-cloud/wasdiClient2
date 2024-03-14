@@ -9,17 +9,64 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   styleUrls: ['./review-input.component.css']
 })
 export class ReviewInputComponent implements OnInit {
+  /**
+   * The selected Processor - necessary for reviewing the processor
+   */
   @Input() m_oProcessor: any;
+
+  /**
+   * User ID for the user writing the review/comment
+   */
   @Input() m_sUserId: string;
+
+  /**
+   * Is the user Editing a Review/Comment? (Optional with default that the user is writing new content)
+   */
   @Input() m_bIsEditing?: boolean = false;
+
+  /**
+   * Is the user writing a review? (Default that the user is writing a review. False means writing a comment)
+   */
   @Input() m_bIsReview: boolean = true;
+
+  /**
+   * Inputted Review if the user is editing a review (Optional)
+   */
   @Input() m_oReview?: any = null;
+
+  /**
+   * Inputted Comment if the user is editing a comment (Optional)
+   */
   @Input() m_oComment?: any = null;
-  @Output() m_oReviewEmit: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * If the user is editing a Comment, include inputted Review Id (Optional only if not editing a comment)
+   */
   @Input() m_sReviewId?: string = "";
 
+  /**
+   * Alert parent that Review Action is complete - if Created, Deleted, or Update emit true; else emit false
+   */
+  @Output() m_oReviewEmit: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  /**
+   * Alert parent that Comment Action is complete - if Created, Deleted, or Update emit true; else emit false
+   */
+  @Output() m_oCommentEmit: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  /**
+   * Model for the Review Star Rating
+   */
   m_iPreviewRating: number = 0;
 
+  /**
+   * Model for the Review Text (collected from the textarea)
+   */
+  m_sReviewText: string = "";
+
+  /**
+   * Wrapper for Review Information
+   */
   m_oUserReview: any = {
     vote: -1,
     title: "",
@@ -27,12 +74,13 @@ export class ReviewInputComponent implements OnInit {
     processorId: ""
   }
 
+  /**
+   * Wrapper for Comment Information
+   */
   m_oCommentInfo: any = {
     reviewId: "",
     text: ""
   }
-
-  m_sReviewText: string = "";
 
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -58,6 +106,10 @@ export class ReviewInputComponent implements OnInit {
     }
   }
 
+  /**
+   * Get the user input from the textarea and assign to Review Text model
+   * @param oEvent 
+   */
   getUserInput(oEvent) {
     this.m_sReviewText = oEvent.target.value;
   }
@@ -66,6 +118,7 @@ export class ReviewInputComponent implements OnInit {
   addReview() {
     let sSavedMsg = this.m_oTranslate.instant("MSG_MKT_REVIEW_SAVED");
     let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_REVIEW_SAVE_ERROR");
+    this.m_oUserReview.comment = this.m_sReviewText;
 
     if (!this.m_oUserReview.comment || !this.m_oUserReview.vote) {
       let sError = "Please complete your Review";
@@ -74,6 +127,7 @@ export class ReviewInputComponent implements OnInit {
       this.m_oProcessorMediaService.addProcessorReview(this.m_oUserReview).subscribe({
         next: oResponse => {
           this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close", "right", "bottom");
+          this.emitCompletedReviewAction(true);
         },
         error: oError => {
           this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
@@ -96,7 +150,7 @@ export class ReviewInputComponent implements OnInit {
           next: oResponse => {
             // this.getReviews();
             this.m_oNotificationDisplayService.openSnackBar("Review Removed", "Close");
-            this.emitCompletedReviewAction();
+            this.emitCompletedReviewAction(true);
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
@@ -123,16 +177,12 @@ export class ReviewInputComponent implements OnInit {
     this.m_oProcessorMediaService.updateProcessorReview(this.m_oUserReview).subscribe({
       next: oResponse => {
         this.m_oNotificationDisplayService.openSnackBar(sSavedMessage, "Close");
-        this.emitCompletedReviewAction();
+        this.emitCompletedReviewAction(true);
       },
       error: oError => {
         this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
       }
     });
-  }
-
-  emitCompletedReviewAction() {
-    this.m_oReviewEmit.emit(true);
   }
 
   /********** Comment Handling Methods **********/
@@ -144,7 +194,8 @@ export class ReviewInputComponent implements OnInit {
 
     this.m_oProcessorMediaService.addReviewComment(this.m_oCommentInfo).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close")
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close");
+        this.emitCompletedCommentAction(true);
       },
       error: oError => {
         this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
@@ -164,6 +215,7 @@ export class ReviewInputComponent implements OnInit {
         this.m_oProcessorMediaService.deleteReviewComment(this.m_oComment.reviewId, this.m_oComment.commentId).subscribe({
           next: oResponse => {
             this.m_oNotificationDisplayService.openSnackBar("Comment Removed", "Close");
+            this.emitCompletedCommentAction(true);
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
@@ -185,6 +237,7 @@ export class ReviewInputComponent implements OnInit {
     this.m_oProcessorMediaService.updateReviewComment(this.m_oCommentInfo).subscribe({
       next: oResponse => {
         this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close");
+        this.emitCompletedCommentAction(true);
       },
       error: oError => {
         this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, 4000);
@@ -192,4 +245,12 @@ export class ReviewInputComponent implements OnInit {
     });
   }
 
+  /********** Emission Methods **********/
+  emitCompletedReviewAction(bEmission: boolean) {
+    this.m_oReviewEmit.emit(bEmission);
+  }
+
+  emitCompletedCommentAction(bEmission: boolean) {
+    this.m_oCommentEmit.emit(bEmission);
+  }
 }

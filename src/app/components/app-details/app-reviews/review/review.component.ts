@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,7 +10,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.css']
 })
-export class ReviewComponent implements OnInit{
+export class ReviewComponent implements OnInit {
   /**
    * Is the Review a REVIEW or a COMMENT? By default it is a review.
    */
@@ -40,6 +40,11 @@ export class ReviewComponent implements OnInit{
    * Review Id
    */
   @Input() m_sReviewId?: string = "";
+
+  /**
+   * Emitter for Refreshing Reviews
+   */
+  @Output() m_oRefreshReviews: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   /**
    * Should the comments be shown?
@@ -84,15 +89,21 @@ export class ReviewComponent implements OnInit{
   ) { }
 
   ngOnInit(): void {
-      console.log(this.m_oComment)
+    console.log(this.m_oComment)
   }
 
   /**
    * Calls server to return all comments associated with a review
    * @returns {boolean}
    */
-  getComments(): boolean {
-    let sReviewId = this.m_oReview.id;
+  getComments(oEvent?: any): boolean {
+    if (!this.m_oReview) {
+      return false;
+    } 
+    
+    let sReviewId;
+    sReviewId = this.m_oReview.id;
+    this.m_aoComments = null;
 
     this.m_bCommentsWaiting = true;
 
@@ -107,6 +118,7 @@ export class ReviewComponent implements OnInit{
             this.m_aoComments = oResponse;
             this.m_bCommentsWaiting = false;
             this.m_bShowComments = true;
+            this.m_bIsEditingComment = false;
           }
         }
       },
@@ -148,7 +160,10 @@ export class ReviewComponent implements OnInit{
    * Handle output from review input component
    * @param oEvent 
    */
-  refreshReview(oEvent: any): void { }
+  refreshReview(oEvent: any): void {
+    this.m_bIsEditing = false;
+    this.m_oRefreshReviews.emit(true);
+  }
 
   addNewComment() {
     this.m_bAddComment = !this.m_bAddComment;

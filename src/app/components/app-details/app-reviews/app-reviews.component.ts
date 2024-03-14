@@ -87,11 +87,15 @@ export class AppReviewsComponent implements OnChanges, AfterViewChecked {
 
     this.m_oProcessorService.getProcessorReviews(this.m_oSelectedProcessor.processorName, this.m_iReviewsPage, this.m_iReviewItemsPerPage = 4).subscribe({
       next: oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) == false) {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_oReviewsInfo = oResponse;
-          console.log(oResponse.reviews);
+          
+          // Close Review and Editing Boxes
+          this.m_bIsEditing = false;
+          this.m_bShowReviewBox = false;
           if (oResponse.reviews.length === 0) {
             this.m_bShowLoadMoreReviews = false;
+            this.m_bUserHasReviewed = false;
           }
           if (oResponse.reviews.length <= this.m_iReviewItemsPerPage) {
             this.m_bShowLoadMoreReviews = false;
