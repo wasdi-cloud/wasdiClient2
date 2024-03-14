@@ -173,16 +173,17 @@ export class EditMapComponent implements OnInit {
           this.m_oMapService.addLayerMap2DByServer(this.m_aoExternalLayers[iExternals].Name, this.m_aoExternalLayers[iExternals].sServerLink);
         }
       }
-
-      // Init the Globe in the small container
-      this.m_oGlobeService.initGlobe('smallMapContainer')
-
-      // If requested, add the foot print
-      if (bAddFootPrints) {
-        // Note: this have also the "fly" included
-        this.m_oGlobeService.addAllWorkspaceRectanglesOnGlobe(this.m_aoProducts);
-      }
     }, 300);
+
+    // Init the Globe in the small container
+    this.m_oGlobeService.initGlobe('smallMapContainer')
+
+    // If requested, add the foot print
+    if (bAddFootPrints) {
+      // Note: this have also the "fly" included
+      this.m_oGlobeService.addAllWorkspaceRectanglesOnGlobe(this.m_aoProducts);
+    }
+
   }
 
   /**

@@ -6,9 +6,8 @@ import { latLng, Map, tileLayer, featureGroup } from 'leaflet';
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ManualBoundingBoxComponent } from '../shared/shared-components/manual-bounding-box/manual-bounding-box.component';
-import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import { BehaviorSubject } from 'rxjs';
-// import * as L from "leaflet";
+import 'node_modules/leaflet-mouse-position/src/L.Control.MousePosition.js'
 
 declare const L: any;
 
@@ -17,6 +16,13 @@ declare const L: any;
 })
 export class MapService {
 
+  /**
+   * Service constructor.
+   * It initializes the base layers and the draw items.
+   * 
+   * @param m_oConstantsService 
+   * @param m_oDialog 
+   */
   constructor(private m_oConstantsService: ConstantsService, private m_oDialog: MatDialog) {
     this.initTilelayer();
     this.m_oOptions = {
@@ -27,17 +33,28 @@ export class MapService {
       center: latLng(0, 0),
       edit: { featureGroup: this.m_oDrawnItems }
     }
-
   }
 
-  APIURL = this.m_oConstantsService.getAPIURL();
-
-  // Reference to the base Layers
+  /**
+   * OSM Basic Map
+   */
   m_oOSMBasic: any = null;
+  /**
+   * Topography Map
+   */
   m_oOpenTopoMap: any = null;
+  /**
+   * Esri World Streep Maps
+   */
   m_oEsriWorldStreetMap: any = null;
+  /**
+   * Esri Imaging
+   */
   m_oEsriWorldImagery: any = null;
-  m_oNASAGIBSViirsEarthAtNight2012: any = null;
+  /**
+   * Dark Stadia Map
+   */
+  m_oStadiMapDark: any = null;
 
   /**
    * Is the component toggle-albe to 3D map? 
@@ -49,6 +66,9 @@ export class MapService {
    */
   m_oLayersControl: any;
 
+  /**
+   * Object containing the drawings done on the map
+   */
   m_oDrawnItems: L.FeatureGroup = new L.FeatureGroup();
 
   /**
@@ -71,10 +91,19 @@ export class MapService {
    */
   m_oGeocoderControl = new Geocoder();
 
+  /**
+   * Manual Boundig Box Event Listener
+   */
   m_oManualBoundingBoxSubscription: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  /**
+   * Manual Boundig Box Observable
+   */
   _m_oManualBoundingBoxSubscription$ = this.m_oManualBoundingBoxSubscription.asObservable();
 
-  //Init options for leaflet-draw
+  /**
+   * Init options for leaflet-draw
+   */
   m_oDrawOptions: any = {
     position: 'topleft',
     draw: {
@@ -99,8 +128,6 @@ export class MapService {
   setMap(oMap: any) {
     this.m_oWasdiMap = oMap;
   }
-
-
 
   /**
    * Get the Map object
@@ -134,10 +161,11 @@ export class MapService {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
 
-    this.m_oNASAGIBSViirsEarthAtNight2012 = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
+    this.m_oStadiMapDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
       minZoom: 0,
       maxZoom: 20,
-      attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	    ext: 'png'
     });
 
     this.m_oLayersControl = L.control.layers(
@@ -146,10 +174,9 @@ export class MapService {
         "OpenTopoMap": this.m_oOpenTopoMap,
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
-        "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
+        "Stadi Map Dark": this.m_oStadiMapDark
       },
-      {},
-      { 'position': 'bottomright' }
+      {}
     )
   }
 
@@ -166,28 +193,46 @@ export class MapService {
   initWasdiMap(sMapDiv: string) {
     FadeoutUtils.verboseLog("MapService.initWasdiMap: initializing Leaflet");
     this.m_oWasdiMap = this.initMap(sMapDiv);
+    this.addMousePositionAndScale();
+  }
+
+  /**
+   * Adds Mouse Position and Scale to the actual map
+   * @returns 
+   */
+  addMousePositionAndScale() {
+
+    if (this.m_oWasdiMap==null) {
+      return;
+    }
+
+    // coordinates in map find this plugin in lib folder
+    let oMousePosition = L.control.mousePosition();
+
+    if (oMousePosition!=null) {
+      oMousePosition.addTo(this.m_oWasdiMap);
+    }
+
+    L.control.scale({
+      position: "bottomright",
+      imperial: false
+    }).addTo(this.m_oWasdiMap);
   }
 
   /**
    * Init the Map
    * @param sMapDiv 
    */
-  initMap(sMapDiv) {
+  initMap(sMapDiv: string) {
 
-    FadeoutUtils.verboseLog("MapService.initMap: creating the map");
-
+    // Create the Map Object
     let oMap: L.Map = L.map(sMapDiv, {
-      zoomControl: false,
+      zoomControl: true,
       center: [0, 0],
       zoom: 3
     });
 
     this.m_oOSMBasic.addTo(oMap)
-
-    L.control.scale({
-      position: "bottomright",
-      imperial: false
-    }).addTo(oMap);
 
     this.m_oLayersControl.addTo(oMap);
 
@@ -204,7 +249,6 @@ export class MapService {
 
     //add event on base change
     oMap.on('baselayerchange', function (e) {
-      // e.layer.bringToBack();
       oActiveBaseLayer = e;
     });
 
@@ -228,20 +272,22 @@ export class MapService {
 
     var oMap = L.map(sMapDiv, {
       zoomControl: false,
-      //layers: [this.m_oOSMBasic, this.m_oOpenTopoMap, this.m_oEsriWorldStreetMap, this.m_oEsriWorldImagery, this.m_oNASAGIBSViirsEarthAtNight2012],
       layers: [oOSMBasic],
       keyboard: false
-      //maxZoom: 22
     });
-
-    // coordinates in map find this plugin in lib folder
-    // L.control.mousePosition().addTo(oMap);
 
     //scale control
     L.control.scale({
       position: "bottomright",
       imperial: false
     }).addTo(oMap);
+
+    // coordinates in map find this plugin in lib folder
+    let oMousePosition = L.control.mousePosition();
+
+    if (oMousePosition!=null) {
+      oMousePosition.addTo(oMap);
+    }
 
     //layers control
     var oLayersControl = L.control.layers(
@@ -250,7 +296,7 @@ export class MapService {
         "OpenTopoMap": this.m_oOpenTopoMap,
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
-        "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
+        "Stadi Map Dark": this.m_oStadiMapDark
       },
       {},
       {
@@ -266,7 +312,6 @@ export class MapService {
 
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
-
 
     //add event on base change
     oMap.on('baselayerchange', function (e) {
@@ -311,7 +356,6 @@ export class MapService {
 
   /**
     * Init geo search plugin, the search bar for geographical reference on the map
-    * @param opt if present, the search bar is placed on the bottom right corner of the map.
     * @references https://github.com/perliedman/leaflet-control-geocoder
     */
   initGeoSearchPluginForOpenStreetMap() {
@@ -794,7 +838,7 @@ export class MapService {
     let oController = this;
     L.Control.Button = L.Control.extend({
       options: {
-        position: "topright"
+        position: "topleft"
       },
       onAdd: function (map) {
         let container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
