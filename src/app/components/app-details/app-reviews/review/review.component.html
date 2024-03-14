@@ -5,7 +5,7 @@
 <app-review-input *ngIf="m_bIsEditing && m_bIsEditingComment" [m_bIsEditing]="m_bIsEditing" [m_bIsReview]="false"
     [m_sUserId]="m_oComment.userId" [m_oComment]="m_oComment"></app-review-input>
 
-<div class="d-flex flex-row gap-2 mb-2" *ngIf="!m_bIsEditing || !m_bIsEditingComment">
+<div class="d-flex flex-row gap-2 mb-2" *ngIf="!m_bIsEditing ||(m_oComment && !m_bIsEditingComment)">
     <!-- Icon -->
     <div class="user-icon">
         <span class="material-symbols-outlined user-icon-symbol">
@@ -59,7 +59,7 @@
 </div>
 
 <app-review-input *ngIf="m_bAddComment" [m_sUserId]="m_sUser" [m_bIsReview]="false"
-    [m_oComment]="m_oComment"></app-review-input>
+    [m_oComment]="m_oComment" [m_sReviewId]="m_oReview.id"></app-review-input>
 
 <!-- Comments Container -->
 <div *ngIf="m_bShowComments" class="mt-1 ps-5">

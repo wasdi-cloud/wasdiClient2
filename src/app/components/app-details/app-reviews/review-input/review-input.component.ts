@@ -54,10 +54,6 @@ export class ReviewInputComponent implements OnInit {
     }
 
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oComment)) {
-      console.log(this.m_oComment)
-      this.m_oCommentInfo.reviewId = this.m_sReviewId
-      this.m_oCommentInfo.commentId = this.m_oComment.id;
-      this.m_oCommentInfo.text = this.m_oComment.text;
       this.m_sReviewText = this.m_oComment.text;
     }
   }
@@ -113,7 +109,7 @@ export class ReviewInputComponent implements OnInit {
   updateReview() {
     let sSavedMessage: string;
     let sErrorMessage: string;
-
+    this.m_oCommentInfo.reviewId = this.m_sReviewId;
     this.m_oUserReview.comment = this.m_sReviewText;
 
     this.m_oTranslate.get("MSG_MKT_REVIEW_UPDATED").subscribe(sTranslation => {
@@ -143,9 +139,9 @@ export class ReviewInputComponent implements OnInit {
   addComment() {
     let sSavedMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_SAVED");
     let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_SAVE_ERROR");
-    this.m_oCommentInfo.reviewId = this.m_sReviewId
-    this.m_oCommentInfo.commentId = this.m_oComment.id;
-    console.log(this.m_oCommentInfo);
+    this.m_oCommentInfo.reviewId = this.m_sReviewId;
+    this.m_oCommentInfo.text = this.m_sReviewText;
+
     this.m_oProcessorMediaService.addReviewComment(this.m_oCommentInfo).subscribe({
       next: oResponse => {
         this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close")
@@ -160,23 +156,30 @@ export class ReviewInputComponent implements OnInit {
     let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENTS_ERROR");
     let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_DELETE_CONFIRM");
 
-    this.m_oProcessorMediaService.deleteReviewComment(this.m_oCommentInfo.reviewId, this.m_oCommentInfo.commentId).subscribe({
-      next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("Comment Removed", "Close");
-      },
-      error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+    this.m_oCommentInfo.reviewId = this.m_oComment.reveiwId;
+    this.m_oCommentInfo.commentId = this.m_oComment.commendId;
+
+    this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg).subscribe(oResult => {
+      if (oResult === true) {
+        this.m_oProcessorMediaService.deleteReviewComment(this.m_oComment.reviewId, this.m_oComment.commentId).subscribe({
+          next: oResponse => {
+            this.m_oNotificationDisplayService.openSnackBar("Comment Removed", "Close");
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+          }
+        });
       }
-    });
+    })
+
   }
 
   updateComment() {
     let sSavedMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_UPDATED");
     let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_UPDATED_ERROR");
 
-    this.m_oCommentInfo.reviewId = this.m_sReviewId
-    this.m_oCommentInfo.commentId = this.m_oComment.id;
-
+    this.m_oCommentInfo.reviewId = this.m_oComment.reviewId
+    this.m_oCommentInfo.commentId = this.m_oComment.commentId;
     this.m_oCommentInfo.text = this.m_sReviewText;
 
     this.m_oProcessorMediaService.updateReviewComment(this.m_oCommentInfo).subscribe({
