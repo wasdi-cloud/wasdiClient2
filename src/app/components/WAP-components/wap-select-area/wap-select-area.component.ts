@@ -1,40 +1,90 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import { TranslateService } from '@ngx-translate/core';
-
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
+import { ManualBoundingBoxComponent } from '../../../shared/shared-components/manual-bounding-box/manual-bounding-box.component';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
-import Geocoder from 'leaflet-control-geocoder';
-import * as L from 'leaflet';
-
+declare const L: any;
 
 @Component({
   selector: 'app-wap-select-area',
   templateUrl: './wap-select-area.component.html',
   styleUrls: ['./wap-select-area.component.css']
 })
+
+/**
+ * WASDI Select Area User Control
+ */
 export class WapSelectAreaComponent implements OnInit {
+
+  /**
+   * Map input as described by the User Interface
+   */
   @Input() oMapInput;
+
+  /**
+   * Event about map changed
+   */
   @Output() oMapInputChange = new EventEmitter;
 
+  /**
+   * Draw Options
+   */
   m_oDrawOptions: any;
+  /**
+   * List of layers drawn by the user (indeed the area of interest)
+   */
   m_oDrawnItems: any;
-  m_sErrorMessage: string;
-  m_bIsValid: boolean;
+  /**
+   * Error message
+   */
+  m_sErrorMessage: string = "Error:";
+  /**
+   * Subscription to the event "a bbox has been created"
+   */
   m_aoManualBBoxSubscription: any;
+  /**
+   * Geo Json representation of the area
+   */
   m_oGeoJSON: any;
+  /**
+   * WKT representation of the area
+   */
   m_sPolygon: string;
 
+  /**
+   * Dynamic map id: each user interface may have more maps...
+   */
   m_sMapId: string = `${Date.now() + Math.random()}`;
-  constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService) { }
 
+  /**
+   * Local Map reference
+   */
+  m_oMap: any;
+
+  /**
+   * Create the component
+   * @param m_oMapService 
+   * @param m_oTranslateService 
+   */
+  constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService, private m_oDialog: MatDialog) 
+  { 
+    console.log("Creating WAP Map Component with MapId: " + this.m_sMapId)
+  }
+
+  /**
+   * Init the component
+   */
   ngOnInit(): void {
 
-    this.m_sErrorMessage = "Error:"
-    this.m_bIsValid = true;
-
+    // Subscribe to the event that tell us a manual bbox has been drawn
     this.m_aoManualBBoxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
+
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+
         this.m_oGeoJSON = oResult.toGeoJSON();
         this.m_sPolygon = this.getPolygon();
 
@@ -45,41 +95,185 @@ export class WapSelectAreaComponent implements OnInit {
       }
     });
 
+    // Our own reference
     let oController = this;
 
-    setTimeout(function () {
-      // this.m_sMapId = ;
-      let oMap = oController.m_oMapService.initMapSingleton(oController.m_sMapId);
-      oController.addBoundingBoxDrawerOnMap(oMap);
-      // console.log()
-      //is it an option?
+    // Create our own Drawn Items Layer
+    this.m_oDrawnItems = new L.FeatureGroup();
+    
 
+    // Give time to leaflet and then init
+    setTimeout(function () {
+      // Create a new map
+      let oMap = oController.m_oMapService.initMapSingleton(oController.m_sMapId);
+      oController.m_oMap = oMap;
+      oMap.addLayer(oController.m_oDrawnItems);
+      oController.addManualBbox(oMap);
+      oController.addBoundingBoxDrawerOnMap(oMap);
     }, 500);
   }
 
+  addManualBbox(oMap: any) {
+    let oController = this;
+
+    L.Control.Button = L.Control.extend({
+      options: {
+        position: "topleft"
+      },
+      onAdd: function (oMap) {
+
+        // Create the container for the dialog
+        let oContainer = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+        // Create the button to add to leaflet
+        let oButton = L.DomUtil.create('a', 'leaflet-control-button', oContainer);
+
+        // Click stops on our button
+        L.DomEvent.disableClickPropagation(oButton);
+
+        // And here we decide what to do with our button
+        L.DomEvent.on(oButton, 'click', function () {
+
+          // We open the Manual Boundig Box Dialog
+          let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent)
+
+          // Once is closed...
+          oDialog.afterClosed().subscribe(oResult => {
+
+            // We need a valid result
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+
+              // With all the values for lat and lon
+              if (isNaN(oResult.north) || isNaN(oResult.south) || isNaN(oResult.east) || isNaN(oResult.west)) {
+                return;
+              } 
+              else {
+                // Get the actual values
+                let fNorth = parseFloat(oResult.north);
+                let fSouth = parseFloat(oResult.south);
+                let fEast = parseFloat(oResult.east);
+                let fWest = parseFloat(oResult.west);
+
+                // Create the bounds array
+                let aoBounds = [[fNorth, fWest], [fSouth, fEast]];
+
+                // And add the new rectangle layer to the map
+                oController.addManualBboxLayer(oMap, aoBounds);
+              }
+            }
+          })
+        });
+
+        // This is the "icon" of the button added to Leaflet
+        oButton.innerHTML = 'M';
+        
+        oContainer.title = "Manual Bounding Box";
+
+        return oContainer;
+      },
+      onRemove: function (map) { },
+    })
+    let oControl = new L.Control.Button();
+    oControl.addTo(oMap);
+  }
+
+  addManualBboxLayer(oMap, aoBounds) {
+    let oLayer = L.rectangle(aoBounds, { color: "#3388ff", weight: 1 });
+
+    //remove old shape
+    if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
+      this.m_oDrawnItems.clearLayers();
+    }
+
+    this.m_oDrawnItems.addLayer(oLayer);
+    this.m_oMapService.zoomOnBounds(aoBounds, this.m_oMap);
+
+    //Emit bounding box to listening componenet:
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oLayer) === false) {
+
+       this.m_oGeoJSON = oLayer.toGeoJSON();
+       this.m_sPolygon = this.getPolygon();
+
+    //   this.oMapInputChange.emit({
+    //     geoJSON: this.m_oGeoJSON,
+    //     polygon: this.m_sPolygon
+    //   });
+    }    
+  }  
+
+  addBoundingBoxDrawerOnMap(oMap) {
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMap)) {
+      return null;
+    }
+    
+    let oDrawControl = new L.Control.Draw();
+
+    oDrawControl.setPosition('topleft');
+
+    oDrawControl.setDrawingOptions({
+      // what kind of shapes are disable/enable
+      marker: false,
+      polyline: false,
+      circle: false,
+      circlemarker: false,
+      polygon: false,
+      rectangle: <any>{ showArea: false }
+    })
+
+    oMap.addControl(oDrawControl);
+
+    //Without this.m_oWasdiMap.on() the shape isn't saved on map
+    let oController = this;
+    
+    oMap.on(L.Draw.Event.CREATED, function (event) {
+      // Clear out old layer: 
+      oController.m_oDrawnItems.clearLayers();
+      let oLayer = event.layer;
+      
+      let bIsValid = oController.checkArea(oLayer);
+      
+      if (!bIsValid) {
+        //show error message
+        // turn the bounding box red
+        oLayer.options.color = "#ff0000";
+        // erase the bounding box
+        oController.oMapInput.oBoundingBox.northEast = "";
+        oController.oMapInput.oBoundingBox.southWest = "";
+      }
+      //save new shape in map
+      oController.m_oDrawnItems.addLayer(oLayer);
+      oController.oMapInputChange.emit(oController.oMapInput);
+    });
+
+    oMap.on(L.Draw.Event.DELETESTOP, function (event) {
+      console.log("DELETE STOP")
+      // oController.m_oDrawOptions.clearLayers();
+      // let layer = event.layers;
+    });
+
+    return oMap;
+  }  
+
   onDrawCreated(event) {
+    
     //Add layer to map
     this.m_oDrawnItems.addLayer(event.layer)
 
     //on draw created -> need to check area 
-    this.checkArea(event.layer)
+    let bValid = this.checkArea(event.layer)
 
     //If not valid after check
-    if (!this.m_bIsValid) {
+    if (!bValid) {
       //set layer color
       event.layer.options.color = "#FF0000"
-
-      console.log(this.m_sErrorMessage)
-      //Add Confirmation dialog before removal
-      // if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
-      //   this.m_oDrawnItems.clearLayers();
-      // }
       return false;
     }
     //If valid after check: 
     this.oMapInput.oBoundingBox.northEast = event.layer._bounds._northEast;
     this.oMapInput.oBoundingBox.southWest = event.layer._bounds._southWest;
+
     this.oMapInputChange.emit(this.oMapInput);
+
     return true
   }
 
@@ -95,15 +289,16 @@ export class WapSelectAreaComponent implements OnInit {
     return distance
   }
 
-  checkArea(layer) {
-    let oController = this
+  checkArea(oLayer) {
+
+    let bIsValid=false;
     /**
      The following happens in this.onDrawCreated():  
      */
-    this.oMapInput.oBoundingBox.northEast = layer._bounds._northEast;
-    this.oMapInput.oBoundingBox.southWest = layer._bounds._southWest;
+    this.oMapInput.oBoundingBox.northEast = oLayer._bounds._northEast;
+    this.oMapInput.oBoundingBox.southWest = oLayer._bounds._southWest;
 
-    let latlngs = layer.getLatLngs();
+    let latlngs = oLayer.getLatLngs();
     // height and width respectively
     let oSide: number[] = [this.getDistance(latlngs[0][0], latlngs[0][1]), this.getDistance(latlngs[0][1], latlngs[0][2])];
 
@@ -113,23 +308,24 @@ export class WapSelectAreaComponent implements OnInit {
     let fRatio = Math.max(...oSide) / Math.min(...oSide);
 
     // first element is the array itself to be passed
-    let fArea = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 1000000;
+    let fArea = L.GeometryUtil.geodesicArea(oLayer.getLatLngs()[0]) / 1000000;
 
     if (fArea > this.oMapInput.maxArea && this.oMapInput.maxArea !== 0) {
       // sErrorMessage = sErrorMessage.concat(this.m_oTranslateService.getTranslation());
-      this.m_bIsValid = false;
+      return false;
     }
 
     if (fMaxSide > this.oMapInput.maxSide && this.oMapInput.maxSide != 0) {
       // sErrorMessage = sErrorMessage.concat($translate.getTranslationTable().WAP_SELECT_AREA_OVER_SIDE);
-      this.m_bIsValid = false;
+      return false;
     }
 
     if (fRatio > this.oMapInput.maxRatioSide && this.oMapInput.maxRatioSide != 0) {
       // sErrorMessage = sErrorMessage.concat($translate.getTranslationTable().WAP_SELECT_AREA_OVER_RATIO);
-      this.m_bIsValid = false;
+      return false;
     }
-    return this.m_bIsValid;
+
+    return true;
   }
 
   getPolygon(): string {
@@ -160,75 +356,6 @@ export class WapSelectAreaComponent implements OnInit {
       }
     }
     return sCoordinatesPolygon;
-  }
-
-  addBoundingBoxDrawerOnMap(oMap) {
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMap)) {
-      return null;
-    }
-
-    this.m_oDrawnItems = new L.FeatureGroup();
-
-    oMap.addLayer(this.m_oDrawnItems);
-
-    var oOptions = {
-      edit: {
-        featureGroup: this.m_oDrawnItems,//draw items are the "voice" of menu
-        edit: false,// hide edit button
-        remove: false// hide remove button
-      }
-    };
-
-    let oDrawControl = new L.Control.Draw();
-
-    oDrawControl.setPosition('topleft');
-
-    oDrawControl.setDrawingOptions({
-      // what kind of shapes are disable/enable
-      marker: false,
-      polyline: false,
-      circle: false,
-      circlemarker: false,
-      polygon: false,
-      rectangle: <any>{ showArea: false }
-    })
-
-    oMap.addControl(oDrawControl);
-
-    //Without this.m_oWasdiMap.on() the shape isn't saved on map
-    let oController = this;
-    oMap.on(L.Draw.Event.CREATED, function (event) {
-      // Clear out old layer: 
-      oController.m_oDrawnItems.clearLayers();
-      let oLayer = event.layer;
-      console.log(oLayer)
-      let bIsValid = true;
-      let oResult = oController.checkArea(oLayer);
-
-      bIsValid = oResult;
-
-
-      if (!bIsValid) {
-        //show error message
-        // turn the bounding box red
-        oLayer.options.color = "#ff0000";
-        // erase the bounding box
-        oController.oMapInput.oBoundingBox.northEast = "";
-        oController.oMapInput.oBoundingBox.southWest = "";
-      }
-      //save new shape in map
-      oController.m_oDrawnItems.addLayer(oLayer);
-      oController.oMapInputChange.emit(oController.oMapInput);
-    });
-
-    oMap.on(L.Draw.Event.DELETESTOP, function (event) {
-      console.log("DELETE STOP")
-      // oController.m_oDrawOptions.clearLayers();
-      // let layer = event.layers;
-    });
-
-    return oMap;
   }
 
 }

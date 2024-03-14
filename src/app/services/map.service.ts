@@ -271,19 +271,9 @@ export class MapService {
    */
   initMapSingleton(sMapDiv) {
 
-    var oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution:
-        '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-      maxZoom: 18,
-      // this map option disables world wrapping. by default, it is false.
-      continuousWorld: false,
-      // this option disables loading tiles outside of the world bounds.
-      noWrap: true
-    });
-
     var oMap = L.map(sMapDiv, {
       zoomControl: true,
-      layers: [oOSMBasic],
+      layers: [this.m_oOSMBasic],
       keyboard: false
     });
 
@@ -304,16 +294,14 @@ export class MapService {
     oLayersControl.addTo(oMap);
 
     // center map
-    var southWest = L.latLng(0, 0),
-      northEast = L.latLng(0, 0),
-      oBoundaries = L.latLngBounds(southWest, northEast);
+    var oSouthWest = L.latLng(0, 0),
+      oNorthEast = L.latLng(0, 0),
+      oBoundaries = L.latLngBounds(oSouthWest, oNorthEast);
 
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
     this.addMousePositionAndScale(oMap);
-
-    this.addManualBbox(oMap);
 
     return oMap;
   }
@@ -363,7 +351,6 @@ export class MapService {
     }
 
     if (this.m_oGeocoderControl!=null) {
-      //this.m_oGeocoderControl.options.position = "topright";
       this.m_oGeocoderControl.addTo(oMap); 
     }
   }
@@ -664,12 +651,16 @@ export class MapService {
    * @param aBounds
    * @returns {boolean}
    */
-  zoomOnBounds(aBounds) {
+  zoomOnBounds(aBounds, oMap = null) {
     try {
       if (!aBounds) { return false; }
       if (aBounds.length == 0) { return false; }
+      if (oMap == null && this.m_oWasdiMap == null) { return false;}
 
-      this.m_oWasdiMap.flyToBounds([aBounds]);
+      if (oMap == null) oMap = this.m_oWasdiMap;
+
+      oMap.flyToBounds([aBounds]);
+      
       return true;
     }
     catch (e) {
@@ -842,36 +833,60 @@ export class MapService {
 
   addManualBbox(oMap: any) {
     let oController = this;
+
     L.Control.Button = L.Control.extend({
       options: {
         position: "topleft"
       },
-      onAdd: function (map) {
-        let container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
-        let button = L.DomUtil.create('a', 'leaflet-control-button', container);
-        L.DomEvent.disableClickPropagation(button);
-        L.DomEvent.on(button, 'click', function () {
+      onAdd: function (oMap) {
+
+        // Create the container for the dialog
+        let oContainer = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+        // Create the button to add to leaflet
+        let oButton = L.DomUtil.create('a', 'leaflet-control-button', oContainer);
+
+        // Click stops on our button
+        L.DomEvent.disableClickPropagation(oButton);
+
+        // And here we decide what to do with our button
+        L.DomEvent.on(oButton, 'click', function () {
+
+          // We open the Manual Boundig Box Dialog
           let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent)
+
+          // Once is closed...
           oDialog.afterClosed().subscribe(oResult => {
+
+            // We need a valid result
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+
+              // With all the values for lat and lon
               if (isNaN(oResult.north) || isNaN(oResult.south) || isNaN(oResult.east) || isNaN(oResult.west)) {
                 return;
-              } else {
+              } 
+              else {
+                // Get the actual values
                 let fNorth = parseFloat(oResult.north);
                 let fSouth = parseFloat(oResult.south);
                 let fEast = parseFloat(oResult.east);
                 let fWest = parseFloat(oResult.west);
 
+                // Create the bounds array
                 let aoBounds = [[fNorth, fWest], [fSouth, fEast]];
-                oController.addManualBboxLayer(aoBounds);
+
+                // And add the new rectangle layer to the map
+                oController.addManualBboxLayer(oMap, aoBounds);
               }
             }
           })
         });
-        button.innerHTML = 'M';
-        container.title = "Manual Bounding Box";
 
-        return container;
+        // This is the "icon" of the button added to Leaflet
+        oButton.innerHTML = 'M';
+        
+        oContainer.title = "Manual Bounding Box";
+
+        return oContainer;
       },
       onRemove: function (map) { },
     })
@@ -879,9 +894,8 @@ export class MapService {
     oControl.addTo(oMap);
   }
 
-  addManualBboxLayer(aoBounds) {
+  addManualBboxLayer(oMap, aoBounds) {
     let oLayer = L.rectangle(aoBounds, { color: "#3388ff", weight: 1 });
-    // oController.m_oRectangleOpenSearch = oLayer;
 
     //remove old shape
     if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
@@ -894,4 +908,5 @@ export class MapService {
     //Emit bounding box to listening componenet:
     this.m_oManualBoundingBoxSubscription.next(oLayer);
   }
+
 }
