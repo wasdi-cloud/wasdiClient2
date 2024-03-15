@@ -16,22 +16,25 @@
 </div>
 <div class="product-bands-container" *ngIf="m_bIsOpen">
     <ul class="container first-list">
-        <li [class.last-child]="m_bIsOpenChild" *ngFor="let oSensor of m_oSatellite.satelliteSensors">
+        <li [class.last-child]="m_bIsOpenChild && m_oOpenParent.description === oSensor.description"
+            *ngFor="let oSensor of m_oSatellite.satelliteSensors">
             <p class="product-label">
-                <span class="arrow-icon material-symbols-outlined" (click)="openSensorModes(oSensor)">
+                <span class="arrow-icon material-symbols-outlined"
+                    *ngIf="!m_bIsOpenChild"
+                    (click)="openSensorModes(oSensor)">
                     arrow_right
                 </span>
-                <!-- <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowBands === true">
+                <span class="arrow-icon material-symbols-outlined"
+                    *ngIf="m_bIsOpenChild" (click)="openSensorModes()">
                     arrow_drop_down
-                </span> -->
+                </span>
                 <input type="checkbox" class="wasdi-checkbox" name="" id="">
                 {{oSensor.description}}
             </p>
-            <div class="product-bands-container"
-                *ngIf="m_bIsOpenChild && m_oOpenParent.description === oSensor.description">
-                <ul class="container first-list">
-                    <li class="last-child" *ngFor="let oSensorMode of oSensor.sensorModes">
-                        <p class="product-label">
+            <div class="" *ngIf="m_bIsOpenChild && m_oOpenParent.description === oSensor.description">
+                <ul class="">
+                    <li class="" *ngFor="let oSensorMode of oSensor.sensorModes">
+                        <p class="product-label ps-2">
                             <input type="checkbox" class="wasdi-checkbox ps-1" name="" id="">
                             {{oSensorMode.name}}
                         </p>
@@ -41,4 +44,3 @@
         </li>
     </ul>
 </div>
-<!--  -->

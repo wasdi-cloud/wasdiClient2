@@ -135,4 +135,9 @@ li ul {
 ul li:last-child ul {
     border-left: 1px solid #FFFFFF !important;
     margin-left: -17px;
+
+}
+
+li.last-child{
+    border-bottom-width: 0px !important;
 }

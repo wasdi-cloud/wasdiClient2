@@ -19,8 +19,11 @@ export class PlanTreeComponent {
     this.m_bIsOpen = !this.m_bIsOpen;
   }
 
-  openSensorModes(oSensor) {
+  openSensorModes(oSensor?: any) {
+    if (oSensor) {
+      this.m_oOpenParent = oSensor;
+
+    }
     this.m_bIsOpenChild = !this.m_bIsOpenChild
-    this.m_oOpenParent = oSensor;
   }
 }

@@ -1,5 +1,6 @@
 .secondary-nav {
   height: calc(100vh - 6rem);
+  width: 478px;
 }
 
 .filters-container {
