@@ -2,7 +2,7 @@
     <!-- Side Bar Container -->
     <div class="editor-sidebar d-flex flex-column justify-content-between">
         <div class="workspace-location">
-            <div class="workspace-subheading">You are currently inside:</div>
+            <div class="workspace-subheading">Workspace - {{m_oActiveWorkspace?.workspaceId}}</div>
             <div class="workspace-name">{{m_oActiveWorkspace?.name}}</div>
         </div>
         <app-products-list class="product-list-container" [m_aoWorkspaceProductsList]="m_aoProducts"
