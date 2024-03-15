@@ -1,11 +1,8 @@
-import { Component, OnChanges, OnInit, Output, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
 //Service Imports
 import { MapService } from 'src/app/services/map.service';
 import { GlobeService } from 'src/app/services/globe.service';
-
-//Font Awesome Icon Improts: 
-import { faGlobeAfrica, faHome, faInfoCircle, faLocationArrow, faMap, faNavicon } from '@fortawesome/free-solid-svg-icons';
 
 //Leaflet Imports: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -20,13 +17,6 @@ import { ConstantsService } from 'src/app/services/constants.service';
 })
 
 export class EditMapComponent implements OnInit {
-  //Font Awesome Imports
-  faHome = faHome;
-  faArrow = faLocationArrow;
-  faNavicon = faNavicon;
-  faInfo = faInfoCircle;
-  faGlobe = faGlobeAfrica;
-  faMap = faMap;
 
   /**
    * List of external WMS Layers added
@@ -102,10 +92,11 @@ export class EditMapComponent implements OnInit {
   }
 
   /**
-   * Setter of teh aoProduct Property
+   * Setter of the aoProduct Property
    */
   @Input() public set b2DMapModeOn(value: boolean) {
     this.m_b2DMapModeOn = value;
+    this.switch2D3DMode()
   }  
 
   /**
@@ -128,8 +119,6 @@ export class EditMapComponent implements OnInit {
    * Method to switch from 2D to 3D mode and vice versa
    */
   switch2D3DMode() {
-    this.m_b2DMapModeOn = !this.m_b2DMapModeOn;
-
     // Clear Both Map and Globe
     this.m_oGlobeService.clearGlobe();
     this.m_oMapService.clearMap();

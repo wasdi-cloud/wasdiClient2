@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
@@ -13,7 +13,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   templateUrl: './workspace-info-dialog.component.html',
   styleUrls: ['./workspace-info-dialog.component.css']
 })
-export class WorkspaceInfoDialogComponent {
+export class WorkspaceInfoDialogComponent implements OnInit {
   m_sWorkspaceId: string;
   m_oCountProduct: any;
   m_aoNodesList: any[] = [];
@@ -26,7 +26,10 @@ export class WorkspaceInfoDialogComponent {
     private m_oNodeService: NodeService,
     @Inject(MAT_DIALOG_DATA) public m_oWorkspace: Workspace,
     private m_oWorkspaceService: WorkspaceService,
-  ) {
+  ) { }
+
+  ngOnInit(): void {
+    this.m_oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     this.getNodesList()
   }
 
