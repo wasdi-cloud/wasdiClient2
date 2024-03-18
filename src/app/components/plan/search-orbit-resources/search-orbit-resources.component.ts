@@ -110,34 +110,22 @@ export class SearchOrbitResourcesComponent implements OnInit, OnChanges {
     this.m_oEndDate = this.m_oEndDate.toISOString().slice(0, 10);
   }
 
-  /** Whether all the descendants of the oNode are selected */
-  descendantsAllSelected(oNode: SatelliteNode): boolean {
-    const aoDescendants = this.treeControl.getDescendants(oNode);
-    return aoDescendants.every(child => this.checklistSelection.isSelected(child));
-  }
 
-  /** Whether part of the aoDescendants are selected */
-  descendantsPartiallySelected(oNode: SatelliteNode): boolean {
-    const aoDescendants = this.treeControl.getDescendants(oNode);
-    const aoResults = aoDescendants.some(child => this.checklistSelection.isSelected(child));
-    return aoResults && !this.descendantsAllSelected(oNode);
-  }
-
-  /** Toggle the node selection. Select/deselect all the aoDescendants oNode */
-  nodeSelectionToggle(oNode: SatelliteNode): void {
-    this.checklistSelection.toggle(oNode);
-    const aoDescendants = this.treeControl.getDescendants(oNode);
-    if (this.checklistSelection.isSelected(oNode)) {
-      this.checklistSelection.select(...aoDescendants);
-      this.addNode(oNode);
-    } else {
-      this.checklistSelection.deselect(...aoDescendants);
-      this.removeNode(oNode)
-    }
-    //Emit the Selected Satellite Change: 
-    this.emitSatelliteSelection();
-    this.emitDateChange();
-  }
+  // /** Toggle the node selection. Select/deselect all the aoDescendants oNode */
+  // nodeSelectionToggle(oNode: SatelliteNode): void {
+  //   this.checklistSelection.toggle(oNode);
+  //   const aoDescendants = this.treeControl.getDescendants(oNode);
+  //   if (this.checklistSelection.isSelected(oNode)) {
+  //     this.checklistSelection.select(...aoDescendants);
+  //     this.addNode(oNode);
+  //   } else {
+  //     this.checklistSelection.deselect(...aoDescendants);
+  //     this.removeNode(oNode)
+  //   }
+  //   //Emit the Selected Satellite Change: 
+  //   this.emitSatelliteSelection();
+  //   this.emitDateChange();
+  // }
 
 
   /********** Selected Nodes Array Handlers **********/

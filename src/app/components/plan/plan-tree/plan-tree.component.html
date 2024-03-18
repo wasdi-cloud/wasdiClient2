@@ -6,7 +6,8 @@
         <span class="arrow-icon material-symbols-outlined" *ngIf="m_bIsOpen" (click)="openSatelliteSensors()">
             arrow_drop_down
         </span>
-        <input class="wasdi-checkbox" type="checkbox" name="" id="">
+        <input (click)="toggleNodeSelection(m_oSatellite)" [indeterminate]="m_oSatellite.indeterminate"
+            class=" wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_oSatellite.enable">
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
@@ -19,23 +20,23 @@
         <li [class.last-child]="m_bIsOpenChild && m_oOpenParent.description === oSensor.description"
             *ngFor="let oSensor of m_oSatellite.satelliteSensors">
             <p class="product-label">
-                <span class="arrow-icon material-symbols-outlined"
-                    *ngIf="!m_bIsOpenChild"
+                <span class="arrow-icon material-symbols-outlined" *ngIf="!m_bIsOpenChild"
                     (click)="openSensorModes(oSensor)">
                     arrow_right
                 </span>
-                <span class="arrow-icon material-symbols-outlined"
-                    *ngIf="m_bIsOpenChild" (click)="openSensorModes()">
+                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bIsOpenChild" (click)="openSensorModes()">
                     arrow_drop_down
                 </span>
-                <input type="checkbox" class="wasdi-checkbox" name="" id="">
+                <input (click)="toggleNodeSelection(oSensor)" type="checkbox" [indeterminate]="oSensor.indeterminate"
+                    class=" wasdi-checkbox" name="" id="" [checked]="oSensor.enable">
                 {{oSensor.description}}
             </p>
             <div class="" *ngIf="m_bIsOpenChild && m_oOpenParent.description === oSensor.description">
                 <ul class="">
                     <li class="" *ngFor="let oSensorMode of oSensor.sensorModes">
                         <p class="product-label ps-2">
-                            <input type="checkbox" class="wasdi-checkbox ps-1" name="" id="">
+                            <input (click)="toggleNodeSelection(oSensorMode)" type="checkbox"
+                                class="wasdi-checkbox ps-1" name="" id="" [checked]="oSensorMode.enable">
                             {{oSensorMode.name}}
                         </p>
                     </li>
