@@ -7,7 +7,7 @@
             arrow_drop_down
         </span>
         <input (click)="toggleNodeSelection(m_oSatellite)" [indeterminate]="m_oSatellite.indeterminate"
-            class=" wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_oSatellite.enable">
+            class=" wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_oSatellite.selected">
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
@@ -28,7 +28,7 @@
                     arrow_drop_down
                 </span>
                 <input (click)="toggleNodeSelection(oSensor)" type="checkbox" [indeterminate]="oSensor.indeterminate"
-                    class=" wasdi-checkbox" name="" id="" [checked]="oSensor.enable">
+                    class=" wasdi-checkbox" name="" id="" [checked]="oSensor.selected">
                 {{oSensor.description}}
             </p>
             <div class="" *ngIf="m_bIsOpenChild && m_oOpenParent.description === oSensor.description">
@@ -36,7 +36,7 @@
                     <li class="" *ngFor="let oSensorMode of oSensor.sensorModes">
                         <p class="product-label ps-2">
                             <input (click)="toggleNodeSelection(oSensorMode)" type="checkbox"
-                                class="wasdi-checkbox ps-1" name="" id="" [checked]="oSensorMode.enable">
+                                class="wasdi-checkbox ps-1" name="" id="" [checked]="oSensorMode.selected">
                             {{oSensorMode.name}}
                         </p>
                     </li>

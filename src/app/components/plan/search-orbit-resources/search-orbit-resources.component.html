@@ -17,25 +17,27 @@
             <div class="search-header">{{"PLAN_DATE_RANGE" | translate}}</div>
             <div class="dates-input-container d-flex flex-row gap-1">
                 <div class="col-6">
-                    <app-input-field [m_sInputType]="'date'" [m_sLabel]="'PLAN_FROM'| translate"></app-input-field>
+                    <app-input-field [m_sInputType]="'date'" [m_sLabel]="'PLAN_FROM'| translate"
+                        [m_sInputValue]="m_oStartDate" (m_oInputChange)="getDateSelection($event)"></app-input-field>
                 </div>
                 <div class="col-6">
-                    <app-input-field class="" [m_sInputType]="'date'"
-                        [m_sLabel]="'PLAN_TO'| translate"></app-input-field>
+                    <app-input-field class="" [m_sInputType]="'date'" [m_sLabel]="'PLAN_TO'| translate"
+                        [m_sInputValue]="m_oEndDate" (m_oInputChange)="getDateSelection($event)"></app-input-field>
                 </div>
             </div>
         </div>
         <div class="satellite-container flex-fill">
             <div class="search-header">{{"PLAN_TREE_HEADER" | translate}}</div>
             <div class="plan-tree-container">
-                <app-plan-tree *ngFor="let oSatellite of m_aoSatelliteResources"
-                    [m_oSatellite]="oSatellite"></app-plan-tree>
+                <app-plan-tree *ngFor="let oSatellite of m_aoSatelliteResources" [m_oSatellite]="oSatellite"
+                    (m_oSatelliteChange)="getSatelliteSelection($event)"></app-plan-tree>
             </div>
         </div>
     </div>
     <div class="floating-buttons d-flex flex-row gap-2 w-100 justify-content-between">
-        <app-button [m_bMuted]="true" [m_sLabel]="'Clear Filters'"></app-button>
-        <app-button class="flex-fill" [m_sLabel]="'Search'" [m_sIconLeft]="'search'"></app-button>
+        <app-button [m_bMuted]="true" [m_sLabel]="'Clear Filters'" (click)="clearFilters()"></app-button>
+        <app-button class="flex-fill" [m_sLabel]="'Search'" [m_sIconLeft]="'search'"
+            (click)="executeSearch()"></app-button>
     </div>
 </div>
 <!-- <section class="sub-menu">

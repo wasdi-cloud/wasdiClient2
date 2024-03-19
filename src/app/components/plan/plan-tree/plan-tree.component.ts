@@ -7,6 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class PlanTreeComponent {
   @Input() m_oSatellite: any = null;
+  @Output() m_oSatelliteChange: EventEmitter<any> = new EventEmitter();
   @Output() m_oProductSelection: EventEmitter<any> = new EventEmitter();
 
   m_bIsOpen: boolean = false;
@@ -30,15 +31,19 @@ export class PlanTreeComponent {
 
   toggleNodeSelection(oSelectedNode: any) {
     let oParentNode = this.findParentNodes(oSelectedNode);
-
+    oSelectedNode.selected = !oSelectedNode.selected;
     oSelectedNode.enable = !oSelectedNode.enable;
-    // If the selected node is the highest node(root node) select it an enable all its children
-    if (oSelectedNode.satelliteName === this.m_oSatellite.satelliteName) {
 
+    // Select/de-select children based on parent
+    this.selectAllChildren(oSelectedNode);
+    // If the selected node is the highest node(root node) select it an selected all its children
+    if (oSelectedNode.satelliteName === this.m_oSatellite.satelliteName) {
       this.m_oSatellite.satelliteSensors.forEach(oSensor => {
-        oSensor.enable = oSelectedNode.enable;
+        oSensor.selected = oSelectedNode.selected;
+        oSensor.enable = oSelectedNode.enable
         oSensor.sensorModes.forEach(oSensorMode => {
-          oSensorMode.enable = oSelectedNode.enable
+          oSensorMode.selected = oSelectedNode.selected;
+          oSensorMode.enable = oSelectedNode.enable;
         });
       })
 
@@ -47,30 +52,26 @@ export class PlanTreeComponent {
     // If the ultimate parent is the root node - check if it has selected children
     if (oParentNode.satelliteName) {
       let oHasSelectedChildren = this.hasSelectedChildren(oParentNode)
-      console.log(oParentNode)
       //If all children are UNSELECTED completely unmark parent
-      if (!oHasSelectedChildren.hasSelectedChild) {
+      if (!oHasSelectedChildren.hasSelectedChild && !oHasSelectedChildren.allChildrenSelected) {
         this.m_oSatellite.indeterminate = false;
-        this.m_oSatellite.enable = false;
-        this.selectAllChildren(oSelectedNode);
+        this.m_oSatellite.selected = false;
+        // this.selectAllChildren(oSelectedNode);
         // If has selected child(ren), but not all children are selected
       } else if (oHasSelectedChildren.hasSelectedChild && !oHasSelectedChildren.allChildrenSelected) {
         this.m_oSatellite.indeterminate = true;
-        this.m_oSatellite.enable = false;
-        this.selectAllChildren(oSelectedNode);
-        // If all children are selected (hasSelectedChild && allChildrenSelected)
-      } else if (oHasSelectedChildren.allChildrenSelected) {
-        this.m_oSatellite.indeterminate = false;
         this.m_oSatellite.enable = true;
+        this.m_oSatellite.selected = false;
+        // If all children are selected (hasSelectedChild && allChildrenSelected)
       } else {
-        // this.m_oSatellite.indeterminate = false;
-        // this.m_oSatellite.enable = true;
+        this.m_oSatellite.indeterminate = false;
+        this.m_oSatellite.selected = true;
       }
     }
 
     // If the node is the lowest child (i.e., has Parent AND Grandparent)
     if (oParentNode.parent) {
-      // this.m_oSatellite.indeterminate = oSelectedNode.enable;
+      // this.m_oSatellite.indeterminate = oSelectedNode.selected;
       this.m_oSatellite.satelliteSensors.forEach(oSensor => {
         if (oSensor.description === oParentNode.parent.description) {
           // Check if the parent node has checked children
@@ -78,14 +79,16 @@ export class PlanTreeComponent {
           // If now all the parent's children are selected 
           if (bParentCheckedChildren.allChildrenSelected) {
             oSensor.indeterminate = false;
+            oSensor.selected = true;
             oSensor.enable = true;
             // If the parent has NO SELECTED CHILDREN
           } else if (bParentCheckedChildren.hasSelectedChild && !bParentCheckedChildren.allChildrenSelected) {
             oSensor.indeterminate = true;
-            oSensor.enable = false
+            oSensor.enable = true;
+            oSensor.selected = false
           } else {
             oSensor.indeterminate = false;
-            oSensor.enable = false;
+            oSensor.selected = false;
           }
           // oSensor.sensorModes.forEach(oSensorMode => {
           // })
@@ -94,16 +97,19 @@ export class PlanTreeComponent {
 
           if (bGrandparentCheckedChildren.hasSelectedChild) {
             this.m_oSatellite.indeterminate = true;
+            this.m_oSatellite.enable = true
           } else if (bGrandparentCheckedChildren.allChildrenSelected) {
             this.m_oSatellite.indeterminate = false;
+            this.m_oSatellite.selected = true;
             this.m_oSatellite.enable = true;
           } else {
             this.m_oSatellite.indeterminate = false;
-            this.m_oSatellite.enable = false;
+            this.m_oSatellite.selected = false;
           }
         }
       })
     }
+    this.m_oSatelliteChange.emit(this.m_oSatellite);
   }
 
   /**
@@ -155,32 +161,31 @@ export class PlanTreeComponent {
     };
     if (oNode.satelliteSensors) {
       oNode.satelliteSensors.forEach(oSensor => {
-        if (oSensor.enable === true) {
+        if (oSensor.selected === true) {
           bHasSelectedChild.hasSelectedChild = true;
         }
-        if (oSensor.enable === false) {
+        if (!oSensor.selected) {
           bHasSelectedChild.allChildrenSelected = false;
         }
-        oSensor.sensorModes.forEach(oSensorMode => {
-          if (oSensorMode.enable === true) {
-            bHasSelectedChild.hasSelectedChild = true;
-          }
-          if (oSensorMode.enable === false) {
-            bHasSelectedChild.allChildrenSelected = false;
-          }
-        })
+        // oSensor.sensorModes.forEach(oSensorMode => {
+        //   if (oSensorMode.selected === true) {
+        //     bHasSelectedChild.hasSelectedChild = true;
+        //   }
+        //   if (oSensorMode.selected === false) {
+        //     bHasSelectedChild.allChildrenSelected = false;
+        //   }
+        // })
 
       })
-    }
-    if (oNode.sensorModes) {
-      oNode.sensorModes.forEach(oSensor => {
-        if (oSensor.enable === true) {
-          bHasSelectedChild.hasSelectedChild = true;
-        }
-        if (oSensor.enable === false) {
-          bHasSelectedChild.allChildrenSelected = false;
-        }
-      })
+      // } else if (oNode.sensorModes) {
+      //   oNode.sensorModes.forEach(oSensor => {
+      //     if (oSensor.selected === true) {
+      //       bHasSelectedChild.hasSelectedChild = true;
+      //     }
+      //     if (oSensor.selected === false) {
+      //       bHasSelectedChild.allChildrenSelected = false;
+      //     }
+      //   })
     }
 
     return bHasSelectedChild
@@ -193,15 +198,15 @@ export class PlanTreeComponent {
   selectAllChildren(oNode: any): void {
     if (oNode.satelliteSensors) {
       oNode.satelliteSensors.forEach(oSensor => {
-        //Enable or disable node based on the parent:
-        oSensor.enable = oNode.enable;
+        //selected or disable node based on the parent:
+        oSensor.selected = oNode.selected;
       })
     }
 
     if (oNode.sensorModes) {
       oNode.sensorModes.forEach(oSensorMode => {
-        //Enable or disable node based on the parent:
-        oSensorMode.enable = oNode.enable
+        //selected or disable node based on the parent:
+        oSensorMode.selected = oNode.selected
       })
     }
   }
