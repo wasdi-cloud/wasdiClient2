@@ -311,38 +311,40 @@ export class WorkspacesComponent implements OnInit {
 
       this.m_oOpportunitySearchService.getTrackSatellite(this.m_aoSatelliteInputTracks[iSat].name).subscribe(oResponse => {
         if (oResponse) {
-          for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliteInputTracks.length; iOriginalSat++) {
-            if (this.m_aoSatelliteInputTracks[iOriginalSat].name === oResponse.code) {
-              oActualSat = this.m_aoSatelliteInputTracks[iOriginalSat];
-              break;
+
+          if (oResponse.currentPosition) {
+            for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliteInputTracks.length; iOriginalSat++) {
+              if (this.m_aoSatelliteInputTracks[iOriginalSat].name === oResponse.code) {
+                oActualSat = this.m_aoSatelliteInputTracks[iOriginalSat];
+                break;
+              }
             }
-          }
-
-          let sDescription = oActualSat.description;
-          sDescription += "\n";
-          sDescription += oResponse.currentTime;
-
-          let oActualPosition = this.m_oGlobeService.drawPointWithImage(WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.currentPosition), oActualSat.icon, sDescription, oActualSat.label, 32, 32);
-          this.m_aoSatellitePositions.push(oActualPosition);
-
-          if (this.m_oFakePosition === null) {
-            if (oResponse.lastPositions != null) {
-
-              let iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
-
-              this.m_oFakePosition = oResponse.lastPositions[iFakeIndex];
-
-              let aoUfoPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
-              aoUfoPosition[2] = aoUfoPosition[2] * 4;
-              this.m_oUfoPointer = this.m_oGlobeService.drawPointWithImage(aoUfoPosition, "assets/icons/alien.svg", "U.F.O.", "?");
-
-              iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
-              let aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
-              aoMoonPosition[2] = 384400000;
-
-              this.m_oGlobeService.drawPointWithImage(aoMoonPosition, "assets/icons/sat_death.svg", "Moon", "-");
-
-            }
+  
+            let sDescription = oActualSat.description;
+            sDescription += "\n";
+            sDescription += oResponse.currentTime;
+  
+            let oActualPosition = this.m_oGlobeService.drawPointWithImage(WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.currentPosition), oActualSat.icon, sDescription, oActualSat.label, 32, 32);
+            this.m_aoSatellitePositions.push(oActualPosition);
+  
+            if (this.m_oFakePosition === null) {
+              if (oResponse.lastPositions != null) {
+  
+                let iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
+  
+                this.m_oFakePosition = oResponse.lastPositions[iFakeIndex];
+  
+                let aoUfoPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
+                aoUfoPosition[2] = aoUfoPosition[2] * 4;
+                this.m_oUfoPointer = this.m_oGlobeService.drawPointWithImage(aoUfoPosition, "assets/icons/alien.svg", "U.F.O.", "?");
+  
+                iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
+                let aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
+                aoMoonPosition[2] = 384400000;
+  
+                this.m_oGlobeService.drawPointWithImage(aoMoonPosition, "assets/icons/sat_death.svg", "Moon", "-");
+              }
+            }            
           }
         }
       })
