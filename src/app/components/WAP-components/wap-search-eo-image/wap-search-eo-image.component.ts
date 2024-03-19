@@ -19,13 +19,9 @@ export class WapSearchEoImageComponent {
 
   m_bAreVisibleProducts: boolean = false;
 
-  // m_oControlInput: any;
-
   m_bLoadingData: boolean = false;
 
-  m_aoMissions: Array<any> = [];
-
-  m_oConfiguration: any;
+  m_aoMissions: Array<any> = [];  
 
   m_aListOfProviders: Array<any> = [];
 
@@ -76,8 +72,9 @@ export class WapSearchEoImageComponent {
    * Load the configuration file and set the missions
    */
   loadConfiguration(): void {
-    this.m_oConfiguration = this.m_oConfigurationService.getConfiguration();
-    this.m_aoMissions = this.m_oConfiguration.missions;
+    if (this.m_oConfigurationService.getConfiguration() != null) {
+      this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
+    }
   };
 
   /**

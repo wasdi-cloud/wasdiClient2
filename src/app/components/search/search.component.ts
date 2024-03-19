@@ -101,8 +101,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     private m_oSearchService: SearchService,
     private m_oTranslate: TranslateService,
   ) {
-    this.m_oConfigurationService.loadConfiguration();
-    this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
+    if (this.m_oConfigurationService.getConfiguration()!=null) {
+      this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
+    }
   }
 
   ngOnInit(): void {

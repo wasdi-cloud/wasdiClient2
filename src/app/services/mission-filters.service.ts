@@ -12,6 +12,10 @@ export class MissionFiltersService {
 
   setAdvancedFilter(modelFilter: any) {
     let filter: string = '';
+
+    if (modelFilter == null) return this.missionFilter;
+    if (modelFilter == undefined) return this.missionFilter;
+
     filter = filter + ' OR (' + modelFilter.indexname + ':' + modelFilter.indexvalue;
     for (let j = 0; j < modelFilter.filters.length; j++) {
       if (modelFilter.filters[j].indexvalue && modelFilter.filters[j].indexvalue.trim() != '') {

@@ -3,6 +3,7 @@ import { ConstantsService } from './services/constants.service';
 import { OpenSearchService } from './services/api/open-search.service';
 import { HttpClient } from '@angular/common/http';
 import FadeoutUtils from './lib/utils/FadeoutJSUtils';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -104,10 +105,6 @@ export class SearchService {
     filter = this.createSearchFilter(textQuery, geoselection, advancedFilter, missionFilter);
     let saveSearchUrl = 'api/stub/users/0/searches?complete=:complete';
     saveSearchUrl = saveSearchUrl.replace(":complete", (filter) ? filter : '*');
-    // return http({url: ConstantsService.getUrl() + saveSearchUrl, method: "POST"})
-    //     .then(function (response) {
-    //         return (response.status == 200) ? response.data : [];
-    //     });
   }
 
   getGeoQueryByCoords(query) {
@@ -115,19 +112,14 @@ export class SearchService {
   }
 
   search(query?) {
-    //console.log('called search function');
+    
     let filter = '';
     if (query)
       filter = this.createSearchFilter(query, '', '', '');
     else
       filter = this.createSearchFilter(this.m_sTextQuery, this.m_sGeoselection,
         this.m_sAdvancedFilter, this.m_sMissionFilter);
-    //console.log('filter xx',filter);
-    // return $http({
-    //     // url: OpenSearchService.getApiProducts(this.createSearchRequest(filter, this.offset, this.limit)),
-    //     url: OpenSearchService.getApiProductsWithProviders(this.createSearchRequest(filter, this.offset, this.limit,this.providers)),
-    //     method: "GET"
-    // });
+      
     return this.m_oHttp.get<any>(this.m_oOpenSearchService.getApiProductsWithProviders(this.createSearchRequest(filter, this.m_iOffset, this.m_iLimit, this.m_aProviders[0].name)))
   }
 
@@ -212,14 +204,15 @@ export class SearchService {
       }
     });
   }
+
   getCollectionProductsList(query, offset, limit) {
     return this.getProductsCount(query).subscribe({
       next: oResponse => { },
       error: oError => { }
     });
   }
+
   getAllCollectionProducts(query, offset, limit) {
-    //console.log('called search function');
     return this.m_oHttp.get(this.m_oConstantsService.getAPIURL() + this.createSearchRequest(query, offset, limit)).subscribe({
       next: oResponse => {
         this.m_oCollectionAllProductsModel.list = oResponse;

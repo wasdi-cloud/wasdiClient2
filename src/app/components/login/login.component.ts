@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
+import { ConfigurationService } from 'src/app/services/configuration.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent, ErrorDialogModel } from 'src/app/shared/dialogs/error-dialog/error-dialog.component';
@@ -27,7 +28,8 @@ export class LoginComponent implements OnInit {
     private m_oAuthService: AuthService,
     private m_oDialog: MatDialog,
     private m_oConstantsService: ConstantsService,
-    private m_oRouter: Router) { }
+    private m_oRouter: Router,
+    private m_oConfigurationService: ConfigurationService) { }
 
   ngOnInit(): void { }
 
@@ -81,6 +83,7 @@ export class LoginComponent implements OnInit {
         this.m_oAuthService.saveToken(data.sessionId);
 
         this.m_oAuthService.checkSession().subscribe({next: oResponse =>  {
+          oController.m_oConfigurationService.loadConfiguration();
           oController.m_oRouter.navigateByUrl('/marketplace');
         }})
         
