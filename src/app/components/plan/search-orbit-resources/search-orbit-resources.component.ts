@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, AfterViewChecked } from '@angular/core';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
 import { TranslateService } from '@ngx-translate/core';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-search-orbit-resources',
