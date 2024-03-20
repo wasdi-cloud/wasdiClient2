@@ -7,7 +7,6 @@ import { MapService } from 'src/app/services/map.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProductService } from 'src/app/services/api/product.service';
-import { SatelliteNode } from './search-orbit-resources/search-orbit-resources.component';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
@@ -74,7 +73,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
     this.getSatellitesResources();
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
-  
+
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("PlanComponent.ngOnDestroy")
   }
@@ -89,12 +88,13 @@ export class SearchOrbit implements OnInit, OnDestroy {
       next: oResponse => {
         if (oResponse.length > 0) {
           this.m_aoSatelliteResources = this.setDisabledAllOpportunities(oResponse);
+          console.log(this.m_aoSatelliteResources)
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+          this.m_oNotificationDisplayService.openAlertDialog(sMessage);
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       }
     });
   }
@@ -102,16 +102,17 @@ export class SearchOrbit implements OnInit, OnDestroy {
 
   executeSearchOrbit(): boolean {
     let sErrorMsg = "";
+    console.log(this.m_aoSelectedSatelliteNodes)
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON)) {
       sErrorMsg += this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
-      this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
       return false;
     }
 
     // Dates emitted when satellite resource selected - if none
     if (!this.m_oOrbitSearch.acquisitionStartTime || !this.m_aoSelectedSatelliteNodes) {
-      this.m_oNotificationDisplayService.openAlertDialog( "Please select at least one Satellite Resource");
+      this.m_oNotificationDisplayService.openAlertDialog("Please select at least one Satellite Resource");
       return false;
     }
 
@@ -142,7 +143,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
   }
 
 
-  cleanSatelliteResources(aoSatelliteResources): Array<SatelliteNode> {
+  cleanSatelliteResources(aoSatelliteResources): Array<any> {
     let aoTempResources = aoSatelliteResources
     if (aoTempResources.length > 0) {
       aoTempResources.forEach(oSatellite => {
@@ -168,7 +169,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
     return aoTempResources;
   }
 
-  setDisabledAllOpportunities(aoSatelliteResources): Array<SatelliteNode> {
+  setDisabledAllOpportunities(aoSatelliteResources): Array<any> {
     let iNumberOfSatellites = aoSatelliteResources.length;
     for (let iIndexSatellite = 0; iIndexSatellite < iNumberOfSatellites; iIndexSatellite++) {
       let oSatellite = aoSatelliteResources[iIndexSatellite];
@@ -273,6 +274,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
   getSelectedSatelliteResources(oEvent: any): void {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_aoSelectedSatelliteNodes = oEvent;
+      console.log(this.m_aoSelectedSatelliteNodes);
     }
   }
 
@@ -301,9 +303,13 @@ export class SearchOrbit implements OnInit, OnDestroy {
   }
 
   getNavigationStatus(oEvent: any): void {
-    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_bShowSatelliteFilters = true;
       this.getSatellitesResources();
     }
+  }
+
+  handleExecuteSearch(oEvent: any): void {
+    this.executeSearchOrbit();
   }
 }

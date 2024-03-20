@@ -7,6 +7,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 //Service Improts: 
 import { MapService } from 'src/app/services/map.service';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 
 // Create Class for Search Result Node to be read by Mat-Tree
@@ -35,27 +36,23 @@ export class SearchOrbitResultsComponent implements OnChanges {
   treeControl: NestedTreeControl<SearchResultNode>;
   dataSource: MatTreeNestedDataSource<SearchResultNode>;
 
+  m_bSearchResultsReceieved: boolean = false;
+
   m_aoDisplayedProducts: Array<any> = [];
 
   m_aoSelectedOrbits: Array<any> = [];
 
   constructor(
     private m_oMapService: MapService
-  ) {
-    this.treeControl = new NestedTreeControl<SearchResultNode>(oNode => {
-      if (oNode.directions) {
-        return oNode.directions
-      } else if (oNode.left) {
-        return oNode.left
-      } else {
-        return oNode.right
-      }
-    });
-    this.dataSource = new MatTreeNestedDataSource();
-  }
+  ) { }
 
   ngOnChanges(): void {
-    this.dataSource.data = this.m_aoSearchOrbits;
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoSearchOrbits)) {
+      if (this.m_aoSearchOrbits.length > 0) {
+        this.m_bSearchResultsReceieved = true;
+      }
+      console.log(this.m_aoSearchOrbits)
+    }
   }
 
   /**
@@ -88,7 +85,7 @@ export class SearchOrbitResultsComponent implements OnChanges {
       if (oProduct.name === oNode.swathName) {
         bIsDisplayed = true;
         oFoundNode = oProduct;
-        iFoundIndex = iIndex; 
+        iFoundIndex = iIndex;
       }
     })
 
@@ -102,7 +99,7 @@ export class SearchOrbitResultsComponent implements OnChanges {
       })
     } else {
       //Remove Found Node from displayed Nodes Array: 
-      this.m_aoDisplayedProducts.splice(iFoundIndex, 1); 
+      this.m_aoDisplayedProducts.splice(iFoundIndex, 1);
       //Remove Rectangle from the Map: 
       this.m_oMapService.removeLayerFromMap(oFoundNode.rectangle);
     }
@@ -131,4 +128,8 @@ export class SearchOrbitResultsComponent implements OnChanges {
   navigateToFilters() {
     this.m_oBackToFiltersEmit.emit(true);
   }
+
+  openNode(oNode: any) {
+    oNode.isOpen = !oNode.isOpen
+   }
 }

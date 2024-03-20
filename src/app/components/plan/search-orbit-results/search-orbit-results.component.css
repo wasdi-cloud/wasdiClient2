@@ -1,46 +1,172 @@
-div.products-container {
-    height: 35vh; 
-    overflow-y: scroll;
-    overflow-x: hidden;
-    width: 35vw; 
-  
-  }
-  h3.products-header {
-    width: 35vw;
-    z-index: 1; 
-  }
-  .tree-btn {
-    padding: 0; 
-  }
-  .tree-invisible {
-    display: none;
-  }
-  .tree-nested-node {
-    padding-left: 1rem;
-  }
-  
-  .mat-tree-node {
-    background-color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 0;
-  }
-  
-  span.product-name {
-    display: block; 
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 12rem;
-  }
-  
-  ul,
-  li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  li.tree-container {
-    border-bottom: 0;
-  }
+.secondary-nav {
+  height: calc(100vh - 6rem);
+  width: 478px;
+}
+
+.satellite-container {
+  overflow-y: scroll;
+  overflow-x: scroll;
+}
+
+.arrow-icon {
+  color: var(--neutral50Brand);
+  cursor: pointer;
+  font-size: 20px;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+.product-label {
+  background: #ffffff;
+  font-weight: 400;
+  color: #000;
+  /* width: 330px; */
+  /* overflow: hidden; */
+  padding: 0;
+  margin: 0;
+}
+
+
+
+.product-label-icon,
+.bands-icon,
+.button-icon {
+  color: var(--neutral30);
+  cursor: default !important;
+  font-size: 14px;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+.arrow-icon {
+  color: var(--neutral50Brand);
+  cursor: pointer;
+  font-size: 20px;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+
+.product-label-icon,
+.bands-icon,
+.button-icon {
+  color: var(--neutral30);
+  cursor: default !important;
+  font-size: 14px;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+.product-label-icon {
+  padding-left: 12px;
+  padding-right: 8px;
+}
+
+
+.display-more-icon {
+  visibility: hidden;
+}
+
+div.product:hover>.display-more-icon {
+  visibility: visible;
+  color: var(--wasdiGreen);
+  cursor: pointer !important;
+  font-size: 14px;
+  /* padding: 8px; */
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+span.category-tag.outlined {
+  color: var(--darkAccessible);
+  padding: 4px !important;
+}
+
+
+.product-bands-container {
+  padding-bottom: 1rem;
+}
+
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  padding-left: 1em;
+}
+
+ul.first-list {
+  padding-left: 2.45rem;
+}
+
+li {
+  padding-left: 1em;
+  border: 1px dotted var(--neutral25);
+  border-width: 0 0 1px 1px;
+}
+
+li>ul {
+  border-left: 0px;
+}
+
+li.container {
+  border-bottom: 0px;
+}
+
+li.empty {
+  font-style: italic;
+  color: svar(--neutral25);
+  border-color: svar(--neutral25);
+}
+
+li p {
+  cursor: pointer;
+  margin: 0;
+  background: white;
+  position: relative;
+  top: 0.5em;
+}
+
+li p.disabled-label {
+  cursor: not-allowed;
+}
+
+li ul {
+  border-top: 1px dotted var(--neutral25);
+  margin-left: -1em;
+  padding-left: 2em;
+}
+
+ul li:last-child ul {
+  border-left: 1px solid #FFFFFF !important;
+  border-bottom: 1px solid #FFFFFF !important;
+  margin-left: -17px;
+
+}
+
+li.direction-container {
+  border-bottom-width: 0px !important;
+}
+
+.wasdi-checkbox {
+  width: 16px!important;
+  height: 16px !important;
+}

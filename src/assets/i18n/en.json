@@ -163,16 +163,20 @@
     "SEARCH_TITLE_PANEL_HEADING_FILTERS": "Filters",
     
     "PLAN_SEARCH": "Search",
-    "PLAN_FROM": "FROM:",
+    "PLAN_FROM": "From:",
     "PLAN_FROM_TOOLTIP": "Select acquisition start time",
-    "PLAN_TO": "TO:",
+    "PLAN_TO": "To:",
     "PLAN_TO_TOOLTIP": "Select acquisition end time",
     "PLAN_OPEN_SELECTED_NODES": "open selected nodes",
     "PLAN_CLOSE_NODES": "close nodes",
     "PLAN_OPEN_NODES": "open nodes",
     "PLAN_DESELECT_NODES": "deselect nodes",
     "PLAN_SELECTED_NODES": "selected nodes:",
-    
+    "PLAN_TREE_HEADER": "Satellites",
+    "PLAN_SELECT": "Select",
+    "PLAN_FILTERS": "Filters",
+    "PLAN_DATE_RANGE": "Date Range",
+
     "DIALOG_GET_CAPABILITIES_TITLE": "Get capabilities",
     "DIALOG_GET_CAPABILITIES_LAYERS": "Layers",
     "DIALOG_GET_CAPABILITIES_SERVER": "http://example:8080/geoserver/ows?",
