@@ -9,14 +9,15 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class SearchOrbitResourcesComponent implements OnInit, AfterViewChecked {
   @Input() m_aoSatelliteResources: Array<any>;
+  @Input() m_oSelectedArea: any;
   @Input() m_oAcquisitionStartTime: any;
   @Input() m_oAcquisitionEndTime: any;
+  @Input() m_aoSelectedNodes: Array<any> = [];
 
   @Output() m_oDateSelection: EventEmitter<any> = new EventEmitter();
   @Output() m_oSatelliteSelection: EventEmitter<any> = new EventEmitter();
   @Output() m_oExecuteSearch: EventEmitter<any> = new EventEmitter();
 
-  m_aoSelectedNodes: Array<any> = [];
 
   m_oStartDate: any;
   m_oEndDate: any;

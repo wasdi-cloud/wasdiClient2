@@ -51,7 +51,6 @@ export class SearchOrbitResultsComponent implements OnChanges {
       if (this.m_aoSearchOrbits.length > 0) {
         this.m_bSearchResultsReceieved = true;
       }
-      console.log(this.m_aoSearchOrbits)
     }
   }
 

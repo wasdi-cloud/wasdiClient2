@@ -3,6 +3,10 @@
   width: 478px;
 }
 
+.check-circle {
+  color: var(--wasdiGreen) !important;
+}
+
 .filters-container {
   height: calc(100vh - 9rem);
 }
@@ -32,5 +36,5 @@ div.floating-buttons {
 
 div.plan-tree-container {
   height: 85%;
-  overflow:scroll;
+  overflow: scroll;
 }

@@ -37,6 +37,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
   m_oActiveWorkspace: any;
   m_aoOrbitResults: Array<any> = []
   m_aoSelectedSatelliteNodes: any = [];
+  m_aoSelectedSatellites: any = [];
 
   m_oGeoJSON: any = null;
   m_sPolygon: string = "";
@@ -88,7 +89,6 @@ export class SearchOrbit implements OnInit, OnDestroy {
       next: oResponse => {
         if (oResponse.length > 0) {
           this.m_aoSatelliteResources = this.setDisabledAllOpportunities(oResponse);
-          console.log(this.m_aoSatelliteResources)
         } else {
           this.m_oNotificationDisplayService.openAlertDialog(sMessage);
         }
@@ -102,7 +102,6 @@ export class SearchOrbit implements OnInit, OnDestroy {
 
   executeSearchOrbit(): boolean {
     let sErrorMsg = "";
-    console.log(this.m_aoSelectedSatelliteNodes)
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON)) {
       sErrorMsg += this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
@@ -274,7 +273,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
   getSelectedSatelliteResources(oEvent: any): void {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_aoSelectedSatelliteNodes = oEvent;
-      console.log(this.m_aoSelectedSatelliteNodes);
+      this.m_aoSelectedSatellites = this.cleanSatelliteResources(this.m_aoSelectedSatelliteNodes);
     }
   }
 

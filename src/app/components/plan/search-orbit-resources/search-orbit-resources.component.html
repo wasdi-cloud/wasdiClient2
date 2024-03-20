@@ -3,13 +3,22 @@
         <div class="location-header">{{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' | translate}}</div>
         <div class="filters-header">{{'PLAN_FILTERS' | translate}}</div>
         <div class="filter-instructions d-flex flex-column gap-2">
-            <div class="font-light">
+            <div class="font-light d-flex flex-row align-items-center gap-1">
+                <span class="material-symbols-outlined check-circle">
+                    {{m_oStartDate && m_oEndDate? 'check_circle' : 'radio_button_unchecked'}}
+                </span>
                 Select <span class="font-bold">a date range</span>
             </div>
-            <div class="font-light">
+            <div class="font-light d-flex flex-row align-items-center gap-1">
+                <span class="material-symbols-outlined check-circle">
+                    {{m_aoSelectedNodes.length > 0 ? 'check_circle' : 'radio_button_unchecked'}}
+                </span>
                 Select <span class="font-bold">at least one satellite</span>
             </div>
-            <div class="font-light">
+            <div class="font-light d-flex flex-row align-items-center gap-1">
+                <span class="material-symbols-outlined check-circle">
+                    {{m_oSelectedArea ? 'check_circle' : 'radio_button_unchecked'}}
+                </span>
                 Draw an <span class="font-bold">area on the map</span>
             </div>
         </div>

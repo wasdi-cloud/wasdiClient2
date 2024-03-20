@@ -8,6 +8,8 @@
   overflow-x: scroll;
 }
 
+
+
 .arrow-icon {
   color: var(--neutral50Brand);
   cursor: pointer;
@@ -167,6 +169,6 @@ li.direction-container {
 }
 
 .wasdi-checkbox {
-  width: 16px!important;
+  width: 16px !important;
   height: 16px !important;
 }
