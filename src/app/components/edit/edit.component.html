@@ -2,8 +2,14 @@
     <!-- Side Bar Container -->
     <div class="editor-sidebar d-flex flex-column justify-content-between">
         <div class="workspace-location">
-            <div class="workspace-subheading">Workspace - {{m_oActiveWorkspace?.workspaceId}}</div>
-            <div class="workspace-name">{{m_oActiveWorkspace?.name}}</div>
+            <div class="workspace-subheading">Workspace - <span class="workspace-id-copy"
+                    (click)="copyWorkspaceId()">{{m_oActiveWorkspace?.workspaceId}}</span></div>
+            <div class="workspace-name d-flex flex-row justify-content-between py-2">
+                <div>
+                    {{m_oActiveWorkspace?.name}} ({{m_aoProducts.length}})
+                </div>
+                <app-button matTooltip="Workspace Properties" [m_sSize]="'small'" [m_sIconLeft]="'info'" [m_bMuted]="true" (click)="openPropertiesDialog()"></app-button>
+            </div>
         </div>
         <app-products-list class="product-list-container" [m_aoWorkspaceProductsList]="m_aoProducts"
             [m_aoVisibleBands]="m_aoVisibleBands" [m_bIsLoadingProducts]="m_bIsLoadingProducts"

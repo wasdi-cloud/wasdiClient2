@@ -13,6 +13,7 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { WorkspaceInfoDialogComponent } from './workspace-info-dialog/workspace-info-dialog.component';
 
 //Model Imports: 
 import { Product } from 'src/app/shared/models/product.model';
@@ -20,6 +21,8 @@ import { Product } from 'src/app/shared/models/product.model';
 //Utilities Imports: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit',
@@ -31,8 +34,10 @@ export class EditComponent implements OnInit, OnDestroy {
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,
+    private m_oClipboard: Clipboard,
     private m_oConsoleService: ConsoleService,
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oNotificationsQueueService: NotificationsQueueService,
     private m_oProductService: ProductService,
@@ -297,7 +302,7 @@ export class EditComponent implements OnInit, OnDestroy {
       this.m_aoVisibleBands = event.visibleBands;
       this.setPublishedSetting(event.removedBand);
     } else {
-    //When handling from Products List:p
+      //When handling from Products List:p
       this.m_aoVisibleBands = event;
     }
   }
@@ -350,5 +355,14 @@ export class EditComponent implements OnInit, OnDestroy {
         })
       }
     })
+  }
+
+  copyWorkspaceId() {
+    this.m_oClipboard.copy(this.m_sWorkspaceId);
+    this.m_oNotificationDisplayService.openSnackBar("Copied Workspace Id to clipboard!", "Close");
+  }
+
+  openPropertiesDialog() {
+    this.m_oDialog.open(WorkspaceInfoDialogComponent, {})
   }
 }
