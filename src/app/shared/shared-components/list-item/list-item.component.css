@@ -40,21 +40,28 @@ span.bold {
 
 .product-info-container {
     font-size: 12px;
-    max-width: 70%;
-    overflow: hidden;
+    max-width: 75%;
+    /* overflow: hidden; */
+
 }
 
 .product-info-container>p {
     margin: 0 !important;
     padding: 0;
-    white-space: nowrap;
+    max-height: 2rem;
+    line-clamp: 2;
     overflow: hidden;
-    text-overflow: ellipsis;
-    /* max-width: 200px; */
+
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 .product-info-container>p>span {
     font-weight: 400;
+    width: 80%;
+    /* specify the width of the container */
+    line-clamp: 2;
+    text-overflow: ellipsis;
 }
 
 .toolbar>.material-symbols-outlined {

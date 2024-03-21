@@ -17,16 +17,18 @@
     <!-- Contents if the List item is of Product Type: -->
     <div class="product-item-container d-flex flex-row justify-content-between align-items-start w-100"
         *ngIf="m_bProductItem">
-        <div *ngIf="!m_oProductListItem.preview" class="pe-1 d-flex flex-column align-items-center text-center">
+        <div *ngIf="!m_oProductListItem.preview"
+            class=" d-flex flex-column align-items-center justify-content-center text-center">
             <span class="material-symbols-outlined">
-                {{m_sIcon}}
+                public
             </span>
             <span class="img-size">
                 {{m_oProductListItem.summary.Size}}
             </span>
         </div>
-        <div *ngIf="m_oProductListItem.preview" class=" preview-layer-image">
-            <img src={{m_oProductListItem.preview}} alt="Image" style="height: 82px;width: 82px; ">
+        <div *ngIf="m_oProductListItem.preview"
+            class=" preview-layer-image h-100 d-flex flex-column justify-content-center">
+            <img src={{m_oProductListItem.preview}} alt="Image" style="height: 80px;width: 80px;">
         </div>
         <div class="product-info-container flex-fill">
             <p class="d-flex flex-row gap-1">Name:<span>{{m_oProductListItem.title}}</span></p>
@@ -34,7 +36,7 @@
                 <span>{{m_oProductListItem.properties.polarisationmode
                     }}</span>
             </p>
-            <p>Rel Orbit: <span>{{m_oProductListItem.properties.relativeOrbitNumber?
+            <p>Relative Orbit: <span>{{m_oProductListItem.properties.relativeOrbitNumber?
                     m_oProductListItem.properties.relativeOrbitNumber :
                     m_oProductListItem.properties.relativeorbitnumber}}</span></p>
             <p *ngIf="m_bIsLightProduct === true">Platform Name:
@@ -43,16 +45,16 @@
             <p *ngIf="m_bIsLightProduct === true">{{"IMPORT_PRODUCT_LIST_SENSOR"|translate}}
                 <span>{{m_oProductListItem.properties.sensoroperationalmode}}</span>
             </p>
-            <p *ngIf="m_bIsLightProduct === false">Provider: <span>{{m_oProductListItem.provider}}</span></p>
+            <!-- <p *ngIf="m_bIsLightProduct === false">Provider: <span>{{m_oProductListItem.provider}}</span></p> -->
             <p *ngIf="m_bIsLightProduct === false">Product Type:
                 <span>{{m_oProductListItem.properties.productType}}</span>
             </p>
             <p *ngIf="m_bIsLightProduct === false">Date: <span>{{m_oProductListItem.properties.date | date:
-                    'short'}}</span>
+                    'M/d/yyyy - h:mm a'}}</span>
             </p>
 
         </div>
-        <div *ngIf="m_bIsLightProduct === false" class="toolbar d-flex flex-row gap-1">
+        <div *ngIf="m_bIsLightProduct === false" class="toolbar d-flex flex-column gap-1">
             <span class="material-symbols-outlined" (click)="m_oInfoCallbackFn(m_oProductListItem)"
                 matTooltip="Properties">
                 info
@@ -68,7 +70,8 @@
         </div>
     </div>
 
-    <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100" matTooltip="{{m_sDescription}}" [matTooltipPosition]="'below'">
+    <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100" matTooltip="{{m_sDescription}}"
+        [matTooltipPosition]="'below'">
         <!--div class="preview-img" style="background: url('/assets/images/hero-images/hero-img1.jpg');"-->
         <div class="preview-img d-flex flex-column align-items-center" style="background-image: url({{m_sIcon}})"></div>
         <div class="d-flex flex-column flex-fill" style="width: 85%;">
