@@ -2,23 +2,16 @@
     <!-- Product Tree Header -->
     <div class="products-header">
         <div class="d-flex flex-row justify-content-between mb-2">
-            <h3 style="padding-top: 5px;">Products: {{m_aoFilteredProducts.length}}</h3>
-            <div class="d-flex flex-row gap-2 align-items-center">
-                <app-button *ngIf="m_bSearchExecuted === true" [m_bOutline]="true" [m_sLabel]="'CLEAR'"
-                    [m_sSize]="'small'" (click)="clearSearch()"></app-button>
-                
-                <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlacehodler]="'Filter'"
-                [m_sInputValue]="m_sSearchString" (keyup)="getSearchString($event);"></app-input-field>
-                <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
+            <div class="d-flex flex-row gap-1 align-items-center justify-content-between">
 
-                <app-button [m_bOutline]="true" [m_sSize]="'small'" [m_sIconLeft]="'sort_by_alpha'" (click)="productSort()"></app-button>
+                <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlacehodler]="'Filter'"
+                    [m_sInputValue]="m_sSearchString" [m_bClearField]="true" (keyup)="getSearchString($event);"
+                    (m_oClearInput)="clearSearch()"></app-input-field>
+                <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
             </div>
+
+            <app-button [m_bOutline]="true" [m_sIconLeft]="'sort_by_alpha'" (click)="productSort()"></app-button>
         </div>
-        <!--div class="d-flex flex-row gap-2">
-            <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlacehodler]="'Search products'"
-                [m_sInputValue]="m_sSearchString" (keyup)="getSearchString($event);"></app-input-field>
-            <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
-        </div-->
     </div>
     <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
     <!-- Product Tree -> Scrollable -->

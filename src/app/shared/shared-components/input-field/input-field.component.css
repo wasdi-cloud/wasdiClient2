@@ -40,6 +40,13 @@ div.icon-left>div.input-group-prepend>span.input-group-text {
     border-bottom-left-radius: 4px !important;
 }
 
+div.input-group-append>span.clear-icon {
+    border-left: none;
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+    cursor: pointer;
+}
+
 div.icon-right>span.input-group-text {
     border-left: none;
     border-top-right-radius: 4px;

@@ -1,3 +1,4 @@
+import { outputAst } from '@angular/compiler';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
@@ -71,10 +72,14 @@ export class InputFieldComponent {
    */
   @Input() m_sMinValue?: any = "";
 
+  @Input() m_bClearField?: boolean = false;
+
   /**
    * Event Emitter the input change to listening parent
    */
   @Output() m_oInputChange: EventEmitter<any> = new EventEmitter();
+
+  @Output() m_oClearInput: EventEmitter<any> = new EventEmitter();
 
   /**
    * Emit the changes to the input to listening parent component
@@ -90,5 +95,9 @@ export class InputFieldComponent {
     } else {
       this.m_oInputChange.emit(oEvent)
     }
+  }
+
+  emitClearInput(oEvent) {
+    this.m_oClearInput.emit(true)
   }
 }
