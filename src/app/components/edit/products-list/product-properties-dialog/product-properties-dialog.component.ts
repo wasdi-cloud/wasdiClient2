@@ -84,8 +84,10 @@ export class ProductPropertiesDialogComponent {
 
   openStylesDialog(): void {
     this.m_oDialog.open(StylesDialogComponent, {
-      height: '80vh',
-      width: '80vw'
+      height: '90vh',
+      width: '90vw',
+      minWidth: '90vw',
+      
     })
   }
 

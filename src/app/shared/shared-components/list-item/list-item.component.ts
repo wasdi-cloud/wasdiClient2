@@ -57,9 +57,11 @@ export class ListItemComponent {
    */
   @Input() m_oProductListItem?: any = {};
 
-  @Input() m_sIcon?: string = "image";
+  @Input() m_oProcessorItem?: any = {};
 
-  @Input() m_sImageSize?: string = "1.65GB";
+  @Input() m_sIcon?: string = "";
+
+  @Input() m_sImageSize?: string = "";
 
   @Input() m_bIsLightProduct?: boolean = false;
 

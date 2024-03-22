@@ -56,7 +56,7 @@ export class StylesDialogComponent implements OnInit {
   m_sJsonString: string = "";
 
   //Model variable that contains the Xml of the style: 
-  m_asStyleXml;
+  m_asStyleXml: string = "";
 
   //Support variable enabled when the xml is edited in the textarea
   m_bXmlEdited: boolean = false;
@@ -152,8 +152,18 @@ export class StylesDialogComponent implements OnInit {
       this.m_bDisplayInfo = false;
     });
   }
-}
 
-export class StylesDialogModel {
-  constructor() { }
+  handleSearchChange(oEvent) {
+    this.m_sSearchString = oEvent.event.target.value;
+  }
+
+  handleToolbarClick(oEvent, oStyle) {
+    if (oEvent === 'delete') {
+      this.deleteStyle(oStyle)
+    } else if (oEvent === 'edit') {
+      this.openStyleEditDialog(oStyle);
+    } else {
+      this.downloadStyle(oStyle.styleId);
+    }
+  }
 }

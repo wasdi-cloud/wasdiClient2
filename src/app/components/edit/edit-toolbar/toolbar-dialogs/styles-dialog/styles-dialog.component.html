@@ -1,4 +1,52 @@
-<div class="dialog d-flex flex-column justify-content-between" style="height: 100%;">
+<div class="apps-dialog d-flex flex-column" style="height: 100%">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">Wasdi styles
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+    </div>
+    <div class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between "
+        style="height: 100%; overflow: hidden;">
+        <div class="apps-container d-flex flex-column">
+            <div class="search-header font-bold d-flex flex-column gap-2 mb-3">
+                <div class="d-flex flex-row justify-content-between align-items-center">Search styles
+                    <app-button [m_sLabel]="'New Style'" [m_sIconLeft]="'add_box'"
+                        (click)="openNewStyleDialog()"></app-button>
+                </div>
+                <app-input-field [m_sPlacehodler]="'Search style'" [m_sIconLeft]="'search'"
+                    (m_oInputChange)="handleSearchChange($event)"></app-input-field>
+            </div>
+            <div *ngIf="m_bIsLoadingStyleList === true">
+                <app-invader></app-invader>
+            </div>
+            <div *ngIf="m_bIsLoadingStyleList === false"
+                class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1" style="overflow-y:scroll">
+                <app-list-item *ngFor="let oStyle of m_aoStyleList| filter: m_sSearchString" [m_oProcessorItem]="oStyle"
+                    [m_bIsSelected]="oStyle.name === m_oSelectedStyle.name" [m_bSimpleItem]="true"
+                    [m_bProcessorItem]="true" [m_sLabel]="oStyle.name" [m_sDescription]="oStyle.description"
+                    [m_sIcon]="oStyle.imgLink" (m_oEmitClickEvent)="handleToolbarClick($event, oStyle)"
+                    [m_bHasToolbar]="oStyle.sharedWithMe === true || m_sActiveUserId === oStyle.userId"
+                    (click)="selectActiveStyle(oStyle)"></app-list-item>
+            </div>
+        </div>
+        <div class="json-container d-flex flex-column justify-content-between">
+            <div class="json-header d-flex flex-column">
+                <div class="processor-name font-bold">{{m_oSelectedStyle.name ?
+                    m_oSelectedStyle.name: 'Select A Style'}}</div>
+                <p *ngIf="m_oSelectedStyle.userId">Publisher: {{m_oSelectedStyle.userId}}</p>
+            </div>
+
+            <app-textarea class="json-body flex-fill" [m_sInputString]="m_asStyleXml"
+                [m_bIsDisabled]="true"></app-textarea>
+
+            <div class="footer d-flex flex-row justify-content-end">
+                <div class="d-flex flex-row gap-3">
+                    <app-button [m_sLabel]="'Apply'" [m_sIconLeft]="'play_circle'"
+                        [m_bDisabled]="!m_oSelectedStyle.name"></app-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="dialog d-flex flex-column justify-content-between" style="height: 100%;">
     <div class="dialog-header d-flex flex-row justify-content-between px-4 pt-3 pb-2 bg-secondary text-light">
         <h4 class="dialog-text">Styles</h4>
         <button class="btn" (click)="onDismiss()">
@@ -79,4 +127,4 @@
             Close
         </button>
     </div>
-</div>
+</div> -->

@@ -78,8 +78,8 @@
             <div class="d-flex flex-row w-100 justify-content-between">
                 <div class="font-bold">{{m_sLabel}}</div>
                 <div *ngIf="m_bHasToolbar" class="processor-toolbar d-flex flex-row align-items-center gap-2">
-                    <span class="material-symbols-outlined" matTooltip="Parameters Library"
-                        (click)="emitToolbarClick('params')">
+                    <span *ngIf="!m_oProcessorItem.styleId" class="material-symbols-outlined"
+                        matTooltip="Parameters Library" (click)="emitToolbarClick('params')">
                         data_object
                     </span>
                     <span class="material-symbols-outlined" matTooltip="Download"
