@@ -5,6 +5,7 @@ import { MapService } from 'src/app/services/map.service';
 import { GlobeService } from 'src/app/services/globe.service';
 
 //Leaflet Imports: 
+import * as L from "leaflet";
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 declare let Cesium: any;
 
@@ -174,6 +175,12 @@ export class EditMapComponent implements OnInit {
           this.m_oMapService.addLayerMap2DByServer(this.m_aoExternalLayers[iExternals].Name, this.m_aoExternalLayers[iExternals].sServerLink);
         }
       }
+
+      // TODO: this is a first step to try to make get pixel info work
+      this.m_oMapService.m_oWasdiMap.on("click", oClickEvent => {
+        console.log("Map Click " + oClickEvent.latlng.lat + " - " + oClickEvent.latlng.lng);
+        //this.getLayerInfo()
+      });
     }, 300);
 
     // Init the Globe in the small container
@@ -184,7 +191,6 @@ export class EditMapComponent implements OnInit {
       // Note: this have also the "fly" included
       this.m_oGlobeService.addAllWorkspaceRectanglesOnGlobe(this.m_aoProducts);
     }
-
   }
 
   /**
@@ -234,5 +240,46 @@ export class EditMapComponent implements OnInit {
     } else {
       this.m_oGlobeService.flyToWorkspaceBoundingBox(this.m_aoProducts);
     }
+  }
+
+  getLayerInfo(wmsUrl: string, point: L.LatLng, bounds: L.LatLngBounds, layer: L.TileLayer.WMS) {
+    const wmsParams = {
+      ...layer.wmsParams,
+      request: 'GetFeatureInfo',
+      service: 'WMS',
+      info_format: 'application/json',
+      query_layers: layer.wmsParams.layers,
+      feature_count: 10,
+      bbox: ""
+    };
+  
+    const lat = point.lat;
+    const lng = point.lng;
+    const bounds1: L.LatLngBounds = L.latLngBounds(L.latLng(lat - 0.1, lng - 0.1), L.latLng(lat + 0.1, lng + 0.1));
+  
+  
+    //set BBox
+    const boundsString = [bounds.getSouth(), bounds.getWest(), bounds.getNorth(), bounds.getEast()].join(',');
+    const boundsString1 = [bounds1.getSouth(), bounds1.getWest(), bounds1.getNorth(), bounds1.getEast()].join(',');
+  
+    wmsParams.bbox = (wmsParams.version === '1.3.0') ? boundsString1 : bounds1.toBBoxString();
+  
+    //set size
+    wmsParams.height = 101;
+    wmsParams.width = 101;
+  
+    //set x/y or i/j
+    wmsParams[wmsParams.version === '1.3.0' ? 'i' : 'x'] = Math.round(50);
+    wmsParams[wmsParams.version === '1.3.0' ? 'j' : 'y'] = Math.round(50);
+  
+    //Set param version
+    wmsParams[wmsParams.version === '1.3.0' ? 'crs' : 'srs'] = 'EPSG:4326';
+  
+  
+    //build url with url and params
+    const url = wmsUrl + L.Util.getParamString(wmsParams, wmsUrl)
+  
+    //load data from server
+    return url;    
   }
 }

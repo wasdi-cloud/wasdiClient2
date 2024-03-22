@@ -168,6 +168,7 @@ export class StylesDialogComponent implements OnInit {
   }
 
   getStyleImgLink(oStyle) {
-    return "/assets/icons/style-placeholder.svg"
+    if (oStyle.imgLink) return oStyle.imgLink;
+    else return "/assets/icons/style-placeholder.svg"
   }
 }
