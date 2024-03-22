@@ -332,4 +332,8 @@ export class WorkflowsDialogComponent implements OnInit {
   onDismiss() {
     this.m_oMatDialogRef.close()
   }
+
+  getWorkflowImageLink(oWorkflow) {
+    return "/assets/icons/style-placeholder.svg"
+  }
 }

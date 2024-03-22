@@ -21,7 +21,7 @@
                 <app-list-item *ngFor="let oStyle of m_aoStyleList| filter: m_sSearchString" [m_oProcessorItem]="oStyle"
                     [m_bIsSelected]="oStyle.name === m_oSelectedStyle.name" [m_bSimpleItem]="true"
                     [m_bProcessorItem]="true" [m_sLabel]="oStyle.name" [m_sDescription]="oStyle.description"
-                    [m_sIcon]="oStyle.imgLink" (m_oEmitClickEvent)="handleToolbarClick($event, oStyle)"
+                    [m_sIcon]="getStyleImgLink(oStyle)" (m_oEmitClickEvent)="handleToolbarClick($event, oStyle)"
                     [m_bHasToolbar]="oStyle.sharedWithMe === true || m_sActiveUserId === oStyle.userId"
                     (click)="selectActiveStyle(oStyle)"></app-list-item>
             </div>

@@ -166,4 +166,8 @@ export class StylesDialogComponent implements OnInit {
       this.downloadStyle(oStyle.styleId);
     }
   }
+
+  getStyleImgLink(oStyle) {
+    return "/assets/icons/style-placeholder.svg"
+  }
 }
