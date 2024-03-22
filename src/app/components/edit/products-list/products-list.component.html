@@ -1,9 +1,8 @@
-<div class="product-tree-container d-flex flex-column h-100" style="min-height: 10rem;">
+<div class="product-tree-container d-flex flex-column justify-content-start h-100" style="min-height: 10rem;">
     <!-- Product Tree Header -->
     <div class="products-header">
         <div class="d-flex flex-row justify-content-between mb-2">
             <div class="d-flex flex-row gap-1 align-items-center justify-content-between">
-
                 <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlacehodler]="'Filter'"
                     [m_sInputValue]="m_sSearchString" [m_bClearField]="true" (keyup)="getSearchString($event);"
                     (m_oClearInput)="clearSearch()"></app-input-field>
@@ -15,13 +14,15 @@
     </div>
     <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
     <!-- Product Tree -> Scrollable -->
-    <div class="products-container flex-fill" *ngIf="m_bIsLoadingProducts === false">
+    <div class="products-container flex-fill"
+        *ngIf="m_bIsLoadingProducts === false && (m_aoWorkspaceProductsList.length >0 )">
         <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts; let iIndex = index" [m_oProduct]="oProduct"
             (m_oProductChange)="handleBandSelection($event, iIndex)"></app-product-list-item>
     </div>
 
     <!-- Buttons to import/search for products if there is no product -->
-    <div *ngIf="(!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0) && !m_bIsLoadingProducts">
+    <div class="flex-fill"
+        *ngIf="(!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0) && !m_bIsLoadingProducts">
         <p>{{'EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT' | translate}}</p>
         <div class="d-flex flex-row gap-2">
             <app-button [m_sLabel]="'Search'" [m_sIconLeft]="'search'" [m_sSize]="'large'"

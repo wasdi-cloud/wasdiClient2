@@ -1,6 +1,6 @@
 <main class="d-flex flex-row flex-fill">
     <!-- Side Bar Container -->
-    <div class="editor-sidebar d-flex flex-column justify-content-between">
+    <div class="editor-sidebar d-flex flex-column">
         <div class="workspace-location">
             <div class="workspace-subheading">Workspace - <span class="workspace-id-copy"
                     (click)="copyWorkspaceId()">{{m_oActiveWorkspace?.workspaceId}}</span></div>
@@ -11,13 +11,13 @@
                 <app-button matTooltip="Workspace Properties" [m_sSize]="'small'" [m_sIconLeft]="'info'" [m_bMuted]="true" (click)="openPropertiesDialog()"></app-button>
             </div>
         </div>
-        <app-products-list class="product-list-container" [m_aoWorkspaceProductsList]="m_aoProducts"
+        <app-products-list class="product-list-container flex-fill" [m_aoWorkspaceProductsList]="m_aoProducts"
             [m_aoVisibleBands]="m_aoVisibleBands" [m_bIsLoadingProducts]="m_bIsLoadingProducts"
             [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
             (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)"
             (m_oProductInfoChange)="getProductsChange($event)"
             (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
-        <app-nav-layers class="flex-fill" style="height: 60%;" [m_aoVisibleBands]="m_aoVisibleBands"
+        <app-nav-layers class="justify-self-end" style="height: 50%;" [m_aoVisibleBands]="m_aoVisibleBands"
             (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
     </div>
     <!-- Map Container with Floating Nav-->
