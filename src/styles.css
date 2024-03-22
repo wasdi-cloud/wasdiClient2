@@ -321,6 +321,57 @@ div.app-outlet {
 span.close-btn {
   cursor: pointer;
 }
+
+/* Styles for Dialogs in the Editor Tab */
+
+div.apps-dialog {
+  padding: 24px;
+  height: 80vh;
+  width: 100%;
+}
+
+.dialog-header {
+  font-size: 20px;
+  line-height: 30px;
+  padding-bottom: 16px;
+}
+
+.search-header {
+  color: var(--neutral60);
+  font-size: 16px;
+}
+
+.apps-container,
+.json-container {
+  width: 49.5%
+}
+
+.json-container {
+  background: var(--neutral10);
+  border-radius: 8px;
+  height: 100%;
+  padding-top: 32px;
+}
+
+.json-header,
+.json-body {
+  padding: 0px 32px;
+}
+
+.json-body {
+  padding-bottom: 1rem;
+}
+
+p {
+  font-size: 14px;
+
+}
+
+.footer {
+  background-color: #FFFFFF;
+  padding: 16px 32px;
+}
+
 /* 
 .leaflet-bar a {
   background-color: rgba(13, 16, 21, 0.8) !important;
