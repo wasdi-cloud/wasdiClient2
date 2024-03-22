@@ -1,10 +1,57 @@
-<div class="dialog d-flex flex-column justify-content-between">
-    <div class="dialog-header d-flex flex-row justify-content-between px-4 pt-3 pb-2 bg-secondary text-light">
-        <h4 class="dialog-text">Workflows</h4>
-        <button class="btn" (click)="onDismiss()">
-            <fa-icon [icon]="faX"></fa-icon>
-        </button>
+<div class="apps-dialog d-flex flex-column" style="height: 100%; width: 100%;">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+        Wasdi workflows
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
+    <div class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between "
+        style="height: 100%; overflow: hidden;">
+        <div class="apps-container d-flex flex-column">
+            <div class="search-header font-bold d-flex flex-column gap-2 mb-3">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    Search workflows
+                    <app-button [m_sLabel]="'New Workflow'" [m_sIconLeft]="'add_box'"
+                        (click)="openEditWorkflowDialog()"></app-button>
+                </div>
+                <app-input-field [m_sPlacehodler]="'Search workflow'" [m_sIconLeft]="'search'"></app-input-field>
+            </div>
+            <div *ngIf="m_bIsLoadingWorkflow === true">
+                <app-invader></app-invader>
+            </div>
+            <div *ngIf="m_bIsLoadingWorkflow === false"
+                class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1" style="overflow-y:scroll">
+                <app-list-item *ngFor="let oWorkflow of m_aoWorkflows| filter: m_sSearchString"
+                    [m_oProcessorItem]="oWorkflow " [m_bIsSelected]="oWorkflow .name === m_oSelectedWorkflow.name"
+                    [m_bSimpleItem]="true" [m_bProcessorItem]="true" [m_sLabel]="oWorkflow.name"
+                    [m_sDescription]="oWorkflow.description" [m_sIcon]="oWorkflow.imgLink"
+                    [m_bHasToolbar]="oWorkflow .sharedWithMe === true || m_sUserId === oWorkflow .userId"
+                    (m_oEmitClickEvent)="handleListItemClick($event, oWorkflow)"
+                    (click)="setSelectedWorkflow(oWorkflow)"></app-list-item>
+            </div>
+        </div>
+        <div class="json-container d-flex flex-column justify-content-between">
+            <div class="json-header d-flex flex-column">
+                <div class="processor-name font-bold">{{m_oSelectedWorkflow.name ?
+                    m_oSelectedWorkflow.name: 'Select A Workflow'}}</div>
+                <p *ngIf="m_oSelectedWorkflow.userId">Publisher: {{m_oSelectedWorkflow.userId}}</p>
+            </div>
+            <div class="flex-fill workflows-product-container">
+                <div *ngFor="let oNode of m_oSelectedWorkflow.inputNodeNames">
+                    <app-dropdown [m_bIsMultiSelect]="false" [m_aoDropdownItems]="m_aoProducts" [m_bHasSearch]="true"
+                        [m_bFileExt]="true" (m_oSelectionChange)="getSingleSelection($event, oNode)"
+                        [m_sLabel]="'Read'"></app-dropdown>
+                </div>
+            </div>
+            <div class="footer d-flex flex-row justify-content-end">
+                <div class="d-flex flex-row gap-3">
+                    <app-button [m_sLabel]="'Run'" [m_sIconLeft]="'play_circle'"
+                        [m_bDisabled]="!m_oSelectedWorkflow.name" (click)="runSingleInputWorkflow()"></app-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="dialog d-flex flex-column justify-content-between">
+    
 
     <div class="dialog-content d-flex flex-row justify-content-between px-4 py-2 gap-3">
         <div class="dialog-col-1">
@@ -79,9 +126,9 @@
                             [(ngModel)]="m_bShowExtension"></mat-checkbox>
                     </div>
                     <div *ngFor="let oNode of m_oSelectedWorkflow.inputNodeNames">
-                        <label class="text-success form-label">Read:</label>
-                        <!-- Multi-select for Batch Processing -->
-                        <mat-select *ngIf="m_sActiveTab === 'batch'" class="form-control"
+                        <label class="text-success form-label">Read:</label> -->
+<!-- Multi-select for Batch Processing -->
+<!-- <mat-select *ngIf="m_sActiveTab === 'batch'" class="form-control"
                             [(ngModel)]="m_aoMultiInputSelectedProducts[oNode]" (selectionChange)="getMultiSelection($event, oNode)" multiple>
                             <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
                                 [(ngModel)]="m_sSearchString">
@@ -89,9 +136,9 @@
                                 [value]="oProduct">
                                 {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
                             </mat-option>
-                        </mat-select>
-                        <!-- Single Select for Single Processing -->
-                        <mat-select *ngIf="m_sActiveTab === 'execute'" class="form-control"
+                        </mat-select> -->
+<!-- Single Select for Single Processing -->
+<!-- <mat-select *ngIf="m_sActiveTab === 'execute'" class="form-control"
                             [(ngModel)]="m_aoMultiInputSelectedProducts[oNode]" (selectionChange)="getSingleSelection($event, oNode)">
                             <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
                                 [(ngModel)]="m_sSearchString">
@@ -100,9 +147,9 @@
                                 {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
                             </mat-option>
                         </mat-select>
-                    </div>
-                    <!-- <button class="btn btn-success" (click)="runMultiInputWorkflow()">Run</button> -->
-                    <button *ngIf="m_sActiveTab === 'execute'" class="btn btn-success"
+                    </div> -->
+<!-- <button class="btn btn-success" (click)="runMultiInputWorkflow()">Run</button> -->
+<!-- <button *ngIf="m_sActiveTab === 'execute'" class="btn btn-success"
                         (click)="runSingleInputWorkflow()" [disabled]="m_bIsReadOnly === true">Run</button>
                     <button *ngIf="m_sActiveTab === 'batch'" class="btn btn-success" (click)="runMultiInputWorkflow()"
                         [disabled]="m_bIsReadOnly === true">Run</button>
@@ -110,9 +157,4 @@
             </div>
         </div>
     </div>
-
-
-    <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
-        <button class="btn btn-secondary" (click)="onDismiss()">Close</button>
-    </div>
-</div>
+</div> -->

@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { faDownload, faEdit, faLaptopCode, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workflow } from 'src/app/shared/models/workflow.model';
@@ -15,12 +14,6 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   styleUrls: ['./workflows-dialog.component.css']
 })
 export class WorkflowsDialogComponent implements OnInit {
-  //font awesome icons:
-  faDownload = faDownload;
-  faEdit = faEdit;
-  faLaptop = faLaptopCode;
-  faPlus = faPlus;
-  faX = faX;
 
   m_aoWorkflows: any[];
   m_aoProducts: any[];
@@ -28,7 +21,7 @@ export class WorkflowsDialogComponent implements OnInit {
   m_aoProductClasses: any[];
 
   m_bIsUploadingWorkflow: boolean = false;
-  m_bIsLoadingWorkdlow: boolean = false;
+  m_bIsLoadingWorkflow: boolean = false;
   m_bShowExtension: boolean = false;
 
   m_oSelectedWorkflow: Workflow = {} as Workflow;
@@ -103,6 +96,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   setSelectedWorkflow(oWorkflow) {
     this.m_oSelectedWorkflow = oWorkflow;
+    console.log(this.m_oSelectedWorkflow);
     this.selectedMultiInputWorkflow(oWorkflow);
   }
 
@@ -323,6 +317,16 @@ export class WorkflowsDialogComponent implements OnInit {
       }
     });
     return true;
+  }
+
+  handleListItemClick(oEvent, oWorkflow) {
+    if (oEvent === 'delete') {
+      this.removeWorkflow(oWorkflow);
+    } else if (oEvent === 'edit') {
+      this.openEditWorkflowDialog(oWorkflow);
+    } else {
+      this.downloadWorkflow(oWorkflow);
+    }
   }
 
   onDismiss() {

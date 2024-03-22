@@ -73,13 +73,15 @@
     <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100" matTooltip="{{m_sDescription}}"
         [matTooltipPosition]="'below'">
         <!--div class="preview-img" style="background: url('/assets/images/hero-images/hero-img1.jpg');"-->
-        <div class="preview-img d-flex flex-column align-items-center" style="background-image: url({{m_sIcon}})"></div>
+        <div class="preview-img d-flex flex-column align-items-center"
+            style="background-size: contain; background-position: center; background-image: url('/assets/icons/style-placeholder.svg')"></div>
         <div class="d-flex flex-column flex-fill" style="width: 85%;">
             <div class="d-flex flex-row w-100 justify-content-between">
                 <div class="font-bold">{{m_sLabel}}</div>
                 <div *ngIf="m_bHasToolbar" class="processor-toolbar d-flex flex-row align-items-center gap-2">
-                    <span *ngIf="!m_oProcessorItem.styleId" class="material-symbols-outlined"
-                        matTooltip="Parameters Library" (click)="emitToolbarClick('params')">
+                    <span *ngIf="!m_oProcessorItem.styleId && !m_oProcessorItem.workflowId"
+                        class="material-symbols-outlined" matTooltip="Parameters Library"
+                        (click)="emitToolbarClick('params')">
                         data_object
                     </span>
                     <span class="material-symbols-outlined" matTooltip="Download"
@@ -89,7 +91,7 @@
                     <span class="material-symbols-outlined" matTooltip="Open Editor" (click)="emitToolbarClick('edit')">
                         edit_square
                     </span>
-                    <span class="material-symbols-outlined" matTooltip="Remove Processor"
+                    <span class="material-symbols-outlined" matTooltip="Remove"
                         (click)="emitToolbarClick('delete')">
                         delete
                     </span>

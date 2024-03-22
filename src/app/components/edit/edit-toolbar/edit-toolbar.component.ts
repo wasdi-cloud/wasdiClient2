@@ -65,8 +65,9 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   openWorkflowsDialog(): void {
     this.m_oDialog.open(WorkflowsDialogComponent, {
-      height: '80vh',
-      width: '80vw',
+      height: '90vh',
+      width: '90vw',
+      minWidth: '90vw',
       data: {
         products: this.m_aoProducts
       }
