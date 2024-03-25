@@ -1,4 +1,46 @@
-<div class="dialog d-flex flex-column justify-content-between" style="height: 100%;">
+<div class="apps-dialog d-flex flex-column justify-content-between" style="height:100%; width: 100%;">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+        {{m_bEditMode === true ? m_oProcessorDetails.processorName : 'New Wasdi app'}}
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
+    </div>
+    <div class="processor-tabs d-flex flex-row">
+        <app-tab [m_sLabel]="'Processor'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PROCESSOR'"
+            (click)="changeActiveTab('PROCESSOR')"></app-tab>
+        <app-tab [m_sLabel]="'Store Info'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'STORE'"
+            (click)="changeActiveTab('STORE')"></app-tab>
+        <app-tab [m_sLabel]="'Pricing'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PRICING'"
+            (click)="changeActiveTab('PRICING')"></app-tab>
+        <app-tab [m_sLabel]="'Collaborators'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'SHARE'"
+            (click)="changeActiveTab('SHARE')"></app-tab>
+        <app-tab [m_sLabel]="'App User Interface'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'UI'"
+            (click)="changeActiveTab('UI')"></app-tab>
+    </div>
+    <div class="flex-fill">
+        <!-- Default Page - Processor Information -->
+        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR' && m_oProcessorForm" [m_bEditMode]="m_bEditMode"
+            [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')"
+            [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''" [m_sProcessorName]="m_sName"
+            [m_sPublisher]="m_oProcessorDetails.publisher"></app-processor-tab-content>
+        <!-- Processor Store Options -->
+        <app-processor-tab-store *ngIf="m_sActiveTab==='STORE'"
+            [m_oProcessorStoreInfo]="m_oProcessorForm.get('processorStoreInfo')"></app-processor-tab-store>
+        <!-- Processor Media Options -->
+        <app-processor-tab-media *ngIf="m_sActiveTab==='MEDIA'"
+            [m_oProcessor]="m_oProcessorDetails"></app-processor-tab-media>
+        <!-- Processor UI JSON file -->
+        <app-processor-tab-ui *ngIf="m_sActiveTab==='UI'" [m_oProcessor]="m_oInputProcessor"
+            [m_oProcessorUIInfo]="m_oProcessorForm.get('processorUIInfo')"></app-processor-tab-ui>
+        <!-- Processor Share Options -->
+        <app-share-ui *ngIf="m_sActiveTab === 'SHARE'" [resourceType]="'processor'"
+            [resource]="m_oInputProcessor"></app-share-ui>
+
+    </div>
+    <div class="dialog-footer d-flex flex-row justify-content-between">
+        <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true"></app-button>
+        <app-button *ngIf="m_bEditMode" [m_sLabel]="'Apply'" (click)="updateProcessor()"></app-button>
+    </div>
+</div>
+<!-- <div class="dialog d-flex flex-column justify-content-between" style="height: 100%;">
     <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between px-4 pt-3 pb-2">
         <h4 *ngIf="m_bEditMode === false" class="dialog-text"><fa-icon [icon]="faRocket"></fa-icon> WASDI App <span class="badge bg-success"></span></h4>
         <h4 *ngIf="m_bEditMode === true" class="dialog-text">
@@ -32,28 +74,11 @@
         </ul>
     </div>
     <div class="tab-content-container p-3" style="height: 75%;">
-        <!-- Default Page - Processor Information -->
-        <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR' && m_oProcessorForm" [m_bEditMode]="m_bEditMode"
-            [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')"
-            [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''" [m_sProcessorName]="m_sName"
-            [m_sPublisher]="m_oProcessorDetails.publisher"></app-processor-tab-content>
-        <!-- Processor Store Options -->
-        <app-processor-tab-store *ngIf="m_sActiveTab==='STORE'"
-            [m_oProcessorStoreInfo]="m_oProcessorForm.get('processorStoreInfo')"></app-processor-tab-store>
-        <!-- Processor Media Options -->
-        <app-processor-tab-media *ngIf="m_sActiveTab==='MEDIA'"
-            [m_oProcessor]="m_oProcessorDetails"></app-processor-tab-media>
-        <!-- Processor UI JSON file -->
-        <app-processor-tab-ui *ngIf="m_sActiveTab==='UI'" [m_oProcessor]="m_oInputProcessor"
-            [m_oProcessorUIInfo]="m_oProcessorForm.get('processorUIInfo')"></app-processor-tab-ui>
-        <!-- Processor Share Options -->
-        <app-share-ui *ngIf="m_sActiveTab === 'SHARE'" [resourceType]="'processor'"
-            [resource]="m_oInputProcessor"></app-share-ui>
-    </div>
+       
     <div mat-dialog-actions class="border dialog-footer p-1 d-flex flex-row justify-content-end justify-self-end gap-2">
         <button class="btn btn-success" *ngIf="m_bEditMode === true" (click)="updateProcessor()">Apply</button>
         <button class="btn btn-success" *ngIf="m_bEditMode === false" (click)="postNewProcessor()">Deploy
             Processor</button>
         <button class="btn btn-secondary" (click)="onDismiss()">Close</button>
     </div>
-</div>
+</div>  -->
