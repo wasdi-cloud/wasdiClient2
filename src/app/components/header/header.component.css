@@ -5,7 +5,7 @@ header {
     position: sticky;
     top: 0;
     width: 100%;
-    z-index: 5;
+    z-index: 3;
 }
 
 .header-logo-container {
@@ -42,7 +42,7 @@ header {
     color: #FFFFFF;
 }
 
-.user-icon > .material-symbols-outlined {
+.user-icon>.material-symbols-outlined {
     position: absolute;
     left: 4px;
 
@@ -75,7 +75,7 @@ header {
     font-size: 14px;
     justify-content: space-between;
     padding: 8px 8px;
-    width:fit-content;
+    width: fit-content;
 }
 
 .dropdown-icon {
