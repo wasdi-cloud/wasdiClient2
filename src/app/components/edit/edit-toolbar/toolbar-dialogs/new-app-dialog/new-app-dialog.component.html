@@ -3,7 +3,7 @@
         {{m_bEditMode === true ? m_oProcessorDetails.processorName : 'New Wasdi app'}}
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
     </div>
-    <div class="processor-tabs d-flex flex-row">
+    <div class="processor-tabs d-flex flex-row pb-4">
         <app-tab [m_sLabel]="'Processor'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PROCESSOR'"
             (click)="changeActiveTab('PROCESSOR')"></app-tab>
         <app-tab [m_sLabel]="'Store Info'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'STORE'"
@@ -15,7 +15,7 @@
         <app-tab [m_sLabel]="'App User Interface'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'UI'"
             (click)="changeActiveTab('UI')"></app-tab>
     </div>
-    <div class="flex-fill">
+    <div class="flex-fill mt-2">
         <!-- Default Page - Processor Information -->
         <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR' && m_oProcessorForm" [m_bEditMode]="m_bEditMode"
             [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')"
@@ -35,7 +35,7 @@
             [resource]="m_oInputProcessor"></app-share-ui>
 
     </div>
-    <div class="dialog-footer d-flex flex-row justify-content-between">
+    <div class="dialog-footer d-flex flex-row justify-content-between mt-2">
         <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true"></app-button>
         <app-button *ngIf="m_bEditMode" [m_sLabel]="'Apply'" (click)="updateProcessor()"></app-button>
     </div>

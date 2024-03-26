@@ -175,7 +175,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     this.m_oDialog.open(NewAppDialogComponent, {
       height: '95vh',
       width: '95vw',
-      maxWidth: '95vw',
+      minWidth: '95vw',
       data: {
         editMode: true,
         inputProcessor: oProcessor
