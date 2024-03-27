@@ -8,7 +8,7 @@
             <app-button [m_sLabel]="'Build Logs'" (click)="openBuildLogs()"></app-button>
         </div>
         <app-input-field [m_sLabel]="'Name'" [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_sProcessorName"
-            (m_oInputChange)="m_oProcessorBasicInfo.patchValue({sProcessorName: $event.target.value})"></app-input-field>
+            (m_oInputChange)="m_oProcessorBasicInfo.patchValue({sProcessorName: $event.event.target.value})"></app-input-field>
         <app-input-field [m_sLabel]="'Type'" [m_bIsReadonly]="m_bEditMode"
             [m_sInputValue]="m_sTypeNameOnly"></app-input-field>
         <div class="textarea-container flex-fill">
