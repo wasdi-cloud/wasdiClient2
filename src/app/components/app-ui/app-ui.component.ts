@@ -333,10 +333,10 @@ export class AppUiComponent implements OnInit {
   }
 
   getSelectedWorkspaceId(oEvent) {
-    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
       return false;
     } else {
-      this.m_oActiveWorkspace = oEvent; 
+      this.m_oActiveWorkspace = oEvent;
       this.m_oSelectedWorkspace = oEvent;
       return true;
     }
@@ -389,8 +389,9 @@ export class AppUiComponent implements OnInit {
         editMode: true,
         inputProcessor: this.m_oProcessorInformation
       },
-      width: '70vw',
-      height: '70vh'
+      height: '95vh',
+      minWidth: '95vw',
+      maxWidth: '95vw'
     })
   }
 
