@@ -1,7 +1,14 @@
-a.nav-link {
+div.processor-tabs {
+    height: 44px;
+    border-bottom: 1px solid #D9DCE1;
+    width: 100%;
+
+}
+
+/* a.nav-link {
     cursor: pointer;
 }
 
 div.tab-content-container {
     overflow-y: scroll;
-}
+} */

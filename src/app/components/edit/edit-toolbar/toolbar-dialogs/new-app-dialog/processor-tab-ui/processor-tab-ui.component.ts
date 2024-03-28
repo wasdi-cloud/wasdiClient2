@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
+import { AppUIItems } from 'src/app/components/navbar/menu-list-item/menu-items';
 @Component({
   selector: 'app-processor-tab-ui',
   templateUrl: './processor-tab-ui.component.html',
@@ -15,6 +15,8 @@ export class ProcessorTabUiComponent implements OnInit {
   m_sJSONSample: string;
   @Input() m_oProcessor?: any;
   @Input() m_oProcessorUIInfo: FormGroup;
+
+  m_aoAppUIItems = AppUIItems;
 
   constructor() { }
 
@@ -77,6 +79,7 @@ export class ProcessorTabUiComponent implements OnInit {
       sTextToInsert = '\n\t{\n\t\t"param": "PARAM_NAME",\n\t\t"type": "table",\n\t\t"label": "description",\n\t\t"required": false,\n\t\t"tooltip":"",\n\t\t"rows":"",\n\t\t"columns":"",\n\t\t"row_headers":[],\n\t\t"col_headers":[]\n\t},'
     }
 
+    
     //Handle textarea insertion
     this.insetText(sTextToInsert);
 
@@ -92,6 +95,8 @@ export class ProcessorTabUiComponent implements OnInit {
   insetText(sText: string) {
     const oTextarea = document.querySelector<HTMLTextAreaElement>(
       `#${this.appui}`);
+
+      console.log(oTextarea)
 
     if (oTextarea) {
       oTextarea.setRangeText(sText, oTextarea.selectionStart, oTextarea.selectionEnd, 'end');

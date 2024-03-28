@@ -48,7 +48,7 @@ export class ProcessorTabContentComponent implements OnInit {
   /**
    * JSON Input Parameters Sample
    */
-  m_sJSONSample: string = "";
+  m_sJSONSample: string = "{}";
 
   /**
    * Selected Processor Type
@@ -110,8 +110,6 @@ export class ProcessorTabContentComponent implements OnInit {
 
   @Input() m_oProcessorBasicInfo: FormGroup;
 
-
-
   m_aoProcessorTypes = [
     { name: "Ubuntu 22.04 + Python 3.10", id: "python_pip_2" },
     { name: "OGC Application Package", id: "eoepca" },
@@ -139,6 +137,7 @@ export class ProcessorTabContentComponent implements OnInit {
   ngOnInit(): void {
     //Set the active workspace from the constants service
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    console.log(this.m_oProcessorBasicInfo)
 
     this.displayProcessorType();
     let sType = this.m_oProcessorBasicInfo.get('oType').value;
@@ -154,6 +153,13 @@ export class ProcessorTabContentComponent implements OnInit {
       this.m_bIsPublic = false
     } else {
       this.m_bIsPublic = true
+    }
+
+    if (this.m_oProcessorBasicInfo.get('iMinuteTimeout')) {
+      this.m_iMinuteTimeout = parseInt(this.m_oProcessorBasicInfo.get('iMinuteTimeout').value)
+    }
+    if (this.m_oProcessorBasicInfo.get('sJSONSample')) {
+      this.m_sJSONSample = this.m_oProcessorBasicInfo.get('sJSONSample').value;
     }
   }
 
@@ -281,7 +287,7 @@ export class ProcessorTabContentComponent implements OnInit {
    * Open Package Manager Dialog
    */
   openPackageManager() {
-    let oDialog = this.m_oDialog.open(PackageManagerComponent, {
+    this.m_oDialog.open(PackageManagerComponent, {
       height: '90vh',
       width: '90vw',
       data: {
@@ -292,7 +298,7 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   openBuildLogs() {
-    let oDialog = this.m_oDialog.open(BuildLogsComponent, {
+    this.m_oDialog.open(BuildLogsComponent, {
       height: '70vh',
       width: '70vw',
       data: {
@@ -310,6 +316,7 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   onPublicChange(event) {
+    console.log(event)
     let oForm = this.m_oProcessorBasicInfo;
     if (event.target.checked) {
       oForm.patchValue({
@@ -320,5 +327,11 @@ export class ProcessorTabContentComponent implements OnInit {
         bIsPublic: false
       })
     }
+  }
+
+  onTextareaInput(oEvent) {
+    this.m_oProcessorBasicInfo.patchValue({
+      sShortDescription: oEvent.target.value
+    })
   }
 }

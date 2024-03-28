@@ -1,0 +1,26 @@
+div.dialog-content {
+    height: 100%;
+}
+
+div.dialog-column {
+    width: 50%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+div.button-container {
+    padding: 8px;
+    border-radius: 8px;
+}
+
+div.button-container, div.json-sample-container {
+    background: var(--neutral5);
+}
+
+div.textarea-container {
+    /* height: 25%; */
+}
+
+div.drag-drop-container {
+    height: 25%;
+}

@@ -1,4 +1,44 @@
-<div *ngIf="m_oProcessorBasicInfo" [formGroup]="m_oProcessorBasicInfo">
+<div class="dialog-content d-flex flex-row gap-2" *ngIf="m_oProcessorBasicInfo" [formGroup]="m_oProcessorBasicInfo">
+    <div class="dialog-column form-input-container d-flex flex-column gap-2">
+        <div *ngIf="m_bEditMode"
+            class="button-container d-flex flex-row align-items-center justify-content-center gap-2">
+            <app-button [m_sLabel]="'Package manager'" (click)="openPackageManager()"></app-button>
+            <app-button [m_sLabel]="'Update Library'" (click)="forceLibUpdate(m_sProcessorId)"></app-button>
+            <app-button [m_sLabel]="'Re-deploy App'" (click)="forceProcessorRefresh(m_sProcessorId)"></app-button>
+            <app-button [m_sLabel]="'Build Logs'" (click)="openBuildLogs()"></app-button>
+        </div>
+        <app-input-field [m_sLabel]="'Name'" [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_sProcessorName"
+            (m_oInputChange)="m_oProcessorBasicInfo.patchValue({sProcessorName: $event.event.target.value})"></app-input-field>
+        <app-input-field [m_sLabel]="'Type'" [m_bIsReadonly]="m_bEditMode"
+            [m_sInputValue]="m_sTypeNameOnly"></app-input-field>
+        <div class="textarea-container flex-fill">
+            <app-textarea [m_sLabel]="'Description'"
+                [m_sInputString]="m_oProcessorBasicInfo.get('sShortDescription').value"
+                (keyup)="onTextareaInput($event)"></app-textarea>
+        </div>
+        <div class="d-flex flex-row align-items-center gap-2 mt-4">
+            <app-input-field [m_sLabel]="'Timeout expressed in minutes'" [m_sPlacehodler]="'180'"
+                [m_sInputValue]="m_iMinuteTimeout.toString()"
+                (m_oInputChange)="m_oProcessorBasicInfo.patchValue({iMinuteTimeout: $event.event.target.value})"></app-input-field>
+            <div class="align-self-end">
+                <input type="checkbox" class="wasdi-checkbox" name="" id="" [checked]="m_bIsPublic"
+                    (change)="onPublicChange($event)">
+                Make the application public
+            </div>
+        </div>
+        <div class="drag-drop-container mt-3">
+            <app-drag-and-drop (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
+
+        </div>
+    </div>
+    <div class="dialog-column json-container json-sample-container d-flex flex-column">
+        <div class="json-header font-bold pb-2">JSON Sample</div>
+        <app-textarea class="json-body flex-fill" [m_sInputString]="m_sJSONSample"></app-textarea>
+
+    </div>
+</div>
+
+<!-- <div *ngIf="m_oProcessorBasicInfo" [formGroup]="m_oProcessorBasicInfo">
     <div class="form d-flex flex-row justify-content-between align-items-center">
         <div class="d-flex flex-column gap-2" style="width: 65%">
             <div>
@@ -24,14 +64,14 @@
             <app-drag-and-drop (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
         </div>
         <div class="d-flex gap-2 flex-wrap" *ngIf="m_bEditMode">
-            <button class="btn btn-secondary" (click)="openPackageManager()">Package Manager</button>
-            <!--button class="btn btn-secondary" (click)="forceLibUpdate(m_sProcessorId)">Update Library</button-->
-            <button class="btn btn-secondary" (click)="forceProcessorRefresh(m_sProcessorId)">Re-Deploy</button>
+            <button class="btn btn-secondary" (click)="openPackageManager()">Package Manager</button> -->
+<!--button class="btn btn-secondary" (click)="forceLibUpdate(m_sProcessorId)">Update Library</button-->
+<!-- <button class="btn btn-secondary" (click)="forceProcessorRefresh(m_sProcessorId)">Re-Deploy</button>
             <button class="btn btn-secondary" (click)="openBuildLogs()">Build Logs</button>
         </div>
-    </div>
+    </div> -->
 
-    <div class="advanced-info d-flex flex-row gap-2 mt-3">
+<!-- <div class="advanced-info d-flex flex-row gap-2 mt-3">
         <div style="width: 50%">
             <label for="description">Description:</label>
             <textarea class="form-control" name="" id="" rows="5" formControlName="sShortDescription"></textarea>
@@ -39,8 +79,6 @@
             <label for="timeOut">Timeout (min)</label>
             <input class="form-control" type="number" name="" id="" formControlName="iMinuteTimeout">
 
-            <input type="checkbox" name="isPublic" [checked]="m_bIsPublic" (change)="onPublicChange($event)">
-            <label for="isPublic">Make Application Public</label>
 
         </div>
         <div style="width: 50%">
@@ -48,4 +86,4 @@
             <textarea class="form-control" name="jsonSample" id="" rows="10" formControlName="sJSONSample"></textarea>
         </div>
     </div>
-</div>
+</div> -->

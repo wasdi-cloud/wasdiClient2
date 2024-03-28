@@ -7,6 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class DragAndDropComponent {
   @Output() m_oSelectedFileOutput = new EventEmitter();
+  @Input() m_sPrompt?: string = "Drop file"
   @Input() m_sFormDataType: string = 'file'
   m_sSelectedFileName: string = '';
   m_oSelectedFile: any;

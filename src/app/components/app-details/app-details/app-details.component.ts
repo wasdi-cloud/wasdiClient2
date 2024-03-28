@@ -160,7 +160,7 @@ export class AppDetailsComponent implements OnInit {
     return dPerc.toFixed(1);
   }
 
-  getCategories() {}
+  getCategories() { }
 
   /**
    * Return to the Marketplace
@@ -180,9 +180,10 @@ export class AppDetailsComponent implements OnInit {
   }
 
   openEditAppDialog(oProcessor) {
-    let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
-      height: '80vh',
-      width: '80vw',
+    this.m_oDialog.open(NewAppDialogComponent, {
+      height: '95vh',
+      width: '95vw',
+      maxWidth: '95vw',
       data: {
         editMode: true,
         inputProcessor: oProcessor

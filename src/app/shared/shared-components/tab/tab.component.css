@@ -1,10 +1,15 @@
 a.nav-link {
     align-self: start;
-    border-bottom: 1px solid #D9DCE1;
     cursor: pointer;
     padding: 8px;
+    border-bottom: 1px solid #D9DCE1;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+}
+
+a.nav-link.not-has-border {
+    border-bottom: 1px solid white;
+    padding: 8px 16px;
 }
 
 a.nav-link:hover {
@@ -37,14 +42,14 @@ div.nav-item.tab-large>a.nav-link {
 
 div.nav-item.tab-large>a.nav-link:hover {
     background: #ECEEF0;
- 
+
 }
 
-div.disabled > a {
+div.disabled>a {
     color: #8E97A6;
 }
 
-div.disabled > a.nav-link:hover {
+div.disabled>a.nav-link:hover {
     background: #FFFFFF !important;
     border-bottom: 1px solid #D9DCE1;
     color: #8E97A6;

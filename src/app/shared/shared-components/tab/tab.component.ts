@@ -10,12 +10,12 @@ export class TabComponent {
   /**
    * Is the tab active? 
    */
- @Input() m_bIsActive: boolean = false;
+  @Input() m_bIsActive: boolean = false;
 
   /**
    * Is the tab disabled?
    */
-  @Input() m_bIsDisabled: boolean = true;
+  @Input() m_bIsDisabled: boolean = false;
 
   /**
    * Label for the Tab
@@ -26,4 +26,6 @@ export class TabComponent {
    * Tab size - Large or Default (medium)
    */
   @Input() m_sSize?: 'default' | 'large' = 'default';
+
+  @Input() m_bHasBorder?: boolean = true;
 }

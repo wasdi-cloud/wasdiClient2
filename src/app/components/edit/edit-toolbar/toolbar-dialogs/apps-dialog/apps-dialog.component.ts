@@ -173,8 +173,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    */
   openEditProcessorDialog(oProcessor: any) {
     this.m_oDialog.open(NewAppDialogComponent, {
-      height: '80vh',
-      width: '80vw',
+      height: '95vh',
+      width: '95vw',
+      minWidth: '95vw',
       data: {
         editMode: true,
         inputProcessor: oProcessor
@@ -184,8 +185,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
 
   openNewAppDialog(): void {
     this.m_oDialog.open(NewAppDialogComponent, {
-      height: '90vh',
-      width: '90vw',
+      height: '95vh',
+      width: '95vw',
+      maxWidth: '95vw',
       data: { editMode: false }
     })
   }
