@@ -8,14 +8,17 @@
 <app-review-input *ngIf="m_bIsEditing && m_bIsEditingComment" [m_bIsEditing]="m_bIsEditing" [m_bIsReview]="false"
     [m_sUserId]="m_oComment.userId" [m_oComment]="m_oComment" (m_oCommentEmit)="getComments($event)"></app-review-input>
 
-<div class="d-flex flex-row gap-2 mb-2" *ngIf="!m_bIsEditing ||(m_oComment && !m_bIsEditingComment)">
+<div class="d-flex flex-row gap-2 mb-2" style="width: 100%;"
+    *ngIf="!m_bIsEditing ||(m_oComment && !m_bIsEditingComment)">
     <!-- Icon -->
-    <div class="user-icon">
-        <span class="material-symbols-outlined user-icon-symbol">
-            account_circle
-        </span>
+    <div class="icon-wrapper">
+        <div class="user-icon">
+            <span class="material-symbols-outlined user-icon-symbol">
+                account_circle
+            </span>
+        </div>
     </div>
-    <div class="flex-fill">
+    <div class="flex-fill review-content-wrapper">
         <div class="d-flex flex-row align-items-center justify-content-between">
             <div class="d-flex flex-row gap-2">
                 <div class="reviews-name">{{m_oReview? m_oReview.userId : m_oComment.userId}}</div>
