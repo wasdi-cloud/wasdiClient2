@@ -54,10 +54,10 @@
                             <span>({{m_oApplicationInfo.reviewsCount}} reviews)</span>
                         </div>
                     </div>
-                    <div class="info-tag d-flex flex-row">
-                        <span class="info-tag">Publisher: </span>
+                    <div class="info-tag d-flex flex-row gap-1">
+                        <span class="info-tag">Publisher:</span>
                         <span class="info-tag-content">{{m_oApplicationInfo.publisher}}</span>
-                        <app-button class="ms-2" *ngIf="m_oApplicationInfo.isMine" [m_sSize]="'small'"
+                        <app-button *ngIf="m_oApplicationInfo.isMine" [m_sSize]="'small'"
                             [m_sLabel]="'Edit'" [m_bOutline]="true"
                             (click)="openEditAppDialog(m_oApplicationInfo)"></app-button>
                     </div>
