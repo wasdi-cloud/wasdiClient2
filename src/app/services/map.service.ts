@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { ConstantsService } from './constants.service';
 import Geocoder from 'leaflet-control-geocoder';
 import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
@@ -23,7 +24,7 @@ export class MapService {
    * @param m_oConstantsService 
    * @param m_oDialog 
    */
-  constructor(private m_oConstantsService: ConstantsService, private m_oDialog: MatDialog) {
+  constructor(private m_oConstantsService: ConstantsService, private m_oDialog: MatDialog, private m_oHttp: HttpClient) {
     this.initTilelayer();
     this.m_oOptions = {
       layers: [
@@ -907,6 +908,60 @@ export class MapService {
 
     //Emit bounding box to listening componenet:
     this.m_oManualBoundingBoxSubscription.next(oLayer);
+  }
+
+  /**
+   * Get the URL to request to geoserver (or WMS Server) the feature info of a point
+   * @param sWmsUrl 
+   * @param oPoint 
+   * @param sLayerIdList 
+   * @returns 
+   */
+  getWMSLayerInfoUrl(sWmsUrl: string, oPoint: L.LatLng, sLayerIdList: string): string {
+    const oLat = oPoint.lat;
+    const oLng = oPoint.lng;
+
+    const aoBounds: L.LatLngBounds = L.latLngBounds(L.latLng(oLat - 0.1, oLng - 0.1), L.latLng(oLat + 0.1, oLng + 0.1));
+    const sVersion = '1.3.0'
+    //set BBox
+    const sBoundsString = [aoBounds.getSouth(), aoBounds.getWest(), aoBounds.getNorth(), aoBounds.getEast()].join(',');
+    const sBbox = (sVersion === '1.3.0') ? sBoundsString : aoBounds.toBBoxString();
+
+    const oWmsParams = {
+        request: 'GetFeatureInfo',
+        service: 'WMS',
+        info_format: 'application/json',
+        query_layers: sLayerIdList,
+        feature_count: 10,
+        version: sVersion,
+        bbox: sBbox,
+        layers: sLayerIdList,
+        height: 101,
+        width: 101,
+    };
+
+
+
+    //set x/y or i/j
+    oWmsParams[sVersion === '1.3.0' ? 'i' : 'x'] = 50;
+    oWmsParams[sVersion === '1.3.0' ? 'j' : 'y'] = 50;
+
+    //Set param version
+    oWmsParams[sVersion === '1.3.0' ? 'crs' : 'srs'] = 'EPSG:4326';
+
+
+    //build url with url and params
+    const sUrl = sWmsUrl + L.Util.getParamString(oWmsParams, sWmsUrl)
+
+    //load data from server
+    return sUrl;
+  } 
+
+  getFeatureInfo(sUrl: string) {
+    const aoHeaders= new HttpHeaders()
+    .set('Accept', 'text/html,application/xhtml+xml,application/xml')
+    .set('Cache-Control', 'max-age=0');
+    return this.m_oHttp.get(sUrl, {'headers': aoHeaders});
   }
 
 }

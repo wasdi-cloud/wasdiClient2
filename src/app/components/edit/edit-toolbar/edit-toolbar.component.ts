@@ -13,7 +13,6 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/workflows-dialog.component';
 import { Product } from 'src/app/shared/models/product.model';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { WorkspaceInfoDialogComponent } from '../workspace-info-dialog/workspace-info-dialog.component';
 
 
 @Component({
@@ -26,8 +25,10 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   @Input() m_aoProducts: Product[];
   @Input() m_bJupyterIsReady: boolean = false;
   @Input() m_b2DMapModeOn: boolean = true;
+  m_bFeatureInfoMode: boolean = false;
 
   @Output() m_b2DMapModeOnChange: EventEmitter<boolean> = new EventEmitter;
+  @Output() m_b2DFeatureInfoModeChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   m_bNotebookIsReady: boolean = false;
   m_sFilterText: string;
@@ -119,11 +120,12 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   switch2D3DMode(): void {
-    this.m_b2DMapModeOn = !this.m_b2DMapModeOn
+    this.m_b2DMapModeOn = !this.m_b2DMapModeOn;
     this.m_b2DMapModeOnChange.emit(this.m_b2DMapModeOn);
   }
 
-  openPropertiesDialog(): void {
-    this.m_oDialog.open(WorkspaceInfoDialogComponent, {})
+  changeFeatureInfoMode(): void {
+    this.m_bFeatureInfoMode = !this.m_bFeatureInfoMode;
+    this.m_b2DFeatureInfoModeChange.emit(this.m_bFeatureInfoMode);
   }
 }

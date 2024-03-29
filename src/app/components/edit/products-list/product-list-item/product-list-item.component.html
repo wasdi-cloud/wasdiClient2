@@ -47,15 +47,15 @@
                 </span>
                 <span class="bands-icon material-symbols-outlined">
                     map
-                </span>Bands
+                </span> <span style="cursor: default !important;">Bands</span>
             </p>
             <ul *ngIf="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands">
                 <li *ngFor="let oBand of m_oProduct.bandsGroups.bands">
-                    <p>{{oBand.name}} <span *ngIf="oBand.published === false"
-                            class="button-icon material-symbols-outlined" style="color: green; cursor: pointer;"
-                            (click)="showBandsOnMap(oBand, true)">lightbulb</span>
+                    <p style="cursor: default !important;">{{oBand.name}} 
+                        <span *ngIf="oBand.published === false" class="button-icon material-symbols-outlined" 
+                            style="color: green; cursor: pointer !important;" (click)="showBandsOnMap(oBand, true)">lightbulb</span>
                         <span *ngIf="oBand.published === true" class="button-icon material-symbols-outlined"
-                            style="color: red; cursor: pointer;" (click)="showBandsOnMap(oBand, false)">light_off</span>
+                            style="color: red; cursor: pointer !important;" (click)="showBandsOnMap(oBand, false)">light_off</span>
                     </p>
                 </li>
             </ul>

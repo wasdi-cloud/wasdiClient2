@@ -6,9 +6,9 @@ import { ConstantsService } from '../constants.service';
   providedIn: 'root'
 })
 export class FileBufferService {
-  APIURL: string = this.oConstantsService.getAPIURL();
+  APIURL: string = this.m_oConstantsService.getAPIURL();
 
-  constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
+  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient) { }
 
   download(sUrl: string, sFileName: string, sWorkspaceId: string, sBounds: string, sProvider: string) {
     let iCut: number = 4;
@@ -33,18 +33,18 @@ export class FileBufferService {
     var sEncodedUri = encodeURIComponent(sTest);
     sEncodedUri = sProtocol + sEncodedUri;
 
-    return this.oHttp.get(this.APIURL + '/filebuffer/download?fileUrl=' + sEncodedUri + "&name=" + sFileName + "&workspace=" + sWorkspaceId + "&bbox=" + sBounds + '&provider=' + sProvider);
+    return this.m_oHttp.get(this.APIURL + '/filebuffer/download?fileUrl=' + sEncodedUri + "&name=" + sFileName + "&workspace=" + sWorkspaceId + "&bbox=" + sBounds + '&provider=' + sProvider);
   }
 
   share(sOriginWorkspaceId: string, sDestinationWorkspaceId: string, sProductName: string) {
-    return this.oHttp.get(this.APIURL + '/filebuffer/share?originWorkspaceId=' + sOriginWorkspaceId + "&destinationWorkspaceId=" + sDestinationWorkspaceId + "&productName=" + sProductName);
+    return this.m_oHttp.get(this.APIURL + '/filebuffer/share?originWorkspaceId=' + sOriginWorkspaceId + "&destinationWorkspaceId=" + sDestinationWorkspaceId + "&productName=" + sProductName);
   }
 
   publishBand(sUrl: string, sWorkspaceId: string, sBand: string) {
-    return this.oHttp.get<any>(this.APIURL + '/filebuffer/publishband?fileUrl=' + encodeURIComponent(sUrl) + "&workspace=" + sWorkspaceId + '&band=' + sBand);
+    return this.m_oHttp.get<any>(this.APIURL + '/filebuffer/publishband?fileUrl=' + encodeURIComponent(sUrl) + "&workspace=" + sWorkspaceId + '&band=' + sBand);
   }
 
   getStyles() {
-    return this.oHttp.get(this.APIURL + '/filebuffer//styles');
+    return this.m_oHttp.get(this.APIURL + '/filebuffer/styles');
   }
 }

@@ -29,20 +29,41 @@ export class ParamsLibraryDialogComponent {
   faX = faX;
   faPlus = faPlus;
 
+  /**
+  * Processor View Model Template: this is the processor that we are using to add/edit/remove Parameter Templates
+  */
   m_oSelectedProcessor: any;
 
-
-  m_sProcessorId: string = "";
+  /**
+  * Active User Id
+  */  
   m_sActiveUserId: string = "";
-  m_sInputTemplateId: string = "";
+  
+  /**
+   * Text filter the filter templates in the list
+   */
   m_sSearchString: string = "";
 
-  m_aoParamsTemplates: any = [];
-  m_aoParamsTemplatesMap: any[] = [];
+  /**
+   * List of the Parameter Template light View Models.
+   * Here there an entry for each parameter template of this processor
+   */
+  m_aoParametersTemplateList: any = [];
 
+  /**
+   * Loading flag
+   */
   m_bIsLoading: boolean = false;
+
+  /**
+   * Editing mode flag
+   */
   m_bEditMode: boolean = false;
 
+  /**
+   * Actually selected Template.
+   * Can be one one in edit or a new one
+   */
   m_oSelectedTemplate: any = {} as {
     creationDate: string;
     description: string;
@@ -52,13 +73,6 @@ export class ParamsLibraryDialogComponent {
     templateId: string;
     updateDate: string;
     userId: string;
-  };
-
-  m_oProcessorParametersTemplate: any = {} as {
-    processorId: string,
-    jsonParameters: string,
-    name: string,
-    description: string
   };
 
   m_sParametersString: string;
@@ -71,19 +85,25 @@ export class ParamsLibraryDialogComponent {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorParametersTemplateService: ProcessorParamsTemplateService,
   ) {
+
+    // Save the reference to the processor
     this.m_oSelectedProcessor = data;
-    this.m_sProcessorId = this.m_oSelectedProcessor.processorId;
+
+    // And the active user id
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
-    this.getProcessorParametersTemplateList(this.m_sProcessorId);
-    if (this.m_oProcessorParametersTemplate.description === undefined) {
-      this.m_oProcessorParametersTemplate.description = "";
+
+    // Read the list of processor templates
+    this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
+
+    // Initialize the description
+    if (this.m_oSelectedTemplate.description === undefined) {
+      this.m_oSelectedTemplate.description = "";
     }
 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorParametersTemplate.jsonParameters)) {
-      this.m_oProcessorParametersTemplate.jsonParameters = "{}";
+    // Initialize the parameter string
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_sParametersString)) {
+      this.m_sParametersString = "{}";
     }
-
-    this.m_oProcessorParametersTemplate.processorId = this.m_sProcessorId;
   }
 
   /**
@@ -92,18 +112,45 @@ export class ParamsLibraryDialogComponent {
      * @returns {boolean}
      */
   getProcessorParametersTemplateList(sProcessorId: string) {
+
+    // We need a processor!!
     if (!sProcessorId) {
       return false;
     }
+
+    // We are loading from API
+    this.m_bIsLoading = true;
+
+    // Load the list from API
     this.m_oProcessorParametersTemplateService.getProcessorParametersTemplatesListByProcessor(sProcessorId).subscribe(oResponse => {
+      // Clean load flag
+      this.m_bIsLoading=false;
       if (oResponse) {
-        this.m_aoParamsTemplates = oResponse;
-        this.m_oProcessorParametersTemplate.jsonParameters = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters)
+
+        // Clean all the selected flag
+        this.cleanTemplateListSelectedStatus(oResponse);
+        // Update the list
+        this.m_aoParametersTemplateList = oResponse;
       }
     })
     return true;
   }
 
+  /**
+   * Clean the selected flag in all elements
+   * @param aoList List of Paramenter Template Light View Models
+   */
+  cleanTemplateListSelectedStatus(aoList) {
+    for (let iTemplates=0; iTemplates<aoList.length; iTemplates++){
+      aoList[iTemplates].selected = false;
+    }
+  }
+
+  /**
+   * Closes this dialog and applies this parameter template in the Apps dialog
+   * @param sTemplateId 
+   * @returns 
+   */
   applyProcessorParams(sTemplateId: string) {
     if (!sTemplateId) {
       return false;
@@ -118,57 +165,63 @@ export class ParamsLibraryDialogComponent {
     return true;
   }
 
+  /**
+   * View a selected Paramter Template
+   * @param oTemplate 
+   */
   viewProcessorParams(oTemplate: any) {
+
     if (oTemplate) {
+      // We clean the selected flag
+      this.cleanTemplateListSelectedStatus(this.m_aoParametersTemplateList);
+      // And set this as selected
+      oTemplate.selected = true;
+
+      // Then we try to read the full view model
       this.m_oProcessorParametersTemplateService.getProcessorParametersTemplate(oTemplate.templateId).subscribe(oResponse => {
         if (oResponse) {
-          console.log(oResponse);
+          // Ok take the result
           this.m_oSelectedTemplate = oResponse;
-          this.m_oProcessorParametersTemplate = oResponse;
-          this.m_oProcessorParametersTemplate.jsonParameters = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters)
-          this.m_sParametersString = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters);
+          // Save the JSON Parameters, decoded
+          this.m_oSelectedTemplate.jsonParameters = decodeURIComponent(this.m_oSelectedTemplate.jsonParameters)
+          this.m_sParametersString = this.m_oSelectedTemplate.jsonParameters;
+          // View is not edit!
           this.m_bEditMode = false;
         }
-      })
-
+      });
     }
   }
 
+  /**
+   * Edit a Parameter Template
+   * @param oTemplate 
+   * @returns 
+   */
   editProcessorParametersTemplate(oTemplate) {
-    if (!this.m_oProcessorParametersTemplate) {
-      return false;
-    }
-    if (!oTemplate) {
+    if (!this.m_oSelectedTemplate) {
       return false;
     }
 
-    this.m_bEditMode = true;
-    console.log(oTemplate)
-    this.m_oProcessorParametersTemplateService.getProcessorParametersTemplate(oTemplate.templateId).subscribe(oResponse => {
-      if (oResponse) {
-        this.m_oProcessorParametersTemplate = oResponse;
-        try {
-          let sJSONPayload = decodeURIComponent(this.m_oProcessorParametersTemplate.jsonParameters);
-          let oParsed = JSON.parse(sJSONPayload);
-          let sPrettyPrint = JSON.stringify(oParsed, null, 2);
-          this.m_oProcessorParametersTemplate.jsonParameters = sPrettyPrint;
-          this.m_bIsLoading = false;
-        } catch (error) {
-          console.log(error);
-          this.m_bIsLoading = false;
-        }
-      } else {
-        //ERROR DIALOG
-        console.log("Error loading processor parameters template detail");
-        this.m_bIsLoading = false;
-      }
-
-
-    })
+    try {
+      // We just need to pretty print
+      let oParsed = JSON.parse(this.m_oSelectedTemplate.jsonParameters);
+      let sPrettyPrint = JSON.stringify(oParsed, null, 2);
+      this.m_sParametersString = sPrettyPrint;
+      // And go in edit mode
+      this.m_bEditMode = true;
+    } 
+    catch (error) {
+      this.m_oNotificationDisplayService.openSnackBar("There may be some problem in the JSON of this template", "Close", "right", "bottom");
+    }
 
     return true;
   }
 
+  /**
+   * Delete a Processor Parameter
+   * @param oTemplate 
+   * @returns 
+   */
   deleteProcessorParams(oTemplate: any) {
     if (!oTemplate) {
       return false;
@@ -180,9 +233,9 @@ export class ParamsLibraryDialogComponent {
     let bConfirmResult: any;
 
     if (oTemplate.sharedWithMe) {
-      bConfirmResult.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared);
     } else {
-      bConfirmResult.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner);
     }
 
     bConfirmResult.subscribe(bDialogResult => {
@@ -191,10 +244,11 @@ export class ParamsLibraryDialogComponent {
           next: oResponse => {
             this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
             this.m_bEditMode = false;
-            this.m_oProcessorParametersTemplate = null;
+            this.m_oSelectedTemplate = null;
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog(`Error in deleting ${oTemplate.name}`)
+            this.m_bEditMode = false;
           }
         });
       }
@@ -202,70 +256,98 @@ export class ParamsLibraryDialogComponent {
     return true;
   }
 
-  saveTemplate() {
+  /**
+   * Save a processor Parameter Template
+   * @returns 
+   */
+  saveProcessorParam() {
     try {
-      console.log(this.m_oProcessorParametersTemplate.jsonParameters);
-      let sJSONPayload = this.m_oProcessorParametersTemplate.jsonParameters
+      // Re-read and try the JSON
+      let sJSONPayload = this.m_sParametersString;
       JSON.parse(sJSONPayload);
-    } catch (error) {
-      //ADD ERROR DIALOG
-      console.log("error in parsing the JSON payload");
+    } 
+    catch (error) {
+      this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload", "Close", "right", "bottom");
       return false;
     }
 
-    this.m_oProcessorParametersTemplate.jsonParameters = encodeURI(this.m_sParametersString);
+    // Save the encoded JSON Parameter
+    this.m_oSelectedTemplate.jsonParameters = encodeURI(this.m_sParametersString);
 
+    // We will reload and edit is false
     this.m_bIsLoading = true;
-    if (this.m_oProcessorParametersTemplate.templateId) {
-      this.m_oProcessorParametersTemplateService.updateProcessorParameterTemplate(this.m_oProcessorParametersTemplate).subscribe(oResponse => {
+    this.m_bEditMode = false;
 
-        this.getProcessorParametersTemplateList(this.m_oProcessorParametersTemplate.processorId);
+    if (!FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oSelectedTemplate.templateId)) {
+      // This is an existing one: update
+      this.m_oProcessorParametersTemplateService.updateProcessorParameterTemplate(this.m_oSelectedTemplate).subscribe(oResponse => {
+        this.getProcessorParametersTemplateList(this.m_oSelectedTemplate.processorId);
       })
-    } else {
-      this.m_oProcessorParametersTemplateService.addProcessorParameterTemplate(this.m_oProcessorParametersTemplate).subscribe({
-        next: oResponse => {
-          this.m_bEditMode = false;
-          this.m_oProcessorParametersTemplate = null;
-          this.m_bIsLoading = false;
-          this.getProcessorParametersTemplateList(this.m_sProcessorId);
+    } 
+    else {
+      // This is a new one: set processor and user
+      this.m_oSelectedTemplate.processorId = this.m_oSelectedProcessor.processorId;
+      this.m_oSelectedTemplate.userId = this.m_sActiveUserId;
 
+      // And call the API
+      this.m_oProcessorParametersTemplateService.addProcessorParameterTemplate(this.m_oSelectedTemplate).subscribe({
+        next: oResponse => {
+          this.m_oSelectedTemplate = null;
+          this.m_bIsLoading = false;
+          this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
         },
         error: oError => {
+          this.m_oSelectedTemplate = null;
+          this.m_bIsLoading = false;          
           this.m_oNotificationDisplayService.openAlertDialog("ERROR IN SAVING YOUR PARAMETERS TEMPLATE");
         }
       })
     }
-
-    this.m_bEditMode = false;
+    
     return true;
   }
 
+  /**
+   * Open the share dialog
+   * @param oTemplate 
+   */
   openShareDialog(oTemplate: any) {
     let dialogData = new ShareDialogModel("PROCESSORPARAMETERSTEMPLATE", oTemplate);
-    console.log(dialogData);
+    
     let dialogRef = this.m_oDialog.open(ShareDialogComponent, {
       width: '50vw',
       data: dialogData
     })
   }
 
+  /**
+   * Pretty print JSON
+   */
   formatJSON() {
-    this.m_sParametersString = JSON.stringify(JSON.parse(this.m_sParametersString.replaceAll("'", '"')), null, 2);
+    try {
+      this.m_sParametersString = JSON.stringify(JSON.parse(this.m_sParametersString.replaceAll("'", '"')), null, 2);
+    } 
+    catch (error) {
+      this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload", "Close", "right", "bottom");
+    }    
   }
 
+  /**
+   * Create a new processor Param
+   */
   addProcessorParams() {
     //Prepare inputs for new information: 
     this.m_oSelectedTemplate = {
       creationDate: "",
       description: "",
-      jsonParameters: "",
+      jsonParameters: "{}",
       name: "",
       processorId: "",
       templateId: "",
       updateDate: "",
       userId: ""
     };
-    this.m_sParametersString = ""
+    this.m_sParametersString = "{}";
     this.m_bEditMode = true;
   }
 

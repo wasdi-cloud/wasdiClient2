@@ -21,9 +21,9 @@
             <input class="form-control my-3" type="text" placeholder="Search by Parameters Name"
                 [(ngModel)]="m_sSearchString">
             <div class="params-cards-container d-flex flex-row flex-wrap justify-content-start gap-1">
-                <div *ngFor="let oTemplate of m_aoParamsTemplates | filter: m_sSearchString"
+                <div *ngFor="let oTemplate of m_aoParametersTemplateList | filter: m_sSearchString"
                     class="template-card card d-flex flex-column gap-3 p-2 align-self-start"
-                    (click)="viewProcessorParams(oTemplate)">
+                    (click)="viewProcessorParams(oTemplate)" [ngStyle]="{'background-color': oTemplate.selected ? 'WhiteSmoke' : 'white' }">
                     <div class="card-buttons-container">
                         <div class="card-toolbar d-flex flex-row justify-content-end">
                             <button class="btn btn-sm" (click)="applyProcessorParams(oTemplate.templateId)"
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="info-container card border border-success rounded-1">
-            <div class="px-4 py-4 d-flex flex-column gap-2" *ngIf="m_bEditMode || m_oProcessorParametersTemplate">
+            <div class="px-4 py-4 d-flex flex-column gap-2" *ngIf="m_bEditMode || m_oSelectedTemplate">
                 <div class="info-header d-flex flex-row align-items-center justify-content-between">
                     <h4>{{m_oSelectedProcessor.processorName}}</h4>
                     <div>
@@ -67,16 +67,16 @@
                             Template Name:
                         </label>
                         <input type="text" class="form-control form-control-sm" [readonly]="!m_bEditMode ?  '' : null"
-                            [(ngModel)]="m_oProcessorParametersTemplate.name" [disabled]="!m_bEditMode ?  '' : null">
+                            [(ngModel)]="m_oSelectedTemplate.name" [disabled]="!m_bEditMode ?  '' : null">
                     </div>
                     <div class="template-description">
                         <span class="text-success">Description:</span>
                         <textarea [readonly]="!m_bEditMode ?  '' : null" class="form-control form-control-sm" rows=""
-                            [(ngModel)]="m_oProcessorParametersTemplate.description"
+                            [(ngModel)]="m_oSelectedTemplate.description"
                             [disabled]="!m_bEditMode ?  '' : null"></textarea>
                     </div>
                 </div>
-                <!-- Date Inputs -->
+                <!-- Date Outputs -->
                 <div class="d-flex flex-row justify-content-between">
                     <div class="">
                         <label class="text-success" for="creationDate">
@@ -113,7 +113,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-between gap-2" *ngIf="m_bEditMode">
                     <button class="btn btn-secondary" (click)="formatJSON()">Format JSON</button>
-                    <button class="btn btn-success" (click)="saveTemplate()">Save</button>
+                    <button class="btn btn-success" (click)="saveProcessorParam()">Save</button>
                 </div>
             </div>
         </div>

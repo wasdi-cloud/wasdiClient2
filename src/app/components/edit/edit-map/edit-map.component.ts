@@ -105,6 +105,20 @@ export class EditMapComponent implements OnInit {
    */
   @Output() m_b2DMapModeOutput = new EventEmitter();
 
+
+  /**
+   * Local Copy of the Feature Info Flag
+  */
+  m_bFeatureInfoMode = false;
+
+  /**
+   * Setter of the Feature Info Property
+   */
+  public setFeatureInfoMode(value: boolean) {
+    this.m_bFeatureInfoMode = value;
+  }
+
+
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oGlobeService: GlobeService,
@@ -178,8 +192,47 @@ export class EditMapComponent implements OnInit {
 
       // TODO: this is a first step to try to make get pixel info work
       this.m_oMapService.m_oWasdiMap.on("click", oClickEvent => {
-        console.log("Map Click " + oClickEvent.latlng.lat + " - " + oClickEvent.latlng.lng);
-        //this.getLayerInfo()
+        if (this.m_bFeatureInfoMode) {
+          if (this.m_aoVisibleBands.length>0) {
+
+            let sWmsUrl = "";
+            let sLayerIdList = "";
+
+            for (let iLayers = 0; iLayers<this.m_aoVisibleBands.length; iLayers ++ ) {
+              let oLayer = this.m_aoVisibleBands[iLayers];
+              if (FadeoutUtils.utilsIsStrNullOrEmpty(sWmsUrl)) {
+                sWmsUrl = oLayer.geoserverUrl.replace("ows", "wms");
+              }
+
+              sLayerIdList += oLayer.layerId;
+
+              if (iLayers<this.m_aoVisibleBands.length-1) sLayerIdList += ","
+            }
+
+            //sWmsUrl: string, oPoint: L.LatLng, sLayerIdList: string
+            let sFeatureInfoUrl = this.m_oMapService.getWMSLayerInfoUrl(sWmsUrl, oClickEvent.latlng, sLayerIdList);
+
+            console.log(sFeatureInfoUrl);
+            
+            if (sFeatureInfoUrl) {
+              this.m_oMapService.getFeatureInfo(sFeatureInfoUrl).subscribe({
+                next: oResponse => {
+                    if (oResponse !== null && oResponse !== undefined) {
+                      console.log(oResponse);
+                    }
+                  },
+                error: oError => {
+                  console.log(oError);
+                  const oCircleMarker = L.circleMarker([oClickEvent.latlng.lat, oClickEvent.latlng.lng], {radius: 3})
+                  let sJson = `<div>{"type":"FeatureCollection","features":[{"type":"Feature","id":"","geometry":null,"properties":{"GRAY_INDEX":0.1479392647743225}}],"totalFeatures":"unknown","numberReturned":1,"timeStamp":"2024-03-29T12:04:31.867Z","crs":null}</div>`;
+                  oCircleMarker.bindPopup(sJson)
+                  oCircleMarker.addTo(this.m_oMapService.m_oWasdiMap);
+                }
+              });
+            }
+          }
+        }
+        
       });
     }, 300);
 
@@ -240,46 +293,5 @@ export class EditMapComponent implements OnInit {
     } else {
       this.m_oGlobeService.flyToWorkspaceBoundingBox(this.m_aoProducts);
     }
-  }
-
-  getLayerInfo(wmsUrl: string, point: L.LatLng, bounds: L.LatLngBounds, layer: L.TileLayer.WMS) {
-    const wmsParams = {
-      ...layer.wmsParams,
-      request: 'GetFeatureInfo',
-      service: 'WMS',
-      info_format: 'application/json',
-      query_layers: layer.wmsParams.layers,
-      feature_count: 10,
-      bbox: ""
-    };
-  
-    const lat = point.lat;
-    const lng = point.lng;
-    const bounds1: L.LatLngBounds = L.latLngBounds(L.latLng(lat - 0.1, lng - 0.1), L.latLng(lat + 0.1, lng + 0.1));
-  
-  
-    //set BBox
-    const boundsString = [bounds.getSouth(), bounds.getWest(), bounds.getNorth(), bounds.getEast()].join(',');
-    const boundsString1 = [bounds1.getSouth(), bounds1.getWest(), bounds1.getNorth(), bounds1.getEast()].join(',');
-  
-    wmsParams.bbox = (wmsParams.version === '1.3.0') ? boundsString1 : bounds1.toBBoxString();
-  
-    //set size
-    wmsParams.height = 101;
-    wmsParams.width = 101;
-  
-    //set x/y or i/j
-    wmsParams[wmsParams.version === '1.3.0' ? 'i' : 'x'] = Math.round(50);
-    wmsParams[wmsParams.version === '1.3.0' ? 'j' : 'y'] = Math.round(50);
-  
-    //Set param version
-    wmsParams[wmsParams.version === '1.3.0' ? 'crs' : 'srs'] = 'EPSG:4326';
-  
-  
-    //build url with url and params
-    const url = wmsUrl + L.Util.getParamString(wmsParams, wmsUrl)
-  
-    //load data from server
-    return url;    
   }
 }
