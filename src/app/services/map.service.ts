@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { ConstantsService } from './constants.service';
 import Geocoder from 'leaflet-control-geocoder';
 import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
@@ -958,7 +958,10 @@ export class MapService {
   } 
 
   getFeatureInfo(sUrl: string) {
-    return this.m_oHttp.get(sUrl);    
+    const aoHeaders= new HttpHeaders()
+    .set('Accept', 'text/html,application/xhtml+xml,application/xml')
+    .set('Cache-Control', 'max-age=0');
+    return this.m_oHttp.get(sUrl, {'headers': aoHeaders});
   }
 
 }

@@ -12,39 +12,40 @@ import { Router } from '@angular/router';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ConstantsService } from '../constants.service';
 import { User } from 'src/app/shared/models/user.model';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionInjectorInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router, private oConstantsService: ConstantsService) { }
+  constructor(private m_oRouter: Router, private m_oConstantsService: ConstantsService) { }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    //Session Token taken from ConstantsService
-    const cookie = this.oConstantsService.getCookie('oUser');
-    const token = this.oConstantsService.getSessionId();
+  intercept(oRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // Session Token taken from ConstantsService
+    const oCookie = this.m_oConstantsService.getCookie('oUser');
+    const sToken = this.m_oConstantsService.getSessionId();
 
-    // // //If token doesn't exist - go to login page
-    if (!token && !cookie) {
-      this.router.navigateByUrl('login')
+    // If token doesn't exist - go to login page
+    if (!sToken && !oCookie) {
+      this.m_oRouter.navigateByUrl('login')
     }
 
-    request = request.clone({
-      setHeaders: {
-        'x-session-token': token
-      }
-    });
-
-    //Safeguard in case sessionId only in Cookie
-    if(!token && cookie.sessionId) {
-      request = request.clone({
+    if (!FadeoutUtils.utilsIsStrNullOrEmpty(sToken)) {
+      oRequest = oRequest.clone({
         setHeaders: {
-          'x-session-token': cookie.sessionId
+          'x-session-token': sToken
         }
+      });  
+    }
+    else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oCookie.sessionId)) {
+      //Safeguard in case sessionId only in Cookie
+      oRequest = oRequest.clone({
+        setHeaders: { 'x-session-token': oCookie.sessionId }
       });
     }
-    return next.handle(request).pipe(
+    
+    return next.handle(oRequest).pipe(
       tap(event => {
         if (event instanceof HttpResponse) {
           if (event.status === 200) {

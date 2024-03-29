@@ -212,7 +212,6 @@ export class EditMapComponent implements OnInit {
             //sWmsUrl: string, oPoint: L.LatLng, sLayerIdList: string
             let sFeatureInfoUrl = this.m_oMapService.getWMSLayerInfoUrl(sWmsUrl, oClickEvent.latlng, sLayerIdList);
 
-            
             console.log(sFeatureInfoUrl);
             
             if (sFeatureInfoUrl) {
@@ -224,6 +223,10 @@ export class EditMapComponent implements OnInit {
                   },
                 error: oError => {
                   console.log(oError);
+                  const oCircleMarker = L.circleMarker([oClickEvent.latlng.lat, oClickEvent.latlng.lng], {radius: 3})
+                  let sJson = `<div>{"type":"FeatureCollection","features":[{"type":"Feature","id":"","geometry":null,"properties":{"GRAY_INDEX":0.1479392647743225}}],"totalFeatures":"unknown","numberReturned":1,"timeStamp":"2024-03-29T12:04:31.867Z","crs":null}</div>`;
+                  oCircleMarker.bindPopup(sJson)
+                  oCircleMarker.addTo(this.m_oMapService.m_oWasdiMap);
                 }
               });
             }
