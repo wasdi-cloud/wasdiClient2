@@ -21,7 +21,6 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   styleUrls: ['./edit-toolbar.component.css']
 })
 export class EditToolbarComponent implements OnInit, OnDestroy {
-  @Input() m_oActiveWorkspace: Workspace;
   @Input() m_aoProducts: Product[];
   @Input() m_bJupyterIsReady: boolean = false;
   @Input() m_b2DMapModeOn: boolean = true;
@@ -48,7 +47,6 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("LAUNCHJUPYTERNOTEBOOK",
       this,
       this.rabbitMessageHook, true)
-    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
 
   ngOnDestroy(): void {
@@ -88,7 +86,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
       return false;
     } else {
       //If user has subscription and project, prepare notebook:
-      this.m_oConsoleService.createConsole(this.m_oActiveWorkspace.workspaceId).subscribe(oResponse => {
+      this.m_oConsoleService.createConsole(this.m_oConstantsService.getActiveWorkspace().workspaceId).subscribe(oResponse => {
         let sMessage = "WASDI is preparing your notebook."
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
 
@@ -106,10 +104,10 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   openShareDialog(): void {
-    let dialogData = new ShareDialogModel("workspace", this.m_oActiveWorkspace)
+    let oDialogData = new ShareDialogModel("workspace",  this.m_oConstantsService.getActiveWorkspace())
     this.m_oDialog.open(ShareDialogComponent, {
       width: '50vw',
-      data: dialogData
+      data: oDialogData
     });
   }
 
