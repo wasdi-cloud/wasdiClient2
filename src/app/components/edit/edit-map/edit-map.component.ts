@@ -3,6 +3,7 @@ import { Component, OnInit, Output, Input, EventEmitter, OnChanges, SimpleChange
 //Service Imports
 import { MapService } from 'src/app/services/map.service';
 import { GlobeService } from 'src/app/services/globe.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 //Leaflet Imports: 
 import * as L from "leaflet";
@@ -116,12 +117,23 @@ export class EditMapComponent implements OnInit {
    */
   public setFeatureInfoMode(value: boolean) {
     this.m_bFeatureInfoMode = value;
+
+    if (!this.m_bFeatureInfoMode) {
+      if (this.m_oFeatureInfoMarker != null) {
+        this.m_oFeatureInfoMarker.remove();
+      }
+    }
   }
 
+  /**
+   * Marker for the feature info
+   */
+  m_oFeatureInfoMarker = null;
 
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oGlobeService: GlobeService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oMapService: MapService) { }
 
   ngOnInit(): void {
@@ -192,7 +204,9 @@ export class EditMapComponent implements OnInit {
 
       // TODO: this is a first step to try to make get pixel info work
       this.m_oMapService.m_oWasdiMap.on("click", oClickEvent => {
+
         if (this.m_bFeatureInfoMode) {
+
           if (this.m_aoVisibleBands.length>0) {
 
             let sWmsUrl = "";
@@ -215,19 +229,27 @@ export class EditMapComponent implements OnInit {
             console.log(sFeatureInfoUrl);
             
             if (sFeatureInfoUrl) {
+              if (this.m_oFeatureInfoMarker!=null) {
+                this.m_oFeatureInfoMarker.remove();
+              }
+
               this.m_oMapService.getFeatureInfo(sFeatureInfoUrl).subscribe({
                 next: oResponse => {
                     if (oResponse !== null && oResponse !== undefined) {
-                      console.log(oResponse);
+                      try {
+                        let sPrettyPrint = JSON.stringify(oResponse, null, 2);
+                        //let sJson = `<div>{"type":"FeatureCollection","features":[{"type":"Feature","id":"","geometry":null,"properties":{"GRAY_INDEX":0.1479392647743225}}],"totalFeatures":"unknown","numberReturned":1,"timeStamp":"2024-03-29T12:04:31.867Z","crs":null}</div>`;
+                        this.m_oFeatureInfoMarker = L.popup().setLatLng([oClickEvent.latlng.lat, oClickEvent.latlng.lng]).setContent(sPrettyPrint).openOn(this.m_oMapService.m_oWasdiMap);
+                      } 
+                      catch (error) {
+                        this.m_oNotificationDisplayService.openSnackBar("Cannot read feature info", "Close", "right", "bottom");
+                      }    
                     }
                   },
                 error: oError => {
-                  console.log(oError);
-                  const oCircleMarker = L.circleMarker([oClickEvent.latlng.lat, oClickEvent.latlng.lng], {radius: 3})
-                  let sJson = `<div>{"type":"FeatureCollection","features":[{"type":"Feature","id":"","geometry":null,"properties":{"GRAY_INDEX":0.1479392647743225}}],"totalFeatures":"unknown","numberReturned":1,"timeStamp":"2024-03-29T12:04:31.867Z","crs":null}</div>`;
-                  oCircleMarker.bindPopup(sJson)
-                  oCircleMarker.addTo(this.m_oMapService.m_oWasdiMap);
+                  this.m_oNotificationDisplayService.openSnackBar("Error reading feature info", "Close", "right", "bottom");
                 }
+
               });
             }
           }
