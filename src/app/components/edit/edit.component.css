@@ -12,6 +12,7 @@ main {
 	padding-left: 0px;
 	padding-bottom: 0px;
 	overflow: hidden;
+	z-index: 3;
 }
 
 .workspace-location {
