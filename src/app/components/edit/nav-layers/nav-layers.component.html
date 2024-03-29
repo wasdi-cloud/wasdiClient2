@@ -32,9 +32,9 @@
                             (click)="removeBandImage(oBand)"></app-button>
                     </div>
                 </div>
-                <div class="font-bold">
-                    Layer opacity
-                    <div class="slider-container d-flex flex-column">
+                <div class="font-bold d-flex flex-row align-items-center gap-2 pe-2">
+                    Opacity:
+                    <div class="slider-container flex-fill"> 
                         <app-slider [m_bHasThumbLabel]="true" [m_iValue]="m_iOpacityVal"
                             (m_oSelectionChange)="setOpacity($event, oBand.layerId)"></app-slider>
                     </div>
