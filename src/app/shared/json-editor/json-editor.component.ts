@@ -15,6 +15,7 @@ import {
 import { Ace, edit } from 'ace-builds';
 import 'ace-builds';
 import 'ace-builds/src-noconflict/theme-dracula';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-json-editor',
@@ -23,13 +24,16 @@ import 'ace-builds/src-noconflict/theme-dracula';
 })
 export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('editor') editorRef!: ElementRef;
-  @Output() textChange = new EventEmitter<string>();
-  @Input() text!: string;
-  @Input() readOnly: boolean = false;
-  @Input() mode: string = 'json';
-  @Input() prettify: boolean = true;
+  @Input() m_sText!: string;
+  @Input() m_bReadOnly: boolean = false;
+  @Input() m_sMode: string = 'json';
+  @Input() m_bPrettify: boolean = true;
 
-  editor!: Ace.Editor;
+  @Input() m_sTextToInsert?: string;
+
+  @Output() m_sTextChange = new EventEmitter<string>();
+
+  m_oEditor!: Ace.Editor;
   // All possible options can be found at:
   // https://github.com/ajaxorg/ace/wiki/Configuring-Ace
   options = {
@@ -50,11 +54,11 @@ export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   onTextChange(text: string): void {
-    this.textChange.emit(text);
+    this.m_sTextChange.emit(text);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!this.editor) {
+    if (!this.m_oEditor) {
       return;
     }
 
@@ -71,28 +75,35 @@ export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
     }
+
+    if (!FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sTextToInsert)) {
+      let oPosition = this.m_oEditor.getCursorPosition();
+      this.m_oEditor.session.insert(oPosition, this.m_sTextToInsert);
+      this.m_sTextToInsert = "";
+    }
   }
 
   private initEditor_(): void {
-    this.editor = edit(this.editorRef.nativeElement);
-    this.editor.setOptions(this.options);
-    this.editor.setValue(this.text, -1);
-    this.editor.setReadOnly(this.readOnly);
-    this.editor.setTheme('ace/theme/dracula');
+  console.log(this.m_sText)
+    this.m_oEditor = edit(this.editorRef.nativeElement);
+    this.m_oEditor.setOptions(this.options);
+    this.m_oEditor.setValue(this.m_sText, -1);
+    this.m_oEditor.setReadOnly(this.m_bReadOnly);
+    this.m_oEditor.setTheme('ace/theme/dracula');
     this.setEditorMode_();
-    this.editor.session.setUseWorker(false);
-    this.editor.on('change', () => this.onEditorTextChange_());
+    this.m_oEditor.session.setUseWorker(false);
+    this.m_oEditor.on('change', () => this.onEditorTextChange_());
   }
 
   private onExternalUpdate_(): void {
-    const point = this.editor.getCursorPosition();
-    this.editor.setValue(this.text, -1);
-    this.editor.moveCursorToPosition(point);
+    const point = this.m_oEditor.getCursorPosition();
+    this.m_oEditor.setValue(this.m_sText, -1);
+    this.m_oEditor.moveCursorToPosition(point);
   }
 
   private onEditorTextChange_(): void {
-    this.text = this.editor.getValue();
-    this.onTextChange(this.text);
+    this.m_sText = this.m_oEditor.getValue();
+    this.onTextChange(this.m_sText);
   }
 
   private onEditorModeChange_(): void {
@@ -100,7 +111,11 @@ export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private setEditorMode_(): void {
-    this.editor.getSession().setMode(`ace/mode/${this.mode}`);
+    this.m_oEditor.getSession().setMode(`ace/mode/${this.m_sMode}`);
   }
 
+
+  public emitCursorPosition(oEvent) {
+
+  }
 }

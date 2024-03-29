@@ -13,7 +13,8 @@ div.button-container {
     border-radius: 8px;
 }
 
-div.button-container, div.json-sample-container {
+div.button-container,
+div.json-sample-container {
     background: var(--neutral5);
 }
 
@@ -23,4 +24,8 @@ div.textarea-container {
 
 div.drag-drop-container {
     height: 25%;
+}
+
+div.json-editor-wrapper {
+    padding: 0px 32px 32px 32px;
 }
