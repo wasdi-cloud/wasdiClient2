@@ -179,6 +179,7 @@ import { ReviewInputComponent } from './components/app-details/app-reviews/revie
 import { ReviewComponent } from './components/app-details/app-reviews/review/review.component';
 import { PlanTreeComponent } from './components/plan/plan-tree/plan-tree.component';
 import { ProcessorTabPricingComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-pricing/processor-tab-pricing.component';
+import { JsonEditorComponent } from './shared/json-editor/json-editor.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -300,7 +301,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ReviewInputComponent,
     ReviewComponent,
     PlanTreeComponent,
-    ProcessorTabPricingComponent
+    ProcessorTabPricingComponent,
+    JsonEditorComponent
 
   ],
   imports: [

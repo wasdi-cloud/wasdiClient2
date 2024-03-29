@@ -33,8 +33,10 @@
     </div>
     <div class="dialog-column json-container json-sample-container d-flex flex-column">
         <div class="json-header font-bold pb-2">JSON Sample</div>
-        <app-textarea class="json-body flex-fill" [m_sInputString]="m_sJSONSample"></app-textarea>
-
+        <div class="flex-fill json-editor-wrapper">
+            <app-json-editor [(m_sText)]="m_sJSONSample" m_sMode="json" (m_sTextChange)="onJsonInput($event)"></app-json-editor>
+        </div>
+        <!-- <app-textarea class="json-body flex-fill" [m_sInputString]="m_sJSONSample"></app-textarea> -->
     </div>
 </div>
 

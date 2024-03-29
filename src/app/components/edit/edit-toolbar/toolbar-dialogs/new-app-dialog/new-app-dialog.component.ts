@@ -438,23 +438,21 @@ export class NewAppDialogComponent implements OnInit {
     // Check if the UI JSON Param was changed: 
 
     // If user has interacted with the Processor UI Textarea:
-    if (this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').touched === true) {
-      //Try parse JSON on UI Input
-      if (this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value)) {
-        this.m_sProcessorUI = this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value);
+    //Try parse JSON on UI Input
+    if (this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value)) {
+      this.m_sProcessorUI = this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value);
 
-        //If parse JSON is successful -> update the processor UI
-        this.m_oProcessorService.saveProcessorUI(this.m_oInputProcessor.processorName, this.m_sProcessorUI).subscribe({
-          next: oResponse => {
-            console.log("JSON Updated")
-          },
-          error: oError => {
-            console.log(oError);
-          }
-        })
-      }
-
+      //If parse JSON is successful -> update the processor UI
+      this.m_oProcessorService.saveProcessorUI(this.m_oInputProcessor.processorName, this.m_sProcessorUI).subscribe({
+        next: oResponse => {
+          console.log("JSON Updated")
+        },
+        error: oError => {
+          console.log(oError);
+        }
+      })
     }
+
   }
 
   /**

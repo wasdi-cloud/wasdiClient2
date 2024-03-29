@@ -334,4 +334,10 @@ export class ProcessorTabContentComponent implements OnInit {
       sShortDescription: oEvent.target.value
     })
   }
+
+  onJsonInput(oEvent) {
+    this.m_oProcessorBasicInfo.patchValue({
+      sJSONSample: oEvent
+    })
+  }
 }
