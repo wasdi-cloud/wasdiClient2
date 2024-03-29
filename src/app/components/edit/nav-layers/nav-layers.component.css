@@ -2,6 +2,17 @@
     height: 100%;
 }
 
+#smallMapContainer {
+    height: 100%
+}
+
+.list-group-item {
+    border: 1px solid var(--neutral10);
+    border-radius: 8px;
+    width: 100%;
+}
+
+
 div.layer-title {
     width: 100%;
 }
@@ -42,4 +53,14 @@ p.band-info {
     overflow: hidden;
     padding: 0;
     margin: 0;
+}
+
+.layers-tab {
+    overflow-y: scroll;
+    height: 100%;
+}
+
+div.slider-container {
+    padding-left: 2px; 
+    width: 98%;
 }

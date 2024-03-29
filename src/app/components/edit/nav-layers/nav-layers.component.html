@@ -1,4 +1,4 @@
-<div class="parent d-flex flex-column">
+<div class="parent d-flex flex-column pt-1">
     <div class="d-flex flex-row pb-3">
         <app-tab [m_sLabel]="'Navigation'" [m_bIsDisabled]="false" [m_bIsActive]="m_sActiveTab === 'nav'"
             (click)="setActiveTab('nav')"></app-tab>
@@ -7,11 +7,11 @@
     </div>
     <!-- Navigation and Layers content -->
     <div class="map-container-panel flex-fill h-100" [hidden]="m_sActiveTab !== 'nav'">
-        <div class="" id="smallMapContainer" class="" style="height: 97.5%"></div>
+        <div class="" id="smallMapContainer" class=""></div>
     </div>
-    <div class="layers-tab" *ngIf="m_sActiveTab === 'layers'">
-        <ul class="list-group pt-3">
-            <li *ngFor="let oBand of m_aoVisibleBands" style="width: 100%;" class="list-group-item d-flex flex-column">
+    <div class="layers-tab h-100" *ngIf="m_sActiveTab === 'layers'">
+        <ul class="list-group pe-1">
+            <li *ngFor="let oBand of m_aoVisibleBands" class="list-group-item d-flex flex-column mt-2">
                 <div class="layer-title d-flex flex-row  justify-content-between gap-2">
                     <div class="legend-container justify-self-start align-self-start d-flex flex-row"
                         matTooltip="Layer Style Options" (click)="showLayerLegend(oBand)">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="font-bold">
                     Layer opacity
-                    <div class="slider-container d-flex flex-column" style="padding-left: 2px; width: 100%;">
+                    <div class="slider-container d-flex flex-column">
                         <app-slider [m_bHasThumbLabel]="true" [m_iValue]="m_iOpacityVal"
                             (m_oSelectionChange)="setOpacity($event, oBand.layerId)"></app-slider>
                     </div>
