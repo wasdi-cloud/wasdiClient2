@@ -183,6 +183,7 @@ export class AppDetailsComponent implements OnInit {
     this.m_oDialog.open(NewAppDialogComponent, {
       height: '95vh',
       width: '95vw',
+      minWidth: '95vw',
       maxWidth: '95vw',
       data: {
         editMode: true,
