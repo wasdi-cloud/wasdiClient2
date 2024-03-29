@@ -137,7 +137,6 @@ export class EditMapComponent implements OnInit {
     private m_oMapService: MapService) { }
 
   ngOnInit(): void {
-    FadeoutUtils.verboseLog("EditMapComponent.ngOnInit: initializing")
     // As we enter, we go in 2D Mode by default
     this.init2DMode(false);
   }
@@ -171,8 +170,6 @@ export class EditMapComponent implements OnInit {
     // Clear Both Map and Globe
     this.m_oGlobeService.clearGlobe();
     this.m_oMapService.clearMap();
-
-    FadeoutUtils.verboseLog("EditMapComponent.init2DMode: moving 2D Map in big view")
 
     // Init the new one in the bigger div
     this.m_oMapService.initWasdiMap('bigMapContainer');
@@ -225,8 +222,6 @@ export class EditMapComponent implements OnInit {
 
             //sWmsUrl: string, oPoint: L.LatLng, sLayerIdList: string
             let sFeatureInfoUrl = this.m_oMapService.getWMSLayerInfoUrl(sWmsUrl, oClickEvent.latlng, sLayerIdList);
-
-            console.log(sFeatureInfoUrl);
             
             if (sFeatureInfoUrl) {
               if (this.m_oFeatureInfoMarker!=null) {
@@ -275,7 +270,6 @@ export class EditMapComponent implements OnInit {
   init3DMode(bAddFootPrints: boolean) {
 
     // Changing the Displayed Map to the 3D Cesium Globe:
-    FadeoutUtils.verboseLog("EditMapComponent.init3DMode: moving 3D Globe in big view")
 
     // Init the new one in the bigger div
     this.m_oGlobeService.initGlobe('bigMapContainer');

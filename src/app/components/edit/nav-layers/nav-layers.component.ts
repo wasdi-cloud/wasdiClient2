@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 // Font Awesome Icon Imports:
 import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +8,7 @@ import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { MapService } from 'src/app/services/map.service';
+import { StylesDialogComponent } from 'src/app/components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
 
 //Import Models:
 import { Band } from 'src/app/shared/models/band.model';
@@ -66,7 +68,8 @@ export class NavLayersComponent implements OnInit, OnChanges {
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oGlobeService: GlobeService,
-    private m_oMapService: MapService
+    private m_oMapService: MapService,
+    private m_oDialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -88,12 +91,12 @@ export class NavLayersComponent implements OnInit, OnChanges {
   /********** Band Visibility Options *********/
   /**
    * Handle Opacity input from opacity slider
-   * @param event 
+   * @param iValue 
    * @param sLayerId 
    * @returns {void}
    */
-  setOpacity(event, sLayerId): void {
-    let iOpacity = event.srcElement.value;
+  setOpacity(iValue, sLayerId): void {
+    let iOpacity = iValue;
     let oMap = this.m_oMapService.getMap();
     let fPercentage = iOpacity / 100;
 
@@ -258,5 +261,14 @@ export class NavLayersComponent implements OnInit, OnChanges {
     sGeoserverUrl = sGeoserverUrl + "request=GetLegendGraphic&format=image/png&WIDTH=12&HEIGHT=12&legend_options=fontAntiAliasing:true;fontSize:10&LEGEND_OPTIONS=forceRule:True&LAYER=";
     sGeoserverUrl = sGeoserverUrl + "wasdi:" + oBand.layerId;
     return sGeoserverUrl;
+  }
+
+  openStylesDialog(): void {
+    this.m_oDialog.open(StylesDialogComponent, {
+      height: '90vh',
+      width: '90vw',
+      minWidth: '90vw',
+      
+    })
   }
 }

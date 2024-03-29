@@ -136,9 +136,6 @@ export class EditComponent implements OnInit, OnDestroy {
       if (this.m_oActivatedRoute.snapshot.params['workspaceId']) {
         //Assign and set new workspace id
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
-
-        FadeoutUtils.verboseLog("edit.component.ngOnInit: call open Workspace ")
-
         this.openWorkspace(this.m_sWorkspaceId);
       }
       else {
@@ -147,8 +144,6 @@ export class EditComponent implements OnInit, OnDestroy {
       }
     }
     else {
-      FadeoutUtils.verboseLog("EditComponent.ngOnInit: using active workspace")
-
       //If workspace is defined => Load Processes
       this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
       this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
@@ -162,8 +157,6 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    FadeoutUtils.verboseLog("EditComponent.ngOnDestroy")
-
     this.m_oRabbitStompService.unsubscribe();
     this.m_oGlobeService.clearGlobe();
     this.m_oMapService.clearMap();
@@ -247,15 +240,12 @@ export class EditComponent implements OnInit, OnDestroy {
             this.m_oNotificationDisplayService.openAlertDialog(sMessage)
           }
           else {
-
-            FadeoutUtils.verboseLog("edit.component.openWorkspace: Received open Workspace View Model ")
             this.m_oConstantsService.setActiveWorkspace(oResponse);
             this.m_oActiveWorkspace = oResponse;
 
             this.m_oTitleService.setTitle(`WASDI 2.0 - ${this.m_oActiveWorkspace.name}`)
 
             this._subscribeToRabbit();
-            FadeoutUtils.verboseLog("edit.component.openWorkspace: CALL get product list ")
             this.getProductList();
 
             this.getJupyterIsReady(this.m_oActiveWorkspace.workspaceId);
@@ -272,7 +262,6 @@ export class EditComponent implements OnInit, OnDestroy {
   getProductList() {
     this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe({
       next: oResponse => {
-        console.log("edit.component.getProductList: RECEIVED got the product list ")
         this.m_aoProducts = oResponse
         this.m_bIsLoadingProducts = false;
       },

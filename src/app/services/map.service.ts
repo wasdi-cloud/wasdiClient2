@@ -199,7 +199,6 @@ export class MapService {
    * Initalize WASDI Map
    */
   initWasdiMap(sMapDiv: string) {
-    FadeoutUtils.verboseLog("MapService.initWasdiMap: initializing Leaflet");
     this.m_oWasdiMap = this.initMap(sMapDiv);
     this.addMousePositionAndScale(this.m_oWasdiMap);
   }
@@ -362,13 +361,9 @@ export class MapService {
   clearMap() {
 
     if (this.m_oWasdiMap) {
-      FadeoutUtils.verboseLog("MapService.clearMap: cleaning the map instance")
       this.m_oDrawnItems.clearLayers();
       this.m_oWasdiMap.remove();
       this.m_oWasdiMap = null;
-    }
-    else {
-      FadeoutUtils.verboseLog("MapService.clearMap: map was already null")
     }
   }
 
@@ -921,7 +916,7 @@ export class MapService {
     const oLat = oPoint.lat;
     const oLng = oPoint.lng;
 
-    const aoBounds: L.LatLngBounds = L.latLngBounds(L.latLng(oLat - 0.1, oLng - 0.1), L.latLng(oLat + 0.1, oLng + 0.1));
+    const aoBounds: L.LatLngBounds = L.latLngBounds(L.latLng(oLat - 0.0001, oLng - 0.0001), L.latLng(oLat + 0.0001, oLng + 0.0001));
     const sVersion = '1.3.0'
     //set BBox
     const sBoundsString = [aoBounds.getSouth(), aoBounds.getWest(), aoBounds.getNorth(), aoBounds.getEast()].join(',');

@@ -54,7 +54,6 @@ export class GlobeService {
    */
   constructor(private m_oMapService: MapService, private m_oConstantsService: ConstantsService) 
   { 
-    FadeoutUtils.verboseLog("GlobeService.constructor: creating the Globe Service")
   }
 
   /**
@@ -81,10 +80,7 @@ export class GlobeService {
         };
         Cesium.Ion.defaultAccessToken = environment.cesiumToken;
 
-        FadeoutUtils.verboseLog("GlobeService.initGlobe: creating the globe")
-
         if (this.m_oWasdiGlobe != null) {
-          FadeoutUtils.verboseLog("GlobeService.initGlobe: PROBLEM: the old globe is not null!!")
           this.clearGlobe();
         }
 
@@ -117,11 +113,8 @@ export class GlobeService {
       this.m_oWasdiGlobe.destroy();
       this.m_oWasdiGlobe = null;
       this.m_aoLayers = null;
-
-      FadeoutUtils.verboseLog("GlobeService.clearGlobe: cleaned");
     }
     else {
-      FadeoutUtils.verboseLog("GlobeService.clearGlobe: the globe reference was already null");
       this.m_aoLayers = null;
     }
   }
@@ -619,7 +612,6 @@ export class GlobeService {
 
       // Check we have products
       if (!aoProducts) {
-        FadeoutUtils.verboseLog("GlobeService.addAllWorkspaceRectanglesOnGlobe: aoProducts is null");
         return false;
       }
 
