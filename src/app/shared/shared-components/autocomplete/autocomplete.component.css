@@ -7,6 +7,11 @@ mat-select {
     padding-top: 3px;
 }
 
+input[type='search']::-webkit-search-cancel-button {
+    cursor: pointer;
+    filter: grayscale(1);
+}
+
 .form-control:focus {
     outline: none;
     border-color: none;
@@ -24,6 +29,10 @@ mat-select {
     border-radius: 4px;
     padding: 4px 8px;
     top: 0;
+}
+
+.user-id {
+    font-size: 12px;
 }
 
 ::ng-deep div.mat-mdc-select-panel {
@@ -47,8 +56,8 @@ mat-select {
 }
 
 ::ng-deep .mat-mdc-option {
-    height: 34px !important;
-    padding: 12px !important;
+    height: fit-content !important;
+    padding: 4px 16px !important;
     /* Override min-height imposed by Angular Materials */
     min-height: 0px !important;
 }
@@ -60,7 +69,7 @@ mat-select {
 ::ng-deep .mat-mdc-option.divider {
     box-sizing: border-box;
     height: 1px !important;
-    padding: 0px 16px !important;
+    padding: 8px 14px !important;
     width: 100% !important;
     background: #D9DCE1 !important;
 }
