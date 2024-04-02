@@ -6,6 +6,7 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
@@ -18,10 +19,13 @@ export class WorkspacesMenuComponent implements OnInit {
 
   m_oActiveWorkspace = null;
 
+  m_bShowCopied: boolean = false;
+
   @Input() m_aoProducts: Array<any> = [];
 
   @Output() m_oActiveWorkspaceOutput: EventEmitter<any> = new EventEmitter<any>();
   constructor(
+    private m_oClipboard: Clipboard,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -121,5 +125,14 @@ export class WorkspacesMenuComponent implements OnInit {
         error: oError => { }
       });
     }
+  }
+
+  copyWorkspaceId() {
+    this.m_oClipboard.copy(this.m_oActiveWorkspace.workspaceId);
+    this.m_bShowCopied = true
+    setTimeout(() => {
+      this.m_bShowCopied = false
+    }, 1000)
+
   }
 }

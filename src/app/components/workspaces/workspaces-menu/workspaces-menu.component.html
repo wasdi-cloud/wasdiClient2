@@ -2,7 +2,9 @@
     <div class="menu-header font-bold">Workspaces</div>
     <div class="menu-dropdown">
         <div>Workspace</div>
-        <app-autocomplete [m_sPlaceholder]="'Select Workspace'" [m_aoInputs]="m_aoWorkspacesList" (m_oSelectionChange)="setActiveWorkspace($event)" [m_oController]="this" [m_oDeleteFn]="deleteWorkspace"></app-autocomplete>
+        <app-autocomplete [m_sPlaceholder]="'Select Workspace'" [m_aoInputs]="m_aoWorkspacesList"
+            (m_oSelectionChange)="setActiveWorkspace($event)" [m_oController]="this"
+            [m_oDeleteFn]="deleteWorkspace"></app-autocomplete>
     </div>
     <app-button [m_sLabel]="'Open Workspace'" [m_sSize]="'large'" [m_bDisabled]="m_oActiveWorkspace === null"
         (click)="openWorkspace(m_oActiveWorkspace)"></app-button>
@@ -29,8 +31,9 @@
                 <input type="text" class="form-control" placeholder="" name="workspace-id"
                     aria-label="Workspace ID Copy Field" value="{{m_oActiveWorkspace.workspaceId}}" readonly disabled
                     aria-describedby="copy-workspace-id">
-                <span class="input-group-text icon-left" id="copy-workspace-id"
-                    [cdkCopyToClipboard]="m_oActiveWorkspace.workspaceId">
+                <span *ngIf="m_bShowCopied"
+                    class="d-flex flex-row align-items-center copied-indicator font-bold">COPIED!</span>
+                <span class="input-group-text icon-left" id="copy-workspace-id" (click)="copyWorkspaceId()">
                     <span class="material-symbols-outlined green-text">
                         content_copy
                     </span>

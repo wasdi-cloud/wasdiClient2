@@ -23,6 +23,13 @@ input.form-control {
     background: var(--neutral10);
 }
 
+.copied-indicator {
+    background-color: var(--neutral10) !important;
+    color: var(--wasdiGreen);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
 .icon-left {
     background: var(--neutral10) !important;
     border-bottom-right-radius: 4px !important;
