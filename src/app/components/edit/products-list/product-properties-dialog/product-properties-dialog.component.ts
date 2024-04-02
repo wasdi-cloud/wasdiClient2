@@ -118,10 +118,9 @@ export class ProductPropertiesDialogComponent {
 
     oUpdatedViewModel.fileName = this.m_oProduct.fileName;
     oUpdatedViewModel.productFriendlyName = this.m_oEditProduct.friendlyName;
-    oUpdatedViewModel.style = this.m_oEditProduct.style;
+    oUpdatedViewModel.style = this.m_oEditProduct.style.name;
     oUpdatedViewModel.description = this.m_oEditProduct.description;
 
-    console.log(oUpdatedViewModel)
     this.m_oProductService.updateProduct(oUpdatedViewModel, this.m_sWorkspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {

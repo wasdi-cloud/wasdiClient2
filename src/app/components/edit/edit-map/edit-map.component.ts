@@ -244,7 +244,6 @@ export class EditMapComponent implements OnInit {
                 error: oError => {
                   this.m_oNotificationDisplayService.openSnackBar("Error reading feature info", "Close", "right", "bottom");
                 }
-
               });
             }
           }
