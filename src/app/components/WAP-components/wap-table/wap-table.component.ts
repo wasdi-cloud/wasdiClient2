@@ -9,18 +9,17 @@ export class WapTableComponent {
   @Input() m_aoTableInput: any;
   @Output() m_aoTableInputChange = new EventEmitter<any>();
 
+   m_aoLocalInputsCopy: any[][];
+
   constructor() { }
 
+
   ngOnInit() {
+    this.m_aoLocalInputsCopy = JSON.parse(JSON.stringify(this.m_aoTableInput.aoTableVariables));
   }
 
-  emitTableInputs() {
-    console.log("emitTableInputs");
-    this.m_aoTableInputChange.emit(this.m_aoTableInput);
-  }
-
-  setTableInput(event, iRow, iColumn) {
-    this.m_aoTableInput.aoTableVariables[iRow][iColumn] = event.target.value;
-    console.log("Row " + iRow + " Col " + iColumn);
+  setTableInput(event, iParentIndex, iChildIndex) {
+    this.m_aoLocalInputsCopy[iParentIndex][iChildIndex] = event.target.value;
+    this.m_aoTableInput.aoTableVariables = JSON.parse(JSON.stringify(this.m_aoLocalInputsCopy));     
   }
 }
