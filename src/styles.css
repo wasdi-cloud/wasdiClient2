@@ -80,11 +80,12 @@ div.app-outlet {
   color: #FFFFFF;
 }
 
-.mat-bottom-sheet-container-medium,
+mat-bottom-sheet-container-medium,
 .mat-bottom-sheet-container-large,
 .mat-bottom-sheet-container-xlarge {
   min-width: 100vw !important;
   max-width: 100vw !important;
+  max-height: 97vh !important;
   padding: 0 !important;
 }
 
