@@ -1,7 +1,6 @@
 div.processes-bar-container {
     border-top: 1px solid var(--neutral20);
     height: 48px;
-
 }
 
 div.processes-bar {
@@ -29,7 +28,6 @@ div.processes-bar {
     font-size: 14px;
     position: relative;
     left: 5px;
-
     top: 1px;
     font-variation-settings:
         'FILL' 1,

@@ -11,6 +11,8 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ProcessesDialog } from './processes-dialog/processes-dialog.component';
+
+import { ProcessesBarTableComponent } from './processes-bar-table/processes-bar-table.component';
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
@@ -27,7 +29,6 @@ export interface SearchFilter {
   selector: 'app-processes-bar',
   templateUrl: './processes-bar.component.html',
   styleUrls: ['./processes-bar.component.css'],
-  host: { "class": "flex-fill" }
 })
 export class ProcessesBarComponent implements OnInit {
   @Input() m_oActiveWorkspace?: any = {};
@@ -129,7 +130,7 @@ export class ProcessesBarComponent implements OnInit {
   }
 
   openProcessesBar(): void {
-    this._bottomSheet.open(ProcessesBarContent, {
+    this._bottomSheet.open(ProcessesBarTableComponent, {
       data: {
         workspace: this.m_oActiveWorkspace
       }
@@ -304,8 +305,8 @@ export class ProcessesBarContent implements OnInit {
   }
   openPayloadDialog(oProcess: any) {
     let oDialogRef = this.m_oDialog.open(PayloadDialogComponent, {
-      height: '65vh',
-      width: '50vw',
+      height: '95vh',
+      width: '100vw',
       data: { process: oProcess }
     })
   }
