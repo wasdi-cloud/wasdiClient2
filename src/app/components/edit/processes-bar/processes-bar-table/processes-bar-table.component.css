@@ -1,0 +1,10 @@
+div.processes-filter {
+    background: var(--neutral5);
+    border-radius: 8px;
+
+}
+
+div.button-container {
+    padding-right: 1rem;
+    border-right: 1px solid var(--neutral25);
+}

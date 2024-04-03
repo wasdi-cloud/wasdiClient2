@@ -180,6 +180,7 @@ import { ReviewComponent } from './components/app-details/app-reviews/review/rev
 import { PlanTreeComponent } from './components/plan/plan-tree/plan-tree.component';
 import { ProcessorTabPricingComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-pricing/processor-tab-pricing.component';
 import { JsonEditorComponent } from './shared/json-editor/json-editor.component';
+import { ProcessesBarTableComponent } from './components/edit/processes-bar/processes-bar-table/processes-bar-table.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -302,7 +303,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ReviewComponent,
     PlanTreeComponent,
     ProcessorTabPricingComponent,
-    JsonEditorComponent
+    JsonEditorComponent,
+    ProcessesBarTableComponent
 
   ],
   imports: [
