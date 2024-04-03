@@ -27,9 +27,9 @@
         <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)"
             (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)"
             [m_sActiveTab]="m_sActiveTab" [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
-        <!-- WAPP Component outlet -->
+        <!-- WAP Component outlet -->
         <app-wap-display [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " class="flex-fill"
-            *ngFor="let oTab of m_aoTabs" [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " [wapData]="oTab"
+            *ngFor="let oTab of m_aoTabs"  [wapData]="oTab"
             [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
 
         <!-- PROCESSOR HELP TAB -->
@@ -50,7 +50,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let historyLog of processorHistory">
+                    <tr *ngFor="let historyLog of m_aoProcessorHistory">
                         <td>{{historyLog.operationDate}}</td>
                         <td>{{historyLog.status}}</td>
                         <td>{{historyLog.workspaceName}}</td>
@@ -59,7 +59,7 @@
             </table>
         </div>
         <!-- PROCESSOR JSON TAB -->
-        <div class="scroll-bar" [ngClass]="m_sActiveTab === 'json_params' ? '' : 'd-none'">
+        <div class="scroll-bar" [ngClass]="m_sActiveTab === 'json' ? '' : 'd-none'">
             <textarea readonly style="font-family:'Courier New',serif;font-size: 16px;width: 100%;" rows="40"
                 [(ngModel)]="m_sJSONParam"></textarea>
         </div>

@@ -10,24 +10,52 @@ import { ViewElementFactory } from 'src/app/shared/wap-components/view-element.f
   styleUrls: ['./wap-display.component.css']
 })
 export class WapDisplayComponent implements OnInit {
+
+  /**
+   * List of controls to show in this tab
+   */
   @Input() wapData
+
+  /**
+   * Flag to know if the inputs must be rendered as native values or all as strings
+   */
   @Input() renderAsStrings
+
+  /**
+   * Id of the active workspace
+   */
   @Input() workspaceId
 
+  /**
+   * List of the view elements to show. Should be one for each control 
+   * in the wapData Array => One element for each parameter of the app
+   */
   m_aoViewElements: any[];
 
+  /**
+   * Array of the product View Models in the selected workpsace
+   */
   m_aoProductsArray: any[] = [];
+
+  /**
+   * Array of the names of the products in the selected workspace
+   */
   m_asProductNames: string[];
 
   constructor(private m_oProcessorService: ProcessorService, private m_oProductService: ProductService) { }
 
   ngOnInit() {
+    // We generate the view elements starting from the wapData 
     this.m_aoViewElements = this.generateViewElements(this.wapData)
   }
 
+  /**
+   * We refresh the list of products in the workspace
+   */
   ngOnChanges() {
     this.getWorkspaceProducts();
   }
+
   /**
      * Get the list of controls in a Tab
      * @param sTabName Name of the tab

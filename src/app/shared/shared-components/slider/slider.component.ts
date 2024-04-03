@@ -41,16 +41,6 @@ export class SliderComponent {
    */
   @Input() m_iDefaultValue?: number = 50;
 
-  /**
-   * Default minimum input for range input slider
-   */
-  @Input() m_iDefaultMin?: number = 0;
-
-  /**
-   * Default maximum input for range input slider
-   */
-  @Input() m_iDefaultMax?: number = 0;
-
   @Input() m_iMinValue?: number = 0;
 
   @Input() m_iMaxValue?: number = 100;

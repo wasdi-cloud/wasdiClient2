@@ -1,4 +1,3 @@
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import {
   AUTO_STYLE,
   animate,
@@ -7,25 +6,26 @@ import {
   transition,
   trigger
 } from '@angular/animations';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 //import API services
-import { ProcessorService } from 'src/app/services/api/processor.service';
-import { ConstantsService } from 'src/app/services/constants.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
+import { ProcessorService } from 'src/app/services/api/processor.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { ConstantsService } from 'src/app/services/constants.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent, ErrorDialogModel } from 'src/app/shared/dialogs/error-dialog/error-dialog.component';
 
 //Import models
+import { TranslateService } from '@ngx-translate/core';
+import { WapDirective } from 'src/app/directives/wap.directive';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
-import { WapDirective } from 'src/app/directives/wap.directive';
-import { WapDisplayComponent } from './wap-display/wap-display.component';
 import { NewAppDialogComponent } from '../edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
-import { TranslateService } from '@ngx-translate/core';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { WapDisplayComponent } from './wap-display/wap-display.component';
 
 export interface Application {
   buyed: boolean,
@@ -68,71 +68,118 @@ export class AppUiComponent implements OnInit {
     private m_oRouter: Router,
     private m_oTranslate: TranslateService,
     private oWorkspaceService: WorkspaceService) { }
-  //Processor Information
+
+  /**
+   * Processor Name
+   */
   m_sProcessorName: string = this.m_oConstantsService.getSelectedApplication();
+
+  /**
+   * Processor View Model
+   */
   m_oProcessorInformation: any = {} as Application;
 
-  workspaceForm: any = {
+  /**
+   * Workspace control to define where to run the processor
+   */
+  m_oWorkspaceForm: any = {
     sNewWorkspaceName: null,
     sExistingWorkspace: null
   }
 
-  //Collapsible elements 
-  isCollapsed: boolean = true;
+  /**
+   * Collapsible elements 
+   */
+  m_bIsCollapsed: boolean = true;
 
-  //Text for the help tab
+  /**
+   * Text for the help tab
+   */
   m_sHelpHtml: string = "<p>No Help Provided</p>";
 
-  //Processor History
-  processorHistory: any = []
+  /**
+   * Processor History
+   */
+  m_aoProcessorHistory: any = []
 
-  //Processor JSON string
+  /**
+   * Processor JSON string
+   */
   m_sJSONParam = "{}";
 
-  //Flag to know if all inputs must be rendered as strings or as objects
+  /**
+   * Flag to know if all inputs must be rendered as strings or as objects
+   */
   m_bRenderAsStrings: boolean = false;
 
-  //Array of View Element Objects
+  /**
+   * Array of View Element Objects
+   */
   m_aoViewElements: {}[] = [];
 
-  //Array of names for the Tabs
+  /**
+   * Array of names for the Tabs
+   */
   m_aoTabs: any[] = [];
 
-  //Active Tab Element
+  /**
+   * Active Tab Element
+   */
   m_sActiveTab: string = ""
 
-  //User's existing workspaces
+  /**
+   * User's existing workspaces
+   */
   m_aoExistingWorkspaces: Workspace[] = [];
 
-  //Selected Workspace Name: 
+  /**
+   * Selected Workspace Name: 
+   */
   m_oSelectedWorkspace: Workspace | null | undefined = null;
 
-  //Error Message
+  /**
+   * Error Message
+   */
   m_sMessage = "The following inputs are required:"
 
-  //Active Workspace
+  /**
+   * Active Workspace
+   */
   m_oActiveWorkspace = null;
 
-  //User ID
+  /**
+   * User ID
+   */
   m_sUserId: string;
 
-  //Does the user want to create a new workspace or open an existing?
+  /**
+   * Does the user want to create a new workspace or open an existing?
+   */
   m_bOpenWorkspace: boolean = true;
 
   ngOnInit(): void {
+    // Take our user id
     this.m_sUserId = this.m_oConstantsService.getUser().userId;
+
+    // Get the list of avaiable workspaces
     this.fetchWorkspaces();
+
+    // We really should have a processor name
     if (this.m_sProcessorName) {
+      // Read the View Model and the user interface
       this.getProcessorDetails(this.m_sProcessorName);
       this.getProcessorUI(this.m_sProcessorName);
     }
     else if (this.m_oActivatedRoute.snapshot.params['processorName']) {
+      // Get the name from the route!
       this.m_sProcessorName = this.m_oActivatedRoute.snapshot.params['processorName'];
       this.m_oConstantsService.setSelectedApplication(this.m_sProcessorName);
+      // Read the View Model and the user interface
       this.getProcessorDetails(this.m_sProcessorName);
       this.getProcessorUI(this.m_sProcessorName);
     }
     else {
+      // This is a problem, we cannot proceed
       let oDialogData = new ErrorDialogModel("Error!", "Problem retrieving Processor Name");
       let oDialogRef = this.m_oDialog.open(ErrorDialogComponent, {
         maxWidth: '400px',
@@ -140,26 +187,43 @@ export class AppUiComponent implements OnInit {
       })
     }
 
+    // Do we have an active workspace?
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+
+    // We select it
     if (this.m_oActiveWorkspace !== null) {
-      this.workspaceForm.sExistingWorkspace = this.m_oActiveWorkspace.workspaceName;
+      this.m_oWorkspaceForm.sExistingWorkspace = this.m_oActiveWorkspace.workspaceName;
     }
   }
+
+  /**
+   * Get Processor details from server
+   */
+  getProcessorDetails(sProcessorName: string) {
+    return this.m_oProcessorService.getMarketplaceDetail(sProcessorName).subscribe(oResponse => {
+      this.m_oProcessorInformation = oResponse;
+    })
+  }  
 
   /**
    * Retrieve Processor UI from WASDI server
    */
   getProcessorUI(sApplicationName: string) {
+    // Call the API to get the UI
     this.m_oProcessorService.getProcessorUI(sApplicationName).subscribe(oResponse => {
+
+      // For all the tabs
       for (let iTabs = 0; iTabs < oResponse.tabs.length; iTabs++) {
+        // Add it to the internal tab list
         let oTab = oResponse.tabs[iTabs];
-
         this.m_aoTabs.push(oTab);
-
+        // We start selecting the first one by default
         if (iTabs === 0) {
           this.m_sActiveTab = oTab.name;
         }
       }
+
+      // Get the render as strings flag
       if (oResponse.renderAsStrings) {
         if (oResponse.renderAsStrings !== null || oResponse.renderAsStrings !== undefined) {
           this.m_bRenderAsStrings = oResponse.renderAsStrings
@@ -173,7 +237,7 @@ export class AppUiComponent implements OnInit {
    * Change Active Tab
    */
   getSelectedTab(sTab) {
-    console.log(this.m_sActiveTab)
+
     if (this.m_sActiveTab !== sTab) {
       this.m_sActiveTab = sTab;
     }
@@ -206,7 +270,7 @@ export class AppUiComponent implements OnInit {
    */
   showHistory() {
     this.m_oProcessorWorkspaceService.getProcessesByProcessor(this.m_sProcessorName).subscribe(response => {
-      this.processorHistory = response
+      this.m_aoProcessorHistory = response
     })
   }
 
@@ -215,26 +279,13 @@ export class AppUiComponent implements OnInit {
    */
   showParamsJSON() {
     let oProcessorInput = this.createParams();
-    console.log(oProcessorInput)
     this.m_sJSONParam = JSON.stringify(oProcessorInput, undefined, 4)
-    console.log(this.m_sJSONParam);
-  }
-
-  /**
-   * Get Processor details from server
-   */
-  getProcessorDetails(processorName: string) {
-    return this.m_oProcessorService.getMarketplaceDetail(processorName).subscribe(response => {
-      this.m_oProcessorInformation = response;
-    })
   }
 
   /**
    * Run Application in either Selected Workspace or New Workspace
    */
   runApplication() {
-    console.log("run application")
-
     let bCheck: boolean = this.checkParams();
 
     if (!bCheck) {
@@ -242,9 +293,9 @@ export class AppUiComponent implements OnInit {
       return;
     }
 
-    if (this.workspaceForm.sNewWorkspaceName && this.workspaceForm.sExistingWorkspace) {
-      console.log("Either select workspace or create new one");
-      return
+    if (this.m_oWorkspaceForm.sNewWorkspaceName && this.m_oWorkspaceForm.sExistingWorkspace) {
+      this.m_oNotificationDisplayService.openSnackBar("Either select workspace or create new one", "Close");
+      return;
     }
 
     //If there is an active workspace: 
@@ -266,14 +317,17 @@ export class AppUiComponent implements OnInit {
         }
       });
       //If we are creating a new workspace:
-    } else if (this.m_bOpenWorkspace === true && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === true) {
+    } 
+    else if (this.m_bOpenWorkspace === true && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === true) {
       this.m_oNotificationDisplayService.openAlertDialog("Please make a valid workspace selection");
-    } else {
+    } 
+    else {
       let sWorkspaceName: string;
-      let sUserProvidedWorkspaceName: string = this.workspaceForm.sNewWorkspaceName;
+      let sUserProvidedWorkspaceName: string = this.m_oWorkspaceForm.sNewWorkspaceName;
       if (sUserProvidedWorkspaceName) {
-        sWorkspaceName = this.workspaceForm.sNewWorkspaceName;
-      } else {
+        sWorkspaceName = this.m_oWorkspaceForm.sNewWorkspaceName;
+      } 
+      else {
         let oToday = new Date();
         let sToday = oToday.toISOString();
 
@@ -371,12 +425,11 @@ export class AppUiComponent implements OnInit {
   }
 
   setSelectedWorkspace(oEvent: any) {
-    this.workspaceForm.sExistingWorkspace = oEvent.value;
-    console.log(this.workspaceForm.sExistingWorkspace);
+    this.m_oWorkspaceForm.sExistingWorkspace = oEvent.value;
   }
 
   toggleCollapse() {
-    this.isCollapsed = !this.isCollapsed;
+    this.m_bIsCollapsed = !this.m_bIsCollapsed;
   }
 
   marketplaceReturn() {

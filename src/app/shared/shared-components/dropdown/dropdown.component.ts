@@ -83,7 +83,6 @@ export class DropdownComponent {
     return aoNewValues;
   }
 
-
   switchFileExtension(oEvent) {
     this.m_bShowFileExtension = oEvent.target.checked;
   }

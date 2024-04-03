@@ -1,4 +1,4 @@
-<div class="d-flex flex-row gap-2 align-items-center" matTooltip="{{oCheckboxDetails.tooltip}}">
-    <input class="wasdi-checkbox" type="checkbox" name="{{oCheckboxDetails.label}}" id="" (change)="getOutput($event)">
-    <label for="{{oCheckboxDetails.label}}">{{oCheckboxDetails.label}}</label>
+<div class="d-flex flex-row gap-2 align-items-center" matTooltip="{{m_oCheckboxDetails.tooltip}}">
+    <input class="wasdi-checkbox" type="checkbox" name="{{m_oCheckboxDetails.label}}" id="" (change)="getOutput($event)" [checked]="m_oCheckboxDetails.m_bValue">
+    <label for="{{m_oCheckboxDetails.label}}">{{m_oCheckboxDetails.label}}</label>
 </div>

@@ -7,14 +7,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./wap-slider.component.css']
 })
 export class WapSliderComponent implements OnInit{
-  @Input() oSliderInput: any;
-  @Output() oSliderInputChange = new EventEmitter<any>();
+  @Input() m_oSliderInput: any;
+  @Output() m_oSliderInputChange = new EventEmitter<any>();
 
   ngOnInit(): void {
   }
 
   getSelectionChange(oEvent) {
-    this.oSliderInput.m_iValue = oEvent
-    this.oSliderInputChange.emit(this.oSliderInput); 
+    this.m_oSliderInput.m_iValue = oEvent
+    this.m_oSliderInputChange.emit(this.m_oSliderInput); 
   }
 }

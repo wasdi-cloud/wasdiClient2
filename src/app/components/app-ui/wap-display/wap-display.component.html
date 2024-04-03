@@ -1,7 +1,7 @@
 <div class="d-flex flex-column" style="padding-bottom:20px;" *ngFor="let oControl of getTabControls(); let i=index">
     <!-- <label for="oControl">{{oControl.label}}</label> -->
     <!-- WAP Checkbox -->
-    <app-wap-check-box *ngIf="oControl.type === 'boolean'" [(oCheckboxDetails)]="getTabControls()[i]"
+    <app-wap-check-box *ngIf="oControl.type === 'boolean'" [(m_oCheckboxDetails)]="getTabControls()[i]"
         (getOutput)="logOutput($event)"></app-wap-check-box>
 
     <!-- WAP Date Time Picker -->
@@ -32,14 +32,12 @@
     <app-wap-select-area *ngIf="oControl.type ==='bbox'" [(oMapInput)]="getTabControls()[i]"></app-wap-select-area>
 
     <!-- WAP Slider -->
-    <app-wap-slider *ngIf="oControl.type ==='slider'" [(oSliderInput)]="getTabControls()[i]"></app-wap-slider>
+    <app-wap-slider *ngIf="oControl.type ==='slider'" [(m_oSliderInput)]="getTabControls()[i]"></app-wap-slider>
 
     <!-- WAP Table -->
-    <app-wap-table *ngIf="oControl.type ==='table'" [(oTableInput)]="getTabControls()[i]"></app-wap-table>
+    <app-wap-table *ngIf="oControl.type ==='table'" [(m_aoTableInput)]="getTabControls()[i]"></app-wap-table>
 
     <!-- WAP Textbox -->
-    <app-wap-textbox *ngIf="oControl.type ==='textbox'" [(oTextboxInfo)]="getTabControls()[i]"></app-wap-textbox>
+    <app-wap-textbox *ngIf="oControl.type ==='textbox'" [(m_oTextboxInfo)]="getTabControls()[i]"></app-wap-textbox>
 
-    <!-- WAP Tooltip -->
-    <!-- <app-wap-tooltip *ngIf="oControl.type ==='tooltip'"></app-wap-tooltip>  -->
 </div>

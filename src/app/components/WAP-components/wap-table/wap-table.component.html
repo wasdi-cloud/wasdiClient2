@@ -1,21 +1,18 @@
-<p>wap-table works!</p>
 <form (ngSubmit)="emitTableInputs()">
     <table class="table table-sm">
         <thead>
-            <th *ngIf="oTableInput.rowHeaders.length !== 0">row</th>
-            <th scope="col" *ngFor="let column of oTableInput.aoTableVariables[0]; let i = index">
-                {{oTableInput.colHeaders[i]}}
+            <th *ngIf="m_aoTableInput.rowHeaders.length !== 0">row</th>
+            <th scope="col" *ngFor="let oColumn of m_aoTableInput.colHeaders; let i = index">
+                {{m_aoTableInput.colHeaders[i]}}
             </th>
         </thead>
         <tbody>
-            <tr *ngFor="let row of oTableInput.aoTableVariables; let i = index">
-                <td>{{oTableInput.rowHeaders[i]}}</td>
-                <td *ngFor="let row of oTableInput.aoTableVariables[i]; let j = index;" >
-                    <input class="form-control" type="text" name="" id="" (change)="getTableInput($event, i, j)">
+            <tr *ngFor="let row of m_aoTableInput.aoTableVariables; let iRow = index">
+                <td *ngIf="m_aoTableInput.rowHeaders.length !== 0">{{m_aoTableInput.rowHeaders[iRow]}}</td>
+                <td *ngFor="let row of m_aoTableInput.aoTableVariables[iRow]; let iColumn = index;" >
+                    <input class="form-control" type="text" name="" id="" (change)="setTableInput($event, iRow, iColumn)" [value]="m_aoTableInput.aoTableVariables[iRow][iColumn]">
                 </td>
             </tr>
-
         </tbody>
     </table>
-    <button type="submit" class="btn btn-primary">SAVE INPUTS</button>
 </form>
