@@ -1,13 +1,66 @@
-<table>
+<div class="table-wrapper">
+    <table>
+        <thead class="table-heading-container">
+            <tr>
+                <th>Status</th>
+                <th>Operation</th>
+                <th>Name</th>
+                <!-- <th>User</th>
+                    <th>Created</th>
+                    <th>Started</th> -->
+                <th>Progress</th>
+                <th>Duration</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let oProcessLog of m_aoTableData">
+                <td>
+                    <app-table-cell [m_sLabel]="oProcessLog.status" [m_bIsTag]="true"></app-table-cell>
+                </td>
+                <td>
+                    <app-table-cell [m_sLabel]="getOperationDescription(oProcessLog)"></app-table-cell>
+                </td>
+                <td>{{oProcessLog.productName}}</td>
+                <!-- <td>{{oProcessLog.userId}}</td> -->
+                <!-- <td>{{oProcessLog.operationDate | date:'dd-MM-yyyy hh:mm:ss'}}</td>
+                <td>{{oProcessLog.operationStartDate | date:'dd-MM-yyyy hh:mm:ss'}}</td> -->
+                <td>
+                    <app-progress-bar [m_iProgressPerc]="oProcessLog.progressPerc"></app-progress-bar>
+                </td>
+                <td>
+                    {{oProcessLog | duration}}
+                </td>
+                <td class="d-flex flex-row">
+                    <span class="material-symbols-outlined" matTooltip="Payload" *ngIf="oProcessLog.payload"
+                        (click)="openPayloadDialog(oProcessLog)">
+                        data_object
+                    </span>
+                    <span class="material-symbols-outlined" matTooltip="Logs" (click)="openLogsDialog(oProcessLog)">
+                        subtitles
+                    </span>
+                    <span class="cancel-icon material-symbols-outlined" matTooltip="Delete"
+                        *ngIf="oProcessLog.status === 'RUNNING'" (click)="deleteProcess(oProcessLog)">
+                        cancel
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+
+<!-- <table>
     <!-- Table Heading -->
-    <tr class="table-heading-container">
+<!-- <tr class="table-heading-container">
         <th>Status</th>
         <th>Operation</th>
-        <th>Name</th>
-        <th>User</th>
-        <th>Created</th>
-        <th>Started</th>
-        <th>Progress</th>
+        <th>Name</th> -->
+<!-- <th>User</th> -->
+<!-- <th>Created</th>
+        <th>Started</th> -->
+<!-- <th>Progress</th>
         <th>Duration</th>
         <th></th>
     </tr>
@@ -18,11 +71,11 @@
         <td>
             <app-table-cell [m_sLabel]="getOperationDescription(oProcessLog)"></app-table-cell>
         </td>
-        <td>{{oProcessLog.productName}}</td>
-        <td>{{oProcessLog.userId}}</td>
-        <td>{{oProcessLog.operationDate | date:'dd-MM-yyyy hh:mm:ss'}}</td>
-        <td>{{oProcessLog.operationStartDate | date:'dd-MM-yyyy hh:mm:ss'}}</td>
-        <td>
+        <td>{{oProcessLog.productName}}</td> -->
+<!-- <td>{{oProcessLog.userId}}</td> -->
+<!-- <td>{{oProcessLog.operationDate | date:'dd-MM-yyyy hh:mm:ss'}}</td>
+            <td>{{oProcessLog.operationStartDate | date:'dd-MM-yyyy hh:mm:ss'}}</td> -->
+<!-- <td>
             <app-progress-bar [m_iProgressPerc]="oProcessLog.progressPerc"></app-progress-bar>
         </td>
         <td>
@@ -41,5 +94,5 @@
                 cancel
             </span>
         </td>
-    </tr>
-</table>
+    </tr> -->
+<!-- </table>  -->

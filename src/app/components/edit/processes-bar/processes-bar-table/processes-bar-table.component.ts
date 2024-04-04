@@ -7,6 +7,8 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { ProcessesBarComponent } from '../processes-bar.component';
 
+import { ProcessStatuses, ProcessTypes } from '../process-status-types';
+
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
@@ -54,6 +56,14 @@ export class ProcessesBarTableComponent implements OnInit {
    * 
    */
   private m_oProcessesBarSubscription: any;
+
+  public m_aoProcessStatuses = ProcessStatuses;
+
+  public m_aoProcessTypes = ProcessTypes;
+
+  public m_oSelectedStatus = [this.m_aoProcessStatuses[0]]
+
+  public m_oSelectedType = [this.m_aoProcessTypes[0]]
 
   m_iNumberOfProcessForRequest: number = 40;
   m_iFirstProcess = 0;
@@ -104,12 +114,10 @@ export class ProcessesBarTableComponent implements OnInit {
     }
 
     let sWorkspaceId = this.m_oActiveWorkspace.workspaceId;
-
-    // this.m_bAreProcessesLoaded = false;
-
-    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(sWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
+    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(sWorkspaceId, this.m_iFirstProcess, this.m_iNumberOfProcessForRequest, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
       if (oResponse) {
         this.m_aoAllProcessesLogs = this.m_aoAllProcessesLogs.concat(oResponse);
+        console.log(this.m_aoAllProcessesLogs)
         this.calculateNextListOfProcesses();
       } else {
         // this.m_bIsLoadMoreBtnClickable = false;
@@ -128,4 +136,98 @@ export class ProcessesBarTableComponent implements OnInit {
     this.m_iLastProcess += this.m_iNumberOfProcessForRequest;
   }
 
+  downloadProcessesFile() {
+    this.m_oProcessWorkspaceService.getAllProcessesFromServer(this.m_oActiveWorkspace.workspaceId, null, null).subscribe(oResponse => {
+
+      this.m_aoAllProcessesLogs = oResponse;
+      let file = this.generateLogFile();
+
+      let oLink = document.createElement('a');
+      oLink.href = file;
+
+      let sTimestamp = (new Date()).toISOString().replace(/[^0-9]/g, "_").slice(0, 19);
+
+      oLink.download = "processes_" + this.m_oActiveWorkspace.name + "_" + sTimestamp;
+
+      oLink.click();
+
+    })
+  }
+
+  generateLogFile() {
+    let sText = this.makeStringLogFile();
+    let oFile = this.generateFile(sText);
+    return oFile;
+  }
+
+  generateFile(sText) {
+    let textFile = null;
+    let sType = 'text/csv';
+
+    let data = new Blob([sText], { type: sType });
+
+    textFile = window.URL.createObjectURL(data);
+
+    return textFile;
+  }
+
+  makeStringLogFile() {
+    if (!this.m_aoAllProcessesLogs) {
+      return null;
+    }
+    let iNumberOfProcessesLogs: number = this.m_aoAllProcessesLogs.length;
+    let sText: string = "";
+
+    sText += "Id,Product Name,Operation Type,User,Status,Progress,Operation date,Operation end date,File size" + "\r\n";
+
+    for (let iIndexProcessLog = 0; iIndexProcessLog < iNumberOfProcessesLogs; iIndexProcessLog++) {
+      let sOperationDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationStartDate;
+      let sFileSize = this.m_aoAllProcessesLogs[iIndexProcessLog].fileSize;
+      let sOperationEndDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationEndDate;
+      let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType;
+      let sPid = this.m_aoAllProcessesLogs[iIndexProcessLog].pid;
+      let sProductName = this.m_aoAllProcessesLogs[iIndexProcessLog].productName;
+      let sProgressPerc = this.m_aoAllProcessesLogs[iIndexProcessLog].progressPerc;
+      let sStatus = this.m_aoAllProcessesLogs[iIndexProcessLog].status;
+      let sUserId = this.m_aoAllProcessesLogs[iIndexProcessLog].userId;
+
+      sText += sPid + "," + sProductName + "," + sOperationType +
+        "," + sUserId + "," + sStatus + "," + sProgressPerc + "%" +
+        "," + sOperationDate + "," + sOperationEndDate + "," + sFileSize + "\r\n";
+    }
+    return sText;
+  }
+
+  catchFilterChange(oEvent, sFilterName) {
+    if (sFilterName === 'name') {
+      this.m_oFilter.sName = oEvent.event.target.value;
+    } else if (sFilterName === 'type') {
+      this.m_oFilter.sType = oEvent.value.value;
+    } else {
+      this.m_oFilter.sStatus = oEvent.value.value;
+    }
+  }
+
+  applyFilters() {
+    this.resetCounters();
+    this.m_aoAllProcessesLogs = [];
+    this.getAllProcessesLogs();
+  }
+
+  resetCounters() {
+    this.m_iNumberOfProcessForRequest = 40;
+    this.m_iFirstProcess = 0;
+  }
+
+  clearFilters() {
+    this.m_aoAllProcessesLogs = [];
+    this.m_oFilter.sName = "";
+    this.m_oFilter.sDate = "";
+    this.m_oFilter.sStatus = "";
+    this.m_oFilter.sType = "";
+    this.m_oSelectedStatus = [];
+    this.m_oSelectedType = [];
+    this.resetCounters();
+    this.getAllProcessesLogs();
+  }
 }

@@ -1,18 +1,28 @@
-<div class="bottom-sheet-container d-flex flex-column" style="height: 100%;">
+<div class="bottom-sheet-container d-flex flex-column" style="height: 95vh">
     <app-processes-bar></app-processes-bar>
     <div class="processes-filter d-flex flex-row align-items-center justify-content-between gap-3 mx-3 p-2">
-        <div class="flex-fill d-flex flex-row gap-3 justify-content-stretch" style="max-width: 70%;">
-            <app-input-field class="flex-fill" [m_sLabel]="'Status'"></app-input-field>
-            <app-input-field class="flex-fill" [m_sLabel]="'Operation Type'"></app-input-field>
-            <app-input-field class="flex-fill" [m_sLabel]="'Name'"></app-input-field>
+        <div class="flex-fill d-flex flex-row gap-3 justify-content-between align-self-end" style="width: 70%;">
+            <app-dropdown class="flex-fill" style="width: 33%" [m_sLabel]="'Status'" [m_sPlaceholder]="'Select Status'"
+            [m_aoSelectedItems]="m_oSelectedStatus"
+                [m_aoDropdownItems]="m_aoProcessStatuses"
+                (m_oSelectionChange)="catchFilterChange($event, 'status')"></app-dropdown>
+            <app-dropdown class="flex-fill" style="width: 33%" [m_sLabel]="'Operation Type'"
+                [m_aoSelectedItems]="m_oSelectedType"
+                [m_sPlaceholder]="'Select Operation'" [m_aoDropdownItems]="m_aoProcessTypes"
+                (m_oSelectionChange)="catchFilterChange($event, 'type')"></app-dropdown>
+            <app-input-field style="padding-bottom: 2px" class="flex-fill" style="width: 33%" [m_sLabel]="'Name'"
+                [m_sInputValue]="m_oFilter.sName"
+                (m_oInputChange)="catchFilterChange($event, 'name')"></app-input-field>
+
         </div>
         <div class="d-flex flex-row gap-2 align-self-end">
 
             <div class="button-container align-self-end d-flex gap-2 flex-row">
-                <app-button [m_sLabel]="'Apply filter'"></app-button>
-                <app-button [m_sLabel]="'Clear'" [m_bMuted]="true"></app-button>
+                <app-button [m_sLabel]="'Apply filter'" (click)="applyFilters()"></app-button>
+                <app-button [m_sLabel]="'Clear'" [m_bMuted]="true" (click)="clearFilters()"></app-button>
             </div>
-            <app-button class="" [m_sLabel]="'Download log'" [m_bOutline]="true"></app-button>
+            <app-button class="" [m_sLabel]="'Download log'" [m_bOutline]="true"
+                (click)="downloadProcessesFile()"></app-button>
         </div>
     </div>
     <app-logs-table class="flex-fill" [m_aoTableData]="m_aoAllProcessesLogs"></app-logs-table>
