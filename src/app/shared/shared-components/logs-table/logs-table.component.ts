@@ -37,8 +37,10 @@ export class LogsTableComponent implements OnChanges {
    */
   openPayloadDialog(oProcess: any): void {
     this.m_oDialog.open(PayloadDialogComponent, {
-      height: '65vh',
-      width: '50vw',
+      height: '90vh',
+      width: '100vw',
+      minWidth: '100vw',
+      position: {bottom: "0"},
       data: { process: oProcess }
     })
   }

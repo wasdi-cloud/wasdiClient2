@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LegendPosition } from '@swimlane/ngx-charts';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 
 
@@ -73,8 +74,16 @@ export class PayloadDialogComponent implements OnInit {
    */
   legendPosition: LegendPosition = LegendPosition.Right
 
+  m_sJsonSample: string = "";
+
+  m_sTagColor: string = "red"
+
+  m_sCopyLabel: string = "COPY PAYLOAD"
+
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
+    private m_oClipboard: Clipboard,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<PayloadDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService
@@ -82,7 +91,11 @@ export class PayloadDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkWasdiDashboard(this.m_oData.process);
-    this.checkWasdiDashboard(JSON.parse(this.m_oData.process.payload))
+    this.checkWasdiDashboard(JSON.parse(this.m_oData.process.payload));
+    let oParsed = JSON.parse(this.m_oProcess.payload)
+    this.m_sJsonSample = JSON.stringify(oParsed, null, 2);
+
+    this.setTagColor(this.m_oProcess.status)
   }
 
 
@@ -101,7 +114,7 @@ export class PayloadDialogComponent implements OnInit {
         let sPrettyPrint = JSON.stringify(oParsed, null, 2);
         this.m_sPayloadString = sPrettyPrint;
       } catch (error) {
-        this.m_oNotificationDisplayService.openAlertDialog( "Problem getting Payload String");
+        this.m_oNotificationDisplayService.openAlertDialog("Problem getting Payload String");
       }
 
     }
@@ -135,7 +148,30 @@ export class PayloadDialogComponent implements OnInit {
     }
   }
 
-  dismiss(event: MouseEvent) {
+  setTagColor(sProcessStatus) {
+    if (sProcessStatus === 'ERROR') {
+      this.m_sTagColor = 'red';
+    } else if (sProcessStatus === 'STOPPED') {
+      this.m_sTagColor = 'red';
+      sProcessStatus = "DIALOG_PROCESSES_LOGS_STOP";
+
+    } else if (sProcessStatus === 'DONE') {
+      this.m_sTagColor = 'green';
+    } else {
+      sProcessStatus = 'green';
+    }
+  }
+
+  copyPayload() {
+    this.m_oClipboard.copy(this.m_sJsonSample);
+
+    this.m_sCopyLabel = "COPIED!";
+    setTimeout(() => {
+      this.m_sCopyLabel = "COPY PAYLOAD";
+    }, 1000)
+  }
+
+  onDismiss() {
     this.m_oDialogRef.close();
   }
 }

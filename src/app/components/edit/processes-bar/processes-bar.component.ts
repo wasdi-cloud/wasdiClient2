@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 
 //Angular Material Imports: 
 import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
@@ -303,10 +303,12 @@ export class ProcessesBarContent implements OnInit {
   getOperationDescription(oOperation: any) {
     return WasdiUtils.utilsConvertOperationToDescription(oOperation);
   }
+  
   openPayloadDialog(oProcess: any) {
     let oDialogRef = this.m_oDialog.open(PayloadDialogComponent, {
       height: '95vh',
       width: '100vw',
+      position: {bottom: '0'},
       data: { process: oProcess }
     })
   }
