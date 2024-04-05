@@ -24,13 +24,14 @@
                 (click)="downloadProcessesFile()"></app-button>
         </div>
     </div>
-    <div class="table-wrapper" (scroll)="loadOnScroll($event)">
+    <div class="table-wrapper d-flex flex-column">
         <table>
             <thead class="table-heading-container">
                 <tr>
                     <th>Status</th>
                     <th>Operation</th>
                     <th>Name</th>
+                    <th>Started</th>
                     <th>Progress</th>
                     <th>Duration</th>
                     <th></th>
@@ -46,8 +47,12 @@
                     </td>
                     <td>{{oProcessLog.productName}}</td>
                     <td>
+                        {{oProcessLog.operationStartDate}}
+                    </td>
+                    <td>
                         <app-progress-bar [m_iProgressPerc]="oProcessLog.progressPerc"></app-progress-bar>
                     </td>
+
                     <td>
                         {{oProcessLog | duration}}
                     </td>
@@ -67,5 +72,7 @@
                 </tr>
             </tbody>
         </table>
+        <app-button class="justify-self-center align-self-center" *ngIf="m_bIsLoadMoreBtnClickable"
+            [m_sLabel]="'Load more'" (click)="getAllProcessesLogs()"></app-button>
     </div>
 </div>

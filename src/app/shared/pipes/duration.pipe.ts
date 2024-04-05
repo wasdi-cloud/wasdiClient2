@@ -1,9 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Pipe({
   name: 'duration'
 })
 export class DurationPipe implements PipeTransform {
+
 
   renderTwoDigitNumber(iNumber: number) {
     let sNumber = "00";
@@ -40,13 +41,14 @@ export class DurationPipe implements PipeTransform {
       oEndTime = new Date(oProcess.operationEndDate);
     }
 
-    if (!oEndTime.getTime()) {
+    if (FadeoutUtils.utilsIsValidDate(oEndTime) === false) {
       oEndTime = new Date(oProcess.lastChangeDate);
     }
 
-    if (!oEndTime.getTime()) {
+    if (FadeoutUtils.utilsIsValidDate(oEndTime) === false) {
       oEndTime = new Date();
     }
+
 
     //pick time
     let iMilliseconds = Math.abs(oEndTime - oStartTime);

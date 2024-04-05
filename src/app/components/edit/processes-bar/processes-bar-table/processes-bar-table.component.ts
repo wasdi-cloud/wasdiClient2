@@ -77,6 +77,8 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
 
   public m_aoAllProcessesLogs: Array<any> = [];
 
+  public m_bIsLoadMoreBtnClickable: boolean = true;
+
   /**
    * Interval function - set in ngOnInit
    */
@@ -113,7 +115,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
 
     this.m_oInterval = setInterval(() => {
       this.getLastProcessesLogs();
-    }, 1000)
+    }, 5000)
   }
 
   ngOnDestroy(): void {
@@ -151,15 +153,15 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     }
 
     let sWorkspaceId = this.m_oActiveWorkspace.workspaceId;
-    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(sWorkspaceId, this.m_iFirstProcess, this.m_iNumberOfProcessForRequest, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
+    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(sWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
       if (oResponse) {
         this.m_aoAllProcessesLogs = this.m_aoAllProcessesLogs.concat(oResponse);
         this.calculateNextListOfProcesses();
       } else {
-        // this.m_bIsLoadMoreBtnClickable = false;
+        this.m_bIsLoadMoreBtnClickable = false;
       }
       if (oResponse.length < this.m_iNumberOfProcessForRequest) {
-        // this.m_bIsLoadMoreBtnClickable = false;
+        this.m_bIsLoadMoreBtnClickable = false;
       }
 
       // this.m_bAreProcessesLoaded = true;
@@ -292,9 +294,9 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     this.m_oProcessWorkspaceService.deleteProcess(oProcess);
   }
 
-  loadOnScroll(oEvent) {
-    if (oEvent.target.scrollHeight < oEvent.target.scrollTop + oEvent.target.offsetHeight) {
-      this.getAllProcessesLogs();
-    }
-  }
+  // loadOnScroll(oEvent) {
+  //   if (oEvent.target.scrollHeight < oEvent.target.scrollTop + oEvent.target.offsetHeight) {
+  //     this.getAllProcessesLogs();
+  //   }
+  // }
 }
