@@ -28,8 +28,7 @@ import { ProductsListComponent } from './components/edit/products-list/products-
 import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
 import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
 import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
-import { ProcessesBarComponent, ProcessesBarContent } from './components/edit/processes-bar/processes-bar.component';
-import { ProcessesDialog } from './components/edit/processes-bar/processes-dialog/processes-dialog.component';
+import { ProcessesBarComponent } from './components/edit/processes-bar/processes-bar.component';
 import { UserSettingsDialogComponent } from './components/header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
 import { ProductPropertiesDialogComponent } from './components/edit/products-list/product-properties-dialog/product-properties-dialog.component';
 import { NavLayersComponent } from './components/edit/nav-layers/nav-layers.component';
@@ -159,7 +158,6 @@ import { HelpDialogComponent } from './components/edit/edit-toolbar/toolbar-dial
 import { MarketplaceFiltersComponent } from './components/marketplace/marketplace-filters/marketplace-filters.component';
 import { MenuListItemComponent } from './components/navbar/menu-list-item/menu-list-item.component';
 import { ButtonComponent } from './shared/shared-components/button/button.component';
-import { LogsTableComponent } from './shared/shared-components/logs-table/logs-table.component';
 import { TableCellComponent } from './shared/shared-components/table-cell/table-cell.component';
 import { ProgressBarComponent } from './shared/shared-components/progress-bar/progress-bar.component';
 import { ProductListItemComponent } from './components/edit/products-list/product-list-item/product-list-item.component';
@@ -223,9 +221,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditToolbarComponent,
     PlanMapComponent,
     EditMapComponent,
-    ProcessesBarComponent,
-    ProcessesBarContent,
-    ProcessesDialog,
     PageNotFoundComponent,
     UserSettingsDialogComponent,
     ProductPropertiesDialogComponent,
@@ -283,7 +278,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MarketplaceFiltersComponent,
     MenuListItemComponent,
     ButtonComponent,
-    LogsTableComponent,
     TableCellComponent,
     ProgressBarComponent,
     ProductListItemComponent,
@@ -304,7 +298,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     PlanTreeComponent,
     ProcessorTabPricingComponent,
     JsonEditorComponent,
-    ProcessesBarTableComponent
+    ProcessesBarTableComponent,
+    ProcessesBarComponent
 
   ],
   imports: [
@@ -373,7 +368,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmationDialogComponent, ProcessesBarContent],
+  entryComponents: [ConfirmationDialogComponent],
 
 })
 export class AppModule { }
