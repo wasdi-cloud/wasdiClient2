@@ -28,7 +28,6 @@ export class AutocompleteComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.m_sSearchString = "";
-    console.log(this.m_aoInputs)
   }
 
   getOptionText(oOption) {

@@ -72,7 +72,7 @@ export class WapSelectAreaComponent implements OnInit {
    */
   constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService, private m_oDialog: MatDialog) 
   { 
-    console.log("Creating WAP Map Component with MapId: " + this.m_sMapId)
+    //console.log("Creating WAP Map Component with MapId: " + this.m_sMapId)
   }
 
   /**

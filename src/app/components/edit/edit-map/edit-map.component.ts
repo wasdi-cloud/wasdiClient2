@@ -199,7 +199,7 @@ export class EditMapComponent implements OnInit {
         }
       }
 
-      // TODO: this is a first step to try to make get pixel info work
+      // get pixel info work
       this.m_oMapService.m_oWasdiMap.on("click", oClickEvent => {
 
         if (this.m_bFeatureInfoMode) {

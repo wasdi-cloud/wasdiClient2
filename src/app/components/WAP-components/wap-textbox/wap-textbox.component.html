@@ -1,1 +1,1 @@
-<app-textarea [m_sLabel]="m_oTextboxInfo.label" matTooltip="{{m_oTextboxInfo.tooltip}}" (keyup)="getUserInput($event)"></app-textarea>
+<app-textarea [m_sLabel]="m_oLocalTextboxInfo.label" [m_sInputString]="m_oLocalTextboxInfo.m_sText" matTooltip="{{m_oLocalTextboxInfo?.tooltip}}" (keyup)="getUserInput($event)"></app-textarea>

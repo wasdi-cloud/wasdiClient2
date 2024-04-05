@@ -89,7 +89,7 @@ export class ReviewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.m_oComment)
+    
   }
 
   /**

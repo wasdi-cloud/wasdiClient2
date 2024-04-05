@@ -9,11 +9,12 @@ export class WapDateTimePickerComponent implements OnInit {
   @Input() m_oDateControl
   @Output() m_oDateControlChange = new EventEmitter<any>();
 
-  m_sInputDate: string;
+  m_sInputDate: any;
 
   ngOnInit(): void {
     if (this.m_oDateControl.m_sDate) {
-      this.m_sInputDate = this.m_oDateControl.m_sDate;
+      var aoDateParts = this.m_oDateControl.m_sDate.split("/");      
+      this.m_sInputDate = ""+aoDateParts[2]+"-"+ aoDateParts[1] + "-" +aoDateParts[0];
     }
   }
 
@@ -22,7 +23,7 @@ export class WapDateTimePickerComponent implements OnInit {
    * @param oEvent 
    */
   getDate(oEvent) {
-    this.m_oDateControl.m_sDate = new Date(oEvent.event.target.value);
+    this.m_oDateControl.m_sDate = oEvent.event.target.value;
     this.m_oDateControlChange.emit(this.m_oDateControl)
   }
 }
