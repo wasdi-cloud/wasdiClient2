@@ -198,4 +198,8 @@ export default class FadeoutUtils {
         /* the object isn't inside array */
         return -1;
     }
+
+    static utilsIsValidDate(d: any) {
+        return d instanceof Date;
+    }
 }
