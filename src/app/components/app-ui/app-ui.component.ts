@@ -293,10 +293,12 @@ export class AppUiComponent implements OnInit {
    * Run Application in either Selected Workspace or New Workspace
    */
   runApplication() {
+
+    this.m_sMessage = "";
     let bCheck: boolean = this.checkParams();
 
     if (!bCheck) {
-      this.m_oNotificationDisplayService.openAlertDialog("Error Running Application.")
+      this.m_oNotificationDisplayService.openAlertDialog(this.m_sMessage);
       return;
     }
 
@@ -314,7 +316,6 @@ export class AppUiComponent implements OnInit {
     let oController = this;
 
     let sApplicationName: string = this.m_oConstantsService.getSelectedApplication();
-
 
     // If we are opening an existing workspace:
     if (this.m_bOpenWorkspace === true && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === false) {
@@ -407,13 +408,23 @@ export class AppUiComponent implements OnInit {
     let bIsValid: boolean = true;
 
     let asMessages: string[] = [];
-    this.m_sMessage = "The following inputs are required: "
+
+    this.m_sMessage = "The following inputs are required or are invalid:"
+    this.m_sMessage += "<br>";
+
     for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
       if (!this.wapDisplayComponent.get(iTabs)?.checkParams(asMessages)) {
         bIsValid = false;
-        this.m_sMessage = this.m_sMessage + asMessages + "\n";
       }
     }
+
+    if (!bIsValid) {
+      for(let iMessages = 0; iMessages<asMessages.length; iMessages++) {
+        this.m_sMessage = this.m_sMessage + asMessages[iMessages] + "<br>";
+      }
+      
+    }
+
     return bIsValid;
   }
 

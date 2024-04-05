@@ -11,8 +11,13 @@ export class WapProductsComboComponent {
   @Output() m_oControlSelectionChange = new EventEmitter<any>();
 
   getUserInput(oEvent) {
-    let sUserInput = oEvent.value;
-    this.m_oControlSelection.sSelectedValues = sUserInput;
-    this.m_oControlSelectionChange.emit(this.m_oControlSelection);
+
+    if (oEvent) {
+      if (oEvent.value) {
+        let sUserInput = oEvent.value.fileName;
+        this.m_oControlSelection.sSelectedValues = sUserInput;
+        this.m_oControlSelectionChange.emit(this.m_oControlSelection);    
+      }
+    }
   }
 }

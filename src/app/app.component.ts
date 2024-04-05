@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ConstantsService } from './services/constants.service';
 import { NavigationEnd, Router } from '@angular/router';
+import { Ace, config } from 'ace-builds';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.m_oRabbitStompService.initWebStomp();
     this.updateConnectionState("");
+
+    config.set('basePath', '../../../../node_modules/ace-builds/src-min-noconflict')
 
     this.m_oConstantsService.m_oActiveWorkspaceSubscription.subscribe(oResponse => {
       this.m_oActiveWorkspace = oResponse;

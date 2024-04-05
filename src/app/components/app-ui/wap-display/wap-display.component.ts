@@ -88,25 +88,26 @@ export class WapDisplayComponent implements OnInit {
             sStringValue = oElement.sSelectedValues.name;
           }
           if (!sStringValue) {
-            let sMessage = oElement.label;
+            let sMessage = oElement.label + ": Missing required field";
             asMessages.push(sMessage);
             bReturn = false
           }
         } else {
           let oValue: any = oElement.getValue();
-          if (oValue === null || oValue === undefined) {
-            let sMessage = oElement.label;
+          if (oValue === null || oValue === undefined || oValue=="")  {
+            let sMessage = oElement.label + ": Missing required field";
             asMessages.push(sMessage);
 
             bReturn = false;
           }
         }
-        if (typeof oElement.isValid === "function") {
-          if (!oElement.isValid(asMessages)) {
-            bReturn = false
-          }
-        }
       }
+
+      if (typeof oElement.isValid === "function") {
+        if (!oElement.isValid(asMessages)) {
+          bReturn = false
+        }
+      }      
     }
     return bReturn
   }

@@ -12,7 +12,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { Ace, edit } from 'ace-builds';
+import { Ace, config, edit } from 'ace-builds';
 import 'ace-builds';
 import 'ace-builds/src-noconflict/theme-dracula';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -47,7 +47,9 @@ export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    
+  }
 
   ngAfterViewInit(): void {
     this.initEditor_();

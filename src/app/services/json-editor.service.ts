@@ -56,8 +56,8 @@ export class JsonEditorService {
     this.m_oEditor.setOptions(this.m_oOptions);
     this.m_oEditor.setValue(this.m_sText, -1);
     this.m_oEditor.setReadOnly(this.m_bReadOnly);
-    this.m_oEditor.setTheme('ace/theme/dracula');
     this.setEditorMode();
+    this.m_oEditor.setTheme('ace/theme/dracula');
     this.m_oEditor.session.setUseWorker(false);
     this.m_oEditor.on('change', () => this.onEditorTextChange());
   }

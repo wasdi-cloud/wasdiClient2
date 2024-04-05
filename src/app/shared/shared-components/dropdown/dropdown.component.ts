@@ -56,7 +56,7 @@ export class DropdownComponent {
 
   m_sSearchString: string = "";
 
-  m_bShowFileExtension: boolean = false;
+  @Input() m_bShowFileExtension: boolean = false;
 
   /**
    * Emit selection change to listening parent component

@@ -1,4 +1,4 @@
 <app-dropdown [m_bHasSearch]="true"
     [m_sPlaceholder]="m_aoProducts.length > 0 ? 'Select a Product' : 'Select a Workspace with Products'"
     [m_aoDropdownItems]="m_aoProducts" [m_sLabel]="m_oControlSelection.label"
-    (m_oSelectionChange)="getUserInput($event)" [m_bFileExt]="true"></app-dropdown>
+    (m_oSelectionChange)="getUserInput($event)" [m_bFileExt]="false" [m_bShowFileExtension]="m_oControlSelection.bShowExtension"></app-dropdown>
