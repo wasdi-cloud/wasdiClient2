@@ -51,7 +51,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatBottomSheetModule, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatTooltipModule } from '@angular/material/tooltip'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -365,7 +365,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       multi: true,
       deps: [ConfigurationService],
       useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
-    }
+    },
+    { provide: MatBottomSheetRef, useValue: {} },
   ],
   bootstrap: [AppComponent],
   entryComponents: [ConfirmationDialogComponent],

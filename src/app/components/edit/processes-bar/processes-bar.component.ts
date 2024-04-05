@@ -1,12 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 //Angular Material Imports: 
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 
 //Service Imports: 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { PayloadDialogComponent } from '../payload-dialog/payload-dialog.component';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -34,6 +33,8 @@ export class ProcessesBarComponent implements OnInit {
   @Input() m_sDownloadProductName?: string = "";
   @Input() m_bShowDownloadProgress: boolean = false;
 
+  @Input() m_bIsOpen?: boolean = false;
+
   m_aoProcessesRunning: any[] = [];
 
   m_bIsProcessRunning: boolean = false;
@@ -48,7 +49,7 @@ export class ProcessesBarComponent implements OnInit {
 
   constructor(
     private _bottomSheet: MatBottomSheet,
-    private m_oDialog: MatDialog,
+    private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarTableComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
@@ -77,7 +78,6 @@ export class ProcessesBarComponent implements OnInit {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(aoProcessesRunning)) {
           this.getSummary();
           this.m_oLastProcesses = this.findLastProcess(aoProcessesRunning)
-          console.log(this.m_oLastProcesses)
         }
       }
     })
@@ -129,11 +129,15 @@ export class ProcessesBarComponent implements OnInit {
   }
 
   openProcessesBar(): void {
-    this._bottomSheet.open(ProcessesBarTableComponent, {
-      data: {
-        workspace: this.m_oActiveWorkspace
-      }
-    })
+    if (this.m_bIsOpen === false) {
+      this._bottomSheet.open(ProcessesBarTableComponent, {
+        data: {
+          workspace: this.m_oActiveWorkspace
+        }
+      })
+    } else {
+      this.m_oBottomSheetRef.dismiss();
+    }
   }
 
   findLastProcess(aoProcessesRunning) {

@@ -1,5 +1,5 @@
 <div class="bottom-sheet-container d-flex flex-column" style="height: 95vh">
-    <app-processes-bar></app-processes-bar>
+    <app-processes-bar [m_bIsOpen]="true"></app-processes-bar>
     <div class="processes-filter d-flex flex-row align-items-center justify-content-between gap-3 mx-3 p-2">
         <div class="flex-fill d-flex flex-row gap-3 justify-content-between align-self-end" style="width: 70%;">
             <app-dropdown class="flex-fill" style="width: 33%" [m_sLabel]="'Status'" [m_sPlaceholder]="'Select Status'"

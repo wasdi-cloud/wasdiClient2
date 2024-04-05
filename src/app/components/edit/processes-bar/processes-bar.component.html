@@ -26,7 +26,7 @@
             <div class="card-divider"></div>
             <div class="logs-open-container d-flex flex-row align-items-center gap-2">
                 <app-button [m_sSize]="'small'" [m_bDisabled]="false" [m_bLink]="false" [m_bRounded]="false"
-                    [m_sIconLeft]="'expand_less'" (click)="openProcessesBar()"></app-button>
+                    [m_sIconLeft]="m_bIsOpen ? 'expand_more' : 'expand_less'" (click)="openProcessesBar()"></app-button>
             </div>
         </div>
         <!-- <div *ngIf="m_bShowDownloadProgress" class="text-light">
