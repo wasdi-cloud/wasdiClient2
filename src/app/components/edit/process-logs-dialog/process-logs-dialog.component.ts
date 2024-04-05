@@ -15,11 +15,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   styleUrls: ['./process-logs-dialog.component.css']
 })
 export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
-  //Font Awesome Imports
-  faXmark = faX;
-  faDownload = faDownload;
 
-  //Member values
   m_oProcess = this.data.process;
   m_aoLogs: any = [];
   m_aoAllLogs: any = [];
@@ -31,6 +27,7 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
   m_iNumberOfLogsPerPage: number = 10;
   m_oTick: any = null;
 
+  m_sTagColor: string = "";
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private m_oAuthService: AuthService,
@@ -46,6 +43,7 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getLogsCount(this.m_oProcess.processObjId);
     this.m_oTick = this.startTick(this.m_oProcess.status);
+    this.setTagColor(this.m_oProcess.status)
   }
 
   ngOnDestroy(): void {
@@ -189,6 +187,20 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
     }, 5000);
 
     return oTick;
+  }
+
+  setTagColor(sProcessStatus) {
+    if (sProcessStatus === 'ERROR') {
+      this.m_sTagColor = 'red';
+    } else if (sProcessStatus === 'STOPPED') {
+      this.m_sTagColor = 'red';
+      sProcessStatus = "DIALOG_PROCESSES_LOGS_STOP";
+
+    } else if (sProcessStatus === 'DONE') {
+      this.m_sTagColor = 'green';
+    } else {
+      sProcessStatus = 'green';
+    }
   }
 
   dismiss() {

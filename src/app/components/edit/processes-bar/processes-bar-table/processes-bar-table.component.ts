@@ -1,22 +1,21 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import { PayloadDialogComponent } from 'src/app/components/edit/payload-dialog/payload-dialog.component';
+import { ProcessLogsDialogComponent } from 'src/app/components/edit/process-logs-dialog/process-logs-dialog.component';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
-import { TranslateService } from '@ngx-translate/core';
-
-import { ProcessesBarComponent } from '../processes-bar.component';
 
 import { ProcessStatuses, ProcessTypes } from '../process-status-types';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-processes-bar-table',
   templateUrl: './processes-bar-table.component.html',
   styleUrls: ['./processes-bar-table.component.css']
 })
-export class ProcessesBarTableComponent implements OnInit {
+export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   /**
    * Filter Inputs from header
    */
@@ -37,47 +36,57 @@ export class ProcessesBarTableComponent implements OnInit {
    */
   private m_oActiveWorkspace?: any = null;
 
-  /**
-   * Processes waiting to start (Queued)
-   */
-  private m_iWaitingProcesses: number = 0;
 
   /**
-   * Total number of processes
+   * Statuses of the Processes (e.g., 'DONE', 'RUNNING', etc)
    */
-  private m_iNumberOfProcesses: number = 0;
-
-  /**
-   * Is websocket connected? 0 = false; 1 = true
-   */
-  private m_iIsWebsocketConnected: number;
-
-  /**
-   * 
-   */
-  private m_oProcessesBarSubscription: any;
-
   public m_aoProcessStatuses = ProcessStatuses;
 
+  /**
+   * Process Types
+   */
   public m_aoProcessTypes = ProcessTypes;
 
+  /**
+   * Default Selected Status for the Statuses Dropdown
+   */
   public m_oSelectedStatus = [this.m_aoProcessStatuses[0]]
 
+  /**
+   * Default Selected Type for the Type Dropdown
+   */
   public m_oSelectedType = [this.m_aoProcessTypes[0]]
 
-  m_iNumberOfProcessForRequest: number = 40;
-  m_iFirstProcess = 0;
-  m_iLastProcess = this.m_iNumberOfProcessForRequest;
+  /**
+   * Selected Workspace ID
+   */
+  private m_sActiveWorkspaceId: string = null;
 
-  m_aoAllProcessesLogs: Array<any> = [];
+
+  /**
+   * Number of Processes for the get all Processes Request
+   */
+  private m_iNumberOfProcessForRequest: number = 40;
+
+  /**
+   * Integer of the first process to be requested
+   */
+  private m_iFirstProcess = 0;
+
+  private m_iLastProcess = this.m_iNumberOfProcessForRequest;
+
+  public m_aoAllProcessesLogs: Array<any> = [];
+
+  /**
+   * Interval function - set in ngOnInit
+   */
+  private m_oInterval: any;
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) private m_oData: any,
-    private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarComponent>,
+    private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    private m_oRabbitStompService: RabbitStompService,
-    private m_oTranslate: TranslateService
+    private m_oProcessWorkspaceService: ProcessWorkspaceService
   ) { }
 
   ngOnInit(): void {
@@ -90,7 +99,6 @@ export class ProcessesBarTableComponent implements OnInit {
         next: oResponse => {
           if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
             this.m_aoProcessesRunning = oResponse;
-            console.log(this.m_aoProcessesRunning);
           } else {
             this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
           }
@@ -102,10 +110,39 @@ export class ProcessesBarTableComponent implements OnInit {
     }
 
     this.getAllProcessesLogs();
+
+    this.m_oInterval = setInterval(() => {
+      this.getLastProcessesLogs();
+    }, 1000)
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.m_oInterval)
   }
 
   setActiveWorkspace(oActiveWorkspace) {
     this.m_oActiveWorkspace = oActiveWorkspace;
+    this.m_sActiveWorkspaceId = oActiveWorkspace.workspaceId;
+  }
+
+  getLastProcessesLogs() {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_sActiveWorkspaceId) === true) {
+      return false;
+    }
+
+    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, 0, 40, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          if (oResponse.length > 0) {
+            oResponse.forEach((oElement, iIndex) => {
+              this.m_aoAllProcessesLogs[iIndex] = oElement;
+            })
+          }
+        }
+      },
+      error: oError => { }
+    })
+    return true;
   }
 
   getAllProcessesLogs() {
@@ -117,7 +154,6 @@ export class ProcessesBarTableComponent implements OnInit {
     this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(sWorkspaceId, this.m_iFirstProcess, this.m_iNumberOfProcessForRequest, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
       if (oResponse) {
         this.m_aoAllProcessesLogs = this.m_aoAllProcessesLogs.concat(oResponse);
-        console.log(this.m_aoAllProcessesLogs)
         this.calculateNextListOfProcesses();
       } else {
         // this.m_bIsLoadMoreBtnClickable = false;
@@ -229,5 +265,35 @@ export class ProcessesBarTableComponent implements OnInit {
     this.m_oSelectedType = [];
     this.resetCounters();
     this.getAllProcessesLogs();
+  }
+
+  openPayloadDialog(oProcess) {
+    this.m_oDialog.open(PayloadDialogComponent, {
+      height: '90vh',
+      width: '100vw',
+      minWidth: '100vw',
+      position: { bottom: "0" },
+      data: { process: oProcess }
+    })
+  }
+
+
+  openLogsDialog(oProcess) {
+    this.m_oDialog.open(ProcessLogsDialogComponent, {
+      width: '100vw',
+      minWidth: '100vw',
+      position: { bottom: "0" },
+      data: { process: oProcess }
+    })
+  }
+
+  deleteProcess(oProcess) {
+    this.m_oProcessWorkspaceService.deleteProcess(oProcess);
+  }
+
+  loadOnScroll(oEvent) {
+    if (oEvent.target.scrollHeight < oEvent.target.scrollTop + oEvent.target.offsetHeight) {
+      this.getAllProcessesLogs();
+    }
   }
 }
