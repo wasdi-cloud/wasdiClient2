@@ -146,19 +146,9 @@ export class AppUiComponent implements OnInit {
   m_sMessage = "The following inputs are required:"
 
   /**
-   * Active Workspace
-   */
-  m_oActiveWorkspace = null;
-
-  /**
    * User ID
    */
   m_sUserId: string;
-
-  /**
-   * Does the user want to create a new workspace or open an existing?
-   */
-  m_bOpenWorkspace: boolean = true;
 
   ngOnInit(): void {
     // Take our user id
@@ -191,11 +181,9 @@ export class AppUiComponent implements OnInit {
     }
 
     // Do we have an active workspace?
-    this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-
     // We select it
-    if (this.m_oActiveWorkspace !== null) {
-      this.m_oWorkspaceForm.sExistingWorkspace = this.m_oActiveWorkspace.workspaceName;
+    if (this.m_oConstantsService.getActiveWorkspace() !== null) {
+      this.m_oWorkspaceForm.sExistingWorkspace = this.m_oConstantsService.getActiveWorkspace();
     }
   }
 
@@ -307,10 +295,6 @@ export class AppUiComponent implements OnInit {
       return;
     }
 
-    //If there is an active workspace: 
-    if (this.m_oActiveWorkspace.workspaceId && this.m_bOpenWorkspace === true) {
-      this.m_oSelectedWorkspace = this.m_oActiveWorkspace;
-    }
     // let asMessages = [];
     let oProcessorInput = this.createParams();
     let oController = this;
@@ -318,16 +302,12 @@ export class AppUiComponent implements OnInit {
     let sApplicationName: string = this.m_oConstantsService.getSelectedApplication();
 
     // If we are opening an existing workspace:
-    if (this.m_bOpenWorkspace === true && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === false) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === false) {
       this.oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
         if (oResponse) {
           this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, oResponse);
         }
       });
-      //If we are creating a new workspace:
-    }
-    else if (this.m_bOpenWorkspace === true && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === true) {
-      this.m_oNotificationDisplayService.openAlertDialog("Please make a valid workspace selection");
     }
     else {
       let sWorkspaceName: string;
@@ -394,11 +374,16 @@ export class AppUiComponent implements OnInit {
     }
   }
 
+  /**
+   * Called to set the workspace where the user wants to run the app
+   * @param oEvent Notification of the selection of a Workspace
+   * @returns 
+   */
   getSelectedWorkspaceId(oEvent) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
       return false;
-    } else {
-      this.m_oActiveWorkspace = oEvent;
+    } 
+    else {
       this.m_oSelectedWorkspace = oEvent;
       return true;
     }
@@ -464,11 +449,6 @@ export class AppUiComponent implements OnInit {
       minWidth: '95vw',
       maxWidth: '95vw'
     })
-  }
-
-  setOpenNewWorkspace(oInput: any): void {
-    let parsedInput = JSON.parse(oInput.value.toLowerCase());
-    this.m_bOpenWorkspace = parsedInput;
   }
 
   getExecuteEvent(oEvent) {
