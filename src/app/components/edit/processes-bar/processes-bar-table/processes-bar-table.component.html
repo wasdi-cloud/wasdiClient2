@@ -10,7 +10,7 @@
                 [m_aoDropdownItems]="m_aoProcessTypes"
                 (m_oSelectionChange)="catchFilterChange($event, 'type')"></app-dropdown>
             <app-input-field style="padding-bottom: 2px" class="flex-fill" style="width: 33%" [m_sLabel]="'Name'"
-                [m_sInputValue]="m_oFilter.sName"
+                [m_sInputValue]="m_oFilter.sName" [m_sPlacehodler]="'Search by name'"
                 (m_oInputChange)="catchFilterChange($event, 'name')"></app-input-field>
 
         </div>
