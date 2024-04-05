@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div class="d-flex flex-column justify-content-between">
     <label for="" *ngIf="m_sLabel">{{m_sLabel}}</label>
     <mat-select [multiple]="m_bIsMultiSelect" class="form-control" name="dropdown" [(value)]="m_aoSelectedItems"
         disableOptionCentering="'false'" (selectionChange)="emitSelectionChange($event)"

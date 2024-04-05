@@ -1,4 +1,19 @@
-<div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between align-items-center p-1">
+<div class="apps-dialog">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">Paylaod
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+    </div>
+    <div class="payload-info d-flex flex-row justify-content-between mb-3">
+        <div>
+            {{m_oProcess.operationType === 'RUNPROCESSOR' ? 'App name' : 'Product name'}}: {{m_oProcess.productName?
+            m_oProcess.productName: 'N/A'}} | Status
+            <span class="category-tag" [ngClass]="m_sTagColor">{{m_oProcess.status}}</span>
+        </div>
+        <app-button [m_sLabel]="m_sCopyLabel" [m_sSize]="'small'" [m_sIconLeft]="'content_copy'"
+            (click)="copyPayload()"></app-button>
+    </div>
+    <app-json-editor [(m_sText)]="m_sJsonSample" m_sMode="json" [m_bReadOnly]="true"></app-json-editor>
+</div>
+<!-- <div class="">
     <h4>Payload For: {{m_oProcess.processObjId}}</h4>
     <button class="btn text-light" (click)="dismiss($event)">
         <fa-icon [icon]="faXmark"></fa-icon>
@@ -26,32 +41,32 @@
 
     <div *ngFor="let oChart of m_aoChartsInformation">
         <!-- Line Chart -->
-        <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" [view]="view" [legend]="m_bLegend"
+<!-- <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" [view]="view" [legend]="m_bLegend"
             [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
             [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data']"></ngx-charts-line-chart>
-        <!-- Area Line Chart -->
-        <ngx-charts-area-chart *ngIf="oChart['chart-type'] === 'line-area'" [view]="view" [legend]="m_bLegend"
+            [results]="oChart['chart-data']"></ngx-charts-line-chart> -->
+<!-- Area Line Chart -->
+<!-- <ngx-charts-area-chart *ngIf="oChart['chart-type'] === 'line-area'" [view]="view" [legend]="m_bLegend"
             [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
             [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data']"></ngx-charts-area-chart>
-        <!-- Stacked Line Chart -->
-        <ngx-charts-area-chart-stacked *ngIf="oChart['chart-type'] === 'line-stacked'" [view]="view" [legend]="m_bLegend"
+            [results]="oChart['chart-data']"></ngx-charts-area-chart> -->
+<!-- Stacked Line Chart -->
+<!-- <ngx-charts-area-chart-stacked *ngIf="oChart['chart-type'] === 'line-stacked'" [view]="view" [legend]="m_bLegend"
         [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
         [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-        [results]="oChart['chart-data']"></ngx-charts-area-chart-stacked>
-        <!-- Horizontal Bar Chart -->
-        <ngx-charts-bar-horizontal *ngIf="oChart['chart-type'] === 'bar-horizontal'" [view]="view" [legend]="m_bLegend"
+        [results]="oChart['chart-data']"></ngx-charts-area-chart-stacked> -->
+<!-- Horizontal Bar Chart -->
+<!-- <ngx-charts-bar-horizontal *ngIf="oChart['chart-type'] === 'bar-horizontal'" [view]="view" [legend]="m_bLegend"
             [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
             [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data'][0].series"></ngx-charts-bar-horizontal>
-        <!-- Vertical Bar Chart -->
-        <ngx-charts-bar-vertical *ngIf="oChart['chart-type'] === 'bar-vertical'" [view]="view" [legend]="m_bLegend"
+            [results]="oChart['chart-data'][0].series"></ngx-charts-bar-horizontal> -->
+<!-- Vertical Bar Chart -->
+<!-- <ngx-charts-bar-vertical *ngIf="oChart['chart-type'] === 'bar-vertical'" [view]="view" [legend]="m_bLegend"
             [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
             [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data'][0].series"></ngx-charts-bar-vertical>
-            <!-- Pie Chart -->
-        <ngx-charts-pie-chart *ngIf="oChart['chart-type'] === 'pie'" [view]="view" [legend]="m_bLegend"
+            [results]="oChart['chart-data'][0].series"></ngx-charts-bar-vertical> -->
+<!-- Pie Chart -->
+<!-- <ngx-charts-pie-chart *ngIf="oChart['chart-type'] === 'pie'" [view]="view" [legend]="m_bLegend"
             [doughnut]="false" [results]="oChart['chart-data'][0].series"></ngx-charts-pie-chart>
     </div>
-</div>
+</div>  -->

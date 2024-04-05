@@ -1,4 +1,46 @@
-<div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between align-items-center p-1">
+<div class="apps-dialog d-flex flex-column justify-content-between">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">Wasdi processor logs ID:
+        {{m_oProcess.processObjId}}
+        <span class="close-btn material-symbols-outlined" (click)="dismiss()"> close</span>
+    </div>
+    <div class="payload-info d-flex flex-row align-items-center mb-3">
+        <div>
+            {{m_oProcess.operationType === 'RUNPROCESSOR' ? 'App name' : 'Product name'}}: {{m_oProcess.productName?
+            m_oProcess.productName: 'N/A'}} | Status
+            <span class="category-tag" [ngClass]="m_sTagColor">{{m_oProcess.status}}</span>
+        </div>
+    </div>
+    <div class="log-filter-container d-flex flex-row justify-content-between">
+        <app-input-field [m_sLabel]="'Search into text'" [m_sPlacehodler]="'Search'"></app-input-field>
+        <div class="buttons-container align-self-end d-flex flex-row gap-2">
+            <app-button [m_sLabel]="'Download'" [m_sIconLeft]="'download'"></app-button>
+            <app-button [m_sLabel]="'Refresh'" [m_sIconLeft]="'refresh'" [m_bMuted]="true"
+                (click)="refreshLogs()"></app-button>
+        </div>
+    </div>
+    <div class="table-wrapper flex-fill mt-2" >
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let oProcessLog of m_aoLogs | filter: m_sSearch">
+                    <td>{{oProcessLog.logDate}}</td>
+                    <td>{{oProcessLog.logRow}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <mat-paginator #paginator class="logs-paginator" (page)="handlePagination($event)" [length]="m_iNumberOfLogs"
+        [disabled]="false" [showFirstLastButtons]="false" [pageSize]="m_iNumberOfLogsPerPage" [hidePageSize]="true"
+        aria-label="Select page">
+    </mat-paginator>
+</div>
+
+<!-- <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between align-items-center p-1">
     <h4>WASDI Process Log ID: {{m_oProcess.processObjId}}</h4>
     <button class="btn text-light" (click)="dismiss()">
         <fa-icon [icon]="faXmark"></fa-icon>
@@ -40,10 +82,4 @@
         [disabled]="false" [showFirstLastButtons]="false" [pageSize]="m_iNumberOfLogsPerPage" [hidePageSize]="true"
         aria-label="Select page">
     </mat-paginator>
-
-    <div class="d-flex flex-row gap-2 align-items-center">
-        <button class="btn btn-success" (click)="refreshLogs()">Refresh</button>
-        <button class="btn btn-secondary" (click)="dismiss()">Close</button>
-    </div>
-
-</div>
+</div> -->
