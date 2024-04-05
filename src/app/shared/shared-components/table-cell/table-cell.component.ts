@@ -37,6 +37,9 @@ export class TableCellComponent implements OnInit {
     } else if (this.m_sLabel === 'DONE') {
       this.m_sTagColor = 'yellow';
       this.m_sLabel = "DIALOG_PROCESSES_LOGS_LOG"
+    } else if (this.m_sLabel === 'RUNNING') {
+      this.m_sTagColor = 'green';
+      this.m_sLabel = "DIALOG_PROCESSES_LOGS_RUNNING";
     } else {
       this.m_sTagColor = 'green';
       this.m_sLabel = "DIALOG_PROCESSES_LOGS_WAIT";
