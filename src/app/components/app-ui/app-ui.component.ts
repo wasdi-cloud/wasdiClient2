@@ -6,7 +6,7 @@ import {
   transition,
   trigger
 } from '@angular/animations';
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 //import API services
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
@@ -26,6 +26,7 @@ import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { NewAppDialogComponent } from '../edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 import { WapDisplayComponent } from './wap-display/wap-display.component';
+import { JsonEditorService } from 'src/app/services/json-editor.service';
 
 export interface Application {
   buyed: boolean,
@@ -57,11 +58,13 @@ export interface Application {
 export class AppUiComponent implements OnInit {
   @ViewChild(WapDirective, { static: true }) appWap!: WapDirective;
   @ViewChildren(WapDisplayComponent) wapDisplayComponent: QueryList<WapDisplayComponent>;
+  @ViewChild('editor') m_oEditorRef!: ElementRef;
 
   constructor(
     private m_oActivatedRoute: ActivatedRoute,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oJsonEditorService: JsonEditorService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
     private m_oProcessorWorkspaceService: ProcessWorkspaceService,
@@ -203,7 +206,7 @@ export class AppUiComponent implements OnInit {
     return this.m_oProcessorService.getMarketplaceDetail(sProcessorName).subscribe(oResponse => {
       this.m_oProcessorInformation = oResponse;
     })
-  }  
+  }
 
   /**
    * Retrieve Processor UI from WASDI server
@@ -279,7 +282,11 @@ export class AppUiComponent implements OnInit {
    */
   showParamsJSON() {
     let oProcessorInput = this.createParams();
-    this.m_sJSONParam = JSON.stringify(oProcessorInput, undefined, 4)
+
+    this.m_sJSONParam = JSON.stringify(oProcessorInput, null, 4)
+    this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+    this.m_oJsonEditorService.initEditor()
+    this.m_oJsonEditorService.setText(this.m_sJSONParam);
   }
 
   /**
@@ -317,16 +324,16 @@ export class AppUiComponent implements OnInit {
         }
       });
       //If we are creating a new workspace:
-    } 
+    }
     else if (this.m_bOpenWorkspace === true && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === true) {
       this.m_oNotificationDisplayService.openAlertDialog("Please make a valid workspace selection");
-    } 
+    }
     else {
       let sWorkspaceName: string;
       let sUserProvidedWorkspaceName: string = this.m_oWorkspaceForm.sNewWorkspaceName;
       if (sUserProvidedWorkspaceName) {
         sWorkspaceName = this.m_oWorkspaceForm.sNewWorkspaceName;
-      } 
+      }
       else {
         let oToday = new Date();
         let sToday = oToday.toISOString();
@@ -455,6 +462,10 @@ export class AppUiComponent implements OnInit {
 
   getExecuteEvent(oEvent) {
     this.runApplication();
+  }
+
+  getJsonText(oEvent) {
+    this.m_sJSONParam = this.m_oJsonEditorService.getValue();
   }
 
 }
