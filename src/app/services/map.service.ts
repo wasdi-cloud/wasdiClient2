@@ -138,6 +138,10 @@ export class MapService {
     return this.m_oWasdiMap;
   }
 
+  getOSMBasicLayer() {
+    return this.m_oOSMBasic;
+  }
+
   /**
    * Initalize base layers
    */

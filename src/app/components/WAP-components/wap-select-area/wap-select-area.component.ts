@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import { TranslateService } from '@ngx-translate/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -23,12 +23,12 @@ export class WapSelectAreaComponent implements OnInit {
   /**
    * Map input as described by the User Interface
    */
-  @Input() oMapInput;
+  @Input() m_oMapInput;
 
   /**
    * Event about map changed
    */
-  @Output() oMapInputChange = new EventEmitter;
+  @Output() m_oMapInputChange = new EventEmitter;
 
   /**
    * Draw Options
@@ -88,7 +88,7 @@ export class WapSelectAreaComponent implements OnInit {
         this.m_oGeoJSON = oResult.toGeoJSON();
         this.m_sPolygon = this.getPolygon();
 
-        this.oMapInputChange.emit({
+        this.m_oMapInputChange.emit({
           geoJSON: this.m_oGeoJSON,
           polygon: this.m_sPolygon
         });
@@ -99,8 +99,7 @@ export class WapSelectAreaComponent implements OnInit {
     let oController = this;
 
     // Create our own Drawn Items Layer
-    this.m_oDrawnItems = new L.FeatureGroup();
-    
+    this.m_oDrawnItems = new L.FeatureGroup();    
 
     // Give time to leaflet and then init
     setTimeout(function () {
@@ -109,8 +108,17 @@ export class WapSelectAreaComponent implements OnInit {
       oController.m_oMap = oMap;
       oMap.addLayer(oController.m_oDrawnItems);
       oController.addManualBbox(oMap);
-      oController.addBoundingBoxDrawerOnMap(oMap);
+      oController.addBoundingBoxDrawerOnMap(oMap);  
     }, 500);
+  }
+
+  ngOnDestroy(): void {
+    //Clear Map 
+    if (this.m_oMap) {
+      this.m_oDrawnItems.clearLayers();
+      this.m_oMap.remove();
+      this.m_oMap = null;
+    }
   }
 
   addManualBbox(oMap: any) {
@@ -237,12 +245,12 @@ export class WapSelectAreaComponent implements OnInit {
         // turn the bounding box red
         oLayer.options.color = "#ff0000";
         // erase the bounding box
-        oController.oMapInput.oBoundingBox.northEast = "";
-        oController.oMapInput.oBoundingBox.southWest = "";
+        oController.m_oMapInput.oBoundingBox.northEast = "";
+        oController.m_oMapInput.oBoundingBox.southWest = "";
       }
       //save new shape in map
       oController.m_oDrawnItems.addLayer(oLayer);
-      oController.oMapInputChange.emit(oController.oMapInput);
+      oController.m_oMapInput.emit(oController.m_oMapInput);
     });
 
     oMap.on(L.Draw.Event.DELETESTOP, function (event) {
@@ -269,10 +277,10 @@ export class WapSelectAreaComponent implements OnInit {
       return false;
     }
     //If valid after check: 
-    this.oMapInput.oBoundingBox.northEast = event.layer._bounds._northEast;
-    this.oMapInput.oBoundingBox.southWest = event.layer._bounds._southWest;
+    this.m_oMapInput.oBoundingBox.northEast = event.layer._bounds._northEast;
+    this.m_oMapInput.oBoundingBox.southWest = event.layer._bounds._southWest;
 
-    this.oMapInputChange.emit(this.oMapInput);
+    this.m_oMapInputChange.emit(this.m_oMapInput);
 
     return true
   }
@@ -295,8 +303,8 @@ export class WapSelectAreaComponent implements OnInit {
     /**
      The following happens in this.onDrawCreated():  
      */
-    this.oMapInput.oBoundingBox.northEast = oLayer._bounds._northEast;
-    this.oMapInput.oBoundingBox.southWest = oLayer._bounds._southWest;
+    this.m_oMapInput.oBoundingBox.northEast = oLayer._bounds._northEast;
+    this.m_oMapInput.oBoundingBox.southWest = oLayer._bounds._southWest;
 
     let latlngs = oLayer.getLatLngs();
     // height and width respectively
@@ -310,17 +318,17 @@ export class WapSelectAreaComponent implements OnInit {
     // first element is the array itself to be passed
     let fArea = L.GeometryUtil.geodesicArea(oLayer.getLatLngs()[0]) / 1000000;
 
-    if (fArea > this.oMapInput.maxArea && this.oMapInput.maxArea !== 0) {
+    if (fArea > this.m_oMapInput.maxArea && this.m_oMapInput.maxArea !== 0) {
       // sErrorMessage = sErrorMessage.concat(this.m_oTranslateService.getTranslation());
       return false;
     }
 
-    if (fMaxSide > this.oMapInput.maxSide && this.oMapInput.maxSide != 0) {
+    if (fMaxSide > this.m_oMapInput.maxSide && this.m_oMapInput.maxSide != 0) {
       // sErrorMessage = sErrorMessage.concat($translate.getTranslationTable().WAP_SELECT_AREA_OVER_SIDE);
       return false;
     }
 
-    if (fRatio > this.oMapInput.maxRatioSide && this.oMapInput.maxRatioSide != 0) {
+    if (fRatio > this.m_oMapInput.maxRatioSide && this.m_oMapInput.maxRatioSide != 0) {
       // sErrorMessage = sErrorMessage.concat($translate.getTranslationTable().WAP_SELECT_AREA_OVER_RATIO);
       return false;
     }
