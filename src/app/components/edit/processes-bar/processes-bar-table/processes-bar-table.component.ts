@@ -282,6 +282,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     this.m_oDialog.open(ProcessLogsDialogComponent, {
       width: '100vw',
       minWidth: '100vw',
+      height: '90vh',
       position: { bottom: "0" },
       data: { process: oProcess }
     })

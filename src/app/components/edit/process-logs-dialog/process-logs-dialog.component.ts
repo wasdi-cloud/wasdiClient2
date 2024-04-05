@@ -203,6 +203,10 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  setSearchString(oEvent) {
+    this.m_sSearch = oEvent.event.target.value;
+  }
+
   dismiss() {
     this.m_oDialogRef.close();
   }
