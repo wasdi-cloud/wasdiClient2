@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders  } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ConstantsService } from './constants.service';
 import Geocoder from 'leaflet-control-geocoder';
 import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
@@ -176,7 +176,7 @@ export class MapService {
       minZoom: 0,
       maxZoom: 20,
       attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	    ext: 'png'
+      ext: 'png'
     });
 
     // Add all to the layers control
@@ -187,8 +187,8 @@ export class MapService {
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
         "Stadi Map Dark": this.m_oStadiMapDark
-      },
-      {}
+      }, null,
+      { position: 'bottomright' }
     )
   }
 
@@ -204,7 +204,7 @@ export class MapService {
    */
   initWasdiMap(sMapDiv: string) {
     this.m_oWasdiMap = this.initMap(sMapDiv);
-    this.addMousePositionAndScale(this.m_oWasdiMap);
+
   }
 
   /**
@@ -213,7 +213,7 @@ export class MapService {
    */
   addMousePositionAndScale(oMap) {
 
-    if (oMap==null) {
+    if (oMap == null) {
       oMap = this.m_oWasdiMap;
       return;
     }
@@ -221,7 +221,7 @@ export class MapService {
     // coordinates in map find this plugin in lib folder
     let oMousePosition = L.control.mousePosition();
 
-    if (oMousePosition!=null) {
+    if (oMousePosition != null) {
       oMousePosition.addTo(oMap);
     }
 
@@ -239,16 +239,20 @@ export class MapService {
 
     // Create the Map Object
     let oMap: L.Map = L.map(sMapDiv, {
-      zoomControl: true,
+      zoomControl: false,
       center: [0, 0],
-      zoom: 3
+      zoom: 3,
+
     });
+
 
     this.m_oOSMBasic.addTo(oMap)
 
     this.initGeoSearchPluginForOpenStreetMap(oMap);
-
+    this.addMousePositionAndScale(oMap);
     this.m_oLayersControl.addTo(oMap);
+    L.control.zoom({ position: 'bottomright' }).addTo(oMap);
+
 
     // center map
     let southWest = L.latLng(0, 0);
@@ -291,8 +295,8 @@ export class MapService {
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
         "Stadi Map Dark": this.m_oStadiMapDark
-      },
-      {}
+      }, null,
+      { position: 'bottomright' }
     );
 
     oLayersControl.addTo(oMap);
@@ -350,12 +354,12 @@ export class MapService {
       oMap = this.m_oWasdiMap;
     }
 
-    if (this.m_oGeocoderControl==null) {
+    if (this.m_oGeocoderControl == null) {
       this.m_oGeocoderControl = L.geocoder();
     }
 
-    if (this.m_oGeocoderControl!=null) {
-      this.m_oGeocoderControl.addTo(oMap); 
+    if (this.m_oGeocoderControl != null) {
+      this.m_oGeocoderControl.addTo(oMap);
     }
   }
 
@@ -425,13 +429,13 @@ export class MapService {
 
     let aoReturnValues = [];
 
-    if (sBbox==null) {
+    if (sBbox == null) {
       return aoReturnValues;
     }
 
     let asBoundaries = sBbox.split(",");
     let iNumberOfBoundaries = asBoundaries.length;
-    
+
     let iIndexReturnValues = 0;
     for (let iBoundaryIndex = 0; iBoundaryIndex < iNumberOfBoundaries; iBoundaryIndex++) {
       if (iBoundaryIndex % 2 === 0) {
@@ -613,7 +617,7 @@ export class MapService {
         if (oProduct != null) {
           if (!FadeoutUtils.utilsIsStrNullOrEmpty(oProduct.bbox)) {
             let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
-            aoBounds = aoBounds.concat(aoProductBounds);    
+            aoBounds = aoBounds.concat(aoProductBounds);
           }
         }
       }
@@ -655,12 +659,12 @@ export class MapService {
     try {
       if (!aBounds) { return false; }
       if (aBounds.length == 0) { return false; }
-      if (oMap == null && this.m_oWasdiMap == null) { return false;}
+      if (oMap == null && this.m_oWasdiMap == null) { return false; }
 
       if (oMap == null) oMap = this.m_oWasdiMap;
 
       oMap.flyToBounds([aBounds]);
-      
+
       return true;
     }
     catch (e) {
@@ -863,7 +867,7 @@ export class MapService {
               // With all the values for lat and lon
               if (isNaN(oResult.north) || isNaN(oResult.south) || isNaN(oResult.east) || isNaN(oResult.west)) {
                 return;
-              } 
+              }
               else {
                 // Get the actual values
                 let fNorth = parseFloat(oResult.north);
@@ -882,8 +886,8 @@ export class MapService {
         });
 
         // This is the "icon" of the button added to Leaflet
-        oButton.innerHTML = 'M';
-        
+        oButton.innerHTML = '<span class="material-symbols-outlined">pin_invoke</span>';
+
         oContainer.title = "Manual Bounding Box";
 
         return oContainer;
@@ -927,16 +931,16 @@ export class MapService {
     const sBbox = (sVersion === '1.3.0') ? sBoundsString : aoBounds.toBBoxString();
 
     const oWmsParams = {
-        request: 'GetFeatureInfo',
-        service: 'WMS',
-        info_format: 'application/json',
-        query_layers: sLayerIdList,
-        feature_count: 10,
-        version: sVersion,
-        bbox: sBbox,
-        layers: sLayerIdList,
-        height: 101,
-        width: 101,
+      request: 'GetFeatureInfo',
+      service: 'WMS',
+      info_format: 'application/json',
+      query_layers: sLayerIdList,
+      feature_count: 10,
+      version: sVersion,
+      bbox: sBbox,
+      layers: sLayerIdList,
+      height: 101,
+      width: 101,
     };
 
 
@@ -954,13 +958,13 @@ export class MapService {
 
     //load data from server
     return sUrl;
-  } 
+  }
 
   getFeatureInfo(sUrl: string) {
-    const aoHeaders= new HttpHeaders()
-    .set('Accept', 'text/html,application/xhtml+xml,application/xml')
-    .set('Cache-Control', 'max-age=0');
-    return this.m_oHttp.get(sUrl, {'headers': aoHeaders});
+    const aoHeaders = new HttpHeaders()
+      .set('Accept', 'text/html,application/xhtml+xml,application/xml')
+      .set('Cache-Control', 'max-age=0');
+    return this.m_oHttp.get(sUrl, { 'headers': aoHeaders });
   }
 
 }
