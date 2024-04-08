@@ -451,14 +451,9 @@ a.leaflet-control-button,
   padding-left: 8px;
 }
 
+.leaflet-control-geocoder-address-context,
 ::-webkit-input-placeholder {
   color: #FFFFFF !important;
-}
-
-.leaflet-touch .leaflet-bar a,
-.leaflet-touch .leaflet-control-layers-toggle {
-  height: 36px !important;
-  width: 36px !important;
 }
 
 .leaflet-touch .leaflet-control-zoom-in,
@@ -488,4 +483,30 @@ a.leaflet-control-button,
 
 .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-rectangle {
   background-position: center !important;
+}
+
+.leaflet-control-geocoder-alternatives>li:last-child {
+  border-bottom-left-radius: 24px !important;
+  border-bottom-right-radius: 24px !important;
+}
+
+.leaflet-control-geocoder-alternatives>li>a {
+  background-color: transparent !important;
+  width: 250px !important;
+  min-height: 60px !important;
+  line-height: 18px !important;
+}
+
+.leaflet-control-geocoder-alternatives>li:hover,
+.leaflet-control-geocoder-alternatives>li>a:hover {
+  background-color: rgba(13, 16, 21, 0.9) !important;
+}
+
+.leaflet-control-layers-toggle,
+.leaflet-draw-draw-rectangle,
+.leaflet-control-button,
+.leaflet-control-zoom-out,
+.leaflet-control-zoom-in {
+  height: 36px !important;
+  width: 36px !important;
 }
