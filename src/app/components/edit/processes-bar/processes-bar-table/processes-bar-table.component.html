@@ -24,7 +24,7 @@
                 (click)="downloadProcessesFile()"></app-button>
         </div>
     </div>
-    <div class="table-wrapper d-flex flex-column">
+    <div class="table-wrapper flex-fill d-flex flex-column pb-3">
         <table>
             <thead class="table-heading-container">
                 <tr>
@@ -57,12 +57,12 @@
                         {{oProcessLog | duration}}
                     </td>
                     <td class="d-flex flex-row">
+                        <span class="material-symbols-outlined" matTooltip="Logs" (click)="openLogsDialog(oProcessLog)">
+                            subtitles
+                        </span>
                         <span class="material-symbols-outlined" matTooltip="Payload" *ngIf="oProcessLog.payload"
                             (click)="openPayloadDialog(oProcessLog)">
                             data_object
-                        </span>
-                        <span class="material-symbols-outlined" matTooltip="Logs" (click)="openLogsDialog(oProcessLog)">
-                            subtitles
                         </span>
                         <span class="cancel-icon material-symbols-outlined" matTooltip="Delete"
                             *ngIf="oProcessLog.status === 'RUNNING'" (click)="deleteProcess(oProcessLog)">

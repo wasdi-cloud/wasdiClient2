@@ -20,6 +20,7 @@ div.table-wrapper {
 table {
     width: 98%;
     margin: auto;
+    height: 100%;
     /* 
     margin: auto;
     height: 80vh;
