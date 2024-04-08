@@ -25,11 +25,12 @@ export class MapService {
    * @param m_oDialog 
    */
   constructor(private m_oConstantsService: ConstantsService, private m_oDialog: MatDialog, private m_oHttp: HttpClient) {
-    this.initTilelayer();
+    this.initTilelayer()
     this.m_oOptions = {
       layers: [
         this.m_oOSMBasic
       ],
+      zoomControl: false,
       zoom: 3,
       center: latLng(0, 0),
       edit: { featureGroup: this.m_oDrawnItems }
@@ -106,7 +107,7 @@ export class MapService {
    * Init options for leaflet-draw
    */
   m_oDrawOptions: any = {
-    position: 'topleft',
+    position: 'topright',
     draw: {
       circle: false,
       circlemarker: false,
@@ -146,7 +147,6 @@ export class MapService {
    * Initalize base layers
    */
   initTilelayer() {
-
     // Basic OSM Layer
     this.m_oOSMBasic = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
@@ -250,8 +250,8 @@ export class MapService {
 
     this.initGeoSearchPluginForOpenStreetMap(oMap);
     this.addMousePositionAndScale(oMap);
-    this.m_oLayersControl.addTo(oMap);
     L.control.zoom({ position: 'bottomright' }).addTo(oMap);
+    this.m_oLayersControl.addTo(oMap);
 
 
     // center map
@@ -840,7 +840,7 @@ export class MapService {
 
     L.Control.Button = L.Control.extend({
       options: {
-        position: "topleft"
+        position: "topright"
       },
       onAdd: function (oMap) {
 

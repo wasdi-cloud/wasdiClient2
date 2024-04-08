@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewChecked, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import * as L from 'leaflet';
@@ -9,7 +9,7 @@ import * as L from 'leaflet';
   templateUrl: './plan-map.component.html',
   styleUrls: ['./plan-map.component.css']
 })
-export class PlanMapComponent implements OnInit {
+export class PlanMapComponent implements OnInit, AfterViewChecked {
 
   /**
    * Array of the elements drawn on the map
@@ -46,6 +46,8 @@ export class PlanMapComponent implements OnInit {
    */
   m_aoManualBBoxSubscription: any;
 
+  m_oMap: any = null;
+
   /**
    * Event for the search params
    */
@@ -71,10 +73,19 @@ export class PlanMapComponent implements OnInit {
     })
   }
 
+  ngAfterViewChecked(): void {
+    this.m_oMap.invalidateSize();
+  }
+
   onMapReady(oMap: L.Map): void {
+    this.m_oMap = oMap;
+
     this.m_oMapService.setMap(oMap);
-    this.m_oMapService.addManualBbox(oMap)
-    this.m_oMapService.setDrawnItems()
+    this.m_oMapService.addMousePositionAndScale(oMap);
+    L.control.zoom({ position: 'bottomright' }).addTo(oMap);
+    this.m_oMapService.m_oLayersControl.addTo(oMap);
+    this.m_oMapService.initGeoSearchPluginForOpenStreetMap(oMap);
+    this.m_oMapService.addManualBbox(oMap);
   }
 
 

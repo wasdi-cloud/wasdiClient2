@@ -1,7 +1,6 @@
 <div class="map-frame map-container" style="height: 100%; width: 100%;">
     <div leaflet leafletDraw class="" style="height:100%; min-width: 100%; width: 100%;" id="searchOrbit"
-        [leafletOptions]="m_oMapOptions" (leafletMapReady)="onMapReady($event)"
-        [leafletLayersControl]="m_oLayersControl" [leafletDrawOptions]="m_oDrawOptions"
+        [leafletOptions]="m_oMapOptions" (leafletMapReady)="onMapReady($event)" [leafletDrawOptions]="m_oDrawOptions"
         (leafletDrawCreated)="onDrawCreated($event)">
         <div [leafletLayer]="m_aoDrawnItems"></div>
     </div>

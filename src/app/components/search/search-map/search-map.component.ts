@@ -25,8 +25,8 @@ export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Output() m_oMapInputChange = new EventEmitter;
 
   m_oDrawnItems: any;
-  m_oLayersControl: any;
   m_oDrawOptions: any;
+  m_oLayersControl: any;
   m_sErrorMessage: string;
   m_bIsValid: boolean;
   m_oMapOptions: any;
@@ -34,14 +34,12 @@ export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
   m_oMap: any;
 
   constructor(
-    private m_oMapService: MapService,
+    public m_oMapService: MapService,
     private m_oTranslate: TranslateService
   ) {
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
-    this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
     this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
     this.m_oDrawnItems = this.m_oMapService.m_oDrawnItems;
-
     this.m_oDrawOptions.edit.featureGroup = this.m_oDrawnItems;
   }
 
@@ -69,10 +67,13 @@ export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   onMapReady(oMap: L.Map) {
     this.m_oMap = oMap;
+
     this.m_oMapService.setMap(oMap);
-    this.m_oMapService.addManualBbox(oMap);
     this.m_oMapService.addMousePositionAndScale(oMap);
+    L.control.zoom({ position: 'bottomright' }).addTo(oMap);
+    this.m_oMapService.m_oLayersControl.addTo(oMap);
     this.m_oMapService.initGeoSearchPluginForOpenStreetMap(oMap);
+    this.m_oMapService.addManualBbox(oMap);
   }
 
   onDrawCreated(oEvent: any) {

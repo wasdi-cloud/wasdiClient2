@@ -409,6 +409,7 @@ a.leaflet-control-button,
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
+  cursor: pointer !important;
 }
 
 .leaflet-control-zoom-in {
