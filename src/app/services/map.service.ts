@@ -280,13 +280,14 @@ export class MapService {
   initMapSingleton(sMapDiv) {
 
     var oMap = L.map(sMapDiv, {
-      zoomControl: true,
+      zoomControl: false,
       layers: [this.m_oOSMBasic],
       keyboard: false
     });
-
+    
     this.initGeoSearchPluginForOpenStreetMap(oMap);
-
+    
+    this.addMousePositionAndScale(oMap);
     //layers control
     var oLayersControl = L.control.layers(
       {
@@ -298,8 +299,9 @@ export class MapService {
       }, null,
       { position: 'bottomright' }
     );
-
+    
     oLayersControl.addTo(oMap);
+    L.control.zoom({ position: 'bottomright' }).addTo(oMap);
 
     // center map
     var oSouthWest = L.latLng(0, 0),
@@ -309,7 +311,6 @@ export class MapService {
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
-    this.addMousePositionAndScale(oMap);
 
     return oMap;
   }

@@ -126,7 +126,7 @@ export class WapSelectAreaComponent implements OnInit {
 
     L.Control.Button = L.Control.extend({
       options: {
-        position: "topleft"
+        position: "topright"
       },
       onAdd: function (oMap) {
 
@@ -172,7 +172,7 @@ export class WapSelectAreaComponent implements OnInit {
         });
 
         // This is the "icon" of the button added to Leaflet
-        oButton.innerHTML = 'M';
+        oButton.innerHTML = '<span class="material-symbols-outlined">pin_invoke</span>';
         
         oContainer.title = "Manual Bounding Box";
 
@@ -216,7 +216,7 @@ export class WapSelectAreaComponent implements OnInit {
     
     let oDrawControl = new L.Control.Draw();
 
-    oDrawControl.setPosition('topleft');
+    oDrawControl.setPosition('topright');
 
     oDrawControl.setDrawingOptions({
       // what kind of shapes are disable/enable
