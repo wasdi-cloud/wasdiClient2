@@ -72,7 +72,7 @@ export class EditMapComponent implements OnInit {
         this.m_oMapService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts, "");
       }
     }
-    
+
   }
 
   /**
@@ -99,7 +99,7 @@ export class EditMapComponent implements OnInit {
   @Input() public set b2DMapModeOn(value: boolean) {
     this.m_b2DMapModeOn = value;
     this.switch2D3DMode()
-  }  
+  }
 
   /**
    * Event triggered when the Map Mode changes from 2D to 3D and vice versa
@@ -149,7 +149,7 @@ export class EditMapComponent implements OnInit {
     this.m_oGlobeService.clearGlobe();
     this.m_oMapService.clearMap();
 
-    
+
     if (this.m_b2DMapModeOn === false) {
       // Changing the Displayed Map to the 3D Cesium Globe:
       this.init3DMode(true);
@@ -186,7 +186,7 @@ export class EditMapComponent implements OnInit {
         // Check if it is a valid layer
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoVisibleBands[iIndexLayers].layerId)) {
           // Add it to the 2D Map
-          this.m_oMapService.addLayerMap2DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);            
+          this.m_oMapService.addLayerMap2DByServer(this.m_aoVisibleBands[iIndexLayers].layerId, this.m_aoVisibleBands[iIndexLayers].geoserverUrl);
         }
       }
 
@@ -204,12 +204,12 @@ export class EditMapComponent implements OnInit {
 
         if (this.m_bFeatureInfoMode) {
 
-          if (this.m_aoVisibleBands.length>0) {
+          if (this.m_aoVisibleBands.length > 0) {
 
             let sWmsUrl = "";
             let sLayerIdList = "";
 
-            for (let iLayers = 0; iLayers<this.m_aoVisibleBands.length; iLayers ++ ) {
+            for (let iLayers = 0; iLayers < this.m_aoVisibleBands.length; iLayers++) {
               let oLayer = this.m_aoVisibleBands[iLayers];
               if (FadeoutUtils.utilsIsStrNullOrEmpty(sWmsUrl)) {
                 sWmsUrl = oLayer.geoserverUrl.replace("ows", "wms");
@@ -217,30 +217,31 @@ export class EditMapComponent implements OnInit {
 
               sLayerIdList += oLayer.layerId;
 
-              if (iLayers<this.m_aoVisibleBands.length-1) sLayerIdList += ","
+              if (iLayers < this.m_aoVisibleBands.length - 1) sLayerIdList += ","
             }
 
             //sWmsUrl: string, oPoint: L.LatLng, sLayerIdList: string
             let sFeatureInfoUrl = this.m_oMapService.getWMSLayerInfoUrl(sWmsUrl, oClickEvent.latlng, sLayerIdList);
-            
+
             if (sFeatureInfoUrl) {
-              if (this.m_oFeatureInfoMarker!=null) {
+              if (this.m_oFeatureInfoMarker != null) {
                 this.m_oFeatureInfoMarker.remove();
               }
 
               this.m_oMapService.getFeatureInfo(sFeatureInfoUrl).subscribe({
                 next: oResponse => {
-                    if (oResponse !== null && oResponse !== undefined) {
-                      try {
-                        let sPrettyPrint = JSON.stringify(oResponse, null, 2);
-                        //let sJson = `<div>{"type":"FeatureCollection","features":[{"type":"Feature","id":"","geometry":null,"properties":{"GRAY_INDEX":0.1479392647743225}}],"totalFeatures":"unknown","numberReturned":1,"timeStamp":"2024-03-29T12:04:31.867Z","crs":null}</div>`;
-                        this.m_oFeatureInfoMarker = L.popup().setLatLng([oClickEvent.latlng.lat, oClickEvent.latlng.lng]).setContent(sPrettyPrint).openOn(this.m_oMapService.m_oWasdiMap);
-                      } 
-                      catch (error) {
-                        this.m_oNotificationDisplayService.openSnackBar("Cannot read feature info", "Close", "right", "bottom");
-                      }    
+                  if (oResponse !== null && oResponse !== undefined) {
+                    try {
+                      let sPrettyPrint = JSON.stringify(oResponse, null, 2);
+                      let sContentString = this.formatFeatureJSON(oResponse)
+                      //let sJson = `<div>{"type":"FeatureCollection","features":[{"type":"Feature","id":"","geometry":null,"properties":{"GRAY_INDEX":0.1479392647743225}}],"totalFeatures":"unknown","numberReturned":1,"timeStamp":"2024-03-29T12:04:31.867Z","crs":null}</div>`;
+                      this.m_oFeatureInfoMarker = L.popup().setLatLng([oClickEvent.latlng.lat, oClickEvent.latlng.lng]).setContent(sContentString).openOn(this.m_oMapService.m_oWasdiMap);
                     }
-                  },
+                    catch (error) {
+                      this.m_oNotificationDisplayService.openSnackBar("Cannot read feature info", "Close", "right", "bottom");
+                    }
+                  }
+                },
                 error: oError => {
                   this.m_oNotificationDisplayService.openSnackBar("Error reading feature info", "Close", "right", "bottom");
                 }
@@ -248,7 +249,7 @@ export class EditMapComponent implements OnInit {
             }
           }
         }
-        
+
       });
     }, 300);
 
@@ -278,7 +279,7 @@ export class EditMapComponent implements OnInit {
 
     //Load any exisiting layers into the Globe
     for (let iIndexLayers = 0; iIndexLayers < this.m_aoVisibleBands.length; iIndexLayers++) {
-      
+
       // Check if it is a valid layer
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoVisibleBands[iIndexLayers].layerId)) {
         // Add the layer to the 3D Map
@@ -300,7 +301,7 @@ export class EditMapComponent implements OnInit {
         this.m_oMapService.flyToWorkspaceBoundingBox(this.m_aoProducts);
       }
     }, 300);
-  } 
+  }
 
   goWorkspaceHome() {
     if (this.m_b2DMapModeOn) {
@@ -308,5 +309,22 @@ export class EditMapComponent implements OnInit {
     } else {
       this.m_oGlobeService.flyToWorkspaceBoundingBox(this.m_aoProducts);
     }
+  }
+
+  /**
+   * Return the content for an 'innerHTML' element to be read by the popup -> setContent()
+   * example: 
+   * Type: string
+   * - Gray Index: X.XXX 
+   */
+  formatFeatureJSON(oJSON: any) {
+    let asFeatureContent = oJSON.features.map(oFeature => {
+      return `<li>Type: ${oFeature.type} <ul>${oFeature.properties instanceof Array ? oFeature.properties.forEach(oProperty => {
+        return `<li> Gray Index: ${oProperty.GRAY_INDEX}</li>`
+      }) : `<li>Gray Index: ${oFeature.properties.GRAY_INDEX}</li>`}</ul> </li>`
+    })
+
+    let sReturnString ='<ul>' + asFeatureContent.toString() + '</ul>'
+    return sReturnString;
   }
 }

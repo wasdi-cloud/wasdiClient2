@@ -510,3 +510,20 @@ a.leaflet-control-button,
   height: 36px !important;
   width: 36px !important;
 }
+
+/* Styles for Leaflet Popup Content */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background-color: rgba(13, 16, 21, 0.8) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.leaflet-popup-content ul {
+  padding-left: 1rem !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: #FFFFFF !important;
+}
