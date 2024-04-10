@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Pipe({
   name: 'filter'
@@ -10,12 +11,17 @@ export class FilterPipe implements PipeTransform {
       return [];
     }
 
-    if (!searchText) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(searchText)) {
       return items;
     }
 
     if (typeof searchText !== 'string') {
-      searchText = searchText.workspaceName;
+      if (searchText.workspaceName) {
+        searchText = searchText.workspaceName;
+      }
+      if (searchText.name) {
+        searchText = searchText.name;
+      }
     }
     searchText = searchText.toLocaleLowerCase();
 
