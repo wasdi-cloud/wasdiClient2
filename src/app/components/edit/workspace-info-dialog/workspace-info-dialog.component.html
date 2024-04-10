@@ -1,4 +1,67 @@
-<h1 mat-dialog-title>Workspace Details - {{m_oWorkspace.name}}</h1>
+<div class="apps-dialog d-flex flex-column">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+        Workspace details
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+    </div>
+    <div class="dialog-content flex-fill d-flex flex-row justify-content-between gap-4">
+        <div class="info-container d-flex flex-column gap-4">
+            <div>
+                <div class="font-bold">Workspace name</div>
+                <div>{{m_oWorkspace.name}}</div>
+            </div>
+            <div>
+                <div class="font-bold">Workspace node</div>
+                <app-dropdown [m_aoDropdownItems]="m_asNodeCodes" [m_aoSelectedItems]="m_oWorkspace.nodeCode"
+                    (m_oSelectionChange)="setNodeCode($event)"></app-dropdown>
+            </div>
+            <div>
+                <div class="font-bold">Workspace ID</div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="" name="workspace-id"
+                        aria-label="Workspace ID Copy Field" value="{{m_oWorkspace.workspaceId}}" readonly disabled
+                        aria-describedby="copy-workspace-id">
+                    <span *ngIf="m_bShowCopied"
+                        class="d-flex flex-row align-items-center copied-indicator font-bold">COPIED!</span>
+                    <span class="input-group-text icon-left" id="copy-workspace-id" (click)="copyWorkspaceId()">
+                        <span class="material-symbols-outlined green-text">
+                            content_copy
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <div class="font-bold">Owner</div>
+                <div>{{m_oWorkspace.userId}}</div>
+            </div>
+            <div class="d-flex flex-row" style="width: 100%;">
+                <div class="date-container">
+                    <div class="font-bold">Created</div>
+                    <div>{{m_oWorkspace.creationDate | date}}</div>
+                </div>
+                <div>
+                    <div class="font-bold">Last Update</div>
+                    <div>{{m_oWorkspace.lastEditDate | date}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-container">
+            <div *ngIf="m_oWorkspace.sharedUsers.length > 0">
+                <div class="font-bold pb-2">Shared with</div>
+                <ul>
+                    <li *ngFor="let oSharedUser of m_oWorkspace.sharedUsers">
+                        {{oSharedUser}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="dialog-footer d-flex flex-row gap-2 justify-content-end">
+        <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true" (click)="onDismiss()"></app-button>
+        <app-button [m_sLabel]="'Update Node'" (click)="saveNodeCode()"></app-button>
+    </div>
+</div>
+<!-- <h1 mat-dialog-title>Workspace Details - {{m_oWorkspace.name}}</h1>
 
 <div mat-dialog-content class="d-flex flex-row">
     <div class="d-flex flex-column gap-3">
@@ -17,12 +80,12 @@
         </div>
         <div>
             Workspace Id:<span class="text-secondary">{{m_oWorkspace.workspaceId}}</span>
-        </div>
+        </div> -->
 
-        <!-- <div>
+<!-- <div>
         Processes Executed:<span class="text-secondary">{{m_oWorkspace.processesCount}}</span>
     </div> -->
-        <div *ngIf="m_oWorkspace.sharedUsers.length > 0">
+<!-- <div *ngIf="m_oWorkspace.sharedUsers.length > 0">
             Workspace Shared With:
             <ul>
                 <li *ngFor="let oSharedUser of m_oWorkspace.sharedUsers">
@@ -44,4 +107,4 @@
 <div mat-dialog-actions class="d-flex flex-row justify-content-end gap-2">
     <button class="btn btn-primary" form="nodeCodeForm" mat-button>Apply</button>
     <button class="btn btn-secondary" mat-button mat-dialog-close>Close</button>
-</div>
+</div> -->

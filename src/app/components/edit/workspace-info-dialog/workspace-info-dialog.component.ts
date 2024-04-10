@@ -3,10 +3,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { NodeService } from 'src/app/services/api/node.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-workspace-info-dialog',
@@ -20,11 +22,15 @@ export class WorkspaceInfoDialogComponent implements OnInit {
   m_asNodeCodes: string[];
   m_asCloudProvider: string[];
   m_sCurrentNode: string;
+  m_bShowCopied
 
   constructor(
-    private m_oConstantsService: ConstantsService,
-    private m_oNodeService: NodeService,
     @Inject(MAT_DIALOG_DATA) public m_oWorkspace: Workspace,
+    private m_oClipboard: Clipboard,
+    private m_oConstantsService: ConstantsService,
+    private m_oDialogRef: MatDialogRef<WorkspaceInfoDialogComponent>,
+    private m_oNodeService: NodeService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oWorkspaceService: WorkspaceService,
   ) { }
 
@@ -68,8 +74,8 @@ export class WorkspaceInfoDialogComponent implements OnInit {
     }
   }
 
-  setNodeVode(oNode: any) {
-    this.m_sCurrentNode = oNode;
+  setNodeCode(oNode: any) {
+    this.m_sCurrentNode = oNode.value;
   }
 
   saveNodeCode() {
@@ -82,11 +88,9 @@ export class WorkspaceInfoDialogComponent implements OnInit {
         this.m_oConstantsService.getActiveWorkspace().nodeCode = this.m_sCurrentNode;
         this.m_oConstantsService.setActiveWorkspace(oWorkspace);
 
-        //Update Successful Dialog
-        console.log("success")
+        this.m_oNotificationDisplayService.openSnackBar("Node Updated", "Close");
       } else {
-        //Update Unsucessful Dialog
-        console.log("unsuccessful")
+        this.m_oNotificationDisplayService.openAlertDialog("Error updating node");
       }
     })
   }
@@ -106,5 +110,18 @@ export class WorkspaceInfoDialogComponent implements OnInit {
   setNodeInput(oEvent: any) {
     let sSelectedNode = oEvent.target.value;
     this.m_sCurrentNode = sSelectedNode;
+  }
+
+  copyWorkspaceId() {
+    this.m_oClipboard.copy(this.m_oWorkspace.workspaceId);
+    this.m_bShowCopied = true
+    setTimeout(() => {
+      this.m_bShowCopied = false
+    }, 1000)
+
+  }
+
+  onDismiss() {
+    this.m_oDialogRef.close();
   }
 }

@@ -1,0 +1,41 @@
+div.apps-dialog {
+    height: 100% !important;
+}
+
+div.info-container, div.date-container {
+    width: 50%;
+}
+
+
+
+input.form-control {
+    border-right: none;
+    background: var(--neutral10);
+}
+
+.copied-indicator {
+    background-color: var(--neutral10) !important;
+    color: var(--wasdiGreen);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.icon-left {
+    background: var(--neutral10) !important;
+    border-bottom-right-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    cursor: pointer;
+}
+
+.green-text {
+    color: var(--wasdiGreen) !important;
+}
+
+li {
+    list-style: none;
+    padding-bottom: 0.25rem;
+}
+
+ul {
+    padding-left: 0;
+}

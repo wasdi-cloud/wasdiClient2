@@ -21,7 +21,7 @@ export class DropdownComponent {
   /**
    * Is there a default option - add input? (i.e., pre-selected array)
    */
-  @Input() m_aoSelectedItems: Array<any> = [];
+  @Input() m_aoSelectedItems: any = [];
 
   /**
    * Is the dropdown a multi-select dropdown? Default: false;

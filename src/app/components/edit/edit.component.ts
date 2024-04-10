@@ -352,6 +352,9 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   openPropertiesDialog() {
-    this.m_oDialog.open(WorkspaceInfoDialogComponent, {})
+    this.m_oDialog.open(WorkspaceInfoDialogComponent, {
+      height: '65vh',
+      width: '60vw'
+    })
   }
 }

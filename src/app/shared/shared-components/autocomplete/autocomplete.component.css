@@ -47,10 +47,6 @@ input[type='search']::-webkit-search-cancel-button {
     min-width: 100% !important;
 }
 
-::ng-deep .cdk-overlay-pane {
-    width: fit-content !important;
-}
-
 ::ng-deep mat-option {
     background: #FFFFFF !important;
 }
