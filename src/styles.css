@@ -327,7 +327,6 @@ span.close-btn {
 
 div.apps-dialog {
   padding: 24px;
-  height: 80vh;
   width: 100%;
 }
 
@@ -451,8 +450,7 @@ a.leaflet-control-button,
   padding-left: 8px;
 }
 
-.leaflet-control-geocoder-address-context,
-::-webkit-input-placeholder {
+.leaflet-control-geocoder-address-context {
   color: #FFFFFF !important;
 }
 

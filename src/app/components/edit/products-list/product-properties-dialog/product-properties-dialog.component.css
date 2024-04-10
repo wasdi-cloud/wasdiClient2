@@ -5,3 +5,7 @@ div.dialog {
 label.product-form-label {
     width: 20%;
 }
+
+.info-container {
+    overflow-wrap: break-word;
+}

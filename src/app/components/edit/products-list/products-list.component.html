@@ -17,7 +17,7 @@
     <div class="products-container flex-fill"
         *ngIf="m_bIsLoadingProducts === false && (m_aoWorkspaceProductsList.length >0 )">
         <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts; let iIndex = index" [m_oProduct]="oProduct"
-            (m_oProductChange)="handleBandSelection($event, iIndex)"></app-product-list-item>
+            (m_oProductChange)="handleBandSelection($event, iIndex)" (m_oProductInfoChange)="emitProductInfoChange()"></app-product-list-item>
     </div>
 
     <!-- Buttons to import/search for products if there is no product -->

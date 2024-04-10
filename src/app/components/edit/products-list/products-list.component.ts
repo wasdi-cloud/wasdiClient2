@@ -346,7 +346,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         product: node
       },
       height: '70vh',
-      width: '60vw'
+      minWidth: '50vw'
     })
 
     oDialogRef.afterClosed().subscribe(oDialogResponse => {

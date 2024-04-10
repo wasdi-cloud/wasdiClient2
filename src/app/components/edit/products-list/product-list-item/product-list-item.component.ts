@@ -17,6 +17,7 @@ import { ProductsListComponent } from '../products-list.component'
 export class ProductListItemComponent {
   @Input() m_oProduct: any = null;
   @Output() m_oProductChange: EventEmitter<any> = new EventEmitter();
+  @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
 
   /**
    * Flag to know if the actual product is open or closed.
@@ -43,7 +44,7 @@ export class ProductListItemComponent {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-      
+
   }
   /**
    * Clicked on the expand button
@@ -77,8 +78,16 @@ export class ProductListItemComponent {
    * Open Product Properties
    */
   openProductProperties() {
-    this.m_oDialog.open(ProductPropertiesDialogComponent, {
-      data: { product: this.m_oProduct }
+    let oDialog = this.m_oDialog.open(ProductPropertiesDialogComponent, {
+      data: { product: this.m_oProduct },
+      height: '70vh',
+      width: '40vw'
+    })
+
+    oDialog.afterClosed().subscribe(oResponse => {
+      if (oResponse === true) {
+        this.m_oProductInfoChange.emit(true);
+      }
     })
   }
 

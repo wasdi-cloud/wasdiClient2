@@ -66,7 +66,7 @@ export class ProductsTableComponent implements OnInit {
     this.m_aoProducts.subscribe(oResponse => {
       if (oResponse.length > 0) {
         this.m_aoProductsList = oResponse;
-        if(FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProvider) === false) {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProvider) === false) {
           if (this.m_oActiveProvider.name) {
             this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
           }
@@ -278,13 +278,13 @@ export class ProductsTableComponent implements OnInit {
    * Open the information dialog for product
    */
   openProductInfoDialog(oProduct) {
-    this.m_oDialog.open(ProductInfoComponent, {
-      height: "60vh",
-      width: '60vw',
+    let oDialog = this.m_oDialog.open(ProductInfoComponent, {
       data: {
         product: oProduct
-      }
-    })
+      },
+      height: '70vh',
+      minWidth: '50vw'
+    });
   }
 
   /**
