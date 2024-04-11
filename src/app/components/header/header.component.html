@@ -34,8 +34,7 @@
                 </div>
             </div>
             <ul class="dropdown-menu">
-                <li class=""><a class="dropdown-item" (click)="openUserDashboard()"><span
-                            class="material-symbols-outlined">
+                <li class=""><a class="dropdown-item" routerLink="/settings"><span class="material-symbols-outlined">
                             settings
                         </span>User Dashboard</a></li>
                 <li class=""><a class="dropdown-item" (click)="goToSubscriptions()"><span
@@ -43,12 +42,11 @@
                             rocket_launch
                         </span>Subscription</a></li>
                 <!-- Open Off Canvas Feedback Form -->
-                <li class=""><a class="dropdown-item" data-bs-toggle="offcanvas" href="#feedbackOffcanvas" role="button" aria-controls="feedbackOffcanvas"><span
-                            class="material-symbols-outlined">
+                <li class=""><a class="dropdown-item" data-bs-toggle="offcanvas" href="#feedbackOffcanvas" role="button"
+                        aria-controls="feedbackOffcanvas"><span class="material-symbols-outlined">
                             chat
                         </span>Send Feedback</a></li>
-                <li class=""><a class="dropdown-item" (click)="openDocs()"><span
-                            class="material-symbols-outlined">
+                <li class=""><a class="dropdown-item" (click)="openDocs()"><span class="material-symbols-outlined">
                             support
                         </span>
                         <div class="help-btn">Help</div> <span class="material-symbols-outlined align-self-end">

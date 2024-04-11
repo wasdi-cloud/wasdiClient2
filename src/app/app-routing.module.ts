@@ -20,7 +20,7 @@ import { AuthGuard } from './services/auth/auth.guard';
 const routes: Routes = [
   { path: '', redirectTo: 'marketplace', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminComponent },
+  { path: 'settings', component: AdminComponent },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'plan', component: SearchOrbit, canActivate: [AuthGuard] },
