@@ -2,7 +2,7 @@
     <label for="" *ngIf="m_sLabel">{{m_sLabel}}</label>
     <mat-select [multiple]="m_bIsMultiSelect" class="form-control" name="dropdown" [(value)]="m_aoSelectedItems"
         disableOptionCentering="'false'" (selectionChange)="emitSelectionChange($event)"
-        placeholder="{{m_sPlaceholder}}" type="text">
+        placeholder="{{m_sPlaceholder}}" [disabled]="m_bIsDisabled" type="text">
         <div *ngIf="m_bHasSearch" class="mat-search-container">
             <input type="text" name="m_sStyle" placeholder="Search..." class="mat-select-search"
                 [(ngModel)]="m_sSearchString">

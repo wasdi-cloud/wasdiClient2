@@ -42,6 +42,8 @@ export class DropdownComponent {
 
   @Input() m_oController?: any;
 
+  @Input() m_bIsDisabled?: boolean = false;
+
   /**
    * Does the dropdown have a file extension checkbox? 
    */

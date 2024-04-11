@@ -1,46 +1,57 @@
-<div mat-dialog-content class="d-flex flex-column justify-content-between gap-3">
-    <!-- User Search and Add form -->
-    <div>
-        <h6 class="dialog-text">Give access to another WASDI user: </h6>
-        <div class="d-flex flex-row align-items-center gap-2">
-            <div class="flex-fill d-flex flex-row gap-1">
-                <input class="form-control" type="email" placeholder="Search by WASDI Email Address"
-                    [(ngModel)]="m_sUserIdSearch">
-                <mat-select class="form-control" style="width: 10rem" placeholder="Permissions"
-                    [(ngModel)]="m_sPermission">
-                    <mat-option value="read">
-                        Read
-                    </mat-option>
-                    <mat-option value="write">
-                        Write
-                    </mat-option>
-                </mat-select>
-            </div>
-            <button class="btn btn-success" (click)="onAddEnabledUser()"
-                [disabled]="this.m_bIsReadOnly === true"><fa-icon [icon]="faUserPlus"></fa-icon> Give
-                Access</button>
-        </div>
+<app-invader *ngIf="m_bLoadingUsers"></app-invader>
+
+<div class="dialog-content d-flex flex-column align-items-center justify-content-center" *ngIf=" (!m_aoSharedUsers ||
+    m_aoSharedUsers.length===0) && (!m_bShowUsers) && !m_bLoadingUsers"
+    class="image-wrapper d-flex flex-column align-items-center justify-content-center">
+    <img src="/assets/images/collaborators.png" alt="">
+    <div class="header-text font-bold">There is no one here...</div>
+    <div class="collab-text mt-2">You can add collaborators to help you manage your {{resourceType}}</div>
+    <app-button class="mt-4" [m_sSize]="'large'" [m_sLabel]="'Add Collaborator'" (click)="openSharedUsers()"></app-button>
+</div>
+<div class="dialog-content d-flex flex-column" *ngIf="m_bShowUsers">
+    <div class="table-wrapper">
+        <table>
+            <thead class="table-heading-container">
+                <tr>
+                    <td class="font-bold">Email Address</td>
+                    <td class="font-bold thead-fixed-width">Access Type</td>
+                    <td class="thead-fixed-width"></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let oUser of m_aoSharedUsers">
+                    <td>
+                        <app-input-field [m_sInputValue]="oUser.userId" [m_bIsDisabled]="true"
+                            [m_bIsReadonly]="true"></app-input-field>
+                    </td>
+                    <td>
+                        <app-dropdown [m_aoDropdownItems]="m_aoShareOptions" [m_aoSelectedItems]="oUser.permissions"
+                            [m_bIsDisabled]="true"></app-dropdown>
+                    </td>
+                    <td class="d-flex flex-row justify-content-end">
+                        <button class="material-symbols-outlined"
+                            (click)="onRemoveEnabledUser(oUser.userId)">delete</button>
+                    </td>
+                </tr>
+                <tr *ngIf="m_bShowInput === true">
+                    <td>
+                        <app-input-field [m_sPlacehodler]="'Enter user email'" (m_oInputChange)="getEmailInput($event)"
+                            [m_sInputValue]="m_sUserIdSearch"></app-input-field>
+                    </td>
+                    <td>
+                        <app-dropdown [m_aoDropdownItems]="m_aoShareOptions" [m_sPlaceholder]="'Permission'"
+                            [m_aoSelectedItems]="m_sPermission"
+                            (m_oSelectionChange)="getPermissionInput($event)"></app-dropdown>
+                    </td>
+                    <td class="d-flex flex-row justify-content-end">
+                        <app-button class="" [m_sLabel]="'Add User'" (click)="!m_bIsReadOnly? onAddEnabledUser() : ''"
+                            [m_bDisabled]="this.m_bIsReadOnly === true"></app-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <!-- User Permissions display -->
-    <div>
-        <p class="dialog-text">
-            Users that currently have access to <span class="text-success">{{resource.name ? resource.name:
-                resource.processorName}}</span>:
-        </p>
-        <ul class="list-group" style="height:20rem; overflow-y: scroll;">
-            <li class="list-group-item d-flex flex-row align-items-center justify-content-between"
-                *ngFor="let oUser of m_aoSharedUsers">
-                <span>
-                    {{oUser.userId}}
-                </span>
-                <div class="d-flex flex-row gap-4 align-items-center">
-                    {{oUser.permissions.toUpperCase()}}
-                    <button class="btn btn-sm btn-danger" (click)="onRemoveEnabledUser(oUser.userId)"
-                        [disabled]="m_bIsReadOnly === true"><fa-icon [icon]="faTrashCan"></fa-icon> Remove</button>
-                </div>
-            </li>
-        </ul>
-    </div>
-
+    <app-button [m_sLabel]="!m_bShowInput ? 'Add collaborator' : 'Cancel'" class="align-self-start"
+        (click)="toggleShowInput()"></app-button>
 </div>

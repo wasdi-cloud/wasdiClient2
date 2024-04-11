@@ -2,19 +2,19 @@ import { Component, Input, OnInit } from '@angular/core';
 
 //Import Services: 
 import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { OrganizationsService } from 'src/app/services/api/organizations.service';
+import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { StyleService } from 'src/app/services/api/style.service';
 import { SubscriptionService } from 'src/app/services/api/subscription.service';
+import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { WorkflowService } from 'src/app/services/api/workflow.service';
+
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
-import { faUserPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
-import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { ConstantsService } from 'src/app/services/constants.service';
 
 @Component({
   selector: 'app-share-ui',
@@ -22,15 +22,21 @@ import { ConstantsService } from 'src/app/services/constants.service';
   styleUrls: ['./share-ui.component.css']
 })
 export class ShareUiComponent implements OnInit {
-  //Font awesome icons: 
-  faUserPlus = faUserPlus
-  faTrashCan = faTrash
+  m_aoShareOptions = [
+    'read', 'write'
+  ]
 
   m_aoSharedUsers: any;
   m_sUserIdSearch: string;
   m_sPermission: string = "read";
 
   m_bIsReadOnly: boolean = true;
+
+  m_bShowUsers: boolean = true;
+
+  m_bShowInput: boolean = false;
+
+  m_bLoadingUsers: boolean = true;
 
   @Input() resource: any;
   @Input() resourceType: string;
@@ -52,14 +58,20 @@ export class ShareUiComponent implements OnInit {
     this.getEnabledUsers();
 
     this.m_bIsReadOnly = this.resource.readOnly;
+    console.log(this.resource)
+
   }
 
   getEnabledUsers() {
+    this.m_sUserIdSearch = "";
+    this.m_sPermission = "";
     if (this.resourceType && this.resource) {
       if (this.resourceType === 'workspace') {
         this.m_oWorkspaceService.getUsersBySharedWorkspace(this.resource.workspaceId).subscribe(oResponse => {
           if (oResponse) {
             this.m_aoSharedUsers = oResponse;
+            this.m_bLoadingUsers = false;
+            this.m_aoSharedUsers.length > 0 ? this.m_bShowUsers = true : this.m_bShowUsers = false;
           }
         })
       }
@@ -68,6 +80,8 @@ export class ShareUiComponent implements OnInit {
         this.m_oStyleService.getUsersBySharedStyle(this.resource.styleId).subscribe(oResponse => {
           if (oResponse) {
             this.m_aoSharedUsers = oResponse;
+            this.m_bLoadingUsers = false;
+            this.m_aoSharedUsers.length > 0 ? this.m_bShowUsers = true : this.m_bShowUsers = false;
           }
         })
       }
@@ -77,6 +91,8 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
               this.m_aoSharedUsers = oResponse;
+              this.m_bLoadingUsers = false;
+              this.m_aoSharedUsers.length > 0 ? this.m_bShowUsers = true : this.m_bShowUsers = false;
             }
           },
           error: oError => {
@@ -90,6 +106,8 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse) {
               this.m_aoSharedUsers = oResponse;
+              this.m_bLoadingUsers = false;
+              this.m_aoSharedUsers.length > 0 ? this.m_bShowUsers = true : this.m_bShowUsers = false;
             }
           },
           error: oError => { }
@@ -100,6 +118,8 @@ export class ShareUiComponent implements OnInit {
         this.m_oProcessorService.getUsersBySharedProcessor(this.resource.processorId).subscribe(oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
             this.m_aoSharedUsers = oResponse;
+            this.m_bLoadingUsers = false;
+            this.m_aoSharedUsers.length > 0 ? this.m_bShowUsers = true : this.m_bShowUsers = false;
           }
         })
       }
@@ -108,6 +128,8 @@ export class ShareUiComponent implements OnInit {
         this.m_oOrganizationsService.getUsersBySharedOrganization(this.resource.organizationId).subscribe({
           next: oResponse => {
             this.m_aoSharedUsers = oResponse;
+            this.m_bLoadingUsers = false;
+            this.m_aoSharedUsers.length > 0 ? this.m_bShowUsers = true : this.m_bShowUsers = false;
           },
           error: oError => { }
         })
@@ -117,6 +139,8 @@ export class ShareUiComponent implements OnInit {
         this.m_oSubscriptionService.getUsersBySharedSubscription(this.resource.subscriptionId).subscribe({
           next: oResponse => {
             this.m_aoSharedUsers = oResponse;
+            this.m_bLoadingUsers = false;
+            this.m_aoSharedUsers.length > 0 ? this.m_bShowUsers = true : this.m_bShowUsers = false;
           },
           error: oError => { }
         })
@@ -153,7 +177,7 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
-              let sMessage = `Successfully Shared ${this.resource.name}`
+              let sMessage = `Successfully Shared ${this.resource.name ? this.resource.name : this.resource.processorName}`
               this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue);
@@ -331,5 +355,22 @@ export class ShareUiComponent implements OnInit {
         error: oError => { }
       });
     }
+  }
+
+  toggleShowInput() {
+    this.m_bShowInput = !this.m_bShowInput
+  }
+
+  getEmailInput(oEvent: any) {
+    this.m_sUserIdSearch = oEvent.event.target.value;
+  }
+
+  getPermissionInput(oEvent) {
+    this.m_sPermission = oEvent.value;
+  }
+
+  openSharedUsers() {
+    this.m_bShowUsers = true;
+    this.m_bShowInput = true;
   }
 }

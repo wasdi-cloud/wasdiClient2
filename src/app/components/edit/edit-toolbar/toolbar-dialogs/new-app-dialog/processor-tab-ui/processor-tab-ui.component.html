@@ -5,16 +5,10 @@
             {{oAppUIItem.label}}
         </div>
     </div>
-    <!-- <app-textarea [id]="appui" class="flex-fill" [m_sInputString]="m_sProcessorUI"></app-textarea> -->
     <div class="JSON-container flex-fill d-flex flex-column gap-1" style="height: 100%; width: 100%;">
         <div class="json-wrapper" style="height: 100%; width: 100%;">
             <div #editor class="json-editor" style="height: 100%;" (keyup)="getJsonText($event)"></div>
-            <!-- <app-json-editor [m_sText]="m_sProcessorUI" [m_sTextToInsert]="m_sTextToInsert" (m_sTextChange)="assignJsonChange($event)"
-                m_sMode="json"></app-json-editor> -->
-
         </div>
-        <!-- <textarea [id]="appui" insertable-text-area="" class="form-control" name="" cols="30"
-            style="height: 100%; width: 100%;" formControlName="sProcessorUI" [(ngModel)]="m_sProcessorUI"></textarea> -->
         <app-button class="json-button" [m_sLabel]="'Format JSON'" [m_sSize]="'small'"
             (click)="formatJSON()"></app-button>
     </div>

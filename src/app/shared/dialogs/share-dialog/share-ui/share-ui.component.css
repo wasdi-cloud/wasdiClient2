@@ -1,0 +1,42 @@
+.image-wrapper {
+    height: 100%;
+    color: var(--neutral70);
+}
+
+img {
+    height: 212px;
+}
+
+.header-text {
+    font-size: 24px;
+    line-height: 36px;
+}
+
+div.collab-text {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+table {
+    width: 100%;
+}
+
+.table-heading-container {
+    background-color: #FFFFFF;
+    box-shadow: inset 0px -1px #D1D5DB;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.thead-fixed-width {
+    width: 30%;
+}
+
+td {
+    padding: 0.25rem;
+}
+
+button.material-symbols-outlined {
+    color: var(--wasdiGreen);
+}
