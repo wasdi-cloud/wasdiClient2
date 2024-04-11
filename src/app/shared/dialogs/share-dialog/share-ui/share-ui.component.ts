@@ -177,7 +177,8 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
-              let sMessage = `Successfully Shared ${this.resource.name ? this.resource.name : this.resource.processorName}`
+              console.log(this.resource);
+              let sMessage = `Successfully Shared ${this.resource.name}`
               this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue);
@@ -232,7 +233,7 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse.boolValue === true) {
               this.getEnabledUsers();
-              let sMessage = `Successfully shared ${this.resource.name}`;
+              let sMessage = `Successfully shared ${this.resource.processorName}`;
               this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue)
