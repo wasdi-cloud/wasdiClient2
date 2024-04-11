@@ -9,6 +9,10 @@
     height: 8px;
     margin: auto;
     position: relative;
+    animation-name: MOVE;
+    animation-duration: 5s;
+    animation-timing-function: step-end;
+    animation-iteration-count: infinite;
     -webkit-animation-name: MOVE;
     -webkit-animation-duration: 5s;
     -webkit-animation-timing-function: step-end;
