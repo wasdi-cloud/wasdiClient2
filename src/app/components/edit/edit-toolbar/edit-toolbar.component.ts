@@ -104,9 +104,10 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   openShareDialog(): void {
-    let oDialogData = new ShareDialogModel("workspace",  this.m_oConstantsService.getActiveWorkspace())
+    let oDialogData = new ShareDialogModel("workspace", this.m_oConstantsService.getActiveWorkspace())
     this.m_oDialog.open(ShareDialogComponent, {
-      width: '50vw',
+      height: '70vh',
+      width: '70vw',
       data: oDialogData
     });
   }
