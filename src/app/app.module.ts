@@ -181,6 +181,7 @@ import { JsonEditorComponent } from './shared/json-editor/json-editor.component'
 import { ProcessesBarTableComponent } from './components/edit/processes-bar/processes-bar-table/processes-bar-table.component';
 import { AdminMenuComponent } from './components/admin/admin-menu/admin-menu.component';
 import { MenuButtonComponent } from './shared/shared-components/menu-button/menu-button.component';
+import { UserAccountComponent } from './components/admin/admin-menu/user-account/user-account.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -303,7 +304,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProcessesBarTableComponent,
     ProcessesBarComponent,
     AdminMenuComponent,
-    MenuButtonComponent
+    MenuButtonComponent,
+    UserAccountComponent
 
   ],
   imports: [
