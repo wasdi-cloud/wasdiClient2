@@ -71,7 +71,6 @@ import { AuthService } from './services/auth/auth.service';
 import { ConstantsService } from './services/constants.service';
 
 
-import { LanguageSwitchComponent } from './components/header/language-switch/language-switch.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
 
@@ -122,10 +121,9 @@ import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ProcessorTabUiComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-ui/processor-tab-ui.component';
 import { ProcessorTabStoreComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-store/processor-tab-store.component';
 import { ProcessorTabMediaComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-media/processor-tab-media.component';
-import { SubscriptionsDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/subscriptions-display/subscriptions-display.component';
-import { OrganizationsDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/organizations-display/organizations-display.component';
-import { PurchaseHistoryDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/purchase-history-display/purchase-history-display.component';
-import { EmailPreferencesDisplayComponent } from './components/header/header-dialogs/user-settings-dialog/email-preferences-display/email-preferences-display.component';
+import { SubscriptionsDisplayComponent } from './components/admin/admin-menu/subscriptions-display/subscriptions-display.component';
+import { OrganizationsDisplayComponent } from './components/admin/organizations-display/organizations-display.component';
+import { EmailPreferencesDisplayComponent } from './components/admin/email-preferences-display/email-preferences-display.component';
 import { SubscriptionProjectsDialogComponent } from './dialogs/subscription-projects-dialog/subscription-projects-dialog.component';
 import { EditSubscriptionDialogComponent } from './dialogs/edit-subscription-dialog/edit-subscription-dialog.component';
 import { EditOrganizationDialogComponent } from './dialogs/edit-organization-dialog/edit-organization-dialog.component';
@@ -145,7 +143,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
 import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { MarketSearchComponent } from './components/header/market-search/market-search.component';
 import { SearchBtnGrpComponent } from './shared/shared-components/search-btn-grp/search-btn-grp.component';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { DragAndDropComponent } from './shared/drag-and-drop/drag-and-drop.component';
@@ -198,7 +195,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     WorkspacesComponent,
     LoginComponent,
     MarketplaceAppCardComponent,
-    LanguageSwitchComponent,
     CourseDialogComponent,
     ConfirmationDialogComponent,
     ErrorDialogComponent,
@@ -249,7 +245,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EditWorkflowDialogComponent,
     SubscriptionsDisplayComponent,
     OrganizationsDisplayComponent,
-    PurchaseHistoryDisplayComponent,
     EmailPreferencesDisplayComponent,
     SubscriptionProjectsDialogComponent,
     EditSubscriptionDialogComponent,
@@ -267,7 +262,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SearchOrbitResultsComponent,
     FTPDialogComponent,
     NavbarComponent,
-    MarketSearchComponent,
     SearchBtnGrpComponent,
     DragAndDropDirective,
     DragAndDropComponent,
