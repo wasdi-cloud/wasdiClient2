@@ -6,6 +6,7 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 
 import { User } from 'src/app/shared/models/user.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-account',
@@ -25,6 +26,35 @@ export class UserAccountComponent implements OnInit {
     userId: ""
   }
 
+  m_aoLanguages = [
+    {
+      name: 'English',
+      value: 'en'
+    }, {
+      name: 'Español',
+      value: 'es'
+    },
+    {
+      name: 'Français',
+      value: 'fr'
+    }, {
+      name: 'Italiano',
+      value: 'it'
+    }, {
+      name: 'Deutsch',
+      value: 'de'
+    }, {
+      name: 'Tiếng Việt',
+      value: 'vi'
+    }, {
+      name: 'bahasa Indonesia',
+      value: 'id'
+    }, {
+      name: 'Română',
+      value: 'ro'
+    }
+  ]
+
   m_bEditingPassword: boolean = false;
 
   m_bEditingUserInfo: boolean = false;
@@ -32,8 +62,20 @@ export class UserAccountComponent implements OnInit {
   constructor(
     private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService
-  ) { }
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oTranslate: TranslateService
+  ) {
+    //Register translation languages:
+    m_oTranslate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
+    m_oTranslate.setDefaultLang('en');
+  }
+
+
+  translateLanguageTo(lang: any) {
+    console.log("TRANSLATE")
+    this.m_oTranslate.use(lang.value.value);
+  }
+
 
   ngOnInit(): void {
     this.m_oUser = this.m_oConstantsService.getUser();
@@ -81,16 +123,16 @@ export class UserAccountComponent implements OnInit {
       this.changeUserPassword();
     }
 
-    if(this.m_bEditingUserInfo) {
+    if (this.m_bEditingUserInfo) {
       this.changeUserInfo();
     }
   }
 
-  getUserInfoInput(oEvent){
-    if(oEvent.label === 'Name') {
+  getUserInfoInput(oEvent) {
+    if (oEvent.label === 'Name') {
       this.m_oEditUser.fname = oEvent.event.target.value;
     }
-    if(oEvent.label === 'Surname') {
+    if (oEvent.label === 'Surname') {
       this.m_oEditUser.lname = oEvent.event.target.value;
     }
 

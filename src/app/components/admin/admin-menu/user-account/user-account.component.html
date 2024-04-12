@@ -18,7 +18,7 @@
         <div class="input-header font-bold">System Language</div>
         <p>Select the system language you want to use for <strong>Wasdi</strong>.</p>
         <div class="input-wrapper">
-            <app-dropdown [m_sLabel]="'Language'"></app-dropdown>
+            <app-dropdown [m_sLabel]="'Language'" [m_aoDropdownItems]="m_aoLanguages" (m_oSelectionChange)="translateLanguageTo($event)"></app-dropdown>
         </div>
     </div>
     <div>
