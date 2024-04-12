@@ -161,7 +161,7 @@ export class AuthService {
   };
 
   changeUserInfo(oUserInfo: object) {
-    return this.m_oHttp.post(this.APIURL + '/auth/editUserDetails', oUserInfo);
+    return this.m_oHttp.post<any>(this.APIURL + '/auth/editUserDetails', oUserInfo);
   };
 
   validateUser(sEmail: string, sValidationCode: string) {

@@ -7,6 +7,7 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 import { User } from 'src/app/shared/models/user.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-user-account',
@@ -62,6 +63,7 @@ export class UserAccountComponent implements OnInit {
   constructor(
     private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oTranslate: TranslateService
   ) {
@@ -108,8 +110,15 @@ export class UserAccountComponent implements OnInit {
     this.m_oAuthService.changeUserInfo(oJsonToSend).subscribe({
       next: oResponse => {
         console.log(oResponse)
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) || oResponse.userId !== "") {
+          if (oResponse.boolValue === false) {
+            this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>IMPOSSIBLE TO CHANGE USER INFO");
+          } else {
+            this.m_oNotificationDisplayService.openSnackBar("Changed user Info", "Close");
 
+            this.m_oUser = oResponse;
+            this.m_oConstantsService.setUser(this.m_oUser);
+          }
         }
       },
       error: oError => { }
