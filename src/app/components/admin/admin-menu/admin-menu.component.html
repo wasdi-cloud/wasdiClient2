@@ -1,1 +1,14 @@
-<p>admin-menu works!</p>
+<div class="secondary-nav">
+    <div class="user-options-container">
+        <div class="header">
+            User account
+        </div>
+        <div class="menu-container d-flex flex-column gap-1">
+            <app-menu-button *ngFor="let oMenuItem of m_aoMenuButtons" [m_sLabel]="oMenuItem.label" [m_bIsActive]="m_sActiveTab === oMenuItem.title"
+                [m_sIcon]="oMenuItem.icon" (click)="setActiveTab(oMenuItem.title)"></app-menu-button>
+        </div>
+    </div>
+    <div class="staff-options-container">
+        <div>WASDI Staff Dashboard</div>
+    </div>
+</div>

@@ -11,7 +11,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditSubscriptionDialogComponent } from 'src/app/dialogs/edit-subscription-dialog/edit-subscription-dialog.component';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { SubscriptionProjectsDialogComponent } from 'src/app/dialogs/subscription-projects-dialog/subscription-projects-dialog.component';
-import { UserSettingsDialogComponent } from '../../../header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
+import { UserSettingsDialogComponent } from '../../header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';

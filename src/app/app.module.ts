@@ -121,7 +121,7 @@ import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ProcessorTabUiComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-ui/processor-tab-ui.component';
 import { ProcessorTabStoreComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-store/processor-tab-store.component';
 import { ProcessorTabMediaComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-media/processor-tab-media.component';
-import { SubscriptionsDisplayComponent } from './components/admin/admin-menu/subscriptions-display/subscriptions-display.component';
+import { SubscriptionsDisplayComponent } from './components/admin/subscriptions-display/subscriptions-display.component';
 import { OrganizationsDisplayComponent } from './components/admin/organizations-display/organizations-display.component';
 import { EmailPreferencesDisplayComponent } from './components/admin/email-preferences-display/email-preferences-display.component';
 import { SubscriptionProjectsDialogComponent } from './dialogs/subscription-projects-dialog/subscription-projects-dialog.component';
@@ -178,7 +178,7 @@ import { JsonEditorComponent } from './shared/json-editor/json-editor.component'
 import { ProcessesBarTableComponent } from './components/edit/processes-bar/processes-bar-table/processes-bar-table.component';
 import { AdminMenuComponent } from './components/admin/admin-menu/admin-menu.component';
 import { MenuButtonComponent } from './shared/shared-components/menu-button/menu-button.component';
-import { UserAccountComponent } from './components/admin/admin-menu/user-account/user-account.component';
+import { UserAccountComponent } from './components/admin/user-account/user-account.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);

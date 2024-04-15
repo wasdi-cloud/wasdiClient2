@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent {
+  m_sActiveTab: string = 'account';
 
+  getActiveTab(sEvent: string) {
+    this.m_sActiveTab = sEvent;
+  }
 }
