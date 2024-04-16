@@ -30,7 +30,7 @@ export class InputFieldComponent {
   /**
    * The placeholder text to appear inside the input field
    */
-  @Input() m_sPlacehodler: string = "Placeholder"
+  @Input() m_sPlacehodler: string = "";
 
   /**
    * Input field Type. Default is text input
@@ -40,7 +40,7 @@ export class InputFieldComponent {
   /**
    * The input name
    */
-  @Input() m_sInputName: string = "example"
+  @Input() m_sInputName: string = ""
 
   /**
    * String text for Icon appearing on the left. If null, there is no icon
@@ -73,6 +73,11 @@ export class InputFieldComponent {
   @Input() m_sMinValue?: any = "";
 
   @Input() m_bClearField?: boolean = false;
+
+  /**
+   * Is the input field required?
+   */
+  @Input() m_bIsRequired?: boolean = false;
 
   /**
    * Event Emitter the input change to listening parent
