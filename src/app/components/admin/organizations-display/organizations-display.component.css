@@ -1,0 +1,74 @@
+div.header {
+    background: var(--neutral5);
+    border-radius: 8px;
+    font-size: 20px;
+    height: 48px;
+    padding: 8px;
+}
+
+div.table-wrapper {
+    height: 100%;
+    overflow: auto;
+    display: inline-block;
+    width: 100%;
+    margin: auto;
+}
+
+table {
+    width: 98%;
+    margin: auto;
+    /* height: 100%; */
+}
+
+.table-heading-container {
+    background-color: #FFFFFF;
+    box-shadow: inset 0px -1px #D1D5DB;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: 700;
+}
+
+td>span.material-symbols-outlined {
+    color: var(--wasdiGreen);
+    cursor: pointer;
+}
+
+td,
+th {
+    font-size: 14px;
+    padding: 6px 12px 6px 8px;
+    height: 44px;
+}
+
+td {
+    /* font-size: 14px;
+    cursor: default;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; */
+}
+
+.form-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    background-color: #FFFFFF;
+    width: 25%;
+}
+
+.org-create-container {
+    box-shadow: 4px 8px 24px 0px #0000003D;
+    height: 100vh;
+    padding: 32px 32px 0px 32px;
+}
+
+.editor-header {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.offcanvas-backdrop.show {
+    opacity: 0 !important;
+}

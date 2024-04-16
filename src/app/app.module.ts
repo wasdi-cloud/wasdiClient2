@@ -126,7 +126,6 @@ import { OrganizationsDisplayComponent } from './components/admin/organizations-
 import { EmailPreferencesDisplayComponent } from './components/admin/email-preferences-display/email-preferences-display.component';
 import { SubscriptionProjectsDialogComponent } from './dialogs/subscription-projects-dialog/subscription-projects-dialog.component';
 import { EditSubscriptionDialogComponent } from './dialogs/edit-subscription-dialog/edit-subscription-dialog.component';
-import { EditOrganizationDialogComponent } from './dialogs/edit-organization-dialog/edit-organization-dialog.component';
 import { ProjectInfoDialogComponent } from './dialogs/project-info-dialog/project-info-dialog.component';
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
 import { PackageManagerComponent } from './components/dialogs/package-manager/package-manager.component';
@@ -248,7 +247,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     EmailPreferencesDisplayComponent,
     SubscriptionProjectsDialogComponent,
     EditSubscriptionDialogComponent,
-    EditOrganizationDialogComponent,
     ProjectInfoDialogComponent,
     SubscriptionsPurchaseComponent,
     PackageManagerComponent,
