@@ -5,6 +5,6 @@
         <app-email-preferences-display *ngIf="m_sActiveTab === 'preferences'"></app-email-preferences-display>
         <app-organizations-display *ngIf="m_sActiveTab === 'organisations'"></app-organizations-display>
         <app-subscriptions-purchase *ngIf="m_sActiveTab ==='subscriptions'"></app-subscriptions-purchase>
-        <app-subscriptions-display *ngIf="m_sActiveTab ==='billings'"></app-subscriptions-display>
+        <app-subscriptions-display *ngIf="m_sActiveTab ==='billings'" [m_aoOrganizations]="m_aoOrganizations"></app-subscriptions-display>
     </div>
 </main>
