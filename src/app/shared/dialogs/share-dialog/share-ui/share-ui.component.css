@@ -5,6 +5,7 @@
 
 img {
     height: 212px;
+    filter: drop-shadow(0px 20px 75px #43526B);
 }
 
 .header-text {
