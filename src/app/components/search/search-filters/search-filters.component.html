@@ -59,7 +59,7 @@
         <div class="dates-input-container row" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
             <div class="col-6">
                 <app-input-field [m_sInputType]="'date'" [m_sLabel]="'From'" [m_sInputValue]="m_sDateFrom"
-                    (m_oInputChange)="emitModelChanges($event)" ></app-input-field>
+                    (m_oInputChange)="emitModelChanges($event)"></app-input-field>
             </div>
             <div class="col-6">
                 <app-input-field class="col" [m_sInputType]="'date'" [m_sLabel]="'To'" [m_sInputValue]="m_sDateTo"
@@ -79,12 +79,11 @@
         <div class=" d-flex flex-row flex-wrap align-items-center justify-content-between pt-2 gap-2">
             <div *ngFor="let oFilter of m_aoVisibleFilters" style="width: 48%">
                 <div *ngIf="m_oActiveMission.name !== 'ERA5'">
-                    <label *ngIf="oFilter.indexvalues !== ''" for="">{{oFilter.indexlabel}}</label>
                     <app-dropdown *ngIf="oFilter.indexvalues !== ''" [m_aoDropdownItems]="prepMissionFilter(oFilter)"
-                        (m_oSelectionChange)="getMissionInput($event, oFilter)"
+                        [m_sLabel]="oFilter.indexlabel" (m_oSelectionChange)="getMissionInput($event, oFilter)"
                         [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
                     <app-input-field *ngIf="oFilter.indexvalues === ''" [m_sPlacehodler]="oFilter.indexhint"
-                        [m_sPattern]="oFilter.regex"></app-input-field>
+                        [m_sLabel]="oFilter.indexlabel" [m_sPattern]="oFilter.regex"></app-input-field>
                 </div>
                 <div *ngIf="m_oActiveMission.name === 'ERA5'">
                     <label *ngIf="oFilter.indexvalues !== ''" for="">{{oFilter.indexlabel}}</label>
