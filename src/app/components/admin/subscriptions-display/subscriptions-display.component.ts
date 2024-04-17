@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { OrganizationsService } from 'src/app/services/api/organizations.service';
@@ -30,8 +30,9 @@ export class SubscriptionsDisplayComponent implements OnInit {
 
   m_oUser = this.m_oConstantsService.getUser();
 
+  m_bShowForm: boolean = true;
   //Organizations Properties:
- m_aoOrganizations: Array<any> = [];
+  @Input() m_aoOrganizations: Array<any> = [];
   m_aoOrganizationsMap: any = [];
   m_asOrganizations: any = [];
   m_aoUserOrganizations: any = [];
@@ -43,11 +44,12 @@ export class SubscriptionsDisplayComponent implements OnInit {
   m_sStartDate: Date;
   m_sEndDate: Date;
   m_iDurationDays: number = 0;
-  m_iDaysRemaining: number | string;
+  m_iDaysRemaining: number | string = 'Expired';
 
   //Susbscription Information passed from opening dialog
   m_oEditSubscription: any;
 
+  m_oActiveSubscription: any = null;
 
   //State Booleans:
   m_bCheckoutNow: boolean = false;
@@ -67,7 +69,7 @@ export class SubscriptionsDisplayComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeSubscriptionsInfo();
-    this.getOrganizationsListByUser();
+
   }
 
   initializeSubscriptionsInfo() {
@@ -99,30 +101,6 @@ export class SubscriptionsDisplayComponent implements OnInit {
       }
     })
   }
-  
-  getOrganizationsListByUser() {
-    this.m_oOrganizationsService.getOrganizationsListByUser().subscribe({
-      next: oResponse => {
-        if (oResponse.status !== 200) {
-          this.m_oNotificationDisplayService.openAlertDialog("ERROR IN FETCHING ORGANIZATIONS");
-        } else {
-          const oFirstElement = { name: "No Organization", organizationId: null };
-          this.m_aoOrganizations = [oFirstElement].concat(oResponse.body);
-          // this.m_aoOrganizationsMap = this.m_asOrganizations.map(
-          //   (item) => ({ name: item.name, organizationId: item.organizationId })
-          // );
-
-          // this.m_aoOrganizationsMap.forEach((oValue, sKey) => {
-          //   if (oValue.organizationId == this.m_oEditSubscription.organizationId) {
-          //     this.m_oOrganization = oValue;
-          //   }
-          // });
-        }
-        // this.m_bLoadingOrganizations = false;
-      },
-      error: oError => { }
-    })
-  }
 
   openEditSubscriptionDialog(oSubscription: any, bIsOwner: boolean) {
     let oDialogRef = this.m_oDialog.open(EditSubscriptionDialogComponent, {
@@ -138,7 +116,6 @@ export class SubscriptionsDisplayComponent implements OnInit {
 
   deleteSubscription(oSubscription) {
     let sConfirmationMessage: string = `Are you sure you want to remove ${oSubscription.name}?`;
-
 
     let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
 
@@ -231,10 +208,8 @@ export class SubscriptionsDisplayComponent implements OnInit {
 
   saveSubscription() {
     this.createSubscriptionObject()
-
     this.m_oSubscriptionService.saveSubscription(this.m_oEditSubscription).subscribe({
       next: oResponse => {
-        console.log(oResponse)
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)
           && !FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.body) && oResponse.status === 200) {
           this.m_oEditSubscription.subscriptionId = oResponse.body.message;
@@ -269,14 +244,13 @@ export class SubscriptionsDisplayComponent implements OnInit {
       }
     })
   }
-  
+
   getStripePaymentUrl() {
     let oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     let sActiveWorkspaceId = oActiveWorkspace == null ? null : oActiveWorkspace.workspaceId;
 
     this.m_oSubscriptionService.getStripePaymentUrl(this.m_oEditSubscription.subscriptionId, sActiveWorkspaceId).subscribe({
       next: oResponse => {
-        console.log(oResponse);
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
           this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED", "Close", "right", "bottom");
 
@@ -291,7 +265,12 @@ export class SubscriptionsDisplayComponent implements OnInit {
     });
   }
 
-
+  setActiveSubscription(oSubscription: any | null): void {
+    this.m_oEditSubscription = oSubscription;
+    if (oSubscription) {
+      this.initEditSubscriptionInfo();
+    }
+  }
 
   getOrganizationName(oOrganization) {
     return oOrganization && oOrganization.name ? oOrganization.name : "";
@@ -314,7 +293,7 @@ export class SubscriptionsDisplayComponent implements OnInit {
     if (iRemaningDays <= 0) {
       this.m_iDaysRemaining = "Expired"
     } else {
-      this.m_iDaysRemaining = iRemaningDays;
+      this.m_iDaysRemaining = `${iRemaningDays}`;
     }
   }
 
@@ -334,5 +313,38 @@ export class SubscriptionsDisplayComponent implements OnInit {
         }
       }
     })
+  }
+
+  initEditSubscriptionInfo() {
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oEditSubscription.subscriptionId)) {
+      this.m_bIsPaid = this.m_oEditSubscription.buySuccess;
+      this.initDates();
+    } else {
+      this.m_oSubscriptionService.getSubscriptionById(this.m_oEditSubscription.subscriptionId).subscribe({
+        next: oResponse => {
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+            this.m_oEditSubscription = oResponse;
+            this.m_bIsPaid = this.m_oEditSubscription.buySuccess;
+            this.initDates();
+            this.getDaysRemaining(this.m_oEditSubscription.startDate, this.m_oEditSubscription.endDate)
+          } else {
+            this.m_oNotificationDisplayService.openAlertDialog("ERROR IN GETTING THE SUBSCRIPTION BY ID");
+          }
+        },
+        error: oError => { }
+      });
+    }
+  }
+
+  getInput(oEvent, sLabel) {
+    if (sLabel === 'name') {
+      this.m_oEditSubscription.name = oEvent.event.target.value;
+    } else if (sLabel === 'description') {
+      this.m_oEditSubscription.description = oEvent.target.value;
+    } else if (sLabel === 'organization') {
+      this.m_oEditSubscription.organizationId = oEvent.value.organizationId;
+      this.m_oEditSubscription.organizationName = oEvent.value.name;
+    }
+
   }
 }
