@@ -32,18 +32,7 @@ export class AdminComponent implements OnInit {
         } else {
           const oFirstElement = { name: "No Organization", organizationId: null };
           this.m_aoOrganizations = [oFirstElement].concat(oResponse.body);
-          console.log(this.m_aoOrganizations)
-          // this.m_aoOrganizationsMap = this.m_asOrganizations.map(
-          //   (item) => ({ name: item.name, organizationId: item.organizationId })
-          // );
-
-          // this.m_aoOrganizationsMap.forEach((oValue, sKey) => {
-          //   if (oValue.organizationId == this.m_oEditSubscription.organizationId) {
-          //     this.m_oOrganization = oValue;
-          //   }
-          // });
         }
-        // this.m_bLoadingOrganizations = false;
       },
       error: oError => { }
     })

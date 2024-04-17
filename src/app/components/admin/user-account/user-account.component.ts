@@ -74,7 +74,6 @@ export class UserAccountComponent implements OnInit {
 
 
   translateLanguageTo(lang: any) {
-    console.log("TRANSLATE")
     this.m_oTranslate.use(lang.value.value);
   }
 
@@ -89,8 +88,6 @@ export class UserAccountComponent implements OnInit {
 
     this.m_bEditingPassword = false;
     this.getUserAuthProvider();
-
-    console.log(this.m_oUser);
   }
 
   getUserAuthProvider() {
