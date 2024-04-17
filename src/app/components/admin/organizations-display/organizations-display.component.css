@@ -68,7 +68,3 @@ td {
     font-size: 20px;
     line-height: 30px;
 }
-
-.offcanvas-backdrop.show {
-    opacity: 0 !important;
-}

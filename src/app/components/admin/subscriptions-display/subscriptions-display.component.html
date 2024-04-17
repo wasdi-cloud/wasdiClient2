@@ -1,54 +1,91 @@
-<div class="d-flex flex-column mx-3" style="height:100%;">
-    <div class="d-flex flex-row justify-content-between">
-        <h4>My Subscriptions</h4>
-        <button class="btn btn-success" routerLink="/subscriptions" (click)="onDismiss()">Buy New Subscription</button>
+<div class="d-flex flex-fill flex-column gap-5">
+    <div class="header font-bold d-flex flex-row justify-content-between">
+        Billings
     </div>
-    <div style="height:100%; overflow-y: scroll;">
-        <table class="table table-sm table-striped table-hover mt-4">
-            <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Owner</th>
-                    <th scope="col">Organization</th>
-                    <th scope="col">Start Date</th>
-                    <th scope="col">End Date</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let oSubscription of m_aoSubscriptions">
-                    <td>{{oSubscription.name}}</td>
-                    <td>{{oSubscription.typeName}}</td>
-                    <td>{{oSubscription.ownerUserId}}</td>
-                    <td>{{oSubscription.organizationName ? oSubscription.organizationName : 'N/A'}}</td>
-                    <td>{{oSubscription.startDate | date:'dd-MM-yyyy'}}</td>
-                    <td>{{oSubscription.endDate | date:'dd-MM-yyyy'}}</td>
-                    <td class="d-flex flex-row gap-1">
-                        <button class="btn btn-secondary btn-sm" *ngIf="oSubscription.readOnly === false"
-                            (click)="openSharedUsersDialog(oSubscription)" matTooltip="Share">
-                            <fa-icon [icon]="faUsers"></fa-icon>
-                        </button>
-                        <button class="btn btn-secondary btn-sm"
-                            (click)="openProjectsDialog(oSubscription.readOnly, oSubscription)" matTooltip="Projects">
-                            <fa-icon [icon]="faBriefcase"></fa-icon>
-                        </button>
-                        <button class="btn btn-secondary btn-sm" *ngIf="oSubscription.readOnly=== false"
-                            (click)="openEditSubscriptionDialog(oSubscription, false)" matTooltip="Edit">
-                            <fa-icon [icon]=" faEdit"></fa-icon>
-                        </button>
-                        <button class="btn btn-secondary btn-sm" *ngIf="oSubscription.readOnly=== true"
-                            (click)="openEditSubscriptionDialog(oSubscription, oSubscription.readOnly)"
-                            matTooltip="Edit">
-                            <fa-icon [icon]="faEye"></fa-icon>
-                        </button>
-                        <button class="btn btn-secondary btn-sm" (click)="deleteSubscription(oSubscription)"
-                            matTooltip="Remove">
-                            <fa-icon [icon]="faTrashcan"></fa-icon>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="d-flex flex-column gap-2">
+        <div class="table-wrapper flex-fill">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>Subscription Type</td>
+                        <td>Name</td>
+                        <td>Owner</td>
+                        <td>Organisation</td>
+                        <td>Start date</td>
+                        <td>End date</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oSubscription of m_aoSubscriptions">
+                        <td>{{oSubscription.typeName}}</td>
+                        <td>{{oSubscription.name}}</td>
+                        <td>{{oSubscription.ownerUserId}}</td>
+                        <td>{{oSubscription.organizationName ? oSubscription.organizationName : 'N/A'}}</td>
+                        <td>{{oSubscription.startDate | date:'dd/MM/yyyy'}}</td>
+                        <td>{{oSubscription.endDate | date:'dd/MM/yyyy'}}</td>
+                        <td class="d-flex flex-row justify-content-end gap-1">
+                            <span *ngIf="oSubscription.readOnly=== false" class="material-symbols-outlined"
+                                data-bs-toggle="offcanvas" href="#orgEditor" role="button" aria-controls="orgEditor">
+                                edit
+                            </span>
+                            <span *ngIf="oSubscription.readOnly === false" class="material-symbols-outlined"
+                                (click)="openSharedUsersDialog(oSubscription)">
+                                share
+                            </span>
+                            <span (click)="openProjectsDialog(oSubscription.readOnly, oSubscription)"
+                                data-bs-toggle="offcanvas" class="material-symbols-outlined">
+                                work_outline
+                            </span>
+                            <span class="material-symbols-outlined" (click)="deleteSubscription(oSubscription)">
+                                delete
+                            </span>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+</div>
+
+<!-- (click)="openEditSubscriptionDialog(oSubscription, false)" -->
+
+<div class="offcanvas offcanvas-end subscription-edit-container d-flex flex-column justify-content-between"
+    data-bs-backdrop="true" tabindex="-1" id="orgEditor" aria-labelledby="orgEditorLabel">
+    <div class="editor-header font-bold pb-3">
+        Edit subscription
+    </div>
+    <div class="d-flex flex-fill flex-column gap-3">
+        <app-input-field [m_sLabel]="'Name'"></app-input-field>
+        <app-input-field [m_sLabel]="'Days Remaining'"></app-input-field>
+        <app-textarea [m_sLabel]="'Description'"></app-textarea>
+        <app-dropdown [m_aoDropdownItems]="m_aoOrganizations"></app-dropdown>
+    </div>
+    <div class="d-flex flex-row justify-content-between pb-3">
+        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
+        <app-button [m_sLabel]="'Save Subscription'" (click)="saveSubscription()"></app-button>
+    </div>
+    <!-- <div class="editor-header font-bold pb-3">
+        {{m_bIsEditing? 'Edit Organisation' :'Add new Organisation' }}
+    </div>
+    <div class="d-flex flex-fill flex-column gap-3">
+        <app-input-field [m_sLabel]="'Organisation name'" [m_sInputValue]="m_oOrganisation? m_oOrganisation.name : ''"
+            [m_bIsRequired]="true" (m_oInputChange)="getUserInput($event, 'name')"
+            [m_bIsValid]="m_bNameIsValid"></app-input-field>
+        <app-input-field [m_sLabel]="'Organisation e-mail'" [m_sInputType]="'email'"
+            [m_sInputValue]="m_oOrganisation? m_oOrganisation.email : ''" [m_bIsRequired]="true"
+            (m_oInputChange)="getUserInput($event, 'email')" [m_bIsValid]="m_bEmailIsValid"></app-input-field>
+        <app-input-field [m_sLabel]="'Organisation website'" [m_sInputValue]="m_oOrganisation? m_oOrganisation.url : ''"
+            (m_oInputChange)="getUserInput($event, 'url')"></app-input-field>
+        <app-input-field [m_sLabel]="'Organisation address'"
+            [m_sInputValue]="m_oOrganisation? m_oOrganisation.address : ''"
+            (m_oInputChange)="getUserInput($event, 'address')"></app-input-field>
+        <app-textarea [m_sLabel]="'Description'" [m_sInputString]="m_oOrganisation? m_oOrganisation.description: ''"
+            (keyup)="getUserInput($event, 'description')"></app-textarea>
+    </div>
+    <div class="d-flex flex-row justify-content-between pb-3">
+        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
+        <app-button [m_sLabel]="'Save Organisation'" (click)="saveOrganisation()"></app-button>
+    </div> -->
 </div>
