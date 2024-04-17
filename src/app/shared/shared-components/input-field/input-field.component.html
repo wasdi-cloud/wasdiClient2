@@ -1,6 +1,6 @@
 <div class="d-flex flex-column justify-content-between">
     <label [class.invalid]="!m_bIsValid" [class.readonly]="m_bIsReadonly" for="{{m_sInputName}}"
-        *ngIf="m_sLabel">{{m_sLabel}}</label>
+        *ngIf="m_sLabel">{{m_sLabel}} <span *ngIf="m_bIsRequired">*</span></label>
     <div class="input-group" [class.invalid]="!m_bIsValid" [class.readonly]="m_bIsReadonly"
         [class.icon-left]="m_sIconLeft !== null" [class.icon-right]="m_sIconRight !== null || m_bClearField">
         <div class="input-group-prepend" *ngIf="m_sIconLeft !== null">

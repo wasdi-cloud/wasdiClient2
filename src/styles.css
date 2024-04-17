@@ -525,3 +525,7 @@ a.leaflet-control-button,
 .leaflet-container a.leaflet-popup-close-button {
   color: #FFFFFF !important;
 }
+
+.offcanvas-backdrop.show {
+  opacity: 0 !important;
+}

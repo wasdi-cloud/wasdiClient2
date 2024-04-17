@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LanguageSwitchComponent } from './language-switch.component';
+import { AdminMenuComponent } from './admin-menu.component';
 
-describe('LanguageSwitchComponent', () => {
-  let component: LanguageSwitchComponent;
-  let fixture: ComponentFixture<LanguageSwitchComponent>;
+describe('AdminMenuComponent', () => {
+  let component: AdminMenuComponent;
+  let fixture: ComponentFixture<AdminMenuComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LanguageSwitchComponent ]
+      declarations: [ AdminMenuComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LanguageSwitchComponent);
+    fixture = TestBed.createComponent(AdminMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -40,7 +40,7 @@ export const MenuItems = [
     {
         label: "ROOT_VIEW_NAV_BAR_LINK_SETTINGS",
         name: "settings",
-        routerLink: "/",
+        routerLink: "/settings",
         materialIcon: "settings"
     }
 ];

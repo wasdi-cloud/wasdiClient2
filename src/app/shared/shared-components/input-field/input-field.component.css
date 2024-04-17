@@ -4,6 +4,10 @@ label {
     font-weight: 400;
 }
 
+label>span {
+    color: var(--wasdiDanger);
+}
+
 input.form-control {
     border: 1px solid #B4BAC4;
     color: #000000;
