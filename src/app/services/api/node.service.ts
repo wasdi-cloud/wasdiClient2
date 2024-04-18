@@ -6,11 +6,53 @@ import { ConstantsService } from '../constants.service';
   providedIn: 'root'
 })
 export class NodeService {
-  APIURL: string = this.oConstantsService.getAPIURL();
+  APIURL: string = this.m_oConstantsService.getAPIURL();
 
-  constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
+  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient) { 
 
+  }
+
+  /**
+   * Get the full list of nodes
+   * @returns 
+   */
   getNodesList() {
-    return this.oHttp.get<any[]>(this.APIURL + '/node/allnodes');
+    return this.m_oHttp.get<any[]>(this.APIURL + '/node/allnodes');
   };
+
+  /**
+   * Get details of a node (selected by nodeCode)
+   * @param sNodeCode 
+   * @returns 
+   */
+  getNodeDetails(sNodeCode: string) {
+    return this.m_oHttp.get(this.APIURL + '/node?node='+sNodeCode);
+  };
+
+   /**
+   * Updates one Node
+   * @param oNode 
+   * @returns 
+   */
+    updateNode(oNode) {
+      return this.m_oHttp.put(this.APIURL + '/node', oNode, { observe: 'response' });
+    };
+  
+    /**
+     * Deletes one node
+     * @param sUserId 
+     * @returns 
+     */
+    deleteNode(sNodeCode: string) {
+      return this.m_oHttp.delete(this.APIURL + '/node?node=' + sNodeCode);
+    }; 
+
+   /**
+   * Inser a new Node
+   * @param oNode 
+   * @returns 
+   */
+    createNode(oNode) {
+      return this.m_oHttp.post(this.APIURL + '/node', oNode, { observe: 'response' });
+    };    
 }
