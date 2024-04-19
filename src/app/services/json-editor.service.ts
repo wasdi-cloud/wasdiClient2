@@ -42,7 +42,9 @@ export class JsonEditorService {
     fontFamily: '\'Roboto Mono Regular\', monospace',
   }
 
-  constructor() { }
+  constructor() { 
+    
+  }
 
   /**
    * Set the value of the Editor value

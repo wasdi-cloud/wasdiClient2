@@ -346,6 +346,11 @@ export class EditComponent implements OnInit, OnDestroy {
     this.m_oNotificationDisplayService.openSnackBar("Copied Workspace Id to clipboard!", "Close");
   }
 
+  copyWorkspaceName() {
+    this.m_oClipboard.copy(this.m_oActiveWorkspace?.name);
+    this.m_oNotificationDisplayService.openSnackBar("Copied Workspace Name to clipboard!", "Close");
+  }
+
   openPropertiesDialog() {
     this.m_oDialog.open(WorkspaceInfoDialogComponent, {
       height: '65vh',

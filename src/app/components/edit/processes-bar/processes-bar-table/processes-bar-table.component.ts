@@ -299,4 +299,10 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   //     this.getAllProcessesLogs();
   //   }
   // }
+
+  showKillButton(oProcessLog) {
+    if (oProcessLog ==null) return false;
+    if (oProcessLog.status === 'RUNNING' || oProcessLog.status === 'READY' || oProcessLog.status === 'WAITING' || oProcessLog.status === 'CREATED') return true;
+    return false;
+  }
 }

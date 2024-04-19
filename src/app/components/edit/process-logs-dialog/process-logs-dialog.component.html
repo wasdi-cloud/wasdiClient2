@@ -1,6 +1,9 @@
 <div class="apps-dialog d-flex flex-column justify-content-between" style="height: 100%;">
-    <div class="dialog-header d-flex flex-row justify-content-between font-bold">Wasdi processor logs ID:
-        {{m_oProcess.processObjId}}
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+        <span>
+            Wasdi processor logs ID:
+            <span class="click-and-copy" (click)="copyProcessObjId()"> {{m_oProcess.processObjId}}</span>
+        </span>
         <span class="close-btn material-symbols-outlined" (click)="dismiss()"> close</span>
     </div>
     <div class="payload-info d-flex flex-row align-items-center mb-3">
@@ -8,12 +11,12 @@
             {{m_oProcess.operationType === 'RUNPROCESSOR' ? 'App name' : 'Product name'}}: {{m_oProcess.productName?
             m_oProcess.productName: 'N/A'}} | Status
             <span class="category-tag" [ngClass]="m_sTagColor">{{m_oProcess.status}}</span>
-        </div>
+        </div>  
     </div>
     <div class="log-filter-container d-flex flex-row justify-content-between">
         <app-input-field class="flex-fill" style="max-width: 50%;" [m_sLabel]="'Search into text'" [m_sPlacehodler]="'Search'" (m_oInputChange)="setSearchString($event)"></app-input-field>
         <div class="buttons-container align-self-end d-flex flex-row gap-2">
-            <app-button [m_sLabel]="'Download'" [m_sIconLeft]="'download'"></app-button>
+            <app-button [m_sLabel]="'Download Logs'" [m_sIconLeft]="'download'"></app-button>
             <app-button [m_sLabel]="'Refresh'" [m_sIconLeft]="'refresh'" [m_bMuted]="true"
                 (click)="refreshLogs()"></app-button>
         </div>

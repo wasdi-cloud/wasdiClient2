@@ -6,7 +6,8 @@
                     (click)="copyWorkspaceId()">{{m_oActiveWorkspace?.workspaceId}}</span></div>
             <div class="workspace-name d-flex flex-row justify-content-between py-2">
                 <div>
-                    {{m_oActiveWorkspace?.name}} ({{m_aoProducts.length}})
+                    <span class="workspace-id-copy"
+                    (click)="copyWorkspaceName()">{{m_oActiveWorkspace?.name}}</span> ({{m_aoProducts.length}})
                 </div>
                 <app-button matTooltip="Workspace Properties" [m_sSize]="'small'" [m_sIconLeft]="'info'" [m_bMuted]="true" (click)="openPropertiesDialog()"></app-button>
             </div>

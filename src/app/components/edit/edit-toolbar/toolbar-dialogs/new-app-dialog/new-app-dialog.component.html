@@ -40,7 +40,7 @@
 
     </div>
     <div class="dialog-footer d-flex flex-row justify-content-between mt-2">
-        <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true"></app-button>
+        <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true" (click)="onDismiss()"></app-button>
         <app-button *ngIf="m_bEditMode" [m_sLabel]="'Apply'" (click)="updateProcessor()"></app-button>
     </div>
 </div>

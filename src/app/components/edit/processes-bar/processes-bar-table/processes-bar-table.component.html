@@ -64,10 +64,16 @@
                             (click)="openPayloadDialog(oProcessLog)">
                             data_object
                         </span>
+                        <span class="material-symbols-outlined" style="cursor: default; color: gray;" matTooltip="Payload" *ngIf="!oProcessLog.payload">
+                            data_object
+                        </span>                        
                         <span class="cancel-icon material-symbols-outlined" matTooltip="Delete"
-                            *ngIf="oProcessLog.status === 'RUNNING'" (click)="deleteProcess(oProcessLog)">
+                            *ngIf="showKillButton(oProcessLog.status)" (click)="deleteProcess(oProcessLog)">
                             cancel
                         </span>
+                        <span class="cancel-icon material-symbols-outlined" style="cursor: default !important; color: gray !important;" matTooltip="Delete" *ngIf="!showKillButton(oProcessLog.status)">
+                            cancel
+                        </span>                        
                     </td>
                 </tr>
             </tbody>

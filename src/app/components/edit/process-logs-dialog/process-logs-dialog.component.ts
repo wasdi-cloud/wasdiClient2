@@ -9,6 +9,9 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
+
+import { Clipboard } from '@angular/cdk/clipboard';
+
 @Component({
   selector: 'app-process-logs-dialog',
   templateUrl: './process-logs-dialog.component.html',
@@ -38,6 +41,7 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oClipboard: Clipboard
   ) { }
 
   ngOnInit(): void {
@@ -210,4 +214,9 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
   dismiss() {
     this.m_oDialogRef.close();
   }
+
+  copyProcessObjId() {
+    this.m_oClipboard.copy(this.m_oProcess.processObjId);
+    this.m_oNotificationDisplayService.openSnackBar("Copied Process Workspace Id to clipboard!", "Close");
+  }  
 }

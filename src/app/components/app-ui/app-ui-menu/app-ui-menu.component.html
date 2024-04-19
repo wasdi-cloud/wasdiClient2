@@ -13,7 +13,7 @@
         <div class="menu-header">Run App</div>
         <div class="run-app-container">
             <label for="">Workspace</label>
-            <app-dropdown [m_sPlaceholder]="'Select Workspace'" [m_aoDropdownItems]="m_aoWorkspaces"
+            <app-dropdown [m_sPlaceholder]="'Select Workspace'" [m_aoDropdownItems]="m_aoWorkspaces" [m_bHasSearch]="true"
                 (m_oSelectionChange)="getSelectedWorkspace($event)"></app-dropdown>
             <app-button [m_sLabel]="'Run app'" [m_sIconLeft]="'rocket_launch'" [m_sSize]="'large'"
                 (click)="executeApp()"></app-button>
