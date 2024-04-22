@@ -33,9 +33,10 @@
                     m_oSelectedProcessor.processorName: 'Select A Processor'}}</div>
                 <p *ngIf="m_oSelectedProcessor.publisher">Publisher: {{m_oSelectedProcessor.publisher}}</p>
             </div>
-
-            <app-textarea class="json-body flex-fill" [m_sInputString]="m_sMyJsonString"
-                (keyup)="getJSONInput($event)"></app-textarea>
+            <div class="json-body flex-fill">
+                <app-textarea  [m_sInputString]="m_sMyJsonString"
+                    (keyup)="getJSONInput($event)"></app-textarea>
+            </div>
 
             <div class="footer d-flex flex-row justify-content-between">
                 <div>

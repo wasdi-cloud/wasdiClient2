@@ -32,10 +32,9 @@
                     m_oSelectedStyle.name: 'Select A Style'}}</div>
                 <p *ngIf="m_oSelectedStyle.userId">Publisher: {{m_oSelectedStyle.userId}}</p>
             </div>
-
-            <app-textarea class="json-body flex-fill" [m_sInputString]="m_asStyleXml"
-                [m_bIsDisabled]="true"></app-textarea>
-
+            <div class="flex-fill json-body">
+                <app-textarea [m_sInputString]="m_asStyleXml" [m_bIsDisabled]="true"></app-textarea>
+            </div>
             <div class="footer d-flex flex-row justify-content-end">
                 <div class="d-flex flex-row gap-3">
                     <app-button [m_sLabel]="'Apply'" [m_sIconLeft]="'play_circle'"
