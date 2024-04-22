@@ -69,12 +69,12 @@
                             data_object
                         </span>
                         <span class="cancel-icon material-symbols-outlined" matTooltip="Delete"
-                            *ngIf="showKillButton(oProcessLog.status)" (click)="deleteProcess(oProcessLog)">
+                            *ngIf="showKillButton(oProcessLog)" (click)="deleteProcess(oProcessLog)">
                             cancel
                         </span>
                         <span class="cancel-icon material-symbols-outlined"
                             style="cursor: default !important; color: gray !important;" matTooltip="Delete"
-                            *ngIf="!showKillButton(oProcessLog.status)">
+                            *ngIf="!showKillButton(oProcessLog)">
                             cancel
                         </span>
                     </td>
