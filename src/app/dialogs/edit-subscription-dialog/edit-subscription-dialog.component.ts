@@ -29,7 +29,6 @@ export class EditSubscriptionDialogComponent implements OnInit {
   //Organizations Properties:
   m_aoOrganizations: any = [];
   m_aoOrganizationsMap: any = [];
-  m_asOrganizations: any = [];
   m_aoUserOrganizations: any = [];
   m_oOrganization: any = {};
   m_bLoadingOrganizations: boolean = true;
@@ -233,8 +232,8 @@ export class EditSubscriptionDialogComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog("ERROR IN FETCHING ORGANIZATIONS");
         } else {
           const oFirstElement = { name: "No Organization", organizationId: null };
-          this.m_asOrganizations = [oFirstElement].concat(oResponse.body);
-          this.m_aoOrganizationsMap = this.m_asOrganizations.map(
+          this.m_aoOrganizations = [oFirstElement].concat(oResponse.body);
+          this.m_aoOrganizationsMap = this.m_aoOrganizations.map(
             (item) => ({ name: item.name, organizationId: item.organizationId })
           );
 
@@ -255,11 +254,14 @@ export class EditSubscriptionDialogComponent implements OnInit {
   }
 
   setSelectedOrganization(event) {
+    console.log(event)
     this.m_aoOrganizations.forEach(oType => {
-      if (oType.name === event.option.value.name) {
+      if (oType.name === event.value.name) {
+        console.log(oType)
         this.m_oOrganization = oType;
       }
     });
+    console.log(this.m_oOrganization);
   }
 
   getDaysRemaining(sStartDate: any, sEndDate: any) {
@@ -280,7 +282,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
     let sMessage = "You will be re-directed to our payment partner, Stripe. Click 'OK' to continue or 'CANCEL' to end the payment process."
     //Notification that user will be re-directed to Stripe
     let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
-    
+
     bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         if (!this.m_oEditSubscription.subscriptionId) {
@@ -293,6 +295,10 @@ export class EditSubscriptionDialogComponent implements OnInit {
     })
   }
 
+  setNameInput(oEvent: any) {
+    console.log(oEvent.event.target.value)
+    this.m_oEditSubscription.name = oEvent.event.target.value
+  }
   onDismiss() {
     this.m_oDialogRef.close();
   }

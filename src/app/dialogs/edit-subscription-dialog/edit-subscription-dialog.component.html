@@ -1,5 +1,23 @@
-<div class="dialog">
-    <div class="px-4 pt-3 text-secondary d-flex flex-row justify-content-between align-items-center">
+<div class="dialog d-flex flex-column gap-3">
+    <div class="header d-flex flex-row justify-content-between">
+        {{m_oEditSubscription.typeName}}
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
+    </div>
+    <div class="dialog-content d-flex flex-column gap-3">
+        <app-input-field [m_sLabel]="'Give your subscription a name so you can keep track of your projects (optional)'"
+            (m_oInputChange)="setNameInput($event)" [m_sPlacehodler]="'Name'"></app-input-field>
+        <app-dropdown [m_sLabel]="'Select the organisation for which you are buying this plan (optional)'"
+            [m_aoDropdownItems]="m_aoOrganizationsMap"
+            (m_oSelectionChange)="setSelectedOrganization($event)"></app-dropdown>
+        <div class="order-summary mb-3">
+            <div class="summary-header">Order Summary</div>
+            <div class="price-total d-flex flex-row justify-content-between">
+                <div>Total:</div>
+                <div class="price">{{m_oEditSubscription.price}}€</div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="px-4 pt-3 text-secondary d-flex flex-row justify-content-between align-items-center">
         <h4 *ngIf="m_oEditSubscription.subscriptionId == null">
             Buy Subscription</h4>
         <h4 *ngIf="m_oEditSubscription.subscriptionId != null && m_bEditMode">
@@ -66,13 +84,12 @@
                 <p>€ {{m_oEditSubscription.price}}</p>
             </li>
         </ul>
-    </div>
-    <div class="d-flex flex-row justify-content-end gap-3 p-3">
-        <button class="btn btn-secondary" (click)="onDismiss()">Cancel</button>
-        <button class="btn btn-success" *ngIf="!m_bEditMode === true || !m_bIsPaid"
-            (click)="checkout()">Checkout</button>
-        <button class="btn btn-success"
+    </div> -->
+    <div class="d-flex flex-row justify-content-between">
+        <app-button (click)="onDismiss()" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
+        <app-button [m_sLabel]="'Checkout on Stripe'" [m_sIconLeft]="'lock'" (click)="checkout()">Checkout</app-button>
+        <!-- <button class="btn btn-success"
             *ngIf="m_bEditMode === true && m_oEditSubscription.subscriptionId !== null && m_bIsPaid === true"
-            (click)="saveSubscription()">Save</button>
+            (click)="saveSubscription()">Save</button> -->
     </div>
 </div>

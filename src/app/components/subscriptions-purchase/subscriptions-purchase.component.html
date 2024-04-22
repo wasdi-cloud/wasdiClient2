@@ -1,4 +1,133 @@
-<div class="pricing-wrapper">
+<div class="flex-fill d-flex flex-column align-items-center h-100 parent">
+    <div class="img-wrapper">
+        <img src="/assets/images/subscriptions-rocket.png" alt="">
+    </div>
+    <div class="header">
+        Choose your <strong>space-y</strong> plan
+    </div>
+    <div class="d-flex flex-row gap-2">
+        <div class="price-container d-flex flex-column gap-3" [class.selected]="m_sSelectedPriceContainer ==='free'">
+            <div>
+                <div class="price-header">Starter</div>
+                <div>Description here...</div>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    Up to <strong>8 cores</strong>
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <strong>20 GB</strong> Storage
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <strong>Discord</strong> assistance
+                </div>
+            </div>
+            <app-button class="align-self-center" [m_sLabel]="'3 months free trial'" [m_sSize]="'large'"></app-button>
+        </div>
+        <div class="price-container d-flex flex-column gap-3" [class.selected]="m_sSelectedPriceContainer ==='stnd'">
+            <div>
+                <div class="price-header">Standard</div>
+                <div>Description here...</div>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    Up to <strong>48 cores</strong>
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <strong>100 GB</strong> Storage
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <strong>Discord and email</strong> assistance
+                </div>
+            </div>
+            <div class="price-slider d-flex flex-row justify-content-between align-items-center">
+                <div [class.active-price]="m_sActiveStndPrice === 'day'" (click)="setActivePrice('day', 'stnd', m_aoTypes[1])">1 DAY
+                </div>
+                <div [class.active-price]="m_sActiveStndPrice === 'week'" (click)="setActivePrice('week', 'stnd', m_aoTypes[2])">1
+                    WEEK
+                </div>
+                <div [class.active-price]="m_sActiveStndPrice === 'month'" (click)="setActivePrice('month', 'stnd', m_aoTypes[3])">1
+                    MONTH
+                </div>
+                <div [class.active-price]="m_sActiveStndPrice === 'year'" (click)="setActivePrice('year', 'stnd', m_aoTypes[4])">1
+                    YEAR
+                </div>
+            </div>
+            <div class="price-output">
+                {{m_iStndPrice}}€
+            </div>
+            <app-button class="align-self-center" [m_sLabel]="'Buy now'" [m_sSize]="'large'"  (click)="showSubscriptionAddForm(m_oStndType, m_iStndPrice)"></app-button>
+        </div>
+        <div class="price-container d-flex flex-column gap-3" [class.selected]="m_sSelectedPriceContainer ==='pro'">
+            <div>
+                <div class="price-header">Professional</div>
+                <div>Description here...</div>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    Up to <strong>96 cores</strong>
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <strong>2 TB</strong> Storage
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <strong>Priority</strong> assistance
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    Dedicated <strong>team</strong>
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    Dedicated <strong>node</strong> (1 Year only)
+                </div>
+            </div>
+            <div class="align-self-center price-slider d-flex flex-row justify-content-between align-items-center">
+                <div [class.active-price]="m_sActiveProPrice === 'month'" (click)="setActivePrice('month', 'pro', m_aoTypes[5])">1
+                    MONTH
+                </div>
+                <div [class.active-price]="m_sActiveProPrice === 'year'" (click)="setActivePrice('year', 'pro', m_aoTypes[6])">1 YEAR
+                </div>
+            </div>
+            <div class="price-output">
+                {{m_iProPrice}}€
+            </div>
+            <app-button class="align-self-center" [m_sLabel]="'Buy now'" [m_sSize]="'large'" (click)="showSubscriptionAddForm(m_oProType, m_iProPrice)"></app-button>
+        </div>
+    </div>
+</div>
+<!-- <div class="pricing-wrapper">
     <div class="row-v4 row-price d-flex flex-row gap-3">
         <div class="col-xs-12 col-md-4 col-lg-3">
             <div class="single-price">
@@ -149,4 +278,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
