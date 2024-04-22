@@ -51,7 +51,7 @@ mat-select {
 }
 
 ::ng-deep .mat-mdc-option {
-    height: 34px !important;
+    /* height: 34px !important; */
     padding: 12px !important;
     /* Override min-height imposed by Angular Materials */
     min-height: 0px !important;
