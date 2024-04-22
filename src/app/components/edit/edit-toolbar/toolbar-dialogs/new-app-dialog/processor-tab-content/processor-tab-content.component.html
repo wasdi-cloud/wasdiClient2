@@ -9,8 +9,10 @@
         </div>
         <app-input-field [m_sLabel]="'Name'" [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_sProcessorName"
             (m_oInputChange)="m_oProcessorBasicInfo.patchValue({sProcessorName: $event.event.target.value})"></app-input-field>
-        <app-input-field [m_sLabel]="'Type'" [m_bIsReadonly]="m_bEditMode"
+        <app-input-field *ngIf="m_bEditMode" [m_sLabel]="'Type'" [m_bIsReadonly]="m_bEditMode"
             [m_sInputValue]="m_sTypeNameOnly"></app-input-field>
+        <app-autocomplete [m_sLabel]="'Type'" *ngIf="!m_bEditMode" [m_aoInputs]="m_aoProcessorTypes"
+            (m_oSelectionChange)="setSelectedType($event)"></app-autocomplete>
         <div class="textarea-container flex-fill">
             <app-textarea [m_sLabel]="'Description'"
                 [m_sInputString]="m_oProcessorBasicInfo.get('sShortDescription').value"
@@ -34,58 +36,8 @@
     <div class="dialog-column json-container json-sample-container d-flex flex-column">
         <div class="json-header font-bold pb-2">JSON Sample</div>
         <div class="flex-fill json-editor-wrapper">
-            <app-json-editor [(m_sText)]="m_sJSONSample" m_sMode="json" (m_sTextChange)="onJsonInput($event)"></app-json-editor>
+            <app-json-editor [(m_sText)]="m_sJSONSample" m_sMode="json"
+                (m_sTextChange)="onJsonInput($event)"></app-json-editor>
         </div>
-        <!-- <app-textarea class="json-body flex-fill" [m_sInputString]="m_sJSONSample"></app-textarea> -->
     </div>
 </div>
-
-<!-- <div *ngIf="m_oProcessorBasicInfo" [formGroup]="m_oProcessorBasicInfo">
-    <div class="form d-flex flex-row justify-content-between align-items-center">
-        <div class="d-flex flex-column gap-2" style="width: 65%">
-            <div>
-                <label for="name">Name:</label>
-                <input class="form-control" type="text" formControlName="sProcessorName">
-            </div>
-            <div *ngIf="m_bEditMode === true">
-                <label for="publisher">Publisher:</label>
-                <input class="form-control" type="text" value="{{m_sPublisher}}" disabled readonly>
-            </div>
-            <div>
-                <label for="type">Type:</label>
-                <input *ngIf="m_bEditMode === true" class="form-control" type="text" formControlName="oType">
-                <input *ngIf="m_bEditMode === false" class="form-control" type="text" name="type"
-                    [matAutocomplete]="auto" placeholder="Select Programming Language">
-
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="setSelectedType($event)">
-                    <mat-option *ngFor="let oProcessorType of m_aoProcessorTypes" [value]="oProcessorType.name">
-                        {{oProcessorType.name}}
-                    </mat-option>
-                </mat-autocomplete>
-            </div>
-            <app-drag-and-drop (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
-        </div>
-        <div class="d-flex gap-2 flex-wrap" *ngIf="m_bEditMode">
-            <button class="btn btn-secondary" (click)="openPackageManager()">Package Manager</button> -->
-<!--button class="btn btn-secondary" (click)="forceLibUpdate(m_sProcessorId)">Update Library</button-->
-<!-- <button class="btn btn-secondary" (click)="forceProcessorRefresh(m_sProcessorId)">Re-Deploy</button>
-            <button class="btn btn-secondary" (click)="openBuildLogs()">Build Logs</button>
-        </div>
-    </div> -->
-
-<!-- <div class="advanced-info d-flex flex-row gap-2 mt-3">
-        <div style="width: 50%">
-            <label for="description">Description:</label>
-            <textarea class="form-control" name="" id="" rows="5" formControlName="sShortDescription"></textarea>
-
-            <label for="timeOut">Timeout (min)</label>
-            <input class="form-control" type="number" name="" id="" formControlName="iMinuteTimeout">
-
-
-        </div>
-        <div style="width: 50%">
-            <label for="jsonSample">JSON Sample:</label>
-            <textarea class="form-control" name="jsonSample" id="" rows="10" formControlName="sJSONSample"></textarea>
-        </div>
-    </div>
-</div> -->

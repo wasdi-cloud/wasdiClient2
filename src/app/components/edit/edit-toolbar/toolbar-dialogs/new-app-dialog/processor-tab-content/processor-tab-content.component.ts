@@ -83,7 +83,7 @@ export class ProcessorTabContentComponent implements OnInit {
   /**
    * Edit Mode status
    */
-  @Input() m_bEditMode: boolean;
+  @Input() m_bEditMode: boolean = false;
 
   /**
    * Processor Id
@@ -192,9 +192,9 @@ export class ProcessorTabContentComponent implements OnInit {
     return false;
   };
 
-  setSelectedType(event: any) {
+  setSelectedType(oEvent: any) {
     this.m_aoProcessorTypes.forEach(oType => {
-      if (oType.name === event.option.value) {
+      if (oType.name === oEvent.name) {
         this.m_oProcessorBasicInfo.patchValue({
           oType: oType.id
         })

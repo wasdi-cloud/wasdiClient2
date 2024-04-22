@@ -33,7 +33,7 @@ export class NewAppDialogComponent implements OnInit {
   /**
    * Edit Mode boolean: are we creating a new processor or editing an existing one?
    */
-  m_bEditMode: boolean;
+  m_bEditMode: boolean = false;
 
   /**
    * UI Changed boolean: was the UI JSON changed in the UI tab?
@@ -497,11 +497,11 @@ export class NewAppDialogComponent implements OnInit {
 
           if (bOk) {
             this.m_oNotificationDisplayService.openSnackBar(`Deployment of ${this.m_oInputProcessor.processorName} has started`, "Close");
+            this.onDismiss();
           }
           else {
-            this.m_oNotificationDisplayService.openSnackBar(`Error: ${oResponse.stringValue} `, "Close");
+            this.m_oNotificationDisplayService.openAlertDialog(`Error: ${oResponse.stringValue}`);
           }
-          this.onDismiss();
         },
         error: oError => {
           this.m_oNotificationDisplayService.openAlertDialog(`Error in deploying ${this.m_oInputProcessor.processorName}`);

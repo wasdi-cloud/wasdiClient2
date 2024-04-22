@@ -7,11 +7,11 @@
         <app-tab [m_sLabel]="'Processor'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PROCESSOR'"
             (click)="changeActiveTab('PROCESSOR')"></app-tab>
         <app-tab [m_sLabel]="'Store Info'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'STORE'"
-            (click)="changeActiveTab('STORE')"></app-tab>
+            (click)="changeActiveTab('STORE')" *ngIf="m_bEditMode"></app-tab>
         <app-tab [m_sLabel]="'Pricing'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PRICING'"
-            (click)="changeActiveTab('PRICING')"></app-tab>
+            (click)="changeActiveTab('PRICING')" *ngIf="m_bEditMode"></app-tab>
         <app-tab [m_sLabel]="'Collaborators'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'SHARE'"
-            (click)="changeActiveTab('SHARE')"></app-tab>
+            (click)="changeActiveTab('SHARE')" *ngIf="m_bEditMode"></app-tab>
         <app-tab [m_sLabel]="'App User Interface'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'UI'"
             (click)="changeActiveTab('UI')"></app-tab>
     </div>
@@ -42,47 +42,6 @@
     <div class="dialog-footer d-flex flex-row justify-content-between mt-2">
         <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true"></app-button>
         <app-button *ngIf="m_bEditMode" [m_sLabel]="'Apply'" (click)="updateProcessor()"></app-button>
+        <app-button *ngIf="!m_bEditMode" [m_sLabel]="'Save App'" (click)="postNewProcessor()"></app-button>
     </div>
 </div>
-<!-- <div class="dialog d-flex flex-column justify-content-between" style="height: 100%;">
-    <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between px-4 pt-3 pb-2">
-        <h4 *ngIf="m_bEditMode === false" class="dialog-text"><fa-icon [icon]="faRocket"></fa-icon> WASDI App <span class="badge bg-success"></span></h4>
-        <h4 *ngIf="m_bEditMode === true" class="dialog-text">
-            <fa-icon [icon]="faRocket"></fa-icon> {{m_oProcessorDetails.processorName}} -
-            {{m_oProcessorDetails.processorId}} <span class="badge bg-success" *ngIf="m_oInputProcessor.readOnly">Read Only</span>
-        </h4>
-        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
-    </div>
-    <div class="processor-tabs m-2">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link" aria-current="page" (click)="changeActiveTab('PROCESSOR')"
-                    ngClass="{{m_sActiveTab === 'PROCESSOR' ? 'active' : ''}}">Processor</a>
-            </li>
-            <li class="nav-item" *ngIf="m_bEditMode === true">
-                <a class="nav-link" (click)="changeActiveTab('STORE')"
-                    ngClass="{{m_sActiveTab === 'STORE' ? 'active' : ''}}">Store</a>
-            </li>
-            <li class="nav-item" *ngIf="m_bEditMode === true">
-                <a class="nav-link" (click)="changeActiveTab('MEDIA')"
-                    ngClass="{{m_sActiveTab === 'MEDIA' ? 'active' : ''}}">Media</a>
-            </li>
-            <li class="nav-item" *ngIf="m_bEditMode === true">
-                <a class="nav-link" (click)="changeActiveTab('SHARE')"
-                    ngClass="{{m_sActiveTab === 'SHARE' ? 'active' : ''}}">Share</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" (click)="changeActiveTab('UI')"
-                    ngClass="{{m_sActiveTab === 'UI' ? 'active' : ''}}">UI</a>
-            </li>
-        </ul>
-    </div>
-    <div class="tab-content-container p-3" style="height: 75%;">
-       
-    <div mat-dialog-actions class="border dialog-footer p-1 d-flex flex-row justify-content-end justify-self-end gap-2">
-        <button class="btn btn-success" *ngIf="m_bEditMode === true" (click)="updateProcessor()">Apply</button>
-        <button class="btn btn-success" *ngIf="m_bEditMode === false" (click)="postNewProcessor()">Deploy
-            Processor</button>
-        <button class="btn btn-secondary" (click)="onDismiss()">Close</button>
-    </div>
-</div>  -->
