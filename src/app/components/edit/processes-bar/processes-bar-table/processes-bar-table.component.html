@@ -24,7 +24,7 @@
                 (click)="downloadProcessesFile()"></app-button>
         </div>
     </div>
-    <div class="table-wrapper flex-fill d-flex flex-column pb-3">
+    <div class="table-wrapper flex-fill pb-3">
         <table>
             <thead class="table-heading-container">
                 <tr>
@@ -64,21 +64,27 @@
                             (click)="openPayloadDialog(oProcessLog)">
                             data_object
                         </span>
-                        <span class="material-symbols-outlined" style="cursor: default; color: gray;" matTooltip="Payload" *ngIf="!oProcessLog.payload">
+                        <span class="material-symbols-outlined" style="cursor: default; color: gray;"
+                            matTooltip="Payload" *ngIf="!oProcessLog.payload">
                             data_object
-                        </span>                        
+                        </span>
                         <span class="cancel-icon material-symbols-outlined" matTooltip="Delete"
                             *ngIf="showKillButton(oProcessLog.status)" (click)="deleteProcess(oProcessLog)">
                             cancel
                         </span>
-                        <span class="cancel-icon material-symbols-outlined" style="cursor: default !important; color: gray !important;" matTooltip="Delete" *ngIf="!showKillButton(oProcessLog.status)">
+                        <span class="cancel-icon material-symbols-outlined"
+                            style="cursor: default !important; color: gray !important;" matTooltip="Delete"
+                            *ngIf="!showKillButton(oProcessLog.status)">
                             cancel
-                        </span>                        
+                        </span>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <app-button class="justify-self-center align-self-center" *ngIf="m_bIsLoadMoreBtnClickable"
-            [m_sLabel]="'Load more'" (click)="getAllProcessesLogs()"></app-button>
+        <div class="d-flex flex-row justify-content-center w-100 my-2">
+
+            <app-button *ngIf="m_bIsLoadMoreBtnClickable" [m_sLabel]="'Load more'"
+                (click)="getAllProcessesLogs()"></app-button>
+        </div>
     </div>
 </div>

@@ -20,7 +20,7 @@ div.table-wrapper {
 table {
     width: 98%;
     margin: auto;
-    height: 100%;
+    /* height: 100%; */
     /* 
     margin: auto;
     height: 80vh;
@@ -42,7 +42,8 @@ td>span.material-symbols-outlined {
 }
 
 td,
-th {
+th,
+tr {
     font-size: 14px;
     padding: 6px 12px 6px 8px;
     height: 44px;
