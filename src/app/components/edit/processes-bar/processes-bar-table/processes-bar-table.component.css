@@ -48,7 +48,10 @@ tr {
     padding: 6px 12px 6px 8px;
     height: 44px;
     /* width: fit-content; */
-    max-width: fit-content;
+    max-width: 30vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 td {
