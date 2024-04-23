@@ -1,0 +1,81 @@
+<div class="flex-fill d-flex flex-column gap-3">
+    <div class="header font-bold d-flex flex-row justify-content-between">Manage Users
+        <app-button [m_sLabel]="'Open Users Summary'"></app-button>
+    </div>
+    <div class="d-flex flex-row align-items-end justify-content-end">
+        <div class="d-flex flex-row gap-2">
+            <app-input-field [m_sPlacehodler]="'Search for a user'"
+                (m_oInputChange)="setUserSearch($event)"></app-input-field>
+            <app-button [m_sIconLeft]="'search'" (click)="executeUserSearch()"></app-button>
+        </div>
+    </div>
+    <div class="flex-fill">
+        <div class="table-wrapper">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>User Id</td>
+                        <td>Surname</td>
+                        <td>First Name</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oUser of m_aoUsers">
+                        <td>{{oUser.userId}}</td>
+                        <td>{{oUser.surname}}</td>
+                        <td>{{oUser.name}}</td>
+                        <td class="d-flex flex-row justify-content-end">
+                            <span (click)="setSelectedUser(oUser)" data-bs-toggle="offcanvas" href="#userEditor"
+                                role="button" aria-controls="userEditor" class="material-symbols-outlined">
+                                edit
+                            </span>
+                            <span class="material-symbols-outlined">
+                                delete
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Users table navigation">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" aria-label="Previous" (click)="!m_bMinusPageDisabled? minusOnePage() : ''">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" aria-label="Next" (click)="!m_bStepPageDisabled? stepOnePage() : ''">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end org-create-container d-flex flex-column justify-content-between"
+    data-bs-backdrop="true" tabindex="-1" id="userEditor" aria-labelledby="userEditorLabel">
+    <div class="editor-header font-bold pb-3">
+        Edit User
+    </div>
+    <div class="d-flex flex-fill flex-column gap-3">
+        <app-input-field [m_sLabel]="'User Id'" [m_sInputValue]="m_oSelectedUser? m_oSelectedUser.userId : ''"
+            [m_bIsRequired]="true" [m_bIsValid]="m_bUserIdIsValid"></app-input-field>
+        <app-input-field [m_sLabel]="'User Surname'" [m_sInputValue]="m_oSelectedUser? m_oSelectedUser.name : ''"
+            [m_bIsRequired]="true" [m_bIsValid]="m_bUserNameIsValid"></app-input-field>
+        <app-input-field [m_sLabel]="'User Last name'" [m_bIsRequired]="true" [m_bIsValid]="m_bUserLastNameIsValid"
+            [m_sInputValue]="m_oSelectedUser? m_oSelectedUser.surname : ''"></app-input-field>
+        <!-- 
+        <app-input-field [m_sLabel]="'Organisation address'"
+            [m_sInputValue]="m_oOrganisation? m_oOrganisation.address : ''"
+            (m_oInputChange)="getUserInput($event, 'address')"></app-input-field>
+        <app-textarea [m_sLabel]="'Description'" [m_sInputString]="m_oOrganisation? m_oOrganisation.description: ''"
+            (keyup)="getUserInput($event, 'description')"></app-textarea> -->
+    </div>
+    <div class="d-flex flex-row justify-content-between pb-3">
+        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
+        <app-button [m_sLabel]="'Update User'" (click)="updateUser()"></app-button>
+    </div>
+</div>

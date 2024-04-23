@@ -33,9 +33,22 @@ export class AdminMenuComponent {
       title: "billings",
       label: "Billings",
       icon: "paid"
-    }
+    },
+
   ]
 
+  m_aoAdminMenuItems = [
+    {
+      title: 'users',
+      label: 'Manage Users',
+      icon: 'passkey'
+    },
+    {
+      title: 'resources',
+      label: 'Manage Resources',
+      icon: 'category'
+    }
+  ]
   m_sActiveTab: string = "account";
 
 
