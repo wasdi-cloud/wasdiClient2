@@ -68,7 +68,7 @@
             [m_sInputString]="m_oEditSubscription? m_oEditSubscription.description: ''"
             (keyup)="getInput($event, 'description')"></app-textarea>
 
-        <app-dropdown [m_aoDropdownItems]="m_aoOrganizations" [m_bHasSearch]="true"
+        <app-dropdown class="mt-4" [m_sLabel]="'Organisations'" [m_aoDropdownItems]="m_aoOrganizations"
             [m_aoSelectedItems]="m_oEditSubscription? m_oEditSubscription.organization: ''"
             (m_oSelectionChange)="getInput($event, 'organization')"></app-dropdown>
     </div>

@@ -41,14 +41,6 @@ th {
     height: 44px;
 }
 
-td {
-    /* font-size: 14px;
-    cursor: default;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; */
-}
-
 .form-container {
     position: absolute;
     right: 0;

@@ -61,3 +61,10 @@ th {
     font-size: 20px;
     line-height: 30px;
 }
+
+a.page-link {
+    cursor: pointer;
+}
+a.page-link.disabled {
+    color: var(--neutral20);
+}
