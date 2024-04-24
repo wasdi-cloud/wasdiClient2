@@ -9,7 +9,7 @@
                 (click)="setActiveTab(oMenuItem.title)"></app-menu-button>
         </div>
     </div>
-    <div class="staff-options-container">
+    <div *ngIf="m_bIsAdmin" class="staff-options-container">
         <div>WASDI Staff Dashboard</div>
         <div class="menu-container d-flex flex-column gap-1">
             <app-menu-button *ngFor="let oMenuItem of  m_aoAdminMenuItems" [m_sLabel]="oMenuItem.label"

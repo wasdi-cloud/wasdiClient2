@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { ConstantsService } from 'src/app/services/constants.service';
 
 @Component({
   selector: 'app-admin-menu',
@@ -7,6 +8,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class AdminMenuComponent {
   @Output() m_sSelectedTab: EventEmitter<string> = new EventEmitter<string>();
+
+  m_bIsAdmin: boolean = false;
 
   m_aoMenuButtons = [
     {
@@ -50,6 +53,15 @@ export class AdminMenuComponent {
     }
   ]
   m_sActiveTab: string = "account";
+
+
+  constructor(private m_oConstantsService: ConstantsService) {
+    console.log(this.m_oConstantsService.getUser().role)
+
+    if (this.m_oConstantsService.getUser().role === 'ADMIN') {
+      this.m_bIsAdmin = true;
+    }
+  }
 
 
   setActiveTab(sInputTab: string) {
