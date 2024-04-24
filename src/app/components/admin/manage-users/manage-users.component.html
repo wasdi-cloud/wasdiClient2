@@ -29,6 +29,12 @@
                         <td>{{oUser.name}}</td>
                         <td>{{oUser.lastLogin | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                         <td class="d-flex flex-row justify-content-end">
+                            <span (click)="setSelectedUser(oUser)" data-bs-toggle="offcanvas" href="#userTime"
+                                role="button" aria-controls="userTime" class="material-symbols-outlined">
+                                timer
+                            </span>
+                            <!-- <span class="material-symbols-outlined"
+                                (click)="showUserSubscriptions(oUser)">library_books</span> -->
                             <span (click)="setSelectedUser(oUser)" data-bs-toggle="offcanvas" href="#userEditor"
                                 role="button" aria-controls="userEditor" class="material-symbols-outlined">
                                 edit
@@ -100,5 +106,31 @@
     <div class="d-flex flex-row justify-content-between pb-3">
         <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
         <app-button [m_sLabel]="'Update User'" (click)="updateUser(m_oSelectedUser)"></app-button>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end org-create-container d-flex flex-column justify-content-between"
+    data-bs-backdrop="true" tabindex="-1" id="userTime" aria-labelledby="userTimeLabel">
+    <div class="editor-header font-bold pb-3">
+        Compute User Processing Time
+    </div>
+    <div class="flex-fill d-flex flex-column gap-3">
+        <app-input-field [m_sLabel]="'Start Date'" [m_sInputType]="'date'" [m_sInputValue]="m_sDateFrom"
+            (m_oInputChange)="setDateInput($event, 'from')"></app-input-field>
+        <app-input-field [m_sLabel]="'End Date'" [m_sInputType]="'date'" [m_sInputValue]="m_sDateTo"
+            (m_oInputChange)="setDateInput($event, 'to')"></app-input-field>
+
+        <div class="output-container d-flex flex-column gap-2">
+            <div>
+                Total running time in milliseconds: {{m_iUserProcessingTime}}
+            </div>
+            <div>
+                Total running time formatted (HH:mm:ss): {{m_iUserProcessingTime | convertMsToTime}}
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between pb-3">
+        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
+        <app-button [m_sLabel]="'Compute Running Time'" (click)="computeRunningTime()"></app-button>
     </div>
 </div>

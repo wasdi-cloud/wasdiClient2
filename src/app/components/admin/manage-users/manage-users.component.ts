@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
 import { NodeService } from 'src/app/services/api/node.service';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 const asRoles = [
@@ -45,9 +46,22 @@ export class ManageUsersComponent implements OnInit {
 
   m_asRoles: Array<string> = asRoles
 
+  m_iUserProcessingTime: number = 0;
+
+  m_sStartDate = new Date();
+
+  m_sDateTo = new Date().toISOString().slice(0, 10);
+
+  m_sDateFrom = new Date(
+    this.m_sStartDate.getFullYear(),
+    this.m_sStartDate.getMonth(),
+    this.m_sStartDate.getDate() - 7
+  ).toISOString().slice(0, 10);
+
   constructor(private m_oAdminDashboardService: AdminDashboardService,
     private m_oNodeService: NodeService,
-    private m_oNotificationDisplayService: NotificationDisplayService) {
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService) {
 
   }
 
@@ -99,7 +113,7 @@ export class ManageUsersComponent implements OnInit {
     this.m_oAdminDashboardService.updateUser(oUser).subscribe({
       next: oResponse => {
         this.m_oNotificationDisplayService.openSnackBar("User Updated. Refreshing.", "Close");
-        if(this.m_sUserSearch) {
+        if (this.m_sUserSearch) {
           this.executeUserSearch();
         } else {
           this.getPaginatedList();
@@ -206,5 +220,45 @@ export class ManageUsersComponent implements OnInit {
     }
   }
 
+  showUserSubscriptions(oUser) {
+    this.m_oAdminDashboardService.getResourceTypes().subscribe(oResponse => {
+      console.log(oResponse);
+    })
+    this.m_oAdminDashboardService.findResourcePermissions("STYLE", null, oUser.userId).subscribe({
+      next: oResponse => {
+        console.log(oResponse);
+      },
+      error: oError => {
+        console.log(oError)
+      }
+    })
+  }
 
+  setDateInput(oEvent, sLabel) {
+    if (sLabel === 'to') {
+      this.m_sDateTo = oEvent.event.target.value
+    } else {
+      this.m_sDateFrom = oEvent.event.target.value
+    }
+  }
+
+  computeRunningTime() {
+    let sDateFromParse = new Date(
+      Date.parse(this.m_sDateFrom + ":00:00")
+    ).toISOString();
+    let sDateToParse = new Date(
+      Date.parse(this.m_sDateTo + ":00:00")
+    ).toISOString();
+    // this.m_sDateFrom = new Date(this.m_sDateFrom)
+    this.m_oProcessWorkspaceService.getProcessWorkspaceTotalRunningTimeByUserAndInterval(this.m_oSelectedUser.userId, sDateFromParse, sDateToParse).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          this.m_oNotificationDisplayService.openAlertDialog("Error in computing running time")
+        } else {
+          this.m_iUserProcessingTime = oResponse;
+        }
+      },
+      error: oError => { }
+    })
+  }
 }

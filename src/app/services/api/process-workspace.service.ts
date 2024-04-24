@@ -361,7 +361,7 @@ export class ProcessWorkspaceService {
   };
 
   getProcessWorkspaceTotalRunningTimeByUserAndInterval(sUserId: string, sDateFrom: string, sDateTo: string) {
-    let sUrl: string = this.APIURL + '/process/runningTime?userId=' + sUserId;
+    let sUrl: string = this.APIURL + '/process/runningTime/UI?userId=' + sUserId;
 
     if (sDateFrom) {
       sUrl += '&dateFrom=' + sDateFrom;
@@ -371,10 +371,10 @@ export class ProcessWorkspaceService {
       sUrl += '&dateTo=' + sDateTo;
     }
 
-    return this.oHttp.get(sUrl);
+    return this.oHttp.get<number>(sUrl);
   };
 
-  getProcessWorkspaceTimeByUser(){
+  getProcessWorkspaceTimeByUser() {
     return this.oHttp.get<any>(this.APIURL + '/process/runningtimeproject/byuser');
   }
 
