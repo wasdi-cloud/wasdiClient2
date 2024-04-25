@@ -34,7 +34,6 @@ export class ManageUsersComponent implements OnInit {
 
   m_iTotalUsers: number = 0;
 
-  //Which 
   m_iOffset: number = 0;
 
   m_iLimit: number = 10;

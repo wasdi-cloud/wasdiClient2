@@ -1,0 +1,43 @@
+<div class="flex-fill d-flex flex-column gap-3">
+    <div class="header font-bold d-flex flex-row justify-content-between">Manage Nodes
+        <app-button [m_sLabel]="'Open Users Summary'"></app-button>
+    </div>
+    <div class="flex-fill d-flex flex-column gap-2">
+        <div class="table-wrapper">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>Cloud Provider</td>
+                        <td>Node Code</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oNode of m_aoNodes">
+                        <td>{{oNode.cloudProvider}}</td>
+                        <td>{{oNode.nodeCode}}</td>
+                        <td>
+                            <span (click)="setSelectedNode(oNode)" data-bs-toggle="offcanvas" href="#nodeEditor"
+                                role="button" aria-controls="nodeEditor" class="material-symbols-outlined">
+                                edit
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end org-create-container d-flex flex-column justify-content-between"
+    data-bs-backdrop="true" tabindex="-1" id="nodeEditor" aria-labelledby="nodeEditorLabel">
+    <div class="editor-header font-bold pb-3">
+        Edit Node
+    </div>
+    <div class="d-flex flex-fill flex-column gap-3">
+
+    </div>
+    <div class="d-flex flex-row justify-content-between pb-3">
+        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
+    </div>
+</div>

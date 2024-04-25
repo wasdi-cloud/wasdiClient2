@@ -43,13 +43,23 @@ export class AdminMenuComponent {
   m_aoAdminMenuItems = [
     {
       title: 'users',
-      label: 'Manage Users',
+      label: 'Users',
       icon: 'passkey'
     },
     {
       title: 'resources',
-      label: 'Manage Resources',
+      label: 'Subscriptions',
       icon: 'category'
+    },
+    {
+      title: 'sharing',
+      label: 'Sharing',
+      icon: 'send'
+    },
+    {
+      title: 'nodes',
+      label: 'Nodes',
+      icon: 'network_node'
     }
   ]
   m_sActiveTab: string = "account";
