@@ -486,7 +486,6 @@ export class AppUiComponent implements OnInit {
   }
 
   createAppPaymentObject() {
-    console.log(this.m_oProcessorInformation)
     this.m_oAppPaymentVM = {
       paymentName: `${this.m_oProcessorInformation.processorName}_${new Date().toISOString()}`,
       processorId: this.m_oProcessorInformation.processorId,
@@ -501,7 +500,6 @@ export class AppUiComponent implements OnInit {
       } else {
         this.m_oProcessorService.getStripeOnDemandPaymentUrl(this.m_oAppPaymentVM.processorId, oResponse.message).subscribe({
           next: oResponse => {
-            console.log(oResponse)
             if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
               this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED", "Close", "right", "bottom");
 
