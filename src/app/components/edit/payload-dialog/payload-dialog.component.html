@@ -1,75 +1,57 @@
 <div class="apps-dialog d-flex flex-column h-100">
-    <div class="dialog-header d-flex flex-row justify-content-between font-bold">Paylaod
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold mb-1">
+        <div class="d-flex flex-row">
+            <app-tab [m_sLabel]="'Payload'" (click)="setActiveTab('payload')"
+                [m_bIsActive]="m_sActiveTab === 'payload'"></app-tab>
+            <app-tab *ngIf="m_bIsWasdiDasboard === true" [m_sLabel]="'Dashbaord'" (click)="setActiveTab('dashboard')"
+                [m_bIsActive]="m_sActiveTab === 'dashboard'"></app-tab>
+        </div>
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
-    <div class="payload-info d-flex flex-row justify-content-between mb-3">
-        <div>
-            {{m_oProcess.operationType === 'RUNPROCESSOR' ? 'App name' : 'Product name'}}: {{m_oProcess.productName?
-            m_oProcess.productName: 'N/A'}} | Status
-            <span class="category-tag" [ngClass]="m_sTagColor">{{m_oProcess.status}}</span>
+    <div class="d-flex flex-column h-100" *ngIf="m_sActiveTab==='payload'">
+        <div class=" payload-info d-flex flex-row justify-content-between mb-3">
+            <div>
+                {{m_oProcess.operationType === 'RUNPROCESSOR' ? 'App name' : 'Product name'}}: {{m_oProcess.productName?
+                m_oProcess.productName: 'N/A'}} | Status
+                <span class="category-tag" [ngClass]="m_sTagColor">{{m_oProcess.status}}</span>
+            </div>
+            <app-button [m_sLabel]="m_sCopyLabel" [m_sSize]="'small'" [m_sIconLeft]="'content_copy'"
+                (click)="copyPayload()"></app-button>
         </div>
-        <app-button [m_sLabel]="m_sCopyLabel" [m_sSize]="'small'" [m_sIconLeft]="'content_copy'"
-            (click)="copyPayload()"></app-button>
+        <div class="flex-fill">
+            <app-json-editor [(m_sText)]="m_sJsonSample" [m_sMode]="'JSON'" [m_bReadOnly]="true"></app-json-editor>
+        </div>
     </div>
-    <div class="flex-fill">
-        <app-json-editor [(m_sText)]="m_sJsonSample" [m_sMode]="'JSON'" [m_bReadOnly]="true"></app-json-editor>
-
+    <div *ngIf="m_bIsWasdiDasboard === true  && m_sActiveTab === 'dashboard'">
+        <div *ngFor="let oChart of m_aoChartsInformation">
+            <!-- Line Chart -->
+            <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" [view]="view" [legend]="m_bLegend"
+                [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+                [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
+                [yAxis]="yAxis" [results]="oChart['chart-data']"></ngx-charts-line-chart>
+            <!-- Area Line Chart -->
+            <ngx-charts-area-chart *ngIf="oChart['chart-type'] === 'line-area'" [view]="view" [legend]="m_bLegend"
+                [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+                [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
+                [yAxis]="yAxis" [results]="oChart['chart-data']"></ngx-charts-area-chart>
+            <!-- Stacked Line Chart -->
+            <ngx-charts-area-chart-stacked *ngIf="oChart['chart-type'] === 'line-stacked'" [view]="view"
+                [legend]="m_bLegend" [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+                [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
+                [yAxis]="yAxis" [results]="oChart['chart-data']"></ngx-charts-area-chart-stacked>
+            <!-- Horizontal Bar Chart -->
+            <ngx-charts-bar-horizontal *ngIf="oChart['chart-type'] === 'bar-horizontal'" [view]="view"
+                [legend]="m_bLegend" [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+                [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
+                [yAxis]="yAxis" [results]="oChart['chart-data'][0].series"></ngx-charts-bar-horizontal>
+            <!-- Vertical Bar Chart -->
+            <ngx-charts-bar-vertical *ngIf="oChart['chart-type'] === 'bar-vertical'" [view]="view" [legend]="m_bLegend"
+                [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+                [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
+                [yAxis]="yAxis" [results]="oChart['chart-data'][0].series"></ngx-charts-bar-vertical>
+            <!-- Pie Chart -->
+            <ngx-charts-pie-chart *ngIf="oChart['chart-type'] === 'pie'" [view]="view" [legend]="m_bLegend"
+                [doughnut]="false" [results]="oChart['chart-data'][0].series"></ngx-charts-pie-chart>
+        </div>
     </div>
 </div>
-<!-- <div class="">
-    <h4>Payload For: {{m_oProcess.processObjId}}</h4>
-    <button class="btn text-light" (click)="dismiss($event)">
-        <fa-icon [icon]="faXmark"></fa-icon>
-    </button>
-</div>
-<div class="nav nav-tabs mt-2 px-2" *ngIf="m_bIsWasdiDasboard === true">
-    <li class="nav-item" (click)="setActiveTab('dashboard')">
-        <a class="nav-link" [ngClass]="m_sActiveTab === 'dashboard' ? 'active' : ''">Charts</a>
-    </li>
-    <li class="nav-item" (click)="setActiveTab('payload')">
-        <a class="nav-link" [ngClass]="m_sActiveTab === 'payload' ? 'active' : ''">Payload</a>
-    </li>
-</div>
-<div *ngIf="m_bIsWasdiDasboard === false || m_sActiveTab === 'payload'"
-    class="process-payload d-flex flex-column align-items-center gap-3 my-4 px-3" style="height: 70%; width:100%;">
-    <textarea class="process-payload-display" name="" id="" value={{m_sPayloadString}}></textarea>
-    <div class="d-flex flex-row jusify-content-end align-self-end gap-3">
-        <button class="btn btn-success" [cdkCopyToClipboard]="m_sPayloadString">Copy Payload</button>
-        <button class="btn btn-secondary" (click)="dismiss($event)">Close</button>
-    </div>
-</div>
-<div *ngIf="m_bIsWasdiDasboard === true && m_sActiveTab === 'dashboard'"
-    class="process-payload d-flex flex-column align-items-center gap-3 my-3 px-3"
-    style="height: 70%; width:100%; overflow-y: scroll;">
-
-    <div *ngFor="let oChart of m_aoChartsInformation">
-        <!-- Line Chart -->
-<!-- <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" [view]="view" [legend]="m_bLegend"
-            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
-            [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data']"></ngx-charts-line-chart> -->
-<!-- Area Line Chart -->
-<!-- <ngx-charts-area-chart *ngIf="oChart['chart-type'] === 'line-area'" [view]="view" [legend]="m_bLegend"
-            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
-            [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data']"></ngx-charts-area-chart> -->
-<!-- Stacked Line Chart -->
-<!-- <ngx-charts-area-chart-stacked *ngIf="oChart['chart-type'] === 'line-stacked'" [view]="view" [legend]="m_bLegend"
-        [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
-        [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-        [results]="oChart['chart-data']"></ngx-charts-area-chart-stacked> -->
-<!-- Horizontal Bar Chart -->
-<!-- <ngx-charts-bar-horizontal *ngIf="oChart['chart-type'] === 'bar-horizontal'" [view]="view" [legend]="m_bLegend"
-            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
-            [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data'][0].series"></ngx-charts-bar-horizontal> -->
-<!-- Vertical Bar Chart -->
-<!-- <ngx-charts-bar-vertical *ngIf="oChart['chart-type'] === 'bar-vertical'" [view]="view" [legend]="m_bLegend"
-            [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
-            [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis" [yAxis]="yAxis"
-            [results]="oChart['chart-data'][0].series"></ngx-charts-bar-vertical> -->
-<!-- Pie Chart -->
-<!-- <ngx-charts-pie-chart *ngIf="oChart['chart-type'] === 'pie'" [view]="view" [legend]="m_bLegend"
-            [doughnut]="false" [results]="oChart['chart-data'][0].series"></ngx-charts-pie-chart>
-    </div>
-</div>  -->

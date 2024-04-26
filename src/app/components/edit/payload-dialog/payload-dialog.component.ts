@@ -6,8 +6,6 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 
-
-
 @Component({
   selector: 'app-payload-dialog',
   templateUrl: './payload-dialog.component.html',
