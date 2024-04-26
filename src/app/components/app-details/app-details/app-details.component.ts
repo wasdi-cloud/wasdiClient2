@@ -96,6 +96,8 @@ export class AppDetailsComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg);
         } else {
           this.m_oApplicationInfo = oResponse;
+          console.log(this.m_oApplicationInfo)
+          this.getIsAppPurchased(this.m_oApplicationInfo.processorId);
           this.getApplicationStats();
           if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oApplicationInfo.logo)) {
             this.m_asImages.push(this.m_oApplicationInfo.imgLink);
@@ -158,6 +160,12 @@ export class AppDetailsComponent implements OnInit {
     dPerc *= 100;
 
     return dPerc.toFixed(1);
+  }
+
+  getIsAppPurchased(sProcessorId) {
+    this.m_oProcessorService.getIsAppPurchased(sProcessorId).subscribe(oResponse => {
+      console.log(oResponse);
+    })
   }
 
   getCategories() { }

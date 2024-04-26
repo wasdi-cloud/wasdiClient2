@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewWorkspaceDialogComponent } from '../../workspaces/new-workspace-dialog/new-workspace-dialog.component';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { ProcessorService } from 'src/app/services/api/processor.service';
 
 @Component({
   selector: 'app-app-ui-menu',
@@ -13,9 +14,11 @@ export class AppUiMenuComponent implements AfterViewChecked {
   @Input() m_aoTabs: Array<any> = [];
   @Input() m_sActiveTab: string = "";
   @Input() m_aoWorkspaces: Array<any> = [];
+  @Input() m_bIsPurchased: boolean = true;
   @Output() m_sSelectedTab: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oSelectedWorkspace: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oExecuteAppEmitter: EventEmitter<any> = new EventEmitter<any>();
+  @Output() m_oExecutePurchaseEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
     private m_oDialog: MatDialog,
@@ -47,4 +50,11 @@ export class AppUiMenuComponent implements AfterViewChecked {
   executeApp() {
     this.m_oExecuteAppEmitter.emit(true);
   }
+
+  saveAppPurchase() {
+    this.m_oExecutePurchaseEmitter.emit(true);
+  }
+
+
+
 }

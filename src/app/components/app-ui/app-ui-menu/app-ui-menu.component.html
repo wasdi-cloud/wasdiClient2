@@ -13,10 +13,12 @@
         <div class="menu-header">Run App</div>
         <div class="run-app-container">
             <label for="">Workspace</label>
-            <app-dropdown [m_sPlaceholder]="'Select Workspace'" [m_aoDropdownItems]="m_aoWorkspaces" [m_bHasSearch]="true"
-                (m_oSelectionChange)="getSelectedWorkspace($event)"></app-dropdown>
-            <app-button [m_sLabel]="'Run app'" [m_sIconLeft]="'rocket_launch'" [m_sSize]="'large'"
-                (click)="executeApp()"></app-button>
+            <app-dropdown [m_sPlaceholder]="'Select Workspace'" [m_aoDropdownItems]="m_aoWorkspaces"
+                [m_bHasSearch]="true" (m_oSelectionChange)="getSelectedWorkspace($event)"></app-dropdown>
+            <app-button *ngIf="m_bIsPurchased" [m_sLabel]="'Run app'" [m_sIconLeft]="'rocket_launch'"
+                [m_sSize]="'large'" (click)="executeApp()"></app-button>
+            <app-button *ngIf="!m_bIsPurchased" [m_sLabel]="'Buy app'" [m_sIconLeft]="'rocket_launch'"
+                [m_sSize]="'large'" (click)="saveAppPurchase()"></app-button>
             <app-button [m_sLabel]="'New Workspace'" [m_sSize]="'large'" [m_bMuted]="true"
                 (click)="openNewWorkspaceDialog()"></app-button>
         </div>
