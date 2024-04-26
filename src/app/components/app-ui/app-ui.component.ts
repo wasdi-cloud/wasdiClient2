@@ -150,6 +150,13 @@ export class AppUiComponent implements OnInit {
    */
   m_sUserId: string;
 
+  /**
+   * Has the app been purchased?
+   */
+  m_bIsPurchased: boolean = true;
+
+  m_oAppPaymentVM: any = {}
+
   ngOnInit(): void {
     // Take our user id
     this.m_sUserId = this.m_oConstantsService.getUser().userId;
@@ -185,6 +192,7 @@ export class AppUiComponent implements OnInit {
     if (this.m_oConstantsService.getActiveWorkspace() !== null) {
       this.m_oWorkspaceForm.sExistingWorkspace = this.m_oConstantsService.getActiveWorkspace();
     }
+
   }
 
   /**
@@ -193,6 +201,11 @@ export class AppUiComponent implements OnInit {
   getProcessorDetails(sProcessorName: string) {
     return this.m_oProcessorService.getMarketplaceDetail(sProcessorName).subscribe(oResponse => {
       this.m_oProcessorInformation = oResponse;
+      this.m_oProcessorService.getIsAppPurchased(this.m_oProcessorInformation.processorId).subscribe({
+        next: oResponse => {
+          this.m_bIsPurchased = oResponse;
+        }
+      })
     })
   }
 
@@ -382,7 +395,7 @@ export class AppUiComponent implements OnInit {
   getSelectedWorkspaceId(oEvent) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
       return false;
-    } 
+    }
     else {
       this.m_oSelectedWorkspace = oEvent;
       return true;
@@ -404,10 +417,10 @@ export class AppUiComponent implements OnInit {
     }
 
     if (!bIsValid) {
-      for(let iMessages = 0; iMessages<asMessages.length; iMessages++) {
+      for (let iMessages = 0; iMessages < asMessages.length; iMessages++) {
         this.m_sMessage = this.m_sMessage + asMessages[iMessages] + "<br>";
       }
-      
+
     }
 
     return bIsValid;
@@ -457,6 +470,32 @@ export class AppUiComponent implements OnInit {
 
   getJsonText(oEvent) {
     this.m_sJSONParam = this.m_oJsonEditorService.getValue();
+  }
+
+  getExecutePurchase(oEvent) {
+    this.createAppPaymentObject();
+    this.m_oNotificationDisplayService.openConfirmationDialog("You will be re-directed to our payment partner, Stripe. Click 'OK' to continue or 'CANCEL' to end the payment process.").subscribe(bDialogResult => {
+      if (bDialogResult) {
+        this.saveAndGetStripePaymentUrl()
+      }
+    })
+  }
+
+  createAppPaymentObject() {
+    console.log(this.m_oProcessorInformation)
+    this.m_oAppPaymentVM = {
+      name: `${this.m_oProcessorInformation.processorName}_${new Date().toISOString()}`,
+      processorId: this.m_oProcessorInformation.processorId,
+      buyDate: new Date().toISOString()
+    }
+
+    console.log(this.m_oAppPaymentVM);
+  }
+
+  saveAndGetStripePaymentUrl() {
+    this.m_oProcessorService.addAppPayment(this.m_oAppPaymentVM).subscribe(oResponse => {
+      console.log(oResponse)
+    })
   }
 
 }

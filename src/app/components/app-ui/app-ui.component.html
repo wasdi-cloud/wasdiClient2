@@ -25,7 +25,7 @@
     <div class="app-ui-container d-flex flex-row gap-4">
         <!-- Menu Component -->
         <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)"
-            (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)"
+            (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)" (m_oExecutePurchaseEmitter)="getExecutePurchase($event)" [m_bIsPurchased]="m_bIsPurchased"
             [m_sActiveTab]="m_sActiveTab" [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
         <!-- WAP Component outlet -->
         <app-wap-display [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " class="flex-fill"

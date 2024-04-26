@@ -371,4 +371,20 @@ export class ProcessorService {
   getProcessorLogsBuild(sProcessorId: string) {
     return this.m_oHttp.get<any>(this.APIURL + '/processors/logs/build?processorId=' + sProcessorId);
   }
+
+
+  addAppPayment(oAppPaymentVM: any) {
+    return this.m_oHttp.post<any>(this.APIURL + "/addAppPayment", oAppPaymentVM);
+  }
+
+  getStripeOnDemandPaymentUrl(sProcessorId: string, sPaymentId: string) {
+    return this.m_oHttp.get<any>(this.APIURL + '/stripe/onDemandPaymentUrl?processor=' + sProcessorId + '&appPayment=' + sPaymentId)
+
+  }
+
+  getIsAppPurchased(sProcessorId: string) {
+    return this.m_oHttp.get<any>(this.APIURL + '/processors/isAppPurchased?processor=' + sProcessorId);
+  }
+
+  getAppPaymentById() { }
 }
