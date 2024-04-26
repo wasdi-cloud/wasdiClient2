@@ -204,6 +204,10 @@ export class AppUiComponent implements OnInit {
       this.m_oProcessorService.getIsAppPurchased(this.m_oProcessorInformation.processorId).subscribe({
         next: oResponse => {
           this.m_bIsPurchased = oResponse;
+          //Ensure owners aren't asked to buy their own apps
+          if (this.m_oProcessorInformation.isMine === true) {
+            this.m_bIsPurchased = true;
+          }
         }
       })
     })
@@ -474,7 +478,7 @@ export class AppUiComponent implements OnInit {
 
   getExecutePurchase(oEvent) {
     this.createAppPaymentObject();
-    this.m_oNotificationDisplayService.openConfirmationDialog("You will be re-directed to our payment partner, Stripe. Click 'OK' to continue or 'CANCEL' to end the payment process.").subscribe(bDialogResult => {
+    this.m_oNotificationDisplayService.openConfirmationDialog("You will be re-directed to our payment partner, Stripe. Click 'OK' to continue or 'CANCEL' to end the payment process.<br> Please remember to refresh the page when you return").subscribe(bDialogResult => {
       if (bDialogResult) {
         this.saveAndGetStripePaymentUrl()
       }
@@ -484,17 +488,33 @@ export class AppUiComponent implements OnInit {
   createAppPaymentObject() {
     console.log(this.m_oProcessorInformation)
     this.m_oAppPaymentVM = {
-      name: `${this.m_oProcessorInformation.processorName}_${new Date().toISOString()}`,
+      paymentName: `${this.m_oProcessorInformation.processorName}_${new Date().toISOString()}`,
       processorId: this.m_oProcessorInformation.processorId,
       buyDate: new Date().toISOString()
     }
-
-    console.log(this.m_oAppPaymentVM);
   }
 
   saveAndGetStripePaymentUrl() {
     this.m_oProcessorService.addAppPayment(this.m_oAppPaymentVM).subscribe(oResponse => {
-      console.log(oResponse)
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+        this.m_oNotificationDisplayService.openAlertDialog("Error getting recording payment");
+      } else {
+        this.m_oProcessorService.getStripeOnDemandPaymentUrl(this.m_oAppPaymentVM.processorId, oResponse.message).subscribe({
+          next: oResponse => {
+            console.log(oResponse)
+            if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
+              this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED", "Close", "right", "bottom");
+
+              let sUrl = oResponse.message;
+
+              window.open(sUrl, '_blank');
+            }
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog("ERROR IN FETCHING PAYMENT URL");
+          }
+        })
+      }
     })
   }
 

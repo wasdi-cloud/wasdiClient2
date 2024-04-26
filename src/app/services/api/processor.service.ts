@@ -374,11 +374,11 @@ export class ProcessorService {
 
 
   addAppPayment(oAppPaymentVM: any) {
-    return this.m_oHttp.post<any>(this.APIURL + "/addAppPayment", oAppPaymentVM);
+    return this.m_oHttp.post<any>(this.APIURL + "/processors/addAppPayment", oAppPaymentVM);
   }
 
   getStripeOnDemandPaymentUrl(sProcessorId: string, sPaymentId: string) {
-    return this.m_oHttp.get<any>(this.APIURL + '/stripe/onDemandPaymentUrl?processor=' + sProcessorId + '&appPayment=' + sPaymentId)
+    return this.m_oHttp.get<any>(this.APIURL + '/processors/stripe/onDemandPaymentUrl?processor=' + sProcessorId + '&appPayment=' + sPaymentId)
 
   }
 
@@ -386,5 +386,7 @@ export class ProcessorService {
     return this.m_oHttp.get<any>(this.APIURL + '/processors/isAppPurchased?processor=' + sProcessorId);
   }
 
-  getAppPaymentById() { }
+  getAppPaymentById(sPaymentId: string) {
+    return this.m_oHttp.get<any>(this.APIURL + '/processors/byAppPaymentId?appPayment=' + sPaymentId);
+   }
 }
