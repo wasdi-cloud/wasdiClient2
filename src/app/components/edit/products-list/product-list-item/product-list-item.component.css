@@ -3,6 +3,8 @@ div.product {
     cursor: default;
     font-size: 14px;
     line-height: 24px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     /* max-width: 100%; */
 }
 

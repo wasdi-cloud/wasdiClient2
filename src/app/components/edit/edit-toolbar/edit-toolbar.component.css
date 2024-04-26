@@ -1,11 +1,5 @@
 nav.navbar {
     background: #FFFFFF !important;
     border-radius: 32px;
-}
-
-a:hover {
-    background-color: #00903759;
-    border: 3px, solid, #009036;
-    border-radius: 4px;
-    cursor: pointer;
+    height: 48px;
 }

@@ -94,9 +94,10 @@
 
 
 .muted:hover {
-    color: #009036 !important;
+    background-color: var(--wasdiGreen) !important;
+    color: #FFFFFF !important;
     border: 1px solid var(--Colors-Primary-10, #009036) !important;
-    background: var(--Colors-Shades-30---Light, #EBF7EF) !important;
+
 }
 
 
