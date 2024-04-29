@@ -12,15 +12,17 @@
             [readOnly]="m_bIsReadonly" aria-label="InputField" aria-describedby="basic-addon1" pattern="{{m_sPattern}}"
             [value]="m_sInputValue" (change)="emitInputChange($event)" (keyup)="emitInputChange($event)"
             max="{{m_sMaxValue}}" min="{{m_sMinValue}}">
-        <div class="icon-right input-group-append" *ngIf="m_sIconRight">
+        <div class="icon-right input-group-append" *ngIf="m_sIconRight"
+            (click)="m_sIconRight === 'visibility'? toggleType() : ''">
             <span class="material-symbols-outlined input-group-text" [class.invalid]="!m_bIsValid">
                 {{m_sIconRight}}
             </span>
         </div>
-        <div class="input-group-append" *ngIf="m_bClearField" (click)="emitClearInput($event)">
+        <div class="icon-left input-group-append" *ngIf="m_bClearField" (click)="emitClearInput($event)">
             <span class="clear-icon material-symbols-outlined input-group-text" [class.invalid]="!m_bIsValid">
                 close
             </span>
         </div>
     </div>
+
 </div>

@@ -27,7 +27,7 @@
 
 .btn-round {
     border-radius: var(--Radius-or-Spacings-FULL, 100px);
-    background: var(--Colors-Primary-10, #009036);
+    /* background: var(--Colors-Primary-10, #009036); */
 }
 
 
@@ -48,7 +48,6 @@
     border: 1px solid transparent;
     background: transparent;
 }
-
 
 
 /* Disabled Button */

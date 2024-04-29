@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
         let dialogRef = this.m_oDialog.open(ErrorDialogComponent, {
           maxWidth: "400px",
           data: oDialogData
-        })  
+        })
       }
       else {
         // Ok we have a valid session Id
@@ -77,17 +77,27 @@ export class LoginComponent implements OnInit {
         oUser.role = data.role;
         oUser.type = data.type;
         oUser.grantedAuthorities = data.grantedAuthorities;
-  
+
         //set user and cookie
         this.m_oConstantsService.setUser(oUser);
         this.m_oAuthService.saveToken(data.sessionId);
 
-        this.m_oAuthService.checkSession().subscribe({next: oResponse =>  {
-          oController.m_oConfigurationService.loadConfiguration();
-          oController.m_oRouter.navigateByUrl('/marketplace');
-        }})
-        
+        this.m_oAuthService.checkSession().subscribe({
+          next: oResponse => {
+            oController.m_oConfigurationService.loadConfiguration();
+            oController.m_oRouter.navigateByUrl('/marketplace');
+          }
+        })
+
       }
     }
+  }
+
+  setUsernameInput(oEvent) {
+    this.form.username = oEvent.event.target.value;
+  }
+
+  setPasswordInput(oEvent) {
+    this.form.password = oEvent.event.target.value;
   }
 }

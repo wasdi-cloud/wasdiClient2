@@ -108,4 +108,12 @@ export class InputFieldComponent {
   emitClearInput(oEvent) {
     this.m_oClearInput.emit(true)
   }
+
+  toggleType() {
+    if (this.m_sInputType === 'password') {
+      this.m_sInputType = 'text';
+    } else {
+      this.m_sInputType = 'password'
+    }
+  }
 }
