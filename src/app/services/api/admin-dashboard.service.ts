@@ -52,7 +52,7 @@ export class AdminDashboardService {
       sUrl += '&userId=' + sUserId;
     }
 
-    return this.m_oHttp.get(sUrl);
+    return this.m_oHttp.get<any>(sUrl);
   };
 
   /**
@@ -199,7 +199,7 @@ export class AdminDashboardService {
    * @returns 
    */
   getResourceTypes() {
-    return this.m_oHttp.get(this.APIURL + '/admin/resourcePermissions/types');
+    return this.m_oHttp.get<any>(this.APIURL + '/admin/resourcePermissions/types');
   };
 }
 

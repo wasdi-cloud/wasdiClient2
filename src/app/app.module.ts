@@ -181,6 +181,7 @@ import { UserAccountComponent } from './components/admin/user-account/user-accou
 import { ManageUsersComponent } from './components/admin/manage-users/manage-users.component';
 import { ManageNodesComponent } from './components/admin/manage-nodes/manage-nodes.component';
 import { ManageSubscriptionsComponent } from './components/admin/manage-subscriptions/manage-subscriptions.component';
+import { ManageSharingComponent } from './components/admin/manage-sharing/manage-sharing.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -303,7 +304,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     UserAccountComponent,
     ManageUsersComponent,
     ManageNodesComponent,
-    ManageSubscriptionsComponent
+    ManageSubscriptionsComponent,
+    ManageSharingComponent
 
   ],
   imports: [
