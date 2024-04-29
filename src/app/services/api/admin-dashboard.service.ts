@@ -52,7 +52,7 @@ export class AdminDashboardService {
       sUrl += '&userId=' + sUserId;
     }
 
-    return this.m_oHttp.get(sUrl);
+    return this.m_oHttp.get<any>(sUrl);
   };
 
   /**
@@ -91,12 +91,12 @@ export class AdminDashboardService {
    * Get a paginated list of users
    * @param sNameFilter Filter to apply to name, surname and user Id
    * @param iOffset Starting index
-   * @param iLmit Nuber of elements to return
+   * @param iLimit Nuber of elements to return
    * @param sSortedBy Name of the column to use to order by
    * @param sOrder Direction of the order
    * @returns List of View models
    */
-  getUsersPaginatedList(sNameFilter: string, iOffset: number, iLmit: number, sSortedBy: string, sOrder: string) {
+  getUsersPaginatedList(sNameFilter: string, iOffset: number, iLimit: number, sSortedBy: string, sOrder: string) {
     let bQuestionMarkAdded = false;
     let sUrl = this.APIURL + "/admin/users/list"
 
@@ -108,21 +108,10 @@ export class AdminDashboardService {
       else {
         sUrl += "&";
       }
-      sUrl +="partialName="+sNameFilter;
-    }
-    
-    if (iOffset!=null) {
-      if (!bQuestionMarkAdded) {
-        sUrl += "?"
-        bQuestionMarkAdded = true;
-      }
-      else {
-        sUrl += "&";
-      }
-      sUrl +="offset="+iOffset;
+      sUrl += "partialName=" + sNameFilter;
     }
 
-    if (iLmit!=null) {
+    if (iOffset != null) {
       if (!bQuestionMarkAdded) {
         sUrl += "?"
         bQuestionMarkAdded = true;
@@ -130,7 +119,18 @@ export class AdminDashboardService {
       else {
         sUrl += "&";
       }
-      sUrl +="limit="+iLmit;
+      sUrl += "offset=" + iOffset;
+    }
+
+    if (iLimit != null) {
+      if (!bQuestionMarkAdded) {
+        sUrl += "?"
+        bQuestionMarkAdded = true;
+      }
+      else {
+        sUrl += "&";
+      }
+      sUrl += "limit=" + iLimit;
     }
 
 
@@ -142,7 +142,7 @@ export class AdminDashboardService {
       else {
         sUrl += "&";
       }
-      sUrl +="sortedby="+sSortedBy;
+      sUrl += "sortedby=" + sSortedBy;
     }
 
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sOrder)) {
@@ -153,7 +153,7 @@ export class AdminDashboardService {
       else {
         sUrl += "&";
       }
-      sUrl +="order="+sOrder;
+      sUrl += "order=" + sOrder;
     }
 
     return this.m_oHttp.get(sUrl);
@@ -164,8 +164,8 @@ export class AdminDashboardService {
    * @returns UsersSummaryViewModel
    */
   getUsersSummary() {
-    return this.m_oHttp.get(this.APIURL + '/admin/users/summary');
-  };  
+    return this.m_oHttp.get<any>(this.APIURL + '/admin/users/summary');
+  };
 
   /**
    * Get the details of a user
@@ -173,7 +173,7 @@ export class AdminDashboardService {
    * @returns UsersFullViewModel
    */
   getUserDetails(sUserId: string) {
-    return this.m_oHttp.get(this.APIURL + '/admin/users?userId='+sUserId);
+    return this.m_oHttp.get(this.APIURL + '/admin/users?userId=' + sUserId);
   };
 
   /**
@@ -192,14 +192,14 @@ export class AdminDashboardService {
    */
   deleteUser(sUserId: string) {
     return this.m_oHttp.delete(this.APIURL + '/admin/users?userId=' + sUserId);
-  }; 
+  };
 
   /**
    * Get an array of strings with the resource types
    * @returns 
    */
   getResourceTypes() {
-    return this.m_oHttp.get(this.APIURL + '/admin/resourcePermissions/types');
+    return this.m_oHttp.get<any>(this.APIURL + '/admin/resourcePermissions/types');
   };
 }
 

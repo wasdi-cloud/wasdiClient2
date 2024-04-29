@@ -178,6 +178,10 @@ import { ProcessesBarTableComponent } from './components/edit/processes-bar/proc
 import { AdminMenuComponent } from './components/admin/admin-menu/admin-menu.component';
 import { MenuButtonComponent } from './shared/shared-components/menu-button/menu-button.component';
 import { UserAccountComponent } from './components/admin/user-account/user-account.component';
+import { ManageUsersComponent } from './components/admin/manage-users/manage-users.component';
+import { ManageNodesComponent } from './components/admin/manage-nodes/manage-nodes.component';
+import { ManageSubscriptionsComponent } from './components/admin/manage-subscriptions/manage-subscriptions.component';
+import { ManageSharingComponent } from './components/admin/manage-sharing/manage-sharing.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -297,7 +301,11 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProcessesBarComponent,
     AdminMenuComponent,
     MenuButtonComponent,
-    UserAccountComponent
+    UserAccountComponent,
+    ManageUsersComponent,
+    ManageNodesComponent,
+    ManageSubscriptionsComponent,
+    ManageSharingComponent
 
   ],
   imports: [

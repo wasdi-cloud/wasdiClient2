@@ -1,16 +1,13 @@
-div.processes-filter {
+div.header {
     background: var(--neutral5);
     border-radius: 8px;
-
-}
-
-div.button-container {
-    padding-right: 1rem;
-    border-right: 1px solid var(--neutral25);
+    font-size: 20px;
+    height: 48px;
+    padding: 8px;
 }
 
 div.table-wrapper {
-    height: 79vh;
+    height: 100%;
     overflow: auto;
     display: inline-block;
     width: 100%;
@@ -21,11 +18,6 @@ table {
     width: 98%;
     margin: auto;
     /* height: 100%; */
-    /* 
-    margin: auto;
-    height: 80vh;
-    overflow-y: scroll; */
-
 }
 
 .table-heading-container {
@@ -34,6 +26,7 @@ table {
     position: sticky;
     top: 0;
     z-index: 1;
+    font-weight: 700;
 }
 
 td>span.material-symbols-outlined {
@@ -42,26 +35,27 @@ td>span.material-symbols-outlined {
 }
 
 td,
-th,
-tr {
+th {
     font-size: 14px;
     padding: 6px 12px 6px 8px;
     height: 44px;
-    /* width: fit-content; */
-    max-width: 30vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
-td {
-    font-size: 14px;
-    cursor: default;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.org-create-container {
+    box-shadow: 4px 8px 24px 0px #0000003D;
+    height: 100vh;
+    padding: 32px 32px 0px 32px;
+    width: 35vw !important;
 }
 
-td>span.cancel-icon {
-    color: var(--wasdiDanger) !important;
+.editor-header {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+a.page-link {
+    cursor: pointer;
+}
+a.page-link.disabled {
+    color: var(--neutral20);
 }

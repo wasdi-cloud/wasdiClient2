@@ -10,7 +10,7 @@ export class SubscriptionService {
 
   APIURL: string = this.m_oConstantsService.getAPIURL();
 
-  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient) { 
+  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient) {
 
   }
 
@@ -131,21 +131,10 @@ export class SubscriptionService {
       else {
         sUrl += "&";
       }
-      sUrl +="userfilter="+sUserFilter;
-    }
-    
-    if (iOffset!=null) {
-      if (!bQuestionMarkAdded) {
-        sUrl += "?"
-        bQuestionMarkAdded = true;
-      }
-      else {
-        sUrl += "&";
-      }
-      sUrl +="offset="+iOffset;
+      sUrl += "userfilter=" + sUserFilter;
     }
 
-    if (iLimit!=null) {
+    if (iOffset != null) {
       if (!bQuestionMarkAdded) {
         sUrl += "?"
         bQuestionMarkAdded = true;
@@ -153,7 +142,18 @@ export class SubscriptionService {
       else {
         sUrl += "&";
       }
-      sUrl +="limit="+iLimit;
+      sUrl += "offset=" + iOffset;
+    }
+
+    if (iLimit != null) {
+      if (!bQuestionMarkAdded) {
+        sUrl += "?"
+        bQuestionMarkAdded = true;
+      }
+      else {
+        sUrl += "&";
+      }
+      sUrl += "limit=" + iLimit;
     }
 
 
@@ -165,7 +165,7 @@ export class SubscriptionService {
       else {
         sUrl += "&";
       }
-      sUrl +="idfilter="+sIdFilter;
+      sUrl += "idfilter=" + sIdFilter;
     }
 
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sNameFilter)) {
@@ -176,9 +176,9 @@ export class SubscriptionService {
       else {
         sUrl += "&";
       }
-      sUrl +="namefilter="+sNameFilter;
+      sUrl += "namefilter=" + sNameFilter;
     }
 
-    return this.m_oHttp.get(sUrl);
+    return this.m_oHttp.get<Array<any>>(sUrl);
   }
 }
