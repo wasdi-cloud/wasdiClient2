@@ -26,6 +26,16 @@ export class ManageSubscriptionsComponent implements OnInit {
   m_bStepPageDisabled: boolean = false;
   m_bMinusPageDisabled: boolean = true;
 
+  m_sSearch: string = "";
+
+  //Date Properties:
+  m_sBuyDate: string | Date = "";
+  m_sStartDate: Date;
+  m_sEndDate: Date;
+  m_iDurationDays: number = 0;
+  m_iDaysRemaining: number | string;
+
+
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oSubscriptionService: SubscriptionService,
@@ -34,6 +44,10 @@ export class ManageSubscriptionsComponent implements OnInit {
   ngOnInit(): void {
     this.getSubscriptions();
     this.getSubscriptionTypes();
+
+    if (!this.m_oSelectedSubscription.subscriptionId) {
+      this.initDates();
+    }
   }
 
   getSubscriptions() {
@@ -138,7 +152,24 @@ export class ManageSubscriptionsComponent implements OnInit {
 
   updateSubscription(oSubscription) {
     this.m_oSubscriptionService.updateSubscription(oSubscription).subscribe({
-      next: oResponse => { },
+      next: oResponse => {
+        if (oResponse) {
+          this.m_oNotificationDisplayService.openSnackBar("Updated Subscription", "Close");
+          this.getSubscriptions();
+        }
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Error while updating subscription");
+      }
+    })
+  }
+
+  createNewSubscription(oSubscription) {
+    console.log(oSubscription)
+    this.m_oSubscriptionService.createSubscription(oSubscription).subscribe({
+      next: oResponse => {
+        console.log(oResponse);
+      },
       error: oError => { }
     })
   }
@@ -160,5 +191,53 @@ export class ManageSubscriptionsComponent implements OnInit {
     if (this.m_iOffset <= 0) {
       this.m_bMinusPageDisabled = true;
     }
+  }
+
+  setSubscriptionSearch(oEvent) {
+    this.m_sSearch = oEvent.event.target.value;
+  }
+
+  getTypeSelection(oEvent) {
+    let sSelectedType = oEvent.value;
+    this.m_aoTypes.forEach(oType => {
+      if (oType.name === sSelectedType) {
+        this.m_oSelectedSubscription.typeId = oType.typeId;
+        this.m_oSelectedSubscription.typeName = oType.name;
+      }
+    })
+  }
+
+  initDates() {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.buyDate)) {
+      this.m_sBuyDate = null;
+    } else {
+      this.m_sBuyDate = new Date(this.m_oSelectedSubscription.buyDate);
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.startDate)) {
+      this.m_sStartDate = new Date();
+    } else {
+      this.m_sStartDate = new Date(this.m_oSelectedSubscription.startDate);
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.endDate)) {
+      this.m_sEndDate = new Date();
+
+      if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("day")) {
+        this.m_sEndDate.setDate(this.m_sStartDate.getDate() + 1);
+      } else if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("week")) {
+        this.m_sEndDate.setDate(this.m_sStartDate.getDate() + 7);
+      } else if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("month")) {
+        this.m_sEndDate.setMonth(this.m_sStartDate.getMonth() + 1);
+      } else if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("year")) {
+        this.m_sEndDate.setFullYear(this.m_sStartDate.getFullYear() + 1);
+      }
+    } else {
+      this.m_sEndDate = new Date(this.m_oSelectedSubscription.endDate);
+    }
+
+    let lDifferenceInTime = this.m_sEndDate.getTime() - this.m_sStartDate.getTime();
+    this.m_iDurationDays = lDifferenceInTime / (1000 * 3600 * 24);
+    this.m_iDurationDays = Math.round(this.m_iDurationDays);
   }
 }
