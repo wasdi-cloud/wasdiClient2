@@ -96,7 +96,7 @@
                 [m_sInputValue]="m_oSelectedSubscription? (m_oSelectedSubscription.startDate | date: 'yyyy-MM-dd'): ''"
                 [m_bIsReadonly]="m_oSelectedSubscription.subscriptionId"></app-input-field>
             <app-input-field class="col" [m_sLabel]="'End Date'" [m_sInputType]="'date'"
-                [m_sInputValue]="m_oSelectedSubscription? (m_oSelectedSubscription.endDate | date: 'yyyy-MM-dd'): ''"></app-input-field>
+                [m_sInputValue]="m_oSelectedSubscription? (m_oSelectedSubscription.endDate | date: 'yyyy-MM-dd'): ''" (m_oInputChange)="setInputSelections($event, 'endDate')"></app-input-field>
         </div>
         <div class="row">
             <div class="col">

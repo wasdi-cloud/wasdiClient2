@@ -49,6 +49,7 @@ export class ManageNodesComponent implements OnInit {
   deleteNode() { }
 
   getNodeDetails() {
+    console.log("getting details")
     this.m_oNodeService.getNodeDetails(this.m_oSelectedNode.nodeCode).subscribe({
       next: oResponse => { console.log(oResponse) },
       error: oError => { }

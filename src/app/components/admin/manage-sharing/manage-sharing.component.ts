@@ -39,7 +39,6 @@ export class ManageSharingComponent implements OnInit {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_oNotificationDisplayService.openAlertDialog("An error occured while getting the Resource Types");
         } else {
-          console.log(oResponse);
           this.m_aoResourceTypes = oResponse;
         }
       },
@@ -54,7 +53,6 @@ export class ManageSharingComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog("Error while finding resources");
         } else {
           this.m_aoFoundResources = oResponse;
-          console.log(this.m_aoFoundResources);
         }
       },
       error: oError => { }
