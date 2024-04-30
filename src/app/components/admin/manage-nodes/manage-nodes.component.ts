@@ -6,6 +6,27 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
+// active
+
+// apiUrl
+// :
+// "https://test2.wasdi.net/wasdiwebserver/rest"
+// cloudProvider
+// :
+// "ADWAISEO"
+// nodeCode
+// :
+// "TEST_ADWAISEO_2"
+// nodeDescription
+// :
+// "Test2 computational node of test environment"
+// nodeGeoserverAddress
+// :
+// "https://test2.wasdi.net/geoserver/ows"
+// shared
+// :
+true
+
 @Component({
   selector: 'app-manage-nodes',
   templateUrl: './manage-nodes.component.html',
@@ -13,6 +34,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 })
 export class ManageNodesComponent implements OnInit {
   m_aoNodes: Array<any> = [];
+
+  m_bEditMode: boolean = false;
 
   m_oSelectedNode: any = null;
   constructor(
@@ -41,17 +64,69 @@ export class ManageNodesComponent implements OnInit {
 
   setSelectedNode(oNode: any) {
     this.m_oSelectedNode = oNode;
-    this.getNodeDetails();
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oNode)) {
+      this.m_bEditMode = true;
+      this.getNodeDetails();
+    } else {
+      this.m_oSelectedNode = {};
+      this.m_bEditMode = false;
+    }
   }
 
-  updateNode() { }
+  updateNode() {
+    this.m_oNotificationDisplayService.openConfirmationDialog("Are you sure you want to update this node?").subscribe(bDialogResult => {
+      if (bDialogResult) {
+        this.m_oNodeService.updateNode(this.m_oSelectedNode).subscribe({
+          next: oResponse => {
+            console.log(oResponse)
+          }
+        })
+      }
+    })
+  }
 
-  deleteNode() { }
+  deleteNode(oNode: any) {
+    this.m_oNotificationDisplayService.openConfirmationDialog(`Are you sure you want to DELETE ${oNode.nodeCode}?`).subscribe(bDialogResult => {
+      if(bDialogResult) {
+        this.m_oNodeService.deleteNode(oNode.nodeCode).subscribe({
+          next: oResponse => {
+            this.getNodes();
+          },
+          error: oError => { }
+        })
+      }
+    })
+  }
+
+  createNode() {
+    this.m_oNodeService.createNode(this.m_oSelectedNode).subscribe({
+      next: oResponse => {
+        console.log(oResponse);
+        this.getNodes();
+      },
+      error: oError => { }
+    })
+  }
 
   getNodeDetails() {
     this.m_oNodeService.getNodeDetails(this.m_oSelectedNode.nodeCode).subscribe({
-      next: oResponse => { console.log(oResponse) },
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          this.m_oNotificationDisplayService.openAlertDialog("Error getting Node Information");
+        } else {
+          this.m_oSelectedNode = oResponse;
+          console.log(this.m_oSelectedNode)
+        }
+      },
       error: oError => { }
     })
+  }
+
+  getCheckedValue(oEvent, sLabel) {
+    if (sLabel === 'shared') {
+      this.m_oSelectedNode.shared = oEvent.target.checked;
+    } else {
+      this.m_oSelectedNode.active = oEvent.target.checked;
+    }
   }
 }
