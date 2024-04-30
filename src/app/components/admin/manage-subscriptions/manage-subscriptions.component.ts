@@ -145,6 +145,10 @@ export class ManageSubscriptionsComponent implements OnInit {
       case 'orgId':
         this.m_oSelectedSubscription.organizationId = oEvent.event.target.value;
         break;
+      case 'endDate':
+        this.m_oSelectedSubscription.endDate = new Date(oEvent.event.target.value).toISOString();
+        console.log(this.m_oSelectedSubscription);
+        break;
       default:
         break;
     }
