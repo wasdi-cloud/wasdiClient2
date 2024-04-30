@@ -42,8 +42,7 @@
                             rocket_launch
                         </span>Subscription</a></li>
                 <!-- Open Off Canvas Feedback Form -->
-                <li class=""><a class="dropdown-item" data-bs-toggle="offcanvas" href="#feedbackOffcanvas" role="button"
-                        aria-controls="feedbackOffcanvas"><span class="material-symbols-outlined">
+                <li class=""><a class="dropdown-item" (click)="openFeedbackDialog()"><span class="material-symbols-outlined">
                             chat
                         </span>Send Feedback</a></li>
                 <li class=""><a class="dropdown-item" (click)="openDocs()"><span class="material-symbols-outlined">
@@ -63,7 +62,7 @@
 </header>
 
 <!-- Feedback Form OffCanvas -->
-<div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
+<!-- <div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
     <div class="offcanvas-header d-flex flex-row justify-content-start gap-3 p-0 m-0">
         <button type="button" class="btn btn-secondary close-feedback-btn" data-bs-dismiss="offcanvas"
             aria-label="Close">
@@ -99,4 +98,4 @@
             </div>
         </form>
     </div>
-</div>
+</div> -->

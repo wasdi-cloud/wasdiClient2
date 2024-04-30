@@ -9,6 +9,7 @@ import { ProjectService } from 'src/app/services/api/project.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { Router } from '@angular/router';
+import { FeedbackDialogComponent } from './feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -119,6 +120,12 @@ export class HeaderComponent implements OnInit {
     this.m_oDialog.open(UserSettingsDialogComponent);
   }
 
+  openFeedbackDialog() {
+    this.m_oDialog.open(FeedbackDialogComponent, {
+      height: '70vh',
+      width: '40vw'
+    });
+  }
   goToSubscriptions() {
     this.m_oRouter.navigateByUrl("subscriptions");
   }

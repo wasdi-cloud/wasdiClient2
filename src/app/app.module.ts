@@ -182,6 +182,7 @@ import { ManageUsersComponent } from './components/admin/manage-users/manage-use
 import { ManageNodesComponent } from './components/admin/manage-nodes/manage-nodes.component';
 import { ManageSubscriptionsComponent } from './components/admin/manage-subscriptions/manage-subscriptions.component';
 import { ManageSharingComponent } from './components/admin/manage-sharing/manage-sharing.component';
+import { FeedbackDialogComponent } from './components/header/feedback-dialog/feedback-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -305,7 +306,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ManageUsersComponent,
     ManageNodesComponent,
     ManageSubscriptionsComponent,
-    ManageSharingComponent
+    ManageSharingComponent,
+    FeedbackDialogComponent
 
   ],
   imports: [
