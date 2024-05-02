@@ -183,6 +183,7 @@ import { ManageNodesComponent } from './components/admin/manage-nodes/manage-nod
 import { ManageSubscriptionsComponent } from './components/admin/manage-subscriptions/manage-subscriptions.component';
 import { ManageSharingComponent } from './components/admin/manage-sharing/manage-sharing.component';
 import { FeedbackDialogComponent } from './components/header/feedback-dialog/feedback-dialog.component';
+import { ConvertBytesToHigherUnitPipe } from './shared/pipes/convert-bytes-to-higher-unit.pipe';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -307,7 +308,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ManageNodesComponent,
     ManageSubscriptionsComponent,
     ManageSharingComponent,
-    FeedbackDialogComponent
+    FeedbackDialogComponent,
+    ConvertBytesToHigherUnitPipe
 
   ],
   imports: [

@@ -399,6 +399,6 @@ export class ProcessWorkspaceService {
   getAvailableNodesSortedByScore() {
     let sUrl = this.APIURL + '/process/nodesByScore?';
 
-    return this.oHttp.get(sUrl);
+    return this.oHttp.get<any[]>(sUrl);
   };
 }
