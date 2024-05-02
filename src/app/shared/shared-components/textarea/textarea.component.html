@@ -1,6 +1,6 @@
 <label for="validationTextarea" class="form-label" for="" [class.disabled]="m_bIsDisabled"
     [class.readonly]="m_bIsReadonly" *ngIf="m_sLabel">{{m_sLabel}}</label>
-<textarea *ngIf="!m_bShowInvalid && !m_bShowValid" style="height: 100%" class="form-control"
+<textarea *ngIf="!m_bShowInvalid && !m_bShowValid" style="height: 75%" class="form-control"
     [class.is-invalid]="m_bShowInvalid" [class.is-valid]="m_bShowValid" [class.readonly]="m_bIsReadonly"
     id="validationTextarea" name="" id="" [disabled]="m_bIsDisabled" [readOnly]="m_bIsReadonly"
     [value]="m_sInputString"></textarea>

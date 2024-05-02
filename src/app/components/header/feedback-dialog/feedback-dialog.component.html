@@ -1,1 +1,33 @@
-<p>feedback-dialog works!</p>
+<div class="apps-dialog d-flex flex-column gap-2 h-100">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">Send Feedback
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+    </div>
+    <div class="dialog-content flex-fill d-flex flex-column gap-3">
+        <div class="d-flex flex-column flex-fill">
+            <app-input-field [m_sLabel]="'Send as'" [m_bIsReadonly]="true" [m_bIsDisabled]="true"
+                [m_sInputValue]="m_oActiveUser.userId"></app-input-field>
+            <app-input-field [m_sLabel]="'Title'" (m_oInputChange)="getUserInput('title', $event)"></app-input-field>
+            <div class="flex-fill">
+                <app-textarea [m_sLabel]="'Message'" (keyup)="getUserInput('message', $event)"></app-textarea>
+            </div>
+        </div>
+        <div class="text-center">
+            OR
+        </div>
+        <div class="discord-cta d-flex flex-row gap-3">
+            <img src="assets/icons/discord.svg" alt="">
+            <div class="d-flex flex-column justify-content-start gap-3">
+                <div class="discord-header font-bold">Join our live support on Discord!</div>
+                <div>Get <strong>real time support</strong> on our Discord channel, join our always growing community,
+                    accelterate your <strong>problem-solving</strong>.
+                </div>
+                <app-button class="align-self-start" [m_sLabel]="'Join today'" [m_bOutline]="true" [m_bIsBgSolid]="true"
+                    (click)="openDiscord()"></app-button>
+            </div>
+        </div>
+    </div>
+    <div class="dialog-footer mt-3 d-flex flex-row justify-content-end gap-2">
+        <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true" (click)="onDismiss()"></app-button>
+        <app-button [m_sLabel]="'Send'" (click)="sendFeedback()"></app-button>
+    </div>
+</div>
