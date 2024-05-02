@@ -60,4 +60,9 @@ export class ButtonComponent {
    * Is the background of the button a solid white?
    */
   @Input() m_bIsBgSolid?: boolean = false;
+
+  /**
+   * Is there are text colour override - to white? 
+   */
+  @Input() m_bTextWhite?: boolean = false;
 }

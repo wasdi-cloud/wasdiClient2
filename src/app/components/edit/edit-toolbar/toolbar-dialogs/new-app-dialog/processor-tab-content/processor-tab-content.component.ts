@@ -17,6 +17,7 @@ import { PackageManagerComponent } from 'src/app/components/dialogs/package-mana
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 
 @Component({
@@ -108,7 +109,15 @@ export class ProcessorTabContentComponent implements OnInit {
    */
   m_sSelectedFileName: string;
 
+  /**
+   * Is the build log component currently being shown? 
+   */
+  m_bShowBuildLogs: boolean = false;
+
   @Input() m_oProcessorBasicInfo: FormGroup;
+
+  m_asBuildLogs: Array<any> = [];
+  m_sBuildLogs: string = "";
 
   m_aoProcessorTypes = [
     { name: "Ubuntu 22.04 + Python 3.10", id: "python_pip_2" },
@@ -128,6 +137,7 @@ export class ProcessorTabContentComponent implements OnInit {
 
 
   constructor(
+    private m_oClipboard: Clipboard,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -339,5 +349,36 @@ export class ProcessorTabContentComponent implements OnInit {
     this.m_oProcessorBasicInfo.patchValue({
       sJSONSample: oEvent
     })
+  }
+
+  showBuildLogs(bShowLogs: boolean) {
+    this.m_bShowBuildLogs = bShowLogs
+
+    if (this.m_bShowBuildLogs === true) {
+      this.getProcessorBuildLogs(this.m_sProcessorId);
+    }
+  }
+
+  getProcessorBuildLogs(sProcessoId: string) {
+    this.m_oProcessorService.getProcessorLogsBuild(sProcessoId).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          this.m_sBuildLogs = oResponse;
+          this.m_asBuildLogs = oResponse.map((sBuildLog, iIndex) => {
+            return { logNumber: iIndex, logs: sBuildLog.split("Step"), isOpen: false }
+          })
+        }
+      },
+      error: oError => { }
+    })
+  }
+
+  openBuildLog(oBuildLog) {
+    oBuildLog.isOpen = !oBuildLog.isOpen;
+  }
+
+  copyBuildLogToClipboard(oBuildLog) {
+    this.m_oClipboard.copy(oBuildLog);
+    this.m_oNotificationDisplayService.openSnackBar("Copied Build Log", "Close")
   }
 }

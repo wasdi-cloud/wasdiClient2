@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-build-logs',
@@ -33,14 +33,11 @@ export class BuildLogsComponent implements OnInit {
   getProcessorBuildLogs(sProcessoId: string) {
     this.m_oProcessorService.getProcessorLogsBuild(sProcessoId).subscribe({
       next: oResponse => {
-        console.log(oResponse)
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_sBuildLogs = oResponse;
           this.m_asBuildLogs = oResponse.map(sBuildLog => {
-            console.log(sBuildLog.split("Step"))
             return sBuildLog.split("Step")
           })
-          console.log(this.m_asBuildLogs)
         }
       },
       error: oError => { }

@@ -1,11 +1,12 @@
-<div class="dialog-content d-flex flex-row gap-2" *ngIf="m_oProcessorBasicInfo" [formGroup]="m_oProcessorBasicInfo">
+<div class="dialog-content d-flex flex-row gap-2" *ngIf="m_oProcessorBasicInfo && !m_bShowBuildLogs"
+    [formGroup]="m_oProcessorBasicInfo">
     <div class="dialog-column form-input-container d-flex flex-column gap-2">
         <div *ngIf="m_bEditMode"
             class="button-container d-flex flex-row align-items-center justify-content-center gap-2">
-            <app-button [m_sLabel]="'Package manager'" (click)="openPackageManager()"></app-button>
+            <!-- <app-button [m_sLabel]="'Package manager'" (click)="openPackageManager()"></app-button>
             <app-button [m_sLabel]="'Update Library'" (click)="forceLibUpdate(m_sProcessorId)"></app-button>
             <app-button [m_sLabel]="'Re-deploy App'" (click)="forceProcessorRefresh(m_sProcessorId)"></app-button>
-            <app-button [m_sLabel]="'Build Logs'" (click)="openBuildLogs()"></app-button>
+            <app-button [m_sLabel]="'Build Logs'" (click)="openBuildLogs()"></app-button> -->
         </div>
         <app-input-field [m_sLabel]="'Name'" [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_sProcessorName"
             (m_oInputChange)="m_oProcessorBasicInfo.patchValue({sProcessorName: $event.event.target.value})"></app-input-field>
@@ -13,12 +14,12 @@
             [m_sInputValue]="m_sTypeNameOnly"></app-input-field>
         <app-autocomplete [m_sLabel]="'Type'" *ngIf="!m_bEditMode" [m_aoInputs]="m_aoProcessorTypes"
             (m_oSelectionChange)="setSelectedType($event)"></app-autocomplete>
-        <div class="textarea-container flex-fill">
+        <div class="textarea-container">
             <app-textarea [m_sLabel]="'Description'"
                 [m_sInputString]="m_oProcessorBasicInfo.get('sShortDescription').value"
                 (keyup)="onTextareaInput($event)"></app-textarea>
         </div>
-        <div class="d-flex flex-row align-items-center gap-2 mt-4">
+        <div class="d-flex flex-row align-items-center gap-2">
             <app-input-field [m_sLabel]="'Timeout expressed in minutes'" [m_sPlacehodler]="'180'"
                 [m_sInputValue]="m_iMinuteTimeout.toString()"
                 (m_oInputChange)="m_oProcessorBasicInfo.patchValue({iMinuteTimeout: $event.event.target.value})"></app-input-field>
@@ -29,6 +30,13 @@
             </div>
         </div>
         <div class="drag-drop-container mt-3">
+            <div class="options-container">
+                <div class="d-flex flex-row justify-content-between font-bold">
+                    Application files
+                    <app-button [m_sLabel]="'Build log'" [m_bMuted]="true" (click)="showBuildLogs(true)"></app-button>
+                </div>
+
+            </div>
             <app-drag-and-drop (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
 
         </div>
@@ -38,6 +46,43 @@
         <div class="flex-fill json-editor-wrapper">
             <app-json-editor [(m_sText)]="m_sJSONSample" m_sMode="json"
                 (m_sTextChange)="onJsonInput($event)"></app-json-editor>
+        </div>
+    </div>
+</div>
+
+
+<div class="dialog-content d-flex flex-column gap-2" *ngIf="m_bShowBuildLogs">
+    <div class="d-flex flex-row align-items-center gap-2">
+        <app-button [m_sLabel]="'Back'" [m_bMuted]="true" [m_sIconLeft]="'arrow_back'"
+            (click)="showBuildLogs(false)" ></app-button>
+        <strong>Build Logs</strong>
+    </div>
+    <div class="flex-fill">
+        <div style="height: 100%; overflow: scroll;">
+            <table  *ngFor="let aBuildLogs of m_asBuildLogs" class="table table-striped table-hover mb-0">
+                <thead>
+                    <tr (click)="openBuildLog(aBuildLogs)">
+                        <td class="d-flex flex-row justify-content-between" [class.isOpen]="aBuildLogs.isOpen">
+                            <div class="font-bold">Build Number: {{aBuildLogs.logNumber}}</div>
+                            <div class="d-flex flex-row gap-1">
+                                <app-button [m_sLabel]="'Copy to Clipboard'.toUpperCase()" [m_sSize]="'small'" [m_sIconLeft]="'content_copy'"
+                                    [m_bOutline]="true" [m_bTextWhite]="true" (click)="copyBuildLogToClipboard(aBuildLogs.logs)"></app-button>
+                                <span *ngIf="aBuildLogs.isOpen === false" class="material-symbols-outlined">
+                                    expand_more
+                                </span>
+                                <span *ngIf="aBuildLogs.isOpen === true" class="material-symbols-outlined">
+                                    expand_less
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody *ngIf="aBuildLogs.isOpen === true">
+                    <tr *ngFor="let sBuildLog of aBuildLogs.logs">
+                        <td *ngIf="sBuildLog.length !== 1 ">{{sBuildLog}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

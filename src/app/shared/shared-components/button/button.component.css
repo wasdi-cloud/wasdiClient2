@@ -115,3 +115,11 @@
 .btn-solid {
     background-color: #FFFFFF;
 }
+
+.text-white {
+    color: #FFFFFF;
+}
+
+.border-white {
+    border: 1px solid #FFFFFF;
+}
