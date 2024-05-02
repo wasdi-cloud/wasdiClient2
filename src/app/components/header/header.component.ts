@@ -9,6 +9,7 @@ import { ProjectService } from 'src/app/services/api/project.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { Router } from '@angular/router';
+import { FeedbackDialogComponent } from './feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -23,15 +24,9 @@ export class HeaderComponent implements OnInit {
   m_oProject: any;
   m_oSelectedProject: any = { name: "No Active Project", projectId: null };
 
-  m_oFeedback: {
-    title: string | null,
-    message: string | null
-  } = { title: null, message: null }
-
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oFeedbackService: FeedbackService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProjectService: ProjectService,
     private m_oRouter: Router
@@ -119,6 +114,12 @@ export class HeaderComponent implements OnInit {
     this.m_oDialog.open(UserSettingsDialogComponent);
   }
 
+  openFeedbackDialog() {
+    this.m_oDialog.open(FeedbackDialogComponent, {
+      height: '70vh',
+      width: '40vw'
+    });
+  }
   goToSubscriptions() {
     this.m_oRouter.navigateByUrl("subscriptions");
   }
@@ -130,23 +131,6 @@ export class HeaderComponent implements OnInit {
 
   openDocs() {
     window.open('https://discord.gg/FkRu2GypSg', '_blank')
-  }
-
-  sendFeedback() {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oFeedback) || !this.m_oFeedback.title || !this.m_oFeedback.message) {
-      console.log("Error sending message");
-      return false;
-    }
-    this.m_oFeedbackService.sendFeedback(this.m_oFeedback).subscribe(oResponse => {
-      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.boolValue === true) {
-        console.log("feedback sent")
-        return true;
-      } else {
-        console.log("error sending feedback");
-        return false;
-      }
-    });
-    return true;
   }
 }
 

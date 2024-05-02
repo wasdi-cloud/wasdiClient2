@@ -8,6 +8,10 @@ label {
     /* height: 100%; */
 }
 
+.form-control {
+    height:75% !important;
+}
+
 .list-item-container {
     border: 1px solid #D9DCE1;
     border-radius: 8px;

@@ -55,4 +55,9 @@ export class ButtonComponent {
    * Is the button a delete button (i.e., should it be RED)? 
    */
   @Input() m_bIsDelete?: boolean = false;
+
+  /**
+   * Is the background of the button a solid white?
+   */
+  @Input() m_bIsBgSolid?: boolean = false;
 }

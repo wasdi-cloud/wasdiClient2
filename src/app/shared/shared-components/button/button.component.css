@@ -111,3 +111,7 @@
 .btn-delete {
     background-color: var(--wasdiDanger);
 }
+
+.btn-solid {
+    background-color: #FFFFFF;
+}
