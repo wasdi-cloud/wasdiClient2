@@ -13,12 +13,20 @@ export class NodeService {
   }
 
   /**
-   * Get the full list of nodes
+   * Get the full list of nodes all ACTIVE nodes
    * @returns 
    */
   getNodesList() {
     return this.m_oHttp.get<any[]>(this.APIURL + '/node/allnodes');
   };
+
+  /**
+   * Get the full list of all nodes (including inactive nodes)
+   * @returns 
+   */
+  getFullNodesList() {
+    return this.m_oHttp.get<any[]>(this.APIURL + '/node/allnodes?all=true')
+  }
 
   /**
    * Get details of a node (selected by nodeCode)
@@ -39,7 +47,7 @@ export class NodeService {
     };
   
     /**
-     * Deletes one node
+     * Deletes one node - NOT USED AT THE MOMENT
      * @param sUserId 
      * @returns 
      */
@@ -48,7 +56,7 @@ export class NodeService {
     }; 
 
    /**
-   * Inser a new Node
+   * Insert a new Node
    * @param oNode 
    * @returns 
    */

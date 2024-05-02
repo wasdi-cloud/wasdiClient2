@@ -6,27 +6,6 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
-// active
-
-// apiUrl
-// :
-// "https://test2.wasdi.net/wasdiwebserver/rest"
-// cloudProvider
-// :
-// "ADWAISEO"
-// nodeCode
-// :
-// "TEST_ADWAISEO_2"
-// nodeDescription
-// :
-// "Test2 computational node of test environment"
-// nodeGeoserverAddress
-// :
-// "https://test2.wasdi.net/geoserver/ows"
-// shared
-// :
-true
-
 @Component({
   selector: 'app-manage-nodes',
   templateUrl: './manage-nodes.component.html',
@@ -38,6 +17,8 @@ export class ManageNodesComponent implements OnInit {
   m_bEditMode: boolean = false;
 
   m_oSelectedNode: any = null;
+
+  m_sSearch: string = null; 
   constructor(
     private m_oAdminDashboardService: AdminDashboardService,
     private m_oNodeService: NodeService,
@@ -49,7 +30,7 @@ export class ManageNodesComponent implements OnInit {
   }
 
   getNodes() {
-    this.m_oNodeService.getNodesList().subscribe({
+    this.m_oNodeService.getFullNodesList().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_oNotificationDisplayService.openAlertDialog("Could not get node information");
@@ -80,19 +61,6 @@ export class ManageNodesComponent implements OnInit {
           next: oResponse => {
             console.log(oResponse)
           }
-        })
-      }
-    })
-  }
-
-  deleteNode(oNode: any) {
-    this.m_oNotificationDisplayService.openConfirmationDialog(`Are you sure you want to DELETE ${oNode.nodeCode}?`).subscribe(bDialogResult => {
-      if(bDialogResult) {
-        this.m_oNodeService.deleteNode(oNode.nodeCode).subscribe({
-          next: oResponse => {
-            this.getNodes();
-          },
-          error: oError => { }
         })
       }
     })

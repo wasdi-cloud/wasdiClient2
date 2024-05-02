@@ -3,6 +3,9 @@
         <app-button data-bs-toggle="offcanvas" href="#nodeEditor" role="button" aria-controls="nodeEditor"
             [m_sLabel]="'Create New Node'" (click)="setSelectedNode(null)"></app-button>
     </div>
+    <div class="d-flex flex-row justify-content-end">
+        <app-input-field [m_sPlacehodler]="'Search by Node Code'" (m_oInputChange)="m_sSearch = $event.event.target.value"></app-input-field>
+    </div>
     <div class="flex-fill d-flex flex-column gap-2">
         <div class="table-wrapper">
             <table>
@@ -14,16 +17,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let oNode of m_aoNodes">
+                    <tr *ngFor="let oNode of m_aoNodes | filter: m_sSearch">
                         <td>{{oNode.cloudProvider}}</td>
                         <td>{{oNode.nodeCode}}</td>
                         <td>
                             <span (click)="setSelectedNode(oNode)" data-bs-toggle="offcanvas" href="#nodeEditor"
                                 role="button" aria-controls="nodeEditor" class="material-symbols-outlined">
                                 edit
-                            </span>
-                            <span class="material-symbols-outlined" (click)="deleteNode(oNode)">
-                                delete
                             </span>
                         </td>
                     </tr>
