@@ -6,10 +6,6 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 
-
-//Font Awesome Icon Imports:
-import { faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
-
 //Angular Materials Imports:
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -26,10 +22,6 @@ import { ImageService } from 'src/app/services/api/image.service';
   styleUrls: ['./new-app-dialog.component.css']
 })
 export class NewAppDialogComponent implements OnInit {
-  //Font Awesome Imports
-  faRocket = faRocket;
-  faX = faXmark;
-
   /**
    * Edit Mode boolean: are we creating a new processor or editing an existing one?
    */

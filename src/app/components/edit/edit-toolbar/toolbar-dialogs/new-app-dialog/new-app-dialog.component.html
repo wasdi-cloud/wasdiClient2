@@ -6,6 +6,8 @@
     <div class="processor-tabs d-flex flex-row pb-4">
         <app-tab [m_sLabel]="'Processor'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PROCESSOR'"
             (click)="changeActiveTab('PROCESSOR')"></app-tab>
+        <app-tab [m_sLabel]="'Package Manaager'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PACKAGES'"
+            (click)="changeActiveTab('PACKAGES')" *ngIf="m_bEditMode"></app-tab>
         <app-tab [m_sLabel]="'Store Info'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'STORE'"
             (click)="changeActiveTab('STORE')" *ngIf="m_bEditMode"></app-tab>
         <app-tab [m_sLabel]="'Pricing'" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PRICING'"
@@ -21,6 +23,9 @@
             [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')"
             [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''" [m_sProcessorName]="m_sName"
             [m_sPublisher]="m_oProcessorDetails.publisher"></app-processor-tab-content>
+        <!-- Package Manager -->
+        <app-package-manager *ngIf="m_sActiveTab === 'PACKAGES'"
+            [m_oProcessorInfo]="m_oInputProcessor"></app-package-manager>
         <!-- Processor Store Options -->
         <app-processor-tab-store *ngIf="m_sActiveTab==='STORE'"
             [m_oProcessorStoreInfo]="m_oProcessorForm.get('processorStoreInfo')"
