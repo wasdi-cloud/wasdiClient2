@@ -530,6 +530,6 @@ a.leaflet-control-button,
   opacity: 0 !important;
 }
 
-.cdk-global-overlay-wrapper, .cdk-overlay-container {
+.cdk-overlay-container {
   z-index: 99999 !important;
 }
