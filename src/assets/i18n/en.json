@@ -812,14 +812,21 @@
     "DIALOG_PACKAGE_MANAGER_HEADER": "Package Manager",
     "DIALOG_PACKAGE_MANAGER_NAME": "Package Name",
     "DIALOG_PACKAGE_MANAGER_VERSION": "Package Version",
-    "DIALOG_PACKAGE_MANAGER_ADD": "Add Package",
     "DIALOG_PACKAGE_MANAGER_UPDATE": "Update Package",
     "DIALOG_PACKAGE_MANAGER_REFRESH_LIST": "Refresh List",
     "DIALOG_PACKAGE_MANAGER_CLEAR": "Clear Selection",
     "DIALOG_PACKAGE_MANAGER_CURRENT_VERSION": "Current Version",
     "DIALOG_PACKAGE_MANAGER_LATEST_VERSION": "Latest Version",
     "DIALOG_PACKAGE_MANAGER_ACTIONS": "Actions",
- 
+    "PACKAGE_MANAGER_REFRESH": "REFRESH",
+    "PACKAGE_MANAGER_ROLLBACK": "Rollback",
+    "PACKAGE_MANAGER_SEARCH": "Search package",
+    "PACKAGE_MANAGER_NAME": "Package Name",
+    "PACKAGE_MANAGER_CURRENT_VERSION": "Current Version", 
+    "PACKAGE_MANAGER_LATEST_VERSION": "Latest Version",
+    "PACKAGE_MANAGER_ADD": "Add new package",
+
+
     "EDITOR_ERROR_CONSOLE_NOT_REACHABLE": "Error contacting the JupyterLab service",
    
     "USER_ORGANIZATIONS_SHOW_USERS": "Show Users",

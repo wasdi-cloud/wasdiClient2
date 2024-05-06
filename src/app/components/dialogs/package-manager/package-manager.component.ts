@@ -1,15 +1,9 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, Input, OnInit, OnDestroy } from '@angular/core';
 
 //Service Imports:
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { PackageManagerService } from 'src/app/services/api/package-manager.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
-
-//Mat Dialog Imports:
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-
-//Font Awesome Imports:
-import { faArrowUp, faFolder, faTrashCan, faX } from '@fortawesome/free-solid-svg-icons';
 
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -21,11 +15,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   styleUrls: ['./package-manager.component.css']
 })
 export class PackageManagerComponent implements OnInit, OnDestroy {
-  //Font Awesome Imports:
-  faArrowUp = faArrowUp;
-  faTrashcan = faTrashCan;
-  faFolder = faFolder;
-  faX = faX;
+  @Input() m_oProcessorInfo: any = null;
 
   m_bIsLoading: boolean = true;
   m_bIsEditing: boolean = false;
@@ -38,23 +28,22 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   m_sPackageManagerName = "";
   m_sPackageManagerVersion = "";
   m_sPackageName: string = "";
-  m_sPackageToAdd: string;
+  m_sPackageToAdd: string = "";
+  m_sPackageVersion: string = "";
+  m_sPackageSearch: string = "";
+
+  m_bShowInputFields: boolean = false;
 
   m_iHookIndex: number;
 
-  m_sPackageSearch: string;
-
   constructor(
-    @Inject(MAT_DIALOG_DATA) public m_oData: any,
-    private m_oDialog: MatDialog,
-    private m_oDialogRef: MatDialogRef<PackageManagerComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oPackageManagerService: PackageManagerService,
     private m_oRabbitStompService: RabbitStompService) { }
 
   ngOnInit(): void {
-    this.m_sProcessorId = this.m_oData.sProcessorId;
-    this.m_sProcessorName = this.m_oData.sProcessorName;
+    this.m_sProcessorId = this.m_oProcessorInfo.processorId;
+    this.m_sProcessorName = this.m_oProcessorInfo.processorName;
 
     this.fetchPackageManagerInfo(this.m_sProcessorName);
     this.fetchPackages();
@@ -77,7 +66,6 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
   fetchPackageManagerInfo(sWorkspaceName: string) {
     this.m_oPackageManagerService.getPackageManagerInfo(sWorkspaceName).subscribe({
       next: oResponse => {
-        //console.log(oResponse);
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_sPackageManagerName = oResponse.name;
           this.m_sPackageManagerVersion = oResponse.version;
@@ -96,7 +84,6 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoPackages = oResponse;
           this.m_bIsLoading = false;
-          //console.log(this.m_aoPackages)
         }
       },
       error: oError => {
@@ -145,39 +132,27 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
           }
         })
       }
-    })    
-    
+    })
+
   }
 
   /**
    * Add a Package (library): 
    */
-  addLibrary(sProcessorId: string, sPackageName: string) {
+  addLibrary(sProcessorId: string, sPackageName: string, sPackageVersion?: string) {
     if (!sPackageName) {
-      this.m_oNotificationDisplayService.openSnackBar("Package name missing, we cannot proceed","Close");
+      this.m_oNotificationDisplayService.openSnackBar("Package name missing, we cannot proceed", "Close");
       return;
     }
-    let aPackageInfo = sPackageName.split("==");
 
-    let aPackageInfoTrimmed = aPackageInfo.map((sElement) => {
-      return sElement.replace(/["]+/g, "").trim();
-    });
+    let sConfirmationMessage = `Are you sure you wish to add ${sPackageName}?`;
 
-    let sPackageInfoName = aPackageInfoTrimmed[0];
-    let sPackageInfoVersion = "";
-    let sAddCommand = "";
-    if (aPackageInfoTrimmed[1]) {
-      sPackageInfoVersion = aPackageInfoTrimmed[1];
+    let sAddCommand = sPackageName;
+
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sPackageVersion) === false) {
+      sAddCommand += ("/" + sPackageVersion);
     }
 
-    let sConfirmationMessage = `Are you sure you wish to add ${sPackageInfoName}?`;
-
-    sAddCommand = sPackageName;
-
-    if (FadeoutUtils.utilsIsStrNullOrEmpty(sPackageInfoVersion) === false) {
-      sAddCommand = sPackageInfoName + "/" + sPackageInfoVersion;
-    } 
-    
     let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
 
     bConfirmResult.subscribe(bDialogResult => {
@@ -185,14 +160,16 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
         this.m_oPackageManagerService.addLibrary(sProcessorId, sAddCommand).subscribe({
           next: oResponse => {
             this.m_bIsLoading = true;
+            this.m_sPackageName = "";
+            this.m_sPackageVersion = "";
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openSnackBar("Error adding your package. Are you sure about the name used?","Close");
+            this.m_oNotificationDisplayService.openSnackBar("Error adding your package. Are you sure about the name used?", "Close");
           }
         })
       }
     });
-  
+
   }
 
   /**
@@ -232,6 +209,10 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
     });
   }
 
+  toggleShowInput(bShowInputs) {
+    this.m_bShowInputFields = bShowInputs;
+  }
+
   /**
    * Add rabbithook - execute function when message recieved
    * @param oRabbitMessage 
@@ -241,12 +222,5 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
     oController.m_oNotificationDisplayService.openSnackBar(oRabbitMessage.payload, "Close");
     oController.fetchPackages();
     oController.m_bIsLoading = false
-  }
-
-  /**
-   * Close Dialog
-   */
-  onDismiss() {
-    this.m_oDialogRef.close();
   }
 }
