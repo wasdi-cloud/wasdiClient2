@@ -12,7 +12,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Component Imports
-import { BuildLogsComponent } from 'src/app/components/dialogs/build-logs/build-logs.component';
 import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
 
 //Fadeout Utilities Import: 
@@ -307,16 +306,6 @@ export class ProcessorTabContentComponent implements OnInit {
     });
   }
 
-  openBuildLogs() {
-    this.m_oDialog.open(BuildLogsComponent, {
-      height: '70vh',
-      width: '70vw',
-      data: {
-        sProcessorId: this.m_sProcessorId,
-        sProcessorName: this.m_sProcessorName
-      }
-    })
-  }
 
   /**
    * on file drop handler
@@ -380,5 +369,9 @@ export class ProcessorTabContentComponent implements OnInit {
   copyBuildLogToClipboard(oBuildLog) {
     this.m_oClipboard.copy(oBuildLog);
     this.m_oNotificationDisplayService.openSnackBar("Copied Build Log", "Close")
+  }
+
+  downloadProcessor(sProcessorId: string) {
+    this.m_oProcessorService.downloadProcessor(sProcessorId)
   }
 }
