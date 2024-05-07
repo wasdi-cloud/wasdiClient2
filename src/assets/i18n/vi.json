@@ -183,6 +183,13 @@
     "DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "Danh sách tệp",
     "DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Thêm vào không gian làm việc",
     "DIALOG_SFTP_UPLOAD_CLOSE_BUTTON": "Đóng",
+
+    "DIALOG_IMPORT_HEADER": "Nhập vào bên trong không gian làm việc",
+    "DIALOG_IMPORT_LOCATION": "Nhập tập tin vào",
+    "DIALOG_IMPORT_FILE_TYPES": "Bạn có thể nhập các loại tệp bên trong không gian làm việc này như .tiff và .zip",
+    "DIALOG_IMPORT_APPLY_STLYE": "Bạn có muốn áp dụng một kiểu không?",
+    "DIALOG_IMPORT_SELECT_STYLE": "Chọn kiểu",
+
     "DIALOG_IMPORT_UPLOAD_STYLE": "Phong cách",
     "DIALOG_IMPORT_UPLOAD_UPLOAD": "Tải file lên",
     "DIALOG_IMPORT_IMPORT": "Nhập vào",

@@ -183,6 +183,14 @@
 	"DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "Lista di file",
 	"DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Aggiuingi al workspace",
 	"DIALOG_SFTP_UPLOAD_CLOSE_BUTTON": "Chiudi",
+
+	"DIALOG_IMPORT_HEADER": "Importa all'interno dell'area di lavoro",
+    "DIALOG_IMPORT_LOCATION": "Importa file in",
+    "DIALOG_IMPORT_FILE_TYPES": "Puoi importare all'interno di questo spazio di lavoro tipi di file come .tiff e .zip",
+    "DIALOG_IMPORT_APPLY_STLYE": "Vuoi applicare uno stile?",
+    "DIALOG_IMPORT_SELECT_STYLE": "Seleziona uno stile", 
+
+
 	"DIALOG_IMPORT_UPLOAD_STYLE": "Stile",
 	"DIALOG_IMPORT_UPLOAD_UPLOAD": "Carica File",
 	"DIALOG_IMPORT_IMPORT": "Importa",
