@@ -1,9 +1,10 @@
 <div class="d-flex flex-column justify-content-between">
     <label for="" *ngIf="m_sLabel">{{m_sLabel}}</label>
-    <mat-select [multiple]="m_bIsMultiSelect" class="form-control" placeholder="{{m_sPlaceholder}}" name="dropdown" (selectionChange)="emitSelectionChange($event)"
-        [(value)]="m_aoSelectedItems" disableOptionCentering="'false'">
+    <mat-select [multiple]="m_bIsMultiSelect" class="form-control" placeholder="{{m_sPlaceholder}}" name="dropdown"
+        (selectionChange)="emitSelectionChange($event)" [(value)]="m_aoSelectedItems" disableOptionCentering="'false'">
         <div *ngIf="m_bHasSearch" class="mat-search-container">
-            <input type="text" name="m_sStyle" placeholder="Search..." class="mat-select-search">
+            <input type="text" name="m_sStyle" placeholder="Search..." class="mat-select-search"
+                [(ngModel)]="m_sSearchString">
         </div>
         <mat-select-trigger>
             {{getValues(m_aoSelectedItems)}}
