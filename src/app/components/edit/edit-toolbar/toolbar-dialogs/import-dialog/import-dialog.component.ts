@@ -11,9 +11,6 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { ProductService } from 'src/app/services/api/product.service';
 import { StyleService } from 'src/app/services/api/style.service';
 
-//Font Awesome Import: 
-import { faUpload, faX } from '@fortawesome/free-solid-svg-icons';
-
 //Model Imports
 import { User } from 'src/app/shared/models/user.model';
 
@@ -26,10 +23,6 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   styleUrls: ['./import-dialog.component.css']
 })
 export class ImportDialogComponent implements OnInit {
-  //Font Awesome Icon Imports
-  faUpload = faUpload;
-  faX = faX;
-
   m_sActiveTab: string = "upload"
 
   m_oUser: User = this.m_oConstantsService.getUser();
@@ -37,11 +30,11 @@ export class ImportDialogComponent implements OnInit {
   m_bIsLoading: boolean = false;
   m_bIsUploading: boolean = false;
 
-  m_sWorkspaceId: string = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-  m_oStyle: string = "";
+  m_oWorkspace: any = this.m_oConstantsService.getActiveWorkspace();
 
-  m_asStyles: Array<string> = [];
-  m_aoStylesMap: any = [];
+  m_sWorkspaceId: string = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+
+  m_aoStyles: Array<any> = [];
   m_oFile: any;
   m_sFileName: string = "";
 
@@ -55,6 +48,8 @@ export class ImportDialogComponent implements OnInit {
   m_bIsAccountCreated: boolean = false;
 
   m_bIsReadOnly: boolean = true;
+
+  m_oSelectedStyle: any = null;
 
 
   constructor(
@@ -81,9 +76,7 @@ export class ImportDialogComponent implements OnInit {
   getStyles() {
     this.m_oStyleService.getStylesByUser().subscribe(oResponse => {
       if (oResponse) {
-        oResponse.map(oStyle => {
-          this.m_aoStylesMap.push(oStyle.name)
-        })
+        this.m_aoStyles = oResponse
       }
     })
   }
@@ -94,6 +87,10 @@ export class ImportDialogComponent implements OnInit {
     this.m_oFile = oEvent.file
   }
 
+  getSelectedStyle(oEvent) {
+    this.m_oSelectedStyle = oEvent.value;
+  }
+
   onUploadFile() {
 
     this.m_bIsLoading = true;
@@ -101,6 +98,7 @@ export class ImportDialogComponent implements OnInit {
 
     //Add paywalling in this area on subscriptions
     if (this.m_oConstantsService.checkProjectSubscriptionsValid() === false) {
+      this.m_oNotificationDisplayService.openAlertDialog("You do not have an active project at the moment <br> Either select a project or purchase a subscription");
       return false;
     }
 
@@ -120,8 +118,8 @@ export class ImportDialogComponent implements OnInit {
     }
 
     //If the Style Input is filled apply the style: 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oStyle) === false) {
-      sStyle = this.m_oStyle;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedStyle) === false) {
+      sStyle = this.m_oSelectedStyle.name;
     }
 
     this.m_oProductService.uploadFile(this.m_sWorkspaceId, this.m_oFile, this.m_sFileName, sStyle).subscribe(
@@ -133,7 +131,6 @@ export class ImportDialogComponent implements OnInit {
           } else {
             let sMessage: string = "FILE UPLOADED";
             this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
-            //Clean Drag and Drop
             this.onDismiss();
           }
           this.m_bIsUploading = false;
@@ -141,7 +138,6 @@ export class ImportDialogComponent implements OnInit {
         error: (oError) => {
           let sErrorMessage: string = "ERROR IN UPLOADING FILE";
           this.m_bIsUploading = false;
-          //Clean Drag and Drop
           this.m_oNotificationDisplayService.openSnackBar(sErrorMessage, "Close", "right", "bottom");
         }
       });
@@ -287,6 +283,13 @@ export class ImportDialogComponent implements OnInit {
       }
     });
     return true;
+  }
+
+  getFileInput(oEvent: any) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
+      console.log(oEvent)
+      this.m_oFile = oEvent;
+    }
   }
 
   onDismiss() {

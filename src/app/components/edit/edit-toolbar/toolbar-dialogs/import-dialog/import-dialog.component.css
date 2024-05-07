@@ -1,3 +1,11 @@
+div.dialog {
+    padding: 24px;
+}
+
 a.nav-link {
     cursor: pointer;
+}
+
+.drag-drop-container {
+    height: 5rem;
 }
