@@ -1,19 +1,20 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, ElementRef, OnInit, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { Workflow } from 'src/app/shared/models/workflow.model';
 import { Product } from 'src/app/shared/models/product.model';
-import { EditWorkflowDialogComponent } from './edit-workflow-dialog/edit-workflow-dialog.component';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-
+import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
+import { JsonEditorService } from 'src/app/services/json-editor.service';
 @Component({
   selector: 'app-workflows-dialog',
   templateUrl: './workflows-dialog.component.html',
   styleUrls: ['./workflows-dialog.component.css']
 })
 export class WorkflowsDialogComponent implements OnInit {
+  @ViewChild('editor') m_oEditorRef!: ElementRef;
 
   m_aoWorkflows: any[];
   m_aoProducts: any[];
@@ -37,6 +38,8 @@ export class WorkflowsDialogComponent implements OnInit {
     isPulic: false
   }
 
+  m_oFile: any = null;
+
   m_sActiveTab: string = 'execute'
   m_sFilterString: string = "";
 
@@ -44,9 +47,27 @@ export class WorkflowsDialogComponent implements OnInit {
   m_sWorkspaceId: string;
   m_sSearchString: string = "";
   m_bIsReadOnly: boolean = true;
+
+  m_bShowInputs: boolean = false;
+  m_bCreatingWorkflow: boolean = false;
+
+  m_sWorkflowName: string = "";
+  m_sWorkflowDescription: string = "";
+  m_bWorkflowIsPublic: boolean = false;
+
+  m_bChangeMade: boolean = false;
+
+  m_sFileName: string = "";
+
+  m_bShowXML: boolean = false;
+
+  m_sJSONParam
+
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
     private m_oConstantsService: ConstantsService,
+    private m_oJsonEditorService: JsonEditorService,
     private m_oDialog: MatDialog,
     private m_oMatDialogRef: MatDialogRef<WorkflowsDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -59,6 +80,8 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_aoProducts = this.m_oData.products;
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
+    this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+    this.m_oJsonEditorService.initEditor();
   }
 
   setActiveTab(sTabName: string) {
@@ -95,35 +118,102 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   setSelectedWorkflow(oWorkflow) {
-    this.m_oSelectedWorkflow = oWorkflow;
-    console.log(this.m_oSelectedWorkflow);
-    this.selectedMultiInputWorkflow(oWorkflow);
-  }
-
-  openEditWorkflowDialog(oWorkflow?) {
-    let oDialog;
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkflow) === false) {
-      oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
-        height: '70vh',
-        width: '70vw',
-        data: {
-          editMode: true,
-          workflow: oWorkflow
+    if (this.m_bChangeMade === true) {
+      // TODO: ADD NEW FORMAT FOR NOTIFICATION DIALOG
+      // sHeader: Edit incomplete
+      this.m_oNotificationDisplayService.openConfirmationDialog("The workflow creation is not complete, some fields are missing and the workflow cannot be saved.<br> What do you wish to do?").subscribe(bDialogResult => {
+        // False means workflow was discarded
+        if (bDialogResult === false) {
+          this.m_bCreatingWorkflow = false;
+          this.m_bShowInputs = false;
+          console.log(this.m_oSelectedWorkflow);
+          this.m_oSelectedWorkflow = oWorkflow;
+          this.selectedMultiInputWorkflow(oWorkflow);
         }
       })
     } else {
-      oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
-        height: '70vh',
-        width: '70vw',
-        data: {
-          editMode: false,
-          workflow: {}
+      this.m_bCreatingWorkflow = false;
+      this.m_bShowInputs = false;
+      this.m_oSelectedWorkflow = oWorkflow;
+      this.selectedMultiInputWorkflow(oWorkflow);
+    }
+  }
+
+  toggleShowInputs(bShowInputs: boolean, bIsEditing: boolean) {
+    this.m_bShowInputs = bShowInputs;
+    this.m_bCreatingWorkflow = !bIsEditing;
+  }
+
+  // openEditWorkflowDialog(oWorkflow?) {
+  //   let oDialog;
+  //   if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkflow) === false) {
+  //     oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
+  //       height: '70vh',
+  //       width: '70vw',
+  //       data: {
+  //         editMode: true,
+  //         workflow: oWorkflow
+  //       }
+  //     })
+  //   } else {
+  //     oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
+  //       height: '70vh',
+  //       width: '70vw',
+  //       data: {
+  //         editMode: false,
+  //         workflow: {}
+  //       }
+  //     })
+  //   }
+  //   oDialog.afterClosed().subscribe(oDialogResult => {
+  //     this.getWorkflowsByUser();
+  //   });
+  // }
+  initWorkflowInfo() {
+
+  }
+
+  uploadWorkflow(sWorkspaceId: string, sName: string, sDescription: string, bIsPublic: boolean, oBody: any) {
+    if (!sName) {
+      this.m_oNotificationDisplayService.openAlertDialog("Please add a name");
+    } else if (!this.m_oFile) {
+      this.m_oNotificationDisplayService.openAlertDialog("Please upload a file");
+    } else {
+      this.m_bIsUploadingWorkflow = true;
+      this.m_oWorkflowService.uploadByFile('workspace', sName, sDescription, oBody, bIsPublic).subscribe({
+        next: oResponse => {
+          let sMessage = "WORKFLOW UPLOADED " + sName.toUpperCase();
+          this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom")
+          this.getWorkflowsByUser();
+          this.m_bShowInputs = false;
+          console.log(oResponse)
+        },
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog("INVALID SNAP FILE!");
         }
       })
     }
-    oDialog.afterClosed().subscribe(oDialogResult => {
-      this.getWorkflowsByUser();
-    });
+  }
+
+  updateWorkflow() {
+    if (this.m_sWorkflowDescription === undefined) {
+      this.m_sWorkflowDescription = "";
+    }
+    this.m_oWorkflowService.updateGraphParameters(this.m_oSelectedWorkflow.workflowId, this.m_sWorkflowName, this.m_sWorkflowDescription, this.m_bWorkflowIsPublic).subscribe({
+      next: oResponse => {
+        this.m_oWorkflowService.updateGraphFile(this.m_oSelectedWorkflow.workflowId, this.m_oFile).subscribe({
+          next: oResponse => {
+            this.m_oNotificationDisplayService.openSnackBar("GRAPH FILE UPDATED", "Close", "right", "bottom");
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog("Error in updating Graph File");
+          }
+        })
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Error in updating Graph File");
+      }
+    })
   }
 
   removeWorkflow(oWorkflow) {
@@ -320,11 +410,18 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   handleListItemClick(oEvent, oWorkflow) {
+    console.log(oEvent)
+    this.setSelectedWorkflow(oWorkflow);
     if (oEvent === 'delete') {
       this.removeWorkflow(oWorkflow);
     } else if (oEvent === 'edit') {
-      this.openEditWorkflowDialog(oWorkflow);
-    } else {
+      // this.openEditWorkflowDialog(oWorkflow);
+    } else if (oEvent === 'xml') {
+      this.showJSONEditor();
+    } else if (oEvent === 'share') {
+      this.openShareDialog()
+    }
+    else {
       this.downloadWorkflow(oWorkflow);
     }
   }
@@ -335,5 +432,41 @@ export class WorkflowsDialogComponent implements OnInit {
 
   getWorkflowImageLink(oWorkflow) {
     return "/assets/icons/style-placeholder.svg"
+  }
+
+  getInputChanges(oEvent, sLabel) {
+    // this.m_bChangeMade = true;
+    switch (sLabel) {
+      case 'name':
+        this.m_sWorkflowName = oEvent.event.target.value;
+        break;
+      case 'description':
+        this.m_sWorkflowDescription = oEvent.target.value;
+        break;
+      case 'search':
+        this.m_sSearchString = oEvent.event.target.value;
+        break;
+    }
+  }
+
+  getSelectedFile(oEvent) {
+    this.m_sFileName = oEvent.name;
+    this.m_oFile = oEvent.file
+  }
+
+  openShareDialog() {
+    let oDialogData = new ShareDialogModel("workflow", this.m_oSelectedWorkflow)
+    this.m_oDialog.open(ShareDialogComponent, {
+      height: '60vh',
+      width: '60vw',
+      data: oDialogData
+    })
+  }
+
+  showJSONEditor() {
+    this.m_bShowXML = true
+
+    this.m_oJsonEditorService.initEditor()
+    this.m_oJsonEditorService.setText(this.m_sJSONParam);
   }
 }

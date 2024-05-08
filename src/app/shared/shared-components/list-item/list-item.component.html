@@ -73,7 +73,7 @@
     <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100" matTooltip="{{m_sDescription}}"
         [matTooltipPosition]="'below'">
         <!--div class="preview-img" style="background: url('/assets/images/hero-images/hero-img1.jpg');"-->
-        <div class="preview-img d-flex flex-column align-items-center"
+        <div *ngIf="m_bHasImg" class="preview-img d-flex flex-column align-items-center"
             style="background-size: contain; background-position: center; background-image: url('{{m_sIcon}}')"></div>
         <div class="d-flex flex-column flex-fill" style="width: 85%;">
             <div class="d-flex flex-row w-100 justify-content-between">
@@ -88,11 +88,15 @@
                         (click)="emitToolbarClick('download')">
                         download
                     </span>
+                    <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
+                        class="material-symbols-outlined" matTooltip="Share" (click)="emitToolbarClick('share')">share</span>
+                    <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
+                        class="material-symbols-outlined" matTooltip="Open XML" (click)="emitToolbarClick('xml')">code</span>
+
                     <span class="material-symbols-outlined" matTooltip="Open Editor" (click)="emitToolbarClick('edit')">
                         edit_square
                     </span>
-                    <span class="material-symbols-outlined" matTooltip="Remove"
-                        (click)="emitToolbarClick('delete')">
+                    <span class="material-symbols-outlined" matTooltip="Remove" (click)="emitToolbarClick('delete')">
                         delete
                     </span>
                 </div>

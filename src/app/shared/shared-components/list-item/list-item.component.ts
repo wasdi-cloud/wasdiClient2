@@ -59,6 +59,8 @@ export class ListItemComponent {
 
   @Input() m_oProcessorItem?: any = {};
 
+  @Input() m_bHasImg?: boolean = true;
+  
   @Input() m_sIcon?: string = "";
 
   @Input() m_sImageSize?: string = "";
