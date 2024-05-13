@@ -1,3 +1,8 @@
+.users-table {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+}
+
 .image-wrapper {
     height: 100%;
     color: var(--neutral70);
@@ -19,6 +24,7 @@ div.collab-text {
 }
 
 table {
+    background-color: #FFFFFF;
     width: 100%;
 }
 
@@ -39,4 +45,11 @@ td {
 
 button.material-symbols-outlined {
     color: var(--wasdiGreen);
+}
+
+
+.pannel {
+    padding: 12px; 
+    border-radius: 8px;
+    
 }

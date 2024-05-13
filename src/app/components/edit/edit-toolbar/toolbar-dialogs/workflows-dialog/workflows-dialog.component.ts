@@ -63,6 +63,12 @@ export class WorkflowsDialogComponent implements OnInit {
 
   m_sJSONParam
 
+  m_bShowEditInputs = false;
+
+  m_asWorkflowXML: string = "";
+
+  m_bShowShare: boolean = false;
+
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
@@ -80,8 +86,6 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_aoProducts = this.m_oData.products;
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
-    this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
-    this.m_oJsonEditorService.initEditor();
   }
 
   setActiveTab(sTabName: string) {
@@ -117,7 +121,11 @@ export class WorkflowsDialogComponent implements OnInit {
     return false;
   }
 
-  setSelectedWorkflow(oWorkflow) {
+  setSelectedWorkflow(oWorkflow, bIsListItemClick?) {
+    console.log(oWorkflow);
+    if (bIsListItemClick === true) {
+      this.clearShownItems();
+    }
     if (this.m_bChangeMade === true) {
       // TODO: ADD NEW FORMAT FOR NOTIFICATION DIALOG
       // sHeader: Edit incomplete
@@ -132,14 +140,15 @@ export class WorkflowsDialogComponent implements OnInit {
         }
       })
     } else {
+
       this.m_bCreatingWorkflow = false;
-      this.m_bShowInputs = false;
       this.m_oSelectedWorkflow = oWorkflow;
       this.selectedMultiInputWorkflow(oWorkflow);
     }
   }
 
   toggleShowInputs(bShowInputs: boolean, bIsEditing: boolean) {
+    this.clearShownItems();
     this.m_bShowInputs = bShowInputs;
     this.m_bCreatingWorkflow = !bIsEditing;
   }
@@ -170,7 +179,9 @@ export class WorkflowsDialogComponent implements OnInit {
   //   });
   // }
   initWorkflowInfo() {
-
+    this.m_sWorkflowDescription = this.m_oSelectedWorkflow.description;
+    this.m_sWorkflowName = this.m_oSelectedWorkflow.name;
+    this.m_bWorkflowIsPublic = this.m_oSelectedWorkflow.public;
   }
 
   uploadWorkflow(sWorkspaceId: string, sName: string, sDescription: string, bIsPublic: boolean, oBody: any) {
@@ -201,20 +212,27 @@ export class WorkflowsDialogComponent implements OnInit {
     }
     this.m_oWorkflowService.updateGraphParameters(this.m_oSelectedWorkflow.workflowId, this.m_sWorkflowName, this.m_sWorkflowDescription, this.m_bWorkflowIsPublic).subscribe({
       next: oResponse => {
-        this.m_oWorkflowService.updateGraphFile(this.m_oSelectedWorkflow.workflowId, this.m_oFile).subscribe({
-          next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("GRAPH FILE UPDATED", "Close", "right", "bottom");
-          },
-          error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in updating Graph File");
-          }
-        })
+        this.m_oNotificationDisplayService.openSnackBar("Workflow updated", "Close")
+
+        this.getWorkflowsByUser();
+        if (this.m_oFile) {
+          this.m_oWorkflowService.updateGraphFile(this.m_oSelectedWorkflow.workflowId, this.m_oFile).subscribe({
+            next: oResponse => {
+              this.m_oNotificationDisplayService.openSnackBar("GRAPH FILE UPDATED", "Close", "right", "bottom");
+            },
+            error: oError => {
+              this.m_oNotificationDisplayService.openAlertDialog("Error in updating Graph File");
+            }
+          })
+        }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in updating Graph File");
+        this.m_oNotificationDisplayService.openAlertDialog("Error in updating Workflow information");
       }
     })
   }
+
+  updateXML() { }
 
   removeWorkflow(oWorkflow) {
     if (!oWorkflow) {
@@ -228,6 +246,9 @@ export class WorkflowsDialogComponent implements OnInit {
         this.m_oWorkflowService.deleteWorkflow(oWorkflow.workflowId).subscribe({
           next: oResponse => {
             this.getWorkflowsByUser();
+            this.clearShownItems();
+            this.m_oSelectedWorkflow = {} as Workflow;
+
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog("Error in Removing this Workflow");
@@ -410,18 +431,22 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   handleListItemClick(oEvent, oWorkflow) {
-    console.log(oEvent)
-    this.setSelectedWorkflow(oWorkflow);
+    this.clearShownItems();
     if (oEvent === 'delete') {
+      this.setSelectedWorkflow(oWorkflow);
       this.removeWorkflow(oWorkflow);
     } else if (oEvent === 'edit') {
-      // this.openEditWorkflowDialog(oWorkflow);
+      this.setSelectedWorkflow(oWorkflow);
+      this.showEditInputs();
     } else if (oEvent === 'xml') {
+      this.setSelectedWorkflow(oWorkflow);
       this.showJSONEditor();
     } else if (oEvent === 'share') {
-      this.openShareDialog()
-    }
-    else {
+      this.setSelectedWorkflow(oWorkflow);
+      // this.openShareDialog()
+      this.m_bShowShare = true;
+    } else {
+      this.setSelectedWorkflow(oWorkflow);
       this.downloadWorkflow(oWorkflow);
     }
   }
@@ -446,6 +471,10 @@ export class WorkflowsDialogComponent implements OnInit {
       case 'search':
         this.m_sSearchString = oEvent.event.target.value;
         break;
+      case 'isPublic':
+        this.m_bWorkflowIsPublic = oEvent.target.checked;
+        console.log(oEvent.target.checked);
+        break;
     }
   }
 
@@ -465,8 +494,69 @@ export class WorkflowsDialogComponent implements OnInit {
 
   showJSONEditor() {
     this.m_bShowXML = true
+    this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+    this.m_oJsonEditorService.initEditor();
+    this.getWorkflowXML();
+  }
 
-    this.m_oJsonEditorService.initEditor()
-    this.m_oJsonEditorService.setText(this.m_sJSONParam);
+  /**
+   * Show inputs for editing an existing workflow
+   */
+  showEditInputs() {
+    this.m_bShowEditInputs = true;
+    this.initWorkflowInfo();
+  }
+
+  /**
+   * Reset all shown items on right side column (XML Editor, New Workflow Inputs, Edit Workflow Inputs)
+   */
+  clearShownItems() {
+    this.m_bShowEditInputs = false;
+    this.m_bShowInputs = false;
+    this.m_bShowXML = false;
+    this.m_bShowShare = false;
+  }
+
+
+  /********** Workflow XML Handlers **********/
+  getWorkflowXML() {
+    this.m_oWorkflowService.getWorkflowXml(this.m_oSelectedWorkflow.workflowId).subscribe({
+      next: oResponse => {
+        this.m_asWorkflowXML = oResponse;
+        this.m_oJsonEditorService.setText(this.m_asWorkflowXML);
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("ERROR GETTING WORKFLOW XML")
+      }
+    });
+  }
+
+  updateWorkflowXML() {
+    if (this.m_asWorkflowXML) {
+      let oBody = new FormData();
+      oBody.append('graphXML', this.m_asWorkflowXML);
+      this.m_oWorkflowService.postWorkflowXml(this.m_oSelectedWorkflow.workflowId, oBody).subscribe({
+        next: oResponse => {
+          if (oResponse.status === 200) {
+            let sMessage = "WORKFLOW XML UPDATED";
+            this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+          }
+        },
+        error: oError => {
+          if (oError.status === 304) {
+            let sMessage = "MODIFICATIONS REJECTED - PLEASE CHECK THE XML";
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+          } else if (oError.status === 401) {
+            let sMessage = "MODIFICATIONS REJECTED - UNAUTHORIZED"
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+          } else; {
+            let sMessage = "INTERNAL SERVER ERROR - PLEASE TRY AGAIN LATER"
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+          }
+
+        }
+      });
+
+    }
   }
 }

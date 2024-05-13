@@ -28,29 +28,29 @@
                         delete
                     </span>
                 </div>
-                <app-list-item *ngFor="let oWorkflow of m_aoWorkflows| filter: m_sSearchString" [m_bHasImg]="false"
+                <app-list-item *ngFor="let oWorkflow of m_aoWorkflows | filter: m_sSearchString" [m_bHasImg]="false"
                     [m_oProcessorItem]="oWorkflow " [m_bIsSelected]="oWorkflow .name === m_oSelectedWorkflow.name"
                     [m_bSimpleItem]="true" [m_bProcessorItem]="true" [m_sLabel]="oWorkflow.name"
                     [m_sDescription]="oWorkflow.description" [m_sIcon]="getWorkflowImageLink(oWorkflow)"
                     [m_bHasToolbar]="oWorkflow .sharedWithMe === true || m_sUserId === oWorkflow .userId"
                     (m_oEmitClickEvent)="handleListItemClick($event, oWorkflow)"
-                    (click)="setSelectedWorkflow(oWorkflow)"></app-list-item>
+                    (click)="setSelectedWorkflow(oWorkflow, true)"></app-list-item>
             </div>
         </div>
 
-
+        <!-- Inputs to Create a New Workflow -->
         <div *ngIf="m_bShowInputs" class="json-container d-flex flex-column">
             <div class="json-header font-bold">
                 New workflow
             </div>
-            <div class="workflows-product-container d-flex flex-column flex-fill">
-                <app-input-field class="my-2" [m_sLabel]="'Workflow name'"
+            <div class="workflows-product-container d-flex flex-column flex-fill gap-3">
+                <app-input-field [m_sLabel]="'Workflow name'"
                     (m_oInputChange)="getInputChanges($event, 'name')"></app-input-field>
                 <app-textarea class="textarea" [m_sLabel]="'Workflow description'"
                     (keyup)="getInputChanges($event, 'description')"></app-textarea>
                 <app-drag-and-drop class="drag-drop"
                     (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
-                <div class="d-flex flex-row align-items-center gap-2 my-2">
+                <div class="d-flex flex-row align-items-center gap-2">
                     <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox">
                     <label for="isPublic">Set as public</label>
                 </div>
@@ -68,24 +68,56 @@
 
         </div>
 
-        <div *ngIf="!m_bShowInputs" class="json-container d-flex flex-column justify-content-between">
-            <div *ngIf="!m_bShowXML" class="json-header d-flex flex-column">
+        <!-- Inputs to Edit an Existing Workflow -->
+        <div *ngIf="m_bShowEditInputs" class="json-container d-flex flex-column">
+            <div class="json-header font-bold mb-2">Edit details</div>
+            <div class="workflows-product-container d-flex flex-column flex-fill gap-3">
+                <app-input-field [m_sLabel]="'Workflow name'" [m_sInputValue]="m_sWorkflowName"
+                    (m_oInputChange)="getInputChanges($event, 'name')"></app-input-field>
+                <app-textarea class="textarea" [m_sLabel]="'Workflow description'"
+                    [m_sInputString]="m_sWorkflowDescription"
+                    (keyup)="getInputChanges($event, 'description')"></app-textarea>
+                <div class="options-container d-flex flex-column gap-2">
+                    <div class="file-container d-flex flex-row justify-content-between">
+                        <div class="d-flex flex-row align-items-center gap-2">
+                            <span class="material-symbols-outlined">
+                                folder_zip
+                            </span>
+                            {{m_oSelectedWorkflow.name}}
+                        </div>
+                        <div class="d-flex flex-row gap-3">
+                            <app-button [m_sIconLeft]="'download'" [m_sSize]="'small'" [m_bOutline]="true"
+                                (click)="downloadWorkflow(m_oSelectedWorkflow)"></app-button>
+                        </div>
+                    </div>
+                </div>
+                <app-drag-and-drop class="drag-drop"
+                (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
+                <div class="d-flex flex-row align-items-center gap-2">
+                    <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox"
+                        [checked]="m_oSelectedWorkflow.public" (change)="getInputChanges($event, 'isPublic')"
+                        [disabled]="m_oSelectedWorkflow.readOnly">
+                    <label for="isPublic">Set as public</label>
+                </div>
+
+            </div>
+            <div class="footer d-flex flex-row justify-content-end">
+                <app-button [m_sLabel]="'Save modifications'" (click)="updateWorkflow()"></app-button>
+            </div>
+        </div>
+
+        <div *ngIf="!m_bShowInputs && !m_bShowEditInputs && !m_bShowXML && !m_bShowShare"
+            class="json-container d-flex flex-column justify-content-between">
+            <div class="json-header d-flex flex-column">
                 <div class="processor-name font-bold">{{m_oSelectedWorkflow.name ?
                     m_oSelectedWorkflow.name: 'Select A Workflow'}}</div>
                 <p *ngIf="m_oSelectedWorkflow.userId">Publisher: {{m_oSelectedWorkflow.userId}}</p>
             </div>
-            <div *ngIf="!m_bShowXML" class="flex-fill workflows-product-container">
+            <div class="flex-fill workflows-product-container">
                 <div *ngFor="let oNode of m_oSelectedWorkflow.inputNodeNames">
                     <app-dropdown [m_bIsMultiSelect]="false" [m_aoDropdownItems]="m_aoProducts" [m_bHasSearch]="true"
                         [m_bFileExt]="true" (m_oSelectionChange)="getSingleSelection($event, oNode)"
                         [m_sLabel]="'Read'"></app-dropdown>
-                </div>
-            </div>
-            <div *ngIf="m_bShowXML"  class="json-header d-flex flex-column">
-            Edit XML</div>
-            <div [hidden]="!m_bShowXML" class="flex-fill workflows-product-container">
-                <div class="json-wrapper" style="height: 100%; width: 100%;">
-                    <div #editor class="json-editor" style="height: 100%;" ></div>
                 </div>
             </div>
 
@@ -96,113 +128,26 @@
                 </div>
             </div>
         </div>
+
+        <!-- XML editor container -->
+        <div [class.hidden]="!m_bShowXML" class="json-container d-flex flex-column justify-content-between gap-3">
+            <div class="json-header font-bold d-flex flex-column">
+                Edit XML</div>
+            <div class="flex-fill workflows-product-container">
+                <div class="json-wrapper" style="height: 100%; width: 100%;">
+                    <div #editor class="json-editor" style="height: 100%;"></div>
+                </div>
+            </div>
+            <div class="footer d-flex flex-row justify-content-end">
+                <app-button [m_sLabel]="'Save modifications'" (click)="updateWorkflowXML()"></app-button>
+            </div>
+        </div>
+
+        <div *ngIf="m_bShowShare" class="json-container d-flex flex-column flex-fill ms-2">
+            <div class="json-header font-bold mb-2">Share workflow with WASDI user</div>
+            <div class="workflows-product-container">
+                <app-share-ui [resource]="m_oSelectedWorkflow" [resourceType]="'workflow'"></app-share-ui>
+            </div>
+        </div>
     </div>
 </div>
-<!-- <div class="dialog d-flex flex-column justify-content-between">
-    
-
-    <div class="dialog-content d-flex flex-row justify-content-between px-4 py-2 gap-3">
-        <div class="dialog-col-1">
-            <ul class="nav nav-tabs d-flex flex-row justify-content-between">
-                <div class="d-flex flex-row">
-                    <li class="nav-item">
-                        <a class="nav-link" [ngClass]="m_sActiveTab === 'execute' ? 'active': ''"
-                            (click)="setActiveTab('execute')">
-                            Execute
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" [ngClass]="m_sActiveTab === 'batch' ? 'active': ''"
-                            (click)="setActiveTab('batch')">
-                            Batch Processing
-                        </a>
-                    </li>
-                </div>
-                <li class="nav-item">
-                    <button class="btn btn-success" (click)="openEditWorkflowDialog()">
-                        <fa-icon [icon]="faPlus"></fa-icon> New Workflow
-                    </button>
-                </li>
-            </ul>
-            <input type="text" class="form-control my-2" placeholder="Filter Workflows by Name"
-                [(ngModel)]="m_sFilterString">
-            <div class="workflow-cards-container d-flex flex-row flex-wrap justify-content-start gap-1">
-                <div class="card d-flex flex-column gap-3 p-2 align-self-start"
-                    *ngFor="let oWorkflow of m_aoWorkflows | filter: m_sFilterString"
-                    (click)="setSelectedWorkflow(oWorkflow)">
-                    <div class="card-toolbar d-flex flex-row justify-content-end" style="height: 30px">
-                        <div *ngIf="isWorkflowOwner(oWorkflow) || oWorkflow.sharedWithMe === true">
-                            <button class="btn" (click)="downloadWorkflow(oWorkflow)">
-                                <fa-icon [icon]="faDownload"></fa-icon>
-                            </button>
-                            <button class="btn" (click)="openEditWorkflowDialog(oWorkflow)">
-                                <fa-icon [icon]="faEdit"></fa-icon>
-                            </button>
-                            <button class="btn text-danger" (click)="removeWorkflow(oWorkflow)">
-                                <fa-icon [icon]="faX"></fa-icon>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="cardbody">
-                        <h2 class="text-center">
-                            <fa-icon [icon]="faLaptop"></fa-icon>
-                        </h2>
-                        <p class="text-success pb-0 mb-0 title">{{oWorkflow.name}}</p>
-                        <p class="style-description pb-0 mb-0">{{oWorkflow.description}}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="info-container card border border-success rounded-1">
-            <div class="px-4 py-4 d-flex flex-column gap-2">
-                <h4>{{m_oSelectedWorkflow.name}}</h4>
-                <div class="main-style-info d-flex flex-row justify-content-between">
-
-                    <div class="style-description">
-                        <span class="text-success">Description:</span>
-                        <p>{{m_oSelectedWorkflow.description}}</p>
-                    </div>
-                    <div>
-                        <span class="text-success">Owner:</span>
-                        <p>{{m_oSelectedWorkflow.userId}}</p>
-                    </div>
-                </div>
-
-                <div class="style-xml-container d-flex flex-column gap-1">
-                    <div class="d-flex flex-row align-items-center">
-                        Show file extension: <mat-checkbox [color]="'success'"
-                            [(ngModel)]="m_bShowExtension"></mat-checkbox>
-                    </div>
-                    <div *ngFor="let oNode of m_oSelectedWorkflow.inputNodeNames">
-                        <label class="text-success form-label">Read:</label> -->
-<!-- Multi-select for Batch Processing -->
-<!-- <mat-select *ngIf="m_sActiveTab === 'batch'" class="form-control"
-                            [(ngModel)]="m_aoMultiInputSelectedProducts[oNode]" (selectionChange)="getMultiSelection($event, oNode)" multiple>
-                            <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
-                                [(ngModel)]="m_sSearchString">
-                            <mat-option *ngFor="let oProduct of m_aoProducts | filter: m_sSearchString"
-                                [value]="oProduct">
-                                {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
-                            </mat-option>
-                        </mat-select> -->
-<!-- Single Select for Single Processing -->
-<!-- <mat-select *ngIf="m_sActiveTab === 'execute'" class="form-control"
-                            [(ngModel)]="m_aoMultiInputSelectedProducts[oNode]" (selectionChange)="getSingleSelection($event, oNode)">
-                            <input type="text" name="m_sStyle" placeholder="Search Products" class="form-control"
-                                [(ngModel)]="m_sSearchString">
-                            <mat-option *ngFor="let oProduct of m_aoProducts | filter:m_sSearchString"
-                                [value]="oProduct">
-                                {{m_bShowExtension ? oProduct.fileName : oProduct.name}}
-                            </mat-option>
-                        </mat-select>
-                    </div> -->
-<!-- <button class="btn btn-success" (click)="runMultiInputWorkflow()">Run</button> -->
-<!-- <button *ngIf="m_sActiveTab === 'execute'" class="btn btn-success"
-                        (click)="runSingleInputWorkflow()" [disabled]="m_bIsReadOnly === true">Run</button>
-                    <button *ngIf="m_sActiveTab === 'batch'" class="btn btn-success" (click)="runMultiInputWorkflow()"
-                        [disabled]="m_bIsReadOnly === true">Run</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
