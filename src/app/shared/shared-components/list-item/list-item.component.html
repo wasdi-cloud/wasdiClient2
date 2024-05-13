@@ -89,14 +89,18 @@
                         download
                     </span>
                     <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
-                        class="material-symbols-outlined" matTooltip="Share" (click)="emitToolbarClick('share')">share</span>
+                        class="material-symbols-outlined" matTooltip="Share"
+                        (click)="emitToolbarClick('share'); $event.stopPropagation()">share</span>
                     <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
-                        class="material-symbols-outlined" matTooltip="Open XML" (click)="emitToolbarClick('xml')">code</span>
+                        class="material-symbols-outlined" matTooltip="Open XML"
+                        (click)="emitToolbarClick('xml'); $event.stopPropagation()">code</span>
 
-                    <span class="material-symbols-outlined" matTooltip="Open Editor" (click)="emitToolbarClick('edit')">
+                    <span class="material-symbols-outlined" matTooltip="Open Editor"
+                        (click)="emitToolbarClick('edit'); $event.stopPropagation()">
                         edit_square
                     </span>
-                    <span class="material-symbols-outlined" matTooltip="Remove" (click)="emitToolbarClick('delete')">
+                    <span class="material-symbols-outlined" matTooltip="Remove"
+                        (click)="emitToolbarClick('delete'); $event.stopPropagation()">
                         delete
                     </span>
                 </div>
