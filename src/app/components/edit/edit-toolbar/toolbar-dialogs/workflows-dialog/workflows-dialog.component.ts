@@ -6,7 +6,6 @@ import { Workflow } from 'src/app/shared/models/workflow.model';
 import { Product } from 'src/app/shared/models/product.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
 @Component({
   selector: 'app-workflows-dialog',
@@ -14,22 +13,30 @@ import { JsonEditorService } from 'src/app/services/json-editor.service';
   styleUrls: ['./workflows-dialog.component.css']
 })
 export class WorkflowsDialogComponent implements OnInit {
+  // Element Reference for the XML editor component (JSON Editor)
   @ViewChild('editor') m_oEditorRef!: ElementRef;
 
-  m_aoWorkflows: any[];
-  m_aoProducts: any[];
-  m_asProductNames: string[];
-  m_aoProductClasses: any[];
+  // Workflows (fetched from server)
+  m_aoWorkflows: any[] = [];
+
+  // Products present in the open workspace
+  m_aoProducts: any[] = [];
+
+  // Map of product names - return names only
+  m_asProductNames: string[] = [];
+
+  //Selected workflow - set by list item actions
+  m_oSelectedWorkflow: Workflow = {} as Workflow;
 
   m_bIsUploadingWorkflow: boolean = false;
   m_bIsLoadingWorkflow: boolean = false;
-  m_bShowExtension: boolean = false;
 
-  m_oSelectedWorkflow: Workflow = {} as Workflow;
   m_oSelectedMultiInputWorkflow: any = null;
-  m_oWAPProudct: any = null;
+
   m_oSelectedProduct: Product;
+
   m_aoSelectedProducts: Array<Product>;
+  
   m_aoMultiInputSelectedProducts: any = {};
 
   m_oWorkflowFileData = {} as {
@@ -39,9 +46,6 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   m_oFile: any = null;
-
-  m_sActiveTab: string = 'execute'
-  m_sFilterString: string = "";
 
   m_sUserId: string;
   m_sWorkspaceId: string;
@@ -61,11 +65,9 @@ export class WorkflowsDialogComponent implements OnInit {
 
   m_bShowXML: boolean = false;
 
-  m_sJSONParam
-
   m_bShowEditInputs = false;
 
-  m_asWorkflowXML: string = "";
+  m_sWorkflowXML: string = "";
 
   m_bShowShare: boolean = false;
 
@@ -88,44 +90,54 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
   }
 
-  setActiveTab(sTabName: string) {
-    this.m_sActiveTab = sTabName;
-  }
-
   selectedMultiInputWorkflow(oWorkflow: Workflow) {
     this.m_oSelectedMultiInputWorkflow = oWorkflow;
     // create a dictionary
     this.m_aoMultiInputSelectedProducts = {};
   }
 
-  getWorkflowsByUser() {
+  /**
+   * Get the workflows from the server
+   */
+  getWorkflowsByUser(): void {
     this.m_oWorkflowService.getWorkflowsByUser().subscribe({
       next: oResponse => {
         if (oResponse.body) {
           this.m_aoWorkflows = oResponse.body
         }
       },
-      error: oError => { }
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Error in getting the workflows.")
+      }
     })
   }
 
-  isWorkflowOwner(oWorkflow) {
-    if (!oWorkflow || !this.m_sUserId) {
+  /**
+   * Check if the current user is the owner of the workflow
+   * @param oWorkflow 
+   * @returns boolean
+   */
+  isWorkflowOwner(oWorkflow): boolean {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkflow) || !this.m_sUserId) {
       return false;
     }
-
     if (this.m_sUserId === oWorkflow.userId) {
       return true;
     }
-
     return false;
   }
 
-  setSelectedWorkflow(oWorkflow, bIsListItemClick?) {
-    console.log(oWorkflow);
+  /**
+   * Set the selected workflow 
+   * @param oWorkflow 
+   * @param bIsListItemClick 
+   * @returns void
+   */
+  setSelectedWorkflow(oWorkflow: Workflow, bIsListItemClick?: boolean): void {
     if (bIsListItemClick === true) {
       this.clearShownItems();
     }
+    // If the user was editing a workflow or creating one, ensure they want to leave their progress
     if (this.m_bChangeMade === true) {
       // TODO: ADD NEW FORMAT FOR NOTIFICATION DIALOG
       // sHeader: Edit incomplete
@@ -140,51 +152,41 @@ export class WorkflowsDialogComponent implements OnInit {
         }
       })
     } else {
-
       this.m_bCreatingWorkflow = false;
       this.m_oSelectedWorkflow = oWorkflow;
       this.selectedMultiInputWorkflow(oWorkflow);
     }
   }
 
-  toggleShowInputs(bShowInputs: boolean, bIsEditing: boolean) {
+  /**
+   * Set the visiblity for new workflow creation inputs
+   * @param bShowInputs 
+   * @param bIsEditing 
+   */
+  toggleShowInputs(bShowInputs: boolean, bIsEditing: boolean): void {
     this.clearShownItems();
     this.m_bShowInputs = bShowInputs;
     this.m_bCreatingWorkflow = !bIsEditing;
   }
 
-  // openEditWorkflowDialog(oWorkflow?) {
-  //   let oDialog;
-  //   if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkflow) === false) {
-  //     oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
-  //       height: '70vh',
-  //       width: '70vw',
-  //       data: {
-  //         editMode: true,
-  //         workflow: oWorkflow
-  //       }
-  //     })
-  //   } else {
-  //     oDialog = this.m_oDialog.open(EditWorkflowDialogComponent, {
-  //       height: '70vh',
-  //       width: '70vw',
-  //       data: {
-  //         editMode: false,
-  //         workflow: {}
-  //       }
-  //     })
-  //   }
-  //   oDialog.afterClosed().subscribe(oDialogResult => {
-  //     this.getWorkflowsByUser();
-  //   });
-  // }
-  initWorkflowInfo() {
+  /**
+   * 
+   */
+  initWorkflowInfo(): void {
     this.m_sWorkflowDescription = this.m_oSelectedWorkflow.description;
     this.m_sWorkflowName = this.m_oSelectedWorkflow.name;
     this.m_bWorkflowIsPublic = this.m_oSelectedWorkflow.public;
   }
 
-  uploadWorkflow(sWorkspaceId: string, sName: string, sDescription: string, bIsPublic: boolean, oBody: any) {
+  /**
+   * Upload a new workflow to the server
+   * @param sWorkspaceId 
+   * @param sName 
+   * @param sDescription 
+   * @param bIsPublic 
+   * @param oBody 
+   */
+  uploadWorkflow(sWorkspaceId: string, sName: string, sDescription: string, bIsPublic: boolean, oBody: any): void {
     if (!sName) {
       this.m_oNotificationDisplayService.openAlertDialog("Please add a name");
     } else if (!this.m_oFile) {
@@ -206,7 +208,10 @@ export class WorkflowsDialogComponent implements OnInit {
     }
   }
 
-  updateWorkflow() {
+  /**
+   * Update an existing workflow
+   */
+  updateWorkflow(): void {
     if (this.m_sWorkflowDescription === undefined) {
       this.m_sWorkflowDescription = "";
     }
@@ -232,9 +237,7 @@ export class WorkflowsDialogComponent implements OnInit {
     })
   }
 
-  updateXML() { }
-
-  removeWorkflow(oWorkflow) {
+  removeWorkflow(oWorkflow: Workflow) {
     if (!oWorkflow) {
       return false;
     }
@@ -260,7 +263,7 @@ export class WorkflowsDialogComponent implements OnInit {
     return true
   }
 
-  downloadWorkflow(oWorkflow) {
+  downloadWorkflow(oWorkflow: Workflow) {
     if (!oWorkflow) {
       return false;
     }
@@ -483,15 +486,6 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_oFile = oEvent.file
   }
 
-  openShareDialog() {
-    let oDialogData = new ShareDialogModel("workflow", this.m_oSelectedWorkflow)
-    this.m_oDialog.open(ShareDialogComponent, {
-      height: '60vh',
-      width: '60vw',
-      data: oDialogData
-    })
-  }
-
   showJSONEditor() {
     this.m_bShowXML = true
     this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
@@ -522,8 +516,8 @@ export class WorkflowsDialogComponent implements OnInit {
   getWorkflowXML() {
     this.m_oWorkflowService.getWorkflowXml(this.m_oSelectedWorkflow.workflowId).subscribe({
       next: oResponse => {
-        this.m_asWorkflowXML = oResponse;
-        this.m_oJsonEditorService.setText(this.m_asWorkflowXML);
+        this.m_sWorkflowXML = oResponse;
+        this.m_oJsonEditorService.setText(this.m_sWorkflowXML);
       },
       error: oError => {
         this.m_oNotificationDisplayService.openAlertDialog("ERROR GETTING WORKFLOW XML")
@@ -532,9 +526,9 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   updateWorkflowXML() {
-    if (this.m_asWorkflowXML) {
+    if (this.m_sWorkflowXML) {
       let oBody = new FormData();
-      oBody.append('graphXML', this.m_asWorkflowXML);
+      oBody.append('graphXML', this.m_sWorkflowXML);
       this.m_oWorkflowService.postWorkflowXml(this.m_oSelectedWorkflow.workflowId, oBody).subscribe({
         next: oResponse => {
           if (oResponse.status === 200) {
