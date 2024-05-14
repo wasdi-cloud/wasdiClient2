@@ -9,10 +9,12 @@ import { MatDialog } from '@angular/material/dialog';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProductsListComponent } from '../products-list.component'
 
+import {CdkContextMenuTrigger, CdkMenuItem, CdkMenu} from '@angular/cdk/menu';
+
 @Component({
   selector: 'app-product-list-item',
   templateUrl: './product-list-item.component.html',
-  styleUrls: ['./product-list-item.component.css']
+  styleUrls: ['./product-list-item.component.css'],
 })
 export class ProductListItemComponent {
   @Input() m_oProduct: any = null;
@@ -116,5 +118,9 @@ export class ProductListItemComponent {
 
   emitBandSelectionChange(oBand: any): void {
     this.m_oProductChange.emit(oBand);
+  }
+
+  openContextMenu(oEvent) {
+    console.log("Menu")
   }
 }

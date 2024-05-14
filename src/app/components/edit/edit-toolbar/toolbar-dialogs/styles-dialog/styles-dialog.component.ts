@@ -1,10 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { StyleService } from 'src/app/services/api/style.service';
 
-import { faEdit, faDownload, faPaintBrush, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import { EditStyleDialogComponent } from './edit-style-dialog/edit-style-dialog.component';
 import { NewStyleDialogComponent } from './new-style-dialog/new-style-dialog.component';
 
@@ -23,12 +22,6 @@ interface Style {
   styleUrls: ['./styles-dialog.component.css']
 })
 export class StylesDialogComponent implements OnInit {
-  //font awesome icons: 
-  faDownload = faDownload;
-  faEdit = faEdit;
-  faPaintBrush = faPaintBrush;
-  faPlus = faPlus;
-  faX = faX;
 
   m_bDisplayInfo: boolean = false;
   m_sSearchString!: string;
@@ -53,8 +46,6 @@ export class StylesDialogComponent implements OnInit {
   m_bIsLoadingStyleList: boolean = false;
   m_bIsJsonEditModeActive: boolean = false;
 
-  m_sJsonString: string = "";
-
   //Model variable that contains the Xml of the style: 
   m_asStyleXml: string = "";
 
@@ -73,9 +64,6 @@ export class StylesDialogComponent implements OnInit {
 
   ngOnInit() { }
 
-  onDismiss(): void {
-    this.m_oDialogRef.close();
-  }
 
   filterStyles() {
     return this.m_aoStyleList.filter(oStyle => oStyle.name.includes(this.m_sSearchString));
@@ -170,5 +158,15 @@ export class StylesDialogComponent implements OnInit {
   getStyleImgLink(oStyle) {
     if (oStyle.imgLink) return oStyle.imgLink;
     else return "/assets/icons/style-placeholder.svg"
+  }
+
+  toggleShowInputs(bShowInputs: boolean, bIsEditing: boolean): void {
+
+  }
+
+  getInputChanges(oEvent: any, sLabel: string) { }
+
+  onDismiss(): void {
+    this.m_oDialogRef.close();
   }
 }
