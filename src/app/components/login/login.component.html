@@ -16,15 +16,15 @@
             <div class="justify-self-center d-flex flex-column gap-3">
 
                 <app-input-field class="pt-3" [m_sLabel]="'Email Address'"
-                    (m_oInputChange)="setUsernameInput($event)"></app-input-field>
+                    (m_oInputChange)="setUsernameInput($event)" (keyup.enter)="login()"></app-input-field>
                 <div class="password">
                     <app-input-field [m_sLabel]="'Password'" [m_sInputType]="'password'" [m_sIconRight]="'visibility'"
-                        (m_oInputChange)="setPasswordInput($event)"></app-input-field>
+                        (m_oInputChange)="setPasswordInput($event)" (keyup.enter)="login()"></app-input-field>
                     Forgot password? Reset.
                 </div>
                 <div>
                     <app-button [m_sSize]="'large'" [m_sLabel]="'Login'" [m_bRounded]="true"
-                        (click)="login()"></app-button>
+                        (click)="login()"  (keyup.enter)="login()"></app-button>
                     <div class="text-center">You do not have an account? Sign up here</div>
                 </div>
             </div>
