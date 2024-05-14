@@ -42,8 +42,8 @@ export class JsonEditorService {
     fontFamily: '\'Roboto Mono Regular\', monospace',
   }
 
-  constructor() { 
-    
+  constructor() {
+
   }
 
   /**
@@ -78,10 +78,14 @@ export class JsonEditorService {
 
   getValue() {
     return this.m_oEditor.getValue();
-  }  
-  
+  }
+
   onEditorTextChange(): void {
     this.m_sText = this.m_oEditor.getValue();
+  }
+
+  setReadOnly(bIsReadOnly: boolean) {
+    this.m_bReadOnly = bIsReadOnly;
   }
 
   insertText(sTextToInsert) {

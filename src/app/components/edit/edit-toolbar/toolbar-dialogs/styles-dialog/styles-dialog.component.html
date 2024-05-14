@@ -1,7 +1,7 @@
 <div class="apps-dialog d-flex flex-column" style="height: 100%; width:100%">
-    <div class="dialog-header d-flex flex-row jusitfy-content-between font-bold">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold w-100">
         Wasdi Styles
-        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
     </div>
     <div class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between"
         style="height: 100%; overflow: hidden;">
@@ -10,7 +10,7 @@
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     Search styles
                     <app-button [m_sLabel]="'New Style'" [m_sIconLeft]="'add_box'"
-                        (click)="toggleShowInputs(true, false)"></app-button>
+                        (click)="setVisibleInput('new-style')"></app-button>
                 </div>
                 <app-input-field [m_sPlacehodler]="'Search style'" [m_sIconLeft]="'search'"
                     (m_oInputChange)="getInputChanges($event, 'search')"></app-input-field>
@@ -25,7 +25,98 @@
                     [m_bProcessorItem]="true" [m_sLabel]="oStyle.name" [m_sDescription]="oStyle.description"
                     [m_sIcon]="getStyleImgLink(oStyle)" (m_oEmitClickEvent)="handleToolbarClick($event, oStyle)"
                     [m_bHasToolbar]="oStyle.sharedWithMe === true || m_sActiveUserId === oStyle.userId"
-                    (click)="selectActiveStyle(oStyle)"></app-list-item>
+                    (click)="selectActiveStyle(oStyle); setVisibleInput('default')"></app-list-item>
+            </div>
+        </div>
+        <div *ngIf="m_sActiveInputs !=='default' && m_sActiveInputs !== 'xml-editor'" [ngSwitch]="m_sActiveInputs"
+            class="json-container">
+            <!-- Inputs to create a new style -->
+            <div *ngSwitchCase="'new-style'" class="h-100 d-flex flex-column justify-content-between">
+                <div class="json-header font-bold">New style</div>
+                <div class="column-body-container mt-3 d-flex flex-column flex-fill gap-3">
+                    <app-input-field [m_sLabel]="'Style name'"
+                        (m_oInputChange)="getInputChanges($event, 'name')"></app-input-field>
+                    <app-textarea class="textarea" [m_sLabel]="'Style description'"
+                        (keyup)="getInputChanges($event, 'description')"></app-textarea>
+                    <app-drag-and-drop class="drag-drop" (m_oSelectedFileOutput)="getFile($event)"></app-drag-and-drop>
+                    <div class="d-flex flex-row align-items-center gap-2">
+                        <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox"
+                            [checked]="m_oNewStyle.isPublic" (change)="getInputChanges($event, 'isPublic')">
+                        <label for="isPublic">Set as public</label>
+                    </div>
+                </div>
+                <div class="footer d-flex flex-row justify-content-end">
+                    <div class="d-flex flex-row gap-3">
+                        <app-button [m_sLabel]="'Discard changes'" [m_bOutline]="true"></app-button>
+                        <app-button [m_sLabel]="'Upload Style'" (click)="uploadStyle(m_oNewStyle)"></app-button>
+                    </div>
+                </div>
+            </div>
+            <!-- Inputs to edit an existing style -->
+            <div *ngSwitchCase="'edit-style'" class="h-100 d-flex flex-column justify-content-between">
+                <div class="json-header font-bold">Edit style</div>
+                <div class="column-body-container my-2 d-flex flex-column flex-fill gap-3">
+                    <app-input-field [m_sLabel]="'Style name'" [m_sInputValue]="m_oNewStyle.styleName"
+                        [m_bIsReadonly]="true" [m_bIsDisabled]="true"></app-input-field>
+                    <app-textarea class="textarea" [m_sLabel]="'Style description'"
+                        [m_sInputString]="m_oNewStyle.styleDescription"
+                        (keyup)="getInputChanges($event, 'description')"></app-textarea>
+                    <app-drag-and-drop class="drag-drop" (m_oSelectedFileOutput)="getFile($event)"></app-drag-and-drop>
+                    <div class="file-container d-flex flex-row justify-content-between">
+                        <div class="d-flex flex-row align-items-center gap-2">
+                            <span class="material-symbols-outlined">
+                                folder_zip
+                            </span>
+                            {{m_oNewStyle.styleName}}
+                        </div>
+                        <div class="d-flex flex-row gap-3">
+                            <app-button [m_sIconLeft]="'download'" [m_sSize]="'small'" [m_bOutline]="true"
+                                (click)="downloadStyle(m_oSelectedStyle.styleId)"></app-button>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row align-items-center gap-2">
+                        <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox"
+                            [checked]="m_oNewStyle.isPublic" (change)="getInputChanges($event, 'isPublic')">
+                        <label for="isPublic">Set as public</label>
+                    </div>
+                </div>
+                <div class="footer d-flex flex-row justify-content-end">
+                    <div class="d-flex flex-row gap-3">
+                        <app-button [m_sLabel]="'Discard changes'" [m_bOutline]="true"
+                            (click)="setVisibleInput('default')"></app-button>
+                        <app-button [m_sLabel]="'Save Style'" (click)="updateStyleParams()"></app-button>
+                    </div>
+                </div>
+            </div>
+            <!-- Share Container -->
+            <div *ngSwitchCase="'share'">
+                <div class="json-header font-bold">Share style with WASDI user</div>
+                <div class="column-body-container share-container">
+                    <app-share-ui [resource]="m_oSelectedStyle" [resourceType]="'style'"></app-share-ui>
+                </div>
+            </div>
+
+        </div>
+        <div class="json-container h-100 d-flex flex-column"
+            [class.hidden]="m_sActiveInputs !== 'default' && m_sActiveInputs !== 'xml-editor'">
+            <div *ngIf="m_sActiveInputs === 'default'" class="json-header d-flex flex-column">
+                <div class="processor-name font-bold">
+                    {{m_oSelectedStyle.name? m_oSelectedStyle.name : 'Select a Style'}}
+                </div>
+                <p *ngIf="m_oSelectedStyle.userId">Publisher: {{m_oSelectedStyle.userId}}</p>
+            </div>
+            <div *ngIf="m_sActiveInputs === 'xml-editor'" class="json-header d-flex flex-column">
+                Edit XML for {{m_oSelectedStyle.name}}
+            </div>
+            <div class="column-body-container flex-fill">
+                <div class="json-wrapper" style="height: 100%; width: 100%">
+                    <div #editor class="json-editor" style="height:100%" (keyup)="getXMLChange($event)"></div>
+                </div>
+            </div>
+            <div class="footer d-flex flex-row justify-content-end">
+                <app-button *ngIf="m_sActiveInputs === 'xml-editor'" [m_sLabel]="'Save modifications'"
+                    [m_bDisabled]="m_oSelectedStyle.name ? false : true" [m_sIconLeft]="'play_circle'"
+                    (click)="updateXml()"></app-button>
             </div>
         </div>
     </div>

@@ -6,9 +6,11 @@
     <img src="/assets/images/collaborators.png" alt="">
     <div class="header-text font-bold">There is no one here...</div>
     <div class="collab-text mt-2">You can add collaborators to help you manage your {{resourceType}}</div>
-    <app-button class="mt-4" [m_sSize]="'large'" [m_sLabel]="'Add Collaborator'" (click)="openSharedUsers()"></app-button>
+    <app-button class="mt-4" [m_sSize]="'large'" [m_sLabel]="'Add Collaborator'"
+        (click)="openSharedUsers()"></app-button>
 </div>
-<div [class.pannel]="resourceType === 'workflow'" class="dialog-content users-table d-flex flex-column" *ngIf="m_bShowUsers">
+<div [class.pannel]="resourceType === 'workflow' || resourceType === 'style' "
+    class="dialog-content users-table d-flex flex-column" *ngIf="m_bShowUsers">
     <div class="table-wrapper">
         <table>
             <thead class="table-heading-container">
