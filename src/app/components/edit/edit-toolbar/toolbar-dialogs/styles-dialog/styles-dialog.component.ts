@@ -1,12 +1,12 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 
 import { ConstantsService } from 'src/app/services/constants.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { StyleService } from 'src/app/services/api/style.service';
 
-import { faEdit, faDownload, faPaintBrush, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
-import { EditStyleDialogComponent } from './edit-style-dialog/edit-style-dialog.component';
-import { NewStyleDialogComponent } from './new-style-dialog/new-style-dialog.component';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { JsonEditorService } from 'src/app/services/json-editor.service';
 
 interface Style {
   description: string,
@@ -22,18 +22,18 @@ interface Style {
   templateUrl: './styles-dialog.component.html',
   styleUrls: ['./styles-dialog.component.css']
 })
-export class StylesDialogComponent implements OnInit {
-  //font awesome icons: 
-  faDownload = faDownload;
-  faEdit = faEdit;
-  faPaintBrush = faPaintBrush;
-  faPlus = faPlus;
-  faX = faX;
+export class StylesDialogComponent implements OnInit, AfterViewInit {
+  @ViewChild('editor') m_oEditorRef!: ElementRef;
 
   m_bDisplayInfo: boolean = false;
   m_sSearchString!: string;
 
   m_sActiveUserId: string;
+
+  /**
+   * String for switch case for viewable elements in second column of dialog
+   */
+  m_sActiveInputs: string = "default";
 
   m_sFileName: string = "";
   m_oFile: any = null;
@@ -41,19 +41,11 @@ export class StylesDialogComponent implements OnInit {
   m_aoStyleList: any[] = [];
   m_oSelectedStyle: any = {} as Style;
 
-  m_oStyleFileData = {} as {
-    styleName: string,
-    styleDescription: string,
-    isPublic: boolean;
-  }
-
-  m_bIsUploadingStyle: boolean = false;
+  m_bIsCreatingStyle: boolean = false;
 
   m_bIsLoadingStyles: boolean = false;
   m_bIsLoadingStyleList: boolean = false;
   m_bIsJsonEditModeActive: boolean = false;
-
-  m_sJsonString: string = "";
 
   //Model variable that contains the Xml of the style: 
   m_asStyleXml: string = "";
@@ -61,21 +53,33 @@ export class StylesDialogComponent implements OnInit {
   //Support variable enabled when the xml is edited in the textarea
   m_bXmlEdited: boolean = false;
 
+  m_oNewStyle = {
+    styleName: "",
+    styleDescription: "",
+    isPublic: false,
+    fileName: null
+  }
+
   constructor(
     public m_oDialogRef: MatDialogRef<StylesDialogComponent>,
     private m_oDialog: MatDialog,
     private m_oConstantsService: ConstantsService,
+    private m_oJsonEditorService: JsonEditorService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oStyleService: StyleService
   ) {
     this.m_sActiveUserId = m_oConstantsService.getUserId()
     this.getStylesByUser();
   }
 
-  ngOnInit() { }
+  ngOnInit() {
 
-  onDismiss(): void {
-    this.m_oDialogRef.close();
   }
+
+  ngAfterViewInit(): void {
+    this.initXMLEditor();
+  }
+
 
   filterStyles() {
     return this.m_aoStyleList.filter(oStyle => oStyle.name.includes(this.m_sSearchString));
@@ -90,6 +94,10 @@ export class StylesDialogComponent implements OnInit {
     });
   }
 
+  setVisibleInput(sLabel: string) {
+    this.m_sActiveInputs = sLabel;
+  }
+
   selectActiveStyle(oStyle: Style) {
     this.m_oSelectedStyle = oStyle;
     this.m_asStyleXml = "";
@@ -102,33 +110,18 @@ export class StylesDialogComponent implements OnInit {
   }
 
   getStyleXml(sStyleId: string, sUserId: string) {
-    this.m_oStyleService.getStyleXml(sStyleId).subscribe(oResponse => {
-      this.m_asStyleXml = oResponse;
-    })
-  }
-
-  openStyleEditDialog(oStyle) {
-    let oDialog = this.m_oDialog.open(EditStyleDialogComponent, {
-      height: '80vh',
-      width: '80vw',
-      data: {
-        styleInfo: oStyle,
-        styleXML: this.m_asStyleXml
+    this.m_oStyleService.getStyleXml(sStyleId).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          this.m_oNotificationDisplayService.openAlertDialog("Error in getting this style's XML")
+        } else {
+          this.m_asStyleXml = oResponse;
+          this.m_oJsonEditorService.setText(this.m_asStyleXml);
+          if (this.m_sActiveInputs === 'default') {
+            this.m_oJsonEditorService.setReadOnly(true);
+          }
+        }
       }
-    });
-    oDialog.afterClosed().subscribe(() => {
-      this.getStylesByUser();
-    })
-  }
-
-  openNewStyleDialog() {
-    let oDialog = this.m_oDialog.open(NewStyleDialogComponent, {
-      height: '80vh',
-      width: '50vw'
-    })
-
-    oDialog.afterClosed().subscribe(() => {
-      this.getStylesByUser();
     })
   }
 
@@ -146,22 +139,31 @@ export class StylesDialogComponent implements OnInit {
     return true;
   }
 
-  deleteStyle(sStyleId: string) {
-    this.m_oStyleService.deleteStyle(sStyleId).subscribe(oResponse => {
-      this.getStylesByUser();
-      this.m_bDisplayInfo = false;
-    });
-  }
-
-  handleSearchChange(oEvent) {
-    this.m_sSearchString = oEvent.event.target.value;
+  deleteStyle(oStyle: any) {
+    let sStyleId = oStyle.styleId;
+    this.m_oNotificationDisplayService.openConfirmationDialog("Are you sure you wish to delete " + oStyle.name + "?").subscribe(bDialogResult => {
+      if (bDialogResult === true) {
+        this.m_oStyleService.deleteStyle(sStyleId).subscribe(oResponse => {
+          this.getStylesByUser();
+          this.m_bDisplayInfo = false;
+        });
+      }
+    })
   }
 
   handleToolbarClick(oEvent, oStyle) {
     if (oEvent === 'delete') {
       this.deleteStyle(oStyle)
     } else if (oEvent === 'edit') {
-      this.openStyleEditDialog(oStyle);
+      this.setVisibleInput('edit-style');
+      this.selectActiveStyle(oStyle);
+      this.initEditInputs();
+    } else if (oEvent === 'share') {
+      this.setVisibleInput('share');
+    } else if (oEvent === 'xml') {
+      this.setVisibleInput('xml-editor')
+      this.selectActiveStyle(oStyle);
+      this.m_oJsonEditorService.setReadOnly(false);
     } else {
       this.downloadStyle(oStyle.styleId);
     }
@@ -170,5 +172,122 @@ export class StylesDialogComponent implements OnInit {
   getStyleImgLink(oStyle) {
     if (oStyle.imgLink) return oStyle.imgLink;
     else return "/assets/icons/style-placeholder.svg"
+  }
+
+  getInputChanges(oEvent: any, sLabel: string) {
+    switch (sLabel) {
+      case 'name':
+        this.m_oNewStyle.styleName = oEvent.event.target.value;
+        break;
+      case 'description':
+        this.m_oNewStyle.styleDescription = oEvent.target.value;
+        break;
+      case 'isPublic':
+        this.m_oNewStyle.isPublic = oEvent.target.checked;
+        break;
+      case 'search':
+        this.m_sSearchString = oEvent.event.target.value;
+        break;
+    }
+  }
+
+  /**
+   * Handle changes to the drag and drop component and get them
+   * @param oEvent 
+   */
+  getFile(oEvent) {
+    this.m_sFileName = oEvent.name;
+    this.m_oFile = oEvent.file
+  }
+
+
+  uploadStyle(oStyle: any) {
+    this.m_bIsCreatingStyle = true;
+
+    let oBody = new FormData();
+    oBody.append('file', this.m_oFile);
+
+    console.log(oBody)
+
+    this.m_oStyleService.uploadFile(this.m_oNewStyle.styleName, this.m_oNewStyle.styleDescription, this.m_oFile, this.m_oNewStyle.isPublic).subscribe({
+      next: oResponse => {
+        if (oResponse && oResponse.boolValue == true) {
+          this.m_oNotificationDisplayService.openSnackBar("STYLE UPLOADED", "Close", "right", "bottom");
+        } else {
+          this.m_oNotificationDisplayService.openAlertDialog("Error in uploading Style");
+        }
+        this.m_bIsCreatingStyle = false;
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Error in uploading Style");
+      }
+    });
+    return true;
+  }
+
+  /**
+   * Update the visible information of a style (i.e., Name, Description, Visibility)
+   * @returns void
+   */
+  updateStyleParams(): void {
+    this.m_oStyleService.updateStyleParameters(this.m_oSelectedStyle.styleId, this.m_oNewStyle.styleDescription, this.m_oNewStyle.isPublic).subscribe({
+      next: oResponse => {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oFile)) {
+          this.m_oStyleService.updateStyleFile(this.m_oSelectedStyle.styleId, this.m_oFile).subscribe({
+            next: oResponse => {
+              this.m_oNotificationDisplayService.openSnackBar("STYLE FILE UPDATED", "Close", "right", "bottom");
+            },
+            error: oError => {
+              this.m_oNotificationDisplayService.openAlertDialog("Error in updating Style File");
+            }
+          })
+        }
+        //Reload Styles List
+        this.m_oNotificationDisplayService.openSnackBar("Style Information Updated!", "Close");
+        this.setVisibleInput("default")
+        this.getStylesByUser();
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("There was an error when attempting to update this style.")
+      }
+    })
+  }
+
+
+
+  initEditInputs() {
+    this.m_oNewStyle.styleName = this.m_oSelectedStyle.name;
+    this.m_oNewStyle.styleDescription = this.m_oSelectedStyle.description;
+    this.m_oNewStyle.isPublic = this.m_oSelectedStyle.public;
+  }
+
+  initXMLEditor() {
+    this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+    this.m_oJsonEditorService.initEditor();
+    this.m_oJsonEditorService.setText(this.m_asStyleXml);
+    this.m_oJsonEditorService.setReadOnly(true);
+  }
+
+  updateXml() {
+    let oBody = new FormData();
+    oBody.append('styleXml', this.m_asStyleXml);
+    this.m_oStyleService.postStyleXml(this.m_oSelectedStyle.styleId, oBody).subscribe({
+      next: oResponse => {
+        this.m_oNotificationDisplayService.openSnackBar("Style XML updated", "Close")
+        this.getStylesByUser();
+        this.setVisibleInput('default');
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Error in updating the style XML.")
+      }
+    })
+  }
+
+  getXMLChange(oEvent) {
+    this.m_asStyleXml = this.m_oJsonEditorService.getValue();
+  }
+
+  onDismiss(): void {
+    this.m_oDialogRef.close();
   }
 }

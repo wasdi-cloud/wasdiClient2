@@ -7,6 +7,7 @@ export interface Workflow {
     outputFileNames: Array<any> | null,
     outputNodeNames: Array<any> | null, 
     public: boolean, 
+    readOnly: boolean,
     sharedWithMe: boolean, 
     userId: string, 
     workflowId: string

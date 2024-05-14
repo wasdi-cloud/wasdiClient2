@@ -1,3 +1,7 @@
+.textarea-container {
+    height: 100%;
+}
+
 label {
     color: var(--neutral95);
     font-size: 14px;

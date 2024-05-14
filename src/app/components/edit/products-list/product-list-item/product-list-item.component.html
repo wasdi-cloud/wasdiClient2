@@ -1,5 +1,6 @@
 <div class="product d-flex flex-row align-items-center gap-4" [class.item-hover]="m_bIsHovering"
-    (mouseenter)="mouseHovering()" (mouseleave)="mouseLeaving()">
+    (contextmenu)="openContextMenu($event); $event.preventDefault" (mouseenter)="mouseHovering()" (mouseleave)="mouseLeaving()"
+    (contextmenu)="openContextMenu($event)">
     <div class=" d-flex flex-row align-items-center" *ngIf="m_bIsOpen">
         <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
             arrow_drop_down
@@ -51,11 +52,13 @@
             </p>
             <ul *ngIf="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands">
                 <li *ngFor="let oBand of m_oProduct.bandsGroups.bands">
-                    <p style="cursor: default !important;">{{oBand.name}} 
-                        <span *ngIf="oBand.published === false" class="button-icon material-symbols-outlined" 
-                            style="color: green; cursor: pointer !important;" (click)="showBandsOnMap(oBand, true)">lightbulb</span>
+                    <p style="cursor: default !important;">{{oBand.name}}
+                        <span *ngIf="oBand.published === false" class="button-icon material-symbols-outlined"
+                            style="color: green; cursor: pointer !important;"
+                            (click)="showBandsOnMap(oBand, true)">lightbulb</span>
                         <span *ngIf="oBand.published === true" class="button-icon material-symbols-outlined"
-                            style="color: red; cursor: pointer !important;" (click)="showBandsOnMap(oBand, false)">light_off</span>
+                            style="color: red; cursor: pointer !important;"
+                            (click)="showBandsOnMap(oBand, false)">light_off</span>
                     </p>
                 </li>
             </ul>

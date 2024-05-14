@@ -1,3 +1,36 @@
+.new-workflow {
+    background: var(--neutral5);
+    border: 1px solid var(--neutral10);
+    border-radius: 8px;
+    color: var(--neutral50Brand);
+    padding: 12px;
+}
+
+.new-workflow>span {
+    cursor: pointer;
+    font-size: 20px;
+}
+
 .workflows-product-container {
     padding: 0px 32px;
+}
+
+
+.textarea {
+    height: 40%;
+}
+
+.drag-drop {
+    height: 20%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.options-container {
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    padding: 12px;
+    border-radius: 6px;
 }
