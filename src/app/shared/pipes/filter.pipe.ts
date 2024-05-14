@@ -45,9 +45,6 @@ export class FilterPipe implements PipeTransform {
       else if (item.packageName) {
         return item.packageName.toLocaleLowerCase().includes(searchText);
       }
-      else if (item.nodeCode) {
-        return item.nodeCode.toLocaleLowerCase().includes(searchText);
-      }
       //Filter for Search Page results: 
       else if (item.provider) {
         return item.provider.toLocaleLowerCase().includes(searchText);
@@ -59,6 +56,9 @@ export class FilterPipe implements PipeTransform {
       //Filter for Workspaces where workspaceName is an attribute:
       else if (item.workspaceName) {
         return item.workspaceName.toLocaleLowerCase().includes(searchText);
+      }
+      else if (item.nodeCode) {
+        return item.nodeCode.toLocaleLowerCase().includes(searchText);
       }
       else if (item.publisher) {
         return item.publisher.toLocaleLowerCase().includes(searchText);
