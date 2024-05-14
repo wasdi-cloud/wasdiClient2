@@ -124,7 +124,7 @@
             <div class="footer d-flex flex-row justify-content-end">
                 <div class="d-flex flex-row gap-3">
                     <app-button [m_sLabel]="'Run'" [m_sIconLeft]="'play_circle'"
-                        [m_bDisabled]="!m_oSelectedWorkflow.name" (click)="runSingleInputWorkflow()"></app-button>
+                        [m_bDisabled]="!m_oSelectedWorkflow.name || this.m_oSelectedWorkflow.inputFileNames.length <= 0" (click)="runSingleInputWorkflow()"></app-button>
                 </div>
             </div>
         </div>
