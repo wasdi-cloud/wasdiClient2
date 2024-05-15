@@ -1,23 +1,34 @@
 <div class="product-tree-container d-flex flex-column justify-content-start h-100" style="min-height: 10rem;">
     <!-- Product Tree Header -->
     <div class="products-header">
-        <div class="d-flex flex-row justify-content-between mb-2">
-            <div class="d-flex flex-row gap-1 align-items-center justify-content-between">
-                <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlacehodler]="'Filter'"
+        <div class="d-flex flex-column mb-2 gap-1">
+            <div class="d-flex flex-row justify-content-between">
+                <h3 class="products-heading">Products ({{m_aoFilteredProducts.length}})</h3>
+                <app-button [m_bOutline]="true" [m_sIconLeft]="'sort_by_alpha'" [m_sSize]="'small'"
+                    (click)="productSort()"></app-button>
+            </div>
+            <div class="d-flex flex-row gap-1">
+                <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlacehodler]="'Search in products list'"
                     [m_sInputValue]="m_sSearchString" [m_bClearField]="true" (keyup)="getSearchString($event);"
                     (m_oClearInput)="clearSearch()"></app-input-field>
                 <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
             </div>
-
-            <app-button [m_bOutline]="true" [m_sIconLeft]="'sort_by_alpha'" (click)="productSort()"></app-button>
         </div>
+
     </div>
     <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
     <!-- Product Tree -> Scrollable -->
+    <div *ngIf="m_asSelectedProducts.length > 0" class="btn-header d-flex flex-row align-items-start gap-2">
+        <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'download'"
+            [m_sLabel]="'DOWNLOAD ' + '[' + m_asSelectedProducts.length + ']'" (click)="downloadMultipleProducts()"></app-button>
+        <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'delete'"
+            [m_sLabel]="'DELETE ' + '[' + m_asSelectedProducts.length + ']'" (click)="deleteMultipleProducts()"></app-button>
+    </div>
     <div class="products-container flex-fill"
         *ngIf="m_bIsLoadingProducts === false && (m_aoWorkspaceProductsList.length >0 )">
         <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts; let iIndex = index" [m_oProduct]="oProduct"
-            (m_oProductChange)="handleBandSelection($event, iIndex)" (m_oProductInfoChange)="emitProductInfoChange()"></app-product-list-item>
+            (m_oProductChange)="handleBandSelection($event, iIndex)" (m_oProductInfoChange)="emitProductInfoChange()"
+            (m_oProductSelectionChange)="getProductSelection($event)"></app-product-list-item>
     </div>
 
     <!-- Buttons to import/search for products if there is no product -->

@@ -114,6 +114,12 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   m_iSortClick: number = 0;
 
+  /** 
+   * Array containing file names for selected products
+  */
+  m_asSelectedProducts: Array<string> = [];
+
+
   constructor(
     private m_oCatalogService: CatalogService,
     private m_oConstantsService: ConstantsService,
@@ -241,23 +247,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
   }
 
   /**
-   * Adds or Removes a product to the selected List once the user clicks on the associated checkbox
-   * @param oEvent 
-   * @param oProduct 
-   */
-  addProductToSelectedProducts(oEvent: any, oProduct: Product) {
-    if (oEvent.currentTarget.checked === true) {
-      //Add the Product to the Selected Products Array
-      this.m_aoSelectedProducts.push(oProduct);
-    } else {
-      //Remove Product from the Selected Products Array
-      this.m_aoSelectedProducts = this.m_aoSelectedProducts.filter((oProductInput) => {
-        return oProductInput.fileName !== oProduct.fileName
-      });
-    }
-  }
-
-  /**
    * Handle the click on the select (de-select) all button
    * @param oEvent 
    */
@@ -290,11 +279,10 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * Called from the Product List tree when the user wants to download many products at once.
    */
   downloadMultipleProducts() {
-
-    this.m_aoSelectedProducts.forEach(oProduct => {
-      this.downloadProduct(oProduct);
+    let oController = this;
+    this.m_asSelectedProducts.forEach(oProduct => {
+      oController.downloadProductByName(oProduct);
     })
-
   }
 
   /**
@@ -306,6 +294,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     if (!sFileName) {
       return false;
     }
+
     let sUrl: string;
     if (this.m_oConstantsService.getActiveWorkspace().apiUrl) {
       sUrl = this.m_oConstantsService.getActiveWorkspace().apiUrl;
@@ -313,6 +302,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     this.m_oCatalogService.newDownloadByName(sFileName, this.m_oActiveWorkspace.workspaceId, sUrl).subscribe({
       next: oResponse => {
+        console.log(oResponse)
         if (oResponse.type === HttpEventType.DownloadProgress) {
           this.m_oDownloadProgress.emit({ downloadStatus: "incomplete", productName: sFileName })
         }
@@ -413,7 +403,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     let bDeleteLayer = true;
     let bDeleteFile = true;
 
-    let sMessage = "Are you sure you wish to delete " + this.m_aoSelectedProducts.length + " products?";
+    let sMessage = "Are you sure you wish to delete " + this.m_asSelectedProducts.length + " products?";
 
     let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
 
@@ -421,20 +411,20 @@ export class ProductsListComponent implements OnChanges, OnInit {
       if (oDialogResult === false) {
         return;
       } else {
-        this.m_aoSelectedProducts.forEach(oProduct => {
-          this.m_oProductService.deleteProductFromWorkspace(oProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe({
+        this.m_asSelectedProducts.forEach(oProduct => {
+          this.m_oProductService.deleteProductFromWorkspace(oProduct, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe({
             next: oResponse => {
               if (oResponse.boolValue) {
                 this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
-                this.m_aoSelectedProducts = [];
+                this.m_asSelectedProducts = [];
                 return true;
               } else {
-                this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
+                this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct);
                 return false;
               }
             },
             error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
+              this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct);
               return false;
             }
           })
@@ -683,5 +673,26 @@ export class ProductsListComponent implements OnChanges, OnInit {
     this.m_aoFilteredProducts.sort(function (oProductA, oProductB) {
       return oProductA.name.localeCompare(oProductB.name);
     })
+  }
+
+  /**
+   * Managee the selected products array
+   * @param oEvent 
+   */
+  getProductSelection(oEvent): void {
+    //If the product is checked (to be added to the array)
+    if (oEvent.checked === true) {
+      if (this.m_asSelectedProducts.length === 0) {
+        this.m_asSelectedProducts.push(oEvent.product);
+      } else if (!this.m_asSelectedProducts.includes(oEvent.product)) {
+        this.m_asSelectedProducts.push(oEvent.product)
+      }
+    } else {
+      //If the product should be removed from the array
+      if (this.m_asSelectedProducts.includes(oEvent.product)) {
+        let iIndex = this.m_asSelectedProducts.indexOf(oEvent.product);
+        this.m_asSelectedProducts.splice(iIndex, 1);
+      }
+    }
   }
 }

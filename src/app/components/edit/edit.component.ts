@@ -357,4 +357,8 @@ export class EditComponent implements OnInit, OnDestroy {
       width: '60vw'
     })
   }
+
+  navigateToWorkspacs() {
+    this.m_oRouter.navigateByUrl('/workspaces')
+  }
 }

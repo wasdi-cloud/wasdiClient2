@@ -3,7 +3,7 @@
     [class.wasdi-btn-lg]="m_sSize=== 'large'" [class.btn-outline]="m_bOutline" [class.btn-link]="m_bLink"
     [class.muted]="m_bMuted" [class.text-white]="m_bTextWhite" [class.border-white]="m_bTextWhite && m_bOutline"
     [class.btn-round]="m_bRounded" [class.btn-delete]="m_bIsDelete" [disabled]="m_bDisabled">
-    <span class="material-symbols-outlined" *ngIf="m_sIconLeft">
+    <span class="material-symbols-outlined" [class.icon-small]="m_sSize === 'small'" *ngIf="m_sIconLeft">
         {{m_sIconLeft}}</span>
     {{m_sLabel}}
     <span class="material-symbols-outlined" *ngIf="m_sIconRight">

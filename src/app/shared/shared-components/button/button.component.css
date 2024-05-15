@@ -34,7 +34,9 @@
 /* Size Dimensions */
 .wasdi-btn-sm {
     height: 24px;
+    line-height: 24px;
     font-size: 12px;
+    gap: 4px;
 }
 
 .wasdi-btn-lg {

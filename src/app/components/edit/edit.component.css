@@ -17,6 +17,7 @@ main {
 
 .workspace-location {
 	font-weight: 700;
+	gap: 16px;
 }
 
 .workspace-subheading {
@@ -37,7 +38,7 @@ main {
 }
 
 .product-list-container {
-	max-height: 40%;
+	max-height: 50%;
 }
 
 .workspace-id-copy:hover {

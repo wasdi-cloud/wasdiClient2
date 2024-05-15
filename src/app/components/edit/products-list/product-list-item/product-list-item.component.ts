@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProductsListComponent } from '../products-list.component'
 
-import {CdkContextMenuTrigger, CdkMenuItem, CdkMenu} from '@angular/cdk/menu';
+import { CdkContextMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
 
 @Component({
   selector: 'app-product-list-item',
@@ -20,6 +20,7 @@ export class ProductListItemComponent {
   @Input() m_oProduct: any = null;
   @Output() m_oProductChange: EventEmitter<any> = new EventEmitter();
   @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
+  @Output() m_oProductSelectionChange: EventEmitter<any> = new EventEmitter();
 
   /**
    * Flag to know if the actual product is open or closed.
@@ -35,6 +36,11 @@ export class ProductListItemComponent {
    * Flag to know if the user is hovering with the mouse on this specific element
    */
   m_bIsHovering: boolean = false;
+
+  /**
+   * Flag to track whether or not the product is selected
+   */
+  m_bIsSelected: boolean = false;
 
 
   constructor(
@@ -118,6 +124,14 @@ export class ProductListItemComponent {
 
   emitBandSelectionChange(oBand: any): void {
     this.m_oProductChange.emit(oBand);
+  }
+
+  emitProductSelectionChange(oProduct: any, oEvent: any): void {
+    let bChecked = oEvent.target.checked
+    this.m_oProductSelectionChange.emit({
+      product: this.m_oProduct.fileName,
+      checked: bChecked
+    });
   }
 
   openContextMenu(oEvent) {

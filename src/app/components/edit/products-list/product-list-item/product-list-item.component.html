@@ -5,7 +5,7 @@
         <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
             arrow_drop_down
         </span>
-        <input class="wasdi-checkbox" type="checkbox" name="" id="">
+        <input class="wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_bIsSelected"  (change)="emitProductSelectionChange(m_oProduct, $event)">
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
@@ -16,7 +16,7 @@
         <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
             arrow_right
         </span>
-        <input class="wasdi-checkbox" type="checkbox" name="" id="">
+        <input class="wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_bIsSelected" (change)="emitProductSelectionChange(m_oProduct, $event)">
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>

@@ -1,15 +1,20 @@
 <main class="d-flex flex-row flex-fill">
     <!-- Side Bar Container -->
     <div class="editor-sidebar d-flex flex-column">
-        <div class="workspace-location">
-            <div class="workspace-subheading">Workspace - <span class="workspace-id-copy"
-                    (click)="copyWorkspaceId()">{{m_oActiveWorkspace?.workspaceId}}</span></div>
-            <div class="workspace-name d-flex flex-row justify-content-between py-2">
-                <div>
-                    <span class="workspace-id-copy"
-                    (click)="copyWorkspaceName()">{{m_oActiveWorkspace?.name}}</span> ({{m_aoProducts.length}})
+        <div class="workspace-location d-flex flex-column">
+            <app-button class="align-self-start" [m_sLabel]="'BACK'" [m_bOutline]="true" [m_sSize]="'small'"
+                [m_sIconLeft]="'arrow_left'" (click)="navigateToWorkspacs()"></app-button>
+            <div>
+                <div class="workspace-subheading">Workspace - <span class="workspace-id-copy"
+                        (click)="copyWorkspaceId()">{{m_oActiveWorkspace?.workspaceId}}</span></div>
+                <div class="workspace-name d-flex flex-row justify-content-between py-2">
+                    <div>
+                        <span class="workspace-id-copy"
+                            (click)="copyWorkspaceName()">{{m_oActiveWorkspace?.name}}</span>
+                    </div>
+                    <app-button matTooltip="Workspace Properties" [m_sSize]="'small'" [m_sIconLeft]="'settings_suggest'"
+                        [m_bOutline]="true" (click)="openPropertiesDialog()"></app-button>
                 </div>
-                <app-button matTooltip="Workspace Properties" [m_sSize]="'small'" [m_sIconLeft]="'info'" [m_bMuted]="true" (click)="openPropertiesDialog()"></app-button>
             </div>
         </div>
         <app-products-list class="product-list-container flex-fill" [m_aoWorkspaceProductsList]="m_aoProducts"
@@ -17,7 +22,7 @@
             [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
             (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)"
             (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
-        <app-nav-layers class="justify-self-end" style="height: 50%;" [m_aoVisibleBands]="m_aoVisibleBands"
+        <app-nav-layers class="justify-self-end" style="height: 40%;" [m_aoVisibleBands]="m_aoVisibleBands"
             (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
     </div>
     <!-- Map Container with Floating Nav-->
