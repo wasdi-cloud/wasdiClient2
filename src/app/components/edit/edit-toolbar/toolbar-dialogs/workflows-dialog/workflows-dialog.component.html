@@ -29,7 +29,7 @@
                     </span>
                 </div>
                 <app-list-item *ngFor="let oWorkflow of m_aoWorkflows | filter: m_sSearchString" [m_bHasImg]="false"
-                    [m_oProcessorItem]="oWorkflow " [m_bIsSelected]="oWorkflow .name === m_oSelectedWorkflow.name"
+                    [m_oProcessorItem]="oWorkflow " [m_bIsSelected]="oWorkflow.name === m_oSelectedWorkflow.name"
                     [m_bSimpleItem]="true" [m_bProcessorItem]="true" [m_sLabel]="oWorkflow.name"
                     [m_sDescription]="oWorkflow.description" [m_sIcon]="getWorkflowImageLink(oWorkflow)"
                     [m_bHasToolbar]="oWorkflow .sharedWithMe === true || m_sUserId === oWorkflow .userId"

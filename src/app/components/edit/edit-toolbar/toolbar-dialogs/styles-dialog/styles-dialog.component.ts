@@ -98,6 +98,10 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
     this.m_oStyleService.getStylesByUser().subscribe(oResponse => {
       if (oResponse !== null && oResponse !== undefined) {
         this.m_aoStyleList = oResponse;
+
+        if (!this.m_oSelectedStyle.name) {
+          this.selectActiveStyle(this.m_aoStyleList[0]);
+        }
       }
     });
   }

@@ -36,7 +36,7 @@ export class WorkflowsDialogComponent implements OnInit {
   m_oSelectedProduct: Product;
 
   m_aoSelectedProducts: Array<Product>;
-  
+
   m_aoMultiInputSelectedProducts: any = {};
 
   m_oWorkflowFileData = {} as {
@@ -103,7 +103,10 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_oWorkflowService.getWorkflowsByUser().subscribe({
       next: oResponse => {
         if (oResponse.body) {
-          this.m_aoWorkflows = oResponse.body
+          this.m_aoWorkflows = oResponse.body;
+          if (!this.m_oSelectedWorkflow.name) {
+            this.setSelectedWorkflow(this.m_aoWorkflows[0])
+          }
         }
       },
       error: oError => {
