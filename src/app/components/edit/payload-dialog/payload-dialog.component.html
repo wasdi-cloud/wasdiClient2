@@ -3,7 +3,7 @@
         <div class="d-flex flex-row">
             <app-tab [m_sLabel]="'Payload'" (click)="setActiveTab('payload')"
                 [m_bIsActive]="m_sActiveTab === 'payload'"></app-tab>
-            <app-tab *ngIf="m_bIsWasdiDasboard === true" [m_sLabel]="'Dashbaord'" (click)="setActiveTab('dashboard')"
+            <app-tab *ngIf="m_bIsWasdiDasboard === true" [m_sLabel]="'Dashboard'" (click)="setActiveTab('dashboard')"
                 [m_bIsActive]="m_sActiveTab === 'dashboard'"></app-tab>
         </div>
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
