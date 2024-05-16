@@ -250,7 +250,7 @@ export class WapSelectAreaComponent implements OnInit {
       }
       //save new shape in map
       oController.m_oDrawnItems.addLayer(oLayer);
-      oController.m_oMapInput.emit(oController.m_oMapInput);
+      oController.m_oMapInputChange.emit(oController.m_oMapInput);
     });
 
     oMap.on(L.Draw.Event.DELETESTOP, function (event) {
