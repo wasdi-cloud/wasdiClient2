@@ -8,50 +8,58 @@
         </div>
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
-    <div class="d-flex flex-column h-100" *ngIf="m_sActiveTab==='payload'">
-        <div class=" payload-info d-flex flex-row justify-content-between mb-3">
-            <div>
-                {{m_oProcess.operationType === 'RUNPROCESSOR' ? 'App name' : 'Product name'}}: {{m_oProcess.productName?
-                m_oProcess.productName: 'N/A'}} | Status
-                <span class="category-tag" [ngClass]="m_sTagColor">{{m_oProcess.status}}</span>
-            </div>
-            <app-button [m_sLabel]="m_sCopyLabel" [m_sSize]="'small'" [m_sIconLeft]="'content_copy'"
-                (click)="copyPayload()"></app-button>
+    <div class=" payload-info d-flex flex-row justify-content-between mb-3">
+        <div>
+            {{m_oProcess.operationType === 'RUNPROCESSOR' ? 'App name' : 'Product name'}}: {{m_oProcess.productName?
+            m_oProcess.productName: 'N/A'}} | Status
+            <span class="category-tag" [ngClass]="m_sTagColor">{{m_oProcess.status}}</span>
         </div>
+        <app-button [m_sLabel]="m_sCopyLabel" [m_sSize]="'small'" [m_sIconLeft]="'content_copy'"
+            (click)="copyPayload()"></app-button>
+    </div>
+    <div *ngIf="m_sActiveTab === 'payload'" class="d-flex flex-column h-100">
         <div class="flex-fill">
             <app-json-editor [(m_sText)]="m_sJsonSample" [m_sMode]="'JSON'" [m_bReadOnly]="true"></app-json-editor>
         </div>
     </div>
-    <div *ngIf="m_bIsWasdiDasboard === true  && m_sActiveTab === 'dashboard'">
-        <div *ngFor="let oChart of m_aoChartsInformation">
+    <div class="charts-container d-flex flex-row flex-wrap flex-fill m-auto"
+        *ngIf="m_bIsWasdiDasboard === true  && m_sActiveTab === 'dashboard'">
+        <div *ngFor="let oChart of m_aoChartsInformation" class="chart-container">
             <!-- Line Chart -->
-            <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" [view]="view" [legend]="m_bLegend"
-                [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+            <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" class="chart" [view]="view"
+                [legend]="m_bLegend" [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
                 [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
-                [yAxis]="yAxis" [results]="oChart['chart-data']"></ngx-charts-line-chart>
+                [yAxis]="yAxis" [results]="oChart['chart-data']" [scheme]="'natural'"></ngx-charts-line-chart>
+
             <!-- Area Line Chart -->
-            <ngx-charts-area-chart *ngIf="oChart['chart-type'] === 'line-area'" [view]="view" [legend]="m_bLegend"
-                [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+            <ngx-charts-area-chart class="chart" *ngIf="oChart['chart-type'] === 'line-area'" [view]="view"
+                [legend]="m_bLegend" [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
                 [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
-                [yAxis]="yAxis" [results]="oChart['chart-data']"></ngx-charts-area-chart>
+                [yAxis]="yAxis" [results]="oChart['chart-data']" [scheme]="'natural'"></ngx-charts-area-chart>
+
             <!-- Stacked Line Chart -->
-            <ngx-charts-area-chart-stacked *ngIf="oChart['chart-type'] === 'line-stacked'" [view]="view"
+            <ngx-charts-area-chart-stacked *ngIf="oChart['chart-type'] === 'line-stacked'" class="chart" [view]="view"
                 [legend]="m_bLegend" [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
                 [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
-                [yAxis]="yAxis" [results]="oChart['chart-data']"></ngx-charts-area-chart-stacked>
+                [yAxis]="yAxis" [results]="oChart['chart-data']" [scheme]="'natural'"></ngx-charts-area-chart-stacked>
+
             <!-- Horizontal Bar Chart -->
-            <ngx-charts-bar-horizontal *ngIf="oChart['chart-type'] === 'bar-horizontal'" [view]="view"
+            <ngx-charts-bar-horizontal *ngIf="oChart['chart-type'] === 'bar-horizontal'" class="chart" [view]="view"
                 [legend]="m_bLegend" [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
                 [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
-                [yAxis]="yAxis" [results]="oChart['chart-data'][0].series"></ngx-charts-bar-horizontal>
+                [yAxis]="yAxis" [results]="oChart['chart-data'][0].series"
+                [scheme]="'natural'"></ngx-charts-bar-horizontal>
+
             <!-- Vertical Bar Chart -->
-            <ngx-charts-bar-vertical *ngIf="oChart['chart-type'] === 'bar-vertical'" [view]="view" [legend]="m_bLegend"
-                [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
+            <ngx-charts-bar-vertical class="chart" *ngIf="oChart['chart-type'] === 'bar-vertical'" [view]="view"
+                [legend]="m_bLegend" [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
                 [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
-                [yAxis]="yAxis" [results]="oChart['chart-data'][0].series"></ngx-charts-bar-vertical>
+                [yAxis]="yAxis" [results]="oChart['chart-data'][0].series"
+                [scheme]="'natural'"></ngx-charts-bar-vertical>
             <!-- Pie Chart -->
-            <ngx-charts-pie-chart *ngIf="oChart['chart-type'] === 'pie'" [view]="view" [legend]="m_bLegend"
-                [doughnut]="false" [results]="oChart['chart-data'][0].series"></ngx-charts-pie-chart>
+            <ngx-charts-pie-chart class="chart" *ngIf="oChart['chart-type'] === 'pie'" [view]="view"
+                [legend]="m_bLegend" [doughnut]="false" [results]="oChart['chart-data'][0].series"
+                [scheme]="'natural'"></ngx-charts-pie-chart>
         </div>
     </div>
 </div>

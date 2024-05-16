@@ -12,3 +12,17 @@ li.nav-item,
 a.nav-link {
     cursor: pointer;
 }
+
+.charts-container {
+    overflow: scroll;
+    gap: 12px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+.chart-container {
+    width: 48%;
+    border: 1px solid var(--neutral15);
+    border-radius: 8px;
+    padding: 12px
+}
