@@ -183,6 +183,7 @@ import { ManageSubscriptionsComponent } from './components/admin/manage-subscrip
 import { ManageSharingComponent } from './components/admin/manage-sharing/manage-sharing.component';
 import { FeedbackDialogComponent } from './components/header/feedback-dialog/feedback-dialog.component';
 import { ConvertBytesToHigherUnitPipe } from './shared/pipes/convert-bytes-to-higher-unit.pipe';
+import {CdkContextMenuTrigger, CdkMenuItem, CdkMenu} from '@angular/cdk/menu';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -349,7 +350,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatProgressSpinnerModule,
     MatChipsModule,
     MatProgressBarModule,
-    NgxChartsModule
+    NgxChartsModule,
+    CdkContextMenuTrigger, CdkMenu, CdkMenuItem
   ],
   providers: [
     AuthService,

@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, Optional, ViewChild } from '@angular/core';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -7,6 +7,7 @@ import { StyleService } from 'src/app/services/api/style.service';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
+import { ProductService } from 'src/app/services/api/product.service';
 
 interface Style {
   description: string,
@@ -24,6 +25,8 @@ interface Style {
 })
 export class StylesDialogComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') m_oEditorRef!: ElementRef;
+
+  @Input() m_oProduct?: any;
 
   m_bDisplayInfo: boolean = false;
   m_sSearchString!: string;
@@ -61,11 +64,13 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
+    @Optional() @Inject(MAT_DIALOG_DATA) private m_oData: any,
     public m_oDialogRef: MatDialogRef<StylesDialogComponent>,
     private m_oDialog: MatDialog,
     private m_oConstantsService: ConstantsService,
     private m_oJsonEditorService: JsonEditorService,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oProductService: ProductService,
     private m_oStyleService: StyleService
   ) {
     this.m_sActiveUserId = m_oConstantsService.getUserId()
@@ -73,7 +78,10 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oData)) {
+      this.m_oProduct = this.m_oData.product;
 
+    }
   }
 
   ngAfterViewInit(): void {
@@ -285,6 +293,31 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
 
   getXMLChange(oEvent) {
     this.m_asStyleXml = this.m_oJsonEditorService.getValue();
+  }
+
+  applyStyleToProduct() {
+    this.m_oProduct.style = this.m_oSelectedStyle.name;
+    let oProductViewModel = {
+      description: this.m_oProduct.description,
+      fileName: this.m_oProduct.fileName,
+      productFriendlyName: this.m_oProduct.productFriendlyName,
+      style: this.m_oSelectedStyle.name
+    }
+
+    let sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId
+
+    this.m_oNotificationDisplayService.openConfirmationDialog(`Are you sure you want to update ${this.m_oProduct.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.fileName} with the style ${this.m_oProduct.style}?`).subscribe(bDialogResult => {
+      console.log(bDialogResult)
+      console.log(this.m_oProduct)
+      if (bDialogResult) {
+        this.m_oProductService.updateProduct(oProductViewModel, sWorkspaceId).subscribe(oResponse => {
+          if (oResponse.status === 200) {
+            this.m_oNotificationDisplayService.openSnackBar("Product Style Updated!", "Close");
+            this.onDismiss();
+          }
+        })
+      }
+    })
   }
 
   onDismiss(): void {

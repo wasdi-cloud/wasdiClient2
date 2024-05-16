@@ -302,7 +302,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     this.m_oCatalogService.newDownloadByName(sFileName, this.m_oActiveWorkspace.workspaceId, sUrl).subscribe({
       next: oResponse => {
-        console.log(oResponse)
         if (oResponse.type === HttpEventType.DownloadProgress) {
           this.m_oDownloadProgress.emit({ downloadStatus: "incomplete", productName: sFileName })
         }

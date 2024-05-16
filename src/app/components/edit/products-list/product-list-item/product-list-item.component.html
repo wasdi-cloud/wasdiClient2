@@ -1,11 +1,11 @@
 <div class="product d-flex flex-row align-items-center gap-4" [class.item-hover]="m_bIsHovering"
-    (contextmenu)="openContextMenu($event); $event.preventDefault" (mouseenter)="mouseHovering()" (mouseleave)="mouseLeaving()"
-    (contextmenu)="openContextMenu($event)">
+    (contextmenu)="$event.preventDefault()" [cdkContextMenuTriggerFor]="context_menu">
     <div class=" d-flex flex-row align-items-center" *ngIf="m_bIsOpen">
         <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
             arrow_drop_down
         </span>
-        <input class="wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_bIsSelected"  (change)="emitProductSelectionChange(m_oProduct, $event)">
+        <input class="wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_bIsSelected"
+            (change)="emitProductSelectionChange(m_oProduct, $event)">
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
@@ -16,18 +16,19 @@
         <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
             arrow_right
         </span>
-        <input class="wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_bIsSelected" (change)="emitProductSelectionChange(m_oProduct, $event)">
+        <input class="wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_bIsSelected"
+            (change)="emitProductSelectionChange(m_oProduct, $event)">
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
         <p class="product-label">
             {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
     </div>
-    <span class="hover-menu d-flex flex-row gap-1" *ngIf="m_bIsHovering">
+    <!-- <span class="hover-menu d-flex flex-row gap-1" *ngIf="m_bIsHovering">
         <button class="button-icon material-symbols-outlined" (click)="downloadProduct()">download</button>
         <button class="button-icon material-symbols-outlined" (click)="deleteProduct()">delete</button>
         <button class="button-icon material-symbols-outlined" (click)="openProductProperties()">more_vert</button>
-    </span>
+    </span> -->
 </div>
 
 <!-- Opened dropdown component for Bands and Metadata -->
@@ -65,3 +66,12 @@
         </li>
     </ul>
 </div>
+
+<ng-template #context_menu>
+    <div class="context-menu d-flex flex-column gap-1" cdkMenu>
+        <div class="context-menu-item" (click)="openStylesDialog()">Edit styles</div>
+        <div class="context-menu-item" (click)="openProductProperties()">Product Properties</div>
+        <div class="context-menu-item" (click)="downloadProduct()">Download</div>
+        <div class="context-menu-item" (click)="deleteProduct()">Delete product</div>
+    </div>
+</ng-template>

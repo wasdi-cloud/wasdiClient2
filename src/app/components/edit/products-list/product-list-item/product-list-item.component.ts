@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewContainerRef } from '@angular/core';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
@@ -8,8 +8,9 @@ import { ProductPropertiesDialogComponent } from '../product-properties-dialog/p
 import { MatDialog } from '@angular/material/dialog';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProductsListComponent } from '../products-list.component'
+import { StylesDialogComponent } from '../../edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
 
-import { CdkContextMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
+
 
 @Component({
   selector: 'app-product-list-item',
@@ -41,7 +42,6 @@ export class ProductListItemComponent {
    * Flag to track whether or not the product is selected
    */
   m_bIsSelected: boolean = false;
-
 
   constructor(
     @Inject(ProductsListComponent) private m_oParentProductList: ProductsListComponent,
@@ -134,7 +134,13 @@ export class ProductListItemComponent {
     });
   }
 
-  openContextMenu(oEvent) {
-    console.log("Menu")
+  openStylesDialog() {
+    this.m_oDialog.open(StylesDialogComponent, {
+      height: '90vh',
+      width: '90vw',
+      minWidth: '90vw',
+      data: { product: this.m_oProduct }
+    })
   }
+
 }

@@ -117,6 +117,8 @@
                 <app-button *ngIf="m_sActiveInputs === 'xml-editor'" [m_sLabel]="'Save modifications'"
                     [m_bDisabled]="m_oSelectedStyle.name ? false : true" [m_sIconLeft]="'play_circle'"
                     (click)="updateXml()"></app-button>
+                <app-button *ngIf="m_oProduct" [m_sLabel]="'Apply'" [m_sIconLeft]="'play_circle'"
+                    [m_bDisabled]="!m_oSelectedStyle.name" (click)="applyStyleToProduct()"></app-button>
             </div>
         </div>
     </div>
