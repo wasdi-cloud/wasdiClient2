@@ -21,7 +21,7 @@
                 (keyup)="setDescription($event)"></app-textarea>
         </div>
         <div class="d-flex flex-row align-items-center gap-3">
-            <app-autocomplete class="mt-4 flex-fill" [m_sLabel]="'Apply Style'" [m_aoInputs]="m_asStyles"
+            <app-autocomplete class="flex-fill" [m_sLabel]="'Apply Style'" [m_aoInputs]="m_asStyles"
                 [m_sPlaceholder]="m_oProduct.style? m_oProduct.style : 'Select style'"
                 (m_oSelectionChange)="setStyleSelection($event)"></app-autocomplete>
         </div>
