@@ -6,7 +6,8 @@
         <div class="product-info-container d-flex flex-row gap-2">
             <div class="info-container" style="width: 70%">
                 <div class="font-bold">Original name</div>
-                <p>{{m_oProduct.fileName}}</p>
+                <p (click)="copyToClipboard(m_oProduct.fileName)">{{m_oProduct.fileName}}</p>
+
             </div>
             <div class="info-container">
                 <div class="font-bold">Product size</div>

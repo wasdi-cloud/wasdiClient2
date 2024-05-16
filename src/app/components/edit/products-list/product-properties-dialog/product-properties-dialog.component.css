@@ -9,3 +9,11 @@ label.product-form-label {
 .info-container {
     overflow-wrap: break-word;
 }
+
+p {
+    cursor: pointer
+}
+
+p:hover {
+    color: var(--wasdiGreen);
+}

@@ -8,6 +8,7 @@ import { Product } from 'src/app/shared/models/product.model';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 interface Style {
   description: string,
@@ -45,6 +46,7 @@ export class ProductPropertiesDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
+    private m_oClipboard: Clipboard,
     private m_oConstantsService: ConstantsService,
     private m_oDialogRef: MatDialogRef<ProductPropertiesDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -142,6 +144,11 @@ export class ProductPropertiesDialogComponent implements OnInit {
   setDescription(oEvent: any) {
     this.m_oEditProduct.description = oEvent.target.value;
   }
+
+  copyToClipboard(sFileName: string) {
+    this.m_oClipboard.copy(sFileName);
+    this.m_oNotificationDisplayService.openSnackBar("Copied Original Name to clipboard!", "Close");
+   }
   /**
    * Handle dialog close
    */
