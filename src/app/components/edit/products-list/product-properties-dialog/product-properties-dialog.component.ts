@@ -3,7 +3,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ProductService } from 'src/app/services/api/product.service';
 import { StyleService } from 'src/app/services/api/style.service';
-import { StylesDialogComponent } from 'src/app/components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
 import { Product } from 'src/app/shared/models/product.model';
 
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
@@ -51,7 +50,6 @@ export class ProductPropertiesDialogComponent implements OnInit {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
     private m_oStyleService: StyleService,
-    private m_oDialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -82,15 +80,6 @@ export class ProductPropertiesDialogComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR GETTING STYLES");
         }
       })
-  }
-
-  openStylesDialog(): void {
-    this.m_oDialog.open(StylesDialogComponent, {
-      height: '90vh',
-      width: '90vw',
-      minWidth: '90vw',
-
-    })
   }
 
   /**

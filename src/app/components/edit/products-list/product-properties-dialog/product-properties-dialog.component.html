@@ -23,8 +23,6 @@
             <app-autocomplete class="mt-4 flex-fill" [m_sLabel]="'Apply Style'" [m_aoInputs]="m_asStyles"
                 [m_sPlaceholder]="m_oProduct.style? m_oProduct.style : 'Select style'"
                 (m_oSelectionChange)="setStyleSelection($event)"></app-autocomplete>
-            <app-button class="align-self-end " [m_sLabel]="'Browse Styles'" (click)="openStylesDialog()"
-                [m_bOutline]="true"></app-button>
         </div>
 
     </div>
