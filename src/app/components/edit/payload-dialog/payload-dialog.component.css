@@ -20,9 +20,10 @@ a.nav-link {
     margin: 0 auto;
 }
 
-.chart-container {
-    width: 48%;
-    border: 1px solid var(--neutral15);
-    border-radius: 8px;
-    padding: 12px
+/* Class for 2 columns */
+@media (max-width: 1024px) {
+	.chart-container{
+		width: 50% !important;
+		max-width: 100% !important;
+	}
 }
