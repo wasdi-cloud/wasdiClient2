@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 //Angular Materials Modules: 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -18,6 +18,8 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { Application } from 'src/app/components/app-ui/app-ui.component';
+import { JsonEditorComponent } from 'src/app/shared/json-editor/json-editor.component';
+import { JsonEditorService } from 'src/app/services/json-editor.service';
 
 
 @Component({
@@ -25,7 +27,9 @@ import { Application } from 'src/app/components/app-ui/app-ui.component';
   templateUrl: './apps-dialog.component.html',
   styleUrls: ['./apps-dialog.component.css']
 })
-export class AppsDialogComponent implements OnInit, OnDestroy {
+export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('editor') m_oEditorRef!: ElementRef;
+
   m_sActiveUserId: string = "";
   m_aoWorkspaceList: any[] = [];
   m_aWorkspacesName: any[] = [];
@@ -51,6 +55,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
+    private m_oJsonEditorService: JsonEditorService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
     private m_oRabbitStompService: RabbitStompService,
@@ -65,6 +70,12 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
+  }
+
+  ngAfterViewInit(): void {
+    this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+    this.m_oJsonEditorService.initEditor()
+    this.m_oJsonEditorService.setText(this.m_sMyJsonString);
   }
 
   /**
@@ -114,10 +125,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    */
   selectProcessor(oProcessor) {
     this.m_oSelectedProcessor = oProcessor;
-
     if (oProcessor.paramsSample) {
       this.m_sMyJsonString = decodeURIComponent(oProcessor.paramsSample);
-
+      this.m_oJsonEditorService.setText(this.m_sMyJsonString);
       try {
         let oParsed = JSON.parse(this.m_sMyJsonString);
 
@@ -158,7 +168,6 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @returns 
    */
   downloadProcessor(oProcessor: any) {
-    console.log(oProcessor)
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oProcessor)) {
       // return false;
     }
@@ -339,8 +348,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
   }
 
   getJSONInput(oEvent) {
-
-    this.m_sMyJsonString = oEvent.target.value;
+    this.m_sMyJsonString = this.m_oJsonEditorService.getValue();
   }
   /**
    * Close the Apps Dialog
