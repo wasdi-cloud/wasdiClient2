@@ -151,7 +151,7 @@ export class ViewElementFactory {
             // Boolean input
             oViewElement = new Checkbox();
 
-            if (oControl.default) {
+            if (oControl.default != undefined) {
                 oViewElement.m_bValue = oControl.default;
             }
         } 
