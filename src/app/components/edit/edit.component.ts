@@ -128,6 +128,11 @@ export class EditComponent implements OnInit, OnDestroy {
    */
   m_bShowProductDownload: boolean = false;
 
+  /**
+   * Length of filtered products recieved from products list
+   */
+  m_iFilteredProducts: number = this.m_aoProducts.length
+
   ngOnInit(): void {
     //What to do if workspace undefined: 
     if (!this.m_oActiveWorkspace) {
@@ -360,5 +365,9 @@ export class EditComponent implements OnInit, OnDestroy {
 
   navigateToWorkspacs() {
     this.m_oRouter.navigateByUrl('/workspaces')
+  }
+
+  getFilteredProductsLength(oEvent) {
+    this.m_iFilteredProducts = oEvent;
   }
 }

@@ -83,6 +83,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
   @Output() m_oDownloadProgress: EventEmitter<any> = new EventEmitter();
 
   /**
+   * Flag to send filtered products length to parent
+   */
+  @Output() m_iFilteredProducts: EventEmitter<number> = new EventEmitter();
+
+  /**
    * Array of (potentially) filtered products to show
    */
   m_aoFilteredProducts: any[] = [];
@@ -244,6 +249,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
       this.m_aoFilteredProducts = [];
       this.m_bIsLoadingProducts = false;
     }
+
+    this.m_iFilteredProducts.emit(this.m_aoFilteredProducts.length);
   }
 
   /**

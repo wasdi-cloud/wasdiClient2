@@ -2,16 +2,13 @@
     <!-- Product Tree Header -->
     <div class="products-header">
         <div class="d-flex flex-column mb-2 gap-1">
-            <div class="d-flex flex-row justify-content-between">
-                <h3 class="products-heading">Products ({{m_aoFilteredProducts.length}})</h3>
-                <app-button [m_bOutline]="true" [m_sIconLeft]="'sort_by_alpha'" [m_sSize]="'small'"
-                    (click)="productSort()"></app-button>
-            </div>
             <div class="d-flex flex-row gap-1">
                 <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlacehodler]="'Search in products list'"
                     [m_sInputValue]="m_sSearchString" [m_bClearField]="true" (keyup)="getSearchString($event);"
                     (m_oClearInput)="clearSearch()"></app-input-field>
                 <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
+                <app-button [matTooltip]="'Sort products'" [m_bOutline]="true" [m_sIconLeft]="'sort_by_alpha'"
+                    (click)="productSort()"></app-button>
             </div>
         </div>
 
@@ -20,9 +17,11 @@
     <!-- Product Tree -> Scrollable -->
     <div *ngIf="m_asSelectedProducts.length > 0" class="btn-header d-flex flex-row align-items-start gap-2">
         <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'download'"
-            [m_sLabel]="'DOWNLOAD ' + '[' + m_asSelectedProducts.length + ']'" (click)="downloadMultipleProducts()"></app-button>
+            [m_sLabel]="'DOWNLOAD ' + '[' + m_asSelectedProducts.length + ']'"
+            (click)="downloadMultipleProducts()"></app-button>
         <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'delete'"
-            [m_sLabel]="'DELETE ' + '[' + m_asSelectedProducts.length + ']'" (click)="deleteMultipleProducts()"></app-button>
+            [m_sLabel]="'DELETE ' + '[' + m_asSelectedProducts.length + ']'"
+            (click)="deleteMultipleProducts()"></app-button>
     </div>
     <div class="products-container flex-fill"
         *ngIf="m_bIsLoadingProducts === false && (m_aoWorkspaceProductsList.length >0 )">

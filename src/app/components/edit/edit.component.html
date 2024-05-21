@@ -2,15 +2,17 @@
     <!-- Side Bar Container -->
     <div class="editor-sidebar d-flex flex-column">
         <div class="workspace-location d-flex flex-column">
-            <app-button class="align-self-start" [m_sLabel]="'BACK'" [m_bOutline]="true" [m_sSize]="'small'"
-                [m_sIconLeft]="'arrow_left'" (click)="navigateToWorkspacs()"></app-button>
-            <div>
+            <div class="d-flex flex-row gap-3 align-items-center">
+                <app-button class="align-self-start" [m_sLabel]="'BACK'" [m_bOutline]="true" [m_sSize]="'small'"
+                    [m_sIconLeft]="'arrow_left'" (click)="navigateToWorkspacs()"></app-button>
                 <div class="workspace-subheading">Workspace - <span class="workspace-id-copy"
                         (click)="copyWorkspaceId()">{{m_oActiveWorkspace?.workspaceId}}</span></div>
+            </div>
+            <div>
                 <div class="workspace-name d-flex flex-row justify-content-between py-2">
                     <div>
                         <span class="workspace-id-copy"
-                            (click)="copyWorkspaceName()">{{m_oActiveWorkspace?.name}}</span>
+                            (click)="copyWorkspaceName()">{{m_oActiveWorkspace?.name}}</span> ({{m_iFilteredProducts}})
                     </div>
                     <app-button matTooltip="Workspace Properties" [m_sSize]="'small'" [m_sIconLeft]="'settings_suggest'"
                         [m_bOutline]="true" (click)="openPropertiesDialog()"></app-button>
@@ -21,6 +23,7 @@
             [m_aoVisibleBands]="m_aoVisibleBands" [m_bIsLoadingProducts]="m_bIsLoadingProducts"
             [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
             (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)"
+            (m_iFilteredProducts)="getFilteredProductsLength($event)"
             (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
         <app-nav-layers class="justify-self-end" style="height: 40%;" [m_aoVisibleBands]="m_aoVisibleBands"
             (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
