@@ -1,4 +1,5 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { trigger, transition, animate, style } from '@angular/animations'
 
 //Angular Materials Modules: 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -18,14 +19,24 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { Application } from 'src/app/components/app-ui/app-ui.component';
-import { JsonEditorComponent } from 'src/app/shared/json-editor/json-editor.component';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
 
 
 @Component({
   selector: 'app-apps-dialog',
   templateUrl: './apps-dialog.component.html',
-  styleUrls: ['./apps-dialog.component.css']
+  styleUrls: ['./apps-dialog.component.css'],
+  animations: [
+    trigger('slideInUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)' }),
+        animate('500ms ease-in', style({ transform: 'translateY(0%)' }))
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({ transform: 'translateY(100%)' }))
+      ])
+    ])
+  ]
 })
 export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('editor') m_oEditorRef!: ElementRef;
@@ -50,6 +61,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     this.rabbitMessageHook
   )
 
+  m_bShowHelpMessage: boolean = false;
+  m_sHelpMsg: string = '';
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -125,6 +138,11 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   selectProcessor(oProcessor) {
     this.m_oSelectedProcessor = oProcessor;
+    this.m_oProcessorService.getHelpFromProcessor(oProcessor.processorName).subscribe({
+      next: oResponse => {
+        this.m_sHelpMsg = oResponse.stringValue;
+      }
+    })
     if (oProcessor.paramsSample) {
       this.m_sMyJsonString = decodeURIComponent(oProcessor.paramsSample);
       this.m_oJsonEditorService.setText(this.m_sMyJsonString);
@@ -359,5 +377,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   rabbitMessageHook(oRabbitMessage: any, oController: any) {
     oController.getProcessorsList();
+  }
+
+  showHelpMessage(bShowMessage: boolean) {
+    this.m_bShowHelpMessage = bShowMessage;
   }
 }

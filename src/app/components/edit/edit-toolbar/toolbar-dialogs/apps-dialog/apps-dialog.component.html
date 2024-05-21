@@ -39,14 +39,18 @@
 
             <div class="footer d-flex flex-row justify-content-between">
                 <div>
-                    <app-button [m_bMuted]="true" [m_sLabel]="'Help'" [m_sIconLeft]="'help'"
-                        (click)="openHelp()"></app-button>
+                    <app-button *ngIf="m_sHelpMsg" [m_bMuted]="true" [m_sLabel]="'Help'" [m_sIconLeft]="'help'"
+                        (click)="showHelpMessage(true)"></app-button>
                 </div>
                 <div class="d-flex flex-row gap-3">
                     <app-button [m_sLabel]="'Format JSON'" [m_bOutline]="true" (click)="formatJSON()"></app-button>
                     <app-button [m_sLabel]="'Run'" [m_sIconLeft]="'play_circle'"
                         [m_bDisabled]="!m_oSelectedProcessor.processorName" (click)="runProcessor()"></app-button>
                 </div>
+            </div>
+            <div class="help-container d-flex flex-column gap-1" *ngIf="m_bShowHelpMessage === true" [@slideInUp]>
+                <app-button [m_sLabel]="'Close'"  class="align-self-start" [m_bMuted]="true" [m_sIconLeft]="'close'" (click)="showHelpMessage(false)"></app-button>
+                <div class="msg-container flex-fill" [innerHTML]="m_sHelpMsg | markdown"></div>
             </div>
         </div>
     </div>
