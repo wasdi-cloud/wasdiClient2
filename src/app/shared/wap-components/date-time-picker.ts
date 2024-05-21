@@ -12,6 +12,11 @@ export class DateTimePicker extends UIComponent {
     */
     getValue() {
         if (this.m_sDate) {
+
+            if (this.m_sDate.indexOf("/")>=0) {
+                var aoDateParts = this.m_sDate.split("/");      
+                this.m_sDate = ""+aoDateParts[2]+"-"+ aoDateParts[1] + "-" +aoDateParts[0];          
+            }
             return this.m_sDate;
         } else {
             return null;
@@ -24,6 +29,12 @@ export class DateTimePicker extends UIComponent {
      */
     getStringValue() {
         if (this.m_sDate) {
+
+            if (this.m_sDate.indexOf("/")>=0) {
+                var aoDateParts = this.m_sDate.split("/");      
+                this.m_sDate = ""+aoDateParts[2]+"-"+ aoDateParts[1] + "-" +aoDateParts[0];          
+            }
+                        
             return this.m_sDate;
         } else {
             return null;
