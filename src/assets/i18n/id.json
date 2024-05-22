@@ -1,6 +1,7 @@
 {
     "BTN_SEARCH" : "Cari",
     "BTN_IMPORT" : "Impor",
+	"SORT_BY": "Urutkan berdasarkan",
     "BTN_CREATE_FIRST_WORKSPACE" : "Pertama Buat Area Kerja",
 
     "LOGIN_PLACEHOLDER_EMAIL": "Alamat Email",
@@ -728,6 +729,9 @@
     "MARKET_LEAST_USED": "Paling Sedikit Digunakan", 
     "MARKET_MAX_PRICE": "Harga Maks",
     "MARKET_CLEAR_FILTERS": "Hapus filter",
+
+	"MARKET_CARD_PUBLISHER": "Penerbit",
+    "MARKET_CARD_PRICE": "Gratis",
 
 	"DIALOG_PROCESSOR_BASE_PACKAGE_MANAGER": "Manajer Paket",
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Melihat Paket Untuk:",

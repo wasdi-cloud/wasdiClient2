@@ -1,6 +1,8 @@
 {
     "BTN_SEARCH": "Tìm kiếm",
     "BTN_IMPORT": "Nhập",
+    "SORT_BY": "Sắp xếp theo",
+    
     "BTN_CREATE_FIRST_WORKSPACE": "Tạo không gian làm việc đầu tiên",
     "LOGIN_PLACEHOLDER_EMAIL": "Địa chỉ Email",
     "LOGIN_PLACEHOLDER_PASSWORD": "Mật khẩu",
@@ -679,6 +681,9 @@
     "MARKET_LEAST_USED": "Ít được sử dụng nhất", 
     "MARKET_MAX_PRICE": "Giá tối đa",
     "MARKET_CLEAR_FILTERS": "Xóa bộ lọc",
+
+    "MARKET_CARD_PUBLISHER": "Nhà xuất bản",
+    "MARKET_CARD_PRICE": "Miễn phí",
 
     "DIALOG_PROCESSOR_BASE_PACKAGE_MANAGER": "Trình quản lý gói",
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Xem các gói cho:",

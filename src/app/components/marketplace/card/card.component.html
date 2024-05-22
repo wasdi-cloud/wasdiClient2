@@ -1,6 +1,6 @@
 <div class="wasdi-card" (click)="openProcessorDetails(m_oProcessor.processorName)">
     <div class="card-price" [class]="m_oProcessor.price === 0 ? 'price-free': 'price-paid'">
-        {{m_oProcessor.price === 0 ? 'Free' : "€" +
+        {{m_oProcessor.price === 0 ? ("MARKET_CARD_PRICE" |translate) : "€" +
         m_oProcessor.price}}
     </div>
     <div class="card-img" style="background-image: url({{m_oProcessor.imgLink}})">
@@ -33,5 +33,6 @@
     <div class="app-title">{{m_oProcessor.friendlyName}}</div>
     <div class="app-description">{{m_oProcessor.processorDescription ? m_oProcessor.processorDescription : ''}}</div>
     <div class="card-divider"></div>
-    <div class="app-publisher">Published by: <span class="publisher-name">{{m_oProcessor.publisher}}</span></div>
+    <div class="app-publisher">{{ "MARKET_CARD_PUBLISHER" | translate}}: <span
+            class="publisher-name">{{m_oProcessor.publisher}}</span></div>
 </div>

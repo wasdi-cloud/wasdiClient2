@@ -5,13 +5,13 @@
         <div class="app-cards-container w-100 ">
             <!-- Sorting Container -->
             <div class="d-flex flex-row pb-2 gap-2 justify-content-end align-items-center">
-                <p class="font-bold m-0 p-0">Sort by:</p>
+                <p class="font-bold m-0 p-0">{{"SORT_BY" | translate}}:</p>
                 <div class="category-tag flex-row align-items-center gap-1" (click)="setSorting('name')"
                     [class.active]="m_oAppFilter.orderBy === 'name'">
                     <span class="material-symbols-outlined">
                         sort_by_alpha
                     </span>
-                    <p>Name</p>
+                    <p>{{"MARKET_NAME" | translate}}</p>
                     <span *ngIf="m_oAppFilter.orderBy === 'name'" class="material-symbols-outlined">
                         {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
                     </span>
@@ -21,7 +21,7 @@
                     <span class="material-symbols-outlined">
                         sort_by_alpha
                     </span>
-                    <p>Date</p>
+                    <p>{{ "MARKET_DATE" | translate}}</p>
                     <span *ngIf="m_oAppFilter.orderBy === 'date'" class="material-symbols-outlined">
                         {{m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
                     </span>
@@ -31,7 +31,7 @@
                     <span class="material-symbols-outlined">
                         sort_by_alpha
                     </span>
-                    <p>Price</p>
+                    <p>{{ "MARKET_PRICE" | translate}}</p>
 
                     <span *ngIf="m_oAppFilter.orderBy === 'price'" class="material-symbols-outlined">
                         {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}

@@ -1,7 +1,9 @@
 {
     "BTN_SEARCH": "Search",
     "BTN_IMPORT": "Import",
+    "SORT_BY": "Sort by",
     "BTN_CREATE_FIRST_WORKSPACE": "Create first workspace",
+
     
     "LOGIN_PLACEHOLDER_EMAIL": "Email Address",
     "LOGIN_PLACEHOLDER_PASSWORD": "Password",
@@ -816,6 +818,9 @@
     "MARKET_LEAST_USED": "Least Used", 
     "MARKET_MAX_PRICE": "Max. Price",
     "MARKET_CLEAR_FILTERS": "Clear filters",
+
+    "MARKET_CARD_PUBLISHER": "Publisher",
+    "MARKET_CARD_PRICE": "Free",
 
     "DIALOG_PROCESSOR_BASE_PACKAGE_MANAGER": "Package Manager",
     "DIALOG_PACKAGE_MANAGER_VIEWING": "Viewing Packages For:",

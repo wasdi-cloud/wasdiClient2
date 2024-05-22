@@ -1,6 +1,7 @@
 {
     "BTN_SEARCH":"Rechercher",
     "BTN_IMPORT":"Importer",
+	"SORT_BY": "Trier par",
     "BTN_CREATE_FIRST_WORKSPACE":"Créer le premier espace de travail",
     "LOGIN_PLACEHOLDER_EMAIL":"Adresse e-mail",
     "LOGIN_PLACEHOLDER_PASSWORD":"Mot de passe",
@@ -685,6 +686,9 @@
     "MARKET_MAX_PRICE": "Prix maximum",
     "MARKET_CLEAR_FILTERS": "Effacer les filtres",
 	
+	"MARKET_CARD_PUBLISHER": "Éditeur",
+    "MARKET_CARD_PRICE": "Gratuit",
+
 	"DIALOG_PROCESSOR_BASE_PACKAGE_MANAGER": "Directeur chargé d'emballage",
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Affichage des forfaits pour :",
 	"DIALOG_PACKAGE_MANAGER_HEADER": "Directeur chargé d'emballage", 

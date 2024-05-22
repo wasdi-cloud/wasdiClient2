@@ -1,6 +1,7 @@
 {
     "BTN_SEARCH" : "Căutare",
     "BTN_IMPORT" : "Importare",
+	"SORT_BY": "Ordonați după",
     "BTN_CREATE_FIRST_WORKSPACE" : "Creați primul spaţiu de lucru",
 
     "LOGIN_PLACEHOLDER_EMAIL":"Adresă de e-mail",
@@ -729,6 +730,9 @@
     "MARKET_LEAST_USED": "Cel mai puțin folosit", 
     "MARKET_MAX_PRICE": "Preț maxim",
     "MARKET_CLEAR_FILTERS": "Ștergeți filtrele",
+
+	"MARKET_CARD_PUBLISHER": "Editor",
+    "MARKET_CARD_PRICE": "Gratuit",
 
 	"DIALOG_PROCESSOR_BASE_PACKAGE_MANAGER": "Manager de pachete",
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Vizualizarea pachetelor pentru:",

@@ -1,6 +1,8 @@
 {
     "BTN_SEARCH" : "Buscar",
     "BTN_IMPORT" : "Importar",
+	"SORT_BY": "Ordenar por",
+
     "BTN_CREATE_FIRST_WORKSPACE" : "Crear primer Espacio de trabajo",
 
     "LOGIN_PLACEHOLDER_EMAIL":"Email",
@@ -690,6 +692,9 @@
     "MARKET_LEAST_USED": "Menos usado", 
     "MARKET_MAX_PRICE": "Precio máx.",
     "MARKET_CLEAR_FILTERS": "Borrar filtros",
+
+	"MARKET_CARD_PUBLISHER": "Editor",
+	"MARKET_CARD_PRICE": "Gratis",
 
 	"READ_ONLY" : "Read Only"
 }
