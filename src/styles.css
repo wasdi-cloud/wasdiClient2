@@ -469,15 +469,25 @@ a.leaflet-control-button,
   color: #FFFFFF !important;
 }
 
-.leaflet-retina .leaflet-control-layers-toggle {
+.leaflet-control-layers-toggle,
+.leaflet-touch .leaflet-control-layers-toggle {
   background-image: url('src/assets/icons/layers-map-icon.svg') !important;
+}
+
+.leaflet-retina .leaflet-control-layers-toggle {
+  /* background-image: url('src/assets/icons/layers-map-icon.svg') !important; */
   background-size: 22px 22px !important;
 }
 
-.leaflet-retina .leaflet-draw-toolbar a {
+.leaflet-draw-draw-rectangle {
   background-image: url('src/assets/icons/draw-map-icon.svg') !important;
   background-size: 22px 22px !important;
 }
+
+/* .leaflet-retina.leaflet-draw-toolbar a {
+  background-image: url('src/assets/icons/draw-map-icon.svg') !important;
+  background-size: 22px 22px !important;
+} */
 
 .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-rectangle {
   background-position: center !important;
@@ -491,7 +501,6 @@ a.leaflet-control-button,
 .leaflet-control-geocoder-alternatives>li>a {
   background-color: transparent !important;
   width: 250px !important;
-  min-height: 60px !important;
   line-height: 18px !important;
 }
 
