@@ -94,7 +94,7 @@ export class WapDisplayComponent implements OnInit {
           }
         } else {
           let oValue: any = oElement.getValue();
-          if (oValue === null || oValue === undefined || oValue=="")  {
+          if (oValue === null || oValue === undefined || oValue === "")  {
             let sMessage = oElement.label + ": Missing required field";
             asMessages.push(sMessage);
 
