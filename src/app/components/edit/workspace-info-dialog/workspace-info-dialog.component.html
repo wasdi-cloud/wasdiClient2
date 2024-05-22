@@ -7,7 +7,8 @@
         <div class="info-container d-flex flex-column gap-4">
             <div>
                 <div class="font-bold">Workspace name</div>
-                <div>{{m_oWorkspace.name}}</div>
+                <app-input-field [m_sInputValue]="m_oWorkspace.name" [m_bIsReadonly]="m_oWorkspace.readOnly === true"
+                    (m_oInputChange)="m_sInputWorkspaceName = $event.event.target.value"></app-input-field>
             </div>
             <div>
                 <div class="font-bold">Workspace node</div>
@@ -46,8 +47,14 @@
         </div>
 
         <div class="info-container">
+            <div class="font-bold pb-2">Shared with</div>
+            <div class="image-wrapper d-flex flex-column align-items-center gap-2"
+                *ngIf="m_oWorkspace.sharedUsers.length === 0">
+                <img src="/assets/images/collaborators.png" alt="">
+                There's no one here, but you can add collaborators!
+                <app-button [m_sLabel]="'Add Collaborators'" (click)="openShareDialog()"></app-button>
+            </div>
             <div *ngIf="m_oWorkspace.sharedUsers.length > 0">
-                <div class="font-bold pb-2">Shared with</div>
                 <ul>
                     <li *ngFor="let oSharedUser of m_oWorkspace.sharedUsers">
                         {{oSharedUser}}
@@ -58,7 +65,7 @@
     </div>
     <div class="dialog-footer d-flex flex-row gap-2 justify-content-end">
         <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true" (click)="onDismiss()"></app-button>
-        <app-button [m_sLabel]="'Update Node'" (click)="saveNodeCode()"></app-button>
+        <app-button [m_sLabel]="'Save Changes'" (click)="saveChanges()"></app-button>
     </div>
 </div>
 <!-- <h1 mat-dialog-title>Workspace Details - {{m_oWorkspace.name}}</h1>

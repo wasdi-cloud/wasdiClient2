@@ -2,11 +2,19 @@ div.apps-dialog {
     height: 100% !important;
 }
 
-div.info-container, div.date-container {
+div.info-container,
+div.date-container {
     width: 50%;
 }
 
+.image-wrapper {
+    height: 100%;
+}
 
+img {
+    height: 212px;
+    filter: drop-shadow(0px 20px 75px #43526B);
+}
 
 input.form-control {
     border-right: none;

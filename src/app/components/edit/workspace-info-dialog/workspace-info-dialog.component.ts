@@ -3,12 +3,13 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 import { NodeService } from 'src/app/services/api/node.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 
 @Component({
   selector: 'app-workspace-info-dialog',
@@ -22,12 +23,15 @@ export class WorkspaceInfoDialogComponent implements OnInit {
   m_asNodeCodes: string[];
   m_asCloudProvider: string[];
   m_sCurrentNode: string;
-  m_bShowCopied
+  m_bShowCopied: boolean = false;
+
+  m_sInputWorkspaceName: string = ""
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oWorkspace: Workspace,
     private m_oClipboard: Clipboard,
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<WorkspaceInfoDialogComponent>,
     private m_oNodeService: NodeService,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -36,6 +40,7 @@ export class WorkspaceInfoDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.m_oWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    this.m_sWorkspaceId = this.m_oWorkspace.workspaceId;
     this.getNodesList()
   }
 
@@ -118,6 +123,48 @@ export class WorkspaceInfoDialogComponent implements OnInit {
     setTimeout(() => {
       this.m_bShowCopied = false
     }, 1000)
+
+  }
+
+  openShareDialog() {
+    let oDialogData = new ShareDialogModel("workspace", this.m_oConstantsService.getActiveWorkspace())
+    let oDialog = this.m_oDialog.open(ShareDialogComponent, {
+      height: '70vh',
+      width: '70vw',
+      data: oDialogData
+    })
+
+    oDialog.afterClosed().subscribe(oResult => {
+      this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.m_sWorkspaceId).subscribe({
+        next: oResponse => {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+            this.m_oNotificationDisplayService.openAlertDialog("Error in refreshing Workspace Information")
+          } else {
+            this.m_oWorkspace = oResponse;
+          }
+        }
+      })
+    })
+  }
+
+  saveNameChange() {
+    console.log(this.m_sInputWorkspaceName)
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    oWorkspace.name = this.m_sInputWorkspaceName
+    this.m_oWorkspaceService.updateWorkspace(oWorkspace).subscribe({
+      next: oResponse => {
+        this.m_oNotificationDisplayService.openSnackBar("Workspace Name Updated", "Close");
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Error while updating worksapce name");
+      }
+    })
+
+  }
+
+  saveChanges() {
+    this.saveNodeCode();
+    this.saveNameChange();
 
   }
 
