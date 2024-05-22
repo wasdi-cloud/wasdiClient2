@@ -480,7 +480,6 @@ a.leaflet-control-button,
 }
 
 .leaflet-draw-draw-rectangle {
-  background-image: url('src/assets/icons/draw-map-icon.svg') !important;
   background-size: 22px 22px !important;
 }
 
@@ -490,6 +489,7 @@ a.leaflet-control-button,
 } */
 
 .leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-rectangle {
+  background-image: url('src/assets/icons/draw-map-icon.svg') !important;
   background-position: center !important;
 }
 
