@@ -16,7 +16,6 @@ import { AdminComponent } from './components/admin/admin.component';
 import { EditComponent } from './components/edit/edit.component';
 import { HeaderComponent } from './components/header/header.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
-import { MarketplaceAppCardComponent } from './components/marketplace/marketplace-app-card/marketplace-app-card.component';
 import { SearchOrbit } from './components/plan/search-orbit.component';
 import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
@@ -180,7 +179,7 @@ import { ManageSubscriptionsComponent } from './components/admin/manage-subscrip
 import { ManageSharingComponent } from './components/admin/manage-sharing/manage-sharing.component';
 import { FeedbackDialogComponent } from './components/header/feedback-dialog/feedback-dialog.component';
 import { ConvertBytesToHigherUnitPipe } from './shared/pipes/convert-bytes-to-higher-unit.pipe';
-import {CdkContextMenuTrigger, CdkMenuItem, CdkMenu} from '@angular/cdk/menu';
+import { CdkContextMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -196,7 +195,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SearchComponent,
     WorkspacesComponent,
     LoginComponent,
-    MarketplaceAppCardComponent,
     CourseDialogComponent,
     ConfirmationDialogComponent,
     ErrorDialogComponent,
