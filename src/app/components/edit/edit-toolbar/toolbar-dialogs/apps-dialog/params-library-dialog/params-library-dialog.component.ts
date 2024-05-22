@@ -1,18 +1,16 @@
-import { Component, Inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 //Angular Materials Imports:
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 //Icon Imports:
-import { faBook, faPlus, faShareNodes, faUpload, faX } from '@fortawesome/free-solid-svg-icons';
+import { User } from 'src/app/shared/models/user.model';
 
 //Service Imports:
 import { ConstantsService } from 'src/app/services/constants.service';
+import { JsonEditorService } from 'src/app/services/json-editor.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-params-template.service';
-
-//Component Imports: 
-import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -21,24 +19,22 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   templateUrl: './params-library-dialog.component.html',
   styleUrls: ['./params-library-dialog.component.css']
 })
-export class ParamsLibraryDialogComponent {
-  //Font Awesome Icons: 
-  faBook = faBook;
-  faShare = faShareNodes;
-  faUpload = faUpload;
-  faX = faX;
-  faPlus = faPlus;
+export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
+  @ViewChild('editor') m_oEditorRef!: ElementRef;
+  @ViewChild('creator') m_oCreatorRef!: ElementRef;
 
   /**
   * Processor View Model Template: this is the processor that we are using to add/edit/remove Parameter Templates
   */
-  m_oSelectedProcessor: any;
+  @Input() m_oSelectedProcessor: any = null;
+
+  @Output() m_oSelectedTemplateEmit: EventEmitter<any> = new EventEmitter<any>();
 
   /**
   * Active User Id
-  */  
+  */
   m_sActiveUserId: string = "";
-  
+
   /**
    * Text filter the filter templates in the list
    */
@@ -75,37 +71,34 @@ export class ParamsLibraryDialogComponent {
     userId: string;
   };
 
-  m_sParametersString: string;
+  m_sParametersString: string = "{}";
+
+  m_oUser: User = this.m_oConstantsService.getUser();
+
+  m_bShowJsonForm: boolean = true;
+
+  m_bShowCreateForm: boolean = false;
+
+  m_bShowShareForm: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<ParamsLibraryDialogComponent>,
+    private m_oJsonEditorService: JsonEditorService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorParametersTemplateService: ProcessorParamsTemplateService,
-  ) {
+  ) { }
 
-    // Save the reference to the processor
-    this.m_oSelectedProcessor = data;
-
-    // And the active user id
-    this.m_sActiveUserId = this.m_oConstantsService.getUserId();
-
-    // Read the list of processor templates
+  ngOnChanges(changes: SimpleChanges): void {
     this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
-
-    // Initialize the description
-    if (this.m_oSelectedTemplate.description === undefined) {
-      this.m_oSelectedTemplate.description = "";
-    }
-
-    // Initialize the parameter string
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_sParametersString)) {
-      this.m_sParametersString = "{}";
-    }
   }
 
+  ngAfterViewInit(): void {
+    this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+    this.m_oJsonEditorService.initEditor();
+  }
   /**
      * Get the list of processor parameters templates for the current user and the current processor.
      * @param sProcessorId
@@ -124,13 +117,14 @@ export class ParamsLibraryDialogComponent {
     // Load the list from API
     this.m_oProcessorParametersTemplateService.getProcessorParametersTemplatesListByProcessor(sProcessorId).subscribe(oResponse => {
       // Clean load flag
-      this.m_bIsLoading=false;
+      this.m_bIsLoading = false;
       if (oResponse) {
 
         // Clean all the selected flag
         this.cleanTemplateListSelectedStatus(oResponse);
         // Update the list
         this.m_aoParametersTemplateList = oResponse;
+        this.viewProcessorParams(this.m_aoParametersTemplateList[0]);
       }
     })
     return true;
@@ -141,7 +135,7 @@ export class ParamsLibraryDialogComponent {
    * @param aoList List of Paramenter Template Light View Models
    */
   cleanTemplateListSelectedStatus(aoList) {
-    for (let iTemplates=0; iTemplates<aoList.length; iTemplates++){
+    for (let iTemplates = 0; iTemplates < aoList.length; iTemplates++) {
       aoList[iTemplates].selected = false;
     }
   }
@@ -159,7 +153,7 @@ export class ParamsLibraryDialogComponent {
     this.m_oProcessorParametersTemplateService.getProcessorParametersTemplate(sTemplateId).subscribe(oResponse => {
       if (oResponse) {
         let oTemplate = oResponse;
-        this.m_oDialogRef.close(oTemplate)
+        this.m_oSelectedTemplateEmit.emit(oTemplate);
       }
     })
     return true;
@@ -170,8 +164,8 @@ export class ParamsLibraryDialogComponent {
    * @param oTemplate 
    */
   viewProcessorParams(oTemplate: any) {
-
     if (oTemplate) {
+      this.m_bShowCreateForm = false;
       // We clean the selected flag
       this.cleanTemplateListSelectedStatus(this.m_aoParametersTemplateList);
       // And set this as selected
@@ -185,8 +179,14 @@ export class ParamsLibraryDialogComponent {
           // Save the JSON Parameters, decoded
           this.m_oSelectedTemplate.jsonParameters = decodeURIComponent(this.m_oSelectedTemplate.jsonParameters)
           this.m_sParametersString = this.m_oSelectedTemplate.jsonParameters;
+          this.m_oJsonEditorService.setText(this.m_sParametersString);
           // View is not edit!
           this.m_bEditMode = false;
+          if (this.m_oSelectedTemplate.readOnly === true) {
+            this.m_oJsonEditorService.setReadOnly(true);
+          } else {
+            this.m_oJsonEditorService.setReadOnly(false);
+          }
         }
       });
     }
@@ -209,7 +209,7 @@ export class ParamsLibraryDialogComponent {
       this.m_sParametersString = sPrettyPrint;
       // And go in edit mode
       this.m_bEditMode = true;
-    } 
+    }
     catch (error) {
       this.m_oNotificationDisplayService.openSnackBar("There may be some problem in the JSON of this template", "Close", "right", "bottom");
     }
@@ -265,7 +265,7 @@ export class ParamsLibraryDialogComponent {
       // Re-read and try the JSON
       let sJSONPayload = this.m_sParametersString;
       JSON.parse(sJSONPayload);
-    } 
+    }
     catch (error) {
       this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload", "Close", "right", "bottom");
       return false;
@@ -283,7 +283,7 @@ export class ParamsLibraryDialogComponent {
       this.m_oProcessorParametersTemplateService.updateProcessorParameterTemplate(this.m_oSelectedTemplate).subscribe(oResponse => {
         this.getProcessorParametersTemplateList(this.m_oSelectedTemplate.processorId);
       })
-    } 
+    }
     else {
       // This is a new one: set processor and user
       this.m_oSelectedTemplate.processorId = this.m_oSelectedProcessor.processorId;
@@ -298,26 +298,13 @@ export class ParamsLibraryDialogComponent {
         },
         error: oError => {
           this.m_oSelectedTemplate = null;
-          this.m_bIsLoading = false;          
+          this.m_bIsLoading = false;
           this.m_oNotificationDisplayService.openAlertDialog("ERROR IN SAVING YOUR PARAMETERS TEMPLATE");
         }
       })
     }
-    
-    return true;
-  }
 
-  /**
-   * Open the share dialog
-   * @param oTemplate 
-   */
-  openShareDialog(oTemplate: any) {
-    let dialogData = new ShareDialogModel("PROCESSORPARAMETERSTEMPLATE", oTemplate);
-    
-    let dialogRef = this.m_oDialog.open(ShareDialogComponent, {
-      width: '50vw',
-      data: dialogData
-    })
+    return true;
   }
 
   /**
@@ -326,16 +313,21 @@ export class ParamsLibraryDialogComponent {
   formatJSON() {
     try {
       this.m_sParametersString = JSON.stringify(JSON.parse(this.m_sParametersString.replaceAll("'", '"')), null, 2);
-    } 
+    }
     catch (error) {
       this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload", "Close", "right", "bottom");
-    }    
+    }
   }
 
   /**
    * Create a new processor Param
    */
   addProcessorParams() {
+    // Init the form in 'create mode'
+    this.m_bShowCreateForm = true;
+    //Open json editor for editing
+    this.m_oJsonEditorService.setReadOnly(false);
+
     //Prepare inputs for new information: 
     this.m_oSelectedTemplate = {
       creationDate: "",
@@ -348,10 +340,42 @@ export class ParamsLibraryDialogComponent {
       userId: ""
     };
     this.m_sParametersString = "{}";
+    this.m_oJsonEditorService.setText(this.m_sParametersString);
     this.m_bEditMode = true;
   }
 
+  isOwner(oParameter): boolean {
+    if (oParameter.userId === this.m_oUser.userId) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  getInputValues(sLabel: string, oEvent) {
+    switch (sLabel) {
+      case 'name':
+        this.m_oSelectedTemplate.name = oEvent.event.target.value;
+        break;
+      case 'description':
+        this.m_oSelectedTemplate.description = oEvent.target.value;
+        break;
+      case 'search':
+        this.m_sSearchString = oEvent.event.target.value;
+        break;
+    }
+  }
+
+  getJSONInput(oEvent) {
+    this.m_sParametersString = this.m_oJsonEditorService.getValue();
+  }
+
+  showShareForm() {
+    this.m_bShowShareForm = true;
+    this.m_bShowJsonForm = false;
+  }
+
   onDismiss() {
-    this.m_oDialogRef.close();
+    this.m_oSelectedTemplateEmit.emit(null);
   }
 }

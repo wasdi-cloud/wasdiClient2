@@ -86,6 +86,7 @@ export class JsonEditorService {
 
   setReadOnly(bIsReadOnly: boolean) {
     this.m_bReadOnly = bIsReadOnly;
+    this.m_oEditor.setReadOnly(this.m_bReadOnly);
   }
 
   insertText(sTextToInsert) {

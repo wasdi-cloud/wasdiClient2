@@ -64,6 +64,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   m_bShowHelpMessage: boolean = false;
   m_sHelpMsg: string = '';
 
+  m_bShowParamsLibrary: boolean = false;
+
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
@@ -348,7 +350,10 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   handleToolbarClick(oEvent, oProcessor) {
     switch (oEvent) {
       case 'params':
-        this.openParametersDialog(oProcessor);
+        this.selectProcessor(oProcessor);
+        this.showParametersLibrary(true);
+
+        // this.openParametersDialog(oProcessor);
         break;
       case 'download':
         this.downloadProcessor(oProcessor);
@@ -368,12 +373,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   getJSONInput(oEvent) {
     this.m_sMyJsonString = this.m_oJsonEditorService.getValue();
   }
-  /**
-   * Close the Apps Dialog
-   */
-  onDismiss() {
-    this.m_oDialogRef.close();
-  }
+
 
   rabbitMessageHook(oRabbitMessage: any, oController: any) {
     oController.getProcessorsList();
@@ -381,5 +381,30 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   showHelpMessage(bShowMessage: boolean) {
     this.m_bShowHelpMessage = bShowMessage;
+  }
+
+  showParametersLibrary(bShowLibrary: boolean) {
+    this.m_bShowParamsLibrary = bShowLibrary;
+  }
+
+  getParamsTemplate(oEvent) {
+    this.m_bShowParamsLibrary = false;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+      this.m_sMyJsonString = decodeURIComponent(oEvent.jsonParameters)
+    }
+
+    //Re-init the JSON editor with time to re-set the DOM
+    setTimeout(() => {
+      this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+      this.m_oJsonEditorService.initEditor()
+      this.m_oJsonEditorService.setText(this.m_sMyJsonString);
+    }, 500)
+  }
+
+  /**
+   * Close the Apps Dialog
+   */
+  onDismiss() {
+    this.m_oDialogRef.close();
   }
 }

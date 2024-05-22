@@ -8,12 +8,20 @@ label {
     font-weight: 400;
 }
 
+label.readonly {
+    font-weight: 700;
+}
+
 .has-validation {
     /* height: 100%; */
 }
 
 .form-control {
-    height:75% !important;
+    height: 75% !important;
+}
+
+.form-label {
+    margin-bottom: 0 !important;
 }
 
 .list-item-container {
