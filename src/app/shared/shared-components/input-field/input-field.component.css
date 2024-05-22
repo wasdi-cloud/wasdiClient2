@@ -45,7 +45,7 @@ div.icon-left>div.input-group-prepend>span.input-group-text {
 }
 
 div.input-group-append {
-    border-left: none !important; 
+    border-left: none !important;
 }
 
 div.input-group-append>span.clear-icon {
@@ -82,6 +82,7 @@ div.input-group.readonly>div.input-group-append>span.input-group-text {
     border: none;
     color: #000000;
     padding: 0;
+    padding-left: 12px;
 }
 
 div.input-group.readonly>div.input-group-append {
@@ -92,6 +93,6 @@ div.input-group.readonly>input:focus {
     outline: none;
 }
 
-input:focus > .input-group-append {
+input:focus>.input-group-append {
     border-color: #86b7fe !important;
 }

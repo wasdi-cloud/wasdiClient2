@@ -1,0 +1,21 @@
+.hidden {
+    display: none !important;
+}
+
+.json-container {
+    position:relative; 
+
+}
+.help-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #FFFFFF;
+    width: 100%;
+    z-index: 999;
+}
+
+.msg-container {
+    overflow: scroll;
+}

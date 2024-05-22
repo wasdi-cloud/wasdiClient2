@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { trigger, transition, animate, style } from '@angular/animations'
 
 //Angular Materials Modules: 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -18,14 +19,28 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { Application } from 'src/app/components/app-ui/app-ui.component';
+import { JsonEditorService } from 'src/app/services/json-editor.service';
 
 
 @Component({
   selector: 'app-apps-dialog',
   templateUrl: './apps-dialog.component.html',
-  styleUrls: ['./apps-dialog.component.css']
+  styleUrls: ['./apps-dialog.component.css'],
+  animations: [
+    trigger('slideInUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)' }),
+        animate('500ms ease-in', style({ transform: 'translateY(0%)' }))
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({ transform: 'translateY(100%)' }))
+      ])
+    ])
+  ]
 })
-export class AppsDialogComponent implements OnInit, OnDestroy {
+export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('editor') m_oEditorRef!: ElementRef;
+
   m_sActiveUserId: string = "";
   m_aoWorkspaceList: any[] = [];
   m_aWorkspacesName: any[] = [];
@@ -46,11 +61,16 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     this.rabbitMessageHook
   )
 
+  m_bShowHelpMessage: boolean = false;
+  m_sHelpMsg: string = '';
+
+  m_bShowParamsLibrary: boolean = false;
 
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
+    private m_oJsonEditorService: JsonEditorService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
     private m_oRabbitStompService: RabbitStompService,
@@ -65,6 +85,12 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
+  }
+
+  ngAfterViewInit(): void {
+    this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+    this.m_oJsonEditorService.initEditor()
+    this.m_oJsonEditorService.setText(this.m_sMyJsonString);
   }
 
   /**
@@ -114,10 +140,14 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    */
   selectProcessor(oProcessor) {
     this.m_oSelectedProcessor = oProcessor;
-
+    this.m_oProcessorService.getHelpFromProcessor(oProcessor.processorName).subscribe({
+      next: oResponse => {
+        this.m_sHelpMsg = oResponse.stringValue;
+      }
+    })
     if (oProcessor.paramsSample) {
       this.m_sMyJsonString = decodeURIComponent(oProcessor.paramsSample);
-
+      this.m_oJsonEditorService.setText(this.m_sMyJsonString);
       try {
         let oParsed = JSON.parse(this.m_sMyJsonString);
 
@@ -158,7 +188,6 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @returns 
    */
   downloadProcessor(oProcessor: any) {
-    console.log(oProcessor)
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oProcessor)) {
       // return false;
     }
@@ -321,7 +350,10 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
   handleToolbarClick(oEvent, oProcessor) {
     switch (oEvent) {
       case 'params':
-        this.openParametersDialog(oProcessor);
+        this.selectProcessor(oProcessor);
+        this.showParametersLibrary(true);
+
+        // this.openParametersDialog(oProcessor);
         break;
       case 'download':
         this.downloadProcessor(oProcessor);
@@ -339,17 +371,40 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
   }
 
   getJSONInput(oEvent) {
-
-    this.m_sMyJsonString = oEvent.target.value;
+    this.m_sMyJsonString = this.m_oJsonEditorService.getValue();
   }
+
+
+  rabbitMessageHook(oRabbitMessage: any, oController: any) {
+    oController.getProcessorsList();
+  }
+
+  showHelpMessage(bShowMessage: boolean) {
+    this.m_bShowHelpMessage = bShowMessage;
+  }
+
+  showParametersLibrary(bShowLibrary: boolean) {
+    this.m_bShowParamsLibrary = bShowLibrary;
+  }
+
+  getParamsTemplate(oEvent) {
+    this.m_bShowParamsLibrary = false;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+      this.m_sMyJsonString = decodeURIComponent(oEvent.jsonParameters)
+    }
+
+    //Re-init the JSON editor with time to re-set the DOM
+    setTimeout(() => {
+      this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+      this.m_oJsonEditorService.initEditor()
+      this.m_oJsonEditorService.setText(this.m_sMyJsonString);
+    }, 500)
+  }
+
   /**
    * Close the Apps Dialog
    */
   onDismiss() {
     this.m_oDialogRef.close();
-  }
-
-  rabbitMessageHook(oRabbitMessage: any, oController: any) {
-    oController.getProcessorsList();
   }
 }
