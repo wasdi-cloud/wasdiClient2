@@ -284,9 +284,9 @@ export class MapService {
       layers: [this.m_oOSMBasic],
       keyboard: false
     });
-    
+
     this.initGeoSearchPluginForOpenStreetMap(oMap);
-    
+
     this.addMousePositionAndScale(oMap);
     //layers control
     var oLayersControl = L.control.layers(
@@ -299,7 +299,7 @@ export class MapService {
       }, null,
       { position: 'bottomright' }
     );
-    
+
     oLayersControl.addTo(oMap);
     L.control.zoom({ position: 'bottomright' }).addTo(oMap);
 
@@ -857,7 +857,10 @@ export class MapService {
         L.DomEvent.on(oButton, 'click', function () {
 
           // We open the Manual Boundig Box Dialog
-          let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent)
+          let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent, {
+            height: '420px',
+            width: '600px'
+          })
 
           // Once is closed...
           oDialog.afterClosed().subscribe(oResult => {

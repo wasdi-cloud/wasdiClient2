@@ -1,5 +1,6 @@
 {
     "BTN_SEARCH": "Search",
+    "BTN_CANCEL": "Cancel",
     "BTN_IMPORT": "Import",
     "SORT_BY": "Sort by",
     "BTN_CREATE_FIRST_WORKSPACE": "Create first workspace",
@@ -340,8 +341,8 @@
     "DIALOG_FTP_REMOTE_PATH": "Remote Path",
     "DIALOG_FTP_FILE_TO_UPLOAD": "File to upload:",
     
-    "DIALOG_MANUAL_INSERT_BBOX_TITLE": "Manual Bounding Box Insert",
-    "DIALOG_MANUAL_INSERT_BBOX_DRAW": "Draw",
+    "DIALOG_MANUAL_INSERT_BBOX_TITLE": "Insert Coordinates",
+    "DIALOG_MANUAL_INSERT_BBOX_DRAW": "Draw area",
     "DIALOG_MANUAL_INSERT_BBOX_NORTH": "North",
     "DIALOG_MANUAL_INSERT_BBOX_SOUTH": "South",
     "DIALOG_MANUAL_INSERT_BBOX_EAST": "East",

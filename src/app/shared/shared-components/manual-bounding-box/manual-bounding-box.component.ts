@@ -19,7 +19,6 @@ export class ManualBoundingBoxComponent {
     private m_oDialogRef: MatDialogRef<ManualBoundingBoxComponent>) { }
 
   saveBoundingBox() {
-
       this.m_oDialogRef.close(this.m_oBBox);
     
   }
