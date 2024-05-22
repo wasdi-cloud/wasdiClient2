@@ -13,8 +13,6 @@ div.hero-image {
     width: calc(100% + 2rem);
 }
 
-
-
 nav,
 div.app-ui-container {
     padding: 0px 32px;
@@ -45,4 +43,31 @@ li.breadcrumb-item.active {
 li.breadcrumb-item>a {
     text-decoration: none;
     color: #000000;
+}
+
+.processor-help {
+    max-width: 75%;
+}
+
+div.table-wrapper {
+    height: 100%;
+    overflow: auto;
+    display: inline-block;
+    width: 100%;
+    margin: auto;
+}
+
+table {
+    width: 98%;
+    margin: auto;
+    /* height: 100%; */
+}
+
+.table-heading-container {
+    background-color: #FFFFFF;
+    box-shadow: inset 0px -1px #D1D5DB;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: 700;
 }

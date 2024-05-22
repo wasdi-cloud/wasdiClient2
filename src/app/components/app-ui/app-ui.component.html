@@ -25,38 +25,41 @@
     <div class="app-ui-container d-flex flex-row gap-4">
         <!-- Menu Component -->
         <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)"
-            (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)" (m_oExecutePurchaseEmitter)="getExecutePurchase($event)" [m_bIsPurchased]="m_bIsPurchased"
+            (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)"
+            (m_oExecutePurchaseEmitter)="getExecutePurchase($event)" [m_bIsPurchased]="m_bIsPurchased"
             [m_sActiveTab]="m_sActiveTab" [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
         <!-- WAP Component outlet -->
         <app-wap-display [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " class="flex-fill"
-            *ngFor="let oTab of m_aoTabs"  [wapData]="oTab"
-            [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
+            *ngFor="let oTab of m_aoTabs" [wapData]="oTab" [renderAsStrings]="m_bRenderAsStrings"
+            [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
 
         <!-- PROCESSOR HELP TAB -->
-        <div class="scroll-bar" [innerHTML]="m_sHelpHtml | markdown" [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
+        <div class="processor-help flex-fill scroll-bar" [innerHTML]="m_sHelpHtml | markdown"
+            [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
         </div>
 
         <!-- PROCESSOR HISTORY TABLE TAB -->
-        <div class="history-container table-wrapper-scroll scroll-bar"
+        <div class="history-container flex-fill table-wrapper-scroll scroll-bar"
             [ngClass]="m_sActiveTab === 'history'? '': 'd-none' ">
-            <table class="history-table table">
-                <thead class="bg-primary" style="position: sticky;
-                top: 0;
-                z-index: 1;">
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Workspace</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let historyLog of m_aoProcessorHistory">
-                        <td>{{historyLog.operationDate}}</td>
-                        <td>{{historyLog.status}}</td>
-                        <td>{{historyLog.workspaceName}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+
+                <table class="history-table table">
+                    <thead class="table-heading-container">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Workspace</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let historyLog of m_aoProcessorHistory">
+                            <td>{{historyLog.operationDate}}</td>
+                            <td><span class="category-tag" [ngClass]="getTagColour(historyLog.status)">{{historyLog.status}}</span></td>
+                            <td>{{historyLog.workspaceName}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <!-- PROCESSOR JSON TAB -->
         <div [ngClass]="m_sActiveTab === 'json' ? '' : 'd-none'" style="height:100vh; width: 100vw;">

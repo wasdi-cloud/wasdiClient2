@@ -516,4 +516,19 @@ export class AppUiComponent implements OnInit {
     })
   }
 
+  getTagColour(sTagContent) {
+    let sTagColor = "red"
+    if (sTagContent === 'ERROR') {
+      sTagColor = 'red';
+    } else if (sTagContent === 'STOPPED') {
+      sTagColor = 'yellow';
+      sTagContent = "DIALOG_PROCESSES_LOGS_STOP";
+    } else if (sTagContent === 'DONE') {
+      sTagColor = 'green';
+    } else {
+      sTagContent = 'green';
+    }
+
+    return sTagColor;
+  }
 }
