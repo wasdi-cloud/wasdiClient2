@@ -70,8 +70,7 @@ export class WapSelectAreaComponent implements OnInit {
    * @param m_oMapService 
    * @param m_oTranslateService 
    */
-  constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService, private m_oDialog: MatDialog) 
-  { 
+  constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService, private m_oDialog: MatDialog) {
     //console.log("Creating WAP Map Component with MapId: " + this.m_sMapId)
   }
 
@@ -99,7 +98,7 @@ export class WapSelectAreaComponent implements OnInit {
     let oController = this;
 
     // Create our own Drawn Items Layer
-    this.m_oDrawnItems = new L.FeatureGroup();    
+    this.m_oDrawnItems = new L.FeatureGroup();
 
     // Give time to leaflet and then init
     setTimeout(function () {
@@ -108,7 +107,7 @@ export class WapSelectAreaComponent implements OnInit {
       oController.m_oMap = oMap;
       oMap.addLayer(oController.m_oDrawnItems);
       oController.addManualBbox(oMap);
-      oController.addBoundingBoxDrawerOnMap(oMap);  
+      oController.addBoundingBoxDrawerOnMap(oMap);
     }, 500);
   }
 
@@ -142,7 +141,10 @@ export class WapSelectAreaComponent implements OnInit {
         L.DomEvent.on(oButton, 'click', function () {
 
           // We open the Manual Boundig Box Dialog
-          let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent)
+          let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent, {
+            height: '420px',
+            width: '600px'
+          })
 
           // Once is closed...
           oDialog.afterClosed().subscribe(oResult => {
@@ -153,7 +155,7 @@ export class WapSelectAreaComponent implements OnInit {
               // With all the values for lat and lon
               if (isNaN(oResult.north) || isNaN(oResult.south) || isNaN(oResult.east) || isNaN(oResult.west)) {
                 return;
-              } 
+              }
               else {
                 // Get the actual values
                 let fNorth = parseFloat(oResult.north);
@@ -173,7 +175,7 @@ export class WapSelectAreaComponent implements OnInit {
 
         // This is the "icon" of the button added to Leaflet
         oButton.innerHTML = '<span class="material-symbols-outlined">pin_invoke</span>';
-        
+
         oContainer.title = "Manual Bounding Box";
 
         return oContainer;
@@ -197,23 +199,19 @@ export class WapSelectAreaComponent implements OnInit {
 
     //Emit bounding box to listening componenet:
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oLayer) === false) {
+      this.m_oMapInput.oBoundingBox.northEast = oLayer._bounds._northEast;
+      this.m_oMapInput.oBoundingBox.southWest = oLayer._bounds._southWest;
 
-       this.m_oGeoJSON = oLayer.toGeoJSON();
-       this.m_sPolygon = this.getPolygon();
-
-    //   this.oMapInputChange.emit({
-    //     geoJSON: this.m_oGeoJSON,
-    //     polygon: this.m_sPolygon
-    //   });
-    }    
-  }  
+      this.m_oMapInputChange.emit(this.m_oMapInput);
+    }
+  }
 
   addBoundingBoxDrawerOnMap(oMap) {
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oMap)) {
       return null;
     }
-    
+
     let oDrawControl = new L.Control.Draw();
 
     oDrawControl.setPosition('topright');
@@ -232,14 +230,14 @@ export class WapSelectAreaComponent implements OnInit {
 
     //Without this.m_oWasdiMap.on() the shape isn't saved on map
     let oController = this;
-    
+
     oMap.on(L.Draw.Event.CREATED, function (event) {
       // Clear out old layer: 
       oController.m_oDrawnItems.clearLayers();
       let oLayer = event.layer;
-      
+
       let bIsValid = oController.checkArea(oLayer);
-      
+
       if (!bIsValid) {
         //show error message
         // turn the bounding box red
@@ -260,10 +258,10 @@ export class WapSelectAreaComponent implements OnInit {
     });
 
     return oMap;
-  }  
+  }
 
   onDrawCreated(event) {
-    
+
     //Add layer to map
     this.m_oDrawnItems.addLayer(event.layer)
 
@@ -299,7 +297,7 @@ export class WapSelectAreaComponent implements OnInit {
 
   checkArea(oLayer) {
 
-    let bIsValid=false;
+    let bIsValid = false;
     /**
      The following happens in this.onDrawCreated():  
      */
