@@ -5,6 +5,11 @@
     "SORT_BY": "Sort by",
     "BTN_CREATE_FIRST_WORKSPACE": "Create first workspace",
 
+    "APP_UI_SELECT_WS": "Select workspace", 
+    "APP_UI_SEARCH_WS": "Search Workspaces",
+    "APP_UI_OPEN_WS": "Open Workspace",
+    "APP_UI_AUTO_WS": "Auto Workspace",
+    "APP_UI_PURCHASE": "Buy App",
     
     "LOGIN_PLACEHOLDER_EMAIL": "Email Address",
     "LOGIN_PLACEHOLDER_PASSWORD": "Password",

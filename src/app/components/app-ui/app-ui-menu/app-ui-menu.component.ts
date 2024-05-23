@@ -1,18 +1,23 @@
-import { AfterViewChecked, Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { NewWorkspaceDialogComponent } from '../../workspaces/new-workspace-dialog/new-workspace-dialog.component';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { ConstantsService } from 'src/app/services/constants.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
+
+import { NewWorkspaceDialogComponent } from '../../workspaces/new-workspace-dialog/new-workspace-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { Workspace } from 'src/app/shared/models/workspace.model';
+
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { ProcessorService } from 'src/app/services/api/processor.service';
 
 @Component({
   selector: 'app-app-ui-menu',
   templateUrl: './app-ui-menu.component.html',
   styleUrls: ['./app-ui-menu.component.css']
 })
-export class AppUiMenuComponent implements AfterViewChecked {
-  @Input() m_aoTabs: Array<any> = [];
+export class AppUiMenuComponent {
+  @Input() m_oActiveWorkspace: Workspace = null;
   @Input() m_sActiveTab: string = "";
+  @Input() m_aoTabs: Array<any> = [];
   @Input() m_aoWorkspaces: Array<any> = [];
   @Input() m_bIsPurchased: boolean = true;
   @Output() m_sSelectedTab: EventEmitter<any> = new EventEmitter<any>();
@@ -20,14 +25,13 @@ export class AppUiMenuComponent implements AfterViewChecked {
   @Output() m_oExecuteAppEmitter: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oExecutePurchaseEmitter: EventEmitter<any> = new EventEmitter<any>();
 
+
   constructor(
+    private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oWorkspaceService: WorkspaceService
   ) { }
 
-  ngAfterViewChecked(): void {
-
-  }
   openNewWorkspaceDialog() {
     this.m_oDialog.open(NewWorkspaceDialogComponent).afterClosed().subscribe(oResponse => {
       this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe(oResponse => {
@@ -42,8 +46,9 @@ export class AppUiMenuComponent implements AfterViewChecked {
   }
 
   getSelectedWorkspace(oEvent) {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent.value) === false) {
-      this.m_oSelectedWorkspace.emit(oEvent.value)
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+      this.m_oActiveWorkspace = oEvent;
+      this.m_oSelectedWorkspace.emit(oEvent)
     }
   }
 
@@ -54,7 +59,4 @@ export class AppUiMenuComponent implements AfterViewChecked {
   saveAppPurchase() {
     this.m_oExecutePurchaseEmitter.emit(true);
   }
-
-
-
 }

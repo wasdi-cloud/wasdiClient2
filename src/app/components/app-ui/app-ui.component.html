@@ -27,7 +27,8 @@
         <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)"
             (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)"
             (m_oExecutePurchaseEmitter)="getExecutePurchase($event)" [m_bIsPurchased]="m_bIsPurchased"
-            [m_sActiveTab]="m_sActiveTab" [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
+            [m_oActiveWorkspace]="m_oSelectedWorkspace" [m_sActiveTab]="m_sActiveTab"
+            [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
         <!-- WAP Component outlet -->
         <app-wap-display [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " class="flex-fill"
             *ngFor="let oTab of m_aoTabs" [wapData]="oTab" [renderAsStrings]="m_bRenderAsStrings"
@@ -54,7 +55,8 @@
                     <tbody>
                         <tr *ngFor="let historyLog of m_aoProcessorHistory">
                             <td>{{historyLog.operationDate}}</td>
-                            <td><span class="category-tag" [ngClass]="getTagColour(historyLog.status)">{{historyLog.status}}</span></td>
+                            <td><span class="category-tag"
+                                    [ngClass]="getTagColour(historyLog.status)">{{historyLog.status}}</span></td>
                             <td>{{historyLog.workspaceName}}</td>
                         </tr>
                     </tbody>

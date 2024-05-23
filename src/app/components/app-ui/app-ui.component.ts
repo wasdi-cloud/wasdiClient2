@@ -1,11 +1,3 @@
-import {
-  AUTO_STYLE,
-  animate,
-  state,
-  style,
-  transition,
-  trigger
-} from '@angular/animations';
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 //import API services
@@ -45,14 +37,6 @@ export interface Application {
   selector: 'app-app-ui',
   templateUrl: './app-ui.component.html',
   styleUrls: ['./app-ui.component.css'],
-  animations: [
-    trigger('collapse', [
-      state('false', style({ height: AUTO_STYLE, visibility: AUTO_STYLE })),
-      state('true', style({ height: '0', visibility: 'hidden' })),
-      transition('false => true', animate(500 + 'ms ease-in')),
-      transition('true => false', animate(500 + 'ms ease-out'))
-    ])
-  ],
   host: { "class": "flex-fill" }
 })
 export class AppUiComponent implements OnInit {
@@ -155,7 +139,17 @@ export class AppUiComponent implements OnInit {
    */
   m_bIsPurchased: boolean = true;
 
-  m_oAppPaymentVM: any = {}
+  /**
+   * View Model for the App Payments
+   */
+  m_oAppPaymentVM: any = {};
+
+  /**
+   * Workspace Object to send to child component
+   */
+  m_oActiveWorkspace: Workspace = null;
+
+
 
   ngOnInit(): void {
     // Take our user id
@@ -190,6 +184,7 @@ export class AppUiComponent implements OnInit {
     // Do we have an active workspace?
     // We select it
     if (this.m_oConstantsService.getActiveWorkspace() !== null) {
+      this.m_oSelectedWorkspace = this.m_oConstantsService.getActiveWorkspace();
       this.m_oWorkspaceForm.sExistingWorkspace = this.m_oConstantsService.getActiveWorkspace();
     }
 
@@ -298,7 +293,6 @@ export class AppUiComponent implements OnInit {
    * Run Application in either Selected Workspace or New Workspace
    */
   runApplication() {
-
     this.m_sMessage = "";
     let bCheck: boolean = this.checkParams();
 
@@ -317,22 +311,19 @@ export class AppUiComponent implements OnInit {
     let oController = this;
 
     let sApplicationName: string = this.m_oConstantsService.getSelectedApplication();
-
     // If we are opening an existing workspace:
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace) === false) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace.workspaceId) === false) {
       this.oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
         if (oResponse) {
           this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, oResponse);
         }
       });
-    }
-    else {
+    } else {
       let sWorkspaceName: string;
       let sUserProvidedWorkspaceName: string = this.m_oWorkspaceForm.sNewWorkspaceName;
       if (sUserProvidedWorkspaceName) {
         sWorkspaceName = this.m_oWorkspaceForm.sNewWorkspaceName;
-      }
-      else {
+      } else {
         let oToday = new Date();
         let sToday = oToday.toISOString();
 
