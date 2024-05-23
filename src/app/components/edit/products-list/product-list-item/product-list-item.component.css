@@ -12,9 +12,9 @@ div.product:hover {
     background: var(--neutral5);
 }
 
-div.product:hover>div>p.product-label {
-    width: 300px;
-}
+/* div.product:hover>div>p.product-label {
+    width: 330px;
+} */
 
 .arrow-icon {
     color: var(--neutral50Brand);
@@ -56,9 +56,9 @@ div.product:hover>div>p.product-label {
 }
 
 
-.display-more-icon {
+/* .display-more-icon {
     visibility: hidden;
-}
+} */
 
 div.product:hover>.display-more-icon {
     visibility: visible;

@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProductsListComponent } from '../products-list.component'
 import { StylesDialogComponent } from '../../edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
+import { WorkspacesListDialogComponent } from 'src/app/components/search/workspaces-list-dialog/workspaces-list-dialog.component';
 
 
 
@@ -95,6 +96,21 @@ export class ProductListItemComponent {
     oDialog.afterClosed().subscribe(oResponse => {
       if (oResponse === true) {
         this.m_oProductInfoChange.emit(true);
+      }
+    })
+  }
+
+  /**
+ * Open the send to ftp dialog
+ * @param oNode 
+ */
+  openSendToFTP() {
+    let oDialog = this.m_oDialog.open(WorkspacesListDialogComponent, {
+      height: "65vh",
+      width: '40vw',
+      data: {
+        product: this.m_oProduct,
+        sharing: true
       }
     })
   }

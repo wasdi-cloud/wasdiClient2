@@ -38,15 +38,18 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   m_bIsLoadingWorkspaceList: boolean = false;
 
+  /**
+   * Flag to check if the user is sharing a product (between workspaces) or sending a new product from search
+   */
+  m_bIsSharingProduct: boolean = false;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
     private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<WorkspacesListDialogComponent>,
     private m_oFileBufferService: FileBufferService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService,
-    private m_oWorkflowsService: WorkflowService,
     private m_oWorkspaceService: WorkspaceService
   ) {
 
@@ -63,7 +66,10 @@ export class WorkspacesListDialogComponent implements OnInit {
     if (this.m_oData.products) {
       this.m_aoSelectedProducts = this.m_oData.products;
     }
-    console.log(this.m_aoSelectedProducts)
+
+    if (this.m_oData.sharing) {
+      this.m_bIsSharingProduct = this.m_oData.sharing;
+    }
   }
 
   /********** API CALLS **********/
@@ -128,8 +134,9 @@ export class WorkspacesListDialogComponent implements OnInit {
    * @param oWorkspace 
    */
   selectWorkspace(event: any, oWorkspace: any): void {
+    oWorkspace.selected = !oWorkspace.selected;
     //If workspace is checked, add it to the Selected Workspaces Array
-    if (event.checked === true) {
+    if (oWorkspace.selected === true) {
       this.m_aoSelectedWorkspaces.push(oWorkspace);
     } else {
       //If Workspace is not checked, remove it from the Selected Workspaces Array
@@ -167,12 +174,11 @@ export class WorkspacesListDialogComponent implements OnInit {
     if (this.m_aoSelectedProducts.length === 1 && this.m_oSelectedProduct === null) {
       this.m_oSelectedProduct = this.m_aoSelectedProducts[0];
     }
-
     for (let iWorkspaceIndex = 0; iWorkspaceIndex < iNumberOfWorkspaces; iWorkspaceIndex++) {
       oController.m_oSelectedProduct.isDisabledToDoDownload = true;
       let sUrl: string = this.m_oSelectedProduct.link;
       let oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
         oController.m_oSelectedProduct.isDisabledToDoDownload = false;
       };
 
@@ -228,7 +234,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         sMessage = sResponse;
       });
       oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog( sMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sMessage);
       };
     }
     this.m_oFileBufferService.download(sUrl, sFileName, sWorkspaceId, sBounds, oProvider).subscribe({
@@ -250,18 +256,18 @@ export class WorkspacesListDialogComponent implements OnInit {
     for (var iIndexWorkspace = 0; iIndexWorkspace < iNumberOfWorkspaces; iIndexWorkspace++) {
 
       oProduct.isDisabledToDoDownload = true;
-      var sUrl = oProduct.link;
-      var oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
+      let sUrl = oProduct.link;
+      let oError = function (data, status) {
+        oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
         oProduct.isDisabledToDoDownload = false;
       };
 
-      var sBound = "";
+      let sBound = "";
 
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds) == false) {
         sBound = oProduct.bounds.toString();
       }
-      //                oThat.shareProduct(sUrl,oProduct.title, aoWorkspaces[iIndexWorkspace].workspaceId,sBound,oProduct.provider,null,oError);
+  
       let sOriginWorkspaceId = oController.m_oActiveWorkspace.workspaceId;
       let sDestinationWorkspaceId = aoWorkspaces[iIndexWorkspace].workspaceId;
       let sProductName = oProduct.fileName;
@@ -271,7 +277,7 @@ export class WorkspacesListDialogComponent implements OnInit {
           oController.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom")
         },
         error: oError => {
-          oController.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
+          oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
         }
       });
     }

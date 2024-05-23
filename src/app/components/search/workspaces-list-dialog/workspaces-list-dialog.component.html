@@ -1,61 +1,26 @@
-<div class="dialog d-flex flex-column justify-content-between" style="height: 100%; width: 100%;">
-    <div *ngIf="m_bIsDialog === true"
-        class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between p-2 w-100">
-        <h4 class="dialog-text m-0 p-0">
-            Add to Workspace
-        </h4>
-        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
+<div class="apps-dialog d-flex flex-column justify-content-between h-100" style="height: 100%;">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+        Send to Workspace
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
-    <div class="dialog-content p-2 h-70" *ngIf="m_bIsLoadingWorkspaceList === false"
-        [ngStyle]="{'overflow-y' : m_bIsDialog ? 'scroll' : ''}">
-        <div class="content-header">
-            <div class="d-flex flex-row justify-content-between pb-2">
-                <button class="btn btn-primary">Add Workspace</button>
-                <button class="btn btn-primary">Show Workflows</button>
-            </div>
-        </div>
-        <div class="workspaces-table flex-fill" style="height:80%;"
-            [ngStyle]="{'overflow-y' : !m_bIsDialog ? 'scroll' : ''}">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Workspace Name</th>
-                        <th scope="col">Owner</th>
-                        <th>
-                            <mat-checkbox (change)="selectAllWorkspaces($event)"></mat-checkbox>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let oWorkspace of m_aoWorkspaceList">
-                        <td>{{oWorkspace.workspaceName}}</td>
-                        <td>{{oWorkspace.ownerUserId}}</td>
-                        <td>
-                            <mat-checkbox (change)="selectWorkspace($event, oWorkspace)"
-                                [checked]="oWorkspace.checked === true"></mat-checkbox>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="dialog-content flex-fill d-flex flex-column gap-3">
+        <ul class="flex-fill ">
+            <li class="workspace-item my-1 d-flex flex-row justify-content-between align-items-center"
+                [class.selected]="oWorkspace.selected" *ngFor="let oWorkspace of m_aoWorkspaceList"
+                (click)="selectWorkspace($event, oWorkspace)">
+                <div>
+                    <div class="workspace-name font-bold">{{oWorkspace.workspaceName}}</div>
+                    <div class="workspace-owner">Owner: {{oWorkspace.ownerUserId}}</div>
+                </div>
+                <span class="material-symbols-outlined">
+                    delete
+                </span>
+            </li>
+        </ul>
     </div>
-    <div *ngIf="m_bIsDialog=== true" class="p-1 d-flex flex-row gap-2 border justify-content-end">
-        <button *ngIf="m_aoSelectedWorkspaces.length === 0 || m_aoSelectedWorkspaces.length === 1"
-            class="btn btn-sm btn-success" [disabled]="m_aoSelectedWorkspaces.length === 0"
-            (click)="m_aoSelectedProducts.length === 0 ? addProductToWorkspace() : addMultipleProductsToWorkspace()">Add
-            to Workspace</button>
-        <button *ngIf="m_aoSelectedWorkspaces.length > 1" class="btn btn-sm btn-success"
-            (click)="m_aoSelectedProducts.length === 0 ? addProductToWorkspace() : addMultipleProductsToWorkspace()">Add
-            to Workspaces</button>
-
-        <button *ngIf="m_bIsDialog === true" class="btn btn-sm btn-secondary" (click)="onDismiss()">Close</button>
-    </div>
-
-    <div class="p-1 d-flex flex-row gap-2" *ngIf="m_bIsDialog === false">
-        <button class="btn btn-sm btn-success" (click)="shareProductToWorkspace()">
-            Send to <span
-                *ngIf="m_aoSelectedWorkspaces.length === 0 || m_aoSelectedWorkspaces.length === 1">Workspace</span><span
-                *ngIf="m_aoSelectedWorkspaces.length > 1">Workspaces</span>
-        </button>
+    <div class="dialog-footer d-flex flex-row justify-content-end">
+        <!-- button for sending product(s) to workspace from search -->
+        <app-button *ngIf="!m_bIsSharingProduct" [m_sLabel]="m_aoSelectedWorkspaces.length <= 2 ? 'Send to Workspace' : 'Send to Workspaces'" (click)="addProductToWorkspace()"></app-button>
+        <app-button *ngIf="m_bIsSharingProduct" [m_sLabel]="m_aoSelectedWorkspaces.length <= 2 ? 'Send to Workspace' : 'Send to Workspaces'" (click)="shareProductToWorkspace()"></app-button>
     </div>
 </div>

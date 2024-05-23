@@ -1,5 +1,5 @@
 <div class="product d-flex flex-row align-items-center gap-4" [class.item-hover]="m_bIsHovering"
-    (contextmenu)="$event.preventDefault()" [cdkContextMenuTriggerFor]="context_menu">
+    (mouseenter)="mouseHovering()" (mouseleave)="mouseLeaving()" [cdkContextMenuTriggerFor]="context_menu">
     <div class=" d-flex flex-row align-items-center" *ngIf="m_bIsOpen">
         <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
             arrow_drop_down
@@ -24,11 +24,10 @@
         <p class="product-label">
             {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
     </div>
-    <!-- <span class="hover-menu d-flex flex-row gap-1" *ngIf="m_bIsHovering">
-        <button class="button-icon material-symbols-outlined" (click)="downloadProduct()">download</button>
-        <button class="button-icon material-symbols-outlined" (click)="deleteProduct()">delete</button>
-        <button class="button-icon material-symbols-outlined" (click)="openProductProperties()">more_vert</button>
-    </span> -->
+    <!-- <div class="align-self-end justify-self-end" *ngIf="m_bIsHovering">
+        <button class="material-symbols-outlined display-more-icon button-icon"
+            [cdkMenuTriggerFor]="context_menu">more_vert</button>
+    </div> -->
 </div>
 
 <!-- Opened dropdown component for Bands and Metadata -->
@@ -69,9 +68,10 @@
 
 <ng-template #context_menu>
     <div class="context-menu d-flex flex-column gap-1" cdkMenu>
-        <div class="context-menu-item" (click)="openStylesDialog()">Edit styles</div>
-        <div class="context-menu-item" (click)="openProductProperties()">Product Properties</div>
-        <div class="context-menu-item" (click)="downloadProduct()">Download</div>
-        <div class="context-menu-item" (click)="deleteProduct()">Delete product</div>
+        <div class="context-menu-item" cdkMenuItem (click)="openStylesDialog()">Edit styles</div>
+        <div class="context-menu-item" cdkMenuItem (click)="openProductProperties()">Product Properties</div>
+        <div class="context-menu-item" cdkMenuItem (click)="downloadProduct()">Download</div>
+        <div class="context-menu-item" cdkMenuItem (click)="openSendToFTP()">Send to Workspace</div>
+        <div class="context-menu-item" cdkMenuItem (click)="deleteProduct()">Delete product</div>
     </div>
 </ng-template>
