@@ -124,7 +124,7 @@ import { SubscriptionProjectsDialogComponent } from './dialogs/subscription-proj
 import { EditSubscriptionDialogComponent } from './dialogs/edit-subscription-dialog/edit-subscription-dialog.component';
 import { ProjectInfoDialogComponent } from './dialogs/project-info-dialog/project-info-dialog.component';
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
-import { PackageManagerComponent } from './components/dialogs/package-manager/package-manager.component';
+import { PackageManagerComponent } from './dialogs/package-manager/package-manager.component';
 import { SearchOrbitResourcesComponent } from './components/plan/search-orbit-resources/search-orbit-resources.component';
 import { SearchMapComponent } from './components/search/search-map/search-map.component';
 import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';

@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Component Imports
-import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
+import { PackageManagerComponent } from 'src/app/dialogs/package-manager/package-manager.component';
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
