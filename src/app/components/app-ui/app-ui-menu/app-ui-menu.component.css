@@ -27,7 +27,8 @@ li {
     cursor: pointer;
     display: flex;
     flex-direction: row;
-    height: 48px;
+    min-height: 48px;
+    height: fit-content;
     color: #000000;
     text-decoration: none;
     width: 100%;
@@ -39,7 +40,7 @@ li:hover {
 }
 
 li.active {
-    border-left: 8px solid var(--wasdiGreen);
+    /* border-left: 8px solid var(--wasdiGreen); */
     background: var(--neutral80);
     color: #FFFFFF;
 }
