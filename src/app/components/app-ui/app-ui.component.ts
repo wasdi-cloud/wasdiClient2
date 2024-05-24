@@ -19,6 +19,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import { NewAppDialogComponent } from '../edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 import { WapDisplayComponent } from './wap-display/wap-display.component';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
+import { SaveParamsDialogComponent } from 'src/app/dialogs/save-params-dialog/save-params-dialog.component';
 
 export interface Application {
   buyed: boolean,
@@ -521,5 +522,16 @@ export class AppUiComponent implements OnInit {
     }
 
     return sTagColor;
+  }
+
+  openSaveAsParamTemplate() {
+    this.m_oDialog.open(SaveParamsDialogComponent, {
+      height: '300px',
+      width: '600px',
+      data: {
+        processor: this.m_oProcessorInformation,
+        params: this.m_sJSONParam
+      }
+    })
   }
 }

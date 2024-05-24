@@ -1,0 +1,12 @@
+.dialog {
+    padding: 24px;
+    height: 100%;
+}
+
+.dialog-header {
+    padding-bottom: 0px;
+}
+
+.textarea-container {
+    height: 50%;
+}

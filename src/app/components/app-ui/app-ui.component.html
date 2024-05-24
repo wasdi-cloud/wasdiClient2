@@ -64,8 +64,11 @@
             </div>
         </div>
         <!-- PROCESSOR JSON TAB -->
-        <div [ngClass]="m_sActiveTab === 'json' ? '' : 'd-none'" style="height:100vh; width: 100vw;">
-            <div #editor class="json-editor" style="height: 100%;" (keyup)="getJsonText($event)"></div>
+        <div class="d-flex flex-column justify-content-start align-items-start gap-3"
+            [ngClass]="m_sActiveTab === 'json' ? '' : 'd-none'" style="height:100vh; width: 100vw;">
+            <app-button [m_sLabel]="'Save as Parameters Template'" [m_sIconLeft]="'code'"
+                (click)="openSaveAsParamTemplate()"></app-button>
+            <div #editor class="json-editor" style="height: 80vh; width: 100%;" (keyup)="getJsonText($event)"></div>
         </div>
     </div>
 </main>

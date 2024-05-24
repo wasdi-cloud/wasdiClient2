@@ -1,4 +1,8 @@
 {
+    "KEY_PHRASES" : {
+        "DESCRIPTION": "Description"
+    },
+
     "BTN_SEARCH": "Search",
     "BTN_CANCEL": "Cancel",
     "BTN_IMPORT": "Import",
@@ -10,6 +14,11 @@
     "APP_UI_OPEN_WS": "Open Workspace",
     "APP_UI_AUTO_WS": "Auto Workspace",
     "APP_UI_PURCHASE": "Buy App",
+
+    "APP_UI_SAVE_PARAMS": "",
+    "DIALOG_PARAMS_CREATE": "Create parameters template",
+    "DIALOG_PARAMS_TEMPLATE_NAME": "Template name", 
+    "DIALOG_PARAMS_SAVE": "Save parameters",
     
     "LOGIN_PLACEHOLDER_EMAIL": "Email Address",
     "LOGIN_PLACEHOLDER_PASSWORD": "Password",
