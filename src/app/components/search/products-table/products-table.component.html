@@ -19,26 +19,13 @@
                 <div class="ps-1" *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts <= 0">
                     Could not find any products.
                 </div>
-                <app-paginator class="align-self-center my-1"
-                    (m_oClickEmitter)="handlePagination($event, oProvider.name)" [m_bFullPaginator]="false"
-                    [m_iTotalItems]="oProvider.totalOfProducts"
-                    (m_iItemsPerPageChange)="changeNumberOfProductsPerPage($event)"></app-paginator>
-                <!-- <ul *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 10" class="pagination pagination text-align-center mb-0">
-                    <li class="page-item" (click)="minusOnePage()">
-                        <span class="page-link">Prev</span>
-                    </li>
-                    <li class="page-item"><a class="page-link">{{getCurrentPage()}}</a></li>
-                    <li class="page-item disabled" aria-current="page">
-                        <span class="page-link">...</span>
-                    </li>
-                    <li class="page-item"><a class="page-link">{{getMaxPage()}}</a></li>
-                    <li class="page-item" (click)="plusOnePage()">
-                        <a class="page-link">Next</a>
-                    </li>
-                </ul> -->
 
-                <div *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 0">
-                    <app-list-item *ngFor="let oProduct of m_aoProductsList" [m_bProductItem]="true"
+                <div class="d-flex flex-column gap-1"
+                    *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 0">
+                    <app-paginator (m_oClickEmitter)="handlePagination($event, oProvider.name)"
+                        [m_bFullPaginator]="false" [m_iTotalItems]="oProvider.totalOfProducts"
+                        (m_iItemsPerPageChange)="changeNumberOfProductsPerPage($event)"></app-paginator>
+                    <app-list-item *ngFor="let oProduct of m_aoProductsList" [m_bProductItem]="true" class="my-1"
                         [m_oProductListItem]="oProduct" [m_bIsSelected]="oProduct.selected"
                         [m_oInfoCallbackFn]="openProductInfoDialog" [m_oZoomCallbackFn]="zoomToProduct"
                         [m_oAddCallbackFn]="sendSingleProductToWorkspace"

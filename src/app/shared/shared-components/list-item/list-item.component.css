@@ -6,7 +6,17 @@
     width: 100%;
 }
 
-.hover:hover {
+.product-item-container {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+span.label {
+    font-weight: 700;
+}
+
+.hover:hover,
+.highlighted {
     background: var(--neutral10);
 }
 
@@ -24,10 +34,6 @@
     font-size: 14px;
 }
 
-span.bold {
-    font-weight: 700;
-}
-
 .material-symbols-outlined {
     font-size: 30px;
 }
@@ -40,9 +46,15 @@ span.bold {
 
 .product-info-container {
     font-size: 12px;
-    max-width: 75%;
-    /* overflow: hidden; */
+    text-wrap: wrap;
+    overflow-wrap: break-word;
+    overflow: hidden;
+}
 
+.no-img-container {
+    width: 20%;
+    border: 1px solid var(--neutral10);
+    border-radius: 8px;
 }
 
 .product-info-container>p {

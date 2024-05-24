@@ -9,7 +9,7 @@ import { SearchService } from 'src/app/search.service';
 })
 export class LightSearchService {
 
-  m_sDefaultProductImage = "assets/icons/ImageNotFound.svg";
+  m_sDefaultProductImage = "";
 
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,

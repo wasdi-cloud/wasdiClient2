@@ -319,6 +319,10 @@ export class ProductsTableComponent implements OnInit {
     return true;
   }
 
+  changeCardStyleMouseEnter(oEvent) {
+
+  }
+
   /********** OPEN DIALOG HANDLERS **********/
   openAddToWorkspaceDialog() {
     let aoListOfSelectedProducts = this.m_aoSelectedProducts;

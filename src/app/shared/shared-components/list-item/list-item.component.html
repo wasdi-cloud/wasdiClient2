@@ -1,5 +1,6 @@
 <div class="list-item-container d-flex flex-row gap-2" [class.parent-item]="m_bParentItem"
-    [class.product-item]="m_bProductItem" [class.hover]="m_bProcessorItem || m_bProcessorItem"
+    [class.product-item]="m_bProductItem" [class.highlighted]="m_oProductListItem.hovering"
+    [class.hover]="m_bProcessorItem || m_bProcessorItem || m_bProductItem"
     [class.selected]="m_bIsSelected && !m_bParentItem">
     <!-- Contents if List Item is of Parent Type: -->
     <div class="d-flex flex-row justify-content-between align-items-center w-100" *ngIf="m_bParentItem">
@@ -15,59 +16,76 @@
         </span>
     </div>
     <!-- Contents if the List item is of Product Type: -->
-    <div class="product-item-container d-flex flex-row justify-content-between align-items-start w-100"
+    <div class="product-item-container d-flex flex-row justify-content-between align-items-start gap-3 w-100"
         *ngIf="m_bProductItem">
         <div *ngIf="!m_oProductListItem.preview"
-            class=" d-flex flex-column align-items-center justify-content-center text-center">
+            class="no-img-container d-flex flex-column align-items-center justify-content-center text-center h-100">
             <span class="material-symbols-outlined">
-                public
+                image
             </span>
             <span class="img-size">
-                {{m_oProductListItem.summary.Size}}
+                NO IMAGE
             </span>
         </div>
         <div *ngIf="m_oProductListItem.preview"
             class=" preview-layer-image h-100 d-flex flex-column justify-content-center">
             <img src={{m_oProductListItem.preview}} alt="Image" style="height: 80px;width: 80px;">
         </div>
-        <div class="product-info-container flex-fill">
-            <p class="d-flex flex-row gap-1">Name:<span>{{m_oProductListItem.title}}</span></p>
-            <p *ngIf="m_bIsLightProduct === true">{{"IMPORT_PRODUCT_LIST_POLARIZATION"|translate}}
+        <div class="product-info-container flex-fill d-flex flex-column gap-2">
+            <!--Product Name and controls -->
+            <div>
+                <div class="d-flex flex-row justify-content-between"><span class="label">Name: </span>
+                    <div *ngIf="m_bIsLightProduct === false" class="toolbar d-flex flex-row gap-1">
+                        <span class="material-symbols-outlined" (click)="m_oInfoCallbackFn(m_oProductListItem)"
+                            matTooltip="Properties">
+                            info
+                        </span>
+                        <span class="material-symbols-outlined"
+                            (click)="m_oZoomCallbackFn(m_oProductListItem.rectangle)" matTooltip="Zoom to Product">
+                            zoom_in
+                        </span>
+                        <span class="material-symbols-outlined" (click)="m_oAddCallbackFn(m_oProductListItem)"
+                            matTooltip="Add to Workspace">
+                            add_box
+                        </span>
+                    </div>
+                </div>
+                {{m_oProductListItem.title}}
+            </div>
+            <!-- Product Type -->
+            <div *ngIf="m_bIsLightProduct === false"><span class="label">Product Type:</span>
+                {{m_oProductListItem.properties.productType}}
+            </div>
+            <!-- Product Relative Orbit and Date -->
+            <div class="d-flex flex-row justify-content-between">
+                <div>
+                    <span class="label">Rel Orbit:</span>
+                    {{m_oProductListItem.properties.relativeOrbitNumber?
+                    m_oProductListItem.properties.relativeOrbitNumber :
+                    m_oProductListItem.properties.relativeorbitnumber}}
+                </div>
+                <div *ngIf="m_bIsLightProduct === false"><span class="label">Date:</span>
+                    {{m_oProductListItem.properties.date | date:
+                    'M/d/yyyy - h:mm a'}}
+                </div>
+
+            </div>
+            <div *ngIf="m_bIsLightProduct === true">{{"IMPORT_PRODUCT_LIST_POLARIZATION"|translate}}
                 <span>{{m_oProductListItem.properties.polarisationmode
                     }}</span>
-            </p>
-            <p>Relative Orbit: <span>{{m_oProductListItem.properties.relativeOrbitNumber?
-                    m_oProductListItem.properties.relativeOrbitNumber :
-                    m_oProductListItem.properties.relativeorbitnumber}}</span></p>
-            <p *ngIf="m_bIsLightProduct === true">Platform Name:
+            </div>
+
+            <div *ngIf="m_bIsLightProduct === true">Platform Name:
                 <span>{{m_oProductListItem.properties.platformname}}</span>
-            </p>
-            <p *ngIf="m_bIsLightProduct === true">{{"IMPORT_PRODUCT_LIST_SENSOR"|translate}}
+            </div>
+            <div *ngIf="m_bIsLightProduct === true">{{"IMPORT_PRODUCT_LIST_SENSOR"|translate}}
                 <span>{{m_oProductListItem.properties.sensoroperationalmode}}</span>
-            </p>
+            </div>
             <!-- <p *ngIf="m_bIsLightProduct === false">Provider: <span>{{m_oProductListItem.provider}}</span></p> -->
-            <p *ngIf="m_bIsLightProduct === false">Product Type:
-                <span>{{m_oProductListItem.properties.productType}}</span>
-            </p>
-            <p *ngIf="m_bIsLightProduct === false">Date: <span>{{m_oProductListItem.properties.date | date:
-                    'M/d/yyyy - h:mm a'}}</span>
-            </p>
+
 
         </div>
-        <div *ngIf="m_bIsLightProduct === false" class="toolbar d-flex flex-column gap-1">
-            <span class="material-symbols-outlined" (click)="m_oInfoCallbackFn(m_oProductListItem)"
-                matTooltip="Properties">
-                info
-            </span>
-            <span class="material-symbols-outlined" (click)="m_oZoomCallbackFn(m_oProductListItem.rectangle)"
-                matTooltip="Zoom to Product">
-                zoom_in
-            </span>
-            <span class="material-symbols-outlined" (click)="m_oAddCallbackFn(m_oProductListItem)"
-                matTooltip="Add to Workspace">
-                add_box
-            </span>
-        </div>
+
     </div>
 
     <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100" matTooltip="{{m_sDescription}}"

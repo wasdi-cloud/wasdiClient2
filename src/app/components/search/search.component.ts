@@ -469,7 +469,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       aoData[iIndexData].summary = oSummary;
 
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData[iIndexData].preview) || FadeoutUtils.utilsIsStrNullOrEmpty(aoData[iIndexData].preview))
-        aoData[iIndexData].preview = "assets/icons/ImageNotFound.svg";//default value ( set it if there isn't the image)
+        aoData[iIndexData].preview = "";//default value ( set it if there isn't the image)
 
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData[iIndexData].footprint) == false) {
         //get bounds
