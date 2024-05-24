@@ -1,6 +1,6 @@
 <div class="d-flex flex-row justify-content-between w-100">
     <div class="d-flex flex-row align-items-center gap-4">
-        <div>{{m_iTotalItems}} Items</div>
+        <div *ngIf="m_bFullPaginator">{{m_iTotalItems}} Items</div>
         <span class="material-symbols-outlined" (click)="!m_bIsMinusEnabled? '' : handlePagination('first')"
             [class.disabled]="!m_bIsMinusEnabled">
             first_page
@@ -24,7 +24,7 @@
             last_page
         </span>
     </div>
-    <div class="d-flex flex-row align-items-center gap-3">
+    <div *ngIf="m_bFullPaginator || m_bShowItemsPerPage" class="d-flex flex-row align-items-center gap-3">
         Items per page
         <app-dropdown [m_aoDropdownItems]="m_aiItemsPerPage" [m_aoSelectedItems]="m_iItemsPerPage"
             (m_oSelectionChange)="getItemsPerPageChange($event)"></app-dropdown>

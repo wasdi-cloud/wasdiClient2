@@ -12,6 +12,11 @@ export class PaginatorComponent {
   @Input() m_bFullPaginator: boolean = true;
 
   /**
+   * Does the paginator include the dropdown option?
+   */
+  @Input() m_bShowItemsPerPage: boolean = true;
+
+  /**
    * The default number of items per-page with a default of 10
    */
   @Input() m_iItemsPerPage: number = 10;
@@ -27,6 +32,9 @@ export class PaginatorComponent {
   @Input() m_iTotalItems: number = 0;
 
   @Output() m_oClickEmitter: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output() m_iItemsPerPageChange: EventEmitter<any> = new EventEmitter<any>();
+
 
   m_aiItemsPerPage: Array<number> = [10, 15, 20, 25, 50];
 
@@ -48,7 +56,9 @@ export class PaginatorComponent {
     this.m_iItemsPerPage = oEvent.value;
     this.m_iCurrentPage = 1;
 
-    this.isButtonDisabled()
+    this.isButtonDisabled();
+
+    this.m_iItemsPerPageChange.emit(this.m_iItemsPerPage);
   }
 
   handlePagination(sLabel) {

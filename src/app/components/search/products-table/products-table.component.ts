@@ -340,27 +340,16 @@ export class ProductsTableComponent implements OnInit {
   /********** Pagination Handler Functions **********/
 
   changeNumberOfProductsPerPage(event) {
-    this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event.value;
+    this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event;
     this.m_oPageService.changeNumberOfProductsPerPage(this.m_oActiveProvider.name);
+  }
+
+  handlePagination(oEvent, sProviderName: string) {
+    console.log(oEvent)
+    this.m_oPageService.changePage(oEvent.pageIndex, sProviderName)
   }
 
   getProductsPerPageOptions() {
     return this.m_oPageService.getProvidersPerPageOptions();
-  }
-
-  plusOnePage() {
-    this.m_oPageService.plusOnePage(this.m_oActiveProvider.name);
-  }
-
-  minusOnePage() {
-    this.m_oPageService.minusOnePage(this.m_oActiveProvider.name);
-  }
-
-  getMaxPage() {
-    return this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).totalPages;
-  }
-
-  getCurrentPage() {
-    return this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).currentPage;
   }
 }
