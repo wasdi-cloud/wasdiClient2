@@ -91,9 +91,10 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
   }
 
   handlePagination(oEvent) {
+    console.log(oEvent);
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false && oEvent.pageIndex >= 0) {
-      //Page Index begins at 0: 
-      this.m_iCurrentPage = oEvent.pageIndex + 1;
+      //Page Index begins at 1: 
+      this.m_iCurrentPage = oEvent.pageIndex;
       //Get the Logs Count
       this.getLogsCount(this.m_oProcess.processObjId);
     }

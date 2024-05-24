@@ -180,6 +180,7 @@ import { ManageSharingComponent } from './components/admin/manage-sharing/manage
 import { FeedbackDialogComponent } from './components/header/feedback-dialog/feedback-dialog.component';
 import { ConvertBytesToHigherUnitPipe } from './shared/pipes/convert-bytes-to-higher-unit.pipe';
 import { CdkContextMenuTrigger, CdkMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
+import { PaginatorComponent } from './shared/shared-components/paginator/paginator.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -300,7 +301,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ManageSubscriptionsComponent,
     ManageSharingComponent,
     FeedbackDialogComponent,
-    ConvertBytesToHigherUnitPipe
+    ConvertBytesToHigherUnitPipe,
+    PaginatorComponent
 
   ],
   imports: [

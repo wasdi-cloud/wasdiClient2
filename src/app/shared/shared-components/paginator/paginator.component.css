@@ -1,0 +1,15 @@
+input.form-control {
+    width: 35px !important;
+}
+
+span.material-symbols-outlined {
+    cursor: pointer;
+}
+
+span.step-btn {
+    font-size: 16px;
+}
+
+.disabled {
+    color: var(--neutral15);
+}
