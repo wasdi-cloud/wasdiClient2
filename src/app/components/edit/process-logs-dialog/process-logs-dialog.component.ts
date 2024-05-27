@@ -218,6 +218,6 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
 
   copyProcessObjId() {
     this.m_oClipboard.copy(this.m_oProcess.processObjId);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Process Workspace Id to clipboard!", "Close");
+    this.m_oNotificationDisplayService.openSnackBar("Copied Process Workspace Id to clipboard!");
   }  
 }

@@ -97,6 +97,6 @@ export class ManageSharingComponent implements OnInit {
 
   copyToClipboard(sResourceId: string) {
     this.m_oClipboard.copy(sResourceId);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Resource Id to clipboard!", "Close");
+    this.m_oNotificationDisplayService.openSnackBar("Copied Resource Id to clipboard!");
   }
 }

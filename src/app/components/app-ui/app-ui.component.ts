@@ -303,7 +303,7 @@ export class AppUiComponent implements OnInit {
     }
 
     if (this.m_oWorkspaceForm.sNewWorkspaceName && this.m_oWorkspaceForm.sExistingWorkspace) {
-      this.m_oNotificationDisplayService.openSnackBar("Either select workspace or create new one", "Close");
+      this.m_oNotificationDisplayService.openSnackBar("Either select workspace or create new one");
       return;
     }
 
@@ -493,7 +493,7 @@ export class AppUiComponent implements OnInit {
         this.m_oProcessorService.getStripeOnDemandPaymentUrl(this.m_oAppPaymentVM.processorId, oResponse.message).subscribe({
           next: oResponse => {
             if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
-              this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED", "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED");
 
               let sUrl = oResponse.message;
 

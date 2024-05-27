@@ -257,7 +257,7 @@ export class ProcessorTabContentComponent implements OnInit {
       if (bDialogResult === true) {
         this.m_oProcessorService.forceLibUpdate(sProcessorId).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("LIBRARY UPDATE SCHEDULED", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar("LIBRARY UPDATE SCHEDULED");
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog("Error in Updating Library")
@@ -280,7 +280,7 @@ export class ProcessorTabContentComponent implements OnInit {
       if (oDialogResult === true) {
         this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar("PROCESSOR REFRESH SCHEDULED");
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog("Error in Refreshing Processor")
@@ -368,7 +368,7 @@ export class ProcessorTabContentComponent implements OnInit {
 
   copyBuildLogToClipboard(oBuildLog) {
     this.m_oClipboard.copy(oBuildLog);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Build Log", "Close")
+    this.m_oNotificationDisplayService.openSnackBar("Copied Build Log")
   }
 
   downloadProcessor(sProcessorId: string) {

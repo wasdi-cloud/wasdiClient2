@@ -24,14 +24,13 @@ export class NotificationDisplayService {
    * @param vPosition 
    * @param className 
    */
-  openSnackBar(sMessage: string, sAction: string,
-    hPosition?: any, vPosition?: any, className?: string) {
+  openSnackBar(sMessage: string, sTitle?: string, className?: string) {
     this.m_oMatSnackBar.openFromComponent(NotificationSnackbarComponent, {
       duration: 4000,
-      horizontalPosition: hPosition ? hPosition : 'right',
-      verticalPosition: vPosition ? vPosition : 'bottom',
-      panelClass: className,
-      data: sMessage
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      panelClass: [className ? className : 'info-snackbar'],
+      data: { message: sMessage, title: sTitle ? sTitle : "Update", class: className ? className : 'info-snackbar' }
     });
   }
 

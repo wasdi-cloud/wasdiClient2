@@ -95,7 +95,7 @@ export default class WasdiUtils {
                 seen: false
             }
             oController.m_oNotificationsQueueService.setNotifications(oUserMessage);
-            oController.m_oNotificationDisplayService.openSnackBar(sUserMessage, "Close", "right", "bottom");
+            oController.m_oNotificationDisplayService.openSnackBar(sUserMessage);
         }
         return "";
     }

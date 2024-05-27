@@ -215,7 +215,7 @@ export class EditComponent implements OnInit, OnDestroy {
   receivedNewProductMessage(oMessage) {
     let sMessage = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED");
     // Alert the user
-    this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+    this.m_oNotificationDisplayService.openSnackBar(sMessage);
     // Update product list
     this.getProductList();
 
@@ -348,12 +348,12 @@ export class EditComponent implements OnInit, OnDestroy {
 
   copyWorkspaceId() {
     this.m_oClipboard.copy(this.m_sWorkspaceId);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Workspace Id to clipboard!", "Close");
+    this.m_oNotificationDisplayService.openSnackBar("Copied Workspace Id to clipboard!");
   }
 
   copyWorkspaceName() {
     this.m_oClipboard.copy(this.m_oActiveWorkspace?.name);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Workspace Name to clipboard!", "Close");
+    this.m_oNotificationDisplayService.openSnackBar("Copied Workspace Name to clipboard!");
   }
 
   openPropertiesDialog() {

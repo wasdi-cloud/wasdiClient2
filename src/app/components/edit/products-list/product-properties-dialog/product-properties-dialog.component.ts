@@ -120,7 +120,7 @@ export class ProductPropertiesDialogComponent implements OnInit {
     this.m_oProductService.updateProduct(oUpdatedViewModel, this.m_sWorkspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          this.m_oNotificationDisplayService.openSnackBar("Product Updated", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("Product Updated");
           this.onDismiss(true);
         }
       },
@@ -147,8 +147,8 @@ export class ProductPropertiesDialogComponent implements OnInit {
 
   copyToClipboard(sFileName: string) {
     this.m_oClipboard.copy(sFileName);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Original Name to clipboard!", "Close");
-   }
+    this.m_oNotificationDisplayService.openSnackBar("Copied Original Name to clipboard!");
+  }
   /**
    * Handle dialog close
    */

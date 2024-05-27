@@ -80,7 +80,7 @@ export class OrganizationsDisplayComponent implements OnInit {
         this.m_oOrganizationsService.deleteOrganization(oOrganization.organizationId).subscribe({
           next: oResponse => {
             this.getUserOrganizations();
-            this.m_oNotificationDisplayService.openSnackBar("Organization Removed", "Close", 'bottom', 'right');
+            this.m_oNotificationDisplayService.openSnackBar("Organization Removed");
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog("Error in deleting this organization");

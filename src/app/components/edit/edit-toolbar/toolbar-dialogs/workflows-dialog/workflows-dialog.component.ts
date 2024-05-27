@@ -199,7 +199,7 @@ export class WorkflowsDialogComponent implements OnInit {
       this.m_oWorkflowService.uploadByFile('workspace', sName, sDescription, oBody, bIsPublic).subscribe({
         next: oResponse => {
           let sMessage = "WORKFLOW UPLOADED " + sName.toUpperCase();
-          this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom")
+          this.m_oNotificationDisplayService.openSnackBar(sMessage)
           this.getWorkflowsByUser();
           this.m_bShowInputs = false;
           console.log(oResponse)
@@ -220,13 +220,13 @@ export class WorkflowsDialogComponent implements OnInit {
     }
     this.m_oWorkflowService.updateGraphParameters(this.m_oSelectedWorkflow.workflowId, this.m_sWorkflowName, this.m_sWorkflowDescription, this.m_bWorkflowIsPublic).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("Workflow updated", "Close")
+        this.m_oNotificationDisplayService.openSnackBar("Workflow updated")
 
         this.getWorkflowsByUser();
         if (this.m_oFile) {
           this.m_oWorkflowService.updateGraphFile(this.m_oSelectedWorkflow.workflowId, this.m_oFile).subscribe({
             next: oResponse => {
-              this.m_oNotificationDisplayService.openSnackBar("GRAPH FILE UPDATED", "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar("GRAPH FILE UPDATED");
             },
             error: oError => {
               this.m_oNotificationDisplayService.openAlertDialog("Error in updating Graph File");
@@ -536,7 +536,7 @@ export class WorkflowsDialogComponent implements OnInit {
         next: oResponse => {
           if (oResponse.status === 200) {
             let sMessage = "WORKFLOW XML UPDATED";
-            this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar(sMessage);
           }
         },
         error: oError => {

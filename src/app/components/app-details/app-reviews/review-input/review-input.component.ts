@@ -126,7 +126,7 @@ export class ReviewInputComponent implements OnInit {
     } else {
       this.m_oProcessorMediaService.addProcessorReview(this.m_oUserReview).subscribe({
         next: oResponse => {
-          this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar(sSavedMsg);
           this.emitCompletedReviewAction(true);
         },
         error: oError => {
@@ -149,7 +149,7 @@ export class ReviewInputComponent implements OnInit {
         this.m_oProcessorMediaService.deleteProcessorReview(this.m_oProcessor.processorId, this.m_oReview.id).subscribe({
           next: oResponse => {
             // this.getReviews();
-            this.m_oNotificationDisplayService.openSnackBar("Review Removed", "Close");
+            this.m_oNotificationDisplayService.openSnackBar("Review Removed");
             this.emitCompletedReviewAction(true);
           },
           error: oError => {
@@ -176,7 +176,7 @@ export class ReviewInputComponent implements OnInit {
 
     this.m_oProcessorMediaService.updateProcessorReview(this.m_oUserReview).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar(sSavedMessage, "Close");
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMessage);
         this.emitCompletedReviewAction(true);
       },
       error: oError => {
@@ -194,7 +194,7 @@ export class ReviewInputComponent implements OnInit {
 
     this.m_oProcessorMediaService.addReviewComment(this.m_oCommentInfo).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close");
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg);
         this.emitCompletedCommentAction(true);
       },
       error: oError => {
@@ -214,7 +214,7 @@ export class ReviewInputComponent implements OnInit {
       if (oResult === true) {
         this.m_oProcessorMediaService.deleteReviewComment(this.m_oComment.reviewId, this.m_oComment.commentId).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("Comment Removed", "Close");
+            this.m_oNotificationDisplayService.openSnackBar("Comment Removed");
             this.emitCompletedCommentAction(true);
           },
           error: oError => {
@@ -236,7 +236,7 @@ export class ReviewInputComponent implements OnInit {
 
     this.m_oProcessorMediaService.updateReviewComment(this.m_oCommentInfo).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, "Close");
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg);
         this.emitCompletedCommentAction(true);
       },
       error: oError => {

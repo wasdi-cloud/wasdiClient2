@@ -320,7 +320,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
           a.download = sFileName;
           a.click();
           URL.revokeObjectURL(objectUrl);
-          this.m_oNotificationDisplayService.openSnackBar("Download Complete", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("Download Complete");
         }
       },
       error: oError => {
@@ -469,14 +469,14 @@ export class ProductsListComponent implements OnChanges, OnInit {
         }
         else {
           let sNotificationMsg = "PUBLISHING BAND";
-          this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg);
 
           this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
         }
       }
       else {
         let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
-        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom");
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg);
       }
     })
 

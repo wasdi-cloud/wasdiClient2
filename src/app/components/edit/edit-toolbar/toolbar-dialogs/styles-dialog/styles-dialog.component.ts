@@ -224,7 +224,7 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
     this.m_oStyleService.uploadFile(this.m_oNewStyle.styleName, this.m_oNewStyle.styleDescription, this.m_oFile, this.m_oNewStyle.isPublic).subscribe({
       next: oResponse => {
         if (oResponse && oResponse.boolValue == true) {
-          this.m_oNotificationDisplayService.openSnackBar("STYLE UPLOADED", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("STYLE UPLOADED");
         } else {
           this.m_oNotificationDisplayService.openAlertDialog("Error in uploading Style");
         }
@@ -247,7 +247,7 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oFile)) {
           this.m_oStyleService.updateStyleFile(this.m_oSelectedStyle.styleId, this.m_oFile).subscribe({
             next: oResponse => {
-              this.m_oNotificationDisplayService.openSnackBar("STYLE FILE UPDATED", "Close", "right", "bottom");
+              this.m_oNotificationDisplayService.openSnackBar("STYLE FILE UPDATED");
             },
             error: oError => {
               this.m_oNotificationDisplayService.openAlertDialog("Error in updating Style File");
@@ -255,7 +255,7 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
           })
         }
         //Reload Styles List
-        this.m_oNotificationDisplayService.openSnackBar("Style Information Updated!", "Close");
+        this.m_oNotificationDisplayService.openSnackBar("Style Information Updated!");
         this.setVisibleInput("default")
         this.getStylesByUser();
       },
@@ -285,7 +285,7 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
     oBody.append('styleXml', this.m_asStyleXml);
     this.m_oStyleService.postStyleXml(this.m_oSelectedStyle.styleId, oBody).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("Style XML updated", "Close")
+        this.m_oNotificationDisplayService.openSnackBar("Style XML updated")
         this.getStylesByUser();
         this.setVisibleInput('default');
       },
@@ -316,7 +316,7 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
       if (bDialogResult) {
         this.m_oProductService.updateProduct(oProductViewModel, sWorkspaceId).subscribe(oResponse => {
           if (oResponse.status === 200) {
-            this.m_oNotificationDisplayService.openSnackBar("Product Style Updated!", "Close");
+            this.m_oNotificationDisplayService.openSnackBar("Product Style Updated!");
             this.onDismiss();
           }
         })

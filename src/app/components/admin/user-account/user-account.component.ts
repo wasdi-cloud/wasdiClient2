@@ -111,7 +111,7 @@ export class UserAccountComponent implements OnInit {
           if (oResponse.boolValue === false) {
             this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>IMPOSSIBLE TO CHANGE USER INFO");
           } else {
-            this.m_oNotificationDisplayService.openSnackBar("Changed user Info", "Close");
+            this.m_oNotificationDisplayService.openSnackBar("Changed user Info");
 
             this.m_oUser = oResponse;
             this.m_oConstantsService.setUser(this.m_oUser);

@@ -95,7 +95,7 @@ export class ProcessesBarComponent implements OnInit {
    */
   receivedNewProductMessage(oMessage: any) {
     let sMessage: string = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED")
-    this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close");
+    this.m_oNotificationDisplayService.openSnackBar(sMessage);
 
     //Emit the message payload and file name to parent: 
 

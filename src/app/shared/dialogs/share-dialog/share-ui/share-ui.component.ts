@@ -179,7 +179,7 @@ export class ShareUiComponent implements OnInit {
               this.getEnabledUsers();
               console.log(this.resource);
               let sMessage = `Successfully Shared ${this.resource.name}`
-              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue);
             }
@@ -197,7 +197,7 @@ export class ShareUiComponent implements OnInit {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
               let sMessage = `Successfully Shared ${this.resource.name}`
-              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               let sErrorMsg = this.m_oTranslate.instant(oResponse.stringValue)
               this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
@@ -216,7 +216,7 @@ export class ShareUiComponent implements OnInit {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
               let sMessage = `Successfully shared ${this.resource.name}`
-              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue);
             }
@@ -234,7 +234,7 @@ export class ShareUiComponent implements OnInit {
             if (oResponse.boolValue === true) {
               this.getEnabledUsers();
               let sMessage = `Successfully shared ${this.resource.processorName}`;
-              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue)
             }
@@ -252,7 +252,7 @@ export class ShareUiComponent implements OnInit {
             if (oResponse.message === "Done") {
               this.getEnabledUsers();
               let sMessage = `Successfully shared ${this.resource.name}`;
-              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue)
             }
@@ -269,7 +269,7 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.message === "Done") {
               let sMessage = `Successfully shared ${this.resource.name}`;
-              this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue)
             }

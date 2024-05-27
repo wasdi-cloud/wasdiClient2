@@ -108,7 +108,7 @@ export class ManageSubscriptionsComponent implements OnInit {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
               this.m_oNotificationDisplayService.openAlertDialog("Error while deleting subscription")
             } else {
-              this.m_oNotificationDisplayService.openSnackBar("Subscription Removed", "Close");
+              this.m_oNotificationDisplayService.openSnackBar("Subscription Removed");
               this.getSubscriptions();
             }
           }
@@ -154,7 +154,7 @@ export class ManageSubscriptionsComponent implements OnInit {
     this.m_oSubscriptionService.updateSubscription(oSubscription).subscribe({
       next: oResponse => {
         if (oResponse) {
-          this.m_oNotificationDisplayService.openSnackBar("Updated Subscription", "Close");
+          this.m_oNotificationDisplayService.openSnackBar("Updated Subscription");
           this.getSubscriptions();
         }
       },
