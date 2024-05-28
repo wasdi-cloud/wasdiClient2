@@ -1,13 +1,10 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { TranslateService } from '@ngx-translate/core';
-import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 import { Workspace } from 'src/app/shared/models/workspace.model';
@@ -20,9 +17,6 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   styleUrls: ['./workspaces-list-dialog.component.css']
 })
 export class WorkspacesListDialogComponent implements OnInit {
-  //Font Awesome Icons: 
-  faX = faX;
-
   @Input() m_bIsDialog: boolean = true;
 
   m_aoWorkspaceList: Array<any> = [];
@@ -42,6 +36,8 @@ export class WorkspacesListDialogComponent implements OnInit {
    * Flag to check if the user is sharing a product (between workspaces) or sending a new product from search
    */
   m_bIsSharingProduct: boolean = false;
+
+  m_sSearch: string = ""
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
