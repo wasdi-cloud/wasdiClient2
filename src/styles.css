@@ -582,3 +582,7 @@ a.leaflet-control-button,
   border: 1px solid var(--neutral50Brand) !important;
   background-color: var(--wasdiBluelight) !important;
 }
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 8px !important;
+}
