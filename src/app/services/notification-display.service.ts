@@ -17,11 +17,9 @@ export class NotificationDisplayService {
     private m_oMatSnackBar: MatSnackBar) { }
 
   /**
-   * Handler to 
+   * Handler to open the snackbar in the bottom right corner
    * @param sMessage 
-   * @param sAction 
-   * @param hPosition 
-   * @param vPosition 
+   * @param sTitle
    * @param className 
    */
   openSnackBar(sMessage: string, sTitle?: string, className?: string) {
@@ -35,18 +33,26 @@ export class NotificationDisplayService {
   }
 
   /**
-   * Handler to open the alert dialog componenet 
+   * Handler to open the alert dialog component
    * @param sMessage 
    * @param iTimeoutInput 
+   * @param sClassName
    */
-  openAlertDialog(sMessage: string, iTimeoutInput?: number): void {
+  openAlertDialog(sMessage: string, sTitle?: string, sClassName?: string): void {
     //Set default 4 second timeout to close alert dialog
     let iTimeout = 4000;
-    if (iTimeoutInput) {
-      iTimeout = iTimeoutInput;
-    }
-    let oDialogRef = this.m_oMatDialog.open(AlertDialogComponent, {
-      data: sMessage
+    // if (iTimeoutInput) {
+    //   iTimeout = iTimeoutInput;
+    // }
+    let oDialogRef = this.m_oMatDialog.open(ConfirmationDialogComponent, {
+      maxWidth: '500px',
+      panelClass: sClassName ? sClassName : 'generic',
+      data: {
+        message: sMessage,
+        title: sTitle ? sTitle : "",
+        isConfirmation: false,
+        className: sClassName? sClassName : 'generic'
+      }
     });
 
     //Set Automatic timeout for dialog
@@ -60,13 +66,20 @@ export class NotificationDisplayService {
   /**
    * Handle open of confirmation dialog
    * @param sMessage 
-   * @returns 
+   * @param sTitle?
+   * @param sClassName
+   * @returns result of the dialog (boolean)
    */
-  openConfirmationDialog(sMessage: string) {
+  openConfirmationDialog(sMessage: string, sTitle?: string, sClassName?: string) {
+    console.log(sClassName)
     let oDialogRef = this.m_oMatDialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
+      width: '500px',
+      panelClass: sClassName ? sClassName : 'generic',
       data: {
-        message: sMessage
+        message: sMessage,
+        title: sTitle ? sTitle : "",
+        className: sClassName ? sClassName : 'generic',
+        isConfirmation: true
       }
     })
 

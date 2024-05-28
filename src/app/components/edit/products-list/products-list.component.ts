@@ -375,16 +375,14 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     //Get product from array
     let oFoundProduct = this.m_aoWorkspaceProductsList.find(oProduct => oProduct.fileName === node.fileName);
-    let sMessage = "Are you sure you wish to delete " + oFoundProduct.name;
+    let sTitle = this.m_oTranslate.instant("EDITOR_PRODUCT_REMOVE");
 
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(oFoundProduct.name, sTitle, 'alert');
 
     bConfirmResult.subscribe(oDialogResult => {
-      if (oDialogResult === false) {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oDialogResult) || oDialogResult === false) {
         return false;
-      }
-      else {
-        //Call the API
+      } else {
         this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
           if (oResponse.boolValue) {
             this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
@@ -395,11 +393,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
         return true;
       }
     });
-    //in subscription, 
-
-    //if deletion successful, reload product tree
-
-    //if deletion unsuccessful show dialog
   }
 
   /**
@@ -409,12 +402,20 @@ export class ProductsListComponent implements OnChanges, OnInit {
     let bDeleteLayer = true;
     let bDeleteFile = true;
 
-    let sMessage = "Are you sure you wish to delete " + this.m_asSelectedProducts.length + " products?";
+    let sTitle: string = this.m_oTranslate.instant("EDITOR_PRODUCTS_REMOVE") + ` (${this.m_asSelectedProducts.length})`
 
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
+    let asProductsMsg = this.m_asSelectedProducts.map(sProduct => {
+      return `<li>${sProduct}</li>`
+    })
+
+    let sMessage = `<ul>${asProductsMsg.toString().replaceAll(",", "")}</ul>`
+
+    console.log(asProductsMsg)
+
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage, sTitle, 'danger');
 
     bConfirmResult.subscribe(oDialogResult => {
-      if (oDialogResult === false) {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oDialogResult) || oDialogResult === false) {
         return;
       } else {
         this.m_asSelectedProducts.forEach(oProduct => {
