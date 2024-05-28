@@ -240,7 +240,7 @@ export class ReviewInputComponent implements OnInit {
         this.emitCompletedCommentAction(true);
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, 4000);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
       }
     });
   }

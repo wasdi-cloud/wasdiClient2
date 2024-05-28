@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { AlertDialogComponent } from 'src/app/shared/dialogs/alert-dialog/alert-dialog.component';
 import { NotificationSnackbarComponent } from 'src/app/shared/dialogs/notification-snackbar/notification-snackbar.component';
 import { ConfirmationDialogComponent } from 'src/app/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 
@@ -51,7 +50,7 @@ export class NotificationDisplayService {
         message: sMessage,
         title: sTitle ? sTitle : "",
         isConfirmation: false,
-        className: sClassName? sClassName : 'generic'
+        className: sClassName ? sClassName : 'generic'
       }
     });
 

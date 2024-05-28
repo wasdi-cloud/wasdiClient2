@@ -1,4 +1,9 @@
 {
+	"KEY_PHRASES": {
+		"DESCRIPTION": "Description",
+		"ERROR": "Erreur",
+		"SUCCESS": "Succès"
+	},
 	"BTN_SEARCH": "Rechercher",
 	"BTN_IMPORT": "Importer",
 	"SORT_BY": "Trier par",
@@ -106,6 +111,9 @@
 	"EDITOR_PRODUCTS_FILTER_CLEAN": "Annuler le filtre",
 	"EDITOR_PRODUCTS_FILTER_SELECT": "Sélectionner",
 	"EDITOR_PRODUCTS_WS_INFO": "Information de l'espace de travail",
+	"EDITOR_PRODUCT_REMOVE": "Confirmer la suppression du produit", 
+    "EDITOR_PRODUCTS_REMOVE": "Confirmer la suppression des produits",
+
 	"IMPORT_PRODUCTS_PER_PAGE_LABEL": "Produtis par page",
 	"IMPORT_PAGE_LABEL": "Page",
 	"IMPORT_OF_LABEL": "sur",
@@ -682,6 +690,22 @@
 	"DIALOG_PACKAGE_MANAGER_CURRENT_VERSION": "Version actuelle",
 	"DIALOG_PACKAGE_MANAGER_LATEST_VERSION": "Dernière version",
 	"DIALOG_PACKAGE_MANAGER_ACTIONS": "Actions",
+
 	"EDITOR_ERROR_CONSOLE_NOT_REACHABLE": "Erreur de contact avec le service JupyterLab",
-	"READ_ONLY": "Read Only"
+
+	"USER_ORGANIZATIONS_ERROR_FETCHING": "Impossible de récupérer vos organisations",
+    "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Impossible de récupérer les informations sur l'organisation",
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirmer la suppression de l'organisation", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Êtes-vous sûr de vouloir supprimer cette organisation ?",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Confirmer la suppression des autorisations",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Êtes-vous sûr de vouloir supprimer vos autorisations auprès de cette organisation ?",
+    "USER_ORGANIZATIONS_DELETE_SUCCESS": "Organisation supprimée",
+    "USER_ORGANIZATION_SAVE_SUCCESS": "Organisation enregistrée",
+    "USER_ORGANIZATION_INVALID_INPUT": "La saisie de l'organisation n'est pas valide",
+    "USER_ORGANIZATION_SAVE_ERROR": "Impossible de sauvegarder votre organisation",
+    "USER_ORGANIZATION_DELETE_ERROR": "Impossible de supprimer votre organisation",
+
+	"READ_ONLY": "Read Only",
+	
+	"MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Un abonnement valide et un projet actif sont requis. Veuillez consulter le tableau de bord utilisateur."
 }
