@@ -10,8 +10,8 @@
 }
 
 div.table-wrapper {
-    height: 100%;
-    overflow: auto;
+    height: 70%;
+    overflow-y: auto;
     display: inline-block;
     width: 100%;
     margin: auto;
@@ -25,7 +25,6 @@ td {
 table {
     width: 100%;
     margin: auto;
-    /* height: 100%; */
 }
 
 .table-heading-container {

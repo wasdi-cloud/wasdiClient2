@@ -60,16 +60,16 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
    * Actually selected Template.
    * Can be one one in edit or a new one
    */
-  m_oSelectedTemplate: any = {} as {
-    creationDate: string;
-    description: string;
-    jsonParameters: string;
-    name: string;
-    processorId: string;
-    templateId: string;
-    updateDate: string;
-    userId: string;
-  };
+  m_oSelectedTemplate: any = {
+    creationDate: "",
+    description: "",
+    jsonParameters: "",
+    name: "",
+    processorId: "",
+    templateId: "",
+    updateDate: "",
+    userId: "",
+  }
 
   m_sParametersString: string = "{}";
 

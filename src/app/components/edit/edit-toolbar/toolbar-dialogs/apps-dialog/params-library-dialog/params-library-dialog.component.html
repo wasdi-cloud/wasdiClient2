@@ -1,5 +1,5 @@
-<div class="dialog-content d-flex flex-row w-100 h-100  gap-3">
-    <div class="templates-container flex-fill d-flex flex-column gap-2">
+<div class="dialog-content d-flex flex-row w-100 h-100 gap-3">
+    <div class="templates-container flex-fill d-flex flex-column gap-2 h-100">
         <div class="d-flex flex-row justify-content-between align-items-center">
             <div class="primary-header font-bold align-items-center d-flex flex-row gap-3">
                 <app-button [m_sLabel]="'Back'" [m_sIconLeft]="'arrow_back'" [m_bOutline]="true" [m_sSize]="'small'"
@@ -19,7 +19,7 @@
             <app-input-field [m_sPlacehodler]="'Search parameters'" [m_sIconLeft]="'search'"
                 (m_oInputChange)="getInputValues('search', $event)"></app-input-field>
         </div>
-        <div class="flex-fill table-wrapper">
+        <div class="table-wrapper">
             <table>
                 <thead class="table-heading-container">
                     <tr>
@@ -41,7 +41,8 @@
                                 class="material-symbols-outlined" (click)="showShareForm()">
                                 share
                             </span>
-                            <span (click)="applyProcessorParams(oParameter.templateId)" class="material-symbols-outlined">
+                            <span (click)="applyProcessorParams(oParameter.templateId)"
+                                class="material-symbols-outlined">
                                 play_circle
                             </span>
                             <span (click)="deleteProcessorParams(oParameter)" *ngIf="isOwner(oParameter)"
@@ -59,7 +60,7 @@
         </div>
     </div>
     <div [class.hidden]="!m_bShowJsonForm" class="json-container d-flex flex-column h-100 gap-3">
-        <div class="json-header d-flex flex-column gap-3">
+        <div *ngIf="m_oSelectedTemplate" class="json-header d-flex flex-column gap-3">
             <app-input-field [m_sLabel]="'Template name'" [m_sInputValue]="m_oSelectedTemplate.name"
                 [m_bIsDisabled]="m_oSelectedTemplate.readOnly === true"
                 [m_bIsReadonly]="m_oSelectedTemplate.readOnly === true"
@@ -81,8 +82,9 @@
             <app-button [m_sLabel]="'Cancel'" *ngIf="m_bShowCreateForm" [m_bOutline]="true"
                 (click)="viewProcessorParams(this.m_aoParametersTemplateList[0])"></app-button>
             <div class="d-flex flex-fill flex-row justify-content-end gap-2">
-                <app-button *ngIf="m_oSelectedTemplate.readOnly === false || m_bShowCreateForm" [m_sLabel]="'Save'"
-                    (click)="saveProcessorParam()"></app-button>
+                <app-button *ngIf="m_oSelectedTemplate && (m_oSelectedTemplate.readOnly === false || m_bShowCreateForm)" [m_bDisabled]="(!m_oSelectedTemplate.name || !m_sParametersString)"
+                    [m_sLabel]="'Save'"
+                    (click)="m_oSelectedTemplate.name && m_sParametersString ? saveProcessorParam() :''"></app-button>
                 <app-button [m_sLabel]="'Apply'"
                     (click)="applyProcessorParams(this.m_oSelectedTemplate.templateId)"></app-button>
             </div>
