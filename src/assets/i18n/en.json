@@ -1,6 +1,8 @@
 {
     "KEY_PHRASES" : {
-        "DESCRIPTION": "Description"
+        "CANCEL": "Cancel",
+        "DESCRIPTION": "Description",
+        "SAVE_CHANGES": "Save Changes"
     },
 
     "BTN_SEARCH": "Search",
@@ -506,15 +508,18 @@
     "DIALOG_FETCH_NODES_TITLE": "Fetch Nodes Sorted by Score",
     "DIALOG_FETCH_NODES_FETCH": "Fetch",
  
-    "DIALOG_WS_INFO_TITLE": "Workspace Details - ",
-    "DIALOG_WS_INFO_OWNER": " Owner ",
-    "DIALOG_WS_INFO_NODE": " Node",
-    "DIALOG_WS_INFO_SLA": " SLA Link",
-    "DIALOG_WS_INFO_UPDATE": " Last Update ",
-    "DIALOG_WS_INFO_ID": " Workspace id ",
+    "DIALOG_WS_INFO_TITLE": "Workspace details",
+    "DIALOG_WS_INFO_NAME": "Workspace name",
+    "DIALOG_WS_INFO_OWNER": "Owner ",
+    "DIALOG_WS_INFO_NODE": "Workspace node",
+    "DIALOG_WS_INFO_SLA": "SLA Link",
+    "DIALOG_WS_INFO_CREATE": "Created",
+    "DIALOG_WS_INFO_UPDATE": "Last Update ",
+    "DIALOG_WS_INFO_ID": "Workspace ID",
     "DIALOG_WS_INFO_FILES": "Total Files ",
     "DIALOG_WS_INFO_PROCS": "Processes Executed ",
-    "DIALOG_WS_INFO_SHARINGS": "Workspace sharing ",
+    "DIALOG_WS_INFO_SHARINGS": "Shared with",
+    "DIALOG_WS_INFO_NO_SHARES": "There's no one here, but you can add collaborators!",
  
     "DIALOG_PARAMS_TITLE": "App Params Library",
     "DIALOG_PARAMS_FILTER_HELP": "Filter Template Name...",

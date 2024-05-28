@@ -25,7 +25,7 @@ export class WorkspaceInfoDialogComponent implements OnInit {
   m_sCurrentNode: string;
   m_bShowCopied: boolean = false;
 
-  m_sInputWorkspaceName: string = ""
+  m_sInputWorkspaceName: string = "";
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oWorkspace: Workspace,
@@ -41,6 +41,7 @@ export class WorkspaceInfoDialogComponent implements OnInit {
   ngOnInit(): void {
     this.m_oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     this.m_sWorkspaceId = this.m_oWorkspace.workspaceId;
+    this.m_sInputWorkspaceName = this.m_oWorkspace.name; 
     this.getNodesList()
   }
 
@@ -148,7 +149,6 @@ export class WorkspaceInfoDialogComponent implements OnInit {
   }
 
   saveNameChange() {
-    console.log(this.m_sInputWorkspaceName)
     let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     oWorkspace.name = this.m_sInputWorkspaceName
     this.m_oWorkspaceService.updateWorkspace(oWorkspace).subscribe({
@@ -164,8 +164,9 @@ export class WorkspaceInfoDialogComponent implements OnInit {
 
   saveChanges() {
     this.saveNodeCode();
-    this.saveNameChange();
-
+    if (this.m_sInputWorkspaceName !== this.m_oWorkspace.name) {
+      this.saveNameChange();
+    }
   }
 
   onDismiss() {

@@ -1,22 +1,22 @@
 <div class="apps-dialog d-flex flex-column">
     <div class="dialog-header d-flex flex-row justify-content-between font-bold">
-        Workspace details
+        {{"DIALOG_WS_INFO_TITLE" | translate}}
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
     <div class="dialog-content flex-fill d-flex flex-row justify-content-between gap-4">
         <div class="info-container d-flex flex-column gap-4">
             <div>
-                <div class="font-bold">Workspace name</div>
+                <div class="font-bold">{{"DIALOG_WS_INFO_NAME" | translate}}</div>
                 <app-input-field [m_sInputValue]="m_oWorkspace.name" [m_bIsReadonly]="m_oWorkspace.readOnly === true"
                     (m_oInputChange)="m_sInputWorkspaceName = $event.event.target.value"></app-input-field>
             </div>
             <div>
-                <div class="font-bold">Workspace node</div>
+                <div class="font-bold">{{"DIALOG_WS_INFO_NODE" | translate}}</div>
                 <app-dropdown [m_aoDropdownItems]="m_asNodeCodes" [m_aoSelectedItems]="m_oWorkspace.nodeCode"
                     (m_oSelectionChange)="setNodeCode($event)"></app-dropdown>
             </div>
             <div>
-                <div class="font-bold">Workspace ID</div>
+                <div class="font-bold">{{"DIALOG_WS_INFO_ID" | translate}}</div>
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="" name="workspace-id"
                         aria-label="Workspace ID Copy Field" value="{{m_oWorkspace.workspaceId}}" readonly disabled
@@ -31,27 +31,27 @@
                 </div>
             </div>
             <div>
-                <div class="font-bold">Owner</div>
+                <div class="font-bold">{{"DIALOG_WS_INFO_OWNER" | translate}}</div>
                 <div>{{m_oWorkspace.userId}}</div>
             </div>
             <div class="d-flex flex-row" style="width: 100%;">
                 <div class="date-container">
-                    <div class="font-bold">Created</div>
+                    <div class="font-bold">{{"DIALOG_WS_INFO_CREATE" | translate}}</div>
                     <div>{{m_oWorkspace.creationDate | date}}</div>
                 </div>
                 <div>
-                    <div class="font-bold">Last Update</div>
+                    <div class="font-bold">{{"DIALOG_WS_INFO_UPDATE" | translate}}</div>
                     <div>{{m_oWorkspace.lastEditDate | date}}</div>
                 </div>
             </div>
         </div>
 
         <div class="info-container">
-            <div class="font-bold pb-2">Shared with</div>
+            <div class="font-bold pb-2">{{"DIALOG_WS_INFO_SHARINGS" | translate}}</div>
             <div class="image-wrapper d-flex flex-column align-items-center gap-2"
                 *ngIf="m_oWorkspace.sharedUsers.length === 0">
                 <img src="/assets/images/collaborators.png" alt="">
-                There's no one here, but you can add collaborators!
+                {{"DIALOG_WS_INFO_NO_SHARES" | translate}}
                 <app-button [m_sLabel]="'Add Collaborators'" (click)="openShareDialog()"></app-button>
             </div>
             <div *ngIf="m_oWorkspace.sharedUsers.length > 0">
@@ -64,7 +64,8 @@
         </div>
     </div>
     <div class="dialog-footer d-flex flex-row gap-2 justify-content-end">
-        <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true" (click)="onDismiss()"></app-button>
-        <app-button [m_sLabel]="'Save Changes'" (click)="saveChanges()"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true"
+            (click)="onDismiss()"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.SAVE_CHANGES' | translate" (click)="saveChanges()"></app-button>
     </div>
 </div>
