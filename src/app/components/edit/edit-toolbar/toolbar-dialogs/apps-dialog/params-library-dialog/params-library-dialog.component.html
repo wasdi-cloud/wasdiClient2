@@ -41,7 +41,7 @@
                                 class="material-symbols-outlined" (click)="showShareForm()">
                                 share
                             </span>
-                            <span (click)="applyProcessorParams(oParameter)" class="material-symbols-outlined">
+                            <span (click)="applyProcessorParams(oParameter.templateId)" class="material-symbols-outlined">
                                 play_circle
                             </span>
                             <span (click)="deleteProcessorParams(oParameter)" *ngIf="isOwner(oParameter)"
