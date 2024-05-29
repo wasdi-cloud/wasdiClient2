@@ -108,12 +108,12 @@ export class AppReviewsComponent implements OnChanges, AfterViewChecked {
           })
         }
         else {
-          this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg,  this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
         }
         this.m_bReviewsWaiting = false;
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg,  this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
       }
     });
   }
@@ -137,48 +137,18 @@ export class AppReviewsComponent implements OnChanges, AfterViewChecked {
             this.m_oReviewsWrapper.reviews = this.m_oReviewsWrapper.reviews.concat(oResponse.reviews);
           }
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg)
+          this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg,  this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger')
 
         }
         this.m_bReviewsWaiting = false;
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sReviewsErrorMsg,  this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
         this.m_bReviewsWaiting = false;
       }
     });
   }
-
-  /**
-   * Calls the API to remove the selected Comment
-   * @param oComment 
-   * @param oReview 
-   */
-  deleteComment(oComment: any, oReview: any): void {
-
-    let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENTS_ERROR");
-    let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_DELETE_CONFIRM");
-
-    //Confirm Comment Removal
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
-
-    bConfirmResult.subscribe(bDialogResult => {
-      if (bDialogResult === true) {
-        //If User agrees, the Comment is deleted
-        this.m_oProcessorMediaService.deleteReviewComment(this.m_oSelectedProcessor.processorId, oReview.id).subscribe({
-          next: oResponse => {
-            this.getReviews();
-          },
-          error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
-          }
-        })
-      }
-    });
-  }
-
-
-
+  
   showReviewInput() {
     this.m_bShowReviewBox = !this.m_bShowReviewBox;
   }

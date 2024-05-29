@@ -122,26 +122,26 @@ export class ReviewInputComponent implements OnInit {
 
     if (!this.m_oUserReview.comment || !this.m_oUserReview.vote) {
       let sError = "Please complete your Review";
-      this.m_oNotificationDisplayService.openAlertDialog(sError);
+      this.m_oNotificationDisplayService.openAlertDialog(sError, this.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'alert');
     } else {
       this.m_oProcessorMediaService.addProcessorReview(this.m_oUserReview).subscribe({
         next: oResponse => {
-          this.m_oNotificationDisplayService.openSnackBar(sSavedMsg);
+          this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, '', 'success-snackbar');
           this.emitCompletedReviewAction(true);
         },
         error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
         }
       });
     }
   }
 
   deleteReview() {
-    let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_REVIEWS_ERROR");
+    let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_REVIEW_REMOVE_ERROR");
     let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_REVIEW_DELETE_CONFIRM");
 
     //Confirm that User wishes to delete the Review:
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg, this.m_oTranslate.instant("KEY_PHRASES.CONFIRM_REMOVAL"), 'alert');
 
     bConfirmResult.subscribe(bDialogResult => {
       if (bDialogResult === true) {
@@ -149,11 +149,11 @@ export class ReviewInputComponent implements OnInit {
         this.m_oProcessorMediaService.deleteProcessorReview(this.m_oProcessor.processorId, this.m_oReview.id).subscribe({
           next: oResponse => {
             // this.getReviews();
-            this.m_oNotificationDisplayService.openSnackBar("Review Removed");
+            this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("MSG_MKT_REVIEW_REMOVED"), '', 'success-snackbar');
             this.emitCompletedReviewAction(true);
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
           }
         })
       }
@@ -161,26 +161,18 @@ export class ReviewInputComponent implements OnInit {
   }
 
   updateReview() {
-    let sSavedMessage: string;
-    let sErrorMessage: string;
+    let sSavedMessage: string = this.m_oTranslate.instant("MSG_MKT_REVIEW_UPDATED");
+    let sErrorMessage: string = this.m_oTranslate.instant("MSG_MKT_REVIEW_UPDATE_ERROR");
     this.m_oCommentInfo.reviewId = this.m_sReviewId;
     this.m_oUserReview.comment = this.m_sReviewText;
 
-    this.m_oTranslate.get("MSG_MKT_REVIEW_UPDATED").subscribe(sTranslation => {
-      sSavedMessage = sTranslation;
-    });
-
-    this.m_oTranslate.get("MSG_MKT_REVIEW_UPDATE_ERROR").subscribe(sTranslation => {
-      sErrorMessage = sTranslation;
-    });
-
     this.m_oProcessorMediaService.updateProcessorReview(this.m_oUserReview).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar(sSavedMessage);
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMessage, '', 'success-snackbar');
         this.emitCompletedReviewAction(true);
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, this.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
       }
     });
   }
@@ -194,31 +186,33 @@ export class ReviewInputComponent implements OnInit {
 
     this.m_oProcessorMediaService.addReviewComment(this.m_oCommentInfo).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg);
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, '', 'success-snackbar');
         this.emitCompletedCommentAction(true);
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
       }
     });
   }
 
+  /**
+   * Calls the API to remove the selected Comment
+   */
   deleteComment() {
-    let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENTS_ERROR");
-    let sConfirmMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_DELETE_CONFIRM");
+    let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENT_REMOVE_ERROR");
 
     this.m_oCommentInfo.reviewId = this.m_oComment.reveiwId;
     this.m_oCommentInfo.commentId = this.m_oComment.commendId;
 
-    this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg).subscribe(oResult => {
+    this.m_oNotificationDisplayService.openConfirmationDialog(this.m_oTranslate.instant("MSG_MKT_COMMENT_DELETE_CONFIRM"), this.m_oTranslate.instant("KEY_PHRASES.CONFIRM_REMOVAL"), "alert").subscribe(oResult => {
       if (oResult === true) {
         this.m_oProcessorMediaService.deleteReviewComment(this.m_oComment.reviewId, this.m_oComment.commentId).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("Comment Removed");
+            this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("MSG_MKY_COMMENT_DELETED"), this.m_oTranslate.instant("KEY_PHRASES.SUCCESS"), 'success-snackbar');
             this.emitCompletedCommentAction(true);
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
           }
         });
       }
@@ -236,11 +230,11 @@ export class ReviewInputComponent implements OnInit {
 
     this.m_oProcessorMediaService.updateReviewComment(this.m_oCommentInfo).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg);
+        this.m_oNotificationDisplayService.openSnackBar(sSavedMsg, '', 'success-snackbar');
         this.emitCompletedCommentAction(true);
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
       }
     });
   }

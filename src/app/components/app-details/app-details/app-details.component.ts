@@ -93,7 +93,7 @@ export class AppDetailsComponent implements OnInit {
     this.m_oProcessorService.getMarketplaceDetail(applicationName).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === true) {
-          this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
         } else {
           this.m_oApplicationInfo = oResponse;
           this.getApplicationStats();
@@ -117,7 +117,7 @@ export class AppDetailsComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
       }
     });
 
@@ -133,13 +133,13 @@ export class AppDetailsComponent implements OnInit {
     this.m_oProcessWorkspaceService.getProcessorStatistics(this.m_oApplicationInfo.processorName).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
         } else {
           this.m_oAppStats = oResponse;
         }
       },
       error: oError => {
-
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
       }
     })
   }
