@@ -61,8 +61,6 @@ export class SubscriptionsDisplayComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oOrganizationsService: OrganizationsService,
-    private m_oProjectService: ProjectService,
     private m_oSubscriptionService: SubscriptionService,
     private m_oTranslate: TranslateService
   ) { }
@@ -115,34 +113,40 @@ export class SubscriptionsDisplayComponent implements OnInit {
   }
 
   deleteSubscription(oSubscription) {
-    let sConfirmationMessage: string = `Are you sure you want to remove ${oSubscription.name}?`;
+    let sConfirmTitle: string = this.m_oTranslate.instant("USER_SUBSCRIPTIONS_REMOVE_TITLE");
+    let sConfirmationMessage: string = this.m_oTranslate.instant("USER_SUBSCRIPTIONS_REMOVE_MSG") + `<li>${oSubscription.name}</li>`;
 
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage);
+    let oConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmationMessage, sConfirmTitle, "alert");
 
-    bConfirmResult.subscribe(oDialogResult => {
+    oConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_oSubscriptionService.deleteSubscription(oSubscription.subscriptionId).subscribe({
           next: oResponse => {
-            let sMessage = "SUBSCRIPTION DELETED";
+            let sSuccessTitle: string = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS");
+            let sErrorTitle: string = this.m_oTranslate.instant("KEY_PHRASES.ERROR");
+            let sMessage = this.m_oTranslate.instant("USER_SUBSCRIPTION_REMOVE_MSG");
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.status === 200) {
               if (oResponse.body.message !== "Done") {
                 sMessage += "<br><br>" + this.m_oTranslate.get(oResponse.body.message).subscribe(oTranslation => {
                   return oTranslation
                 });
-                this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+                this.m_oNotificationDisplayService.openAlertDialog(sMessage, sErrorTitle, 'danger');
               }
-              this.m_oNotificationDisplayService.openSnackBar(sMessage);
+
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, sSuccessTitle, 'success-snackbar');
+              this.initializeSubscriptionsInfo();
             }
           },
           error: oError => {
-            let sErrorMessage = "GURU MEDITATION<br>ERROR IN DELETING SUBSCRIPTION";
+            let sErrorTitle: string = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION")
+            let sErrorMessage = this.m_oTranslate.instant("USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG");
 
             if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oError.data) && !FadeoutUtils.utilsIsStrNullOrEmpty(oError.data.message)) {
-              sErrorMessage += "<br><br>" + this.m_oTranslate.get(oError.data.message).subscribe(oTranslation => {
+              sErrorMessage += "<br>" + this.m_oTranslate.get(oError.data.message).subscribe(oTranslation => {
                 return oTranslation;
               });
             }
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, sErrorTitle, 'danger');
           }
         })
       }
@@ -207,6 +211,8 @@ export class SubscriptionsDisplayComponent implements OnInit {
   }
 
   saveSubscription() {
+    let sTitle = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION");
+    let sErrorMsg = this.m_oTranslate.instant("USER_SUBSCRIPTION_SAVE_ERROR")
     this.createSubscriptionObject()
     this.m_oSubscriptionService.saveSubscription(this.m_oEditSubscription).subscribe({
       next: oResponse => {
@@ -216,31 +222,22 @@ export class SubscriptionsDisplayComponent implements OnInit {
           // this.initSubscriptionInfo();
           this.initDates();
           if (this.m_bCheckoutNow === false) {
-            this.m_oNotificationDisplayService.openAlertDialog("UPDATED SUBSCRIPTION");
+            let sAlertMsg: string = this.m_oTranslate.instant("USER_SUBSCRIPTION_UPDATED")
+            this.m_oNotificationDisplayService.openAlertDialog(sAlertMsg, "", 'success-snackbar');
           }
           //If creating a subscription:
           if (this.m_bCheckoutNow === true) {
-            // let oDialog = utilsVexDialogAlertBottomRightCorner("SUBSCRIPTION SAVED<br>REDIRECTING TO PAYMENT");
-            // utilsVexCloseDialogAfter(4000, oDialog);
-
             this.getStripePaymentUrl();
           }
         } else {
-          //utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR IN SAVING SUBSCRIPTION");
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sTitle, 'danger')
         }
       },
       error: oError => {
-        let sErrorMessage = "GURU MEDITATION<br>ERROR IN SAVING SUBSCRIPTION";
-
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oError.data) && !FadeoutUtils.utilsIsStrNullOrEmpty(oError.data.message)) {
-          sErrorMessage += "<br><br>" + this.m_oTranslate.instant(oError.data.message);
+          sErrorMsg += "<br>" + this.m_oTranslate.instant(oError.data.message);
         }
-
-        // utilsVexDialogAlertTop(sErrorMessage);
-
-        if (this.m_bIsPaid) {
-          //this.m_oScope.close();
-        }
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sTitle, 'danger')
       }
     })
   }
@@ -252,7 +249,8 @@ export class SubscriptionsDisplayComponent implements OnInit {
     this.m_oSubscriptionService.getStripePaymentUrl(this.m_oEditSubscription.subscriptionId, sActiveWorkspaceId).subscribe({
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
-          this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED");
+          let sMsg = this.m_oTranslate.instant("USER_SUBSCRIPTION_URL")
+          this.m_oNotificationDisplayService.openSnackBar(sMsg, '', 'success-snackbar');
 
           let sUrl = oResponse.message;
 
@@ -260,7 +258,8 @@ export class SubscriptionsDisplayComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("ERROR IN FETCHING PAYMENT URL");
+        let sMsg = this.m_oTranslate.instant("USER_SUBSCRIPTION_URL_ERROR")
+        this.m_oNotificationDisplayService.openSnackBar(sMsg, '', 'danger-snackbar');
       }
     });
   }
@@ -299,9 +298,10 @@ export class SubscriptionsDisplayComponent implements OnInit {
 
   checkout() {
     this.createSubscriptionObject();
-    let sMessage = "You will be re-directed to our payment partner, Stripe. Click 'OK' to continue or 'CANCEL' to end the payment process."
+    let sMessage = this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_MSG");
+    let sTitle = this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_TITLE");
     //Notification that user will be re-directed to Stripe
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage);
+    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage, sTitle, 'info');
 
     bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
@@ -316,6 +316,8 @@ export class SubscriptionsDisplayComponent implements OnInit {
   }
 
   initEditSubscriptionInfo() {
+    let sErrorMsg = this.m_oTranslate.instant("USER_SUBSCRIPTION_ID_ERROR");
+    let sTitle = this.m_oTranslate.instant("KEY_PHRASES.ERROR");
     if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oEditSubscription.subscriptionId)) {
       this.m_bIsPaid = this.m_oEditSubscription.buySuccess;
       this.initDates();
@@ -328,10 +330,12 @@ export class SubscriptionsDisplayComponent implements OnInit {
             this.initDates();
             this.getDaysRemaining(this.m_oEditSubscription.startDate, this.m_oEditSubscription.endDate)
           } else {
-            this.m_oNotificationDisplayService.openAlertDialog("ERROR IN GETTING THE SUBSCRIPTION BY ID");
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sTitle, 'alert');
           }
         },
-        error: oError => { }
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sTitle, 'alert');
+        }
       });
     }
   }
