@@ -3,7 +3,8 @@
         "CANCEL": "Cancel",
         "DESCRIPTION": "Description",
         "SAVE_CHANGES": "Save Changes",
-        "ERROR": "Error"
+        "ERROR": "Error",
+        "GURU_MEDITATION": "Guru Meditation"
     },
 
     "BTN_SEARCH": "Search",
@@ -356,6 +357,9 @@
     "DIALOG_EDIT_USER_PROCESS_TIME_1": "You have used",
     "DIALOG_EDIT_USER_PROCESS_TIME_2": "of WASDI processing time",
     "DIALOG_EDIT_USER_TIME": "Total processing time",
+
+    "USER_ACCOUNT_CHANGE_SUCCESS": "Your information has been updated",
+    "USER_ACCOUNT_CHANGE_ERROR": "Your information could not be updated",
     
     "DIALOG_FTP_TITLE": "Transfer to FTP",
     "DIALOG_FTP_INPUT_SERVER": "FTP Server address",
@@ -916,6 +920,18 @@
     "USER_SUBSCRIPTIONS_HIDE_PROJECTS": "Hide Projects",
     "USER_SUBSCRIPTIONS_SHOW_ORGANIZATION": "Show Organizations",
     "USER_SUBSCRIPTIONS_HIDE_ORGANIZATION": "Hide Organizations",
+    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Confirm Subscription Removal", 
+    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Are you sure you want to remove this subscription?", 
+    "USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG": "Error in deleting subscription",
+    "USER_SUBSCRIPTION_REMOVE_MSG": "Subscription Removed",
+    "USER_SUBSCRIPTION_UPDATED": "Subscription Updated",
+    "USER_SUBSCRIPTION_URL": "Payment URL Recieved",
+    "USER_SUBSCRIPTION_URL_ERROR": "Error in fetching payment URL",
+    "USER_SUBSCRIPTION_STRIPE_TITLE": "Re-direcrting to STRIPE", 
+    "USER_SUBSCRIPTION_STRIPE_MSG": "You will be re-directed to our payment partner, Stripe. Click 'Yes' to continue or 'CANCEL' to end the payment process.",
+    "USER_SUBSCRIPTION_ID_ERROR": "Could not find subscription by ID",
+    "USER_SUBSCRIPTION_SAVE_ERROR": "Could not save subscription",
+    "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Could not get user organisations",
   
     "DIALOG_ADD_SUBSCRIPTION": "Add Subscription",
     "DIALOG_EDIT_SUBSCRIPTION": "Edit Subscription",

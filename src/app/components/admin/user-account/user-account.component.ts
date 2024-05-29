@@ -34,8 +34,7 @@ export class UserAccountComponent implements OnInit {
     }, {
       name: 'Español',
       value: 'es'
-    },
-    {
+    }, {
       name: 'Français',
       value: 'fr'
     }, {
@@ -64,7 +63,6 @@ export class UserAccountComponent implements OnInit {
     private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oTranslate: TranslateService
   ) {
     //Register translation languages:
@@ -104,22 +102,27 @@ export class UserAccountComponent implements OnInit {
   changeUserInfo() {
     let oJsonToSend = this.getUserInfo();
 
+    let sChangeSuccess = this.m_oTranslate.instant("USER_ACCOUNT_CHANGE_SUCCESS");
+    let sChangeError = this.m_oTranslate.instant("USER_ACCOUNT_CHANGE_ERROR");
+    let sChangeErrorTitle = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION");
+
     this.m_oAuthService.changeUserInfo(oJsonToSend).subscribe({
       next: oResponse => {
-        console.log(oResponse)
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) || oResponse.userId !== "") {
           if (oResponse.boolValue === false) {
-            this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>IMPOSSIBLE TO CHANGE USER INFO");
+            this.m_oNotificationDisplayService.openAlertDialog(sChangeError, sChangeErrorTitle, 'danger');
           } else {
-            this.m_oNotificationDisplayService.openSnackBar("Changed user Info");
+            this.m_oNotificationDisplayService.openSnackBar(sChangeSuccess, '', 'success-snackbar');
 
             this.m_oUser = oResponse;
             this.m_oConstantsService.setUser(this.m_oUser);
           }
         }
       },
-      error: oError => { }
-    })
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog(sChangeError, sChangeErrorTitle, 'danger');
+      }
+    });
   }
 
   changeUserPassword() { }
@@ -141,7 +144,6 @@ export class UserAccountComponent implements OnInit {
     if (oEvent.label === 'Surname') {
       this.m_oEditUser.lname = oEvent.event.target.value;
     }
-
     this.m_bEditingUserInfo = true;
   }
 }
