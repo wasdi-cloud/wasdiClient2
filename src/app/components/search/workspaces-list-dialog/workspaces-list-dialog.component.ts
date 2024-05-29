@@ -83,14 +83,14 @@ export class WorkspacesListDialogComponent implements OnInit {
           this.m_bIsLoadingWorkspaceList = false;
 
           // If there is an Active Workspace, move it to the first position to display first:
-          if (this.m_oActiveWorkspace.workspaceId && this.m_bIsDialog === true) {
+          if (this.m_oActiveWorkspace.workspaceId) {
             this.m_aoWorkspaceList.forEach((oWorkspace, iIndex) => {
               if (oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
                 this.m_aoWorkspaceList.splice(iIndex, 1);
                 this.m_aoWorkspaceList.unshift(oWorkspace);
                 // Add the workspace to the selected workspaces array:
                 this.m_aoSelectedWorkspaces.push(oWorkspace);
-                oWorkspace.checked = true;
+                oWorkspace.selected = true
               }
             })
           }
@@ -112,15 +112,15 @@ export class WorkspacesListDialogComponent implements OnInit {
   * @param oEvent
   */
   selectAllWorkspaces(oEvent: any): void {
-    if (oEvent.checked === true) {
+    if (oEvent.selected === true) {
       this.m_aoSelectedWorkspaces = this.m_aoWorkspaceList;
       this.m_aoWorkspaceList.forEach(oWorkspace => {
-        oWorkspace.checked = true;
+        oWorkspace.selected = true;
       })
     } else {
       this.m_aoSelectedWorkspaces = [];
       this.m_aoWorkspaceList.forEach(oWorkspace => {
-        oWorkspace.checked = false;
+        oWorkspace.selected = false;
       })
     }
   }

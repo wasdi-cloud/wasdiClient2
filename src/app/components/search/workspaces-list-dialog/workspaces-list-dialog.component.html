@@ -18,7 +18,8 @@
     </div>
     <div class="dialog-footer d-flex flex-row justify-content-end">
         <!-- button for sending product(s) to workspace from search -->
-        <app-button *ngIf="!m_bIsSharingProduct" [m_sLabel]="m_aoSelectedWorkspaces.length <= 2 ? 'Send to Workspace' : 'Send to Workspaces'" (click)="addProductToWorkspace()"></app-button>
-        <app-button *ngIf="m_bIsSharingProduct" [m_sLabel]="m_aoSelectedWorkspaces.length <= 2 ? 'Send to Workspace' : 'Send to Workspaces'" (click)="shareProductToWorkspace()"></app-button>
+        <app-button *ngIf="!m_bIsSharingProduct && m_oSelectedProduct" [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? 'Send Product to Workspace' : 'Send Product to Workspaces'" (click)="addProductToWorkspace()"></app-button>
+        <app-button *ngIf="!m_bIsSharingProduct && m_aoSelectedProducts.length > 0" [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? 'Send Products to Workspace' : 'Send Products to Workspaces'" (click)="addMultipleProductsToWorkspace()"></app-button>
+        <app-button *ngIf="m_bIsSharingProduct" [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? 'Send to Workspace' : 'Send to Workspaces'" (click)="shareProductToWorkspace()"></app-button>
     </div>
 </div>
