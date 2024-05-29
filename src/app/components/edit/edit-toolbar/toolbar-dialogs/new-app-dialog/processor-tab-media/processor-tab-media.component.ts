@@ -38,7 +38,7 @@ export class ProcessorTabMediaComponent implements OnInit {
 
     this.m_oImageService.uploadProcessorLogo(this.m_oProcessor.processorId, this.m_oProcessorLogo).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("PROCESSOR LOGO UPDATED", "Close", "right", "bottom");
+        this.m_oNotificationDisplayService.openSnackBar("PROCESSOR LOGO UPDATED");
         // this.m_oNotificationDisplayService.openAlertDialog( "PROCESSOR LOGO UPDATED")
         // this.onDismiss();
       },

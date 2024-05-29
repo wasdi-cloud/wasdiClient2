@@ -131,7 +131,7 @@ export class SubscriptionsDisplayComponent implements OnInit {
                 });
                 this.m_oNotificationDisplayService.openAlertDialog(sMessage);
               }
-              this.m_oNotificationDisplayService.openSnackBar(sMessage, 'Close', 'right', 'bottom');
+              this.m_oNotificationDisplayService.openSnackBar(sMessage);
             }
           },
           error: oError => {
@@ -252,7 +252,7 @@ export class SubscriptionsDisplayComponent implements OnInit {
     this.m_oSubscriptionService.getStripePaymentUrl(this.m_oEditSubscription.subscriptionId, sActiveWorkspaceId).subscribe({
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
-          this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED");
 
           let sUrl = oResponse.message;
 

@@ -542,3 +542,47 @@ a.leaflet-control-button,
 .cdk-overlay-container {
   z-index: 99999 !important;
 }
+
+
+.mdc-snackbar__label,
+.mdc-snackbar__surface {
+  padding: 0px !important;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: 8px !important;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__label {
+  color: var(--neutral80) !important;
+}
+
+.generic-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--neutral20) !important;
+  background-color: #FFFFFF !important;
+}
+
+
+.success-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--wasdiGreen) !important;
+  background-color: var(--wasdiGreenLight) !important;
+}
+
+.alert-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--wasdiWarn) !important;
+  background-color: var(--wasdiWarnLight) !important;
+}
+
+.danger-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--wasdiDanger) !important;
+  background-color: var(--wasdiDangerLight) !important;
+}
+
+.info-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--neutral50Brand) !important;
+  background-color: var(--wasdiBluelight) !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 8px !important;
+}

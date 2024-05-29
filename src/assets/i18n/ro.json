@@ -1,4 +1,9 @@
 {
+	"KEY_PHRASES": {
+		"DESCRIPTION": "Descriere",
+		"ERROR": "Eroare",
+		"SUCCESS": "Succes"
+	},
 	"BTN_SEARCH": "Căutare",
 	"BTN_IMPORT": "Importare",
 	"SORT_BY": "Ordonați după",
@@ -106,6 +111,9 @@
 	"EDITOR_PRODUCTS_FILTER_CLEAN": "Elimină filtrul",
 	"EDITOR_PRODUCTS_FILTER_SELECT": "Selectează",
 	"EDITOR_PRODUCTS_WS_INFO": "Informații despre spațiul de lucru",
+	"EDITOR_PRODUCT_REMOVE": "Confirmați eliminarea produsului", 
+    "EDITOR_PRODUCTS_REMOVE": "Confirmați eliminarea produselor",
+
 	"IMPORT_PRODUCTS_PER_PAGE_LABEL": "Produse pe pagină",
 	"IMPORT_PAGE_LABEL": "Pagină",
 	"IMPORT_OF_LABEL": "de",
@@ -683,5 +691,20 @@
 	"DIALOG_PACKAGE_MANAGER_LATEST_VERSION": "Ultima versiune",
 	"DIALOG_PACKAGE_MANAGER_ACTIONS": "Acțiuni",
 	"EDITOR_ERROR_CONSOLE_NOT_REACHABLE": "Eroare la contactarea serviciului JupyterLab",
-	"READ_ONLY": "Read Only"
+
+	"USER_ORGANIZATIONS_ERROR_FETCHING": "Nu s-au putut prelua organizațiile dvs.",
+    "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Nu s-au putut prelua informațiile despre organizație",
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirmați eliminarea organizației", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Sunteți sigur că doriți să eliminați această organizație?",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Confirmați eliminarea permisiunilor",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Sunteți sigur că doriți să vă eliminați permisiunile cu această organizație?",
+    "USER_ORGANIZATIONS_DELETE_SUCCESS": "Organizație eliminată",
+    "USER_ORGANIZATION_SAVE_SUCCESS": "Organizație salvată",
+    "USER_ORGANIZATION_INVALID_INPUT": "Intrarea organizației nu este validă",
+    "USER_ORGANIZATION_SAVE_ERROR": "Nu s-a putut salva organizația dvs.",
+    "USER_ORGANIZATION_DELETE_ERROR": "Nu s-a putut șterge organizația dvs.",
+
+	"READ_ONLY": "Read Only",
+
+	"MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Este necesar un abonament valid și un proiect activ. Consultați Tabloul de bord pentru utilizatori."
 }

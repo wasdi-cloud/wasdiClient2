@@ -211,7 +211,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
       this.m_bEditMode = true;
     }
     catch (error) {
-      this.m_oNotificationDisplayService.openSnackBar("There may be some problem in the JSON of this template", "Close", "right", "bottom");
+      this.m_oNotificationDisplayService.openSnackBar("There may be some problem in the JSON of this template");
     }
 
     return true;
@@ -267,7 +267,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
       JSON.parse(sJSONPayload);
     }
     catch (error) {
-      this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload", "Close", "right", "bottom");
+      this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload");
       return false;
     }
 
@@ -315,7 +315,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
       this.m_sParametersString = JSON.stringify(JSON.parse(this.m_sParametersString.replaceAll("'", '"')), null, 2);
     }
     catch (error) {
-      this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload", "Close", "right", "bottom");
+      this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload");
     }
   }
 

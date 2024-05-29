@@ -65,25 +65,33 @@ export class OrganizationsDisplayComponent implements OnInit {
   }
 
   removeOrganization(oOrganization: any) {
-    let sConfirmMsgOwner = `Are you sure you want to delete ${oOrganization.name}?`
-    let sConfirmMsgShared = `Are you sure you want to remove your permissions from ${oOrganization.name}?`;
+    let sOwnerTitle: string = this.m_oTranslate.instant("USER_ORGANIZATIONS_REMOVE_OWNER_TITLE")
+    let sOwnerMsg: string = this.m_oTranslate.instant("USER_ORGANIZATIONS_REMOVE_OWNER_MSG")
+
+    let sSharedTitle: string = this.m_oTranslate.instant("USER_ORGANIZATIONS_REMOVE_SHARED_TITLE")
+    let sSharedMsg: string = this.m_oTranslate.instant("USER_ORGANIZATIONS_REMOVE_SHARED_MSG")
+
+    let sDeleteSuccessMsg = this.m_oTranslate.instant("USER_ORGANIZATIONS_DELETE_SUCCESS")
+    let sDeleteErrorMsg = this.m_oTranslate.instant("USER_ORGANIZATION_DELETE_ERROR")
+
+    let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.ERROR")
 
     let bConfirmResult: any;
 
-    if (oOrganization.adminRole) {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsgOwner);
+    if (!oOrganization.readOnly) {
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sOwnerMsg, sOwnerTitle, 'alert');
     } else {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsgShared);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sSharedMsg, sSharedTitle, 'alert');
     }
     bConfirmResult.subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_oOrganizationsService.deleteOrganization(oOrganization.organizationId).subscribe({
           next: oResponse => {
             this.getUserOrganizations();
-            this.m_oNotificationDisplayService.openSnackBar("Organization Removed", "Close", 'bottom', 'right');
+            this.m_oNotificationDisplayService.openSnackBar(sDeleteSuccessMsg, "", 'success-snackbar');
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in deleting this organization");
+            this.m_oNotificationDisplayService.openAlertDialog(sDeleteErrorMsg, sErrorHeader, 'danger');
           }
         })
       }
@@ -126,23 +134,28 @@ export class OrganizationsDisplayComponent implements OnInit {
   }
 
   saveOrganisation() {
+    let sSaveSuccess = this.m_oTranslate.instant("USER_ORGANIZATION_SAVE_SUCCESS")
+    let sInvalidInput = this.m_oTranslate.instant("USER_ORGANIZATION_INVALID_INPUT")
+    let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.ERROR");
+    let sErrorMsg = this.m_oTranslate.instant("USER_ORGANIZATION_SAVE_ERROR")
+
     if (!this.checkOrgIsValid()) {
-      this.m_oNotificationDisplayService.openAlertDialog('The organisation input is not valid');
+      this.m_oNotificationDisplayService.openAlertDialog(sInvalidInput, sErrorHeader, 'danger');
     } else {
       this.m_oOrganizationsService.saveOrganization(this.m_oOrganisation).subscribe({
         next: oResponse => {
           if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.status === 200) {
-            this.m_oNotificationDisplayService.openAlertDialog("Organization Saved");
+            this.m_oNotificationDisplayService.openSnackBar(sSaveSuccess, "", "success-snackbar");
           } else {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in Saving this Organization");
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sErrorHeader, "danger");
           }
           this.getUserOrganizations();
         },
         error: oError => {
-          let sErrorMsg = "Error in Saving this Organization";
           if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oError) && !FadeoutUtils.utilsIsStrNullOrEmpty(oError.message)) {
-            this.m_oTranslate.instant(oError.message);
+            sErrorMsg = this.m_oTranslate.instant(oError.message);
           }
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sErrorHeader, "danger")
         }
       })
     }
@@ -168,13 +181,14 @@ export class OrganizationsDisplayComponent implements OnInit {
   }
 
   initializeOragnizationInfo() {
+    let sErrorMsg = this.m_oTranslate.instant("USER_ORGANIZATIONS_ERROR_FETCHING_INFO")
+    let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.ERROR");
     this.m_oOrganizationsService.getOrganizationById(this.m_oActiveOrganization.organizationId).subscribe({
       next: oResponse => {
         this.m_oOrganisation = oResponse;
-        console.log(this.m_oOrganisation);
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in getting organization information");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sErrorHeader, 'danger');
       }
     })
   }

@@ -60,7 +60,7 @@ export class SaveParamsDialogComponent implements OnInit {
     // And call the API
     this.m_oProcessorParametersTemplateService.addProcessorParameterTemplate(this.m_oTemplate).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("Template Saved!", "Close");
+        this.m_oNotificationDisplayService.openSnackBar("Template Saved!");
       },
       error: oError => {
         this.m_oNotificationDisplayService.openAlertDialog("ERROR IN SAVING YOUR PARAMETERS TEMPLATE");

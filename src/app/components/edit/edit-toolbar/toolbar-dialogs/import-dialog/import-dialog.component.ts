@@ -127,10 +127,10 @@ export class ImportDialogComponent implements OnInit {
         next: (oResponse) => {
           if (oResponse.status !== 200) {
             let sErrorMsg: string = "GURU MEDITATION<br>ERROR IN UPLOADING FILE"
-            this.m_oNotificationDisplayService.openSnackBar(sErrorMsg, "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar(sErrorMsg);
           } else {
             let sMessage: string = "FILE UPLOADED";
-            this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar(sMessage);
             this.onDismiss();
           }
           this.m_bIsUploading = false;
@@ -138,7 +138,7 @@ export class ImportDialogComponent implements OnInit {
         error: (oError) => {
           let sErrorMessage: string = "ERROR IN UPLOADING FILE";
           this.m_bIsUploading = false;
-          this.m_oNotificationDisplayService.openSnackBar(sErrorMessage, "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar(sErrorMessage);
         }
       });
     return true

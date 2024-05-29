@@ -141,7 +141,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchBtnGrpComponent } from './shared/shared-components/search-btn-grp/search-btn-grp.component';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { DragAndDropComponent } from './shared/drag-and-drop/drag-and-drop.component';
-import { AlertDialogComponent } from './shared/dialogs/alert-dialog/alert-dialog.component';
 import { NotificationSnackbarComponent } from './shared/dialogs/notification-snackbar/notification-snackbar.component';
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 import { ManualBoundingBoxComponent } from './shared/shared-components/manual-bounding-box/manual-bounding-box.component';
@@ -263,7 +262,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SearchBtnGrpComponent,
     DragAndDropDirective,
     DragAndDropComponent,
-    AlertDialogComponent,
     NotificationSnackbarComponent,
     ConvertMsToTimePipe,
     ManualBoundingBoxComponent,

@@ -1,4 +1,9 @@
 {
+    "KEY_PHRASES": {
+        "DESCRIPTION": "Mô tả",
+        "ERROR": "Lỗi",
+        "SUCCESS": "Thành công"
+    },
     "BTN_SEARCH": "Tìm kiếm",
     "BTN_IMPORT": "Nhập",
     "SORT_BY": "Sắp xếp theo",
@@ -106,6 +111,9 @@
     "EDITOR_PRODUCTS_FILTER_CLEAN": "Làm sạch bộ lọc",
     "EDITOR_PRODUCTS_FILTER_SELECT": "Lựa chọn",
     "EDITOR_PRODUCTS_WS_INFO": "Thông tin không gian làm việc",
+    "EDITOR_PRODUCT_REMOVE": "Xác nhận xóa sản phẩm", 
+    "EDITOR_PRODUCTS_REMOVE":"Xác nhận xóa sản phẩm",
+
     "IMPORT_PRODUCTS_PER_PAGE_LABEL": "Sản phẩm mỗi trang",
     "IMPORT_PAGE_LABEL": "Trang",
     "IMPORT_OF_LABEL": "của",
@@ -682,6 +690,22 @@
     "DIALOG_PACKAGE_MANAGER_CURRENT_VERSION": "Phiên bản hiện tại",
     "DIALOG_PACKAGE_MANAGER_LATEST_VERSION": "Phiên bản mới nhất",
     "DIALOG_PACKAGE_MANAGER_ACTIONS": "Hành động",
+
     "EDITOR_ERROR_CONSOLE_NOT_REACHABLE": "Lỗi khi liên hệ với dịch vụ JupyterLab",
-    "READ_ONLY": "Read Only"
+
+    "USER_ORGANIZATIONS_ERROR_FETCHING": "Không thể tìm nạp tổ chức của bạn",
+    "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Không thể tìm nạp thông tin tổ chức",
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Xác nhận xóa tổ chức", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Bạn có chắc chắn muốn xóa tổ chức này không?",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Xác nhận xóa quyền",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Bạn có chắc chắn muốn xóa quyền của mình với tổ chức này không?",
+    "USER_ORGANIZATIONS_DELETE_SUCCESS": "Tổ chức đã bị xóa",
+    "USER_ORGANIZATION_SAVE_SUCCESS": "Tổ chức đã lưu",
+    "USER_ORGANIZATION_INVALID_INPUT": "Thông tin đầu vào của tổ chức không hợp lệ",
+    "USER_ORGANIZATION_SAVE_ERROR": "Không thể lưu tổ chức của bạn",
+    "USER_ORGANIZATION_DELETE_ERROR": "Không thể xóa tổ chức của bạn",
+
+    "READ_ONLY": "Read Only",
+    
+    "MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Yêu cầu đăng ký hợp lệ và dự án đang hoạt động. Vui lòng xem Bảng điều khiển người dùng."
 }

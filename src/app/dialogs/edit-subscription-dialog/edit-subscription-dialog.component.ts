@@ -212,7 +212,7 @@ export class EditSubscriptionDialogComponent implements OnInit {
       next: oResponse => {
         console.log(oResponse);
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
-          this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED");
 
           let sUrl = oResponse.message;
 

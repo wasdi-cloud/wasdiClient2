@@ -94,7 +94,7 @@ export class WorkspaceInfoDialogComponent implements OnInit {
         this.m_oConstantsService.getActiveWorkspace().nodeCode = this.m_sCurrentNode;
         this.m_oConstantsService.setActiveWorkspace(oWorkspace);
 
-        this.m_oNotificationDisplayService.openSnackBar("Node Updated", "Close");
+        this.m_oNotificationDisplayService.openSnackBar("Node Updated");
       } else {
         this.m_oNotificationDisplayService.openAlertDialog("Error updating node");
       }
@@ -153,7 +153,7 @@ export class WorkspaceInfoDialogComponent implements OnInit {
     oWorkspace.name = this.m_sInputWorkspaceName
     this.m_oWorkspaceService.updateWorkspace(oWorkspace).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("Workspace Name Updated", "Close");
+        this.m_oNotificationDisplayService.openSnackBar("Workspace Name Updated");
       },
       error: oError => {
         this.m_oNotificationDisplayService.openAlertDialog("Error while updating worksapce name");

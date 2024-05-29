@@ -125,10 +125,10 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
       if (bDialogResult === true) {
         this.m_oPackageManagerService.resetActions(sProcessorId).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("All the past actions on this app have been deleted", "Close");
+            this.m_oNotificationDisplayService.openSnackBar("All the past actions on this app have been deleted");
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openSnackBar("There was an error resetting the past actions", "Close");
+            this.m_oNotificationDisplayService.openSnackBar("There was an error resetting the past actions");
           }
         })
       }
@@ -141,7 +141,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
    */
   addLibrary(sProcessorId: string, sPackageName: string, sPackageVersion?: string) {
     if (!sPackageName) {
-      this.m_oNotificationDisplayService.openSnackBar("Package name missing, we cannot proceed", "Close");
+      this.m_oNotificationDisplayService.openSnackBar("Package name missing, we cannot proceed");
       return;
     }
 
@@ -164,7 +164,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
             this.m_sPackageVersion = "";
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openSnackBar("Error adding your package. Are you sure about the name used?", "Close");
+            this.m_oNotificationDisplayService.openSnackBar("Error adding your package. Are you sure about the name used?");
           }
         })
       }
@@ -219,7 +219,7 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
    * @param oController 
    */
   rabbitMessageHook(oRabbitMessage, oController) {
-    oController.m_oNotificationDisplayService.openSnackBar(oRabbitMessage.payload, "Close");
+    oController.m_oNotificationDisplayService.openSnackBar(oRabbitMessage.payload);
     oController.fetchPackages();
     oController.m_bIsLoading = false
   }

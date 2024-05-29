@@ -306,7 +306,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
         let sNotificationMsg = "PROCESSOR SCHEDULED";
-        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg)
       }
       this.m_oDialogRef.close();
     })

@@ -85,7 +85,7 @@ export class WorkspacesMenuComponent implements OnInit {
         oController.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
           next: oReponse => {
             if (oReponse === null) {
-              oController.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
+              oController.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`);
               // Clear workspace information displayed in the UI
               oController.m_oActiveWorkspace = null;
               // Refresh workspaces list:

@@ -111,7 +111,7 @@ export class ManageUsersComponent implements OnInit {
   updateUser(oUser) {
     this.m_oAdminDashboardService.updateUser(oUser).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("User Updated. Refreshing.", "Close");
+        this.m_oNotificationDisplayService.openSnackBar("User Updated. Refreshing.");
         if (this.m_sUserSearch) {
           this.executeUserSearch();
         } else {

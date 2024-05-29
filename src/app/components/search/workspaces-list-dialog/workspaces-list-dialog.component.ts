@@ -222,7 +222,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         sMessage = sResponse;
       });
       oCallback = function (data, status) {
-        oController.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "bottom", "right");
+        oController.m_oNotificationDisplayService.openSnackBar(sMessage);
       }
     }
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oError) === true) {
@@ -263,14 +263,14 @@ export class WorkspacesListDialogComponent implements OnInit {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds) == false) {
         sBound = oProduct.bounds.toString();
       }
-  
+
       let sOriginWorkspaceId = oController.m_oActiveWorkspace.workspaceId;
       let sDestinationWorkspaceId = aoWorkspaces[iIndexWorkspace].workspaceId;
       let sProductName = oProduct.fileName;
 
       oController.m_oFileBufferService.share(sOriginWorkspaceId, sDestinationWorkspaceId, sProductName).subscribe({
         next: oResponse => {
-          oController.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom")
+          oController.m_oNotificationDisplayService.openSnackBar(sMessage)
         },
         error: oError => {
           oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);

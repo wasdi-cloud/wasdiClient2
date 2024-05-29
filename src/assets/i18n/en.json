@@ -2,7 +2,8 @@
     "KEY_PHRASES" : {
         "CANCEL": "Cancel",
         "DESCRIPTION": "Description",
-        "SAVE_CHANGES": "Save Changes"
+        "SAVE_CHANGES": "Save Changes",
+        "ERROR": "Error"
     },
 
     "BTN_SEARCH": "Search",
@@ -144,6 +145,8 @@
     "EDITOR_PRODUCTS_FILTER_CLEAN": "Clean Filter",
     "EDITOR_PRODUCTS_FILTER_SELECT": "Select",
     "EDITOR_PRODUCTS_WS_INFO": "Workspace Info",
+    "EDITOR_PRODUCT_REMOVE": "Confirm product removal", 
+    "EDITOR_PRODUCTS_REMOVE": "Confirm products removal",
     
     "IMPORT_PRODUCTS_PER_PAGE_LABEL": "Products per page",
     "IMPORT_PAGE_LABEL": "Page",
@@ -868,12 +871,22 @@
     "PACKAGE_MANAGER_LATEST_VERSION": "Latest Version",
     "PACKAGE_MANAGER_ADD": "Add new package",
 
-
     "EDITOR_ERROR_CONSOLE_NOT_REACHABLE": "Error contacting the JupyterLab service",
    
     "USER_ORGANIZATIONS_SHOW_USERS": "Show Users",
     "USER_ORGANIZATIONS_HIDE_USERS": "Hide Users",
-  
+    "USER_ORGANIZATIONS_ERROR_FETCHING": "Could not fetch your organisations",
+    "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Could not fetch organisation information",
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirm Organisation Removal", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Are you sure you want to remove this organisation?",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Confirm permissions removal",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Are you sure you want to remove your permissions with this organization?",
+    "USER_ORGANIZATIONS_DELETE_SUCCESS": "Organisation removed",
+    "USER_ORGANIZATION_SAVE_SUCCESS": "Organisation saved",
+    "USER_ORGANIZATION_INVALID_INPUT": "The organization input is not valid",
+    "USER_ORGANIZATION_SAVE_ERROR": "Could not save your organisation",
+    "USER_ORGANIZATION_DELETE_ERROR": "Could not delete your organisation",
+      
     "DIALOG_ADD_ORGANIZATION": "Add Organization",
     "DIALOG_EDIT_ORGANIZATION": "Edit Organization",
     "DIALOG_VIEW_ORGANIZATION": "View Organization",
@@ -961,5 +974,7 @@
     "DIALOG_EDIT_PROJECT_CHANGE_ACTIVE": "Change Active",
     "DIALOG_EDIT_PROJECT_SELECT_ACTIVE_PROJECT": "Select the Active Project",
    
-    "MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "A valid subscription and an active project are required. Please see the User Dashboard."
+    "MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "A valid subscription and an active project are required. Please see the User Dashboard.",
+
+    "DASHBOARD_CONFIRM_NODE_TITLE": "Confirm Node Update"
 }

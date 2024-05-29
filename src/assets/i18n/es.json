@@ -1,4 +1,9 @@
 {
+	"KEY_PHRASES" : {
+        "DESCRIPTION":"Descripción",
+        "ERROR": "Error",
+        "SUCCESS": "Éxito"
+    },
 	"BTN_SEARCH": "Buscar",
 	"BTN_IMPORT": "Importar",
 	"SORT_BY": "Ordenar por",
@@ -103,6 +108,9 @@
 	"EDITOR_PRODUCTS_FILTER_CLEAN": "Limpiar filtro",
 	"EDITOR_PRODUCTS_FILTER_SELECT": "Seleccionar",
 	"EDITOR_PRODUCTS_WS_INFO": "Info del Espacio de trabajo",
+	"EDITOR_PRODUCT_REMOVE": "Confirmar eliminación del producto", 
+	"EDITOR_PRODUCTS_REMOVE": "Confirmar eliminación de productos",
+
 	"IMPORT_PRODUCTS_PER_PAGE_LABEL": "Products per page",
 	"IMPORT_PAGE_LABEL": "Page",
 	"IMPORT_OF_LABEL": "of",
@@ -638,5 +646,22 @@
 	"MARKET_CLEAR_FILTERS": "Borrar filtros",
 	"MARKET_CARD_PUBLISHER": "Editor",
 	"MARKET_CARD_PRICE": "Gratis",
-	"READ_ONLY": "Read Only"
+
+
+
+	"USER_ORGANIZATIONS_ERROR_FETCHING":  "No se pudieron recuperar sus organizaciones",
+    "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "No se pudo recuperar la información de la organización",
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirmar eliminación de organización", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_MSG":"¿Está seguro de que desea eliminar esta organización?",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Confirmar eliminación de permisos",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "¿Estás seguro de que deseas eliminar tus permisos con esta organización?",
+    "USER_ORGANIZATIONS_DELETE_SUCCESS": "Organización eliminada",
+    "USER_ORGANIZATION_SAVE_SUCCESS": "Organización guardada",
+    "USER_ORGANIZATION_INVALID_INPUT": "La entrada de la organización no es válida",
+    "USER_ORGANIZATION_SAVE_ERROR":"No se pudo guardar tu organización",
+    "USER_ORGANIZATION_DELETE_ERROR": "No se pudo eliminar tu organización",
+
+	"READ_ONLY": "Read Only",
+
+	"MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Se requiere una suscripción válida y un proyecto activo. Consulte el Panel de usuario."
 }

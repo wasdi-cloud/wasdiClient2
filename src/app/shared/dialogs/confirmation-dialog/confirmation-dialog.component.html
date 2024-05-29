@@ -1,7 +1,28 @@
-<div class="dialog d-flex flex-column">
-    <div mat-dialog-content [innerHTML]="m_sMessage"></div>
-    <div mat-dialog-actions class="d-flex flex-row align-self-end gap-1">
-        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">Cancel</button>
-        <button class="btn btn-danger btn-sm" (click)="onConfirm()">Yes</button>
+<div class="dialog-container d-flex flex-row" [ngClass]="m_sClassName">
+    <div *ngIf="m_sClassName" class="icon-container">
+        <span *ngIf="m_sClassName ==='success'" class="material-symbols-outlined">
+            check_circle
+        </span>
+        <span *ngIf="m_sClassName ==='alert'" class="material-symbols-outlined">
+            error
+        </span>
+        <span *ngIf="m_sClassName ==='danger'" class="material-symbols-outlined">
+            warning
+        </span>
+        <span *ngIf="m_sClassName ==='info'" class="material-symbols-outlined">
+            info
+        </span>
+    </div>
+    <div class="dialog-content-container d-flex flex-column gap-3 flex-fill">
+        <div class="alert-header font-bold d-flex flex-row justify-content-between">
+            {{m_sTitle}}
+            <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+        </div>
+
+        <div class="dialog-message-container" [innerHTML]="m_sMessage"></div>
+        <div *ngIf="m_bIsConfirmation === true" class="d-flex flex-row gap-1">
+            <app-button [m_bOutline]="true" [m_sLabel]="'Yes'" (click)="onConfirm()"></app-button>
+            <app-button [m_bMuted]="true" [m_sLabel]="'Cancel'" (click)="onDismiss()"></app-button>
+        </div>
     </div>
 </div>

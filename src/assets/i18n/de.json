@@ -1,4 +1,9 @@
 {
+	"KEY_PHRASES" : {
+        "DESCRIPTION":"Beschreibung",
+        "ERROR": "Fehler",
+        "SUCCESS": "Erfolg"
+    },
 	"BTN_SEARCH": "Suchen",
 	"BTN_IMPORT": "Einlesen",
 	"SORT_BY": "Sortieren nach",
@@ -106,6 +111,9 @@
 	"EDITOR_PRODUCTS_FILTER_CLEAN": "Filter reinigen",
 	"EDITOR_PRODUCTS_FILTER_SELECT": "Wählen",
 	"EDITOR_PRODUCTS_WS_INFO": "Arbeitsbereich-Infos",
+	"EDITOR_PRODUCT_REMOVE": "Produktentfernung bestätigen", 
+    "EDITOR_PRODUCTS_REMOVE": "Entfernung der Produkte bestätigen",
+
 	"IMPORT_PRODUCTS_PER_PAGE_LABEL": "Produkte pro Seite",
 	"IMPORT_PAGE_LABEL": "Seite",
 	"IMPORT_OF_LABEL": "des",
@@ -683,5 +691,20 @@
 	"DIALOG_PACKAGE_MANAGER_LATEST_VERSION": "Letzte Version",
 	"DIALOG_PACKAGE_MANAGER_ACTIONS": "Aktionen",
 	"EDITOR_ERROR_CONSOLE_NOT_REACHABLE": "Fehler beim Kontaktieren des JupyterLab-Dienstes",
-	"READ_ONLY": "Read Only"
+	
+	"USER_ORGANIZATIONS_ERROR_FETCHING": "Ihre Organisationen konnten nicht abgerufen werden",
+    "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Organisationsinformationen konnten nicht abgerufen werden",
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Entfernung der Organisation bestätigen", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Sind Sie sicher, dass Sie diese Organisation entfernen möchten?",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Entfernung der Berechtigungen bestätigen",
+    "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Sind Sie sicher, dass Sie Ihre Berechtigungen für diese Organisation entfernen möchten?",
+    "USER_ORGANIZATIONS_DELETE_SUCCESS": "Organisation entfernt",
+    "USER_ORGANIZATION_SAVE_SUCCESS": "Organisation gespeichert",
+    "USER_ORGANIZATION_INVALID_INPUT": "Die Organisationseingabe ist ungültig",
+    "USER_ORGANIZATION_SAVE_ERROR": "Ihre Organisation konnte nicht gespeichert werden",
+    "USER_ORGANIZATION_DELETE_ERROR": "Ihre Organisation konnte nicht gelöscht werden",
+	
+	"READ_ONLY": "Read Only",
+	
+	"MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Ein gültiges Abonnement und ein aktives Projekt sind erforderlich. Bitte sehen Sie sich das Benutzer-Dashboard an."
 }

@@ -65,7 +65,7 @@ export class NewWorkspaceDialogComponent implements OnInit {
       this.m_oInputWorkspace.name = this.m_sWorkspaceName;
       this.m_oWorkspaceService.updateWorkspace(this.m_oInputWorkspace).subscribe({
         next: oResponse => {
-          this.m_oNotificationDisplayService.openSnackBar(sMessge, "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar(sMessge);
           this.m_oConstantsService.setActiveWorkspace(this.m_oInputWorkspace);
           this.onDismiss();
         },

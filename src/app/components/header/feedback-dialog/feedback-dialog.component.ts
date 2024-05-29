@@ -39,7 +39,7 @@ export class FeedbackDialogComponent implements OnInit {
     }
     this.m_oFeedbackService.sendFeedback(this.m_oFeedback).subscribe(oResponse => {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.boolValue === true) {
-        this.m_oNotificationDisplayService.openSnackBar("Feedback sent!", "Close");
+        this.m_oNotificationDisplayService.openSnackBar("Feedback sent!", "Thank you");
         this.onDismiss()
         return true;
       } else {

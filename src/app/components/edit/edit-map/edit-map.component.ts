@@ -238,12 +238,12 @@ export class EditMapComponent implements OnInit {
                       this.m_oFeatureInfoMarker = L.popup().setLatLng([oClickEvent.latlng.lat, oClickEvent.latlng.lng]).setContent(sContentString).openOn(this.m_oMapService.m_oWasdiMap);
                     }
                     catch (error) {
-                      this.m_oNotificationDisplayService.openSnackBar("Cannot read feature info", "Close", "right", "bottom");
+                      this.m_oNotificationDisplayService.openSnackBar("Cannot read feature info");
                     }
                   }
                 },
                 error: oError => {
-                  this.m_oNotificationDisplayService.openSnackBar("Error reading feature info", "Close", "right", "bottom");
+                  this.m_oNotificationDisplayService.openSnackBar("Error reading feature info");
                 }
               });
             }
