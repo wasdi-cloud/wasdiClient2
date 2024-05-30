@@ -21,7 +21,12 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/images"
+              "src/images",
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images/",
+                "output": "./assets"
+              }
             ],
             "styles": [
               "src/custom-theme.scss",
