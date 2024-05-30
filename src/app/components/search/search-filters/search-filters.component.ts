@@ -13,7 +13,6 @@ import { MatSelectChange } from '@angular/material/select';
 //Import Utilities:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { MatDialog } from '@angular/material/dialog';
-import { AdvancedFiltersComponent } from '../advanced-filters/advanced-filters.component';
 import { OpenSearchService } from 'src/app/services/api/open-search.service';
 
 @Component({
@@ -370,7 +369,7 @@ export class SearchFiltersComponent implements OnInit {
    * @param oEvent 
    */
   setMissionTextQuery(oEvent) {
-    this.m_oMissionObject.textQuery = oEvent.target.value;
+    this.m_oMissionObject.textQuery = oEvent.event.target.value;
   }
 
 
