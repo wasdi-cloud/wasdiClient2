@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { CatalogService } from 'src/app/services/api/catalog.service';
@@ -10,6 +10,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProductsListComponent } from '../products-list.component'
 import { StylesDialogComponent } from '../../edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
 import { WorkspacesListDialogComponent } from 'src/app/components/search/workspaces-list-dialog/workspaces-list-dialog.component';
+import { ProductService } from 'src/app/services/api/product.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -44,12 +46,23 @@ export class ProductListItemComponent {
    */
   m_bIsSelected: boolean = false;
 
+  /**
+   * Flag to track whether or not the product has metadata - possible change when user elects to get metadata
+   */
+  m_bHasMetadata: boolean = false;
+
+  m_oProductMetadata: any = null;
+
+  m_bShowMetadata: boolean = false;
+
   constructor(
     @Inject(ProductsListComponent) private m_oParentProductList: ProductsListComponent,
     private m_oDialog: MatDialog,
     private m_oConstantsService: ConstantsService,
     private m_oCatalogService: CatalogService,
-    private m_oNotificationDisplayService: NotificationDisplayService) {
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oProductService: ProductService,
+    private m_oTranslate: TranslateService) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -105,7 +118,7 @@ export class ProductListItemComponent {
  * @param oNode 
  */
   openSendToFTP() {
-    let oDialog = this.m_oDialog.open(WorkspacesListDialogComponent, {
+    this.m_oDialog.open(WorkspacesListDialogComponent, {
       height: "65vh",
       width: '40vw',
       data: {
@@ -127,7 +140,28 @@ export class ProductListItemComponent {
         oBand.published = bShowOnMap
       }
     });
+  }
 
+  /**
+   * Retrieve the product's metadata
+   */
+  getProductMetaData() {
+    if (this.m_bHasMetadata === false) {
+      let sWorkpace = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+      this.m_oProductService.getProductMetadata(this.m_oProduct.name, sWorkpace).subscribe({
+        next: oResponse => {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+            this.m_oNotificationDisplayService.openAlertDialog("No Metadata found", "Alert", "danger")
+          } else {
+            this.m_bHasMetadata = true;
+            this.m_oProductMetadata = oResponse;
+            this.showMetadata(true)
+          }
+        }
+      })
+    } else {
+      this.showMetadata(true);
+    }
   }
 
   downloadProduct() {
@@ -159,4 +193,15 @@ export class ProductListItemComponent {
     })
   }
 
+  showMetadata(bShowData: boolean) {
+    this.m_bShowMetadata = !this.m_bShowMetadata
+  }
+
+  toggleMetadataOpen(oMetadata) {
+    oMetadata.open = !oMetadata.open;
+  }
+
+  openElement(oElement) {
+    oElement.open = !oElement.open
+  }
 }

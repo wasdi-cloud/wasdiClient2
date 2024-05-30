@@ -20,7 +20,7 @@ export class ProductService {
   }
 
   constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
- 
+
   getProductListByWorkspace(sWorkspaceId: string) {
     return this.oHttp.get<Product[]>(this.APIURL + '/product/byws?workspace=' + sWorkspaceId);
   };
@@ -70,7 +70,7 @@ export class ProductService {
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
-    return sUrl + "/product/metadatabyname?name=" + sProductName + "&workspace=" + sWorkspace;
+    return this.oHttp.get<any>(sUrl + "/product/metadatabyname?name=" + sProductName + "&workspace=" + sWorkspace);
   };
 
 
@@ -88,6 +88,6 @@ export class ProductService {
       sUrl = sUrl + '&style=' + sStyle;
     }
 
-    return this.oHttp.post<any>(sUrl, oBody, {  observe: 'response' });
+    return this.oHttp.post<any>(sUrl, oBody, { observe: 'response' });
   };
 }

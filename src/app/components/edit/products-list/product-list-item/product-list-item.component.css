@@ -94,7 +94,7 @@ ul {
 }
 
 ul.first-list {
-    padding-left: 2.45rem;
+    padding-left: 1.7rem;
 }
 
 li {
@@ -108,7 +108,7 @@ li>ul {
 }
 
 li.container {
-    border-bottom: 0px;
+    border-bottom-width: 0px;
 }
 
 li.empty {

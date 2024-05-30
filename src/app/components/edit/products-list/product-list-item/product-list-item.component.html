@@ -9,7 +9,7 @@
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
-        <p class="product-label">
+        <p class="product-label d-flex flex-row align-items-center gap-1">
             {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
     </div>
     <div class="d-flex flex-row align-items-center" *ngIf="m_bIsOpen === false">
@@ -21,7 +21,7 @@
         <span class="product-label-icon material-symbols-outlined">
             satellite_alt
         </span>
-        <p class="product-label">
+        <p class="product-label d-flex flex-row align-items-center gap-1">
             {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
     </div>
     <!-- <div class="align-self-end justify-self-end" *ngIf="m_bIsHovering">
@@ -33,10 +33,66 @@
 <!-- Opened dropdown component for Bands and Metadata -->
 <div class="product-bands-container" *ngIf="m_bIsOpen">
     <ul class="container first-list">
-        <li>
-            <p> <span class="bands-icon material-symbols-outlined">
-                    code
-                </span>Metadata</p>
+        <li [class.container]="m_bHasMetadata === true && m_bShowMetadata === true">
+            <p class="d-flex flex-row align-items-center gap-1" (click)="getProductMetaData()">
+                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowMetadata === false">
+                    arrow_right
+                </span>
+                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowMetadata === true">
+                    arrow_drop_down
+                </span><span style="cursor: default !important;"><span class="bands-icon material-symbols-outlined">
+                        code
+                    </span> Metadata</span>
+            </p>
+            <ul *ngIf="m_bShowMetadata">
+                <li [class.container]="oMetadata.open === true"
+                    *ngFor="let oMetadata of m_oProductMetadata.elements">
+                    <p class="d-flex flex-row align-items-center gap-1" style="cursor: default !important;"
+                        (click)="toggleMetadataOpen(oMetadata)">
+                        <span class="arrow-icon material-symbols-outlined"
+                            *ngIf="oMetadata.elements && !oMetadata.open">
+                            arrow_right
+                        </span>
+                        <span class="arrow-icon material-symbols-outlined"
+                            *ngIf="oMetadata.elements && oMetadata.open === true">
+                            arrow_drop_down
+                        </span>
+                        <span class="arrow-icon material-symbols-outlined" *ngIf="!oMetadata.elements">
+                            info
+                        </span>
+                        {{oMetadata.name}}
+                    </p>
+                    <ul *ngIf="oMetadata.open">
+                        <li [class.container]="oElement.elements && oElement.open"
+                            *ngFor="let oElement of oMetadata.elements">
+                            <p (click)="openElement(oElement)" class="d-flex flex-row align-items-center gap-1">
+                                <span class="arrow-icon material-symbols-outlined"
+                                    *ngIf="oElement.elements && !oElement.open">
+                                    arrow_right
+                                </span>
+                                <span class="arrow-icon material-symbols-outlined"
+                                    *ngIf="oElement.elements && oElement.open === true">
+                                    arrow_drop_down
+                                </span>
+                                <span class="arrow-icon material-symbols-outlined" *ngIf="!oElement.elements">
+                                    info
+                                </span>
+                                {{oElement.name}}
+                            </p>
+                            <ul *ngIf="oElement.open">
+                                <li *ngFor="let oNestedElement of oElement.elements">
+                                    <p class="d-flex flex-row align-items-center gap-1">
+                                        <span class="arrow-icon material-symbols-outlined">
+                                            info
+                                        </span>
+                                        {{oNestedElement.name}}
+                                    </p>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </li>
         <li [class.container]="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands === true">
             <p [class.disabled-label]="m_oProduct.bandsGroups.bands.length === 0" (click)="openShowBands()">
@@ -48,7 +104,7 @@
                 </span>
                 <span class="bands-icon material-symbols-outlined">
                     map
-                </span> <span style="cursor: default !important;">Bands</span>
+                </span><span style="cursor: default !important;"> Bands</span>
             </p>
             <ul *ngIf="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands">
                 <li *ngFor="let oBand of m_oProduct.bandsGroups.bands">

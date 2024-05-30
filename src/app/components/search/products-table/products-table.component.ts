@@ -247,8 +247,8 @@ export class ProductsTableComponent implements OnInit {
    */
   sendSingleProductToWorkspace(oProduct) {
     let oDialog = this.m_oDialog.open(WorkspacesListDialogComponent, {
-      height: "55vh",
-      width: '60vw',
+      height: "70vh",
+      width: '50vw',
       data: {
         product: oProduct
       }
@@ -332,8 +332,8 @@ export class ProductsTableComponent implements OnInit {
     }
 
     this.m_oDialog.open(WorkspacesListDialogComponent, {
-      height: "55vh",
-      width: '60vw',
+      height: "70vh",
+      width: '50vw',
       data: {
         products: aoListOfSelectedProducts
       }
