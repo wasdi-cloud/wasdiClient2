@@ -1,18 +1,21 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+
 import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { Workspace } from 'src/app/shared/models/workspace.model';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+
 
 import { MatDialog } from '@angular/material/dialog';
-import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
-import { ImportDialogComponent } from './toolbar-dialogs/import-dialog/import-dialog.component';
 import { AppsDialogComponent } from './toolbar-dialogs/apps-dialog/apps-dialog.component';
-import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+import { ImportDialogComponent } from './toolbar-dialogs/import-dialog/import-dialog.component';
+import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
+import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/workflows-dialog.component';
+
+import { Product } from 'src/app/shared/models/product.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
-import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/workflows-dialog.component';
-import { Product } from 'src/app/shared/models/product.model';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 
 @Component({
@@ -32,6 +35,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   m_bNotebookIsReady: boolean = false;
   m_sFilterText: string;
 
+  m_sWorkspaceId: string = "";
   m_iHookIndex: number = 0;
 
   constructor(
@@ -39,10 +43,12 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService
   ) { }
 
   ngOnInit() {
+    this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     //RabbitStomp service call 
     this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("LAUNCHJUPYTERNOTEBOOK",
       this,
@@ -55,10 +61,14 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
 
   openAppsDialog(): void {
-    this.m_oDialog.open(AppsDialogComponent, {
+    let oAppsDialog = this.m_oDialog.open(AppsDialogComponent, {
       height: '90vh',
       width: '90vw',
-      minWidth: '90vw'
+      maxWidth: '1500px'
+    })
+
+    oAppsDialog.afterClosed().subscribe(() => {
+      this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_sWorkspaceId);
     })
   }
 
@@ -66,7 +76,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     this.m_oDialog.open(WorkflowsDialogComponent, {
       height: '90vh',
       width: '90vw',
-      minWidth: '90vw',
+      maxWidth: '1500px',
       data: {
         products: this.m_aoProducts
       }

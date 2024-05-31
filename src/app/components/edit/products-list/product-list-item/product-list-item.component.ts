@@ -188,7 +188,7 @@ export class ProductListItemComponent {
     this.m_oDialog.open(StylesDialogComponent, {
       height: '90vh',
       width: '90vw',
-      minWidth: '90vw',
+      maxWidth: '1500px',
       data: { product: this.m_oProduct }
     })
   }

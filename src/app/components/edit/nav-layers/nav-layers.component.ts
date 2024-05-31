@@ -267,7 +267,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
     this.m_oDialog.open(StylesDialogComponent, {
       height: '90vh',
       width: '90vw',
-      minWidth: '90vw',
+      maxWidth: '1500px',
       
     })
   }

@@ -299,6 +299,7 @@ export class ProcessorTabContentComponent implements OnInit {
     this.m_oDialog.open(PackageManagerComponent, {
       height: '90vh',
       width: '90vw',
+      maxWidth: '1500px',
       data: {
         sProcessorId: this.m_sProcessorId,
         sProcessorName: this.m_sProcessorName
