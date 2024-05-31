@@ -7,13 +7,14 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Service Imports
 import { ConstantsService } from '../constants.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-
   APIURL: string = this.oConstantsService.getAPIURL();
+
   m_bIgnoreWorkspaceApiUrl: boolean = this.oConstantsService.getIgnoreWorkspaceApiUrl();
   httpOptions = {
     observe: 'response'
@@ -79,7 +80,7 @@ export class ProductService {
     let oWorkspace = this.oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
-    if (oWorkspace !== null && oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
