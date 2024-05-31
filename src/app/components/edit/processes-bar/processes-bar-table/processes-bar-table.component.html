@@ -2,25 +2,29 @@
     <app-processes-bar [m_bIsOpen]="true"></app-processes-bar>
     <div class="processes-filter d-flex flex-row align-items-center justify-content-between gap-3 mx-3 p-2">
         <div class="flex-fill d-flex flex-row gap-3 justify-content-between align-self-end" style="width: 70%;">
-            <app-dropdown class="flex-fill" style="width: 33%" [m_sLabel]="'Status'" [m_sPlaceholder]="'Select Status'"
-                [m_aoSelectedItems]="m_oSelectedStatus" [m_aoDropdownItems]="m_aoProcessStatuses"
+            <app-dropdown class="flex-fill" style="width: 33%" [m_sLabel]="'DIALOG_LOGS_STATUS' | translate"
+                [m_sPlaceholder]="'DIALOG_LOGS_STATUS_PLACEHOLDER' | translate" [m_aoSelectedItems]="m_oSelectedStatus"
+                [m_aoDropdownItems]="m_aoProcessStatuses"
                 (m_oSelectionChange)="catchFilterChange($event, 'status')"></app-dropdown>
-            <app-dropdown class="flex-fill" style="width: 33%" [m_sLabel]="'Operation Type'"
-                [m_aoSelectedItems]="m_oSelectedType" [m_sPlaceholder]="'Select Operation'"
+            <app-dropdown class="flex-fill" style="width: 33%" [m_sLabel]="'DIALOG_LOGS_OPERATION_TYPE' | translate"
+                [m_aoSelectedItems]="m_oSelectedType" [m_sPlaceholder]="'DIALOG_LOGS_OPERATION_SELECT'| translate "
                 [m_aoDropdownItems]="m_aoProcessTypes"
                 (m_oSelectionChange)="catchFilterChange($event, 'type')"></app-dropdown>
-            <app-input-field style="padding-bottom: 2px" class="flex-fill" style="width: 33%" [m_sLabel]="'Name'"
-                [m_sInputValue]="m_oFilter.sName" [m_sPlacehodler]="'Search by name'"
+            <app-input-field style="padding-bottom: 2px" class="flex-fill" style="width: 33%"
+                [m_sLabel]="'DIALOG_LOGS_NAME' | translate" [m_sInputValue]="m_oFilter.sName"
+                [m_sPlacehodler]="'DIALOG_LOGS_SEARCH_NAME'| translate"
                 (m_oInputChange)="catchFilterChange($event, 'name')"></app-input-field>
 
         </div>
         <div class="d-flex flex-row gap-2 align-self-end">
 
             <div class="button-container align-self-end d-flex gap-2 flex-row">
-                <app-button [m_sLabel]="'Apply filter'" (click)="applyFilters()"></app-button>
-                <app-button [m_sLabel]="'Clear'" [m_bMuted]="true" (click)="clearFilters()"></app-button>
+                <app-button [m_sLabel]="'EDITOR_PRODUCTS_FILTER_APPLY' | translate"
+                    (click)="applyFilters()"></app-button>
+                <app-button [m_sLabel]="'IMPORT_CLEAR_BUTTON' | translate" [m_bMuted]="true"
+                    (click)="clearFilters()"></app-button>
             </div>
-            <app-button class="" [m_sLabel]="'Download log'" [m_bOutline]="true"
+            <app-button class="" [m_sLabel]="'DIALOG_LOGS_DOWNLOAD' | translate" [m_bOutline]="true"
                 (click)="downloadProcessesFile()"></app-button>
         </div>
     </div>
@@ -28,12 +32,12 @@
         <table>
             <thead class="table-heading-container">
                 <tr>
-                    <th>Status</th>
-                    <th>Operation</th>
-                    <th>Name</th>
-                    <th>Started</th>
-                    <th>Progress</th>
-                    <th>Duration</th>
+                    <th>{{"DIALOG_LOGS_STATUS" | translate}}</th>
+                    <th>{{"DIALOG_LOGS_OPERATION" | translate}}</th>
+                    <th>{{"DIALOG_LOGS_NAME" | translate}}</th>
+                    <th>{{"DIALOG_LOGS_STARTED" | translate}}</th>
+                    <th>{{"DIALOG_LOGS_PROGRESS" | translate}}</th>
+                    <th>{{"DIALOG_LOGS_DURATION" | translate}}</th>
                     <th></th>
                 </tr>
             </thead>
@@ -82,7 +86,6 @@
             </tbody>
         </table>
         <div class="d-flex flex-row justify-content-center w-100 my-2">
-
             <app-button *ngIf="m_bIsLoadMoreBtnClickable" [m_sLabel]="'Load more'"
                 (click)="getAllProcessesLogs()"></app-button>
         </div>

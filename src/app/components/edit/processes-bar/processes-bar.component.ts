@@ -74,43 +74,18 @@ export class ProcessesBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    let sInterval = null
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.getSummary();
 
-    if (this.m_oActiveWorkspace.workspaceId) {
-      this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
-
-      this.m_oProcessWorkspaceService.getProcessesRunning().subscribe({
-        next: oResponse => {
-          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_aoProcessesRunning = oResponse;
-            console.log(oResponse)
-            this.getSummary();
-            this.m_oLastProcesses = this.findLastProcess(oResponse)
-          } else {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
-          }
-        },
-        error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
-        }
-      });
-    }
     this.m_oProcessesBarSubscription = this.m_oProcessWorkspaceService.updateProcessBarMsg.subscribe(oResponse => {
       if (oResponse.message === "m_aoProcessesRunning:updated" && oResponse.data === true) {
         let aoProcessesRunning = this.m_oProcessWorkspaceService.getProcesses().value;
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(aoProcessesRunning)) {
-          console.log(aoProcessesRunning)
           this.getSummary();
           this.m_oLastProcesses = this.findLastProcess(aoProcessesRunning)
-        } else {
-          clearTimeout(sInterval)
         }
       }
     })
-
-
 
     this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
       this.m_iIsWebsocketConnected = oResponse;
