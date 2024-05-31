@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 
 //Angular Material Imports: 
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { MatDialog } from '@angular/material/dialog';
 
 //Service Imports: 
+import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
@@ -13,7 +13,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { ProcessesBarTableComponent } from './processes-bar-table/processes-bar-table.component';
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 
 export interface SearchFilter {
   sStatus: string,
@@ -47,9 +46,12 @@ export class ProcessesBarComponent implements OnInit {
   m_oProcessesBarSubscription: any;
   m_oSummary: any;
 
+  m_sWorkspaceId: string = ""
+
   constructor(
     private _bottomSheet: MatBottomSheet,
     private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarTableComponent>,
+    private m_oConstantsService: ConstantsService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
@@ -57,6 +59,7 @@ export class ProcessesBarComponent implements OnInit {
     setTimeout(() => {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProcessesRunning) && this.m_aoProcessesRunning.length != 0) {
         let iNumberOfProcesses = this.m_aoProcessesRunning.length;
+
 
         for (let iIndexProcess = 0; iIndexProcess < iNumberOfProcesses; iIndexProcess++) {
           if (this.m_aoProcessesRunning[iIndexProcess].status === "RUNNING" ||
@@ -71,16 +74,43 @@ export class ProcessesBarComponent implements OnInit {
   }
 
   ngOnInit() {
+    let sInterval = null
+    this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.getSummary();
+
+    if (this.m_oActiveWorkspace.workspaceId) {
+      this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
+
+      this.m_oProcessWorkspaceService.getProcessesRunning().subscribe({
+        next: oResponse => {
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+            this.m_aoProcessesRunning = oResponse;
+            console.log(oResponse)
+            this.getSummary();
+            this.m_oLastProcesses = this.findLastProcess(oResponse)
+          } else {
+            this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
+          }
+        },
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
+        }
+      });
+    }
     this.m_oProcessesBarSubscription = this.m_oProcessWorkspaceService.updateProcessBarMsg.subscribe(oResponse => {
       if (oResponse.message === "m_aoProcessesRunning:updated" && oResponse.data === true) {
         let aoProcessesRunning = this.m_oProcessWorkspaceService.getProcesses().value;
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(aoProcessesRunning)) {
+          console.log(aoProcessesRunning)
           this.getSummary();
           this.m_oLastProcesses = this.findLastProcess(aoProcessesRunning)
+        } else {
+          clearTimeout(sInterval)
         }
       }
     })
+
+
 
     this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
       this.m_iIsWebsocketConnected = oResponse;
@@ -112,8 +142,7 @@ export class ProcessesBarComponent implements OnInit {
       sMessage = sTranslation;
       this.m_oProcessWorkspaceService.getSummary().subscribe({
         next: oResponse => {
-          //If Response is undefined or is null:
-          if (!oResponse) {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
             this.m_oNotificationDisplayService.openAlertDialog(sMessage);
           } else {
             this.m_oSummary = oResponse;

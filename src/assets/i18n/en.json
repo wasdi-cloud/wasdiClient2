@@ -13,6 +13,7 @@
     "BTN_CANCEL": "Cancel",
     "BTN_IMPORT": "Import",
     "SORT_BY": "Sort by",
+
     "BTN_CREATE_FIRST_WORKSPACE": "Create first workspace",
 
     "APP_UI_SELECT_WS": "Select workspace", 
@@ -20,8 +21,8 @@
     "APP_UI_OPEN_WS": "Open Workspace",
     "APP_UI_AUTO_WS": "Auto Workspace",
     "APP_UI_PURCHASE": "Buy App",
-
     "APP_UI_SAVE_PARAMS": "",
+
     "DIALOG_PARAMS_CREATE": "Create parameters template",
     "DIALOG_PARAMS_TEMPLATE_NAME": "Template name", 
     "DIALOG_PARAMS_SAVE": "Save parameters",
@@ -442,15 +443,22 @@
     "DIALOG_PROCESSOR_UI_LISTBOX": "List Box",
     "DIALOG_PROCESSOR_UI_HIDDEN_FIELD": "Hidden Field",
   
-    "DIALOG_LOGS_TITLE": "WASDI Processor Logs ID: ",
-    "DIALOG_LOGS_SEARCH_TEXT": "Search by text: ",
-    "DIALOG_LOGS_OPERATION": "Operation: ",
-    "DIALOG_LOGS_NAME": "Name: ",
-    "DIALOG_LOGS_STATUS": "Status: ",
+    "DIALOG_LOGS_TITLE": "WASDI Processor Logs ID",
+    "DIALOG_LOGS_SEARCH_TEXT": "Search by text",
+    "DIALOG_LOGS_OPERATION": "Operation",
+    "DIALOG_LOGS_NAME": "Name ",
+    "DIALOG_LOGS_STATUS": "Status ",
     "DIALOG_LOGS_DOWNLOAD": "Download",
-    "DIALOG_LOGS_DATE": "Date: ",
+    "DIALOG_LOGS_DATE": "Date",
     "DIALOG_LOGS_ROW": "Row",
     "DIALOG_LOGS_REFRESH": "Refresh",
+    "DIALOG_LOGS_STARTED": "Started", 
+    "DIALOG_LOGS_PROGRESS": "Progress",
+    "DIALOG_LOGS_DURATION": "Duration",
+    "DIALOG_LOGS_STATUS_PLACEHOLDER": "Select Status",
+    "DIALOG_LOGS_OPERATION_TYPE": "Operation Type",
+    "DIALOG_LOGS_OPERATION_SELECT": "Select Operation",
+    "DIALOG_LOGS_SEARCH_NAME": "Search by name",
   
     "DIALOG_PRODUCT_INFO_TITLE": "Product info",
     "DIALOG_PRODUCT_INFO_PROP": "Property",
@@ -651,6 +659,7 @@
     "DELETE_PROCESS_QUESTION": "Are you sure to kill this running process?",
     "DELETE_PROCESS_YES": "Yeah, Kill it",
     "DELETE_PROCESS_NO": "Uhm, no, not really",
+    "DELETE_PROCESS_ERROR": "An error occurred while killing the process",
  
     "DOWNLOAD_IN_WS_TITLE": "Workspaces List",
     "DOWNLOAD_IN_WS_NAME": "Workspace name",
@@ -972,7 +981,8 @@
 
     "USER_PROJECTS_SHOW_USERS": "Show Users",
     "USER_PROJECTS_HIDE_USERS": "Hide Users",
-  
+    "DIALOG_USER_PROJECTS": "Projects",
+
     "USER_PROJECTS_SHOW_ORGANIZATION": "Show Organizations",
     "USER_PROJECTS_HIDE_ORGANIZATION": "Hide Organizations",
   
