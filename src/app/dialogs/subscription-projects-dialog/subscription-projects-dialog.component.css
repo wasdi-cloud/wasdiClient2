@@ -1,0 +1,34 @@
+.close-btn {
+    justify-self: right;
+}
+
+div.table-wrapper {
+    height: 100%;
+    overflow: auto;
+    display: inline-block;
+    width: 100%;
+    margin: auto;
+}
+
+table {
+    width: 100%;
+    margin: auto;
+}
+
+.table-heading-container {
+    background-color: #FFFFFF;
+    box-shadow: inset 0px -1px #D1D5DB;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: 700;
+}
+
+.table-btn {
+    color: var(--wasdiGreen);
+    cursor: pointer;
+}
+
+td {
+    padding: 0.25rem;
+}

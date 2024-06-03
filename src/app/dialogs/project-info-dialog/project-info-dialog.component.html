@@ -1,33 +1,23 @@
-<div class="dialog d-flex flex-column justify-content-between h-100">
-    <div class="px-4 pt-3 text-secondary align-items-center d-flex flex-row justify-content-between">
-        <h4>Manage Project</h4>
-        <button class="btn" (click)="onDismiss()">
-            <fa-icon [icon]="faX"></fa-icon>
-        </button>
+<div class="apps-dialog d-flex flex-column justify-content-between h-100">
+    <div class="dialog-header font-bold d-flex flex-row justify-content-between">
+        {{m_bEditMode ? 'Edit Project - ' + m_oProject.name : 'Create Project -' + m_oSubscription.name}}
+        <span class="close-btn material-symbols-outlined justify-self-end" (click)="onDismiss()"> close</span>
     </div>
-    <div mat-dialog-content>
-        <h6 *ngIf="m_bEditMode === true">Edit <span class="text-success">{{m_oProject.name}}</span></h6>
-        <h6 *ngIf="m_bEditMode=== false">Create Project for <span class="text-success">{{m_oSubscription.name}}</span>
-        </h6>
-
+    <div class="dialog-content flex-fill">
         <div class="d-flex flex-column gap-2">
-            <div>
-                <label for="">Name</label>
-                <input type="text" class="form-control" [(ngModel)]="m_oEditProject.name">
+            <app-input-field [m_sLabel]="'Project Name'" [m_sInputValue]="m_oProject.name"
+                (m_oInputChange)="m_oEditProject.name = $event.event.target.value"></app-input-field>
+            <app-input-field [m_sLabel]="'Subscription'" [m_sInputValue]="m_oSubscription.name" [m_bIsDisabled]="true"
+                [m_bIsReadonly]="true"></app-input-field>
+            <app-textarea [m_sLabel]="'Description'" (keyup)="getDescription($event)"></app-textarea>
+            <div class="d-flex flex-row align-items-center gap-1">
+                <input name="isActive" type="checkbox" class="wasdi-checkbox"
+                    [(ngModel)]="m_oEditProject.activeProject">Set Active
+                <label for="isActive">Project</label>
             </div>
-            <div>
-                <label for="">Description</label>
-                <input type="text" class="form-control" [(ngModel)]="m_oEditProject.description">
-            </div>
-            <div>
-                <label for="">Subscription</label>
-                <input type="text" class="form-control" placeholder="{{m_oSubscription.name}}" readonly>
-            </div>
-            <div>
-                <mat-checkbox [color]="'success'" [(ngModel)]="m_oEditProject.activeProject">Set Active
-                    Project</mat-checkbox>
-            </div>
-            <button class="btn btn-success align-self-center" (click)="saveProject()">Save</button>
         </div>
+    </div>
+    <div class="dialog-footer d-flex flex-row justify-content-end">
+        <app-button [m_sLabel]="'DIALOG_SAVE_BUTTON' | translate" (click)="saveProject()"></app-button>
     </div>
 </div>

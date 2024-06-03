@@ -1,54 +1,50 @@
-<div class="dialog d-flex flex-column justify-content-between h-100">
-    <div class="px-4 pt-3 text-secondary d-flex flex-row justify-content-between align-items-center w-100">
-        <h4>Projects</h4>
-        <button class="btn" (click)="onDismiss()">
-            <fa-icon [icon]="faX"></fa-icon>
-        </button>
+<div class="apps-dialog h-100 d-flex flex-column justify-content-between">
+    <div class="dialog-header font-bold d-flex flex-row justify-content-between w-100">
+        {{"DIALOG_USER_PROJECTS" | translate}}
+        <span class="close-btn material-symbols-outlined justify-self-end" (click)="onDismiss()"> close</span>
     </div>
-    <div mat-dialog-content class="gap-3">
-        <div class="d-flex flex-row justify-content-between">
-            <h6>Projects For <span class="text-success">{{m_oSubscription.name}}</span></h6>
-            <button class="btn btn-success btn-sm" (click)="openProjectInfoDialog(false, m_oSubscription)">
-                <fa-icon [icon]="faPlus"></fa-icon>
-                Add Project
-            </button>
+    <div class="dialog-content flex-fill">
+        <div class="table-wrapper">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>Project Name</td>
+                        <td>Status</td>
+                        <td>My Processing Time</td>
+                        <td>Total Processing Time</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oProject of m_aoProjects">
+                        <td>{{oProject.name}}</td>
+                        <td> {{oProject.activeProject ? "Active" :
+                            "Inactive"}}</td>
+                        <td *ngIf="oProject.individualProcessingTime">
+                            {{oProject.individualProcessingTime
+                            | convertMsToTime }}</td>
+                        <td *ngIf="!oProject.individualProcessingTime">00:00:00</td>
+                        <td *ngIf="oProject.totalProcessingTime">{{oProject.totalProcessingTime |
+                            convertMsToTime}}</td>
+                        <td *ngIf="!oProject.totalProcessingTime">00:00:00</td>
+                        <td class=" d-flex flex-row gap-2">
+                            <span class="table-btn material-symbols-outlined justify-self-end"
+                                (click)="openProjectInfoDialog(true, m_oSubscription, oProject)">edit</span>
+                            <span class="table-btn material-symbols-outlined justify-self-end"
+                                (click)="removeProject(oProject)">delete</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="d-flex flex-row justify-content-start">
+                            <app-button [m_sLabel]="'DIALOG_USER_PROJECTS_NEW' | translate"
+                                (click)="openProjectInfoDialog(false, m_oSubscription)"></app-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <table class="table table-sm table-hover align-middle">
-            <thead>
-                <tr>
-                    <th scope="col">Project Name</th>
-                    <th scope="col">Status</th>
-                    <th class="text-center" scope="col">My Processing Time</th>
-                    <th class="text-center" scope="col">Total Processing Time</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let oProject of m_aoProjects">
-                    <td>{{oProject.name}}</td>
-                    <td> {{oProject.activeProject ? "Active" :
-                        "Inactive"}}</td>
-                    <td class="text-center" *ngIf="oProject.individualProcessingTime">
-                        {{oProject.individualProcessingTime
-                        | convertMsToTime }}</td>
-                    <td class="text-center" *ngIf="!oProject.individualProcessingTime">00:00:00</td>
-                    <td class="text-center" *ngIf="oProject.totalProcessingTime">{{oProject.totalProcessingTime |
-                        convertMsToTime}}</td>
-                    <td class="text-center" *ngIf="!oProject.totalProcessingTime">00:00:00</td>
-                    <td class=" d-flex flex-row gap-2">
-                        <button class="btn btn-sm btn-secondary"
-                            (click)="openProjectInfoDialog(true, m_oSubscription, oProject)">
-                            <fa-icon [icon]="faEdit"></fa-icon>
-                        </button>
-                        <button class="btn btn-sm btn-danger" (click)="removeProject(oProject)">
-                            <fa-icon [icon]="faX"></fa-icon>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     </div>
-    <div mat-dialog-actions class="d-flex flex-row justify-content-end">
-        <button class="btn btn-secondary" (click)="onDismiss()">Close</button>
+    <div class="dialog-footer d-flex flex-row justify-content-end">
+        <app-button [m_sLabel]="'DIALOG_CLOSE_BUTTON' | translate" (click)="onDismiss()"></app-button>
     </div>
 </div>

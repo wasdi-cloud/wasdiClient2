@@ -84,7 +84,7 @@ export class SubscriptionsDisplayComponent implements OnInit {
   openSharedUsersDialog(oSubscription) {
     let oDialogData = new ShareDialogModel("subscription", oSubscription);
     this.m_oDialog.open(ShareDialogComponent, {
-      height: '60vh',
+      height: '65vh',
       width: '60vw',
       data: oDialogData
     });
@@ -93,7 +93,7 @@ export class SubscriptionsDisplayComponent implements OnInit {
   openProjectsDialog(bIsOwner: boolean, oSubscription: any) {
     let oDialogRef = this.m_oDialog.open(SubscriptionProjectsDialogComponent, {
       height: '70vh',
-      width: '50vw',
+      width: '70vw',
       data: {
         subscription: oSubscription
       }
