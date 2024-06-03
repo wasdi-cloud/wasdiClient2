@@ -101,7 +101,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private m_oSearchService: SearchService,
     private m_oTranslate: TranslateService,
   ) {
-    if (this.m_oConfigurationService.getConfiguration()!=null) {
+    if (this.m_oConfigurationService.getConfiguration() != null) {
       this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
     }
   }
@@ -691,10 +691,11 @@ export class SearchComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    let oDialogRef = this.m_oDialog.open(WorkspacesListDialogComponent, {
+    this.m_oDialog.open(WorkspacesListDialogComponent, {
       height: "55vh",
       width: '60vw',
       data: {
+        isSharing: false,
         products: aoListOfSelectedProducts
       }
     })

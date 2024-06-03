@@ -52,40 +52,51 @@
                 </div>
                 {{m_oProductListItem.title}}
             </div>
-            <!-- Product Type -->
-            <div *ngIf="m_bIsLightProduct === false"><span class="label">Product Type:</span>
-                {{m_oProductListItem.properties.productType}}
-            </div>
-            <!-- Product Relative Orbit and Date -->
-            <div class="d-flex flex-row justify-content-between">
-                <div>
-                    <span class="label">Rel Orbit:</span>
-                    {{m_oProductListItem.properties.relativeOrbitNumber?
-                    m_oProductListItem.properties.relativeOrbitNumber :
-                    m_oProductListItem.properties.relativeorbitnumber}}
-                </div>
-                <div *ngIf="m_bIsLightProduct === false"><span class="label">Date:</span>
-                    {{m_oProductListItem.properties.date | date:
-                    'M/d/yyyy - h:mm a'}}
+            <div class="row">
+                <div class="col-6"
+                    *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.relativeorbitnumber">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_ORBIT'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.relativeorbitnumber}}</span>
                 </div>
 
+                <div class="col-6" *ngIf="m_oProductListItem.provider">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_PROVIDER'|translate}}: </span>
+                    <span>{{m_oProductListItem.provider}}</span>
+                </div>
             </div>
-            <div *ngIf="m_bIsLightProduct === true">{{"IMPORT_PRODUCT_LIST_POLARIZATION"|translate}}
-                <span>{{m_oProductListItem.properties.polarisationmode
-                    }}</span>
+            <div class="row">
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.platformname">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_PLATFORM'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.platformname}}</span>
+                </div>
+                <div class="col-6"
+                    *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.sensoroperationalmode">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_SENSOR'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.sensoroperationalmode}}</span>
+                </div>
             </div>
-
-            <div *ngIf="m_bIsLightProduct === true">Platform Name:
-                <span>{{m_oProductListItem.properties.platformname}}</span>
+            <div class="row">
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.variables">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_VARIABLES'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.variables}}</span>
+                </div>
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.protocol">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_PROTOCOL'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.protocol}}</span>
+                </div>
             </div>
-            <div *ngIf="m_bIsLightProduct === true">{{"IMPORT_PRODUCT_LIST_SENSOR"|translate}}
-                <span>{{m_oProductListItem.properties.sensoroperationalmode}}</span>
+            <div class="row">
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.productType">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_TYPE'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.productType}}</span>
+                </div>
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.dataset">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_DATASET'|translate}}</span>
+                    <span>{{m_oProductListItem.properties.dataset}}</span>
+                </div>
             </div>
-            <!-- <p *ngIf="m_bIsLightProduct === false">Provider: <span>{{m_oProductListItem.provider}}</span></p> -->
-
 
         </div>
-
     </div>
 
     <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100" matTooltip="{{m_sDescription}}"

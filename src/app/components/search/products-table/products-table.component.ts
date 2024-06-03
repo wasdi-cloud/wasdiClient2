@@ -219,7 +219,6 @@ export class ProductsTableComponent implements OnInit {
     this.m_oNavigateBackOutput.emit(false);
   }
 
-
   /**
    * Add checked product to selected products array
    */

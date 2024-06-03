@@ -20,7 +20,7 @@
                     Could not find any products.
                 </div>
 
-                <div class="d-flex flex-column gap-1"
+                <div class="d-flex flex-column gap-1 px-1"
                     *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 0">
                     <app-paginator (m_oClickEmitter)="handlePagination($event, oProvider.name)"
                         [m_bFullPaginator]="false" [m_iTotalItems]="oProvider.totalOfProducts"
