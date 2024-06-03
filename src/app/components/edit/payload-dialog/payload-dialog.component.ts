@@ -21,7 +21,7 @@ export class PayloadDialogComponent implements OnInit {
 
   //Chart Configurations: 
   multi: any[];
-  view: [number, number] = [700, 300];
+  view: [number, number] = [1000, 700];
 
   m_aoChartsInformation: Array<any> = []
 
@@ -61,12 +61,6 @@ export class PayloadDialogComponent implements OnInit {
    */
   m_bShowXAxisLabel: boolean = false;
 
-
-  /**
-   * Show Timeline: display a timeline control under the chart. Only available if a the x scale is linear or time
-   */
-  timeline: boolean = true;
-
   /**
    * Positioning of the Legend
    */
@@ -77,7 +71,45 @@ export class PayloadDialogComponent implements OnInit {
   m_sTagColor: string = "red"
 
   m_sCopyLabel: string = "COPY PAYLOAD"
+  
+  /**
+   * Further Options for charts 
+   */
 
+  /**
+   * Show Timeline: display a timeline control under the chart. Only available if a the x scale is linear or time
+   */
+
+  m_bTimelineEnable = true;
+
+  serieManuale = [
+    {
+      "name": "Denmark",
+      "series": [
+        {
+          "value": 3759,
+          "name": new Date("2016-09-13T10:24:24.173Z")
+        },
+        {
+          "value": 5455,
+          "name": new Date("2016-09-15T17:07:55.443Z")
+        },
+        {
+          "value": 5562,
+          "name": new Date("2016-09-23T21:07:10.229Z")
+        },
+        {
+          "value": 4402,
+          "name": new Date("2016-09-13T09:11:30.591Z")
+        },
+        {
+          "value": 6844,
+          "name": new Date("2016-09-19T13:07:16.972Z")
+        }
+      ]
+    
+    }
+  ];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
@@ -125,6 +157,7 @@ export class PayloadDialogComponent implements OnInit {
       console.log(oPayload.wasdi_dashboard)
       this.m_aoChartsInformation = oPayload.wasdi_dashboard;
       this.m_sActiveTab = 'dashboard';
+      // Dashboard content is an array of charts 
       oPayload.wasdi_dashboard.forEach(oChart => {
         console.log(oChart)
         if (oChart['x-axis-name'] !== false) {
@@ -133,8 +166,22 @@ export class PayloadDialogComponent implements OnInit {
         if (oChart['y-axis-name'] !== false) {
           this.m_bShowYAxisLabel = true;
         }
+        // adding timeline option
+        if (oChart['timeline'] !== false) {
+          this.m_bTimelineEnable = true;
+        }
+        //for each chart data 
+        // if there is a series 
+        if (oPayload.wasdi_dashboard[0]["chart-data"][0].hasOwnProperty("series")){
+              // and can be converted to dates 
+              let a = Date.parse(oPayload.wasdi_dashboard[0]["chart-data"][0].series[0].name);
+              if(!isNaN(a)){
+                oPayload.wasdi_dashboard[0]["chart-data"][0].series.forEach((element) => element.name = new Date(element.name) )
+              }
+              
+        }
       });
-      console.log(this.m_aoChartsInformation);
+      //console.log(this.m_aoChartsInformation);
     } else {
       this.getPayloadString();
     }

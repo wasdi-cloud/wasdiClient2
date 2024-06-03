@@ -29,7 +29,10 @@
             <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" class="chart" [view]="view"
                 [legend]="m_bLegend" [showXAxisLabel]="m_bShowXAxisLabel" [showYAxisLabel]="m_bShowYAxisLabel"
                 [xAxisLabel]="oChart['x-axis-name']" [yAxisLabel]="oChart['y-axis-name']" [xAxis]="xAxis"
-                [yAxis]="yAxis" [results]="oChart['chart-data']" [scheme]="'natural'"></ngx-charts-line-chart>
+                [yAxis]="yAxis" [results]="oChart['chart-data']" [scheme]="'natural'"
+                [showGridLines]="false"  
+                
+                [timeline]="true"></ngx-charts-line-chart>
 
             <!-- Area Line Chart -->
             <ngx-charts-area-chart class="chart" *ngIf="oChart['chart-type'] === 'line-area'" [view]="view"

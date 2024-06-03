@@ -21,7 +21,7 @@ a.nav-link {
 }
 
 .chart-container {
-    width: 48%;
+    width: 100%;
     border: 1px solid var(--neutral15);
     border-radius: 8px;
     padding: 12px
