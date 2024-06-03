@@ -14,8 +14,10 @@
         </span>
     </div>
     <div class="dialog-content-container d-flex flex-column gap-3 flex-fill">
-        <div class="alert-header font-bold d-flex flex-row justify-content-between">
-            {{m_sTitle}}
+        <div class="alert-header font-bold d-flex flex-row justify-content-between align-items-center">
+            <div>
+                {{m_sTitle? m_sTitle : "Alert"}}
+            </div>
             <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
         </div>
 

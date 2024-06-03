@@ -310,7 +310,6 @@ export class ConstantsService {
    */
   checkProjectSubscriptionsValid() {
     let sMessage: string;
-    console.log(this.m_oActiveProject);
     if (this.m_aoActiveSubscriptions.length === 0) {
       sMessage = "You do not have an Active Subscription at the moment";
       this.m_oNotificationDisplayService.openAlertDialog(sMessage);
@@ -319,7 +318,6 @@ export class ConstantsService {
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProject) === true || this.m_oActiveProject.projectId === null) {
       sMessage = "You do not have an Active Project at the moment. Please select one in the navbar";
-      console.log(this.m_oActiveProject);
       this.m_oNotificationDisplayService.openAlertDialog(sMessage);
       return false;
     }
