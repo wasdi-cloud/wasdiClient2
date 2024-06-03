@@ -9,27 +9,17 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
   selector: 'app-workspaces-list-dialog',
   templateUrl: './workspaces-list-dialog.component.html',
   styleUrls: ['./workspaces-list-dialog.component.css']
 })
 export class WorkspacesListDialogComponent implements OnInit {
-  @Input() m_bIsDialog: boolean = true;
-
-  m_aoWorkspaceList: Array<any> = [];
-  m_aoSelectedWorkspaces: Array<any> = [];
-
-  m_oActiveWorkspace: Workspace = {} as Workspace;
-
-  m_sCurrentNode: string = '';
-  m_sExcludedWorkspaceId: string = '';
-
-  m_oSelectedProduct: any = null;
-  m_aoSelectedProducts: Array<any> = [];
-
+  /**
+   * Flag to check if the workspace list has loaded
+   */
   m_bIsLoadingWorkspaceList: boolean = false;
 
   /**
@@ -37,6 +27,34 @@ export class WorkspacesListDialogComponent implements OnInit {
    */
   m_bIsSharingProduct: boolean = false;
 
+  /**
+   * The selected products for multi-product sending
+   */
+  m_aoSelectedProducts: Array<any> = [];
+
+  /**
+   * Array of selected workspaces - add active workspace when sending via search
+   */
+  m_aoSelectedWorkspaces: Array<any> = [];
+
+  /**
+   * Array of user's workspaces
+   */
+  m_aoWorkspaceList: Array<any> = [];
+
+  /**
+   * The user's active (open) workspace
+   */
+  m_oActiveWorkspace: Workspace = {} as Workspace;
+
+  /**
+   * The selected product for single selection 
+   */
+  m_oSelectedProduct: any = null;
+
+  /**
+   * Holder for the user's search input
+   */
   m_sSearch: string = ""
 
   constructor(
@@ -47,9 +65,7 @@ export class WorkspacesListDialogComponent implements OnInit {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService
-  ) {
-
-  }
+  ) { }
 
   ngOnInit(): void {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
@@ -75,7 +91,6 @@ export class WorkspacesListDialogComponent implements OnInit {
    */
   getWorkspaces() {
     this.m_bIsLoadingWorkspaceList = true;
-
     this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
@@ -83,7 +98,7 @@ export class WorkspacesListDialogComponent implements OnInit {
           this.m_bIsLoadingWorkspaceList = false;
 
           // If there is an Active Workspace, move it to the first position to display first:
-          if (this.m_oActiveWorkspace.workspaceId) {
+          if (this.m_oActiveWorkspace.workspaceId && this.m_bIsSharingProduct === false) {
             this.m_aoWorkspaceList.forEach((oWorkspace, iIndex) => {
               if (oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
                 this.m_aoWorkspaceList.splice(iIndex, 1);
@@ -174,7 +189,7 @@ export class WorkspacesListDialogComponent implements OnInit {
       oController.m_oSelectedProduct.isDisabledToDoDownload = true;
       let sUrl: string = this.m_oSelectedProduct.link;
       let oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
         oController.m_oSelectedProduct.isDisabledToDoDownload = false;
       };
 
@@ -222,7 +237,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         sMessage = sResponse;
       });
       oCallback = function (data, status) {
-        oController.m_oNotificationDisplayService.openSnackBar(sMessage);
+        oController.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
       }
     }
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oError) === true) {
@@ -230,7 +245,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         sMessage = sResponse;
       });
       oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog(sMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
       };
     }
     this.m_oFileBufferService.download(sUrl, sFileName, sWorkspaceId, sBounds, oProvider).subscribe({
@@ -240,7 +255,7 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   }
 
-  shareProductToWorkspace() {
+shareProductToWorkspace() {
     let oController = this;
     let aoWorkspaces = this.m_aoSelectedWorkspaces;
     let oProduct = this.m_oSelectedProduct;
@@ -254,7 +269,7 @@ export class WorkspacesListDialogComponent implements OnInit {
       oProduct.isDisabledToDoDownload = true;
       let sUrl = oProduct.link;
       let oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
         oProduct.isDisabledToDoDownload = false;
       };
 
@@ -270,10 +285,10 @@ export class WorkspacesListDialogComponent implements OnInit {
 
       oController.m_oFileBufferService.share(sOriginWorkspaceId, sDestinationWorkspaceId, sProductName).subscribe({
         next: oResponse => {
-          oController.m_oNotificationDisplayService.openSnackBar(sMessage)
+          oController.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar')
         },
         error: oError => {
-          oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+          oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
         }
       });
     }
