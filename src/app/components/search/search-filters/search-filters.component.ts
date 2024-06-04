@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
 //Import Services:
 import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
@@ -20,7 +20,7 @@ import { OpenSearchService } from 'src/app/services/api/open-search.service';
   templateUrl: './search-filters.component.html',
   styleUrls: ['./search-filters.component.css']
 })
-export class SearchFiltersComponent implements OnInit {
+export class SearchFiltersComponent implements OnInit, OnChanges {
 
   @Input() m_aoMissions: Array<any> = [];
   @Input() m_aoSelectedProviders: Array<any> = [];
@@ -99,6 +99,11 @@ export class SearchFiltersComponent implements OnInit {
     this.initDefaultMonths();//TODO REMOVE IT
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.m_aoMissions.length > 0) {
+      this.setActiveMission(this.m_aoMissions[0]);
+    }
+  }
   /************ SET DEFAULT VALUE METHODS ************/
 
   /**
@@ -292,9 +297,11 @@ export class SearchFiltersComponent implements OnInit {
     this.m_oActiveMission = oMission;
 
     this.setMissionFilter(this.m_oActiveMission);
-    this.m_aoFilters = this.m_oActiveMission.filters;
+    if (this.m_oActiveMission && this.m_oActiveMission.filters) {
+      this.m_aoFilters = this.m_oActiveMission.filters;
+      this.m_aoVisibleFilters = this.m_oMissionFiltersService.setFilterVisibility(oMission.filters, this.m_oMissionObject.missionFilter);
+    }
 
-    this.m_aoVisibleFilters = this.m_oMissionFiltersService.setFilterVisibility(oMission.filters, this.m_oMissionObject.missionFilter);
   }
 
   /**
@@ -393,7 +400,7 @@ export class SearchFiltersComponent implements OnInit {
     }
 
     //Update Results of Search Service:
-    
+
   }
 
   /**

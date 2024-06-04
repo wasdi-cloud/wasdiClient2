@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, AfterContentInit, AfterContentChecked } from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { SearchService } from 'src/app/search.service';
@@ -22,7 +22,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   styleUrls: ['./search.component.css'],
   host: { 'class': 'flex-fill' }
 })
-export class SearchComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   //Font Awesome Imports:
   faPlus = faPlus;
 
@@ -100,16 +100,19 @@ export class SearchComponent implements OnInit, OnDestroy {
     private m_oResultsOfSearchService: ResultOfSearchService,
     private m_oSearchService: SearchService,
     private m_oTranslate: TranslateService,
-  ) {
-    if (this.m_oConfigurationService.getConfiguration() != null) {
-      this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
-    }
-  }
+  ) { }
 
   ngOnInit(): void {
     FadeoutUtils.verboseLog("SearchComponent.ngOnInit")
     this.m_oPageService.setFunction(this.executeSearch, this);
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+  }
+
+  //Wait until After Content is initialized and then check - on check call the config file
+  ngAfterContentChecked(): void {
+    if (this.m_oConfigurationService.getConfiguration() != null) {
+      this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
+    }
   }
 
   ngOnDestroy(): void {
