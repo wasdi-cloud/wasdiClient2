@@ -42,7 +42,10 @@ export class WorkspacesMenuComponent implements OnInit {
    * Open New Workspace Dialog (re-routes to open editor if user creates workspace)
    */
   openNewWorkspaceDialog() {
-    this.m_oDialog.open(NewWorkspaceDialogComponent);
+    this.m_oDialog.open(NewWorkspaceDialogComponent, {
+      height: '275px',
+      width: '550px'
+    });
   }
 
   /**

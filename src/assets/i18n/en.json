@@ -117,7 +117,7 @@
     "WORKSPACES_SHARED_WITH": "Shared with",
     "WORKSPACES_SHOW_SATS": "Show Satellites",
 
-    "DIALOG_ADD_NEW_WORKSPACE_HEADER": "New Workspace", 
+    "DIALOG_ADD_NEW_WORKSPACE_HEADER": "Create new Workspace", 
     "DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Update Workspace Name",
     "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Enter Workspace Name",
     "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" : "Enter New Workspace Name", 
@@ -126,6 +126,7 @@
     "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Cancel",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_ERROR": "Error in updating workspace name",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS": "Workspace Name Updated",
+    "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "For best practices, give a meaningful name to your workspace so it will be easy to remember. (Optional)",
 
     "EDITOR_TOOLTIP_SWITCH_3D_2D": "Switch between 3D globe and 2D map",
     "EDITOR_TOOLTIP_SYNCHRONIZE_MAP_3D": "Synchronize this globe to the 2D Navigation View",
