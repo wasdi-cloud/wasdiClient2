@@ -29,7 +29,10 @@ export class ConsoleService {
       sUrl = oWorkspace.apiUrl;
     }
 
-
+    //Prevent double back slash in url
+    if (sUrl.endsWith('/')) {
+      sUrl.slice(1, -1);
+    }
 
     return this.oHttp.post<defaultResponse>(sUrl + this.m_sResource + '/create?workspaceId=' + sWorkspaceId, {});
   };
