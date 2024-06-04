@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom, lastValueFrom, map } from 'rxjs';
 import { AuthService } from './auth/auth.service';
 
 @Injectable({
