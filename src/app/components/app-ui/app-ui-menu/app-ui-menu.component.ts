@@ -55,8 +55,6 @@ export class AppUiMenuComponent {
         isCreating: this.m_bRunInNewWorkspace,
         workspace: oEvent
       }
-
-      console.log(oEmitObject)
       this.m_oSelectedWorkspace.emit(oEmitObject)
     }
   }
