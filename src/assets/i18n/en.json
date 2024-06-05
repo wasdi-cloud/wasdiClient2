@@ -24,6 +24,8 @@
     "APP_UI_PURCHASE": "Buy App",
     "APP_UI_SAVE_PARAMS": "",
 
+    "ACTIVE_SUBSCRIPTION_ERROR": "You do not have an active project at the moment <br> Either select a project or purchase a subscription",
+
     "DIALOG_PARAMS_CREATE": "Create parameters template",
     "DIALOG_PARAMS_TEMPLATE_NAME": "Template name", 
     "DIALOG_PARAMS_SAVE": "Save parameters",
@@ -236,6 +238,7 @@
     "DIALOG_DOWNLOAD_BUTTON": "Download",
     "DIALOG_OK_BUTTON": "Ok",
     "DIALOG_FORMAT_JSON_ERROR": "Could not format your JSON input. Please ensure it is a valid JSON",
+    "DIALOG_PARSE_JSON_ERROR": "There was an error in parsing the JSON payload", 
     
     "DIALOG_PRODUCT_EDITOR_INFO_DIALOG_ORIGINAL_NAME_LABEL": "Original name",
     "DIALOG_PRODUCT_EDITOR_INFO_DIALOG_FRIENDLY_NAME_LABEL": "Friendly Name",
@@ -271,6 +274,8 @@
     "DIALOG_IMPORT_IMPORT": "Import",
     "DIALOG_IMPORT_UPLOAD": "Upload",
     "DIALOG_IMPORT_SFTP": "SFTP",
+    "DIALOG_IMPORT_READONLY": "You do not have permission to import products to this workspace",
+    "DIALOG_IMPORT_UPLOAD_ERROR": "Error in uploading file",
     
     "DIALOG_PROCESSES_LOGS_TITLE": "Workspace Processes List",
     "DIALOG_PROCESSES_LOGS_NO_WS": "No workspace selected, cannot loading data. If you refreshed the page please go to Workspace section and select one.",
@@ -561,6 +566,10 @@
     "DIALOG_PARAMS_CREATE_DATE": "Creation Date",
     "DIALOG_PARAMS_UPDATE_DATE": "Update Date",
     "DIALOG_PARAMS_PARAMS": "Parameters",
+    "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Are you sure you want to delete the following parameters template?", 
+    "DIALOG_PARAMS_CONFIRM_DELETE_SHARE": "Are you sure you want to remove your permissions from the following parameters template?",
+    "DIALOG_PARAMS_DELETE_ERROR": "Could not delete your parameters template",
+    "DIALOG_PARAMS_SAVE_ERROR": "Could not save your parameters template",
    
     "DIALOG_PARAMS_SHARE": "Share",
     "DIALOG_PARAMS_SHARE_HEADER": "Share Parameters",
