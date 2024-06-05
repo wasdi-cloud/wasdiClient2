@@ -302,10 +302,10 @@ export class AppUiComponent implements OnInit {
       return;
     }
 
-    if (this.m_oWorkspaceForm.sNewWorkspaceName && this.m_oWorkspaceForm.sExistingWorkspace) {
-      this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("MSG_MKT_APP_UI_WORKSPACE"), '', 'danger-snackbar');
-      return;
-    }
+    // if (this.m_oWorkspaceForm.sNewWorkspaceName && this.m_oWorkspaceForm.sExistingWorkspace) {
+    //   this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("MSG_MKT_APP_UI_WORKSPACE"), '', 'danger-snackbar');
+    //   return;
+    // }
 
     // let asMessages = [];
     let oProcessorInput = this.createParams();

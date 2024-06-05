@@ -17,9 +17,13 @@
 
     "BTN_CREATE_FIRST_WORKSPACE": "Create first workspace",
 
+    "APP_UI_NEW_EXISTING_WS_CHECK_1":"New Workspace",
+    "APP_UI_NEW_EXISTING_WS_CHECK_2":"Existing Workspace",
+    "APP_UI_RUN_APP_LABEL":"Run App in",
+    "APP_UI_AUTOMATIC_NAME_PLACEHOLDER":"[Automatic Name]",
     "APP_UI_SELECT_WS": "Select workspace", 
     "APP_UI_SEARCH_WS": "Search Workspaces",
-    "APP_UI_OPEN_WS": "Open Workspace",
+    "APP_UI_OPEN_WS": "Run App",
     "APP_UI_AUTO_WS": "Auto Workspace",
     "APP_UI_PURCHASE": "Buy App",
     "APP_UI_SAVE_PARAMS": "",
