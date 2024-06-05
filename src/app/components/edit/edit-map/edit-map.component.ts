@@ -11,6 +11,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 declare let Cesium: any;
 
 import { ConstantsService } from 'src/app/services/constants.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-map',
@@ -28,7 +29,7 @@ export class EditMapComponent implements OnInit {
   /**
    * Array of all the products in the Workspace. Used to fly on the workspace bbox 
    */
-  
+
   private m_aoProducts: Array<any> = [];
 
   /**
@@ -134,7 +135,8 @@ export class EditMapComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oGlobeService: GlobeService,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oMapService: MapService) { }
+    private m_oMapService: MapService,
+    private m_oTranslate: TranslateService) { }
 
   ngOnInit(): void {
     // As we enter, we go in 2D Mode by default
@@ -167,6 +169,7 @@ export class EditMapComponent implements OnInit {
    * @param bAddFootPrints true to add the workspace footprints to the small map
    */
   init2DMode(bAddFootPrints: boolean) {
+    let sErrorMsg = this.m_oTranslate.instant("MAP_FEATURE_ERROR");
     // Clear Both Map and Globe
     this.m_oGlobeService.clearGlobe();
     this.m_oMapService.clearMap();
@@ -238,12 +241,12 @@ export class EditMapComponent implements OnInit {
                       this.m_oFeatureInfoMarker = L.popup().setLatLng([oClickEvent.latlng.lat, oClickEvent.latlng.lng]).setContent(sContentString).openOn(this.m_oMapService.m_oWasdiMap);
                     }
                     catch (error) {
-                      this.m_oNotificationDisplayService.openSnackBar("Cannot read feature info");
+                      this.m_oNotificationDisplayService.openSnackBar(sErrorMsg, '', 'danger-snackbar');
                     }
                   }
                 },
                 error: oError => {
-                  this.m_oNotificationDisplayService.openSnackBar("Error reading feature info");
+                  this.m_oNotificationDisplayService.openSnackBar(sErrorMsg, '', 'danger-snackbar');
                 }
               });
             }
@@ -324,7 +327,7 @@ export class EditMapComponent implements OnInit {
       }) : `<li>Gray Index: ${oFeature.properties.GRAY_INDEX}</li>`}</ul> </li>`
     })
 
-    let sReturnString ='<ul>' + asFeatureContent.toString() + '</ul>'
+    let sReturnString = '<ul>' + asFeatureContent.toString() + '</ul>'
     return sReturnString;
   }
 }

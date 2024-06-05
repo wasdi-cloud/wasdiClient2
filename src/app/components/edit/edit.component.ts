@@ -182,7 +182,8 @@ export class EditComponent implements OnInit, OnDestroy {
       if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
       if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
 
-      oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + sOperation + oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_2") + sErrorDescription, 10000);
+      console.log('here')
+      oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + `<li>${sOperation}</li>` + sErrorDescription, 10000);
 
       return;
     }
@@ -215,7 +216,7 @@ export class EditComponent implements OnInit, OnDestroy {
   receivedNewProductMessage(oMessage) {
     let sMessage = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED");
     // Alert the user
-    this.m_oNotificationDisplayService.openSnackBar(sMessage);
+    this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
     // Update product list
     this.getProductList();
 
@@ -242,7 +243,7 @@ export class EditComponent implements OnInit, OnDestroy {
           if (oResponse.workspaceId === null || oResponse.activeNode === false) {
             this.m_oRouter.navigateByUrl('/workspaces');
             let sMessage = this.m_oTranslate.instant("MSG_FORBIDDEN")
-            this.m_oNotificationDisplayService.openAlertDialog(sMessage)
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger')
           }
           else {
             this.m_oConstantsService.setActiveWorkspace(oResponse);
@@ -259,7 +260,7 @@ export class EditComponent implements OnInit, OnDestroy {
       },
       error: oError => {
         let sMessage = this.m_oTranslate.instant("MSG_ERROR_READING_WS");
-        this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger');
       }
     })
   }
@@ -277,10 +278,11 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   getJupyterIsReady(sWorkspaceId) {
+    let sErrorMsg = this.m_oTranslate.instant("EDITOR_ERROR_CONSOLE_STATUS_FAIL");
     this.m_oConsoleService.isConsoleReady(sWorkspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === true) {
-          this.m_oNotificationDisplayService.openAlertDialog("Error in getting Jupyter Notebook Status");
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
           return false;
         }
         this.m_bJupyterIsReady = oResponse.boolValue;
@@ -347,13 +349,15 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   copyWorkspaceId() {
+    let sCopiedMsg = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD");
     this.m_oClipboard.copy(this.m_sWorkspaceId);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Workspace Id to clipboard!");
+    this.m_oNotificationDisplayService.openSnackBar(sCopiedMsg, '', 'success-snackbar');
   }
 
   copyWorkspaceName() {
+    let sCopiedMsg = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD");
     this.m_oClipboard.copy(this.m_oActiveWorkspace?.name);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Workspace Name to clipboard!");
+    this.m_oNotificationDisplayService.openSnackBar(sCopiedMsg, '', 'success-snackbar');
   }
 
   openPropertiesDialog() {

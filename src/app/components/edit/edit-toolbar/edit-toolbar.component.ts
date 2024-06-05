@@ -102,8 +102,8 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
           if (oResponse.stringValue.includes("http")) {
             window.open(oResponse.stringValue, '_blank');
           } else {
-            sMessage = sMessage + "<BR>" + oResponse.stringValue;
-            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+            sMessage = sMessage + "<br>" + oResponse.stringValue;
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger');
           }
         }
 

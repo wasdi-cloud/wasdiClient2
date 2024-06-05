@@ -6,7 +6,8 @@
         "ERROR": "Error",
         "SUCCESS": "Success",
         "GURU_MEDITATION": "Guru Meditation", 
-        "CONFIRM_REMOVAL": "Confirm Removal"
+        "CONFIRM_REMOVAL": "Confirm Removal", 
+        "CLIPBOARD": "Copied to Clipboard!"
     },
 
     "BTN_SEARCH": "Search",
@@ -127,6 +128,13 @@
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_ERROR": "Error in updating workspace name",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS": "Workspace Name Updated",
     "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "For best practices, give a meaningful name to your workspace so it will be easy to remember. (Optional)",
+    
+    "DIALOG_APPS_PROCESSORS_ERROR": "An error occured while fetching the processors", 
+    "DIALOG_APPS_DELETE_OWNER": "Are you sure you want to delete the following processor?", 
+    "DIALOG_APPS_DELETE_SHARED": "Are you sure you want to remove your permissions from the following processor?",
+    "DIALOG_APPS_ERROR_DELETE": "An error occured while attempting to delete your procesor",
+    "DIALOG_APPS_CANNOT_EDIT": "You do not have permision to edit this workspace",
+    "DIALOG_APPS_INVALID_JSON": "Invalid JSON input", 
 
     "EDITOR_TOOLTIP_SWITCH_3D_2D": "Switch between 3D globe and 2D map",
     "EDITOR_TOOLTIP_SYNCHRONIZE_MAP_3D": "Synchronize this globe to the 2D Navigation View",
@@ -227,6 +235,7 @@
     "DIALOG_DELETE_BUTTON": "Delete",
     "DIALOG_DOWNLOAD_BUTTON": "Download",
     "DIALOG_OK_BUTTON": "Ok",
+    "DIALOG_FORMAT_JSON_ERROR": "Could not format your JSON input. Please ensure it is a valid JSON",
     
     "DIALOG_PRODUCT_EDITOR_INFO_DIALOG_ORIGINAL_NAME_LABEL": "Original name",
     "DIALOG_PRODUCT_EDITOR_INFO_DIALOG_FRIENDLY_NAME_LABEL": "Friendly Name",
@@ -695,6 +704,8 @@
     "DIRECTIVE_DD_BACK": "Back",
     "DIRECTIVE_DD_SAVE_SELECTION": "Save Selection",
 
+    "MAP_FEATURE_ERROR": "Cannot read feature info", 
+
     "MSG_EDIT_PRODUCT_ADDED": "PRODUCT ADDED TO THE WS<br>READY",
     "MSG_DOWNLOAD": "PRODUCT ADDED TO THE WORKSPACE<br>READY",
     "MSG_PUBLISHBAND_1": "BAND PUBLISHED: ",
@@ -717,8 +728,8 @@
     "MSG_KILLPROCESSTREE": "PROCESS KILLED<br>READY",
     "MSG_READMETADATA": "METADATA READ<br>READY",
     "MSG_EMPTY_MSG": "ERROR: GOT EMPTY MESSAGE<br>READY",
-    "MSG_ERROR_IN_OPERATION_1": "THERE WAS AN ERROR IN THE ",
-    "MSG_ERROR_IN_OPERATION_2": " PROCESS",
+    "MSG_ERROR_IN_OPERATION_1": "There was an error in the following process:",
+
     "MSG_PUBLISH_ERROR": " THERE WAS AN ERROR PUBLISHING THE PRODUCT",
     "MSG_PRODUCT_LIST_ERROR": "ERROR READING PRODUCT LIST",
     "MSG_FORBIDDEN": "FORBIDDEN <br> TRYING TO ACCES A PRIVATE RESOURCE YOU HAVE NO RIGHTS ON",
@@ -763,19 +774,21 @@
     "MSG_MKT_REVIEW_UPDATE_ERROR": "Error updating your review",
     "MSG_MKT_REVIEW_REMOVED": "Review removed",
     "MSG_MKT_REVIEW_REMOVE_ERROR": "Error removing your review",
+    "MSG_MKT_REVIEW_COMPLETE": "Please complete your review",
 
     "MSG_MKT_COMMENT_SAVED": "Comment saved",
     "MSG_MKT_COMMENT_SAVE_ERROR": "Error saving your comment",
     "MSG_MKT_COMMENT_UPDATED": "Comment Updated",
     "MSG_MKT_COMMENT_UPDATED_ERROR": "Error updating your comment",
-    "MSG_MKY_COMMENT_DELETED": "Comment removed",
+    "MSG_MKT_COMMENT_DELETED": "Comment removed",
     "MSG_MKT_COMMENT_REMOVE_ERROR": "Error removing your comment",
    
-
     "MSG_MKT_REVIEW_DELETE_CONFIRM": "Are you sure you want to delete your review?",
     "MSG_MKT_COMMENT_DELETE_CONFIRM": "Are you sure you want to delete your comment?",
   
     "MSG_MKT_APP_UI_ERROR": "ERROR: READING APP UI",
+    "MSG_MKT_APP_UI_INVALID": "The following inputs are required or have an invalid input",
+    "MSG_MKT_APP_UI_WORKSPACE": "Either select a workpace or create a new one",
     "MSG_MKT_APP_DATA_ERROR": "ERROR GETTING APPLICATION DATA",
     "MSG_MKT_APP_HELP_ERROR": "ERROR READING APP HELP",
     "MSG_MKT_APP_NO_HELP": "There isn't any help message.",
@@ -893,7 +906,8 @@
     "PACKAGE_MANAGER_ADD": "Add new package",
 
     "EDITOR_ERROR_CONSOLE_NOT_REACHABLE": "Error contacting the JupyterLab service",
-   
+    "EDITOR_ERROR_CONSOLE_STATUS_FAIL": "Error in getting Jupyter Notebook Status",
+
     "USER_ORGANIZATIONS_SHOW_USERS": "Show Users",
     "USER_ORGANIZATIONS_HIDE_USERS": "Hide Users",
     "USER_ORGANIZATIONS_ERROR_FETCHING": "Could not fetch your organisations",
@@ -946,6 +960,7 @@
     "USER_SUBSCRIPTION_URL_ERROR": "Error in fetching payment URL",
     "USER_SUBSCRIPTION_STRIPE_TITLE": "Re-direcrting to STRIPE", 
     "USER_SUBSCRIPTION_STRIPE_MSG": "You will be re-directed to our payment partner, Stripe. Click 'Yes' to continue or 'CANCEL' to end the payment process.",
+    "USER_SUBSCRIPTION_STRIPE_FAIL": "There was an error in recording your payment",
     "USER_SUBSCRIPTION_ID_ERROR": "Could not find subscription by ID",
     "USER_SUBSCRIPTION_SAVE_ERROR": "Could not save subscription",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Could not get user organisations",

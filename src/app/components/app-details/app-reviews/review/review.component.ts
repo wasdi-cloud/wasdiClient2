@@ -108,6 +108,7 @@ export class ReviewComponent implements OnInit {
     this.m_bCommentsWaiting = true;
 
     let sCommentsErrorMsg = this.m_oTranslate.instant("MSG_MKT_COMMENTS_ERROR");
+    let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.ERROR")
 
     this.m_oProcessorMediaService.getReviewComments(sReviewId, undefined, undefined).subscribe({
       next: oResponse => {
@@ -123,8 +124,8 @@ export class ReviewComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sCommentsErrorMsg);
         this.m_bCommentsWaiting = false;
+        this.m_oNotificationDisplayService.openAlertDialog(sCommentsErrorMsg, sErrorHeader, 'danger');
       }
     });
     return true;

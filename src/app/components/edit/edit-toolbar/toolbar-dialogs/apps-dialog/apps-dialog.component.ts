@@ -20,6 +20,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { Application } from 'src/app/components/app-ui/app-ui.component';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -74,7 +75,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
     private m_oRabbitStompService: RabbitStompService,
-    private m_oImageService: ImageService
+    private m_oImageService: ImageService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -97,17 +99,18 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    * Get the list of processors from the server
    */
   getProcessorsList() {
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_APPS_PROCESSORS_ERROR");
     this.m_oProcessorService.getProcessorsList().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoProcessorList = this.setDefaultImages(oResponse);
           this.m_bIsLoadingProcessorList = false;
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog("Error in getting processors");
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in getting processors");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
       }
     });
   }
@@ -231,16 +234,19 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!oProcessor) {
       return false;
     }
+    let sConfirmHeader: string = this.m_oTranslate.instant("KEY_PHRASES.CONFIRM_REMOVAL");
 
-    let sConfirmOwner = `Are you sure you want to delete ${oProcessor.processorName}?`;
-    let sConfirmShared = `Are you sure you want to remove your permissions from ${oProcessor.processorName}?`
+    let sConfirmOwner = `${this.m_oTranslate.instant("DIALOG_APPS_DELETE_OWNER")}<li> ${oProcessor.processorName}</li>`;
+    let sConfirmShared = `${this.m_oTranslate.instant("DIALOG_APPS_DELETE_SHARED")}<li> ${oProcessor.processorName}</li>`;
+
+    let sDeleteErrorMsg: string = this.m_oTranslate.instant("DIALOG_APPS_ERROR_DELETE");
 
     let bConfirmResult: any;
 
     if (oProcessor.sharedWithMe) {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared, sConfirmHeader, 'alert');
     } else {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner, sConfirmHeader, 'alert');
     }
 
     bConfirmResult.subscribe(bDialogResult => {
@@ -250,7 +256,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
           next: oResponse => {
             //Next actions are handled on RabbitMessageHook function
           },
-          error: oError => { }
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog(sDeleteErrorMsg, '', 'danger');
+          }
         }
         );
       }
@@ -262,10 +270,11 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    * Format the JSON textbox
    */
   formatJSON() {
+    let sJsonError = this.m_oTranslate.instant("DIALOG_FORMAT_JSON_ERROR")
     try {
       this.m_sMyJsonString = JSON.stringify(JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')), null, 3);
     } catch (oError) {
-      this.m_oNotificationDisplayService.openAlertDialog("Could not format your JSON Input. Please ensure it is a valid JSON.")
+      this.m_oNotificationDisplayService.openAlertDialog(sJsonError, '', 'alert');
     }
   }
 
@@ -278,7 +287,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (this.m_bIsReadonly === true) {
-      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to edit this workspace.");
+      let sCannotEditMsg: string = this.m_oTranslate.instant("DIALOG_APPS_CANNOT_EDIT")
+      this.m_oNotificationDisplayService.openAlertDialog(sCannotEditMsg, '', 'alert');
       return false;
     }
     console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
@@ -298,15 +308,15 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       JSON.parse(sStringJSON);
     } catch (oError) {
-      let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
+      let sErrorMessage = this.m_oTranslate.instant("DIALOG_APPS_INVALID_JSON") + "<br>" + oError.toString();
 
-      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, '', 'alert');
     }
 
     this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-        let sNotificationMsg = "PROCESSOR SCHEDULED";
-        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg)
+        let sNotificationMsg = this.m_oTranslate.instant("MSG_MKT_PROC_SCHEDULED");
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, '', 'success-snackbar')
       }
       this.m_oDialogRef.close();
     })
@@ -331,19 +341,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
           } catch (oError) {
             sHelpMessage = oResponse.stringValue;
           }
-        } else {
-          sHelpMessage = "There isn't any help message."
         }
-      } else {
-        sHelpMessage = "The developer did not include a help message."
       }
-      this.m_oDialog.open(HelpDialogComponent, {
-        maxHeight: '70vh',
-        maxWidth: '50vw',
-        data: {
-          helpMsg: sHelpMessage
-        }
-      })
     })
   }
 
@@ -352,8 +351,6 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'params':
         this.selectProcessor(oProcessor);
         this.showParametersLibrary(true);
-
-        // this.openParametersDialog(oProcessor);
         break;
       case 'download':
         this.downloadProcessor(oProcessor);

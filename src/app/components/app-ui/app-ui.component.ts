@@ -298,12 +298,12 @@ export class AppUiComponent implements OnInit {
     let bCheck: boolean = this.checkParams();
 
     if (!bCheck) {
-      this.m_oNotificationDisplayService.openAlertDialog(this.m_sMessage);
+      this.m_oNotificationDisplayService.openAlertDialog(this.m_sMessage, '', 'alert');
       return;
     }
 
     if (this.m_oWorkspaceForm.sNewWorkspaceName && this.m_oWorkspaceForm.sExistingWorkspace) {
-      this.m_oNotificationDisplayService.openSnackBar("Either select workspace or create new one");
+      this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("MSG_MKT_APP_UI_WORKSPACE"), '', 'danger-snackbar');
       return;
     }
 
@@ -339,11 +339,11 @@ export class AppUiComponent implements OnInit {
         let sWorkspaceId = oResponse.stringValue;
 
         if (sWorkspaceId === null) {
-          this.m_oNotificationDisplayService.openAlertDialog(sCreateError)
+          this.m_oNotificationDisplayService.openAlertDialog(sCreateError, '', 'danger')
         } else {
           this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(response => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-              this.m_oNotificationDisplayService.openAlertDialog(sOpenError);
+              this.m_oNotificationDisplayService.openAlertDialog(sOpenError, '', 'danger');
             } else {
               this.executeProcessorInWorkspace(oController, sApplicationName, oProcessorInput, response);
             }
@@ -403,7 +403,7 @@ export class AppUiComponent implements OnInit {
 
     let asMessages: string[] = [];
 
-    this.m_sMessage = "The following inputs are required or are invalid:"
+    this.m_sMessage = this.m_oTranslate.instant("MSG_MKT_APP_UI_INVALID") + ":";
     this.m_sMessage += "<br>";
 
     for (let iTabs = 0; iTabs < this.m_aoTabs.length; iTabs++) {
@@ -414,7 +414,7 @@ export class AppUiComponent implements OnInit {
 
     if (!bIsValid) {
       for (let iMessages = 0; iMessages < asMessages.length; iMessages++) {
-        this.m_sMessage = this.m_sMessage + asMessages[iMessages] + "<br>";
+        this.m_sMessage += `<li>${asMessages[iMessages]}</li>`;
       }
 
     }
@@ -470,7 +470,7 @@ export class AppUiComponent implements OnInit {
 
   getExecutePurchase(oEvent) {
     this.createAppPaymentObject();
-    this.m_oNotificationDisplayService.openConfirmationDialog("You will be re-directed to our payment partner, Stripe. Click 'OK' to continue or 'CANCEL' to end the payment process.<br> Please remember to refresh the page when you return").subscribe(bDialogResult => {
+    this.m_oNotificationDisplayService.openConfirmationDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_MSG"), this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_TITLE"), 'info').subscribe(bDialogResult => {
       if (bDialogResult) {
         this.saveAndGetStripePaymentUrl()
       }
@@ -488,12 +488,12 @@ export class AppUiComponent implements OnInit {
   saveAndGetStripePaymentUrl() {
     this.m_oProcessorService.addAppPayment(this.m_oAppPaymentVM).subscribe(oResponse => {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-        this.m_oNotificationDisplayService.openAlertDialog("Error getting recording payment");
+        this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_FAIL"), '', 'danger');
       } else {
         this.m_oProcessorService.getStripeOnDemandPaymentUrl(this.m_oAppPaymentVM.processorId, oResponse.message).subscribe({
           next: oResponse => {
             if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
-              this.m_oNotificationDisplayService.openSnackBar("PAYMENT URL RECIEVED");
+              this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("USER_SUBSCRIPTION_URL"), '', 'success-snackbar');
 
               let sUrl = oResponse.message;
 
@@ -501,7 +501,7 @@ export class AppUiComponent implements OnInit {
             }
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog("ERROR IN FETCHING PAYMENT URL");
+            this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant( "USER_SUBSCRIPTION_URL_ERROR"), '', 'danger');
           }
         })
       }

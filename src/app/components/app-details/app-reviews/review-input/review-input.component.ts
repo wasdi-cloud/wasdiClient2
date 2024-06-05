@@ -118,11 +118,12 @@ export class ReviewInputComponent implements OnInit {
   addReview() {
     let sSavedMsg = this.m_oTranslate.instant("MSG_MKT_REVIEW_SAVED");
     let sErrorMsg = this.m_oTranslate.instant("MSG_MKT_REVIEW_SAVE_ERROR");
+    let sComplete = this.m_oTranslate.instant("MSG_MKT_REVIEW_COMPLETE")
     this.m_oUserReview.comment = this.m_sReviewText;
 
     if (!this.m_oUserReview.comment || !this.m_oUserReview.vote) {
-      let sError = "Please complete your Review";
-      this.m_oNotificationDisplayService.openAlertDialog(sError, this.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'alert');
+
+      this.m_oNotificationDisplayService.openAlertDialog(sComplete, this.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'alert');
     } else {
       this.m_oProcessorMediaService.addProcessorReview(this.m_oUserReview).subscribe({
         next: oResponse => {
@@ -208,7 +209,7 @@ export class ReviewInputComponent implements OnInit {
       if (oResult === true) {
         this.m_oProcessorMediaService.deleteReviewComment(this.m_oComment.reviewId, this.m_oComment.commentId).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("MSG_MKY_COMMENT_DELETED"), this.m_oTranslate.instant("KEY_PHRASES.SUCCESS"), 'success-snackbar');
+            this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("MSG_MKT_COMMENT_DELETED"), this.m_oTranslate.instant("KEY_PHRASES.SUCCESS"), 'success-snackbar');
             this.emitCompletedCommentAction(true);
           },
           error: oError => {
