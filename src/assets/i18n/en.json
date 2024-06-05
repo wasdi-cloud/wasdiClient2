@@ -9,7 +9,8 @@
         "CONFIRM_REMOVAL": "Confirm Removal", 
         "CLIPBOARD": "Copied to Clipboard!",
         "SHARE": "Collaborators",
-        "APPLY": "Apply"
+        "APPLY": "Apply",
+        "SAVE": "Save"
     },
 
     "BTN_SEARCH": "Search",
@@ -466,7 +467,7 @@
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL": "Additional Images",
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL_LINE1": "You can upload up to 6 images. Maximum file size per image is 5Mb",
    
-    "DIALOG_PROCESSOR_UI_APP": "App UI",
+    "DIALOG_PROCESSOR_UI_APP_FORMAT_JSON": "Format Json",
     "DIALOG_PROCESSOR_UI_ADD_ELEMENTS": "- Add elements (take care of commas!)",
     "DIALOG_PROCESSOR_UI_TAB": "Tab",
     "DIALOG_PROCESSOR_UI_STRINGS": "Render As Strings",
