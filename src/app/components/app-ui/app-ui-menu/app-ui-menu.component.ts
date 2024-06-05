@@ -25,6 +25,9 @@ export class AppUiMenuComponent {
   @Output() m_oExecuteAppEmitter: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oExecutePurchaseEmitter: EventEmitter<any> = new EventEmitter<any>();
 
+  m_bRunInNewWorkspace: boolean = true;
+  m_sNewWorkspaceName: string = "";
+
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -58,5 +61,10 @@ export class AppUiMenuComponent {
 
   saveAppPurchase() {
     this.m_oExecutePurchaseEmitter.emit(true);
+  }
+
+  newOrExistingWorkspaceChanged() {
+    this.m_bRunInNewWorkspace = !this.m_bRunInNewWorkspace;
+
   }
 }

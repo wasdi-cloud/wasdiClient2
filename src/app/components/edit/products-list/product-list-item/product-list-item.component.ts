@@ -148,14 +148,20 @@ export class ProductListItemComponent {
   getProductMetaData() {
     if (this.m_bHasMetadata === false) {
       let sWorkpace = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-      this.m_oProductService.getProductMetadata(this.m_oProduct.name, sWorkpace).subscribe({
+      this.m_oProductService.getProductMetadata(this.m_oProduct.fileName, sWorkpace).subscribe({
         next: oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oNotificationDisplayService.openAlertDialog("No Metadata found", "Alert", "danger")
+            this.m_oNotificationDisplayService.openAlertDialog("No Metadata found", "Alert", "danger");
           } else {
-            this.m_bHasMetadata = true;
-            this.m_oProductMetadata = oResponse;
-            this.showMetadata(true)
+
+            if (oResponse.attributes==null && oResponse.elements==null && oResponse.name.startsWith("Generating Metadata")) {
+              this.m_oNotificationDisplayService.openAlertDialog("Generating Metadata", "Info", "alert");
+            }
+            else {
+              this.m_bHasMetadata = true;
+              this.m_oProductMetadata = oResponse;
+              this.showMetadata(true)  
+            }
           }
         }
       })

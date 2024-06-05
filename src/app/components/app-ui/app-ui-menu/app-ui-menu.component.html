@@ -10,17 +10,21 @@
         </ul>
     </div>
     <div>
-        <div class="menu-header">Run App</div>
+        <div class="menu-header">{{'APP_UI_RUN_APP_LABEL' | translate}}</div>
         <div class="run-app-container">
-            <app-autocomplete [m_sLabel]="'APP_UI_SELECT_WS' | translate" [m_aoInputs]="m_aoWorkspaces"
+            <div>
+                <input type="checkbox" class="wasdi-checkbox" checked="true" name="IsNew" (change)="newOrExistingWorkspaceChanged()"> 
+                <label for="IsNew" *ngIf="m_bRunInNewWorkspace">{{'APP_UI_NEW_EXISTING_WS_CHECK_1' | translate}}</label>
+                <label for="IsNew" *ngIf="!m_bRunInNewWorkspace">{{'APP_UI_NEW_EXISTING_WS_CHECK_2' | translate}}</label>
+            </div>
+            <app-autocomplete [m_aoInputs]="m_aoWorkspaces" *ngIf="!m_bRunInNewWorkspace"
                 (m_oSelectionChange)="getSelectedWorkspace($event)"
                 [m_sPlaceholder]="m_oActiveWorkspace.name ? m_oActiveWorkspace.name : 'APP_UI_SEARCH_WS' | translate"></app-autocomplete>
+            <app-input-field *ngIf="m_bRunInNewWorkspace" [m_sPlacehodler]="'APP_UI_AUTOMATIC_NAME_PLACEHOLDER' | translate" (m_oInputChange)= "m_sNewWorkspaceName = $event.event.target.value"></app-input-field>
             <app-button *ngIf="m_bIsPurchased" [m_sLabel]="'APP_UI_OPEN_WS' | translate" [m_sSize]="'large'"
-                (click)="executeApp()" [m_bDisabled]="!m_oActiveWorkspace.workspaceId"></app-button>
+                (click)="executeApp()"></app-button>
             <app-button *ngIf="!m_bIsPurchased" [m_sLabel]="'APP_UI_PURCHASE' | translate" [m_sIconLeft]="'rocket_launch'"
                 [m_sSize]="'large'" (click)="saveAppPurchase()"></app-button>
-            <app-button [m_sLabel]="'APP_UI_AUTO_WS' | translate" [m_sSize]="'large'" [m_bMuted]="true"
-                [m_sIconLeft]="'add'" (click)="executeApp()"></app-button>
         </div>
     </div>
 </div>
