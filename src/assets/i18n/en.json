@@ -8,7 +8,8 @@
         "GURU_MEDITATION": "Guru Meditation", 
         "CONFIRM_REMOVAL": "Confirm Removal", 
         "CLIPBOARD": "Copied to Clipboard!",
-        "SHARE": "Collaborators"
+        "SHARE": "Collaborators",
+        "APPLY": "Apply"
     },
 
     "BTN_SEARCH": "Search",
@@ -410,20 +411,23 @@
     "DIALOG_PROCESSOR_TAB_SHARE": "Collaborators",
     "DIALOG_PROCESSOR_TAB_UI": "User Interface",
     "DIALOG_PROCESSOR_APP": "WASDI APP",
+    "DIALOG_PROCESSOR_SAVE_APP": "Publish App",
     
     "DIALOG_PROCESSOR_BASE_NAME": "Name",
     "DIALOG_PROCESSOR_BASE_TYPE": "Type",
     "DIALOG_PROCESSOR_BASE_SELECT_LANG": "Select Your Programming Language",
     "DIALOG_PROCESSOR_BASE_UPDATE_LIB": "Update Lib",
-    "DIALOG_PROCESSOR_BASE_REDEPLOY": "Re-Deploy",
+    "DIALOG_PROCESSOR_BASE_REDEPLOY": "Force App Re-deploy",
     "DIALOG_PROCESSOR_BASE_DRAG_ZIP": "Drag and Drop here the .zip file with your WASDI App or click to browse.",
-    "DIALOG_PROCESSOR_BASE_FILE": "File",
+    "DIALOG_PROCESSOR_BASE_FILE": "Applictation files",
     "DIALOG_PROCESSOR_BASE_DRAG_FILES": "Drag and Drop here the .zip or single file to update your WASDI App or click to browse.",
     "DIALOG_PROCESSOR_BASE_NO_UPDATE": "File Update not available for this Application Type",
-    "DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Short Description",
-    "DIALOG_PROCESSOR_BASE_TIMEOUT": "TimeOut [min]",
-    "DIALOG_PROCESSOR_BASE_PUBLIC": "Make Application Public",
+    "DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Description",
+    "DIALOG_PROCESSOR_BASE_TIMEOUT": "Timeout expressed in minutes (-1 for no timeout)",
+    "DIALOG_PROCESSOR_BASE_PUBLIC": "Make the application public",
     "DIALOG_PROCESSOR_BASE_JSON": "JSON Sample",
+    "DIALOG_PROCESSOR_BASE_BUILD_LOGS": "View Build logs",
+    "DIALOG_PROCESSOR_BASE_BUILD_NUMBER": "Build Number: ",
     
     "DIALOG_PROCESSOR_MEDIA_LOGO": "Application Logo",
     "DIALOG_PROCESSOR_MEDIA_LOGO_DROP": "Drag and Drop here the Application Logo",

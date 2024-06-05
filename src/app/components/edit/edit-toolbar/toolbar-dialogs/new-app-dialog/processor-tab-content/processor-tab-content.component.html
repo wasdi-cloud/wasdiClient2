@@ -1,32 +1,32 @@
 <div class="dialog-content d-flex flex-row gap-2" *ngIf="m_oProcessorBasicInfo && !m_bShowBuildLogs"
     [formGroup]="m_oProcessorBasicInfo">
     <div class="dialog-column form-input-container d-flex flex-column gap-3">
-        <app-input-field [m_sLabel]="'Name'" [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_sProcessorName"
+        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_NAME' | translate" [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_sProcessorName"
             (m_oInputChange)="m_oProcessorBasicInfo.patchValue({sProcessorName: $event.event.target.value})"></app-input-field>
-        <app-input-field *ngIf="m_bEditMode" [m_sLabel]="'Type'" [m_bIsReadonly]="m_bEditMode"
+        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_TYPE' | translate"  *ngIf="m_bEditMode" [m_bIsReadonly]="m_bEditMode"
             [m_sInputValue]="m_sTypeNameOnly"></app-input-field>
-        <app-autocomplete [m_sLabel]="'Type'" *ngIf="!m_bEditMode" [m_aoInputs]="m_aoProcessorTypes"
+        <app-autocomplete [m_sLabel]="'DIALOG_PROCESSOR_BASE_SELECT_LANG' | translate" *ngIf="!m_bEditMode" [m_aoInputs]="m_aoProcessorTypes"
             (m_oSelectionChange)="setSelectedType($event)"></app-autocomplete>
         <div class="textarea-container">
-            <app-textarea [m_sLabel]="'Description'"
+            <app-textarea [m_sLabel]="'DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION' | translate"
                 [m_sInputString]="m_oProcessorBasicInfo.get('sShortDescription').value"
                 (keyup)="onTextareaInput($event)"></app-textarea>
         </div>
         <div class="d-flex flex-row align-items-center gap-2">
-            <app-input-field [m_sLabel]="'Timeout expressed in minutes'" [m_sPlacehodler]="'180'"
+            <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_TIMEOUT' | translate" [m_sPlacehodler]="'180'"
                 [m_sInputValue]="m_iMinuteTimeout.toString()"
                 (m_oInputChange)="m_oProcessorBasicInfo.patchValue({iMinuteTimeout: $event.event.target.value})"></app-input-field>
             <div class="align-self-end">
                 <input type="checkbox" class="wasdi-checkbox" name="" id="" [checked]="m_bIsPublic"
                     (change)="onPublicChange($event)">
-                Make the application public
+                    {{"DIALOG_PROCESSOR_BASE_PUBLIC" | translate}}
             </div>
         </div>
         <div class="drag-drop-container flex-fill d-flex flex-column gap-3 mt-3">
             <div *ngIf="m_bEditMode" class="options-container d-flex flex-column gap-2">
                 <div class="d-flex flex-row justify-content-between font-bold">
-                    Application files
-                    <app-button [m_sLabel]="'Build log'" [m_bMuted]="true" (click)="showBuildLogs(true)"></app-button>
+                    {{"DIALOG_PROCESSOR_BASE_FILE" | translate}}
+                    <app-button [m_sLabel]="'DIALOG_PROCESSOR_BASE_BUILD_LOGS' | translate" [m_bMuted]="true" (click)="showBuildLogs(true)"></app-button>
                 </div>
                 <div class="file-container d-flex flex-row justify-content-between">
                     <div class="d-flex flex-row align-items-center gap-2">
@@ -40,7 +40,7 @@
                             (click)="forceProcessorRefresh(m_sProcessorId)"><span class="material-symbols-outlined">
                                 code
                             </span>
-                            Re-deploy App
+                            {{"DIALOG_PROCESSOR_BASE_REDEPLOY" | translate}}
                         </div>
                         <app-button [m_sIconLeft]="'download'" [m_sSize]="'small'" [m_bOutline]="true" (click)="downloadProcessor(m_sProcessorId)"></app-button>
                     </div>
@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="dialog-column json-container json-sample-container d-flex flex-column">
-        <div class="json-header font-bold pb-2">JSON Sample</div>
+        <div class="json-header font-bold pb-2">{{"DIALOG_PROCESSOR_BASE_JSON" | translate}}</div>
         <div class="flex-fill json-editor-wrapper">
             <app-json-editor [(m_sText)]="m_sJSONSample" m_sMode="json"
                 (m_sTextChange)="onJsonInput($event)"></app-json-editor>
@@ -65,7 +65,7 @@
     <div class="d-flex flex-row align-items-center gap-2">
         <app-button [m_sLabel]="'Back'" [m_bMuted]="true" [m_sIconLeft]="'arrow_back'"
             (click)="showBuildLogs(false)"></app-button>
-        <strong>Build Logs</strong>
+        <strong>{{"DIALOG_PROCESSOR_BASE_BUILD_LOGS" |translate}}</strong>
     </div>
     <div class="flex-fill">
         <div style="height: 100%; overflow: scroll;">
@@ -73,7 +73,7 @@
                 <thead>
                     <tr (click)="openBuildLog(aBuildLogs)">
                         <td class="d-flex flex-row justify-content-between" [class.isOpen]="aBuildLogs.isOpen">
-                            <div class="font-bold">Build Number: {{aBuildLogs.logNumber}}</div>
+                            <div class="font-bold">{{"DIALOG_PROCESSOR_BASE_BUILD_NUMBER" | translate}} {{aBuildLogs.logNumber}}</div>
                             <div class="d-flex flex-row gap-1">
                                 <app-button [m_sLabel]="'Copy to Clipboard'.toUpperCase()" [m_sSize]="'small'"
                                     [m_sIconLeft]="'content_copy'" [m_bOutline]="true" [m_bTextWhite]="true"

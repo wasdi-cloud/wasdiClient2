@@ -1,6 +1,7 @@
 <div class="apps-dialog d-flex flex-column justify-content-between px-4" style="height:100%; width: 100%;">
     <div class="dialog-header d-flex flex-row justify-content-between font-bold">
         {{m_bEditMode === true ? m_oProcessorDetails.processorName : 'New Wasdi app'}}
+        {{m_bEditMode === true ? ' - ' + m_oProcessorDetails.processorId: ''}}
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
     </div>
     <div class="processor-tabs d-flex flex-row pb-4">
@@ -45,8 +46,8 @@
 
     </div>
     <div class="dialog-footer d-flex flex-row justify-content-between mt-2">
-        <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true" (click)="onDismiss()"></app-button>
-        <app-button *ngIf="m_bEditMode" [m_sLabel]="'Apply'" (click)="updateProcessor()"></app-button>
-        <app-button *ngIf="!m_bEditMode" [m_sLabel]="'Save App'" (click)="postNewProcessor()"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true" (click)="onDismiss()"></app-button>
+        <app-button *ngIf="m_bEditMode" [m_sLabel]="'KEY_PHRASES.APPLY' | translate" (click)="updateProcessor()"></app-button>
+        <app-button *ngIf="!m_bEditMode" [m_sLabel]="'DIALOG_PROCESSOR_SAVE_APP' | translate" (click)="postNewProcessor()"></app-button>
     </div>
 </div>
