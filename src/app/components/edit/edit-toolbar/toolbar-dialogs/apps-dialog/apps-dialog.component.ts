@@ -55,12 +55,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   m_sSearchString = ""
   m_oSelectedProcessor: any = {} as Application;
   m_bIsReadonly: boolean = true;
-
-  m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
-    "DELETEPROCESSOR",
-    this,
-    this.rabbitMessageHook
-  )
+  m_iHookIndex: Number = -1;
 
   m_bShowHelpMessage: boolean = false;
   m_sHelpMsg: string = '';
@@ -80,6 +75,11 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
+    this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
+      "DELETEPROCESSOR",
+      this,
+      this.rabbitMessageHook
+    )    
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.m_bIsReadonly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getProcessorsList();
@@ -373,6 +373,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   rabbitMessageHook(oRabbitMessage: any, oController: any) {
+    console.log("RECEVIED " + oRabbitMessage)
     oController.getProcessorsList();
   }
 
