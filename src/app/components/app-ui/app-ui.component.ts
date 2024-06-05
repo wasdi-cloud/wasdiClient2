@@ -150,6 +150,10 @@ export class AppUiComponent implements OnInit {
    */
   m_oActiveWorkspace: Workspace = null;
 
+  /**
+   * Flag to check if running in existing workspace
+   */
+  m_bRunInNewWorkspace: boolean = true;
 
 
   ngOnInit(): void {
@@ -312,8 +316,9 @@ export class AppUiComponent implements OnInit {
     let oController = this;
 
     let sApplicationName: string = this.m_oConstantsService.getSelectedApplication();
+
     // If we are opening an existing workspace:
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace.workspaceId) === false) {
+    if (this.m_bRunInNewWorkspace === false && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace.workspaceId) === false) {
       this.oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
         if (oResponse) {
           this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, oResponse);
@@ -389,12 +394,12 @@ export class AppUiComponent implements OnInit {
    * @returns 
    */
   getSelectedWorkspaceId(oEvent) {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
-      return false;
-    }
-    else {
-      this.m_oSelectedWorkspace = oEvent;
-      return true;
+    if (oEvent.isCreating) {
+      this.m_oWorkspaceForm.sNewWorkspaceName = oEvent.workspace;
+      this.m_bRunInNewWorkspace = true;
+    } else {
+      this.m_oSelectedWorkspace = oEvent.workspace;
+      this.m_bRunInNewWorkspace = false;
     }
   }
 
@@ -501,7 +506,7 @@ export class AppUiComponent implements OnInit {
             }
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant( "USER_SUBSCRIPTION_URL_ERROR"), '', 'danger');
+            this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_URL_ERROR"), '', 'danger');
           }
         })
       }

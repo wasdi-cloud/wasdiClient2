@@ -48,15 +48,28 @@ export class AppUiMenuComponent {
     this.m_sSelectedTab.emit(this.m_sActiveTab);
   }
 
-  getSelectedWorkspace(oEvent) {
+  getSelectedWorkspace(oEvent: any) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_oActiveWorkspace = oEvent;
-      this.m_oSelectedWorkspace.emit(oEvent)
+      let oEmitObject = {
+        isCreating: this.m_bRunInNewWorkspace,
+        workspace: oEvent
+      }
+
+      console.log(oEmitObject)
+      this.m_oSelectedWorkspace.emit(oEmitObject)
     }
   }
 
   executeApp() {
-    this.m_oExecuteAppEmitter.emit(true);
+    if(this.m_bRunInNewWorkspace) {
+      this.getSelectedWorkspace(this.m_sNewWorkspaceName);
+      this.m_oExecuteAppEmitter.emit(true);
+    } else {
+      this.getSelectedWorkspace(this.m_oActiveWorkspace);
+      this.m_oExecuteAppEmitter.emit(false);
+    }
+
   }
 
   saveAppPurchase() {
