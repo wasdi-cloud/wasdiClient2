@@ -7,7 +7,8 @@
         "SUCCESS": "Success",
         "GURU_MEDITATION": "Guru Meditation", 
         "CONFIRM_REMOVAL": "Confirm Removal", 
-        "CLIPBOARD": "Copied to Clipboard!"
+        "CLIPBOARD": "Copied to Clipboard!",
+        "SHARE": "Collaborators"
     },
 
     "BTN_SEARCH": "Search",
@@ -402,10 +403,12 @@
     "DIALOG_MANUAL_INSERT_BBOX_WEST": "West",
     
     "DIALOG_PROCESSOR_TAB_BASE": "Processor",
+    "DIALOG_PROCESSOR_TAB_PACKAGE_MANAGER": "Package Manager",
+    "DIALOG_PROCESSOR_TAB_DETAILS": "Details",
     "DIALOG_PROCESSOR_TAB_STORE": "Store",
     "DIALOG_PROCESSOR_TAB_MEDIA": "Media",
-    "DIALOG_PROCESSOR_TAB_SHARE": "Share",
-    "DIALOG_PROCESSOR_TAB_UI": "UI",
+    "DIALOG_PROCESSOR_TAB_SHARE": "Collaborators",
+    "DIALOG_PROCESSOR_TAB_UI": "User Interface",
     "DIALOG_PROCESSOR_APP": "WASDI APP",
     
     "DIALOG_PROCESSOR_BASE_NAME": "Name",
@@ -440,11 +443,19 @@
     "DIALOG_PROCESSOR_STORE_FRIEND_NAME": "Friendly Name",
     "DIALOG_PROCESSOR_STORE_LINK": "Link",
     "DIALOG_PROCESSOR_STORE_MAIL": "E-Mail",
-    "DIALOG_PROCESSOR_STORE_ONDEMAND": "On Demand Price",
-    "DIALOG_PROCESSOR_STORE_SUBSCRIPTION": "Subscription Price",
-    "DIALOG_PROCESSOR_STORE_SHOW": "Show Application in the Store",
+    "DIALOG_PROCESSOR_STORE_ONDEMAND": "On Demand",
+    "DIALOG_PROCESSOR_STORE_ONDEMAND_PRICE": "On Demand Price",
+    "DIALOG_PROCESSOR_STORE_SUBSCRIPTION": "Subscriptions... coming soon!",
+    "DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE1": "We are working hard with new improvements in the store.",
+    "DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE2": "We are going to release a subscription-based model to let you have recurring income from the apps you develop for WASDI!",
+    "DIALOG_PROCESSOR_STORE_SHOW": "App available in the store",
     "DIALOG_PROCESSOR_STORE_LONG_DESCRIPTION": "Long Description",
     "DIALOG_PROCESSOR_STORE_CATEGORY": "Category",
+    "DIALOG_PROCESSOR_STORE_PRICE_TITLE": "Pricing Plans",
+    "DIALOG_PROCESSOR_STORE_PRICE_DESCRIPTION": "WASDI Gives the opportunity to monetize your work: you can setup a price for your application. If an user buy your application, WASDI will pay you 70% of the amount and keep 30%. Please check our Terms and Conditions for more details.",
+    "DIALOG_PROCESSOR_STORE_PRICE_STORE_DETALS": "Store details",
+    "DIALOG_PROCESSOR_STORE_PRICE_STORE_FREE": "App is free",
+    "DIALOG_PROCESSOR_STORE_ONDEMAND_DESCRIPTION": "The on-demand pricing model, also known as the 'pay-per-use' model, offers users the flexibility to pay only for the app when they actually use it.",
    
     "DIALOG_PROCESSOR_UI_APP": "App UI",
     "DIALOG_PROCESSOR_UI_ADD_ELEMENTS": "- Add elements (take care of commas!)",
@@ -898,8 +909,7 @@
 
     "MARKET_CARD_PUBLISHER": "Publisher",
     "MARKET_CARD_PRICE": "Free",
-
-    "DIALOG_PROCESSOR_BASE_PACKAGE_MANAGER": "Package Manager",
+    
     "DIALOG_PACKAGE_MANAGER_VIEWING": "Viewing Packages For",
     "DIALOG_PACKAGE_MANAGER_HEADER": "Package Manager",
     "DIALOG_PACKAGE_MANAGER_NAME": "Package Name",

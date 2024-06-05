@@ -1,40 +1,38 @@
 <div class="pricing-container d-flex flex-row gap-3">
     <div class="pricing-column d-flex flex-column gap-2">
-        <h3 class="font-bold">Pricing Plans</h3>
+        <h3 class="font-bold">{{"DIALOG_PROCESSOR_STORE_PRICE_TITLE" | translate}}</h3>
         <p>
-            WASDI Gives the opportunity to monetize your work and ... TODO: Add better copy here.
+            {{"DIALOG_PROCESSOR_STORE_PRICE_DESCRIPTION" | translate}}
         </p>
         <div class=" store-details">
-            <h4 class="font-bold">Store details</h4>
+            <h4 class="font-bold">{{"DIALOG_PROCESSOR_STORE_PRICE_STORE_DETALS" | translate}}</h4>
             <div class="d-flex flex-row">
                 <div class="checkbox-container d-flex flex-row gap-1 align-items-center">
                     <input class="wasdi-checkbox" type="checkbox" name="in-store" id=""
                         [checked]="m_oProcessorStoreInfo.get('bShowInStore').value" (change)="patchShowInStore($event)">
-                    <label for="in-store">App available in the store</label>
+                    <label for="in-store">{{"DIALOG_PROCESSOR_STORE_SHOW" | translate}}</label>
                 </div>
                 <div class="checkbox-container d-flex flex-row gap-1 align-items-center">
-                    <input class="wasdi-checkbox" type="checkbox" name="is-free" id="">
-                    <label for="is-free">App is Free</label>
+                    <input class="wasdi-checkbox" type="checkbox" name="is-free" id=""  [checked]="m_bIsFree">
+                    <label for="is-free">{{"DIALOG_PROCESSOR_STORE_PRICE_STORE_FREE" | translate}}</label>
                 </div>
             </div>
         </div>
-        <h4 class="font-bold mt-4">On demand</h4>
+        <h4 class="font-bold mt-4">{{"DIALOG_PROCESSOR_STORE_ONDEMAND" | translate}}</h4>
         <p>
-            The on-demand pricing model, also known as the "pay-per-use" model, offers users the flexibility to pay only
-            for the app when they actually use it.
+            {{"DIALOG_PROCESSOR_STORE_ONDEMAND_DESCRIPTION" | translate}}
         </p>
         <app-input-field class="align-self-start" [m_sLabel]="'On demand price'" [m_sInputType]="'number'"
-            [m_sPlacehodler]="'On demand price'" [m_sInputValue]="m_oProcessorStoreInfo.get('iOnDemandPrice').value"
+            [m_sPlacehodler]='"DIALOG_PROCESSOR_STORE_ONDEMAND_PRICE" | translate' [m_sInputValue]="m_oProcessorStoreInfo.get('iOnDemandPrice').value"
             (m_oInputChange)="patchOnDemandPrice($event)"></app-input-field>
     </div>
     <div class="pricing-column pricing-column-2 d-flex flex-column justify-content-center align-items-center">
         <div class="subscriptions-content-wrapper d-flex flex-column justify-content-center  align-items-center">
             <img src="/assets/images/pricing-ship.svg" alt="">
             <div class="subscriptions-text-wrapper">
-                <div class="font-bold">Subscriptions... coming soon!</div>
-                <p>We are working hard with new improvements in the store.</p>
-                <p>We are going to release a subscription-based model to let you have recurring income from
-                    the apps you develop for WASDI!</p>
+                <div class="font-bold">{{"DIALOG_PROCESSOR_STORE_SUBSCRIPTION" | translate}}</div>
+                <p>{{"DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE1" | translate}}</p>
+                <p>{{"DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE2" | translate}}</p>
             </div>
         </div>
     </div>
