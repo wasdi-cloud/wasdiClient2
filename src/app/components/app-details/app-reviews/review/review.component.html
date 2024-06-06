@@ -24,9 +24,9 @@
                 <div class="reviews-name">{{m_oReview? m_oReview.userId : m_oComment.userId}}</div>
             </div>
             <app-button *ngIf="m_oComment && isMineComment()" class="me-2" [m_sSize]="'small'"
-                [m_sLabel]="'EDIT COMMENT'" [m_bOutline]="true" (click)="updateComment()"></app-button>
+                [m_sLabel]="'WAP_EDIT_COMMENT' | translate" [m_bOutline]="true" (click)="updateComment()"></app-button>
             <div *ngIf="m_oReview" class="review-option-container d-flex flex-row align-items-center gap-1">
-                <app-button *ngIf="isMineReview()" class="me-2" [m_sSize]="'small'" [m_sLabel]="'EDIT REVIEW'"
+                <app-button *ngIf="isMineReview()" class="me-2" [m_sSize]="'small'" [m_sLabel]="'WAP_EDIT_REVIEW' | translate"
                     [m_bOutline]="true" (click)="updateReview()"></app-button>
                 <span class="material-symbols-outlined star-icon"
                     [class]="m_oReview.vote > 0 ? 'star-filled' : 'star-grey'">
@@ -55,11 +55,11 @@
         <!-- <p>{{oReview.title}}</p> -->
         <p class="review-content">{{m_oReview? m_oReview.comment : m_oComment.text}}</p>
         <div *ngIf="m_oReview" class="d-flex flex-row justify-content-end gap-2">
-            <app-button [m_sSize]="'small'" [m_sLabel]="'Add Comment'" [m_bOutline]="true"
+            <app-button [m_sSize]="'small'" [m_sLabel]="'WAP_ADD_COMMENT' | translate" [m_bOutline]="true"
                 (click)="addNewComment()"></app-button>
-            <app-button *ngIf="!m_bShowComments" [m_sSize]="'small'" [m_sLabel]="'Show Comments'" [m_bOutline]="true"
-                (click)="getComments()"></app-button>
-            <app-button *ngIf="m_bShowComments" [m_sSize]="'small'" [m_sLabel]="'Hide Comments'" [m_bOutline]="true"
+            <app-button *ngIf="!m_bShowComments" [m_sSize]="'small'" [m_sLabel]="'WAP_SHOW_COMMENTS' | translate"
+                [m_bOutline]="true" (click)="getComments()"></app-button>
+            <app-button *ngIf="m_bShowComments" [m_sSize]="'small'" [m_sLabel]="'WAP_HIDE_COMMENTS' | translate" [m_bOutline]="true"
                 (click)="m_bShowComments = !m_bShowComments"></app-button>
         </div>
     </div>

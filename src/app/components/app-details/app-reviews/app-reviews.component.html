@@ -1,6 +1,6 @@
 <div class="d-flex flex-row justify-content-between align-items-center pb-2">
-    <h2>Reviews</h2>
-    <app-button *ngIf="m_bUserHasReviewed === false && !m_bIsOwner" [m_sLabel]="'Add Review'"
+    <h2>{{"WAP_REVIEWS2" | translate}}</h2>
+    <app-button *ngIf="m_bUserHasReviewed === false && !m_bIsOwner" [m_sLabel]="' WAP_ADD_REVIEW' | translate"
         (click)="showReviewInput()"></app-button>
 </div>
 <div *ngIf="m_bShowReviewBox">
@@ -10,10 +10,10 @@
 <div class="reviews-container d-flex flex-row gap-4 mb-2">
     <div class="flex-fill d-flex flex-column gap-3">
         <div *ngFor="let oReview of m_oReviewsInfo.reviews">
-            <app-review *ngIf="!m_bIsEditing" [m_oReview]="oReview"
-                [m_oSelectedProcessor]="m_oSelectedProcessor" (m_oRefreshReviews)="this.getReviews()"></app-review>
+            <app-review *ngIf="!m_bIsEditing" [m_oReview]="oReview" [m_oSelectedProcessor]="m_oSelectedProcessor"
+                (m_oRefreshReviews)="this.getReviews()"></app-review>
         </div>
         <app-button class="align-self-center my-3" [m_bDisabled]="!m_bShowLoadMoreReviews" (click)="loadMoreReviews()"
-            [m_sLabel]="'Load More'"></app-button>
+            [m_sLabel]="'KEY_PHRASES.LOAD_MORE' | translate"></app-button>
     </div>
 </div>
