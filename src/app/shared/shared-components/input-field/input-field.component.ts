@@ -30,7 +30,7 @@ export class InputFieldComponent {
   /**
    * The placeholder text to appear inside the input field
    */
-  @Input() m_sPlacehodler: string = "";
+  @Input() m_sPlaceholder: string = "";
 
   /**
    * Input field Type. Default is text input

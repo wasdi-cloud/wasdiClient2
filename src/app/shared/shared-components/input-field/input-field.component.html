@@ -8,7 +8,7 @@
                 {{m_sIconLeft}}
             </span>
         </div>
-        <input type="{{m_sInputType}}" class="form-control" name="{{m_sInputName}}" placeholder="{{m_sPlacehodler}}"
+        <input type="{{m_sInputType}}" class="form-control" name="{{m_sInputName}}" placeholder="{{m_sPlaceholder}}"
             [readOnly]="m_bIsReadonly" aria-label="InputField" aria-describedby="basic-addon1" pattern="{{m_sPattern}}"
             [value]="m_sInputValue" (change)="emitInputChange($event)" (keyup)="emitInputChange($event)"
             max="{{m_sMaxValue}}" min="{{m_sMinValue}}">

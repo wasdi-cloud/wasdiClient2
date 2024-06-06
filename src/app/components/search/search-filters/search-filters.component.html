@@ -11,7 +11,7 @@
         </div>
         <!-- Product Name Input -->
         <app-input-field [m_sLabel]="'IMPORT_PRODUCT_NAME' | translate" [m_sIconLeft]="'search'"
-            [m_sPlacehodler]="'IMPORT_PRODUCT_NAME_SEARCH'| translate"
+            [m_sPlaceholder]="'IMPORT_PRODUCT_NAME_SEARCH'| translate"
             (m_oInputChange)="setMissionTextQuery($event)"></app-input-field>
     </div>
     <div class="filters-container container">
@@ -84,7 +84,7 @@
                     <app-dropdown *ngIf="oFilter.indexvalues !== ''" [m_aoDropdownItems]="prepMissionFilter(oFilter)"
                         [m_sLabel]="oFilter.indexlabel" (m_oSelectionChange)="getMissionInput($event, oFilter)"
                         [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
-                    <app-input-field *ngIf="oFilter.indexvalues === ''" [m_sPlacehodler]="oFilter.indexhint"
+                    <app-input-field *ngIf="oFilter.indexvalues === ''" [m_sPlaceholder]="oFilter.indexhint"
                         [m_sLabel]="oFilter.indexlabel" [m_sPattern]="oFilter.regex"></app-input-field>
                 </div>
                 <div *ngIf="m_oActiveMission.name === 'ERA5'">
@@ -100,7 +100,7 @@
                         [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
                     <app-input-field
                         *ngIf="oFilter.indexvalues === '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
-                        [m_sPlacehodler]="oFilter.indexhint" [m_sPattern]="oFilter.regex"></app-input-field>
+                        [m_sPlaceholder]="oFilter.indexhint" [m_sPattern]="oFilter.regex"></app-input-field>
                 </div>
             </div>
         </div>

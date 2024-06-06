@@ -12,7 +12,7 @@
                     <app-button [m_sLabel]="'New App'" [m_sIconLeft]="'add_box'"
                         (click)="openNewAppDialog()"></app-button>
                 </div>
-                <app-input-field [m_sPlacehodler]="'Search app'" [m_sIconLeft]="'search'"
+                <app-input-field [m_sPlaceholder]="'Search app'" [m_sIconLeft]="'search'"
                     (m_oInputChange)="handleSearchChange($event)"></app-input-field>
             </div>
             <div *ngIf="m_bIsLoadingProcessorList === true">

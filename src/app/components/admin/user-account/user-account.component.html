@@ -7,12 +7,12 @@
             <strong>Wasdi</strong>.
         </p>
         <div class="d-flex flex-row justify-items-stretch gap-1">
-            <app-input-field class="flex-fill" [m_sLabel]="'Name'" [m_sPlacehodler]="''" [m_sInputValue]="m_oUser.name"
+            <app-input-field class="flex-fill" [m_sLabel]="'Name'" [m_sPlaceholder]="''" [m_sInputValue]="m_oUser.name"
                 (m_oInputChange)="getUserInfoInput($event)"></app-input-field>
-            <app-input-field class="flex-fill" [m_sLabel]="'Surname'" [m_sPlacehodler]="''"
+            <app-input-field class="flex-fill" [m_sLabel]="'Surname'" [m_sPlaceholder]="''"
                 [m_sInputValue]="m_oUser.surname" (m_oInputChange)="getUserInfoInput($event)"></app-input-field>
         </div>
-        <app-input-field [m_sLabel]="'Username'" [m_sPlacehodler]="''"></app-input-field>
+        <app-input-field [m_sLabel]="'Username'" [m_sPlaceholder]="''"></app-input-field>
     </div>
     <div class="d-flex flex-column gap-2">
         <div class="input-header font-bold">System Language</div>

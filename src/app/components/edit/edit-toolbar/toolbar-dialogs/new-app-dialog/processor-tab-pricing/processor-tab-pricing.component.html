@@ -13,7 +13,8 @@
                     <label for="in-store">{{"DIALOG_PROCESSOR_STORE_SHOW" | translate}}</label>
                 </div>
                 <div class="checkbox-container d-flex flex-row gap-1 align-items-center">
-                    <input class="wasdi-checkbox" type="checkbox" name="is-free" id=""  [checked]="m_bIsFree">
+                    <input class="wasdi-checkbox" type="checkbox" name="is-free" id="" [checked]="m_bIsFree"
+                        (change)="getFreeStatus($event)">
                     <label for="is-free">{{"DIALOG_PROCESSOR_STORE_PRICE_STORE_FREE" | translate}}</label>
                 </div>
             </div>
@@ -23,7 +24,8 @@
             {{"DIALOG_PROCESSOR_STORE_ONDEMAND_DESCRIPTION" | translate}}
         </p>
         <app-input-field class="align-self-start" [m_sLabel]="'On demand price'" [m_sInputType]="'number'"
-            [m_sPlacehodler]='"DIALOG_PROCESSOR_STORE_ONDEMAND_PRICE" | translate' [m_sInputValue]="m_oProcessorStoreInfo.get('iOnDemandPrice').value"
+            [m_sPlaceholder]='"DIALOG_PROCESSOR_STORE_ONDEMAND_PRICE" | translate'
+            [m_sInputValue]="m_iOnDemandPrice.toString()"
             (m_oInputChange)="patchOnDemandPrice($event)"></app-input-field>
     </div>
     <div class="pricing-column pricing-column-2 d-flex flex-column justify-content-center align-items-center">

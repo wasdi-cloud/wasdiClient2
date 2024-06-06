@@ -4,7 +4,7 @@
     </div>
     <div class="dialog-content flex-fill d-flex flex-column gap-2">
         <app-input-field [m_sLabel]="'DIALOG_PARAMS_TEMPLATE_NAME' | translate"
-            [m_sPlacehodler]="'DIALOG_PARAMS_TEMPLATE_NAME' | translate"
+            [m_sPlaceholder]="'DIALOG_PARAMS_TEMPLATE_NAME' | translate"
             (m_oInputChange)="m_oTemplate.name = $event.event.target.value"></app-input-field>
         <div class="textarea-container">
             <app-textarea [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate" (keyup)="getInput($event)"></app-textarea>

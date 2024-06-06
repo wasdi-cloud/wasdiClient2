@@ -12,7 +12,7 @@
                     <app-button [m_sLabel]="'New Workflow'" [m_sIconLeft]="'add_box'"
                         (click)="toggleShowInputs(true, false)"></app-button>
                 </div>
-                <app-input-field [m_sPlacehodler]="'Search workflow'" [m_sIconLeft]="'search'"
+                <app-input-field [m_sPlaceholder]="'Search workflow'" [m_sIconLeft]="'search'"
                     (m_oInputChange)="getInputChanges($event, 'search')"></app-input-field>
             </div>
             <div *ngIf="m_bIsLoadingWorkflow === true">

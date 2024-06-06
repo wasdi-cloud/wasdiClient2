@@ -5,7 +5,7 @@
     </div>
     <div class="dialog-content d-flex flex-column gap-3">
         <app-input-field [m_sLabel]="'Give your subscription a name so you can keep track of your projects (optional)'"
-            (m_oInputChange)="setNameInput($event)" [m_sPlacehodler]="'Name'"></app-input-field>
+            (m_oInputChange)="setNameInput($event)" [m_sPlaceholder]="'Name'"></app-input-field>
         <app-dropdown [m_sLabel]="'Select the organisation for which you are buying this plan (optional)'"
             [m_aoDropdownItems]="m_aoOrganizationsMap"
             (m_oSelectionChange)="setSelectedOrganization($event)"></app-dropdown>

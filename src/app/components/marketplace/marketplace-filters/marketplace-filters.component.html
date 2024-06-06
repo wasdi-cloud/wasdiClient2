@@ -3,7 +3,7 @@
     <div class="filters-header">{{"MARKET_FILTERS" | translate }} </div>
     <div class="filters-container" style="height: 90%">
         <div class="input-container">
-            <app-input-field [m_sIconLeft]="'search'" [m_sPlacehodler]="'MARKET_SEARCH_APP' | translate"
+            <app-input-field [m_sIconLeft]="'search'" [m_sPlaceholder]="'MARKET_SEARCH_APP' | translate"
                 [m_sInputValue]="m_sSearchInput" (m_oInputChange)="getSearchInput($event)"
                 [m_sLabel]="'MARKET_SEARCH_APP' | translate"></app-input-field>
         </div>
@@ -18,7 +18,7 @@
         </div>
         <div class="input-container">
             <div class="search-header">{{"MARKET_DEVELOPER" | translate}}</div>
-            <app-input-field [m_sIconLeft]="'search'" [m_sPlacehodler]="'MARKET_SEARCH_DEVELOPERS' | translate"
+            <app-input-field [m_sIconLeft]="'search'" [m_sPlaceholder]="'MARKET_SEARCH_DEVELOPERS' | translate"
                 (m_oInputChange)="getDeveloperInput($event)"
                 [m_sLabel]="'MARKET_DEVELOPER_SEARCH' | translate"></app-input-field>
             <div class="developers-container">

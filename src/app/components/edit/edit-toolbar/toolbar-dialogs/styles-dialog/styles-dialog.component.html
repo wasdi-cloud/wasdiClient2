@@ -12,7 +12,7 @@
                     <app-button [m_sLabel]="'New Style'" [m_sIconLeft]="'add_box'"
                         (click)="setVisibleInput('new-style')"></app-button>
                 </div>
-                <app-input-field [m_sPlacehodler]="'Search style'" [m_sIconLeft]="'search'"
+                <app-input-field [m_sPlaceholder]="'Search style'" [m_sIconLeft]="'search'"
                     (m_oInputChange)="getInputChanges($event, 'search')"></app-input-field>
             </div>
             <div *ngIf="m_bIsLoadingStyleList === true">
@@ -136,7 +136,7 @@
                     <app-button [m_sLabel]="'New Style'" [m_sIconLeft]="'add_box'"
                         (click)="openNewStyleDialog()"></app-button>
                 </div>
-                <app-input-field [m_sPlacehodler]="'Search style'" [m_sIconLeft]="'search'"
+                <app-input-field [m_sPlaceholder]="'Search style'" [m_sIconLeft]="'search'"
                     (m_oInputChange)="handleSearchChange($event)"></app-input-field>
             </div>
             <div *ngIf="m_bIsLoadingStyleList === true">

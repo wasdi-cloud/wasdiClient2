@@ -23,7 +23,7 @@
                 (m_oSelectionChange)="this.m_oActiveWorkspace = $event"
                 [m_sPlaceholder]="m_oActiveWorkspace.name ? m_oActiveWorkspace.name : 'APP_UI_SEARCH_WS' | translate"></app-autocomplete>
             <app-input-field *ngIf="m_bRunInNewWorkspace"
-                [m_sPlacehodler]="'APP_UI_AUTOMATIC_NAME_PLACEHOLDER' | translate"
+                [m_sPlaceholder]="'APP_UI_AUTOMATIC_NAME_PLACEHOLDER' | translate"
                 (m_oInputChange)="m_sNewWorkspaceName = $event.event.target.value"></app-input-field>
             <app-button *ngIf="m_bIsPurchased" [m_sLabel]="'APP_UI_OPEN_WS' | translate" [m_sSize]="'large'"
                 (click)="executeApp()"></app-button>

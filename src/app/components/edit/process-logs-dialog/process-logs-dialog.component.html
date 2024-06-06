@@ -15,7 +15,7 @@
     </div>
     <div class="log-filter-container d-flex flex-row justify-content-between">
         <app-input-field class="flex-fill" style="max-width: 50%;" [m_sLabel]="'Search into text'"
-            [m_sPlacehodler]="'Search'" (m_oInputChange)="setSearchString($event)"></app-input-field>
+            [m_sPlaceholder]="'Search'" (m_oInputChange)="setSearchString($event)"></app-input-field>
         <div class="buttons-container align-self-end d-flex flex-row gap-2">
             <app-button [m_sLabel]="'Download Logs'" [m_sIconLeft]="'download'"></app-button>
             <app-button [m_sLabel]="'Refresh'" [m_sIconLeft]="'refresh'" [m_bMuted]="true"

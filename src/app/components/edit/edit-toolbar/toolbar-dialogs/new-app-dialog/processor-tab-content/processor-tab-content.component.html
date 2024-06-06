@@ -13,7 +13,7 @@
                 (keyup)="onTextareaInput($event)"></app-textarea>
         </div>
         <div class="d-flex flex-row align-items-center gap-2">
-            <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_TIMEOUT' | translate" [m_sPlacehodler]="'180'"
+            <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_TIMEOUT' | translate" [m_sPlaceholder]="'180'"
                 [m_sInputValue]="m_iMinuteTimeout.toString()"
                 (m_oInputChange)="m_oProcessorBasicInfo.patchValue({iMinuteTimeout: $event.event.target.value})"></app-input-field>
             <div class="align-self-end">

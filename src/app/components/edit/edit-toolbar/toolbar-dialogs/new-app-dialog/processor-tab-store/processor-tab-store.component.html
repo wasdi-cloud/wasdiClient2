@@ -1,7 +1,7 @@
 <div class="d-flex flex-row gap-3" style="height: 100%; width: 100%;">
     <div class="input-column d-flex flex-column gap-2">
         <h3 class="app-header font-bold">{{"DIALOG_PROCESSOR_STORE_SUB_TITLE" | translate}}</h3>
-        <app-input-field [m_sLabel]="'Application name in the store'" [m_sPlacehodler]="'DIALOG_PROCESSOR_STORE_FRIEND_NAME' | translate"
+        <app-input-field [m_sLabel]="'Application name in the store'" [m_sPlaceholder]="'DIALOG_PROCESSOR_STORE_FRIEND_NAME' | translate"
             [m_sInputValue]="m_oProcessorStoreInfo.get('sFriendlyName').value"></app-input-field>
         <div class="categories-container">
             <div>{{"DIALOG_PROCESSOR_STORE_CATEGORY" | translate}}</div>
@@ -16,10 +16,10 @@
                 [m_sInputString]="m_oProcessorStoreInfo.get('sLongDescription').value"
                 (keyup)="onTextareaInput($event)"></app-textarea>
         </div>
-        <app-input-field class="mt-4" [m_sLabel]="'DIALOG_PROCESSOR_STORE_LINK' | translate" [m_sPlacehodler]="'Link'"
+        <app-input-field class="mt-4" [m_sLabel]="'DIALOG_PROCESSOR_STORE_LINK' | translate" [m_sPlaceholder]="'Link'"
             [m_sInputValue]=" m_oProcessorStoreInfo.get('sLink').value"
             (m_oInputChange)="m_oProcessorStoreInfo.patchValue({sLink: $event.event.target.value})"></app-input-field>
-        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_STORE_MAIL' | translate" [m_sPlacehodler]="'Email'"
+        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_STORE_MAIL' | translate" [m_sPlaceholder]="'Email'"
             [m_sInputValue]=" m_oProcessorStoreInfo.get('sEmail').value"
             (m_oInputChange)="m_oProcessorStoreInfo.patchValue({sEmail: $event.event.target.value})"></app-input-field>
     </div>
