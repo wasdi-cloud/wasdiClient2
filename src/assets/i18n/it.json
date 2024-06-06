@@ -193,7 +193,7 @@
 	"DIALOG_IMPORT_HEADER": "Importa all'interno dell'area di lavoro",
 	"DIALOG_IMPORT_LOCATION": "Importa file in",
 	"DIALOG_IMPORT_FILE_TYPES": "Puoi importare all'interno di questo spazio di lavoro tipi di file come .tiff e .zip",
-	"DIALOG_IMPORT_APPLY_STLYE": "Vuoi applicare uno stile?",
+	"DIALOG_IMPORT_APPLY_STYLE": "Vuoi applicare uno stile?",
 	"DIALOG_IMPORT_SELECT_STYLE": "Seleziona uno stile",
 	"DIALOG_IMPORT_UPLOAD_STYLE": "Stile",
 	"DIALOG_IMPORT_UPLOAD_UPLOAD": "Carica File",

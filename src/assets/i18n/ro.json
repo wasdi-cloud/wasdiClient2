@@ -195,7 +195,7 @@
 	"DIALOG_IMPORT_HEADER": "Importați în spațiul de lucru",
 	"DIALOG_IMPORT_LOCATION": "Importați fișiere în",
 	"DIALOG_IMPORT_FILE_TYPES": "Puteți importa în interiorul acestui spațiu de lucru tipuri de fișiere, cum ar fi .tiff și .zip",
-	"DIALOG_IMPORT_APPLY_STLYE": "Doriți să aplicați un stil?",
+	"DIALOG_IMPORT_APPLY_STYLE": "Doriți să aplicați un stil?",
 	"DIALOG_IMPORT_SELECT_STYLE": "Selectați un stil",
 	"DIALOG_IMPORT_UPLOAD_STYLE": "Stil",
 	"DIALOG_IMPORT_UPLOAD_UPLOAD": "Incarcă fișier",

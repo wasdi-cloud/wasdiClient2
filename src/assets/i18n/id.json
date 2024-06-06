@@ -195,7 +195,7 @@
 	"DIALOG_IMPORT_HEADER": "Impor ke dalam ruang kerja",
 	"DIALOG_IMPORT_LOCATION": "Impor file ke",
 	"DIALOG_IMPORT_FILE_TYPES": "Anda dapat mengimpor jenis file ke dalam ruang kerja ini seperti .tiff dan .zip",
-	"DIALOG_IMPORT_APPLY_STLYE": "Apakah Anda ingin menerapkan gaya?",
+	"DIALOG_IMPORT_APPLY_STYLE": "Apakah Anda ingin menerapkan gaya?",
 	"DIALOG_IMPORT_SELECT_STYLE": "Pilih gaya",
 	"DIALOG_IMPORT_UPLOAD_STYLE": "Style",
 	"DIALOG_IMPORT_UPLOAD_UPLOAD": "Unggah File",

@@ -13,7 +13,7 @@
             <app-drag-and-drop (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
         </div>
         <div class="mt-3">
-            <div class="font-bold">{{"DIALOG_IMPORT_APPLY_STLYE" | translate}}</div>
+            <div class="font-bold">{{"DIALOG_IMPORT_APPLY_STYLE" | translate}}</div>
             <app-dropdown [m_sPlaceholder]="'DIALOG_IMPORT_SELECT_STYLE' | translate" [m_aoDropdownItems]="m_aoStyles"
                 [m_bHasSearch]="true" (m_oSelectionChange)="getSelectedStyle($event)"></app-dropdown>
         </div>

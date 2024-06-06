@@ -1,13 +1,39 @@
 {
 	"KEY_PHRASES" : {
-        "DESCRIPTION":"Beschreibung",
+        "CANCEL": "Abbrechen",
+        "DESCRIPTION": "Beschreibung",
+        "SAVE_CHANGES": "Änderungen speichern",
         "ERROR": "Fehler",
-        "SUCCESS": "Erfolg"
+        "SUCCESS": "Erfolg",
+        "GURU_MEDITATION": "Guru-Meditation", 
+        "CONFIRM_REMOVAL": "Entfernung bestätigen", 
+        "CLIPBOARD": "In die Zwischenablage kopiert!"
     },
+
 	"BTN_SEARCH": "Suchen",
 	"BTN_IMPORT": "Einlesen",
 	"SORT_BY": "Sortieren nach",
+
 	"BTN_CREATE_FIRST_WORKSPACE": "Ersten Arbeitsbereich erstellen",
+
+	"APP_UI_NEW_EXISTING_WS_CHECK_1": "Neuer Arbeitsbereich",
+    "APP_UI_NEW_EXISTING_WS_CHECK_2": "Vorhandener Arbeitsbereich",
+    "APP_UI_RUN_APP_LABEL": "App ausführen in",
+    "APP_UI_AUTOMATIC_NAME_PLACEHOLDER": "[Automatischer Name]",
+    "APP_UI_SELECT_WS": "Arbeitsbereich auswählen", 
+    "APP_UI_SEARCH_WS": "Arbeitsbereiche durchsuchen",
+    "APP_UI_OPEN_WS": "Arbeitsbereich öffnen",
+    "APP_UI_AUTO_WS": "Automatischer Arbeitsbereich",
+    "APP_UI_PURCHASE": "App kaufen",
+	"APP_UI_SAVE_PARAMS": "",
+
+	"ACTIVE_SUBSCRIPTION_ERROR": "Sie haben im Moment kein aktives Projekt <br> Wählen Sie entweder ein Projekt aus oder erwerben Sie ein Abonnement.",
+	"ACTIVE_SUBSCRIPTION_ERROR_2": "Sie haben derzeit kein aktives Abonnement.",
+
+    "DIALOG_PARAMS_CREATE": "Parametervorlage erstellen",
+    "DIALOG_PARAMS_TEMPLATE_NAME": "Vorlagenname", 
+    "DIALOG_PARAMS_SAVE": "Parameter speichern",
+
 	"LOGIN_PLACEHOLDER_EMAIL": "E-Mail Addresse",
 	"LOGIN_PLACEHOLDER_PASSWORD": "Passwort",
 	"LOGIN_CHECK_BOX_LABEL": "Angemeldet bleiben",
@@ -19,8 +45,10 @@
 	"LOGIN_LINK_WEBSITE": "INFO",
 	"LOGIN_LINK_NEW_USER": "Neuer Benutzer? Erstellen Sie!",
 	"LOGIN_LINK_BACK": "Zurück",
+	
 	"RECOVERY_EMAIL_BUTTON": "Anfrage senden",
 	"RECOVERY_EMAIL_TITLE": "Bitte geben Sie Ihre E-Mail-Adresse ein und bestätigen Sie.\n Es wird eine Nachricht mit weiteren Anweisungen zur Wiederherstellung Ihres Kontos gesendet.",
+	
 	"SIGN_IN_PLACEHOLDER_EMAIL": "E-Mail Addresse",
 	"SIGN_IN_PLACEHOLDER_PASSWORD": "Passwort",
 	"SIGN_IN_PLACEHOLDER_REPEAT_PASSWORD": "Passwort nochmals eingeben",
@@ -39,18 +67,20 @@
 	"SIGN_IN_TERMS_AGREE_2": "die Konditionen",
 	"SIGN_IN_TERMS_AGREE_3": "Und",
 	"SIGN_IN_TERMS_AGREE_4": "Erklärung zum Datenschutz",
+
 	"ROOT_VIEW_NAV_BAR_LINK_IMPORT": "Suchen",
 	"ROOT_VIEW_NAV_BAR_LINK_PROCESS": "Bearbeiten",
 	"ROOT_VIEW_NAV_BAR_LINK_APPSTORE": "Marktplatz",
 	"ROOT_VIEW_NAV_BAR_LINK_WORKSPACES": "Workspaces",
 	"ROOT_VIEW_NAV_BAR_LINK_ADMIN": "Admin",
 	"ROOT_VIEW_NAV_BAR_LINK_SEARCH": "Planen",
+    "ROOT_VIEW_NAV_BAR_LINK_SETTINGS": "Einstellungen",
 	"ROOT_VIEW_NAV_BAR_LINK_FEEDBACK": "Feedback",
-	"ROOT_VIEW_LINK_HELP": "Docs",
-	"ROOT_VIEW_LINK_LOG_OUT": "Log-out",
-	"ROOT_VIEW_LABEL_USER": "User",
-	"ROOT_VIEW_LABEL_PROJECT": "Project",
-	"ROOT_VIEW_LABEL_NO_PROJECT": "No Project",
+	"ROOT_VIEW_LINK_HELP": "Dokumentation",
+    "ROOT_VIEW_LINK_LOG_OUT": "Abmelden",
+    "ROOT_VIEW_LABEL_USER": "Benutzer",
+    "ROOT_VIEW_LABEL_PROJECT": "Projekt",
+    "ROOT_VIEW_LABEL_NO_PROJECT": "Kein Projekt",
 	"ROOT_LABEL_NUMBER_OF_RUNNING_PROCESSES": "Laufen ",
 	"ROOT_LABEL_NUMBER_OF_WAITING_PROCESSES": "Warten ",
 	"ROOT_TABLE_HEAD_OPERATION_DATA": "Erstellt",
@@ -65,6 +95,7 @@
 	"ROOT_LABEL_TYPE_OF_OPERATION": "Operation",
 	"ROOT_LABEL_NAME": "Name",
 	"ROOT_PLEASE_WAIT": "Bitte warten Sie...",
+	
 	"PROCESSING_BAR_WAITING": "Warten",
 	"PROCESSING_BAR_LOG": "Log",
 	"PROCESSING_BAR_STOPPED": "Gestoppt",
@@ -72,6 +103,7 @@
 	"PROCESSING_BAR_LOGS": "Logs",
 	"PROCESSING_BAR_PAYLOAD": "Payload",
 	"PROCESSING_BAR_LOAD_MORE": "Mehr laden...",
+	
 	"WORKSPACES_PLACEHOLDER_SEARCH": "Arbeitsbereich suchen...",
 	"WORKSPACES_BUTTON_NEW_WORKSPACE": "Neuer Arbeitsbereich",
 	"WORKSPACES_THEAD_WORKSPACES": "Arbeitsbereich",
@@ -86,10 +118,30 @@
 	"WORKSPACES_OWNER": "Owner",
 	"WORKSPACES_NODE_CODE": "Node Code",
 	"WORKSPACES_PRODUCTS": "Produkte",
+	"WORKSPACES_NAME": "Name",
 	"WORKSPACES_ID": "Workspace-ID",
 	"WORKSPACES_PROC_COUNT": "Durchgeführte Prozesse ",
 	"WORKSPACES_SHARED_WITH": "Getailt mit ",
 	"WORKSPACES_SHOW_SATS": "Satelliten anzeigen",
+
+	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Neuer Arbeitsbereich", 
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Arbeitsbereichsnamen aktualisieren",
+    "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Arbeitsbereichsnamen eingeben",
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Neuen Arbeitsbereichsnamen eingeben", 
+    "DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON": "Arbeitsbereich erstellen",
+    "DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON": "Arbeitsbereich aktualisieren",
+    "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Abbrechen",
+    "DIALOG_ADD_NEW_WORKSPACE_UPDATE_ERROR": "Fehler beim Aktualisieren des Arbeitsbereichsnamens",
+    "DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS": "Arbeitsbereichsname aktualisiert",
+	"DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "Als Best Practices geben Sie Ihrem Arbeitsbereich einen aussagekräftigen Namen, damit er leicht zu merken ist. (Optional)",
+
+	"DIALOG_APPS_PROCESSORS_ERROR": "Beim Abrufen der Prozessoren ist ein Fehler aufgetreten", 
+    "DIALOG_APPS_DELETE_OWNER": "Sind Sie sicher, dass Sie den folgenden Prozessor löschen möchten?", 
+    "DIALOG_APPS_DELETE_SHARED": "Sind Sie sicher, dass Sie Ihre Berechtigungen vom folgenden Prozessor entfernen möchten?",
+    "DIALOG_APPS_ERROR_DELETE": "Beim Versuch, Ihren Prozessor zu löschen, ist ein Fehler aufgetreten",
+    "DIALOG_APPS_CANNOT_EDIT": "Sie haben keine Berechtigung, diesen Arbeitsbereich zu bearbeiten",
+    "DIALOG_APPS_INVALID_JSON": "Ungültige JSON-Eingabe",
+	
 	"EDITOR_TOOLTIP_SWITCH_3D_2D": "Umschalten zwischen 3D-Globus und 2D-Karte",
 	"EDITOR_TOOLTIP_SYNCHRONIZE_MAP_3D": "Diesen Globus mit der 2D-Navigationsansicht synchronisieren",
 	"EDITOR_TOOLTIP_SYNCHRONIZE_MAP_2D": "Diese Karte mit der 3D-Navigationsansicht synchronisieren",
@@ -147,7 +199,14 @@
 	"IMPORT_PRODUCT_LIST_DATASET": "Dataset",
 	"IMPORT_PRODUCT_LIST_VARIABLES": "Variablen",
 	"IMPORT_PRODUCT_LIST_PROTOCOL": "Protokoll",
+
+	"IMPORT_CRONTAB_YEAR": "Jahr",
+    "IMPORT_CRONTAB_SEASON": "Saison",
+    "IMPORT_CRONTAB_MONTH": "Monat",
+    "IMPORT_CRONTAB_DATE": "Datum",
+	
 	"SEARCH_TITLE_PANEL_HEADING_FILTERS": "Filters",
+	
 	"PLAN_SEARCH": "Suchen",
 	"PLAN_FROM": "VON",
 	"PLAN_FROM_TOOLTIP": "Startzeit der Erfassung auswählen",
@@ -158,12 +217,20 @@
 	"PLAN_OPEN_NODES": "Nodes öffnen",
 	"PLAN_DESELECT_NODES": "Nodes abwählen",
 	"PLAN_SELECTED_NODES": "ausgewählt Nodes",
+	
+	
+	"PLAN_TREE_HEADER": "Satelliten",
+	"PLAN_SELECT": "Auswählen",
+	"PLAN_FILTERS": "Filter",
+	"PLAN_DATE_RANGE": "Datumsbereich",
+		
 	"DIALOG_GET_CAPABILITIES_TITLE": "Fähigkeiten erhalten",
 	"DIALOG_GET_CAPABILITIES_LAYERS": "Layers",
 	"DIALOG_GET_CAPABILITIES_SERVER": "http://example:8080/geoserver/ows?",
 	"DIALOG_GET_CAPABILITIES_EXIT": "Beenden",
 	"DIALOG_GET_CAPABILITIES_SEARCH": "Suchen",
 	"DIALOG_GET_CAPABILITIES_LOADING": "Laden...",
+	
 	"DIALOG_CLOSE_BUTTON": "Schließen",
 	"DIALOG_SAVE_BUTTON": "Speichern",
 	"DIALOG_SEND_BUTTON": "Senden",
@@ -172,14 +239,17 @@
 	"DIALOG_DELETE_BUTTON": "Löschen",
 	"DIALOG_DOWNLOAD_BUTTON": "Download",
 	"DIALOG_OK_BUTTON": "Ok",
+	
 	"DIALOG_PRODUCT_EDITOR_INFO_DIALOG_ORIGINAL_NAME_LABEL": "Origineller Name",
 	"DIALOG_PRODUCT_EDITOR_INFO_DIALOG_FRIENDLY_NAME_LABEL": "Friendly Name",
 	"DIALOG_PRODUCT_EDITOR_INFO_DIALOG_STYLE": "Style",
+	
 	"DIALOG_WAPPS_ITEMS_FILTER": "Nach App-Namen suchen...",
 	"DIALOG_WAPPS_JSON_PARAMS": "Parameters (JSON)",
 	"DIALOG_WAPPS_JSON_EDITOR": "JSON Editor",
 	"DIALOG_WAPPS_JSON_RUN": "Laufen",
 	"DIALOG_WAPPS_JSON_HELP": "Hilfe",
+	
 	"DIALOG_SFTP_UPLOAD_TITLE": "SFTP",
 	"DIALOG_SFTP_UPLOAD_EMAIL_LABEL": "E-Mail",
 	"DIALOG_SFTP_UPLOAD_EMAIL_PLACEHOLDER": "E-Mail...",
@@ -192,16 +262,19 @@
 	"DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "Liste der Dateien",
 	"DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Zum Arbeitsbereich hinzufügen",
 	"DIALOG_SFTP_UPLOAD_CLOSE_BUTTON": "Schließen",
+	
 	"DIALOG_IMPORT_HEADER": "Im Arbeitsbereich importieren",
 	"DIALOG_IMPORT_LOCATION": "Dateien importieren nach",
 	"DIALOG_IMPORT_FILE_TYPES": "Sie können in diesen Arbeitsbereich Dateitypen wie .tiff und .zip importieren",
-	"DIALOG_IMPORT_APPLY_STLYE": "Möchten Sie einen Stil anwenden?",
+	"DIALOG_IMPORT_APPLY_STYLE": "Möchten Sie einen Stil anwenden?",
 	"DIALOG_IMPORT_SELECT_STYLE": "Wählen Sie einen Stil aus",
+	
 	"DIALOG_IMPORT_UPLOAD_STYLE": "Style",
 	"DIALOG_IMPORT_UPLOAD_UPLOAD": "Upload Datei",
 	"DIALOG_IMPORT_IMPORT": "Importieren",
 	"DIALOG_IMPORT_UPLOAD": "Upload",
 	"DIALOG_IMPORT_SFTP": "SFTP",
+	
 	"DIALOG_PROCESSES_LOGS_TITLE": "Liste der Arbeitsbereichsprozesse",
 	"DIALOG_PROCESSES_LOGS_NO_WS": "Kein Arbeitsbereich ausgewählt, Daten können nicht geladen werden. Wenn Sie die Seite aktualisiert haben, gehen Sie bitte zum Abschnitt Arbeitsbereich und wählen Sie einen aus.",
 	"DIALOG_PROCESSES_LOGS_NONE": "BELIEBIG",
