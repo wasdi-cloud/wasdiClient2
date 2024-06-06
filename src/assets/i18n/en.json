@@ -5,11 +5,13 @@
         "CLOSE": "Close",
         "CLIPBOARD": "Copied to Clipboard!",
         "CONFIRM_REMOVAL": "Confirm Removal", 
+        "COPIED": "Copied!",
         "DESCRIPTION": "Description",
         "ERROR": "Error",
         "NAME": "Name",
         "SAVE": "Save",
         "GURU_MEDITATION": "Guru Meditation", 
+        "REMOVED": "Removed",
         "SAVE_CHANGES": "Save Changes",
         "SUCCESS": "Success",
         "SHARE": "Collaborators"
@@ -139,6 +141,7 @@
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_ERROR": "Error in updating workspace name",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS": "Workspace Name Updated",
     "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "For best practices, give a meaningful name to your workspace so it will be easy to remember. (Optional)",
+    "DIALOG_ADD_NEW_WORKSPACE_CREATING": "WASDI is creating your workspace...",
     
     "DIALOG_APPS_PROCESSORS_ERROR": "An error occured while fetching the processors", 
     "DIALOG_APPS_DELETE_OWNER": "Are you sure you want to delete the following processor?", 

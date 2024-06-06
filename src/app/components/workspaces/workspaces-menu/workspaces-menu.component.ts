@@ -67,28 +67,31 @@ export class WorkspacesMenuComponent implements OnInit {
    * @param oWorkspace 
    */
   openWorkspace(oWorkspace) {
+    let sError = this.m_oTranslate.instant("MSG_MKT_WS_OPEN_ERROR");
     this.m_oConstantsService.setActiveWorkspace(oWorkspace);
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oNotificationDisplayService.openAlertDialog("Error in opening " + oWorkspace.workspaceName);
+          this.m_oNotificationDisplayService.openAlertDialog(sError, '', 'danger');
         } else {
           this.m_oRouter.navigateByUrl(`edit/${oResponse.workspaceId}`);
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in opening " + oWorkspace.workspaceName);
+        this.m_oNotificationDisplayService.openAlertDialog(sError, '', 'danger');
       }
     })
   }
 
   deleteWorkspace(oWorkspace, oController) {
-    this.m_oNotificationDisplayService.openConfirmationDialog("Are you sure you want to delete " + oWorkspace.workspaceName).subscribe(oResult => {
+    let sRemoveHeader = this.m_oTranslate.instant("KEY_PHRASES.CONFIRM_REMOVAL");
+    let sRemoved = this.m_oTranslate.instant("KEY_PHRASES.REMOVED")
+    this.m_oNotificationDisplayService.openConfirmationDialog(`<li>${oWorkspace.workspaceName}</li>`, sRemoveHeader, 'alert').subscribe(oResult => {
       if (oResult === true) {
         oController.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
           next: oReponse => {
             if (oReponse === null) {
-              oController.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`);
+              oController.m_oNotificationDisplayService.openSnackBar(oWorkspace.workspaceName, sRemoved, 'success-snackbar');
               // Clear workspace information displayed in the UI
               oController.m_oActiveWorkspace = null;
               // Refresh workspaces list:

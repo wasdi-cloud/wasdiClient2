@@ -9,18 +9,9 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
-//Import Componenets: 
-import { NewWorkspaceDialogComponent } from './new-workspace-dialog/new-workspace-dialog.component';
 
-//Import Angular Materials:
-import { MatDialog } from '@angular/material/dialog';
-
-//Import Models:
-import { User } from 'src/app/shared/models/user.model';
+//Import Models:;
 import { Workspace } from 'src/app/shared/models/workspace.model';
-
-//Font Awesome Imports:
-import { faArrowsUpDown, faPlay, faPlus, faStop, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 //Import Utilities: 
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
@@ -56,12 +47,6 @@ export interface WorkspaceViewModel {
 })
 
 export class WorkspacesComponent implements OnInit {
-  //Icons: 
-  faArrowsUpDown = faArrowsUpDown;
-  faPlus = faPlus
-  faPlay = faPlay;
-  faStop = faStop;
-  faTrashcan = faTrash;
 
   /**
    * Array of available workspaces

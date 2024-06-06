@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
@@ -23,7 +24,8 @@ export class AutocompleteComponent implements OnChanges {
   m_sSearchString: string = "";
 
   constructor(
-    private m_oNotificationDisplayService: NotificationDisplayService
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -35,8 +37,8 @@ export class AutocompleteComponent implements OnChanges {
       return "";
     }
 
-    if(oOption.workspaceName) {
-      return oOption.workspaceName 
+    if (oOption.workspaceName) {
+      return oOption.workspaceName
     } else {
       return oOption.name
     }
