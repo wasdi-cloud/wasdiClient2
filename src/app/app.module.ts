@@ -70,7 +70,6 @@ import { ConstantsService } from './services/constants.service';
 
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CourseDialogComponent } from './shared/course-dialog/course-dialog.component';
 
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AppDetailsComponent } from './components/app-details/app-details/app-details.component';
@@ -196,7 +195,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SearchComponent,
     WorkspacesComponent,
     LoginComponent,
-    CourseDialogComponent,
     ConfirmationDialogComponent,
     ErrorDialogComponent,
     ProductsListComponent,
