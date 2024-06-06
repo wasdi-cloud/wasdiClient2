@@ -28,7 +28,6 @@ import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolba
 import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
 import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
 import { ProcessesBarComponent } from './components/edit/processes-bar/processes-bar.component';
-import { UserSettingsDialogComponent } from './components/header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
 import { ProductPropertiesDialogComponent } from './components/edit/products-list/product-properties-dialog/product-properties-dialog.component';
 import { NavLayersComponent } from './components/edit/nav-layers/nav-layers.component';
 import { WorkspaceInfoDialogComponent } from './components/edit/workspace-info-dialog/workspace-info-dialog.component';
@@ -223,7 +222,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     PlanMapComponent,
     EditMapComponent,
     PageNotFoundComponent,
-    UserSettingsDialogComponent,
     ProductPropertiesDialogComponent,
     NavLayersComponent,
     WorkspaceInfoDialogComponent,

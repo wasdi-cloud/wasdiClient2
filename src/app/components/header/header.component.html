@@ -24,7 +24,7 @@
             <div class="user-greeting-container d-flex flex-row align-items-center gap-2" data-bs-toggle="dropdown"
                 aria-expanded="false" aria-haspopup="true">
                 <div class="d-flex flex-column align-items-end">
-                    <span class="greeting">Welcome Back</span>
+                    <span class="greeting">{{"ROOT_HEADER_WELCOME" | translate}}</span>
                     <span class="username">{{m_oUser.name}}</span>
                 </div>
                 <div class="user-icon">
@@ -36,26 +36,28 @@
             <ul class="dropdown-menu">
                 <li class=""><a class="dropdown-item" routerLink="/settings"><span class="material-symbols-outlined">
                             settings
-                        </span>User Dashboard</a></li>
+                        </span>{{"ROOT_MENU_USER_DASHBOARD" | translate }}</a></li>
                 <li class=""><a class="dropdown-item" (click)="goToSubscriptions()"><span
                             class="material-symbols-outlined">
                             rocket_launch
-                        </span>Subscription</a></li>
+                        </span>{{"ROOT_MENU_SUBSCRIPTION" | translate }}</a></li>
                 <!-- Open Off Canvas Feedback Form -->
-                <li class=""><a class="dropdown-item" (click)="openFeedbackDialog()"><span class="material-symbols-outlined">
+                <li class=""><a class="dropdown-item" (click)="openFeedbackDialog()"><span
+                            class="material-symbols-outlined">
                             chat
-                        </span>Send Feedback</a></li>
+                        </span>{{"DIALOG_FEEDBACK_SEND" | translate}}</a></li>
                 <li class=""><a class="dropdown-item" (click)="openDocs()"><span class="material-symbols-outlined">
                             support
                         </span>
-                        <div class="help-btn">Help</div> <span class="material-symbols-outlined align-self-end">
+                        <div class="help-btn">{{"KEY_PHRASES.HELP" | translate}}</div> <span
+                            class="material-symbols-outlined align-self-end">
                             open_in_new
                         </span>
                     </a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+                <li><a class="dropdown-item" (click)="logout()">{{"ROOT_MENU_LOGOUT"| translate}}</a></li>
             </ul>
         </div>
     </div>

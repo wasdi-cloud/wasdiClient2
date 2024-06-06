@@ -3,13 +3,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
 import { User } from 'src/app/shared/models/user.model';
-import { UserSettingsDialogComponent } from './header-dialogs/user-settings-dialog/user-settings-dialog.component';
+
 import { ProjectService } from 'src/app/services/api/project.service';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { Router } from '@angular/router';
 import { FeedbackDialogComponent } from './feedback-dialog/feedback-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -29,7 +30,8 @@ export class HeaderComponent implements OnInit {
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProjectService: ProjectService,
-    private m_oRouter: Router
+    private m_oRouter: Router,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -93,31 +95,29 @@ export class HeaderComponent implements OnInit {
   }
 
   setActiveProject(oProject: any) {
+    let sSetProject: string = this.m_oTranslate.instant("ROOT_ACTIVE_PROJECT_CHANGE")
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProject) === false) {
       this.m_oProjectService.changeActiveProject(oProject.projectId).subscribe({
         next: oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-            this.m_oNotificationDisplayService.openSnackBar(`Changed project to ${oProject.name}`, "Active Project Changed");
+            this.m_oNotificationDisplayService.openSnackBar(oProject.name, sSetProject, 'success-snackbar');
 
             this.m_oSelectedProject = oProject;
             this.m_oConstantsService.setActiveProject(oProject);
             this.initializeProjectsInfo();
           }
         },
-        error: oError => { }
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("ROOT_PROJECT_CHANGE_ERROR"), '', 'danger')
+        }
       });
     }
   }
 
-
-  openUserDashboard() {
-    this.m_oDialog.open(UserSettingsDialogComponent);
-  }
-
   openFeedbackDialog() {
     this.m_oDialog.open(FeedbackDialogComponent, {
-      height: '70vh',
-      width: '40vw'
+      height: '700px',
+      width: '600px'
     });
   }
   goToSubscriptions() {

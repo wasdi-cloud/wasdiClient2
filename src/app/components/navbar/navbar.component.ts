@@ -13,7 +13,6 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 //Import Dialog Components:
 import { MatDialog } from '@angular/material/dialog';
-import { UserSettingsDialogComponent } from '../header/header-dialogs/user-settings-dialog/user-settings-dialog.component';
 
 //Import Models:
 import { User } from 'src/app/shared/models/user.model';
@@ -129,14 +128,6 @@ export class NavbarComponent implements OnInit, OnChanges {
   logout() {
     this.m_oConstantsService.logOut();
     this.m_oRouter.navigateByUrl("login");
-  }
-
-  openUserSettings(event: MouseEvent) {
-    const oDialogRef = this.m_oDialog.open(UserSettingsDialogComponent, {
-      height: '85vh',
-      width: '80vw'
-    })
-    event.preventDefault();
   }
 
   reNameWorkspace(oInputWorkspace) {
