@@ -11,7 +11,6 @@
     },
 
     "BTN_SEARCH": "Search",
-    "BTN_CANCEL": "Cancel",
     "BTN_IMPORT": "Import",
     "SORT_BY": "Sort by",
 
@@ -29,6 +28,7 @@
     "APP_UI_SAVE_PARAMS": "",
 
     "ACTIVE_SUBSCRIPTION_ERROR": "You do not have an active project at the moment <br> Either select a project or purchase a subscription",
+    "ACTIVE_SUBSCRIPTION_ERROR_2": "You do not have an active subscripion at the moment.",
 
     "DIALOG_PARAMS_CREATE": "Create parameters template",
     "DIALOG_PARAMS_TEMPLATE_NAME": "Template name", 
@@ -155,7 +155,6 @@
     "EDITOR_OPERATION_TITLE_IMPORT": "Import",
     "EDITOR_OPERATION_TITLE_NEW_PROCESSOR": "New App",
     "EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_OPEN": "Open Jupyter",
-    "EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_CREATE": "Create Jupyter",
     "EDITOR_OPERATION_TITLE_WAPPS": "Apps",
     "EDITOR_OPERATION_TITLE_SHARE": "Share",
     "EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT": "Add Product",
@@ -233,14 +232,7 @@
     "DIALOG_GET_CAPABILITIES_SEARCH": "Search",
     "DIALOG_GET_CAPABILITIES_LOADING": "Loading...",
     
-    "DIALOG_CLOSE_BUTTON": "Close",
-    "DIALOG_SAVE_BUTTON": "Save",
-    "DIALOG_SEND_BUTTON": "Send",
-    "DIALOG_EDIT_BUTTON": "Edit",
-    "DIALOG_APPLY_BUTTON": "Apply",
-    "DIALOG_DELETE_BUTTON": "Delete",
-    "DIALOG_DOWNLOAD_BUTTON": "Download",
-    "DIALOG_OK_BUTTON": "Ok",
+   
     "DIALOG_FORMAT_JSON_ERROR": "Could not format your JSON input. Please ensure it is a valid JSON",
     "DIALOG_PARSE_JSON_ERROR": "There was an error in parsing the JSON payload", 
     
