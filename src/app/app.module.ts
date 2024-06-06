@@ -114,7 +114,6 @@ import { rxStompServiceFactory } from './shared/factories/rx-stomp-service-facto
 import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ProcessorTabUiComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-ui/processor-tab-ui.component';
 import { ProcessorTabStoreComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-store/processor-tab-store.component';
-import { ProcessorTabMediaComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-media/processor-tab-media.component';
 import { SubscriptionsDisplayComponent } from './components/admin/subscriptions-display/subscriptions-display.component';
 import { OrganizationsDisplayComponent } from './components/admin/organizations-display/organizations-display.component';
 import { EmailPreferencesDisplayComponent } from './components/admin/email-preferences-display/email-preferences-display.component';
@@ -236,7 +235,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProcessorTabContentComponent,
     ProcessorTabUiComponent,
     ProcessorTabStoreComponent,
-    ProcessorTabMediaComponent,
     WorkflowsDialogComponent,
     SubscriptionsDisplayComponent,
     OrganizationsDisplayComponent,
@@ -343,9 +341,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatChipsModule,
     MatProgressBarModule,
     NgxChartsModule,
-    CdkContextMenuTrigger, 
-    CdkMenu, 
-    CdkMenuItem, 
+    CdkContextMenuTrigger,
+    CdkMenu,
+    CdkMenuItem,
     CdkMenuTrigger
   ],
   providers: [

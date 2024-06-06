@@ -34,9 +34,6 @@
         <!-- Processor Pricing Options -->
         <app-processor-tab-pricing *ngIf="m_sActiveTab==='PRICING'"
             [m_oProcessorStoreInfo]="m_oProcessorForm.get('processorStoreInfo')"></app-processor-tab-pricing>
-        <!-- Processor Media Options -->
-        <app-processor-tab-media *ngIf=" m_sActiveTab==='MEDIA'"
-            [m_oProcessor]=" m_oProcessorDetails"></app-processor-tab-media>
         <!-- Processor UI JSON file -->
         <app-processor-tab-ui *ngIf="m_sActiveTab==='UI'" [m_oProcessor]="m_oInputProcessor"
             [m_oProcessorUIInfo]="m_oProcessorForm.get('processorUIInfo')"></app-processor-tab-ui>

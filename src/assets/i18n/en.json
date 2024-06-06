@@ -1,9 +1,11 @@
 {
     "KEY_PHRASES" : {
         "APPLY": "Apply",
+        "BACK": "Back", 
         "CANCEL": "Cancel",
         "CLOSE": "Close",
         "CLIPBOARD": "Copied to Clipboard!",
+        "CLIPBOARD_BTN": "Copy to Clipboard",
         "CONFIRM_REMOVAL": "Confirm Removal", 
         "COPIED": "Copied!",
         "DESCRIPTION": "Description",
@@ -429,7 +431,7 @@
     "DIALOG_PROCESSOR_BASE_UPDATE_LIB": "Update Lib",
     "DIALOG_PROCESSOR_BASE_REDEPLOY": "Force App Re-deploy",
     "DIALOG_PROCESSOR_BASE_DRAG_ZIP": "Drag and Drop here the .zip file with your WASDI App or click to browse.",
-    "DIALOG_PROCESSOR_BASE_FILE": "Applictation files",
+    "DIALOG_PROCESSOR_BASE_FILE": "Application files",
     "DIALOG_PROCESSOR_BASE_DRAG_FILES": "Drag and Drop here the .zip or single file to update your WASDI App or click to browse.",
     "DIALOG_PROCESSOR_BASE_NO_UPDATE": "File Update not available for this Application Type",
     "DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Description",
@@ -438,7 +440,12 @@
     "DIALOG_PROCESSOR_BASE_JSON": "JSON Sample",
     "DIALOG_PROCESSOR_BASE_BUILD_LOGS": "View Build logs",
     "DIALOG_PROCESSOR_BASE_BUILD_NUMBER": "Build Number: ",
-    
+    "DIALOG_PROCESSOR_BASE_LIB_SCHEDULE": "Library Scheduled",
+    "DIALOG_PROCESSOR_BASE_LIB_ERROR": "Error in updating library",
+    "DIALOG_PROCESSOR_BASE_REFRESH_CONFIRM": "Are you sure you want to re-deploy this processor?",
+    "DIALOG_PROCESSOR_BASE_REFRESH_SUCCESS": "Processor refresh underway",
+    "DIALOG_PROCESSOR_BASE_REFRESH_ERROR": "Error in refreshing processor",
+
     "DIALOG_PROCESSOR_MEDIA_LOGO": "Upload Logo",
     "DIALOG_PROCESSOR_MEDIA_LOGO_DROP": "Drag and Drop here the Application Logo",
     "DIALOG_PROCESSOR_MEDIA_FILE": "File",

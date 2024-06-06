@@ -5,8 +5,10 @@ import { FormGroup } from '@angular/forms';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+import { TranslateService } from '@ngx-translate/core';
 
 //Angular Material Import: 
+import { Clipboard } from '@angular/cdk/clipboard';
 import { MatDialog } from '@angular/material/dialog';
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
@@ -16,7 +18,6 @@ import { PackageManagerComponent } from 'src/app/dialogs/package-manager/package
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { Clipboard } from '@angular/cdk/clipboard';
 
 
 @Component({
@@ -140,7 +141,8 @@ export class ProcessorTabContentComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oProcessorService: ProcessorService) {
+    private m_oProcessorService: ProcessorService,
+    private m_oTranslate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -245,45 +247,36 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   forceLibUpdate(sProcessorId: string) {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId) === true) {
-      return false;
+    let sUpdateMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_LIB_SCHEDULE")
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_LIB_ERROR")
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId) === false) {
+      this.m_oProcessorService.forceLibUpdate(sProcessorId).subscribe({
+        next: oResponse => {
+          this.m_oNotificationDisplayService.openSnackBar(sUpdateMsg, '', 'success-snackbar');
+        },
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
+        }
+      })
     }
-
-    let sConfirnMsg = "Are you sure you want to update this Processor?"
-
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirnMsg);
-
-    bConfirmResult.subscribe(bDialogResult => {
-      if (bDialogResult === true) {
-        this.m_oProcessorService.forceLibUpdate(sProcessorId).subscribe({
-          next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("LIBRARY UPDATE SCHEDULED");
-          },
-          error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in Updating Library")
-          }
-        })
-      }
-    });
-    return true;
   }
 
   forceProcessorRefresh(sProcessorId: string) {
+    let sConfirmMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_REFRESH_CONFIRM");
+    let sSuccessMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_REFRESH_SUCCESS")
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_REFRESH_ERROR")
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId)) {
       return false;
     }
 
-    let sConfirmMsg = "Are you sure you want to Redeploy this processor?";
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
-
-    bConfirmResult.subscribe(oDialogResult => {
+    this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg).subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("PROCESSOR REFRESH SCHEDULED");
+            this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, '', 'success-snackbar');
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in Refreshing Processor")
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
           }
 
         })
@@ -368,8 +361,9 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   copyBuildLogToClipboard(oBuildLog) {
+    let sCopiedMsg = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD")
     this.m_oClipboard.copy(oBuildLog);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Build Log")
+    this.m_oNotificationDisplayService.openSnackBar(sCopiedMsg, '', 'success-snackbar')
   }
 
   downloadProcessor(sProcessorId: string) {

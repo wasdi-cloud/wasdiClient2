@@ -14,6 +14,7 @@ import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-p
 
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-params-library-dialog',
   templateUrl: './params-library-dialog.component.html',
@@ -89,6 +90,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
     private m_oJsonEditorService: JsonEditorService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorParametersTemplateService: ProcessorParamsTemplateService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -198,6 +200,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
    * @returns 
    */
   editProcessorParametersTemplate(oTemplate) {
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_FORMAT_JSON_ERROR");
     if (!this.m_oSelectedTemplate) {
       return false;
     }
@@ -211,7 +214,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
       this.m_bEditMode = true;
     }
     catch (error) {
-      this.m_oNotificationDisplayService.openSnackBar("There may be some problem in the JSON of this template");
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
     }
 
     return true;
@@ -226,16 +229,18 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
     if (!oTemplate) {
       return false;
     }
+    console.log(oTemplate)
 
-    let sConfirmOwner = `Are you sure you want to delete ${oTemplate.name}?`;
-    let sConfirmShared = `Are you sure you want to remove your permissions from ${oTemplate.name}`;
+    let sConfirmOwner = `${this.m_oTranslate.instant("DIALOG_PARAMS_CONFIRM_DELETE_OWNER")} <br> <li>${oTemplate.name}</li>`;
+    let sConfirmShared = `${this.m_oTranslate.instant("DIALOG_PARAMS_CONFIRM_DELETE_SHARE")} <br> <li>${oTemplate.name}</li>`;
 
+    let sDeleteError = this.m_oTranslate.instant("DIALOG_PARAMS_DELETE_ERROR")
     let bConfirmResult: any;
 
-    if (oTemplate.sharedWithMe) {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared);
+    if (oTemplate.readOnly === false && oTemplate.userId !== this.m_sActiveUserId) {
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner, '', 'alert');
     } else {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared, '', 'alert');
     }
 
     bConfirmResult.subscribe(bDialogResult => {
@@ -247,7 +252,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
             this.m_oSelectedTemplate = null;
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog(`Error in deleting ${oTemplate.name}`)
+            this.m_oNotificationDisplayService.openAlertDialog(sDeleteError, '', 'danger')
             this.m_bEditMode = false;
           }
         });
@@ -261,13 +266,15 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
    * @returns 
    */
   saveProcessorParam() {
+    let sJsonError: string = this.m_oTranslate.instant("DIALOG_PARSE_JSON_ERROR");
+    let sSaveError: string = this.m_oTranslate.instant("DIALOG_PARAMS_SAVE_ERROR");
     try {
       // Re-read and try the JSON
       let sJSONPayload = this.m_sParametersString;
       JSON.parse(sJSONPayload);
     }
     catch (error) {
-      this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload");
+      this.m_oNotificationDisplayService.openAlertDialog(sJsonError, '', 'danger');
       return false;
     }
 
@@ -299,7 +306,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
         error: oError => {
           this.m_oSelectedTemplate = null;
           this.m_bIsLoading = false;
-          this.m_oNotificationDisplayService.openAlertDialog("ERROR IN SAVING YOUR PARAMETERS TEMPLATE");
+          this.m_oNotificationDisplayService.openAlertDialog(sSaveError, '', 'danger');
         }
       })
     }
@@ -311,11 +318,12 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
    * Pretty print JSON
    */
   formatJSON() {
+    let sJsonError: string = this.m_oTranslate.instant("DIALOG_PARSE_JSON_ERROR")
     try {
       this.m_sParametersString = JSON.stringify(JSON.parse(this.m_sParametersString.replaceAll("'", '"')), null, 2);
     }
     catch (error) {
-      this.m_oNotificationDisplayService.openSnackBar("Error in parsing the JSON payload");
+      this.m_oNotificationDisplayService.openAlertDialog(sJsonError, '', 'danger');
     }
   }
 

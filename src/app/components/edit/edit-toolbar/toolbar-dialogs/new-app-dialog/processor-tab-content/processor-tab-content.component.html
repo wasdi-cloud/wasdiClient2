@@ -1,12 +1,13 @@
 <div class="dialog-content d-flex flex-row gap-2" *ngIf="m_oProcessorBasicInfo && !m_bShowBuildLogs"
     [formGroup]="m_oProcessorBasicInfo">
     <div class="dialog-column form-input-container d-flex flex-column gap-3">
-        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_NAME' | translate" [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_sProcessorName"
+        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_NAME' | translate" [m_bIsReadonly]="m_bEditMode"
+            [m_sInputValue]="m_sProcessorName"
             (m_oInputChange)="m_oProcessorBasicInfo.patchValue({sProcessorName: $event.event.target.value})"></app-input-field>
-        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_TYPE' | translate"  *ngIf="m_bEditMode" [m_bIsReadonly]="m_bEditMode"
-            [m_sInputValue]="m_sTypeNameOnly"></app-input-field>
-        <app-autocomplete [m_sLabel]="'DIALOG_PROCESSOR_BASE_SELECT_LANG' | translate" *ngIf="!m_bEditMode" [m_aoInputs]="m_aoProcessorTypes"
-            (m_oSelectionChange)="setSelectedType($event)"></app-autocomplete>
+        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_TYPE' | translate" *ngIf="m_bEditMode"
+            [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_sTypeNameOnly"></app-input-field>
+        <app-autocomplete [m_sLabel]="'DIALOG_PROCESSOR_BASE_SELECT_LANG' | translate" *ngIf="!m_bEditMode"
+            [m_aoInputs]="m_aoProcessorTypes" (m_oSelectionChange)="setSelectedType($event)"></app-autocomplete>
         <div class="textarea-container">
             <app-textarea [m_sLabel]="'DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION' | translate"
                 [m_sInputString]="m_oProcessorBasicInfo.get('sShortDescription').value"
@@ -19,14 +20,15 @@
             <div class="align-self-end">
                 <input type="checkbox" class="wasdi-checkbox" name="" id="" [checked]="m_bIsPublic"
                     (change)="onPublicChange($event)">
-                    {{"DIALOG_PROCESSOR_BASE_PUBLIC" | translate}}
+                {{"DIALOG_PROCESSOR_BASE_PUBLIC" | translate}}
             </div>
         </div>
         <div class="drag-drop-container flex-fill d-flex flex-column gap-3 mt-3">
             <div *ngIf="m_bEditMode" class="options-container d-flex flex-column gap-2">
                 <div class="d-flex flex-row justify-content-between font-bold">
                     {{"DIALOG_PROCESSOR_BASE_FILE" | translate}}
-                    <app-button [m_sLabel]="'DIALOG_PROCESSOR_BASE_BUILD_LOGS' | translate" [m_bMuted]="true" (click)="showBuildLogs(true)"></app-button>
+                    <app-button [m_sLabel]="'DIALOG_PROCESSOR_BASE_BUILD_LOGS' | translate" [m_bMuted]="true"
+                        (click)="showBuildLogs(true)"></app-button>
                 </div>
                 <div class="file-container d-flex flex-row justify-content-between">
                     <div class="d-flex flex-row align-items-center gap-2">
@@ -42,7 +44,8 @@
                             </span>
                             {{"DIALOG_PROCESSOR_BASE_REDEPLOY" | translate}}
                         </div>
-                        <app-button [m_sIconLeft]="'download'" [m_sSize]="'small'" [m_bOutline]="true" (click)="downloadProcessor(m_sProcessorId)"></app-button>
+                        <app-button [m_sIconLeft]="'download'" [m_sSize]="'small'" [m_bOutline]="true"
+                            (click)="downloadProcessor(m_sProcessorId)"></app-button>
                     </div>
                 </div>
             </div>
@@ -63,7 +66,7 @@
 
 <div class="dialog-content d-flex flex-column gap-2" *ngIf="m_bShowBuildLogs">
     <div class="d-flex flex-row align-items-center gap-2">
-        <app-button [m_sLabel]="'Back'" [m_bMuted]="true" [m_sIconLeft]="'arrow_back'"
+        <app-button [m_sLabel]="'KEY_PHRASES.BACK'| translate" [m_bMuted]="true" [m_sIconLeft]="'arrow_back'"
             (click)="showBuildLogs(false)"></app-button>
         <strong>{{"DIALOG_PROCESSOR_BASE_BUILD_LOGS" |translate}}</strong>
     </div>
@@ -73,10 +76,12 @@
                 <thead>
                     <tr (click)="openBuildLog(aBuildLogs)">
                         <td class="d-flex flex-row justify-content-between" [class.isOpen]="aBuildLogs.isOpen">
-                            <div class="font-bold">{{"DIALOG_PROCESSOR_BASE_BUILD_NUMBER" | translate}} {{aBuildLogs.logNumber}}</div>
+                            <div class="font-bold">{{"DIALOG_PROCESSOR_BASE_BUILD_NUMBER" | translate}}
+                                {{aBuildLogs.logNumber}}</div>
                             <div class="d-flex flex-row gap-1">
-                                <app-button [m_sLabel]="'Copy to Clipboard'.toUpperCase()" [m_sSize]="'small'"
-                                    [m_sIconLeft]="'content_copy'" [m_bOutline]="true" [m_bTextWhite]="true"
+                                <app-button [m_sLabel]="('KEY_PHRASES.CLIPBOARD_BTN'| translate).toUpperCase()"
+                                    [m_sSize]="'small'" [m_sIconLeft]="'content_copy'" [m_bOutline]="true"
+                                    [m_bTextWhite]="true"
                                     (click)="copyBuildLogToClipboard(aBuildLogs.logs)"></app-button>
                                 <span *ngIf="aBuildLogs.isOpen === false" class="material-symbols-outlined">
                                     expand_more

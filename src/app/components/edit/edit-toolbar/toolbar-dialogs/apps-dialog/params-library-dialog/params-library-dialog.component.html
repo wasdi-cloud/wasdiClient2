@@ -4,18 +4,18 @@
             <div class="primary-header font-bold align-items-center d-flex flex-row gap-3">
                 <app-button [m_sLabel]="'Back'" [m_sIconLeft]="'arrow_back'" [m_bOutline]="true" [m_sSize]="'small'"
                     (click)="onDismiss()"></app-button>
-                Parameters list
+                {{"DIALOG_PARAMS_TITLE" | translate}}
             </div>
             <div>
                 <app-button [m_sLabel]="'New template'" (click)=" addProcessorParams()"></app-button>
             </div>
         </div>
         <div class="">
-            <div class="secondary-header font-bold">Selected app</div>
+            <div class="secondary-header font-bold">{{ "DIALOG_PARAMS_SELECTED_APP" | translate}}</div>
             {{m_oSelectedProcessor.processorName}}
         </div>
         <div class="align-self-stretch">
-            <div>Search by parameters name</div>
+            <div>{{"DIALOG_PARAMS_FILTER_HELP"| translate}}</div>
             <app-input-field [m_sPlaceholder]="'Search parameters'" [m_sIconLeft]="'search'"
                 (m_oInputChange)="getInputValues('search', $event)"></app-input-field>
         </div>
@@ -23,9 +23,9 @@
             <table>
                 <thead class="table-heading-container">
                     <tr>
-                        <td>Parameter name</td>
-                        <td>Publisher</td>
-                        <td>Last Updated</td>
+                        <td>{{"DIALOG_PARAMS_NAME" | translate}}</td>
+                        <td>{{"DIALOG_PARAMS_PUBLISHER" | translate}}</td>
+                        <td>{{"WAP_LAST_UPDATE"| translate}}</td>
                         <td></td>
                     </tr>
                 </thead>
@@ -61,12 +61,13 @@
     </div>
     <div [class.hidden]="!m_bShowJsonForm" class="json-container d-flex flex-column h-100 gap-3">
         <div *ngIf="m_oSelectedTemplate" class="json-header d-flex flex-column gap-3">
-            <app-input-field [m_sLabel]="'Template name'" [m_sInputValue]="m_oSelectedTemplate.name"
-                [m_bIsDisabled]="m_oSelectedTemplate.readOnly === true"
+            <app-input-field [m_sLabel]="'DIALOG_PARAMS_TEMPLATE_NAME' | translate"
+                [m_sInputValue]="m_oSelectedTemplate.name" [m_bIsDisabled]="m_oSelectedTemplate.readOnly === true"
                 [m_bIsReadonly]="m_oSelectedTemplate.readOnly === true"
                 (m_oInputChange)="getInputValues('name', $event)"></app-input-field>
             <div class="textarea-wrapper">
-                <app-textarea [m_sLabel]="'Description'" [m_bIsDisabled]="m_oSelectedTemplate.readOnly === true"
+                <app-textarea [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate"
+                    [m_bIsDisabled]="m_oSelectedTemplate.readOnly === true"
                     [m_bIsReadonly]="m_oSelectedTemplate.readOnly === true"
                     [m_sInputString]="m_oSelectedTemplate.description"
                     (keyup)="getInputValues('description', $event)"></app-textarea>
@@ -79,19 +80,20 @@
             </div>
         </div>
         <div class="footer d-flex flex-row justify-content-between gap-2">
-            <app-button [m_sLabel]="'Cancel'" *ngIf="m_bShowCreateForm" [m_bOutline]="true"
+            <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" *ngIf="m_bShowCreateForm" [m_bOutline]="true"
                 (click)="viewProcessorParams(this.m_aoParametersTemplateList[0])"></app-button>
             <div class="d-flex flex-fill flex-row justify-content-end gap-2">
-                <app-button *ngIf="m_oSelectedTemplate && (m_oSelectedTemplate.readOnly === false || m_bShowCreateForm)" [m_bDisabled]="(!m_oSelectedTemplate.name || !m_sParametersString)"
-                    [m_sLabel]="'Save'"
+                <app-button *ngIf="m_oSelectedTemplate && (m_oSelectedTemplate.readOnly === false || m_bShowCreateForm)"
+                    [m_bDisabled]="(!m_oSelectedTemplate.name || !m_sParametersString)"
+                    [m_sLabel]="'KEY_PHRASES.SAVE' | translate"
                     (click)="m_oSelectedTemplate.name && m_sParametersString ? saveProcessorParam() :''"></app-button>
-                <app-button [m_sLabel]="'Apply'"
+                <app-button [m_sLabel]="'KEY_PHRASES.APPLY' | translate"
                     (click)="applyProcessorParams(this.m_oSelectedTemplate.templateId)"></app-button>
             </div>
         </div>
     </div>
     <div *ngIf="m_bShowShareForm" class="json-container d-flex flex-column flex-fill ms-2">
-        <div class="json-header font-bold mb-2">Share workflow with WASDI user</div>
+        <div class="json-header font-bold mb-2">{{"DIALOG_PARAMS_SHARE_CTA" | translate}}</div>
         <div class="share-container">
             <app-share-ui [resource]="m_oSelectedTemplate" [resourceType]="'workflow'"></app-share-ui>
         </div>
