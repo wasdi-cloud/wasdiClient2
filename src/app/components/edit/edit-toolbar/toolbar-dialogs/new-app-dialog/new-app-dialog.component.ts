@@ -71,7 +71,7 @@ export class NewAppDialogComponent implements OnInit {
   /**
    * Input Processor JSON Parameters Sample
    */
-  m_sJSONSample: string = "";
+  m_sJSONSample: string = "{}";
 
   /**
    * Input Processor Processor Id
@@ -187,7 +187,6 @@ export class NewAppDialogComponent implements OnInit {
       this.initializeProcessorInformation(this.data.inputProcessor.processorId);
 
     } else {
-      //Create form builder with nested elements to pass to tabs: 
       this.initializeFormBuilder();
     }
   }
@@ -277,7 +276,7 @@ export class NewAppDialogComponent implements OnInit {
 
       //Nested Form Builder for UI tab: 
       processorUIInfo: this.m_oFormBuilder.group({
-        sProcessorUI: "",
+        sProcessorUI: "{\n\"tabs\": []\n}",
         bUIChanged: false
       })
     });
@@ -339,12 +338,19 @@ export class NewAppDialogComponent implements OnInit {
    * Function to set the input processor values
    */
   setInputProcessorValues() {
+
     //Is processor public? 
-    if (this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value === false) {
+    if (!this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value) {
       this.m_oInputProcessor.isPublic = 0;
-    } else {
-      this.m_oInputProcessor.isPublic = 1;
     }
+    else {
+      if (this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value === false) {
+        this.m_oInputProcessor.isPublic = 0;
+      } else {
+        this.m_oInputProcessor.isPublic = 1;
+      }  
+    }
+    
     //Set processor name: 
     this.m_oInputProcessor.processorName = this.m_oProcessorForm.get('processorBasicInfo.sProcessorName').value;
 
@@ -395,12 +401,22 @@ export class NewAppDialogComponent implements OnInit {
    */
   updateProcessor() {
     this.setInputProcessorValues();
+
+    let sMessage = "Processor Data Updated";
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === false) {
+      sMessage +="<BR>";
+      sMessage +="Updating Processor Files";
+      sMessage +="<BR>";
+      sMessage +="Rebuild Ongoing";
+    }
+
     // Update the processor and the processor details
     this.m_oProcessorService.updateProcessor(this.m_oInputProcessor.processorId, this.m_oInputProcessor).subscribe({
       next: oResponse => {
         this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oProcessorDetails).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("Processor Data Updated<br>Rebuild ongoing");
+            this.m_oNotificationDisplayService.openSnackBar(sMessage);
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog(`Error in updating ${this.m_oInputProcessor.processorName}`);
@@ -419,10 +435,10 @@ export class NewAppDialogComponent implements OnInit {
 
       this.m_oProcessorService.updateProcessorFiles(sFileName, this.m_oInputProcessor.processorId, oSelectedFile).subscribe({
         next: oResponse => {
-          console.log(oResponse)
+          //this.m_oNotificationDisplayService.openSnackBar("Processor Files Updated<br>Rebuild ongoing");
         },
         error: oError => {
-          console.log(oError)
+          this.m_oNotificationDisplayService.openAlertDialog(`Error in updating ${this.m_oInputProcessor.processorName} files!!!`);
         }
       })
     }
@@ -457,7 +473,7 @@ export class NewAppDialogComponent implements OnInit {
     }
 
     this.setInputProcessorValues();
-    let sType = this.m_oProcessorForm.get('processorBasicInfo.oType').value;
+    let sType = this.m_oProcessorForm.get('processorBasicInfo.oType').value.id;
 
 
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sType)) {

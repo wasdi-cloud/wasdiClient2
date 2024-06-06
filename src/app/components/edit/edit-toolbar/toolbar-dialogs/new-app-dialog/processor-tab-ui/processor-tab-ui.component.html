@@ -9,7 +9,7 @@
         <div class="json-wrapper" style="height: 100%; width: 100%;">
             <div #editor class="json-editor" style="height: 100%;" (keyup)="getJsonText($event)"></div>
         </div>
-        <app-button class="json-button" [m_sLabel]="'Format JSON'" [m_sSize]="'small'"
+        <app-button class="json-button" [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate" [m_sSize]="'small'"
             (click)="formatJSON()"></app-button>
     </div>
 </div>
