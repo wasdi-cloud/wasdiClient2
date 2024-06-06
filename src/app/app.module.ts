@@ -181,6 +181,7 @@ import { ConvertBytesToHigherUnitPipe } from './shared/pipes/convert-bytes-to-hi
 import { CdkContextMenuTrigger, CdkMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
 import { PaginatorComponent } from './shared/shared-components/paginator/paginator.component';
 import { SaveParamsDialogComponent } from './dialogs/save-params-dialog/save-params-dialog.component';
+import { MetadataAttributesDialogComponent } from './components/edit/products-list/metadata-attributes-dialog/metadata-attributes-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -302,7 +303,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     FeedbackDialogComponent,
     ConvertBytesToHigherUnitPipe,
     PaginatorComponent,
-    SaveParamsDialogComponent
+    SaveParamsDialogComponent,
+    MetadataAttributesDialogComponent
 
   ],
   imports: [

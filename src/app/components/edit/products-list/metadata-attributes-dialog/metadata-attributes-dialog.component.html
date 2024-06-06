@@ -1,0 +1,30 @@
+<div class="apps-dialog h-100 d-flex flex-column">
+    <div class="dialog-header font-bold d-flex flex-row justify-content-between">
+        <div>
+            {{ "METADATA_TITLE" | translate}}: {{m_oElement}}
+        </div>
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+    </div>
+    <div class="dialog-content flex-fill">
+        <div class="table-wrapper h-100">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>{{"KEY_PHRASES.NAME" | translate}}</td>
+                        <td>{{"KEY_PHRASES.DESCRIPTION" | translate}}</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oAttribute of m_aoAttributes">
+                        <td>{{oAttribute.description}}</td>
+                        <td>{{oAttribute.data}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dialog-footer d-flex flex-row justify-content-end">
+        <app-button [m_sLabel]="'KEY_PHRASES.CLOSE' | translate" (click)="onDismiss()"></app-button>
+    </div>
+</div>

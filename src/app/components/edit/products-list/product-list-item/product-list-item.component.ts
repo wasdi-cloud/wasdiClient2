@@ -12,6 +12,7 @@ import { StylesDialogComponent } from '../../edit-toolbar/toolbar-dialogs/styles
 import { WorkspacesListDialogComponent } from 'src/app/components/search/workspaces-list-dialog/workspaces-list-dialog.component';
 import { ProductService } from 'src/app/services/api/product.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MetadataAttributesDialogComponent } from '../metadata-attributes-dialog/metadata-attributes-dialog.component';
 
 
 
@@ -154,13 +155,13 @@ export class ProductListItemComponent {
             this.m_oNotificationDisplayService.openAlertDialog("No Metadata found", "Alert", "danger");
           } else {
 
-            if (oResponse.attributes==null && oResponse.elements==null && oResponse.name.startsWith("Generating Metadata")) {
+            if (oResponse.attributes == null && oResponse.elements == null && oResponse.name.startsWith("Generating Metadata")) {
               this.m_oNotificationDisplayService.openAlertDialog("Generating Metadata", "Info", "alert");
             }
             else {
               this.m_bHasMetadata = true;
               this.m_oProductMetadata = oResponse;
-              this.showMetadata(true)  
+              this.showMetadata(true)
             }
           }
         }
@@ -209,5 +210,16 @@ export class ProductListItemComponent {
 
   openElement(oElement) {
     oElement.open = !oElement.open
+  }
+
+  attributesDialog(oElement) {
+    console.log(oElement)
+    this.m_oDialog.open(MetadataAttributesDialogComponent, {
+      data: {
+        element: oElement
+      },
+      height: '600px',
+      width: '550px'
+    })
   }
 }

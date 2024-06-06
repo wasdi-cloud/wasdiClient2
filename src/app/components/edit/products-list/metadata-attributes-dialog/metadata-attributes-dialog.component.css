@@ -1,0 +1,33 @@
+table {
+    width: 100%;
+    margin: auto;
+    /* height: 100%; */
+    word-wrap: break-word;
+    table-layout: fixed;
+}
+.dialog-content {
+    height: 475px;
+}
+
+.table-heading-container {
+    background-color: #FFFFFF;
+    box-shadow: inset 0px -1px #D1D5DB;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: 700;
+}
+.table-wrapper {
+    overflow: scroll;
+}
+td>span.material-symbols-outlined {
+    color: var(--wasdiGreen);
+    cursor: pointer;
+}
+
+td,
+th {
+    font-size: 14px;
+    padding: 6px 12px 6px 8px;
+    height: 44px;
+}

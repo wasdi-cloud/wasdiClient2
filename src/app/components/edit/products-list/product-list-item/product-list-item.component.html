@@ -42,12 +42,12 @@
                     arrow_drop_down
                 </span><span style="cursor: default !important;"><span class="bands-icon material-symbols-outlined">
                         code
-                    </span> Metadata</span>
+                    </span> {{"MENU_METADATA" | translate}}</span>
             </p>
             <ul *ngIf="m_bShowMetadata">
-                <li [class.container]="oMetadata.open === true"
-                    *ngFor="let oMetadata of m_oProductMetadata.elements">
-                    <p class="d-flex flex-row align-items-center gap-1" style="cursor: default !important;"
+                <li [class.container]="oMetadata.open === true" *ngFor="let oMetadata of m_oProductMetadata.elements">
+                    <p (dblclick)="oMetadata.attributes !== null? attributesDialog(oMetadata): ''"
+                        class="d-flex flex-row align-items-center gap-1" style="cursor: default !important;"
                         (click)="toggleMetadataOpen(oMetadata)">
                         <span class="arrow-icon material-symbols-outlined"
                             *ngIf="oMetadata.elements && !oMetadata.open">
@@ -65,7 +65,8 @@
                     <ul *ngIf="oMetadata.open">
                         <li [class.container]="oElement.elements && oElement.open"
                             *ngFor="let oElement of oMetadata.elements">
-                            <p (click)="openElement(oElement)" class="d-flex flex-row align-items-center gap-1">
+                            <p (click)="openElement(oElement)" (dblclick)="attributesDialog(oElement)"
+                                class="d-flex flex-row align-items-center gap-1">
                                 <span class="arrow-icon material-symbols-outlined"
                                     *ngIf="oElement.elements && !oElement.open">
                                     arrow_right
@@ -81,7 +82,8 @@
                             </p>
                             <ul *ngIf="oElement.open">
                                 <li *ngFor="let oNestedElement of oElement.elements">
-                                    <p class="d-flex flex-row align-items-center gap-1">
+                                    <p class="d-flex flex-row align-items-center gap-1"
+                                        (dblclick)="oNestedElement.attributes !== null? attributesDialog(oNestedElement) : ''">
                                         <span class="arrow-icon material-symbols-outlined">
                                             info
                                         </span>
@@ -104,7 +106,7 @@
                 </span>
                 <span class="bands-icon material-symbols-outlined">
                     map
-                </span><span style="cursor: default !important;"> Bands</span>
+                </span><span style="cursor: default !important;"> {{"MENU_BANDS" | translate}}</span>
             </p>
             <ul *ngIf="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands">
                 <li *ngFor="let oBand of m_oProduct.bandsGroups.bands">
@@ -124,10 +126,10 @@
 
 <ng-template #context_menu>
     <div class="context-menu d-flex flex-column gap-1" cdkMenu>
-        <div class="context-menu-item" cdkMenuItem (click)="openStylesDialog()">Edit styles</div>
-        <div class="context-menu-item" cdkMenuItem (click)="openProductProperties()">Product Properties</div>
-        <div class="context-menu-item" cdkMenuItem (click)="downloadProduct()">Download</div>
-        <div class="context-menu-item" cdkMenuItem (click)="openSendToFTP()">Send to Workspace</div>
-        <div class="context-menu-item" cdkMenuItem (click)="deleteProduct()">Delete product</div>
+        <div class="context-menu-item" cdkMenuItem (click)="openStylesDialog()">{{ "MENU_EDIT_STYLES"| translate}}</div>
+        <div class="context-menu-item" cdkMenuItem (click)="openProductProperties()">{{"MENU_EDIT_PRODUCT_PROPERTIES" | translate}}</div>
+        <div class="context-menu-item" cdkMenuItem (click)="downloadProduct()">{{ "MENU_DOWNLOAD"|translate}}</div>
+        <div class="context-menu-item" cdkMenuItem (click)="openSendToFTP()">{{ "MENU_SHARE"| translate}}</div>
+        <div class="context-menu-item" cdkMenuItem (click)="deleteProduct()">{{"MENU_DELETE"| translate}}</div>
     </div>
 </ng-template>

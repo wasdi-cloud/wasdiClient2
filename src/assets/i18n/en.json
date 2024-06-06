@@ -1,16 +1,18 @@
 {
     "KEY_PHRASES" : {
-        "CANCEL": "Cancel",
-        "DESCRIPTION": "Description",
-        "SAVE_CHANGES": "Save Changes",
-        "ERROR": "Error",
-        "SUCCESS": "Success",
-        "GURU_MEDITATION": "Guru Meditation", 
-        "CONFIRM_REMOVAL": "Confirm Removal", 
-        "CLIPBOARD": "Copied to Clipboard!",
-        "SHARE": "Collaborators",
         "APPLY": "Apply",
-        "SAVE": "Save"
+        "CANCEL": "Cancel",
+        "CLOSE": "Close",
+        "CLIPBOARD": "Copied to Clipboard!",
+        "CONFIRM_REMOVAL": "Confirm Removal", 
+        "DESCRIPTION": "Description",
+        "ERROR": "Error",
+        "NAME": "Name",
+        "SAVE": "Save",
+        "GURU_MEDITATION": "Guru Meditation", 
+        "SAVE_CHANGES": "Save Changes",
+        "SUCCESS": "Success",
+        "SHARE": "Collaborators"
     },
 
     "BTN_SEARCH": "Search",
@@ -878,6 +880,9 @@
     "MENU_METADATA": "Metadata",
     "MENU_BANDS": "Bands",
     "MENU_SHARE_PRODUCT": "Share Product Options",
+    "MENU_EDIT_STYLES": "Edit Styles",
+    "MENU_EDIT_PRODUCT_PROPERTIES": "Product Properties", 
+
    
     "MENU_DELETE_MANY_1": "Delete ",
     "MENU_DELETE_MANY_2": " products",
