@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ImageService } from 'src/app/services/api/image.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
@@ -31,7 +32,7 @@ export class ProcessorTabStoreComponent implements OnInit {
    */
   m_aoSelectedCategories: Array<any> = [];
 
-  m_sApplicaitonImageName: string = "";
+  m_sApplicationImageName: string = "";
 
   m_sProcessorLogoName: string = "";
 
@@ -44,7 +45,8 @@ export class ProcessorTabStoreComponent implements OnInit {
     private m_oImageService: ImageService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
-    private m_oProcessorService: ProcessorService) { }
+    private m_oProcessorService: ProcessorService,
+    private m_oTranslate: TranslateService) { }
 
   ngOnInit(): void {
     //Uncomment when committing
@@ -56,6 +58,7 @@ export class ProcessorTabStoreComponent implements OnInit {
   }
 
   getCategories() {
+    let sErrorMsg: string = this.m_oTranslate.instant("MSG_WAPPS_CATEGORY_ERROR")
     this.m_oProcessorMediaService.getCategories().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
@@ -67,7 +70,7 @@ export class ProcessorTabStoreComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in getting categories");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
       }
     })
   }
@@ -102,6 +105,11 @@ export class ProcessorTabStoreComponent implements OnInit {
   }
 
   updateProcessorLogo() {
+    let sSuccessMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_MEDIA_LOGO_SAVED");
+
+    let sGuruMeditation: string = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION")
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_MEDIA_LOGO_ERROR")
+
     //Check for uploaded file:
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorLogo)) {
       console.log("Please upload a file");
@@ -110,12 +118,10 @@ export class ProcessorTabStoreComponent implements OnInit {
 
     this.m_oImageService.uploadProcessorLogo(this.m_oProcessor.processorId, this.m_oProcessorLogo).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("PROCESSOR LOGO UPDATED");
-        // this.m_oNotificationDisplayService.openAlertDialog( "PROCESSOR LOGO UPDATED")
-        // this.onDismiss();
+        this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, this.m_oTranslate.instant("KEY_PHRASES.SUCCESS"), 'success-snackbar');
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>THERE WAS AN ERROR UPDATING PROCESSOR LOGO");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sGuruMeditation, 'danger');
       }
     });
     return true;
@@ -138,7 +144,7 @@ export class ProcessorTabStoreComponent implements OnInit {
 
 
   getSelectedAppImage(oEvent: any) {
-    this.m_sApplicaitonImageName = oEvent.name;
+    this.m_sApplicationImageName = oEvent.name;
     this.m_oApplicationImage = oEvent.file;
   }
 }

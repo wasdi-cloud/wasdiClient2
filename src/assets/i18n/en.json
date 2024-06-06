@@ -414,6 +414,10 @@
     "DIALOG_MANUAL_INSERT_BBOX_SOUTH": "South",
     "DIALOG_MANUAL_INSERT_BBOX_EAST": "East",
     "DIALOG_MANUAL_INSERT_BBOX_WEST": "West",
+
+    "DIALOG_PROCESSOR_FETCH_ERROR": "Could not get processor information",
+    "DIALOG_PROCESSOR_APP_DETAILS_ERROR": "Could not get application detail",
+    "DIALOG_PROCESSOR_APP_UI_ERROR": "Error getting the processor's UI",
     
     "DIALOG_PROCESSOR_TAB_BASE": "Processor",
     "DIALOG_PROCESSOR_TAB_PACKAGE_MANAGER": "Package Manager",
@@ -453,6 +457,8 @@
     "DIALOG_PROCESSOR_MEDIA_GALLERY": "Upload Images",
     "DIALOG_PROCESSOR_MEDIA_GALLERY_ADD": "Save Image",
     "DIALOG_PROCESSOR_MEDIA_GALLERY_REMOVE": "Remove Image",
+    "DIALOG_PROCESSOR_MEDIA_LOGO_SAVED": "Logo Updated",
+    "DIALOG_PROCESSOR_MEDIA_LOGO_ERROR": "Could not save processor logo",
     
     "DIALOG_PROCESSOR_SHARE_TITLE": "Share Application",
     "DIALOG_PROCESSOR_SHARE_MAIL": "Insert WASDI User email",
