@@ -1,6 +1,6 @@
 <div class="menu-container">
     <div>
-        <div class="menu-header">App User Interface</div>
+        <div class="menu-header">{{"DIALOG_PROCESSOR_TAB_UI" | translate}}</div>
         <ul>
             <li *ngFor="let oTab of m_aoTabs" [class.active]="m_sActiveTab === oTab.name"
                 (click)="setActiveTab(oTab.name)">{{oTab.name}}</li>

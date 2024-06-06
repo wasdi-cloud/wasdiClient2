@@ -5,7 +5,8 @@
             <div class="d-flex flex-row gap-3 justify-content-center">
                 <p class="font-bold">Publisher: <span class="font-light">{{m_oProcessorInformation.publisher}}</span>
                 </p>
-                <app-button *ngIf="m_oProcessorInformation.isMine" [m_sSize]="'small'" [m_sLabel]="'Edit'"
+                <app-button *ngIf="m_oProcessorInformation.isMine" [m_sSize]="'small'"
+                    [m_sLabel]="'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate"
                     (click)="openEditAppDialog()"></app-button>
             </div>
         </div>
@@ -13,12 +14,13 @@
     <!-- Breadcrumb navigation -->
     <nav aria-label="marketplace breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a routerLink="/marketplace">Marketplace</a></li>
+            <li class="breadcrumb-item"><a routerLink="/marketplace">{{"ROOT_VIEW_NAV_BAR_LINK_APPSTORE" |
+                    translate}}</a></li>
             <li class="breadcrumb-item"><a
                     routerLink="/{{m_oProcessorInformation.processorName}}/appDetails">{{m_oProcessorInformation.friendlyName}}</a>
             </li>
             <li class="breadcrumb-item active" attr.aria-current="{{m_oProcessorInformation.friendlyName + ' page'}}">
-                <a>Application Interface</a>
+                <a>{{ "APP_UI_INTERFACE" | translate}}</a>
             </li>
         </ol>
     </nav>
@@ -66,7 +68,7 @@
         <!-- PROCESSOR JSON TAB -->
         <div class="d-flex flex-column justify-content-start align-items-start gap-3"
             [ngClass]="m_sActiveTab === 'json' ? '' : 'd-none'" style="height:100vh; width: 100vw;">
-            <app-button [m_sLabel]="'Save as Parameters Template'" [m_sIconLeft]="'code'"
+            <app-button [m_sLabel]="'APP_UI_SAVE_PARAMS' | translate" [m_sIconLeft]="'code'"
                 (click)="openSaveAsParamTemplate()"></app-button>
             <div #editor class="json-editor" style="height: 80vh; width: 100%;" (keyup)="getJsonText($event)"></div>
         </div>

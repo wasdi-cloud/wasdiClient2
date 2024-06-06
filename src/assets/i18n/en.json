@@ -36,7 +36,8 @@
     "APP_UI_OPEN_WS": "Run App",
     "APP_UI_AUTO_WS": "Auto Workspace",
     "APP_UI_PURCHASE": "Buy App",
-    "APP_UI_SAVE_PARAMS": "",
+    "APP_UI_SAVE_PARAMS": "Save as Parameters Template",
+    "APP_UI_INTERFACE": "Application Interface",
 
     "ACTIVE_SUBSCRIPTION_ERROR": "You do not have an active project at the moment <br> Either select a project or purchase a subscription",
     "ACTIVE_SUBSCRIPTION_ERROR_2": "You do not have an active subscripion at the moment.",
