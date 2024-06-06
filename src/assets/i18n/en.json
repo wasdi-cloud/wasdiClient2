@@ -176,7 +176,7 @@
     "EDITOR_OPERATION_TITLE_STYLE": "Styles",
     "EDITOR_OPERATION_TITLE_IMPORT": "Import",
     "EDITOR_OPERATION_TITLE_NEW_PROCESSOR": "New App",
-    "EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_OPEN": "Open Jupyter",
+    "EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_OPEN": "Notebook",
     "EDITOR_OPERATION_TITLE_WAPPS": "Apps",
     "EDITOR_OPERATION_TITLE_SHARE": "Share",
     "EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT": "Add Product",
@@ -647,6 +647,12 @@
     "DIALOG_STYLE_SHARE_REMOVE": "Remove",
     "DIALOG_STYLE_OWNER": "Owner",
     "DIALOG_STYLE_FILTER": "Filter Style Name...",
+    "DIALOG_STYLE_GET_XML_ERROR": "Error in getting this style's XML",
+    "DIALOG_STYLE_GET_XML_SUCCESS": "Style XML Updated",
+    "DIALOG_STYLE_UPLOAD_ERROR": "Error in uploading Style",
+    "DIALOG_STYLE_UPLOAD_XML_ERROR": "Could not update Style XML",
+    "DIALOG_STYLE_UPLOAD_SUCCESS":"STYLE UPLOADED",
+    "DIALOG_STYLE_FILE_ERROR": "Error in updating Style File",
   
     "DIALOG_PAYLOAD_COPY": "Copy payload",
  

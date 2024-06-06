@@ -8,6 +8,7 @@ import { StyleService } from 'src/app/services/api/style.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
 import { ProductService } from 'src/app/services/api/product.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface Style {
   description: string,
@@ -71,7 +72,8 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
     private m_oJsonEditorService: JsonEditorService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
-    private m_oStyleService: StyleService
+    private m_oStyleService: StyleService,
+    private m_oTranslate: TranslateService
   ) {
     this.m_sActiveUserId = m_oConstantsService.getUserId()
     this.getStylesByUser();
@@ -122,10 +124,11 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
   }
 
   getStyleXml(sStyleId: string, sUserId: string) {
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_STYLE_GET_XML_ERROR")
     this.m_oStyleService.getStyleXml(sStyleId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oNotificationDisplayService.openAlertDialog("Error in getting this style's XML")
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
         } else {
           this.m_asStyleXml = oResponse;
           this.m_oJsonEditorService.setText(this.m_asStyleXml);
@@ -152,8 +155,9 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
   }
 
   deleteStyle(oStyle: any) {
+    let sConfirmMsg: string = this.m_oTranslate.instant("KEY_PHRASES.CONFIRM_REMOVAL")
     let sStyleId = oStyle.styleId;
-    this.m_oNotificationDisplayService.openConfirmationDialog("Are you sure you wish to delete " + oStyle.name + "?").subscribe(bDialogResult => {
+    this.m_oNotificationDisplayService.openConfirmationDialog(`<li>${oStyle.name}</li>`, sConfirmMsg, 'alert').subscribe(bDialogResult => {
       if (bDialogResult === true) {
         this.m_oStyleService.deleteStyle(sStyleId).subscribe(oResponse => {
           this.getStylesByUser();
@@ -214,24 +218,24 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
 
 
   uploadStyle(oStyle: any) {
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_STYLE_UPLOAD_ERROR");
+    let sSuccessMsg: string = this.m_oTranslate.instant("DIALOG_STYLE_UPLOAD_SUCCESS")
     this.m_bIsCreatingStyle = true;
 
     let oBody = new FormData();
     oBody.append('file', this.m_oFile);
 
-    console.log(oBody)
-
     this.m_oStyleService.uploadFile(this.m_oNewStyle.styleName, this.m_oNewStyle.styleDescription, this.m_oFile, this.m_oNewStyle.isPublic).subscribe({
       next: oResponse => {
         if (oResponse && oResponse.boolValue == true) {
-          this.m_oNotificationDisplayService.openSnackBar("STYLE UPLOADED");
+          this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, '', 'success-snackbar');
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog("Error in uploading Style");
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
         }
         this.m_bIsCreatingStyle = false;
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in uploading Style");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
       }
     });
     return true;
@@ -242,25 +246,28 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
    * @returns void
    */
   updateStyleParams(): void {
+    let sSuccessMsg: string = this.m_oTranslate.instant("DIALOG_STYLE_UPLOAD_SUCCESS");
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_STYLE_FILE_ERROR");
+
     this.m_oStyleService.updateStyleParameters(this.m_oSelectedStyle.styleId, this.m_oNewStyle.styleDescription, this.m_oNewStyle.isPublic).subscribe({
       next: oResponse => {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oFile)) {
           this.m_oStyleService.updateStyleFile(this.m_oSelectedStyle.styleId, this.m_oFile).subscribe({
             next: oResponse => {
-              this.m_oNotificationDisplayService.openSnackBar("STYLE FILE UPDATED");
+              this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, '', 'success-snackbar');
             },
             error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog("Error in updating Style File");
+              this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
             }
           })
         }
         //Reload Styles List
-        this.m_oNotificationDisplayService.openSnackBar("Style Information Updated!");
+        this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, '', 'success-snackbar');
         this.setVisibleInput("default")
         this.getStylesByUser();
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("There was an error when attempting to update this style.")
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
       }
     })
   }
@@ -281,16 +288,18 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
   }
 
   updateXml() {
+    let sSuccessMsg = this.m_oTranslate.instant("DIALOG_STYLE_GET_XML_SUCCESS");
+    let sErrorMsg = this.m_oTranslate.instant("DIALOG_STYLE_UPLOAD_XML_ERROR")
     let oBody = new FormData();
     oBody.append('styleXml', this.m_asStyleXml);
     this.m_oStyleService.postStyleXml(this.m_oSelectedStyle.styleId, oBody).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("Style XML updated")
+        this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, '', 'success-snackbar')
         this.getStylesByUser();
         this.setVisibleInput('default');
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in updating the style XML.")
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
       }
     })
   }
@@ -311,8 +320,6 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
     let sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId
 
     this.m_oNotificationDisplayService.openConfirmationDialog(`Are you sure you want to update ${this.m_oProduct.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.fileName} with the style ${this.m_oProduct.style}?`).subscribe(bDialogResult => {
-      console.log(bDialogResult)
-      console.log(this.m_oProduct)
       if (bDialogResult) {
         this.m_oProductService.updateProduct(oProductViewModel, sWorkspaceId).subscribe(oResponse => {
           if (oResponse.status === 200) {
