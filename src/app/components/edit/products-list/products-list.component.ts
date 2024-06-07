@@ -614,8 +614,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   openImportDialog() {
     this.m_oDialog.open(ImportDialogComponent, {
-      height: '40vh',
-      width: '50vw'
+      height: '425px',
+      width: '660px'
     })
   }
 
