@@ -167,8 +167,3 @@ ul li:last-child ul {
 li.direction-container {
   border-bottom-width: 0px !important;
 }
-
-.wasdi-checkbox {
-  width: 16px !important;
-  height: 16px !important;
-}

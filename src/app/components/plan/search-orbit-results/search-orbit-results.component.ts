@@ -36,7 +36,7 @@ export class SearchOrbitResultsComponent implements OnChanges {
   treeControl: NestedTreeControl<SearchResultNode>;
   dataSource: MatTreeNestedDataSource<SearchResultNode>;
 
-  m_bSearchResultsReceieved: boolean = false;
+  m_bSearchResultsReceived: boolean = false;
 
   m_aoDisplayedProducts: Array<any> = [];
 
@@ -49,7 +49,7 @@ export class SearchOrbitResultsComponent implements OnChanges {
   ngOnChanges(): void {
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoSearchOrbits)) {
       if (this.m_aoSearchOrbits.length > 0) {
-        this.m_bSearchResultsReceieved = true;
+        this.m_bSearchResultsReceived = true;
       }
     }
   }
@@ -130,5 +130,5 @@ export class SearchOrbitResultsComponent implements OnChanges {
 
   openNode(oNode: any) {
     oNode.isOpen = !oNode.isOpen
-   }
+  }
 }

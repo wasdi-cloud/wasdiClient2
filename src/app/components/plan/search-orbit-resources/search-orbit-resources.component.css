@@ -1,6 +1,6 @@
 .secondary-nav {
   height: calc(100vh - 6rem);
-  width: 478px;
+  width: 480px;
 }
 
 .check-circle {
@@ -8,11 +8,7 @@
 }
 
 .filters-container {
-  height: calc(100vh - 9rem);
-}
-
-.satellite-container {
-  height: 60%;
+  overflow-y: scroll;
 }
 
 .filter-instructions {
@@ -24,14 +20,13 @@
 }
 
 .date-inputs {
-  max-width: 100%;
+  max-width:50%
 }
 
 div.floating-buttons {
   background: #FFFFFF;
-  bottom: 0px;
-  width: 22rem;
-  position: sticky;
+  /* width: 22rem; */
+  padding: 1rem;
 }
 
 div.plan-tree-container {

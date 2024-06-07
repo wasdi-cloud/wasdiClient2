@@ -1,23 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 //Service Imports:
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { MapService } from 'src/app/services/map.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
-import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { ProductService } from 'src/app/services/api/product.service';
-import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
-
-//Font Awesome Icon Imports:
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 //Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-
 
 @Component({
   selector: 'app-search-orbit',
@@ -26,8 +16,6 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   host: { 'class': 'flex-fill' }
 })
 export class SearchOrbit implements OnInit, OnDestroy {
-  //Font Awesome Icons: 
-  faSearch = faSearch;
 
   m_bIsVisibleLoadingIcon: boolean;
   m_bIsDisabledSearchButton: boolean = false;
@@ -57,16 +45,10 @@ export class SearchOrbit implements OnInit, OnDestroy {
   }
 
   constructor(
-    private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
-    private m_oMapService: MapService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOpportunitySearchService: OpportunitySearchService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    private m_oProductService: ProductService,
-    private m_oRabbitService: RabbitStompService,
     private m_oTranslate: TranslateService,
-    private m_oWorkspaceService: WorkspaceService
   ) { }
 
   ngOnInit(): void {
@@ -90,11 +72,11 @@ export class SearchOrbit implements OnInit, OnDestroy {
         if (oResponse.length > 0) {
           this.m_aoSatelliteResources = this.setDisabledAllOpportunities(oResponse);
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+          this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger');
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger');
       }
     });
   }
@@ -105,13 +87,13 @@ export class SearchOrbit implements OnInit, OnDestroy {
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON)) {
       sErrorMsg += this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
-      this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
       return false;
     }
 
     // Dates emitted when satellite resource selected - if none
     if (!this.m_oOrbitSearch.acquisitionStartTime || !this.m_aoSelectedSatelliteNodes) {
-      this.m_oNotificationDisplayService.openAlertDialog("Please select at least one Satellite Resource");
+      this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("ORBIT_SELECT_RESOURCE"), '', 'alert');
       return false;
     }
 
@@ -273,7 +255,6 @@ export class SearchOrbit implements OnInit, OnDestroy {
   getSelectedSatelliteResources(oEvent: any): void {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_aoSelectedSatelliteNodes = oEvent;
-      this.m_aoSelectedSatellites = this.cleanSatelliteResources(this.m_aoSelectedSatelliteNodes);
     }
   }
 

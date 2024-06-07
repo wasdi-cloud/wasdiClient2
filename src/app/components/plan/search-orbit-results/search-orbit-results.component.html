@@ -1,15 +1,14 @@
 <div class="secondary-nav d-flex flex-column gap-2">
     <div class="d-flex flex-column justify-content-start mb-2 gap-2">
-        <div class="location-header">Plan results</div>
-        <app-button class="align-self-start" [m_bOutline]="true" [m_sLabel]="'BACK TO PLAN'"
+        <div class="location-header">{{"ORBIT_INFO_RESULTS_HEADER" | translate}}</div>
+        <app-button class="align-self-start" [m_bOutline]="true" [m_sLabel]="'DIRECTIVE_DD_BACK'|translate"
             [m_sIconLeft]="'arrow_back'" [m_sSize]="'small'" (click)="navigateToFilters()"></app-button>
     </div>
     <div class="d-flex flex-row justify-content-between">
-        <div class="search-header">Results</div>
-        <!-- <app-button [m_sSize]="'small'" [m_bOutline]="true"></app-button> -->
+        <div class="search-header">{{'ORBIT_INFO_RESULTS' | translate}}</div>
     </div>
-    <app-invader *ngIf="!m_bSearchResultsReceieved"></app-invader>
-    <div class="satellite-container flex-fill" *ngIf="m_bSearchResultsReceieved">
+    <app-invader *ngIf="!m_bSearchResultsReceived"></app-invader>
+    <div class="satellite-container flex-fill" *ngIf="m_bSearchResultsReceived">
         <div *ngIf="m_aoSearchOrbits" class="results-tree">
             <div *ngFor="let oResult of m_aoSearchOrbits">
                 <div class="product d-flex flex-row align-items-center gap-4">

@@ -794,7 +794,10 @@
     "ORBIT_INFO_SENS_NAME": "Sensor name",
     "ORBIT_INFO_SENS_TYPE": "Sensor type",
     "ORBIT_INFO_SWATH_NAME": "Swath name",
- 
+    "ORBIT_INFO_RESULTS": "Results",
+    "ORBIT_INFO_RESULTS_HEADER": "Plan results",
+    "ORBIT_SELECT_RESOURCE": "Please select at least one Satellite Resource",
+    
     "DIRECTIVE_DD_SEARCH": "Search...",
     "DIRECTIVE_DD_BACK": "Back",
     "DIRECTIVE_DD_SAVE_SELECTION": "Save Selection",

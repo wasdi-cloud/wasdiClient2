@@ -44,7 +44,6 @@ export class SearchOrbitResourcesComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     //Set default Date Data: 
     this.setDefaultDateData();
-
   }
 
   ngAfterViewChecked() {
@@ -80,6 +79,7 @@ export class SearchOrbitResourcesComponent implements OnInit, AfterViewChecked {
     });
     return oData;
   }
+
   setDefaultDateData() {
     this.m_oStartDate = new Date();
     this.m_oEndDate = new Date();
