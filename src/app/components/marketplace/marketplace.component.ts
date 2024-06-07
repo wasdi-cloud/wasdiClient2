@@ -1,19 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 
 //Service Imports:
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { ConstantsService } from 'src/app/services/constants.service';
 import { ImageService } from 'src/app/services/api/image.service';
-import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { TranslateService } from '@ngx-translate/core';
 
 //Angular Material Imports:
-import { MatDialog } from "@angular/material/dialog"
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { HeaderService } from 'src/app/services/header.service';
 
 interface AppFilter {
   categories: any[];
@@ -66,10 +60,8 @@ export class MarketplaceComponent implements OnInit {
 
   m_sDeveloperSearch: string = "";
   constructor(
-    private m_oHeaderService: HeaderService,
     private m_oImageService: ImageService,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService,
     private m_oTranslate: TranslateService,
   ) { }
@@ -106,12 +98,12 @@ export class MarketplaceComponent implements OnInit {
             this.m_bLoadMoreEnabled = false;
           }
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
         }
         this.m_bWaiting = false;
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
         this.m_bWaiting = false;
       }
     })
@@ -186,11 +178,11 @@ export class MarketplaceComponent implements OnInit {
             this.m_bLoadMoreEnabled = false;
           }
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+          this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
       }
     });
   }
@@ -227,8 +219,7 @@ export class MarketplaceComponent implements OnInit {
     } else {
       this.m_aoSelectedPublishers.splice(iDeveloperIndex, 1);
     }
-    //Add Selected Developers to the App Filter publishers and then get applicatinons
-    this.m_oAppFilter.publishers = this.m_aoSelectedPublishers;
+    //Add Selected Developers to the App Filter publishers and then get applications
     this.m_oAppFilter.page = 0;
     this.getApplications();
 

@@ -109,8 +109,6 @@ import { WorkflowsDialogComponent } from './components/edit/edit-toolbar/toolbar
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ProcessLogsDialogComponent } from './components/edit/process-logs-dialog/process-logs-dialog.component';
 import { ImportDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
-import { RxStompService } from './services/rx-stomp.service';
-import { rxStompServiceFactory } from './shared/factories/rx-stomp-service-factory';
 import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ProcessorTabUiComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-ui/processor-tab-ui.component';
 import { ProcessorTabStoreComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-store/processor-tab-store.component';
@@ -358,10 +356,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     JwtHelperService,
     MatDatepickerModule,
     MatNativeDateModule,
-    {
-      provide: RxStompService,
-      useFactory: rxStompServiceFactory,
-    },
     { provide: RabbitStompService },
     {
       provide: APP_INITIALIZER,

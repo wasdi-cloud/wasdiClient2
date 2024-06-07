@@ -1,13 +1,10 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { animate, style, transition, trigger } from '@angular/animations';
 
 //Import Services: 
-import { AlertDialogTopService } from 'src/app/services/alert-dialog-top.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FeedbackService } from 'src/app/services/api/feedback.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { ProjectService } from 'src/app/services/api/project.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
@@ -19,7 +16,6 @@ import { User } from 'src/app/shared/models/user.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 import { NewWorkspaceDialogComponent } from '../workspaces/new-workspace-dialog/new-workspace-dialog.component';
-import { HeaderService } from 'src/app/services/header.service';
 import { MenuItems, Documentation } from './menu-list-item/menu-items';
 
 //Import Utilities: 
@@ -30,7 +26,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, OnChanges {
+export class NavbarComponent implements OnInit {
   m_bIsNavbarOpen: boolean = false;
 
   sActiveWorkspaceId: string | null = null;
@@ -54,14 +50,11 @@ export class NavbarComponent implements OnInit, OnChanges {
   m_oDocumentation = Documentation;
 
   constructor(
-    private m_oAlertDialog: AlertDialogTopService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFeedbackService: FeedbackService,
-    private m_oHeaderService: HeaderService,
-    private m_oProjectService: ProjectService,
-    private m_oRouter: Router,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oRouter: Router,
     public m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
   ) {
@@ -82,7 +75,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.getAccountType();
 
     this.m_oConstantsService.m_oActiveWorkspaceSubscription.subscribe(oWorkspace => {
-      if(FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace)) {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace)) {
         this.m_oActiveWorkspace = null;
         this.m_bEditIsActive = false;
       } else {
@@ -102,7 +95,7 @@ export class NavbarComponent implements OnInit, OnChanges {
               this.m_oActiveWorkspace = oResponse;
             },
             error: oError => {
-              this.m_oAlertDialog.openDialog(4000, "Error in retreiving Workspace Information")
+              this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("EDITOR_WORKSPACE_REFRESH_ERROR"), '', 'alert')
             }
           })
         } else if (oEvent.url.includes('appDetails') || oEvent.url.includes('appui')) {
@@ -116,13 +109,8 @@ export class NavbarComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-      
-  }
-
   setActiveTab(sActiveTab: string) {
     this.m_sSelectedTab = sActiveTab;
-    this.m_oHeaderService.setLocation(sActiveTab);
   }
 
   logout() {
