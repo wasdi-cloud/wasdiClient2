@@ -367,7 +367,7 @@ export class EditComponent implements OnInit, OnDestroy {
     })
   }
 
-  navigateToWorkspacs() {
+  navigateToWorkspaces() {
     this.m_oRouter.navigateByUrl('/workspaces')
   }
 

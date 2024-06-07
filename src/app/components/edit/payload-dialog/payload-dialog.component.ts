@@ -5,6 +5,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payload-dialog',
@@ -16,7 +17,7 @@ export class PayloadDialogComponent implements OnInit {
   m_oProcess = this.m_oData.process;
   m_sActiveTab: string = "payload"
   m_sPayloadString: string = "";
-  m_bIsWasdiDasboard: boolean = false;
+  m_bIsWasdiDashboard: boolean = false;
   m_sGraphType: string;
 
   //Chart Configurations: 
@@ -76,7 +77,7 @@ export class PayloadDialogComponent implements OnInit {
 
   m_sTagColor: string = "red"
 
-  m_sCopyLabel: string = "COPY PAYLOAD"
+  m_sCopyLabel: string = this.m_oTranslate.instant("DIALOG_PAYLOAD_COPY");
 
 
   constructor(
@@ -84,7 +85,8 @@ export class PayloadDialogComponent implements OnInit {
     private m_oClipboard: Clipboard,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<PayloadDialogComponent>,
-    private m_oNotificationDisplayService: NotificationDisplayService
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -102,8 +104,9 @@ export class PayloadDialogComponent implements OnInit {
    * @returns {void}
    */
   getPayloadString(): void {
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_PAYLOAD_FETCH_ERROR")
     if (!this.m_oProcess.payload) {
-      this.m_sPayloadString = "No payload information is available for the selected process";
+      this.m_sPayloadString = this.m_oTranslate.instant("DIALOG_PAYLOAD_NO_INFO");
     } else {
       this.m_sPayloadString = this.m_oData.process.payload;
 
@@ -112,7 +115,7 @@ export class PayloadDialogComponent implements OnInit {
         let sPrettyPrint = JSON.stringify(oParsed, null, 2);
         this.m_sPayloadString = sPrettyPrint;
       } catch (error) {
-        this.m_oNotificationDisplayService.openAlertDialog("Problem getting Payload String");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
       }
 
     }
@@ -121,7 +124,7 @@ export class PayloadDialogComponent implements OnInit {
   //If WASDI Dashboard value is defined, show the m_oData as a chart:
   checkWasdiDashboard(oPayload: any) {
     if (oPayload.hasOwnProperty('wasdi_dashboard')) {
-      this.m_bIsWasdiDasboard = true;
+      this.m_bIsWasdiDashboard = true;
       console.log(oPayload.wasdi_dashboard)
       this.m_aoChartsInformation = oPayload.wasdi_dashboard;
       this.m_sActiveTab = 'dashboard';
@@ -162,10 +165,9 @@ export class PayloadDialogComponent implements OnInit {
 
   copyPayload() {
     this.m_oClipboard.copy(this.m_sJsonSample);
-
-    this.m_sCopyLabel = "COPIED!";
+    this.m_sCopyLabel = this.m_oTranslate.instant("KEY_PHRASES.COPIED");
     setTimeout(() => {
-      this.m_sCopyLabel = "COPY PAYLOAD";
+      this.m_sCopyLabel = this.m_oTranslate.instant("DIALOG_PAYLOAD_COPY");
     }, 1000)
   }
 

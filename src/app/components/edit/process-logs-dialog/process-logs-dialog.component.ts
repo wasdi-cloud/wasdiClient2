@@ -1,6 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { faDownload, faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { CatalogService } from 'src/app/services/api/catalog.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
@@ -11,6 +10,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 
 
 import { Clipboard } from '@angular/cdk/clipboard';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-process-logs-dialog',
@@ -33,15 +33,11 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
   m_sTagColor: string = "";
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private m_oAuthService: AuthService,
-    private m_oCatalogService: CatalogService,
-    private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog,
+    private m_oClipboard: Clipboard,
     private m_oDialogRef: MatDialogRef<ProcessLogsDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    private m_oClipboard: Clipboard
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -71,8 +67,8 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
 
   //Get the number of Logs for this processor
   getLogsCount(oProcessId: any) {
-    let sErrorMsg: string = 'GURU MEDITATION<br>ERROR READING PROCESSOR LOGS';
-    let sErrorRefreshMsg: string = 'GURU MEDITATION<br>ERROR REFRESHING PROCESSOR STATUS';
+    let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION");
+    let sErrorRefreshMsg: string = this.m_oTranslate.instant("DIALOG_LOGS_REFRESH_ERROR");
     if (!oProcessId) {
       return false;
     }
@@ -84,7 +80,7 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorRefreshMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorRefreshMsg, sErrorHeader, 'danger');
       }
     });
     return true;
@@ -218,6 +214,6 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
 
   copyProcessObjId() {
     this.m_oClipboard.copy(this.m_oProcess.processObjId);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Process Workspace Id to clipboard!");
-  }  
+    this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD"), '', 'success-snackbar');
+  }
 }

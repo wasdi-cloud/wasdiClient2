@@ -1,5 +1,6 @@
 {
     "KEY_PHRASES" : {
+        "APP_NAME": "App Name", 
         "APPLY": "Apply",
         "BACK": "Back", 
         "CANCEL": "Cancel",
@@ -15,13 +16,17 @@
         "LOAD_MORE": "Load More",
         "NAME": "Name",
         "OR": "Or",
-        "SAVE": "Save",
+        "PRODUCT_NAME": "Product Name",
         "REMOVED": "Removed",
+        "SAVE": "Save",
         "SAVE_CHANGES": "Save Changes",
+        "SEARCH": "Search",
         "SEND": "Send",
         "SUCCESS": "Success",
         "SHARE": "Collaborators"
     },
+    "PAGINATOR_PER_PAGE": "Items per Page",
+    "PAGINATOR_ITEMS": "Items",
 
     "BTN_SEARCH": "Search",
     "BTN_IMPORT": "Import",
@@ -187,6 +192,14 @@
     "EDITOR_PRODUCTS_WS_INFO": "Workspace Info",
     "EDITOR_PRODUCT_REMOVE": "Confirm product removal", 
     "EDITOR_PRODUCTS_REMOVE": "Confirm products removal",
+    "EDITOR_NOTEBOOK_PREPARE": "WASDI is preparing your notebook",
+    "EDITOR_NAVIGATION": "Navigation",
+    "EDITOR_LAYERS_OPTIONS": "Layer style options",
+    "EDITOR_DOWNLOAD_COMPLETE": "Download Complete!",
+    "EDITOR_DOWNLOAD_ERROR": "There was an error downloading the product",
+    "EDITOR_NODE_UPDATE": "Node Updated",
+    "EDITOR_NODE_UPDATE_ERROR": "Error updating node",
+    "EDITOR_WORKSPACE_REFRESH_ERROR": "Error in refreshing workspace information",
     
     "IMPORT_PRODUCTS_PER_PAGE_LABEL": "Products per page",
     "IMPORT_PAGE_LABEL": "Page",
@@ -258,9 +271,15 @@
     "DIALOG_FORMAT_JSON_ERROR": "Could not format your JSON input. Please ensure it is a valid JSON",
     "DIALOG_PARSE_JSON_ERROR": "There was an error in parsing the JSON payload", 
     
+    "DIALOG_PRODUCT_EDITOR_TITLE": "Product details",
     "DIALOG_PRODUCT_EDITOR_INFO_DIALOG_ORIGINAL_NAME_LABEL": "Original name",
     "DIALOG_PRODUCT_EDITOR_INFO_DIALOG_FRIENDLY_NAME_LABEL": "Friendly Name",
     "DIALOG_PRODUCT_EDITOR_INFO_DIALOG_STYLE": "Style",
+    "DIALOG_PRODUCT_EDITOR_UNAVAILABLE": "Unavailable",
+    "DIALOG_PRODUCT_EDITOR_SIZE": "Product Size",
+    "DIALOG_PRODUCT_EDITOR_STYLE_ERROR": "Could not get styles",
+    "DIALOG_PRODUCT_EDITOR_UPDATE_ERROR": "Could not update product",
+    "DIALOG_PRODUCT_EDITOR_UPDATE_SUCCESS": "Product updated",
     
     "DIALOG_WAPPS_ITEMS_FILTER": "Search by App Name...",
     "DIALOG_WAPPS_JSON_PARAMS": " Parameters (JSON)",
@@ -372,8 +391,6 @@
     "DIALOG_TITLE_WAPPS": "WASDI Apps",
     "DIALOG_TITLE_STYLES": "WASDI Styles",
     "DIALOG_TITLE_PAYLOAD": "View Payload",
-    
-    "DIALOG_PAYLOAD_PAYLOAD": "Payload",
     
     "DIALOG_EDIT_USER": "Update user info",
     "DIALOG_EDIT_USER_OLD_PASSWORD": "Old password",
@@ -521,6 +538,8 @@
     "DIALOG_LOGS_OPERATION_TYPE": "Operation Type",
     "DIALOG_LOGS_OPERATION_SELECT": "Select Operation",
     "DIALOG_LOGS_SEARCH_NAME": "Search by name",
+    "DIALOG_LOGS_ACTION": "Action",
+    "DIALOG_LOGS_REFRESH_ERROR": "Error refreshing processor status",
   
     "DIALOG_PRODUCT_INFO_TITLE": "Product info",
     "DIALOG_PRODUCT_INFO_PROP": "Property",
@@ -655,6 +674,9 @@
     "DIALOG_STYLE_FILE_ERROR": "Error in updating Style File",
   
     "DIALOG_PAYLOAD_COPY": "Copy payload",
+    "DIALOG_PAYLOAD_DASHBOARD": "Dashboard",
+    "DIALOG_PAYLOAD_NO_INFO": "No payload information is available for the selected process",
+    "DIALOG_PAYLOAD_FETCH_ERROR": "Problem getting Payload String",
  
     "DIALOG_WORKSPACE_DETAILS_APPLY": "Apply",
     "DIALOG_WORKSPACE_DETAILS_CLOSE": "Close",
@@ -734,12 +756,16 @@
     "METADATA_ATTRIBUTE_LIST": "Attributes list",
     "METADATA_NAME": "Name",
     "METADATA_DESCRIPTION": "Description",
+    "METADATA_GENERATING": "Generating metadata",
+    "METADATA_NONE": "No Metadata found",
  
     "DELETE_PROCESS_QUESTION": "Are you sure to kill this running process?",
     "DELETE_PROCESS_YES": "Yeah, Kill it",
     "DELETE_PROCESS_NO": "Uhm, no, not really",
     "DELETE_PROCESS_ERROR": "An error occurred while killing the process",
  
+    "PROCESSES_BAR_RUNNING_PROCESSES_ERROR": "Could not get running processes",
+
     "DOWNLOAD_IN_WS_TITLE": "Workspaces List",
     "DOWNLOAD_IN_WS_NAME": "Workspace name",
     "DOWNLOAD_IN_WS_OWNER": "Owner",
@@ -923,13 +949,11 @@
     "MENU_SHARE_PRODUCT": "Share Product Options",
     "MENU_EDIT_STYLES": "Edit Styles",
     "MENU_EDIT_PRODUCT_PROPERTIES": "Product Properties", 
-
    
     "MENU_DELETE_MANY_1": "Delete ",
     "MENU_DELETE_MANY_2": " products",
     "MENU_DELETE_SINGLE": "Delete product",
 
-    
     "MARKET_SEARCH_APP": "Search Apps",
     "MARKET_ABOVE": "Above",
     "MARKET_NAME": "Name",

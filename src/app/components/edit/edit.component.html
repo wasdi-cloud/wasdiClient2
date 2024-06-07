@@ -3,9 +3,9 @@
     <div class="editor-sidebar d-flex flex-column">
         <div class="workspace-location d-flex flex-column">
             <div class="d-flex flex-row gap-3 align-items-center">
-                <app-button class="align-self-start" [m_sLabel]="'BACK'" [m_bOutline]="true" [m_sSize]="'small'"
-                    [m_sIconLeft]="'arrow_left'" (click)="navigateToWorkspacs()"></app-button>
-                <div class="workspace-subheading">Id - <span class="workspace-id-copy"
+                <app-button class="align-self-start" [m_sLabel]="'KEY_PHRASES.BACK' | translate" [m_bOutline]="true"
+                    [m_sSize]="'small'" [m_sIconLeft]="'arrow_left'" (click)="navigateToWorkspaces()"></app-button>
+                <div class="workspace-subheading">{{"DIALOG_WS_INFO_ID" | translate}} - <span class="workspace-id-copy"
                         (click)="copyWorkspaceId()">{{m_oActiveWorkspace?.workspaceId}}</span></div>
             </div>
             <div>

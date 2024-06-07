@@ -1,9 +1,9 @@
 <div class="parent d-flex flex-column pt-1">
     <div class="d-flex flex-row pb-3">
-        <app-tab [m_sLabel]="'Navigation'" [m_bIsDisabled]="false" [m_bIsActive]="m_sActiveTab === 'nav'"
-            (click)="setActiveTab('nav')"></app-tab>
-        <app-tab [m_sLabel]="'Layers'" [m_bIsDisabled]="false" [m_bIsActive]="m_sActiveTab === 'layers'"
-            (click)="setActiveTab('layers')"></app-tab>
+        <app-tab [m_sLabel]="'EDITOR_NAVIGATION'| translate" [m_bIsDisabled]="false"
+            [m_bIsActive]="m_sActiveTab === 'nav'" (click)="setActiveTab('nav')"></app-tab>
+        <app-tab [m_sLabel]="'DIALOG_GET_CAPABILITIES_LAYERS'| translate" [m_bIsDisabled]="false"
+            [m_bIsActive]="m_sActiveTab === 'layers'" (click)="setActiveTab('layers')"></app-tab>
     </div>
     <!-- Navigation and Layers content -->
     <div class="map-container-panel flex-fill h-100" [hidden]="m_sActiveTab !== 'nav'">
@@ -14,7 +14,7 @@
             <li *ngFor="let oBand of m_aoVisibleBands" class="list-group-item d-flex flex-column mt-2">
                 <div class="layer-title d-flex flex-row  justify-content-between gap-2">
                     <div class="legend-container justify-self-start align-self-start d-flex flex-row"
-                        matTooltip="Layer Style Options" (click)="showLayerLegend(oBand)">
+                        matTooltip="{{'EDITOR_LAYERS_OPTIONS' | translate}}" (click)="showLayerLegend(oBand)">
                         <div class="legend-dot"></div>
                         <div class="legend-dot dot-2"></div>
                         <div class="legend-dot dot-3"></div>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="font-bold d-flex flex-row align-items-center gap-2 pe-2">
                     Opacity:
-                    <div class="slider-container flex-fill"> 
+                    <div class="slider-container flex-fill">
                         <app-slider [m_bHasThumbLabel]="true" [m_iValue]="m_iOpacityVal"
                             (m_oSelectionChange)="setOpacity($event, oBand.layerId)"></app-slider>
                     </div>

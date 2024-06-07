@@ -147,16 +147,18 @@ export class ProductListItemComponent {
    * Retrieve the product's metadata
    */
   getProductMetaData() {
+    let sNoneFound: string = this.m_oTranslate.instant("METADATA_NONE")
+    let sGenerating: string = this.m_oTranslate.instant("METADATA_GENERATING")
     if (this.m_bHasMetadata === false) {
-      let sWorkpace = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-      this.m_oProductService.getProductMetadata(this.m_oProduct.fileName, sWorkpace).subscribe({
+      let sWorkspace = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+      this.m_oProductService.getProductMetadata(this.m_oProduct.fileName, sWorkspace).subscribe({
         next: oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oNotificationDisplayService.openAlertDialog("No Metadata found", "Alert", "danger");
+            this.m_oNotificationDisplayService.openAlertDialog(sNoneFound, "", "danger");
           } else {
 
             if (oResponse.attributes == null && oResponse.elements == null && oResponse.name.startsWith("Generating Metadata")) {
-              this.m_oNotificationDisplayService.openAlertDialog("Generating Metadata", "Info", "alert");
+              this.m_oNotificationDisplayService.openAlertDialog(sGenerating, this.m_oTranslate.instant("IMPORT_TOOLTIP_INFO"), "alert");
             }
             else {
               this.m_bHasMetadata = true;

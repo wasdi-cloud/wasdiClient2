@@ -9,6 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dial
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { TranslateService } from '@ngx-translate/core';
 
 interface Style {
   description: string,
@@ -52,6 +53,7 @@ export class ProductPropertiesDialogComponent implements OnInit {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
     private m_oStyleService: StyleService,
+    private m_oTranslate: TranslateService,
   ) { }
 
   ngOnInit(): void {
@@ -69,17 +71,19 @@ export class ProductPropertiesDialogComponent implements OnInit {
    * Get the list of styles:
    */
   getStyles(): void {
+    let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION")
+    let sError = this.m_oTranslate.instant("DIALOG_PRODUCT_EDITOR_STYLE_ERROR")
     this.m_oStyleService.getStylesByUser().subscribe(
       {
         next: oResponse => {
           if (oResponse.length === 0) {
-            this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR GETTING STYLES")
+            this.m_oNotificationDisplayService.openAlertDialog(sError, sErrorHeader, 'danger')
           } else {
             this.m_asStyles = oResponse;
           }
         },
         error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR GETTING STYLES");
+          this.m_oNotificationDisplayService.openAlertDialog(sError, sErrorHeader, 'danger');
         }
       })
   }
@@ -98,6 +102,10 @@ export class ProductPropertiesDialogComponent implements OnInit {
    * @returns {boolean}
    */
   updateProduct(): boolean {
+    let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION");
+    let sErrorMsg = this.m_oTranslate.instant("DIALOG_PRODUCT_EDITOR_UPDATE_ERROR")
+    let sSuccessMsg = this.m_oTranslate.instant("DIALOG_PRODUCT_EDITOR_UPDATE_SUCCESS")
+
     let oOldMetaData = this.m_oProduct.metadata;
     this.m_oProduct.metadata = null;
 
@@ -120,12 +128,12 @@ export class ProductPropertiesDialogComponent implements OnInit {
     this.m_oProductService.updateProduct(oUpdatedViewModel, this.m_sWorkspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          this.m_oNotificationDisplayService.openSnackBar("Product Updated");
+          this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, '', 'success-snackbar');
           this.onDismiss(true);
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR: IMPOSSIBLE TO UPDATE THE PRODUCT");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sErrorHeader, 'danger');
         return false;
       }
     })
@@ -146,8 +154,9 @@ export class ProductPropertiesDialogComponent implements OnInit {
   }
 
   copyToClipboard(sFileName: string) {
+    let sCopied = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD")
     this.m_oClipboard.copy(sFileName);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Original Name to clipboard!");
+    this.m_oNotificationDisplayService.openSnackBar(sCopied, '', 'success-snackbar');
   }
   /**
    * Handle dialog close

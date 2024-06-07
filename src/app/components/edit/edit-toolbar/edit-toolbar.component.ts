@@ -15,6 +15,7 @@ import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/wor
 
 import { Product } from 'src/app/shared/models/product.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -44,7 +45,8 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    private m_oRabbitStompService: RabbitStompService
+    private m_oRabbitStompService: RabbitStompService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit() {
@@ -94,9 +96,9 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     if (this.m_oConstantsService.checkProjectSubscriptionsValid() === false) {
       return false;
     } else {
+      let sMessage = this.m_oTranslate.instant("EDITOR_NOTEBOOK_PREPARE");
       //If user has subscription and project, prepare notebook:
       this.m_oConsoleService.createConsole(this.m_oConstantsService.getActiveWorkspace().workspaceId).subscribe(oResponse => {
-        let sMessage = "WASDI is preparing your notebook."
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
 
           if (oResponse.stringValue.includes("http")) {
@@ -106,7 +108,6 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
             this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger');
           }
         }
-
       });
       return true;
     }

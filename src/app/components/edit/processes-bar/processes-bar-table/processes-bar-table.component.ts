@@ -9,6 +9,7 @@ import { ProcessStatuses, ProcessTypes } from '../process-status-types';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { MatDialog } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-processes-bar-table',
@@ -88,13 +89,15 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     @Inject(MAT_BOTTOM_SHEET_DATA) private m_oData: any,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService
+    private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.setActiveWorkspace(this.m_oData.workspace);
 
     if (this.m_oActiveWorkspace.workspaceId) {
+      let sErrorMsg: string = this.m_oTranslate.instant("PROCESSES_BAR_RUNNING_PROCESSES_ERROR")
       this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_oActiveWorkspace.workspaceId);
 
       this.m_oProcessWorkspaceService.getProcessesRunning().subscribe({
@@ -102,11 +105,11 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
           if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
             this.m_aoProcessesRunning = oResponse;
           } else {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
           }
         },
         error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog("Error in getting running processes");
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
         }
       });
     }

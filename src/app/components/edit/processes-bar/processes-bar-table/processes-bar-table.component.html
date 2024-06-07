@@ -61,24 +61,25 @@
                         {{getDuration(oProcessLog)}}
                     </td>
                     <td class="d-flex flex-row">
-                        <span class="material-symbols-outlined" matTooltip="Logs" (click)="openLogsDialog(oProcessLog)">
+                        <span class="material-symbols-outlined" matTooltip="{{'PROCESSING_BAR_LOGS'| translate}}"
+                            (click)="openLogsDialog(oProcessLog)">
                             subtitles
                         </span>
-                        <span class="material-symbols-outlined" matTooltip="Payload" *ngIf="oProcessLog.payload"
-                            (click)="openPayloadDialog(oProcessLog)">
+                        <span class="material-symbols-outlined" matTooltip="{{'PROCESSING_BAR_PAYLOAD' | translate}}"
+                            *ngIf="oProcessLog.payload" (click)="openPayloadDialog(oProcessLog)">
                             data_object
                         </span>
                         <span class="material-symbols-outlined" style="cursor: default; color: gray;"
-                            matTooltip="Payload" *ngIf="!oProcessLog.payload">
+                            matTooltip="{{'PROCESSING_BAR_PAYLOAD' | translate}}" *ngIf="!oProcessLog.payload">
                             data_object
                         </span>
-                        <span class="cancel-icon material-symbols-outlined" matTooltip="Delete"
+                        <span class="cancel-icon material-symbols-outlined" matTooltip="{{'WAP_DELETE' | translate}}"
                             *ngIf="showKillButton(oProcessLog)" (click)="deleteProcess(oProcessLog)">
                             cancel
                         </span>
                         <span class="cancel-icon material-symbols-outlined"
-                            style="cursor: default !important; color: gray !important;" matTooltip="Delete"
-                            *ngIf="!showKillButton(oProcessLog)">
+                            style="cursor: default !important; color: gray !important;" matTooltip="{{'WAP_DELETE' |
+                            translate}}" *ngIf="!showKillButton(oProcessLog)">
                             cancel
                         </span>
                     </td>
@@ -86,7 +87,7 @@
             </tbody>
         </table>
         <div class="d-flex flex-row justify-content-center w-100 my-2">
-            <app-button *ngIf="m_bIsLoadMoreBtnClickable" [m_sLabel]="'Load more'"
+            <app-button *ngIf="m_bIsLoadMoreBtnClickable" [m_sLabel]="'KEY_PHRASES.LOAD_MORE' | translate"
                 (click)="getAllProcessesLogs()"></app-button>
         </div>
     </div>

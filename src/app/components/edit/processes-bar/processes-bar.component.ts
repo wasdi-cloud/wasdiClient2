@@ -100,7 +100,7 @@ export class ProcessesBarComponent implements OnInit {
    */
   receivedNewProductMessage(oMessage: any) {
     let sMessage: string = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED")
-    this.m_oNotificationDisplayService.openSnackBar(sMessage);
+    this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'generic');
 
     //Emit the message payload and file name to parent: 
 
@@ -118,7 +118,7 @@ export class ProcessesBarComponent implements OnInit {
       this.m_oProcessWorkspaceService.getSummary().subscribe({
         next: oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
           } else {
             this.m_oSummary = oResponse;
             this.m_iNumberOfProcesses = oResponse.userProcessRunning;
@@ -126,7 +126,7 @@ export class ProcessesBarComponent implements OnInit {
           }
         },
         error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog(sMessage)
+          this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert')
         }
       });
     });

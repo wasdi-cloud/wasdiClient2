@@ -320,11 +320,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
           a.download = sFileName;
           a.click();
           URL.revokeObjectURL(objectUrl);
-          this.m_oNotificationDisplayService.openSnackBar("Download Complete");
+          this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("EDITOR_DOWNLOAD_COMPLETE"), '', 'success-snackbar');
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("There was an error dowloading the product");
+        this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("EDITOR_DOWNLOAD_ERROR"), '', 'alert');
       }
     });
 

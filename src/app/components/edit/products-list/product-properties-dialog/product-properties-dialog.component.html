@@ -1,34 +1,38 @@
 <div class="apps-dialog d-flex flex-column justify-content-between" style="height: 100%">
-    <div class="dialog-header d-flex flex-row justify-content-between font-bold">Product details
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">{{ "DIALOG_PRODUCT_EDITOR_TITLE" |
+        translate}}
         <span class="close-btn material-symbols-outlined" (click)="onDismiss(false)"> close</span>
     </div>
     <div class="dialog-content flex-fill d-flex flex-column gap-2">
         <div class="product-info-container d-flex flex-row gap-2">
             <div class="info-container" style="width: 70%">
-                <div class="font-bold">Original name</div>
+                <div class="font-bold">{{"DIALOG_PRODUCT_EDITOR_INFO_DIALOG_ORIGINAL_NAME_LABEL" | translate}}</div>
                 <p (click)="copyToClipboard(m_oProduct.fileName)">{{m_oProduct.fileName}}</p>
 
             </div>
             <div class="info-container">
-                <div class="font-bold">Product size</div>
-                <div>Unavailable</div>
+                <div class="font-bold">{{"DIALOG_PRODUCT_EDITOR_SIZE"| translate}}</div>
+                <div>{{"DIALOG_PRODUCT_EDITOR_UNAVAILABLE"| translate}}</div>
             </div>
         </div>
-        <app-input-field [m_sLabel]="'Friendly Name'" [m_sInputValue]="m_oProduct.productFriendlyName"
+        <app-input-field [m_sLabel]="'DIALOG_PRODUCT_EDITOR_INFO_DIALOG_FRIENDLY_NAME_LABEL' | translate"
+            [m_sInputValue]="m_oProduct.productFriendlyName"
             (m_oInputChange)="setProductFriendlyName($event)"></app-input-field>
         <div class="textarea-wrapper" style="height: 40%">
-            <app-textarea [m_sLabel]="'Description'" [m_sInputString]="m_oProduct.description"
+            <app-textarea [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate" [m_sInputString]="m_oProduct.description"
                 (keyup)="setDescription($event)"></app-textarea>
         </div>
         <div class="d-flex flex-row align-items-center gap-3">
-            <app-autocomplete class="flex-fill" [m_sLabel]="'Apply Style'" [m_aoInputs]="m_asStyles"
-                [m_sPlaceholder]="m_oProduct.style? m_oProduct.style : 'Select style'"
+            <app-autocomplete class="flex-fill" [m_sLabel]="'DIALOG_IMPORT_UPLOAD_STYLE'| translate"
+                [m_aoInputs]="m_asStyles"
+                [m_sPlaceholder]="m_oProduct.style? m_oProduct.style : ('DIALOG_IMPORT_SELECT_STYLE' | translate)"
                 (m_oSelectionChange)="setStyleSelection($event)"></app-autocomplete>
         </div>
 
     </div>
     <div class="dialog-footer d-flex flex-row justify-content-end gap-3">
-        <app-button [m_sLabel]="'Cancel'" [m_bOutline]="true" (click)="onDismiss(false)"></app-button>
-        <app-button [m_sLabel]="'Save Changes'" (click)="updateProduct()"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true"
+            (click)="onDismiss(false)"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.SAVE_CHANGES' | translate" (click)="updateProduct()"></app-button>
     </div>
 </div>

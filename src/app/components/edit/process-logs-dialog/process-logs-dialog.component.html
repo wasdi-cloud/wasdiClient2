@@ -1,24 +1,26 @@
 <div class="apps-dialog d-flex flex-column justify-content-between" style="height: 100%;">
     <div class="dialog-header d-flex flex-row justify-content-between font-bold">
         <span>
-            Wasdi processor logs ID:
+            {{"DIALOG_LOGS_TITLE" | translate}}:
             <span class="click-and-copy" (click)="copyProcessObjId()"> {{m_oProcess.processObjId}}</span>
         </span>
         <span class="close-btn material-symbols-outlined" (click)="dismiss()"> close</span>
     </div>
     <div class="payload-info d-flex flex-row align-items-center mb-3">
         <div>
-            {{m_oProcess.operationType === 'RUNPROCESSOR' ? 'App name' : 'Product name'}}: {{m_oProcess.productName?
-            m_oProcess.productName: 'N/A'}} | Status
+            {{m_oProcess.operationType === 'RUNPROCESSOR' ? ('KEY_PHRASES.APP_NAME' | translate) :
+            ('KEY_PHRASES.PRODUCT_NAME' | translate) }}: {{m_oProcess.productName?
+            m_oProcess.productName: 'N/A'}} | {{"DIALOG_LOGS_STATUS" | translate}}
             <span class="category-tag" [ngClass]="m_sTagColor">{{m_oProcess.status}}</span>
         </div>
     </div>
     <div class="log-filter-container d-flex flex-row justify-content-between">
-        <app-input-field class="flex-fill" style="max-width: 50%;" [m_sLabel]="'Search into text'"
-            [m_sPlaceholder]="'Search'" (m_oInputChange)="setSearchString($event)"></app-input-field>
+        <app-input-field class="flex-fill" style="max-width: 50%;" [m_sLabel]="'DIALOG_LOGS_SEARCH_TEXT' | translate"
+            [m_sPlaceholder]="'BTN_SEARCH' | translate" (m_oInputChange)="setSearchString($event)"></app-input-field>
         <div class="buttons-container align-self-end d-flex flex-row gap-2">
-            <app-button [m_sLabel]="'Download Logs'" [m_sIconLeft]="'download'"></app-button>
-            <app-button [m_sLabel]="'Refresh'" [m_sIconLeft]="'refresh'" [m_bMuted]="true"
+            <app-button [m_sLabel]="'DIALOG_LOGS_DOWNLOAD' | translate" [m_sIconLeft]="'download'"
+                (click)="downloadLogFile()"></app-button>
+            <app-button [m_sLabel]="'DIALOG_LOGS_REFRESH' | translate" [m_sIconLeft]="'refresh'" [m_bMuted]="true"
                 (click)="refreshLogs()"></app-button>
         </div>
     </div>
@@ -26,8 +28,8 @@
         <table>
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Action</th>
+                    <th>{{"DIALOG_LOGS_DATE" | translate}}</th>
+                    <th>{{"DIALOG_LOGS_ACTION" | translate}}</th>
                 </tr>
             </thead>
             <tbody>

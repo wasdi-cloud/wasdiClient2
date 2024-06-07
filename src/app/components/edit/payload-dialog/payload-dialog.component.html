@@ -1,16 +1,16 @@
 <div class="apps-dialog d-flex flex-column h-100">
     <div class="dialog-header d-flex flex-row justify-content-between font-bold mb-1">
         <div class="d-flex flex-row">
-            <app-tab [m_sLabel]="'Payload'" (click)="setActiveTab('payload')"
+            <app-tab [m_sLabel]="'DIALOG_PROCESSES_LOGS_PAYLOAD' | translate" (click)="setActiveTab('payload')"
                 [m_bIsActive]="m_sActiveTab === 'payload'"></app-tab>
-            <app-tab *ngIf="m_bIsWasdiDasboard === true" [m_sLabel]="'Dashboard'" (click)="setActiveTab('dashboard')"
-                [m_bIsActive]="m_sActiveTab === 'dashboard'"></app-tab>
+            <app-tab *ngIf="m_bIsWasdiDashboard === true" [m_sLabel]="'DIALOG_PAYLOAD_DASHBOARD' | translate"
+                (click)="setActiveTab('dashboard')" [m_bIsActive]="m_sActiveTab === 'dashboard'"></app-tab>
         </div>
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
     <div class=" payload-info d-flex flex-row justify-content-between mb-3">
         <div>
-            {{m_oProcess.operationType === 'RUNPROCESSOR' ? 'App name' : 'Product name'}}: {{m_oProcess.productName?
+            {{"KEY_PHRASES.NAME" | translate}}: {{m_oProcess.productName?
             m_oProcess.productName: 'N/A'}} | Status
             <span class="category-tag" [ngClass]="m_sTagColor">{{m_oProcess.status}}</span>
         </div>
@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="charts-container d-flex flex-row flex-wrap flex-fill m-auto"
-        *ngIf="m_bIsWasdiDasboard === true  && m_sActiveTab === 'dashboard'">
+        *ngIf="m_bIsWasdiDashboard === true  && m_sActiveTab === 'dashboard'">
         <div *ngFor="let oChart of m_aoChartsInformation" class="chart-container">
             <!-- Line Chart -->
             <ngx-charts-line-chart *ngIf="oChart['chart-type'] === 'line'" class="chart" [view]="view"

@@ -10,6 +10,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-workspace-info-dialog',
@@ -35,13 +36,14 @@ export class WorkspaceInfoDialogComponent implements OnInit {
     private m_oDialogRef: MatDialogRef<WorkspaceInfoDialogComponent>,
     private m_oNodeService: NodeService,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
   ) { }
 
   ngOnInit(): void {
     this.m_oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     this.m_sWorkspaceId = this.m_oWorkspace.workspaceId;
-    this.m_sInputWorkspaceName = this.m_oWorkspace.name; 
+    this.m_sInputWorkspaceName = this.m_oWorkspace.name;
     this.getNodesList()
   }
 
@@ -94,9 +96,9 @@ export class WorkspaceInfoDialogComponent implements OnInit {
         this.m_oConstantsService.getActiveWorkspace().nodeCode = this.m_sCurrentNode;
         this.m_oConstantsService.setActiveWorkspace(oWorkspace);
 
-        this.m_oNotificationDisplayService.openSnackBar("Node Updated");
+        this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("EDITOR_NODE_UPDATE"), '', 'success-snackbar');
       } else {
-        this.m_oNotificationDisplayService.openAlertDialog("Error updating node");
+        this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("EDITOR_NODE_UPDATE_ERROR"), '', 'alert');
       }
     })
   }
@@ -139,7 +141,7 @@ export class WorkspaceInfoDialogComponent implements OnInit {
       this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.m_sWorkspaceId).subscribe({
         next: oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in refreshing Workspace Information")
+            this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("Error in refreshing workspace information"), '', 'alert')
           } else {
             this.m_oWorkspace = oResponse;
           }
@@ -153,10 +155,10 @@ export class WorkspaceInfoDialogComponent implements OnInit {
     oWorkspace.name = this.m_sInputWorkspaceName
     this.m_oWorkspaceService.updateWorkspace(oWorkspace).subscribe({
       next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("Workspace Name Updated");
+        this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS"), '', 'success-snackbar');
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error while updating worksapce name");
+        this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("DIALOG_ADD_NEW_WORKSPACE_UPDATE_ERROR"), '', 'alert');
       }
     })
 
