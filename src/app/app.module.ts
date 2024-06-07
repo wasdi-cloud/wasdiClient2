@@ -127,7 +127,6 @@ import { ConfigurationService } from './services/configuration.service';
 import { ProductsTableComponent } from './components/search/products-table/products-table.component';
 import { WorkspacesListDialogComponent } from './components/search/workspaces-list-dialog/workspaces-list-dialog.component';
 import { ProductInfoComponent } from './components/search/product-info/product-info.component';
-import { AdvancedFiltersComponent } from './components/search/advanced-filters/advanced-filters.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
@@ -248,7 +247,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ProductsTableComponent,
     WorkspacesListDialogComponent,
     ProductInfoComponent,
-    AdvancedFiltersComponent,
     SearchOrbitResultsComponent,
     FTPDialogComponent,
     NavbarComponent,

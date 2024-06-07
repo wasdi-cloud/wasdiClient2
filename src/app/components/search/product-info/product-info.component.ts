@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
@@ -9,9 +8,6 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   styleUrls: ['./product-info.component.css']
 })
 export class ProductInfoComponent implements OnInit {
-  //Font Awesome Import:
-  faX = faX;
-
   m_oProduct: any = null;
 
   m_aoPropertiesList: Array<any> = [];

@@ -1,7 +1,33 @@
-<div class="d-flex flex-column justify-content-between" style="height:100%; width: 100%">
+<div class="apps-dialog d-flex flex-column justify-content-between h-100 w-100 gap-2">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+        {{m_oProduct.title}}
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
+    </div>
+    <div class="dialog-content flex-fill">
+        <div class="table-wrapper">
+            <table class="table">
+                <thead class="table-heading-container">
+                    <tr>
+                        <th scope="col">{{"DIALOG_PRODUCT_INFO_PROP" | translate}}</th>
+                        <th scope="col">{{"DIALOG_PRODUCT_INFO_VALUE"| translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oProperty of m_aoPropertiesList">
+                        <td>{{oProperty.label}}</td>
+                        <td>{{oProperty.value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dialog-footer d-flex flex-row justify-content-end">
+        <app-button [m_sLabel]="'KEY_PHRASES.CLOSE' | translate" (click)="onDismiss()"></app-button>
+    </div>
+</div>
+<!-- <div class="d-flex flex-column justify-content-between" style="height:100%; width: 100%">
     <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between px-1">
         <h5>{{m_oProduct.title}}</h5>
-        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
     </div>
     <div class="dialog-content p-2 h-70" style="overflow-y: scroll;">
         <div class="info-table">
@@ -25,4 +51,4 @@
         <button class="btn btn-sm btn-secondary" (click)="onDismiss()">Close</button>
     </div>
 
-</div>
+</div> -->
