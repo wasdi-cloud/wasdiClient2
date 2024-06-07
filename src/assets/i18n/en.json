@@ -1124,5 +1124,8 @@
    
     "MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "A valid subscription and an active project are required. Please see the User Dashboard.",
 
-    "DASHBOARD_CONFIRM_NODE_TITLE": "Confirm Node Update"
+    "DASHBOARD_CONFIRM_NODE_TITLE": "Confirm Node Update",
+
+    "PAGE_NOT_FOUND": "Page not found!",
+    "PAGE_NOT_FOUND_MARKETPLACE": "Return to Marketplace"
 }

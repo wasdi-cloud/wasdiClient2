@@ -1,9 +1,8 @@
-<div class="secondary-gradient"></div>
-<div class="page-message-container d-flex flex-row align-items-center justify-content-center gap-4">
+<main class="flex-fill d-flex flex-row align-items-center justify-content-center gap-4">
     <div class="d-flex flex-column align-items-center gap-4">
-        <h2>404 {{"PAGE_NOT_FOUND.NOT_FOUND" | translate}}</h2>
-        <button (click)="marketplaceRedirect()" class="btn btn-success btn-lg">{{"PAGE_NOT_FOUND.MARKET_BTN" |
-            translate}}</button>
+        <h2>404 {{"PAGE_NOT_FOUND" | translate}}</h2>
+        <app-button [m_sLabel]="'PAGE_NOT_FOUND_MARKETPLACE' |
+            translate" (click)="marketplaceRedirect()" [m_sSize]="'large'"></app-button>
     </div>
     <img src="assets/images/404-img/Astronaut.png" alt="">
-</div>
+</main>
