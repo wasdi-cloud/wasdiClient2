@@ -177,6 +177,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   searchAndCount(oProvider) {
+    let sHeader: string = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION");
+    let sErrorSearch: string = this.m_oTranslate.instant("IMPORT_ERROR_SEARCH_REQUEST")
     //If there is no provider selected, return false
     if (this.thereIsAtLeastOneProvider() === false) {
       return false;
@@ -241,7 +243,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
         oProvider.isLoaded = true;
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR IN OPEN SEARCH REQUEST");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorSearch, sHeader, 'alert');
         oProvider.isLoaded = false;
       }
     });
@@ -295,7 +297,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
         oProvider.isLoaded = true;
       },
       error: oError => {
-        oController.m_oNotificationDisplayService.openAlertDialog(sMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
         oProvider.isLoaded = true;
       }
     })

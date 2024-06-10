@@ -1,11 +1,11 @@
 <div class="secondary-nav">
-    <div class="location-header">Search Results</div>
-    <app-button [m_sLabel]="'Back to Search'" [m_bOutline]="true" [m_sSize]="'small'" [m_sIconLeft]="'arrow_back'"
-        class="align-self-start" (click)="navigateBackToFilters()"></app-button>
+    <div class="location-header">{{"IMPORT_SEARCH_RESULTS" | translate}}</div>
+    <app-button [m_sLabel]="'IMPORT_BACK_TO_SEARCH' | translate" [m_bOutline]="true" [m_sSize]="'small'"
+        [m_sIconLeft]="'arrow_back'" class="align-self-start" (click)="navigateBackToFilters()"></app-button>
     <div class="d-flex flex-row justify-content-between">
         <!-- <app-button class="align-self-start" [m_sLabel]="'Select All'" [m_bOutline]="true"
             (click)="selectAllProducts()"></app-button> -->
-        <app-button [m_sLabel]="'Add to Workspace'" [m_bOutline]="true" (click)="openAddToWorkspaceDialog()"
+        <app-button [m_sLabel]="'MSG_ADD_TO_WS'" [m_bOutline]="true" (click)="openAddToWorkspaceDialog()"
             *ngIf="m_aoSelectedProducts.length > 0"></app-button>
     </div>
     <div class="results-container">

@@ -201,6 +201,8 @@
     "EDITOR_NODE_UPDATE_ERROR": "Error updating node",
     "EDITOR_WORKSPACE_REFRESH_ERROR": "Error in refreshing workspace information",
     
+    "IMPORT_SEARCH_RESULTS": "Search Results",
+    "IMPORT_BACK_TO_SEARCH": "Back to Search",
     "IMPORT_PRODUCTS_PER_PAGE_LABEL": "Products per page",
     "IMPORT_PAGE_LABEL": "Page",
     "IMPORT_OF_LABEL": "of",
@@ -237,7 +239,8 @@
     "IMPORT_PRODUCT_LIST_DATASET": "Dataset",
     "IMPORT_PRODUCT_LIST_VARIABLES": "Variables",
     "IMPORT_PRODUCT_LIST_PROTOCOL": "Protocol",
-
+    "IMPORT_ERROR_SEARCH_REQUEST": "Error in opening search request",
+    
     "IMPORT_CRONTAB_YEAR": "Year",
     "IMPORT_CRONTAB_SEASON": "Season",
     "IMPORT_CRONTAB_MONTH": "Month",
@@ -952,6 +955,12 @@
     "MENU_SHARE_PRODUCT": "Share Product Options",
     "MENU_EDIT_STYLES": "Edit Styles",
     "MENU_EDIT_PRODUCT_PROPERTIES": "Product Properties", 
+
+    "SHARE_SEND_PRODUCT": "Send Product to Workspace",
+    "SHARE_SEND_PRODUCT_WORKSPACES": "Send product to Workspaces",
+    "SHARE_SEND_PRODUCTS": "Send Products to Workspace",
+    "SHARE_SEND_PRODUCTS_WORKSPACES": "Send product to Workspaces",
+    "SHARE_SEND_MULTIPLE": "Send to Workspaces",
    
     "MENU_DELETE_MANY_1": "Delete ",
     "MENU_DELETE_MANY_2": " products",

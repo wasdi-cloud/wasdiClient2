@@ -1,10 +1,11 @@
 <div class="apps-dialog d-flex flex-column justify-content-between h-100" style="height: 100%;">
     <div class="dialog-header d-flex flex-row justify-content-between font-bold">
-        Send to Workspace
+        {{ "MENU_SHARE" | translate}}
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
     <div class="dialog-content flex-fill d-flex flex-column gap-3">
-        <app-input-field [m_sPlaceholder]="'Search Workspaces'" [m_sIconLeft]="'search'" [m_sInputValue]="m_sSearch" (m_oInputChange)="m_sSearch = $event.event.target.value"></app-input-field>
+        <app-input-field [m_sPlaceholder]="'APP_UI_SEARCH_WS' | translate" [m_sIconLeft]="'search'"
+            [m_sInputValue]="m_sSearch" (m_oInputChange)="m_sSearch = $event.event.target.value"></app-input-field>
         <app-invader *ngIf="m_bIsLoadingWorkspaceList"></app-invader>
         <ul *ngIf="!m_bIsLoadingWorkspaceList" class="flex-fill ">
             <li class="workspace-item my-1 d-flex flex-row justify-content-between align-items-center"
@@ -19,8 +20,14 @@
     </div>
     <div class="dialog-footer d-flex flex-row justify-content-end">
         <!-- button for sending product(s) to workspace from search -->
-        <app-button *ngIf="!m_bIsSharingProduct && m_oSelectedProduct" [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? 'Send Product to Workspace' : 'Send Product to Workspaces'" (click)="addProductToWorkspace()"></app-button>
-        <app-button *ngIf="!m_bIsSharingProduct && m_aoSelectedProducts.length > 0" [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? 'Send Products to Workspace' : 'Send Products to Workspaces'" (click)="addMultipleProductsToWorkspace()"></app-button>
-        <app-button *ngIf="m_bIsSharingProduct" [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? 'Send to Workspace' : 'Send to Workspaces'" (click)="shareProductToWorkspace()"></app-button>
+        <app-button *ngIf="!m_bIsSharingProduct && m_oSelectedProduct"
+            [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? ('SHARE_SEND_PRODUCT' | translate) : ('SHARE_SEND_PRODUCT_WORKSPACES' | translate)"
+            (click)="addProductToWorkspace()"></app-button>
+        <app-button *ngIf="!m_bIsSharingProduct && m_aoSelectedProducts.length > 0"
+            [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? ('SHARE_SEND_PRODUCTS' | translate) : ('SHARE_SEND_PRODUCTS_WORKSPACES' | translate)"
+            (click)="addMultipleProductsToWorkspace()"></app-button>
+        <app-button *ngIf="m_bIsSharingProduct"
+            [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? ('MENU_SHARE' | translate) : ('SHARE_SEND_MULTIPLE' | translate)"
+            (click)="shareProductToWorkspace()"></app-button>
     </div>
 </div>
