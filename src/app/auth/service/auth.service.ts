@@ -13,7 +13,7 @@ import { KeycloakService } from 'keycloak-angular';
 })
 export class AuthService {
 
-  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient, public m_oJwtHelper: JwtHelperService,  private m_oKeycloakService: KeycloakService) { }
+  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient, public m_oJwtHelper: JwtHelperService, private m_oKeycloakService: KeycloakService) { }
 
   APIURL: string = this.m_oConstantsService.getAPIURL();
   AUTHURL: string = this.m_oConstantsService.getAUTHURL();
@@ -63,10 +63,6 @@ export class AuthService {
     this.m_oKeycloakService.login();
   }
 
-  // public logout(): void {
-    
-  // }
-
   public redirectToProfile(): void {
     this.m_oKeycloakService.getKeycloakInstance().accountManagement();
   }
@@ -97,7 +93,7 @@ export class AuthService {
     localStorage.setItem('access_token', token)
     localStorage.setItem('refresh_token', token)
   }
-  
+
   legacyLogin(oCredentials: any) {
     return this.m_oHttp.post<any>(this.APIURL + '/auth/login', oCredentials)
   }
@@ -107,8 +103,11 @@ export class AuthService {
 
   logout() {
     //CLEAN COOKIE
-    this.m_oKeycloakService.logout();
-    return this.m_oHttp.get(this.APIURL + '/auth/logout')
+    if (this.m_oKeycloakService.isLoggedIn()) {
+      this.m_oKeycloakService.logout();
+    }
+
+    // return this.m_oHttp.get(this.APIURL + '/auth/logout')
   }
 
   /**
@@ -216,7 +215,7 @@ export class AuthService {
   }
 
   checkSession() {
-      return this.m_oHttp.get<any>(this.APIURL + '/auth/checksession');
+    return this.m_oHttp.get<any>(this.APIURL + '/auth/checksession');
   }
 
   getClientConfig() {

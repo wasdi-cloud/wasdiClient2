@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, AfterContentChecked } from '@angular/core';
 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
@@ -6,6 +6,8 @@ import { ProcessorService } from 'src/app/services/api/processor.service';
 import { TranslateService } from '@ngx-translate/core';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { ConstantsService } from 'src/app/services/constants.service';
+import { AuthService } from 'src/app/auth/service/auth.service';
 
 
 @Component({
@@ -37,10 +39,12 @@ export class MarketplaceFiltersComponent implements OnInit {
     orderDirection: 1
   }
 
-  /** */
   @Output() m_oAppFilterOutput = new EventEmitter();
 
-  constructor(private m_oNotificationDisplayService: NotificationDisplayService,
+  constructor(
+    private m_oAuthService: AuthService,
+    private m_oConstantsService: ConstantsService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService,
     private m_oTranslate: TranslateService,) {
@@ -48,15 +52,18 @@ export class MarketplaceFiltersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCategories();
-    this.getPublishers();
+    if (this.m_oAuthService.getTokenObject().access_token) {
+      setTimeout(() => {
+        this.getPublishers();
+        this.getCategories();
+
+      }, 500)
+
+    }
   }
 
   getCategories(): void {
-    let sCategoriesError;
-    this.m_oTranslate.get('MSG_WAPPS_CATEGORY_ERROR').subscribe(sResponse => {
-      sCategoriesError = sResponse;
-    })
+    let sCategoriesError = this.m_oTranslate.instant('MSG_WAPPS_CATEGORY_ERROR')
     this.m_oProcessorMediaService.getCategories().subscribe(
       {
         next: oResponse => {
@@ -105,10 +112,7 @@ export class MarketplaceFiltersComponent implements OnInit {
  * @returns {void}
  */
   getPublishers(): void {
-    let sErrorMsg: string;
-    this.m_oTranslate.get("MSG_WAPPS_PUBLISHERS_ERROR").subscribe(sResponse => {
-      sErrorMsg = sResponse;
-    })
+    let sErrorMsg: string = this.m_oTranslate.instant("MSG_WAPPS_PUBLISHERS_ERROR")
     this.m_oProcessorMediaService.getPublishersFilterList().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
@@ -142,7 +146,7 @@ export class MarketplaceFiltersComponent implements OnInit {
     this.m_sSearchInput = oEvent.event.target.value;
 
     // Handle user hitting enter to execute the search
-    if(oEvent.event.key === 'Enter'){
+    if (oEvent.event.key === 'Enter') {
       this.onSearchInput(oEvent)
     }
   }

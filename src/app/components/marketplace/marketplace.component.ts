@@ -8,6 +8,8 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { TranslateService } from '@ngx-translate/core';
 
+import { User } from 'src/app/shared/models/user.model';
+
 //Angular Material Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
@@ -61,7 +63,10 @@ export class MarketplaceComponent implements OnInit {
   m_iSelectedStarRating: number = 0;
 
   m_sDeveloperSearch: string = "";
+
+  m_oActiveUser: User = {} as User;
   constructor(
+    private m_oConstantsService: ConstantsService,
     private m_oImageService: ImageService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
@@ -69,6 +74,8 @@ export class MarketplaceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.m_oActiveUser = this.m_oConstantsService.getUser();
+  
     this.getApplications();
   }
 

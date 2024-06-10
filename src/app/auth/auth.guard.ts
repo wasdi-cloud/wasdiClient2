@@ -15,6 +15,11 @@ export class AuthGuard implements CanActivate {
       this.oRouter.navigate(["login"])
       return false;
     }
+    // If the User isn't set in the constants service
+    if (!this.m_oConstantsService.getUser().userId) {
+      this.oRouter.navigate(["login"])
+      return false;
+    }
     return true;
   }
 

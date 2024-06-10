@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from '../auth/service/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,6 @@ export class ConfigurationService {
   m_oSearchConfiguration: any = null;
 
   constructor(
-    private m_oHttp: HttpClient,
     private m_oAuthService: AuthService
   ) { }
 

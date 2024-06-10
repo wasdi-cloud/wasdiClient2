@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { RabbitStompService } from './services/rabbit-stomp.service';
 import { ConstantsService } from './services/constants.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { Ace, config } from 'ace-builds';
+import { config } from 'ace-builds';
+import { AuthService } from './auth/service/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
   m_oActiveWorkspace: any
 
   constructor(
+    public m_oAuthService: AuthService,
     public m_oConstantsService: ConstantsService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oRouter: Router) {

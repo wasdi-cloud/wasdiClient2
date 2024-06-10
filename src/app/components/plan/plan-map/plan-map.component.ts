@@ -1,5 +1,5 @@
 
-import { AfterViewChecked, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewChecked, Component, EventEmitter,  OnInit, Output } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import * as L from 'leaflet';

@@ -7,12 +7,13 @@ import { FeedbackDialogComponent } from './feedback-dialog/feedback-dialog.compo
 import { ConstantsService } from 'src/app/services/constants.service';
 import { KeycloakService } from 'keycloak-angular';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { ProjectService } from 'src/app/services/api/project.service'; 
+import { ProjectService } from 'src/app/services/api/project.service';
 import { TranslateService } from '@ngx-translate/core';
 
 import { User } from 'src/app/shared/models/user.model';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { AuthService } from 'src/app/auth/service/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -28,6 +29,7 @@ export class HeaderComponent implements OnInit {
   m_oSelectedProject: any = { name: "No Active Project", projectId: null };
 
   constructor(
+    private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -92,7 +94,7 @@ export class HeaderComponent implements OnInit {
       error: oError => {
         let sErrorMessage = "Error in getting your projects";
         this.m_oProject = oFirstProjectElement;
-        // this.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
       }
     });
   }
@@ -128,8 +130,8 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
+    this.m_oAuthService.logout();
     this.m_oConstantsService.logOut();
-    this.m_oRouter.navigateByUrl("login");
   }
 
   openDocs() {
