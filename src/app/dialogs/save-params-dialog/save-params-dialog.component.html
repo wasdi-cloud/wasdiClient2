@@ -1,0 +1,16 @@
+<div class="dialog d-flex flex-column justify-content-between">
+    <div class="dialog-header font-bold d-flex flex-row justify-content-between">
+        {{ "DIALOG_PARAMS_CREATE" | translate}}
+    </div>
+    <div class="dialog-content flex-fill d-flex flex-column gap-2">
+        <app-input-field [m_sLabel]="'DIALOG_PARAMS_TEMPLATE_NAME' | translate"
+            [m_sPlaceholder]="'DIALOG_PARAMS_TEMPLATE_NAME' | translate"
+            (m_oInputChange)="m_oTemplate.name = $event.event.target.value"></app-input-field>
+        <div class="textarea-container">
+            <app-textarea [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate" (keyup)="getInput($event)"></app-textarea>
+        </div>
+    </div>
+    <div class="dialog-footer d-flex flex-row justify-content-end">
+        <app-button [m_sLabel]="'DIALOG_PARAMS_SAVE' | translate" (click)="saveTemplate()"></app-button>
+    </div>
+</div>

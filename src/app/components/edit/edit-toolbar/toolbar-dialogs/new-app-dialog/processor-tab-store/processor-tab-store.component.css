@@ -1,0 +1,17 @@
+.input-column {
+    height: 100%;
+    width: 50%;
+}
+
+h3.app-header {
+    font-size: 20px;
+}
+
+.textarea-wrapper {
+    height: 30%;
+}
+
+div.image-header {
+    font-size: 16px;
+    padding-bottom: 0.5rem;
+}

@@ -1,46 +1,76 @@
-div.dialog {
-    height: 100%;
+.primary-header {
+    font-size: 20px;
+    line-height: 30px;
 }
 
-div.dialog-content {
-    height: 80%;
+.secondary-header {
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--neutral95);
 }
 
-div.params-container,
-div.info-container {
-    width: 50%;
-}
-
-div.params-cards-container {
+div.table-wrapper {
+    height: 70%;
+    overflow-y: auto;
+    display: inline-block;
     width: 100%;
-    height: 80%;
-    overflow: hidden;
-    overflow-y: scroll;
+    margin: auto;
 }
 
-div.template-card {
+td {
+    padding: 6px 12px 6px 8px;
+}
+
+
+table {
+    width: 100%;
+    margin: auto;
+}
+
+.table-heading-container {
+    background-color: #FFFFFF;
+    box-shadow: inset 0px -1px #D1D5DB;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: 700;
+}
+
+td>span.material-symbols-outlined {
+    color: var(--wasdiGreen);
     cursor: pointer;
+    font-size: 20px;
+}
+
+.table-row>td {
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.table-row {
+    cursor: pointer;
+}
+
+.table-row:hover {
+    background: var(--neutral5);
+}
+
+.table-row.selected {
+    background: var(--wasdiGreenLight);
+}
+
+.textarea-wrapper {
+    height: 6rem;
+}
+
+.json-body {
     height: 50%;
-    width: 32%;
 }
 
-div.card-buttons-container {
-    height: 30px;
+.hidden {
+    display: none !important;
 }
 
-div.main-params-info {
-    height: 8rem
-}
-
-div.info-header {
-    height: 2rem;
-}
-
-input.date-input {
-    cursor: not-allowed;
-}
-
-div.info-container {
-    overflow: hidden;
-    overflow-y: scroll;
+.share-container {
+    padding: 0px 32px;
 }

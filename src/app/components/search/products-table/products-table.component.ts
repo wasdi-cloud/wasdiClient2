@@ -38,8 +38,10 @@ export class ProductsTableComponent implements OnInit {
 
   m_aoSelectedProducts: Array<any> = [];
 
+  m_bAllSelected: boolean = false;
+
   constructor(
-    private m_oDialog: MatDialog,
+    public m_oDialog: MatDialog,
     private m_oMapService: MapService,
     private m_oPageService: PagesService
   ) { }
@@ -64,8 +66,10 @@ export class ProductsTableComponent implements OnInit {
     this.m_aoProducts.subscribe(oResponse => {
       if (oResponse.length > 0) {
         this.m_aoProductsList = oResponse;
-        if (this.m_oActiveProvider.name) {
-          this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProvider) === false) {
+          if (this.m_oActiveProvider.name) {
+            this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
+          }
         }
       }
     });
@@ -142,14 +146,14 @@ export class ProductsTableComponent implements OnInit {
     for (let iIndexData = 0; iIndexData < this.m_aoProductsList.length; iIndexData++) {
       if (this.m_aoProductsList[iIndexData].provider !== sProvider) continue;
 
-      var oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(this.m_aoProductsList[iIndexData].bounds, null, iIndexData);
+      let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(this.m_aoProductsList[iIndexData].bounds, null, iIndexData);
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
         this.m_aoProductsList[iIndexData].rectangle = oRectangle
       }
       aaoAllBounds.push(this.m_aoProductsList[iIndexData].bounds);
     }
 
-    if (aaoAllBounds.length > 0 && aaoAllBounds[0] && aaoAllBounds[0].length) {
+    if (aaoAllBounds.length > 0 && aaoAllBounds[0]?.length) {
       this.m_oMapService.zoomOnBounds(aaoAllBounds);
     }
   }
@@ -210,16 +214,18 @@ export class ProductsTableComponent implements OnInit {
   /**
    * 
    */
-  navigateBackToFilters() {   
+  navigateBackToFilters() {
+    this.m_aoProvidersList = [];
     this.m_oNavigateBackOutput.emit(false);
   }
-
 
   /**
    * Add checked product to selected products array
    */
-  addProductSelectedProducts(oEvent, oInputProduct) {
-    if (oEvent.currentTarget.checked === true) {
+  addProductSelectedProducts(oInputProduct) {
+    oInputProduct.selected = !oInputProduct.selected
+
+    if (oInputProduct.selected === true) {
       //Add the Product to the Selected Products Array
       this.m_aoSelectedProducts.push(oInputProduct);
     } else {
@@ -229,13 +235,19 @@ export class ProductsTableComponent implements OnInit {
     this.m_oSelectedProducts.emit(this.m_aoSelectedProducts);
   }
 
+  // selectAllProducts() {
+  //   this.m_bAllSelected = !this.m_bAllSelected;
+  //   for (let oProduct of this.m_aoProductsList) {
+  //     this.m_bAllSelected ? oProduct.selected = true : oProduct.select = false;
+  //   }
+  // }
   /**
    * Open dialog to add single product to a workspace
    */
   sendSingleProductToWorkspace(oProduct) {
     let oDialog = this.m_oDialog.open(WorkspacesListDialogComponent, {
-      height: "55vh",
-      width: '60vw',
+      height: "70vh",
+      width: '50vw',
       data: {
         product: oProduct
       }
@@ -266,12 +278,12 @@ export class ProductsTableComponent implements OnInit {
    */
   openProductInfoDialog(oProduct) {
     let oDialog = this.m_oDialog.open(ProductInfoComponent, {
-      height: "60vh",
-      width: '60vw',
       data: {
         product: oProduct
-      }
-    })
+      },
+      height: '70vh',
+      minWidth: '50vw'
+    });
   }
 
   /**
@@ -306,30 +318,41 @@ export class ProductsTableComponent implements OnInit {
     return true;
   }
 
+  changeCardStyleMouseEnter(oEvent) {
+
+  }
+
+  /********** OPEN DIALOG HANDLERS **********/
+  openAddToWorkspaceDialog() {
+    let aoListOfSelectedProducts = this.m_aoSelectedProducts;
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoListOfSelectedProducts) === true) {
+      return false;
+    }
+
+    this.m_oDialog.open(WorkspacesListDialogComponent, {
+      height: "70vh",
+      width: '50vw',
+      data: {
+        products: aoListOfSelectedProducts
+      }
+    })
+    return true;
+  }
+
   /********** Pagination Handler Functions **********/
 
   changeNumberOfProductsPerPage(event) {
-    this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event.value;
+    this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event;
     this.m_oPageService.changeNumberOfProductsPerPage(this.m_oActiveProvider.name);
+  }
+
+  handlePagination(oEvent, sProviderName: string) {
+    console.log(oEvent)
+    this.m_oPageService.changePage(oEvent.pageIndex, sProviderName)
   }
 
   getProductsPerPageOptions() {
     return this.m_oPageService.getProvidersPerPageOptions();
-  }
-
-  plusOnePage() {
-    this.m_oPageService.plusOnePage(this.m_oActiveProvider.name);
-  }
-
-  minusOnePage() {
-    this.m_oPageService.minusOnePage(this.m_oActiveProvider.name);
-  }
-
-  getMaxPage() {
-    return this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).totalPages;
-  }
-
-  getCurrentPage() {
-    return this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).currentPage;
   }
 }

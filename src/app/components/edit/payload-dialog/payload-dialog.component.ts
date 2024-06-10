@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LegendPosition } from '@swimlane/ngx-charts';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-
-
+import { Clipboard } from '@angular/cdk/clipboard';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payload-dialog',
@@ -17,7 +17,7 @@ export class PayloadDialogComponent implements OnInit {
   m_oProcess = this.m_oData.process;
   m_sActiveTab: string = "payload"
   m_sPayloadString: string = "";
-  m_bIsWasdiDasboard: boolean = false;
+  m_bIsWasdiDashboard: boolean = false;
   m_sGraphType: string;
 
   //Chart Configurations: 
@@ -73,16 +73,29 @@ export class PayloadDialogComponent implements OnInit {
    */
   legendPosition: LegendPosition = LegendPosition.Right
 
+  m_sJsonSample: string = "";
+
+  m_sTagColor: string = "red"
+
+  m_sCopyLabel: string = this.m_oTranslate.instant("DIALOG_PAYLOAD_COPY");
+
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
+    private m_oClipboard: Clipboard,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<PayloadDialogComponent>,
-    private m_oNotificationDisplayService: NotificationDisplayService
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.checkWasdiDashboard(this.m_oData.process);
-    this.checkWasdiDashboard(JSON.parse(this.m_oData.process.payload))
+    this.checkWasdiDashboard(JSON.parse(this.m_oData.process.payload));
+    let oParsed = JSON.parse(this.m_oProcess.payload)
+    this.m_sJsonSample = JSON.stringify(oParsed, null, 2);
+
+    this.setTagColor(this.m_oProcess.status)
   }
 
 
@@ -91,8 +104,9 @@ export class PayloadDialogComponent implements OnInit {
    * @returns {void}
    */
   getPayloadString(): void {
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_PAYLOAD_FETCH_ERROR")
     if (!this.m_oProcess.payload) {
-      this.m_sPayloadString = "No payload information is available for the selected process";
+      this.m_sPayloadString = this.m_oTranslate.instant("DIALOG_PAYLOAD_NO_INFO");
     } else {
       this.m_sPayloadString = this.m_oData.process.payload;
 
@@ -101,7 +115,7 @@ export class PayloadDialogComponent implements OnInit {
         let sPrettyPrint = JSON.stringify(oParsed, null, 2);
         this.m_sPayloadString = sPrettyPrint;
       } catch (error) {
-        this.m_oNotificationDisplayService.openAlertDialog( "Problem getting Payload String");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
       }
 
     }
@@ -110,7 +124,7 @@ export class PayloadDialogComponent implements OnInit {
   //If WASDI Dashboard value is defined, show the m_oData as a chart:
   checkWasdiDashboard(oPayload: any) {
     if (oPayload.hasOwnProperty('wasdi_dashboard')) {
-      this.m_bIsWasdiDasboard = true;
+      this.m_bIsWasdiDashboard = true;
       console.log(oPayload.wasdi_dashboard)
       this.m_aoChartsInformation = oPayload.wasdi_dashboard;
       this.m_sActiveTab = 'dashboard';
@@ -135,7 +149,29 @@ export class PayloadDialogComponent implements OnInit {
     }
   }
 
-  dismiss(event: MouseEvent) {
+  setTagColor(sProcessStatus) {
+    if (sProcessStatus === 'ERROR') {
+      this.m_sTagColor = 'red';
+    } else if (sProcessStatus === 'STOPPED') {
+      this.m_sTagColor = 'red';
+      sProcessStatus = "DIALOG_PROCESSES_LOGS_STOP";
+
+    } else if (sProcessStatus === 'DONE') {
+      this.m_sTagColor = 'green';
+    } else {
+      sProcessStatus = 'green';
+    }
+  }
+
+  copyPayload() {
+    this.m_oClipboard.copy(this.m_sJsonSample);
+    this.m_sCopyLabel = this.m_oTranslate.instant("KEY_PHRASES.COPIED");
+    setTimeout(() => {
+      this.m_sCopyLabel = this.m_oTranslate.instant("DIALOG_PAYLOAD_COPY");
+    }, 1000)
+  }
+
+  onDismiss() {
     this.m_oDialogRef.close();
   }
 }

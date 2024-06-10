@@ -1,89 +1,111 @@
-<div class="card h-100 " style="overflow-y:scroll;">
-    <div class="card-header">
-        {{"IMPORT_PANEL_HEAD_TITLE_FILTERS" | translate}}
+<div class="secondary-nav">
+    <div class="location-header">{{"ROOT_VIEW_NAV_BAR_LINK_IMPORT" | translate}}</div>
+    <div class="filters-header">{{"IMPORT_PROVIDERS" | translate}}</div>
+    <div class="filters-container d-flex flex-column gap-2">
+        <!-- Providers Input -->
+        <div>
+            <label for="">{{"IMPORT_PROVIDERS" | translate}}</label>
+            <app-dropdown [m_bIsMultiSelect]="true" [m_aoDropdownItems]="m_aoListOfProviders"
+                [m_aoSelectedItems]="m_aoUserProviderSelection"
+                (m_oSelectionChange)="emitSelectedProviders($event)"></app-dropdown>
+        </div>
+        <!-- Product Name Input -->
+        <app-input-field [m_sLabel]="'IMPORT_PRODUCT_NAME' | translate" [m_sIconLeft]="'search'"
+            [m_sPlaceholder]="'IMPORT_PRODUCT_NAME_SEARCH'| translate"
+            (m_oInputChange)="setMissionTextQuery($event)"></app-input-field>
     </div>
-    <div class="card-body flex-column">
-        <!-- CronTab / Providers Buttons -->
+    <div class="filters-container container">
         <div class="d-flex flex-row justify-content-between align-items-center">
-            <button class="btn btn-primary" (click)="openAdvancedSearchFiltersDialog()">{{"IMPORT_CRONTAB" |
-                translate}}</button>
-
-            <!-- Providers Multi-select -->
-            <div>
-                <mat-select class="form-control" multiple placeholder="{{'IMPORT_PROVIDERS' | translate}}"
-                    style="width: 20rem;" [(ngModel)]="m_aoUserProviderSelection"
-                    (selectionChange)="emitSelectedProviders($event)">
-                    <mat-option *ngFor="let oProvider of m_aoListOfProviders" [value]="oProvider">
-                        {{oProvider.description}}
-                    </mat-option>
-                </mat-select>
-            </div>
-
-        </div>
-
-        <!-- From/to Date Pickers -->
-        <div class="d-flex flex-row justify-content-between gap-2" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
-            <div class="flex-fill">
-                <label for="startDate">{{'IMPORT_DATE_FROM'|translate}}</label>
-                <input type="date" name="" id="" class="form-control" [(ngModel)]="m_sDateFrom"
-                    (ngModelChange)="emitModelChanges()">
-            </div>
-            <div class="flex-fill">
-                <label for="startDate">{{'IMPORT_DATE_TO'|translate}}</label>
-                <input type="date" name="" id="" class="form-control" [(ngModel)]="m_sDateTo"
-                    (ngModelChange)="emitModelChanges()">
+            <app-button [m_sLabel]="('IMPORT_CRONTAB' | translate).toUpperCase()" [m_sSize]="'small'"
+                *ngIf="m_bUseCronTab === false" (click)="setFilterTypeAsTimeSeries()"></app-button>
+            <app-button [m_sLabel]="('IMPORT_DATES' | translate).toUpperCase()" [m_sSize]="'small'"
+                *ngIf="m_bUseCronTab=== true" (click)="setFilterTypeAsTimePeriod()"></app-button>
+            <div *ngIf="m_sTypeOfFilterSelected === 'Time series'" class="d-flex flex-row gap-2">
+                <p class="clear-btn" (click)="removeSavedData()">{{("IMPORT_CLEAR_BUTTON" | translate).toUpperCase()}}
+                </p>
+                <p class="clear-btn" (click)="addFiltersData()">{{("IMPORT_ADD_BUTTON" | translate).toUpperCase()}}</p>
             </div>
         </div>
 
-        <!-- Time-series filters summary -->
-        <div *ngIf="m_sTypeOfFilterSelected === 'Time series' && m_oAdvancedFilter.savedData.length !== 0">
-            <div class="col-v4-12">
-                <mat-chip-grid #chipGrid aria-label="time selection">
-                    <mat-chip-row *ngFor="let oData of m_oAdvancedFilter.savedData">
-                        {{oData.name}}
-                        <button matChipRemove [attr.aria-label]="'remove ' + oData.name"
-                            (click)="removeSavedDataChip(oData)">
-                            <mat-icon>cancel</mat-icon>
-                        </button>
-                    </mat-chip-row>
-                </mat-chip-grid>
+        <div class="crontab-container" *ngIf="m_sTypeOfFilterSelected === 'Time series'">
+            <div class="row">
+                <div class="col-6">
+                    <label for="">{{"IMPORT_CRONTAB_YEAR" | translate}}</label>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfYears" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedYears($event)"></app-dropdown>
+                </div>
+                <div class="col-6">
+                    <label for="">{{"IMPORT_CRONTAB_SEASON" | translate}}</label>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfSeasons" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedSeasons($event)"></app-dropdown>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label for="">{{"IMPORT_CRONTAB_MONTH" | translate}}</label>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfMonths" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedMonths($event)"></app-dropdown>
+                </div>
+                <div class="col-6">
+                    <label for="">{{"IMPORT_CRONTAB_DATE" | translate}}</label>
+                    <app-dropdown [m_aoDropdownItems]="m_oAdvancedFilter.listOfDays" [m_bIsMultiSelect]="true"
+                        (m_oSelectionChange)="getSelectedDays($event)"></app-dropdown>
+                </div>
+            </div>
+            <!-- Chip Output Container -->
+            <div class="row">
+                <app-chip *ngFor="let oSavedData of m_oAdvancedFilter.savedData" [m_sLabel]="oSavedData.name"
+                    (click)="removeSavedDataChip(oSavedData)"></app-chip>
             </div>
         </div>
+        <div class="dates-input-container row" *ngIf="m_sTypeOfFilterSelected === 'Time period'">
+            <div class="col-6">
+                <app-input-field [m_sInputType]="'date'" [m_sLabel]="'IMPORT_DATE_FROM' | translate"
+                    [m_sInputValue]="m_sDateFrom" (m_oInputChange)="emitModelChanges($event)"></app-input-field>
+            </div>
+            <div class="col-6">
+                <app-input-field class="col" [m_sInputType]="'date'" [m_sLabel]="'IMPORT_DATE_TO' | translate"
+                    [m_sInputValue]="m_sDateTo" (m_oInputChange)="emitModelChanges($event)"></app-input-field>
+            </div>
+        </div>
+    </div>
 
-        <!-- Missions Selector and Advanced Filters -->
-        <div id="advanced-search-content h-50" class="d-flex flex-column">
-            <!-- Product Name Search -->
-            <div>
-                <label for="productName">{{"IMPORT_PRODUCT_NAME"|translate}}:</label>
-                <input type="text" name="" id="" class="form-control" [(ngModel)]="m_oMissionObject.textQuery">
-            </div>
-            <!-- Missions Tabs -->
-            <div>
-                <label for="">{{"IMPORT_PRODUCT_SELECTED_MISSIONS"|translate}}</label>
-                <ul class="d-flex flex-row flex-wrap border-bottom pb-2  nav nav-pills">
-                    <li class="nav-item" *ngFor="let oMission of m_aoMissions" (click)="setActiveMission(oMission)">
-                        <a class="nav-link"
-                            [ngClass]="oMission.name === m_oActiveMission.name? 'active' : ''">{{oMission.name}}</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- Mission Search Form -->
-            <div class="mission-inputs d-flex flex-row flex-wrap align-items-center pt-2 gap-2 ">
-                <div class="d-flex flex-column " *ngFor="let oFilter of m_aoVisibleFilters">
-                    <div style="width: 15rem">
-                        <label class="form-label" for="">{{oFilter.indexlabel}}</label>
-                        <mat-select *ngIf="oFilter.indexvalues !== ''" #auto="matSelect" class="form-control"
-                            placeholder="" (selectionChange)="getMissionInput($event, oFilter)"
-                            placeholder="{{oFilter.indexvalue}}">
-                            <mat-option *ngFor="let oOption of prepMissionFilter(oFilter)" [value]="oOption">
-                                {{oOption}}
-                            </mat-option>
-                        </mat-select>
-                        <input class="form-control" type="text" *ngIf="oFilter.indexvalues === ''"
-                            placeholder="{{oFilter.indexhint}}" pattern="{{oFilter.regex}}">
-                    </div>
+    <div class="filters-container">
+        <!-- Mission Input -->
+        <div class="">{{"IMPORT_PRODUCT_SELECT_MISSION" | translate}}</div>
+        <label for="">{{"IMPORT_PRODUCT_MISSION_TYPE" | translate}}</label>
+        <app-dropdown [m_aoDropdownItems]="m_aoMissions" [m_aoSelectedItems]="m_oActiveMission"
+            (m_oSelectionChange)="setActiveMission($event.value)"></app-dropdown>
+    </div>
+    <div class="satellite-options-container">
+        <div class=" d-flex flex-row flex-wrap align-items-center justify-content-between pt-2 gap-2">
+            <div *ngFor="let oFilter of m_aoVisibleFilters" style="width: 48%">
+                <div *ngIf="m_oActiveMission.name !== 'ERA5'">
+                    <app-dropdown *ngIf="oFilter.indexvalues !== ''" [m_aoDropdownItems]="prepMissionFilter(oFilter)"
+                        [m_sLabel]="oFilter.indexlabel" (m_oSelectionChange)="getMissionInput($event, oFilter)"
+                        [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
+                    <app-input-field *ngIf="oFilter.indexvalues === ''" [m_sPlaceholder]="oFilter.indexhint"
+                        [m_sLabel]="oFilter.indexlabel" [m_sPattern]="oFilter.regex"></app-input-field>
+                </div>
+                <div *ngIf="m_oActiveMission.name === 'ERA5'">
+                    <label *ngIf="oFilter.indexvalues !== ''" for="">{{oFilter.indexlabel}}</label>
+                    <app-dropdown
+                        *ngIf="oFilter.indexvalues !== '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
+                        [m_aoDropdownItems]="prepMissionFilter(oFilter)"
+                        (m_oSelectionChange)="getMissionInput($event, oFilter)"
+                        [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
+                    <app-dropdown *ngIf="oFilter.indexname === 'pressureLevels' || oFilter.indexname ==='variables'"
+                        (m_oSelectionChange)="getMultiSelectInput($event, oFilter)" [m_bIsMultiSelect]="true"
+                        [m_aoDropdownItems]="prepMissionFilter(oFilter)"
+                        [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
+                    <app-input-field
+                        *ngIf="oFilter.indexvalues === '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
+                        [m_sPlaceholder]="oFilter.indexhint" [m_sPattern]="oFilter.regex"></app-input-field>
                 </div>
             </div>
         </div>
     </div>
+
+    <app-button class="align-self-stretch" [m_sLabel]="'IMPORT_SEARCH_BUTTON' | translate" [m_sSize]="'large'"
+        [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
 </div>

@@ -34,7 +34,8 @@ export interface application {
 @Component({
   selector: 'app-app-details',
   templateUrl: './app-details.component.html',
-  styleUrls: ['./app-details.component.css']
+  styleUrls: ['./app-details.component.css'],
+  host: { "class": "flex-fill" }
 })
 export class AppDetailsComponent implements OnInit {
   m_sActiveApplicationName: string = this.m_oConstantsService.getSelectedApplication();
@@ -49,6 +50,8 @@ export class AppDetailsComponent implements OnInit {
   m_bShowLoadMoreReviews: boolean;
 
   m_asImages: Array<any> = [];
+
+  m_sViewImage: string = ""
 
   m_oAppStats = {
     done: 0,
@@ -90,15 +93,17 @@ export class AppDetailsComponent implements OnInit {
     this.m_oProcessorService.getMarketplaceDetail(applicationName).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === true) {
-          this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
         } else {
           this.m_oApplicationInfo = oResponse;
           this.getApplicationStats();
           if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oApplicationInfo.logo)) {
             this.m_asImages.push(this.m_oApplicationInfo.imgLink);
+            this.m_sViewImage = this.m_asImages[0]
           } else {
             let sUrl = this.m_oImageService.getImageLink(this.m_oApplicationInfo.logo);
             this.m_asImages.push(sUrl);
+            this.m_sViewImage = this.m_asImages[0]
           }
 
           if (this.m_oApplicationInfo.images.length > 0) {
@@ -107,11 +112,12 @@ export class AppDetailsComponent implements OnInit {
               let sUrl = this.m_oImageService.getImageLink(sImageUrl);
               this.m_asImages.push(sUrl);
             }
+            this.m_sViewImage = this.m_asImages[0]
           }
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sDataErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
       }
     });
 
@@ -127,13 +133,13 @@ export class AppDetailsComponent implements OnInit {
     this.m_oProcessWorkspaceService.getProcessorStatistics(this.m_oApplicationInfo.processorName).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
         } else {
           this.m_oAppStats = oResponse;
         }
       },
       error: oError => {
-
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
       }
     })
   }
@@ -154,6 +160,8 @@ export class AppDetailsComponent implements OnInit {
     return dPerc.toFixed(1);
   }
 
+  getCategories() { }
+
   /**
    * Return to the Marketplace
    * @returns {void}
@@ -172,13 +180,21 @@ export class AppDetailsComponent implements OnInit {
   }
 
   openEditAppDialog(oProcessor) {
-    let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
-      height: '80vh',
-      width: '80vw',
+    this.m_oDialog.open(NewAppDialogComponent, {
+      height: '95vh',
+      width: '95vw',
+      minWidth: '95vw',
+      maxWidth: '95vw',
       data: {
         editMode: true,
         inputProcessor: oProcessor
       }
     })
+  }
+
+  setViewImage(sImage) {
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sImage) === false) {
+      this.m_sViewImage = sImage;
+    }
   }
 }

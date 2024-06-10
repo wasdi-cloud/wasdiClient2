@@ -1,152 +1,138 @@
-<div class="pricing-wrapper">
-    <div class="row-v4 row-price d-flex flex-row gap-3">
-        <div class="col-xs-12 col-md-4 col-lg-3">
-            <div class="single-price">
-                <div class="price-title free-bg">
-                    <h3>Free<br>Subscription</h3>
+<div class="flex-fill d-flex flex-column align-items-center h-100 parent">
+    <div class="img-wrapper">
+        <img src="/assets/images/subscriptions-rocket.png" alt="">
+    </div>
+    <div class="header" [innerHTML]="('SUBSCRIPTIONS_HEADER' | translate)"></div>
+    <div class="d-flex flex-row gap-2">
+        <div class="price-container d-flex flex-column gap-3" [class.selected]="m_sSelectedPriceContainer ==='free'">
+            <div>
+                <div class="price-header">{{"SUBSCRIPTIONS_STARTER" | translate}}</div>
+                <div>Description here...</div>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    {{ "SUBSCRIPTIONS_UP_TO" | translate}} <strong>8 cores</strong>
                 </div>
-                <div class="features-wrapper">
-                    <div class="features">
-                        <div class="single-feature"><strong>Shared</strong> Node</div>
-                        <div class="single-feature"><strong>Up to 8</strong> Cores</div>
-                        <div class="single-feature"><strong>20GB</strong> Storage</div>
-                        <div class="single-feature"><strong>Low</strong> Priority</div>
-                        <div class="single-feature"><strong>Discord</strong> Assistance</div>
-                    </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <strong>20 GB</strong> {{ "SUBSCRIPTIONS_STORAGE" | translate}}
                 </div>
-                <div class="btn-wrapper">
-                    <div class="btn-row" style="justify-content: center">
-                        <div class="btn-group">
-                            <button class="btn btn-primary free-bg price-disabled">0€</button>
-                            <button class="btn btn-primary free-bg" style="pointer-events: none">3 MONTHS FREE TRIAL
-                            </button>
-                        </div>
-                    </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <div [innerHTML]="'SUBSCRIPTIONS_DISCORD' | translate"></div>
                 </div>
             </div>
+            <app-button class="align-self-center" [m_sLabel]="'SUBSCRIPTIONS_TRIAL' | translate"
+                [m_sSize]="'large'"></app-button>
         </div>
-        <div class="col-xs-12 col-md-4 col-lg-3">
-            <div class="single-price">
-                <div class="price-title standard-bg">
-                    <h3>STANDARD<br>Subscription</h3>
+        <div class="price-container d-flex flex-column gap-3" [class.selected]="m_sSelectedPriceContainer ==='stnd'">
+            <div>
+                <div class="price-header">{{"SUBSCRIPTIONS_STANDARD" | translate}}</div>
+                <div>Description here...</div>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    {{ "SUBSCRIPTIONS_UP_TO" | translate}} <strong>48 cores</strong>
                 </div>
-                <div class="features-wrapper">
-                    <div class="features">
-                        <div class="single-feature"><strong>Shared</strong> Node</div>
-                        <div class="single-feature"><strong>Up to 48</strong> Cores</div>
-                        <div class="single-feature"><strong>100GB</strong> Storage</div>
-                        <div class="single-feature"><strong>Medium</strong> Priority</div>
-                        <div class="single-feature"><strong>Discord/Email</strong> Assistance</div>
-                    </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <strong>100 GB</strong> {{ "SUBSCRIPTIONS_STORAGE" | translate}}
                 </div>
-                <div class="btn-wrapper">
-                    <div class="btn-row">
-                        <div class="price-desc">
-                            1 Day
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-success price-disabled">50€</button>
-                            <button class="btn btn-success" (click)="showSubscriptionAddForm(m_aoTypes[1], 50)">BUY NOW
-                                <span class="fas fa-cart-plus"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="btn-row">
-                        <div class="price-desc">
-                            1 Week
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-success price-disabled">150€</button>
-                            <button class="btn btn-success" (click)="showSubscriptionAddForm(m_aoTypes[2], 150)">BUY NOW
-                                <span class="fas fa-cart-plus"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="btn-row">
-                        <div class="price-desc">
-                            1 Month
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-success price-disabled">500€</button>
-                            <button class="btn btn-success" (click)="showSubscriptionAddForm(m_aoTypes[3], 500)">BUY
-                                NOW <span class="fas fa-cart-plus"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="btn-row">
-                        <div class="price-desc">
-                            1 Year
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-success price-disabled">5000€</button>
-                            <button class="btn btn-success" (click)="showSubscriptionAddForm(m_aoTypes[4], 5000)">BUY
-                                NOW <span class="fas fa-cart-plus"></span>
-                            </button>
-                        </div>
-                    </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <div [innerHTML]="'SUBSCRIPTIONS_ASSISTANCE' | translate"></div>
                 </div>
             </div>
+            <div class="price-slider d-flex flex-row justify-content-between align-items-center">
+                <div [class.active-price]="m_sActiveStndPrice === 'day'"
+                    (click)="setActivePrice('day', 'stnd', m_aoTypes[1])">1 {{ "SUBSCRIPTIONS_DAY" | translate}}
+                </div>
+                <div [class.active-price]="m_sActiveStndPrice === 'week'"
+                    (click)="setActivePrice('week', 'stnd', m_aoTypes[2])">1
+                    {{"SUBSCRIPTIONS_WEEK" | translate}}
+                </div>
+                <div [class.active-price]="m_sActiveStndPrice === 'month'"
+                    (click)="setActivePrice('month', 'stnd', m_aoTypes[3])">1
+                    {{"IMPORT_CRONTAB_MONTH" | translate}}
+                </div>
+                <div [class.active-price]="m_sActiveStndPrice === 'year'"
+                    (click)="setActivePrice('year', 'stnd', m_aoTypes[4])">1
+                    {{"IMPORT_CRONTAB_YEAR" | translate}}
+                </div>
+            </div>
+            <div class="price-output">
+                {{m_iStndPrice}}€
+            </div>
+            <app-button class="align-self-center" [m_sLabel]="'DIALOG_BUY_SUBSCRIPTION' | translate" [m_sSize]="'large'"
+                (click)="showSubscriptionAddForm(m_oStndType, m_iStndPrice)"></app-button>
         </div>
-        <div class="col-xs-12 col-md-4 col-lg-3">
-            <div class="single-price">
-                <div class="price-title professional-bg">
-                    <h3>PROFESSIONAL<br>Subscription</h3>
+        <div class="price-container d-flex flex-column gap-3" [class.selected]="m_sSelectedPriceContainer ==='pro'">
+            <div>
+                <div class="price-header">{{"SUBSCRIPTIONS_PRO" | translate}}</div>
+                <div>Description here...</div>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    {{ "SUBSCRIPTIONS_UP_TO" | translate}} <strong>96 cores</strong>
                 </div>
-                <div class="features-wrapper">
-                    <div class="features">
-                        <div class="single-feature"><strong>Dedicated</strong> Node</div>
-                        <div class="single-feature"><strong>Up to 96</strong> Cores</div>
-                        <div class="single-feature"><strong>2TB</strong> Storage</div>
-                        <div class="single-feature"><strong>Highest</strong> Priority</div>
-                        <div class="single-feature"><strong>Dedicated Team</strong> Assistance</div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <strong>2 TB</strong> {{ "SUBSCRIPTIONS_STORAGE" | translate}}
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <div [innerHTML]="'SUBSCRIPTIONS_PRIORITY' | translate"></div>
+
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <div [innerHTML]="'SUBSCRIPTIONS_DEDICATED_TEAM' | translate">
                     </div>
                 </div>
-                <div class="btn-wrapper">
-                    <div class="btn-row">
-                        <div class="price-desc">
-                            1 Day
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-warning professional-bg disabled" style="pointer-events: none">
-                                NOT AVAILABLE
-                            </button>
-                        </div>
-                    </div>
-                    <div class="btn-row">
-                        <div class="price-desc">
-                            1 Week
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-warning professional-bg disabled" style="pointer-events: none">
-                                NOT AVAILABLE
-                            </button>
-                        </div>
-                    </div>
-                    <div class="btn-row">
-                        <div class="price-desc">
-                            1 Month
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-warning professional-bg price-disabled">2000€</button>
-                            <button class="btn btn-warning professional-bg"
-                                (click)="showSubscriptionAddForm(m_aoTypes[5], 2000)">BUY
-                                NOW <span class="fas fa-cart-plus"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="btn-row">
-                        <div class="price-desc">
-                            1 Year
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-warning professional-bg price-disabled">20000€</button>
-                            <a href="mailto:info@wasdi.cloud?subject=One Year Professional Subscription"
-                                class="btn btn-warning professional-bg">Contact Us <span class="fas fa-envelope"></span>
-                            </a>
-                        </div>
-                    </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <div [innerHTML]="'SUBSCRIPTIONS_DEDICATED_NODE' | translate"></div>
                 </div>
             </div>
+            <div class="align-self-center price-slider d-flex flex-row justify-content-between align-items-center">
+                <div [class.active-price]="m_sActiveProPrice === 'month'"
+                    (click)="setActivePrice('month', 'pro', m_aoTypes[5])">1
+                    {{"IMPORT_CRONTAB_MONTH" |translate}}
+                </div>
+                <div [class.active-price]="m_sActiveProPrice === 'year'"
+                    (click)="setActivePrice('year', 'pro', m_aoTypes[6])">1 {{"IMPORT_CRONTAB_YEAR" | translate}}
+                </div>
+            </div>
+            <div class="price-output">
+                {{m_iProPrice}}€
+            </div>
+            <app-button class="align-self-center" [m_sLabel]="'DIALOG_BUY_SUBSCRIPTION' | translate" [m_sSize]="'large'"
+                (click)="showSubscriptionAddForm(m_oProType, m_iProPrice)"></app-button>
         </div>
     </div>
 </div>

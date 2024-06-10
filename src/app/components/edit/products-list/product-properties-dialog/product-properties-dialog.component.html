@@ -1,49 +1,38 @@
-<div class="dialog d-flex flex-column justify-content-between">
-    <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between align-items-center p-2">
-        <h4 class="">Product Properties</h4>
-        <button class="btn" (click)="onDismiss()">
-            <fa-icon [icon]="faX"></fa-icon>
-        </button>
+<div class="apps-dialog d-flex flex-column justify-content-between" style="height: 100%">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">{{ "DIALOG_PRODUCT_EDITOR_TITLE" |
+        translate}}
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss(false)"> close</span>
     </div>
-    <div class="dialog-content flex-fill mt-2">
-        <form class="d-flex flex-column gap-3 px-5" name="" #f="ngForm" (ngSubmit)="f.form && updateProduct()">
-            <div class="d-flex flex-row align-items-center gap-3">
-                <label class="product-form-label" for="productName">Original Name: </label>
-                <input class="form-control" type="text" readonly disabled value={{m_oProduct.fileName}}>
+    <div class="dialog-content flex-fill d-flex flex-column gap-2">
+        <div class="product-info-container d-flex flex-row gap-2">
+            <div class="info-container" style="width: 70%">
+                <div class="font-bold">{{"DIALOG_PRODUCT_EDITOR_INFO_DIALOG_ORIGINAL_NAME_LABEL" | translate}}</div>
+                <p (click)="copyToClipboard(m_oProduct.fileName)">{{m_oProduct.fileName}}</p>
+
             </div>
-            <div class="d-flex flex-row align-items-center gap-3">
-                <label class="product-form-label" for="friendlyName">Friendly Name:</label>
-                <input type="text" name="friendlyName" class="form-control"
-                    placeholder={{m_oProduct.productFriendlyName}} [(ngModel)]="m_oEditProduct.friendlyName"
-                    [disabled]="m_bIsReadOnly === true">
+            <div class="info-container">
+                <div class="font-bold">{{"DIALOG_PRODUCT_EDITOR_SIZE"| translate}}</div>
+                <div>{{"DIALOG_PRODUCT_EDITOR_UNAVAILABLE"| translate}}</div>
             </div>
-            <div class="d-flex flex-row align-items-center gap-3">
-                <label class="product-form-label" for="productSize">Product Size:</label>
-                <input class="form-control" type="text" readonly disabled>
-            </div>
-            <div class="d-flex flex-row align-items-center gap-3">
-                <label class="product-form-label" for="description">Description:</label>
-                <textarea class="form-control" name="description" id="" cols="25" rows="5"
-                    [(ngModel)]="m_oEditProduct.description" placeholder={{m_oProduct.description}}
-                    [disabled]="m_bIsReadOnly === true"></textarea>
-            </div>
-            <div class="d-flex flex-row align-items-center gap-3">
-                <label class="product-form-label" for="style">Style:</label>
-                <input type="text" [matAutocomplete]="auto" class="form-control" name="style"
-                    [(ngModel)]="m_oEditProduct.style" placeholder={{m_oEditProduct.style}}
-                    [disabled]="m_bIsReadOnly === true">
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="getStyleName">
-                    <mat-option *ngFor="let oStyle of m_asStyles" [value]="oStyle">
-                        {{oStyle.name}}
-                    </mat-option>
-                </mat-autocomplete>
-            </div>
-            <button class="btn btn-success align-self-end">Save</button>
-        </form>
+        </div>
+        <app-input-field [m_sLabel]="'DIALOG_PRODUCT_EDITOR_INFO_DIALOG_FRIENDLY_NAME_LABEL' | translate"
+            [m_sInputValue]="m_oProduct.productFriendlyName"
+            (m_oInputChange)="setProductFriendlyName($event)"></app-input-field>
+        <div class="textarea-wrapper" style="height: 40%">
+            <app-textarea [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate" [m_sInputString]="m_oProduct.description"
+                (keyup)="setDescription($event)"></app-textarea>
+        </div>
+        <div class="d-flex flex-row align-items-center gap-3">
+            <app-autocomplete class="flex-fill" [m_sLabel]="'DIALOG_IMPORT_UPLOAD_STYLE'| translate"
+                [m_aoInputs]="m_asStyles"
+                [m_sPlaceholder]="m_oProduct.style? m_oProduct.style : ('DIALOG_IMPORT_SELECT_STYLE' | translate)"
+                (m_oSelectionChange)="setStyleSelection($event)"></app-autocomplete>
+        </div>
+
     </div>
-    <div mat-dialog-actions class="border dialog-footer p-1 d-flex flex-row justify-content-end">
-        <button class="btn btn-secondary" (click)="onDismiss()">
-            Close
-        </button>
+    <div class="dialog-footer d-flex flex-row justify-content-end gap-3">
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true"
+            (click)="onDismiss(false)"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.SAVE_CHANGES' | translate" (click)="updateProduct()"></app-button>
     </div>
 </div>

@@ -1,56 +1,46 @@
-<nav class="navbar navbar-expand-lg d-flex flex-row justify-content-between px-3">
-    <form class="d-flex gap-2" #filterTextForm="ngForm" (ngSubmit)="getFilterText()">
-        <input class="form-control me-2" type="search" placeholder="{{'EDITOR_PRODUCTS_FILTER'|translate}}"
-            aria-label="Search" name="m_sFilterText" [(ngModel)]="m_sFilterText">
-        <button class="btn btn-outline-primary" type="submit"
-            matTooltip="{{'EDITOR_PRODUCTS_FILTER_APPLY' | translate}}" [matTooltipPosition]="'above'">
-            <fa-icon [icon]="faSearch"></fa-icon>
-        </button>
-        <button class="btn btn-outline-secondary" matTooltip="{{'EDITOR_PRODUCTS_FILTER_CLEAN' | translate}}"
-            [matTooltipPosition]="'above'">
-            <fa-icon [icon]="faRefresh" (click)="resetFilterText($event)"></fa-icon>
-        </button>
-        <button class="btn btn-outline-secondary" (click)="openWorkspaceInfo($event)"
-            matTooltip="{{'EDITOR_PRODUCTS_WS_INFO' | translate}}" [matTooltipPosition]="'above'">
-            <fa-icon [icon]="faInfo"></fa-icon>
-        </button>
-    </form>
+<nav class="navbar navbar-expand-lg d-flex flex-row align-items-center justify-content-between px-3">
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openAppsDialog($event)"><fa-icon
-                    [icon]="faRocket"></fa-icon> {{'EDITOR_OPERATION_TITLE_WAPPS' |
-                translate}}</a>
+            <app-button [m_sLabel]="'APPS'" [m_sIconRight]="'rocket_launch'" [m_bMuted]="true" [m_sSize]="'small'"
+                (click)="openAppsDialog()" [m_bRounded]="true"></app-button>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openNewAppDialog($event)"><fa-icon
-                    [icon]="faPlus"></fa-icon> {{'EDITOR_OPERATION_TITLE_NEW_PROCESSOR' |
-                translate}}</a>
+            <app-button [m_sLabel]="'WORKFLOWS'" [m_sIconRight]="'account_tree'" [m_bMuted]="true"
+                (click)="openWorkflowsDialog()" [m_sSize]="'small'" [m_bRounded]="true"></app-button>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openWorkflowsDialog($event)"><fa-icon
-                    [icon]="faGears"></fa-icon> {{'EDITOR_OPERATION_TITLE_WORKFLOW' |
-                translate}}</a>
+            <app-button [m_sLabel]="'NOTEBOOK'" [m_sIconRight]="'laptop_mac'" [m_bMuted]="true"
+                (click)="openJupyterNotebookPage()" [m_sSize]="'small'" [m_bRounded]="true"></app-button>
+        </li>
+
+        <li class="nav-item">
+            <app-button [m_sIconRight]="'upload'" [m_bMuted]="true" (click)="openImportDialog()" [m_sSize]="'small'"
+                [m_bRounded]="true"></app-button>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openImportDialog($event)"><fa-icon
-                    [icon]="faUpload"></fa-icon> {{'EDITOR_OPERATION_TITLE_IMPORT' |
-                translate}}</a>
+            <app-button [m_sIconRight]="'share'" [m_bMuted]="true" (click)="openShareDialog()" [m_sSize]="'small'"
+                [m_bRounded]="true"></app-button>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openJupyterNotebookPage($event)"><fa-icon
-                    [icon]="faComputer"></fa-icon> {{m_bJupyterIsReady === true ?
-                ('EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_OPEN' |
-                translate) : ("EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_CREATE" | translate)}}</a>
+
+        <li class="nav-item" *ngIf="!m_b2DMapModeOn">
+            <app-button [m_sIconRight]="'map'" [m_bMuted]="true" (click)="switch2D3DMode()" [m_sSize]="'small'"
+                [m_bRounded]="true"></app-button>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openStylesDialog($event)"><fa-icon
-                    [icon]="faStyles"></fa-icon> {{'EDITOR_OPERATION_TITLE_STYLE' |
-                translate}}</a>
+
+        <li class="nav-item" *ngIf="m_b2DMapModeOn">
+            <app-button [m_sIconRight]="'globe'" [m_bMuted]="true" (click)="switch2D3DMode()" [m_sSize]="'small'"
+                [m_bRounded]="true"></app-button>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="openShareDialog($event)"><fa-icon
-                    [icon]="faShare"></fa-icon> {{'EDITOR_OPERATION_TITLE_SHARE' |
-                translate}}</a>
+
+        <li class="nav-item" *ngIf="m_bFeatureInfoMode">
+            <app-button [m_sIconRight]="'chat_info'" [m_bMuted]="true" (click)="changeFeatureInfoMode()"
+                [m_sSize]="'small'" [m_bRounded]="true"></app-button>
         </li>
+
+        <li class="nav-item" *ngIf="!m_bFeatureInfoMode">
+            <app-button [m_sIconRight]="'pinch'" [m_bMuted]="true" (click)="changeFeatureInfoMode()" [m_sSize]="'small'"
+                [m_bRounded]="true"></app-button>
+        </li>
+
     </ul>
 </nav>

@@ -1,0 +1,12 @@
+.progress {
+    height: 2rem;
+}
+
+.progress-bar {
+    background: #009036;
+}
+
+.progress-percent {
+    margin: auto;
+    font-weight: 700;
+}

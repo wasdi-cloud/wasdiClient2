@@ -1,31 +1,18 @@
-<div class="dialog">
-    <h1 *ngIf="m_bIsEditingWorkspaceName === false" class="dialog-text" mat-dialog-title>
+<div class="apps-dialog d-flex flex-column jusitfy-content-between gap-1 h-100">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
         {{"DIALOG_ADD_NEW_WORKSPACE_HEADER" | translate}}
-    </h1>
-    <h1 *ngIf="m_bIsEditingWorkspaceName === true" class="dialog-text" mat-dialog-title>
-        {{"DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER" | translate}}
-    </h1>
-    <div class="m-2" mat-dialog-content>
-        <label *ngIf="m_bIsEditingWorkspaceName === false " class="form-label" for="">
-            {{"DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE" | translate}}
-        </label>
-        <label *ngIf="m_bIsEditingWorkspaceName === true" class="form-label" for="">
-            {{"DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" | translate}}
-        </label>
-        <input class="form-control my-2" type="text" name="m_sWorkspaceName" placeholder="Workspace Name"
-          (keyup)="onWorkspaceInput($event)"  [(ngModel)]="m_sWorkspaceName">
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
-    <div mat-dialog-actions class="d-flex flex-row gap-1 justify-content-end">
-        <!-- Add New Workspace -->
-        <button *ngIf="m_bIsEditingWorkspaceName === false" class="btn btn-success btn-sm"
-            (click)="onCreateWorkspace()">{{"DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON" |
-            translate}}</button>
-        <!-- Update Existing Workspace -->
-        <button *ngIf="m_bIsEditingWorkspaceName === true" class="btn btn-success btn-sm"
-            (click)="onRenameWorkspace()">{{"DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON" |
-            translate}}</button>
-        <!-- Cancel Button -->
-        <button class="btn btn-secondary btn-sm" (click)="onDismiss()">{{"DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON" |
-            translate}}</button>
+    <div class="flex-fill">
+        <p>{{"DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO" | translate }}
+        <p>
+            <app-input-field [m_sLabel]="'DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE' | translate"
+                (m_oInputChange)="m_sWorkspaceName = $event.event.target.value"></app-input-field>
+    </div>
+    <div class="dialog-footer d-flex flex-row gap-1 justify-content-between">
+        <app-button [m_sLabel]="'DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON' |
+        translate" (click)="onDismiss()" [m_bMuted]="true"></app-button>
+        <app-button *ngIf="m_bIsEditingWorkspaceName === false" [m_sLabel]="'DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON' |
+        translate" (click)="onCreateWorkspace()"></app-button>
     </div>
 </div>

@@ -1,0 +1,61 @@
+div.nav-container {
+	height: 100%;
+	max-height: calc(100vh - 3rem);
+	overflow: hidden;
+	position: sticky;
+	top: 3rem;
+	z-index: 2;
+}
+
+nav {
+	background: var(--neutral50Brand);
+	position: relative;
+	overflow: hidden;
+	width: 250px;
+	z-index: 1;
+}
+
+nav.collapsed {
+	width: 64px;
+}
+
+div.menu-control {
+
+	position: relative;
+	left: -16px;
+	background: var(--neutral50Brand);
+	cursor: pointer;
+	height: 32px;
+	border-radius: 50%;
+	z-index: 4;
+	padding: 4px;
+	width: 32px;
+}
+
+div.menu-control>.material-symbols-outlined {
+	border-radius: 50%;
+	border: 2px solid white;
+	cursor: pointer;
+	font-size: 18px;
+}
+
+div.menu-control:hover {
+	background: var(--neutral80);
+}
+
+.logo-img {
+	filter: brightness(0) saturate(100%) invert(24%) sepia(8%) saturate(1917%) hue-rotate(179deg) brightness(96%) contrast(91%);
+	height: 135.033px;
+	left: 2rem;
+	position: absolute;
+	top: 87%;
+	transform: rotate(-30deg);
+	width: 137.754px;
+	z-index: -1;
+}
+
+.logo-img.open {
+	height: 135.033px;
+	transform: rotate(-30deg);
+	width: 137.754px;
+}

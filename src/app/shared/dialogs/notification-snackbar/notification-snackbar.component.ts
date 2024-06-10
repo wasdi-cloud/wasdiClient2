@@ -16,4 +16,4 @@ export class NotificationSnackbarComponent {
   onDismiss() {
     this.m_oSnackbarRef.dismiss();
   }
-  }
+}

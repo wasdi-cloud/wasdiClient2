@@ -1,11 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Workspace } from 'src/app/shared/models/workspace.model';
-import { ConstantsService } from '../constants.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { MatDialog } from '@angular/material/dialog';
+
+import { ConstantsService } from '../constants.service';
 import { NotificationDisplayService } from '../notification-display.service';
+import { TranslateService } from '@ngx-translate/core';
+
+import { Workspace } from 'src/app/shared/models/workspace.model';
+
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 export interface Process {
   fileSize: string,
@@ -28,41 +31,62 @@ export interface Process {
   providedIn: 'root'
 })
 export class ProcessWorkspaceService {
-
+  /**
+   * Behaviour subject for emitting the running processes
+   */
   m_aoProcessesRunning: BehaviorSubject<Process[]> = new BehaviorSubject<Process[]>([]);
   _m_aoProcessesRunning$ = this.m_aoProcessesRunning.asObservable();
+
+  /**
+   * Stopped processes
+   */
   m_aoProcessesStopped: Array<Process> = [];
 
+  /**
+   * Behaviour subject and Observable for emitting the process bar message
+   */
   updateProcessBarMsg: BehaviorSubject<any> = new BehaviorSubject<any>({ message: "Intial Status" });
   updateProcessBarMsg$ = this.updateProcessBarMsg.asObservable();
 
-  //Days
+  /**
+   * Cookie expiration time
+   */
   COOKIE_EXPIRE_TIME_DAYS: number = 1;
-  APIURL: string = this.oConstantsService.getAPIURL();
-  m_bIgnoreWorkspaceApiUrl: boolean = this.oConstantsService.getIgnoreWorkspaceApiUrl();
 
-  //ORDER OF PROCESSES IS IMPORTANT
+  /**
+   * API URL from constants service
+   */
+  APIURL: string = this.m_oConstantsService.getAPIURL();
+
+  /**
+   * Flag to check if the workspace api url should be ignored
+   */
+  m_bIgnoreWorkspaceApiUrl: boolean = this.m_oConstantsService.getIgnoreWorkspaceApiUrl();
+
+  /**
+   * The types of processes - DO NOT CHANGE ORDER!!!!
+   */
   TYPE_OF_PROCESS: Array<string> = ["DOWNLOAD", "PUBLISHBAND", "PUBLISH", "UPDATEPROCESSES"];
 
   constructor(
-    private oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog,
+    private m_oConstantsService: ConstantsService,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private oHttp: HttpClient) { }
+    private m_oTranslate: TranslateService,
+    private m_oHttp: HttpClient) { }
 
   /**
     * Load the last 5 processes of a workspace
     * @param sWorkSpaceId
     */
   loadProcessesFromServer(sWorkspaceId: string) {
-    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
-    if (oWorkspace !== null && oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get<any>(sUrl + '/process/lastbyws?workspace=' + sWorkspaceId).subscribe(oResponse => {
+    return this.m_oHttp.get<any>(sUrl + '/process/lastbyws?workspace=' + sWorkspaceId).subscribe(oResponse => {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
         // this.m_aoProcessesRunning = oResponse; 
         this.setProcessesRunning(oResponse.reverse());
@@ -82,7 +106,6 @@ export class ProcessWorkspaceService {
 
   /**
    * Return m_aoProcessesRunning
-   * 
    */
   getProcessesRunning(): Observable<Process[]> {
     return this._m_aoProcessesRunning$;
@@ -96,10 +119,10 @@ export class ProcessWorkspaceService {
    * @returns {*}
    */
   getAllProcessesFromServer(sWorkSpaceId: string, iStartIndex: number, iEndIndex: number) {
-    var oWorkspace = this.oConstantsService.getActiveWorkspace();
-    var sUrl = this.APIURL;
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
 
-    if (oWorkspace !== null && oWorkspace.apiUrl !== null && !this.m_bIgnoreWorkspaceApiUrl) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
@@ -113,7 +136,7 @@ export class ProcessWorkspaceService {
       sUrl += '&endindex=' + iEndIndex;
     }
 
-    return this.oHttp.get<any>(sUrl);
+    return this.m_oHttp.get<any>(sUrl);
   };
 
   /**
@@ -123,7 +146,7 @@ export class ProcessWorkspaceService {
    */
   getProcessesByProcessor(sProcessorName: string) {
     let sUrl = this.APIURL;
-    return this.oHttp.get(sUrl + '/process/byapp?processorName=' + sProcessorName);
+    return this.m_oHttp.get(sUrl + '/process/byapp?processorName=' + sProcessorName);
   };
 
 
@@ -139,11 +162,10 @@ export class ProcessWorkspaceService {
    * @returns {*}
    */
   getFilteredProcessesFromServer(sWorkSpaceId: string, iStartIndex: number, iEndIndex: number, sStatus: string, sType: string, sDate: string, sName: string) {
-    var oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    var oWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     var sUrl = this.APIURL;
 
-    //Will need to refactor this
-    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
@@ -162,7 +184,7 @@ export class ProcessWorkspaceService {
       sUrl += "&namePattern=" + sName;
     }
 
-    return this.oHttp.get<any[]>(sUrl);
+    return this.m_oHttp.get<any[]>(sUrl);
   };
 
   /**
@@ -177,15 +199,14 @@ export class ProcessWorkspaceService {
     if (!sPidInput) {
       return false;
     }
-    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
-    //Will need to refactor this
-    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    this.oHttp.get<any>(sUrl + '/process/delete?procws=' + sPidInput).subscribe({
+    this.m_oHttp.get<any>(sUrl + '/process/delete?procws=' + sPidInput).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(sWorkSpaceId) === false) {
           oProcess.status = "stopped";
@@ -194,19 +215,10 @@ export class ProcessWorkspaceService {
         }
       },
       error: oError => {
-        oService.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS")
+        oService.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("DELETE_PROCESS_ERROR"), this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
       }
     }
     );
-
-
-
-    //   function (data, status) {
-    //
-    // }, (function (data, status) {
-    //  
-    //   // FadeoutUtils.utilsVexDialogAlertTop("GURU MEDITATION<br>ERROR WHILE KILLING THE PROCESS");
-    // }));
     return true;
   };
 
@@ -298,15 +310,14 @@ export class ProcessWorkspaceService {
    * @returns {*}
    */
   getProcessWorkspaceById(sProcessId: string) {
-    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
-    //REFACTOR:
-    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get(sUrl + '/process/byid?procws=' + sProcessId);
+    return this.m_oHttp.get(sUrl + '/process/byid?procws=' + sProcessId);
   };
 
   /**
@@ -314,15 +325,14 @@ export class ProcessWorkspaceService {
    * @returns {*}
    */
   getSummary() {
-    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
-    //REFACTOR
-    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get<any>(sUrl + '/process/summary');
+    return this.m_oHttp.get<any>(sUrl + '/process/summary');
   };
 
   /**
@@ -331,37 +341,24 @@ export class ProcessWorkspaceService {
    * @returns {boolean}
    */
   deleteProcess(oProcessInput: Process) {
-    let oController = this;
-    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
 
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog("Are you sure you want to kill this process?");
-
-    bConfirmResult.subscribe(oDialogResult => {
+    this.m_oNotificationDisplayService.openConfirmationDialog(this.m_oTranslate.instant("DELETE_PROCESS_QUESTION"), this.m_oTranslate.instant("KEY_PHRASES.CONFIRM_REMOVAL"), 'alert').subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.removeProcessInServer(oProcessInput.processObjId, oWorkspace.workspaceId, oProcessInput)
       }
     })
-    // this.m_oModalService.showModal({
-    //   templateUrl: "dialogs/delete_process/DeleteProcessDialog.html",
-    //   controller: "DeleteProcessController"
-    // }).then(function (modal) {
-    //   modal.element.modal();
-    //   modal.close.then(function (result) {
-    //     if (result === 'delete')
-    //       oController.removeProcessInServer(oProcessInput.processObjId, oWorkspace.workspaceId, oProcessInput)
-    //   });
-    // });
 
     return true;
   };
 
   getProcessorStatistics(sProcessorName: string) {
     let sUrl: string = this.APIURL;
-    return this.oHttp.get<any>(sUrl + '/process/appstats?processorName=' + sProcessorName);
+    return this.m_oHttp.get<any>(sUrl + '/process/appstats?processorName=' + sProcessorName);
   };
 
   getProcessWorkspaceTotalRunningTimeByUserAndInterval(sUserId: string, sDateFrom: string, sDateTo: string) {
-    let sUrl: string = this.APIURL + '/process/runningTime?userId=' + sUserId;
+    let sUrl: string = this.APIURL + '/process/runningTime/UI?userId=' + sUserId;
 
     if (sDateFrom) {
       sUrl += '&dateFrom=' + sDateFrom;
@@ -371,15 +368,15 @@ export class ProcessWorkspaceService {
       sUrl += '&dateTo=' + sDateTo;
     }
 
-    return this.oHttp.get(sUrl);
+    return this.m_oHttp.get<number>(sUrl);
   };
 
-  getProcessWorkspaceTimeByUser(){
-    return this.oHttp.get<any>(this.APIURL + '/process/runningtimeproject/byuser');
+  getProcessWorkspaceTimeByUser() {
+    return this.m_oHttp.get<any>(this.APIURL + '/process/runningtimeproject/byuser');
   }
 
   getProcessWorkspaceTimeByProject() {
-    return this.oHttp.get<any>(this.APIURL + '/process/runningtimeproject');
+    return this.m_oHttp.get<any>(this.APIURL + '/process/runningtimeproject');
   }
 
   getQueuesStatus(sNodeCode: string, sStatuses: string) {
@@ -393,12 +390,12 @@ export class ProcessWorkspaceService {
       sUrl += '&statuses=' + sStatuses;
     }
 
-    return this.oHttp.get(sUrl);
+    return this.m_oHttp.get(sUrl);
   };
 
   getAvailableNodesSortedByScore() {
     let sUrl = this.APIURL + '/process/nodesByScore?';
 
-    return this.oHttp.get(sUrl);
+    return this.m_oHttp.get<any[]>(sUrl);
   };
 }

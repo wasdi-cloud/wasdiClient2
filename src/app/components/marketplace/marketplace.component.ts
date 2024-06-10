@@ -1,18 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 
 //Service Imports:
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ImageService } from 'src/app/services/api/image.service';
-import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { TranslateService } from '@ngx-translate/core';
 
 //Angular Material Imports:
-import { MatDialog } from "@angular/material/dialog"
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 interface AppFilter {
   categories: any[];
@@ -30,7 +27,8 @@ interface AppFilter {
 @Component({
   selector: 'app-marketplace',
   templateUrl: './marketplace.component.html',
-  styleUrls: ['./marketplace.component.css']
+  styleUrls: ['./marketplace.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class MarketplaceComponent implements OnInit {
   m_sPublisher: string;
@@ -56,73 +54,23 @@ export class MarketplaceComponent implements OnInit {
   m_bWaiting: boolean = true;
 
   m_sNameFilter!: string;
+  m_sNameFilterSubscription: any;
 
   m_aoSelectedPublishers: Array<any> = [];
   m_aoSelectedCategories: Array<any> = [];
   m_iSelectedStarRating: number = 0;
 
+  m_sDeveloperSearch: string = "";
   constructor(
     private m_oImageService: ImageService,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService,
     private m_oTranslate: TranslateService,
   ) { }
 
   ngOnInit(): void {
     this.getApplications();
-    //Remove categories retrieval for ESA demo
-    this.getCategories();
-    this.getPublishers();
   }
-
-
-  /**
-   * Get Marketplace Categories
-   * @returns {void}
-   */
-  getCategories(): void {
-    let sCategoriesError;
-    this.m_oTranslate.get('MSG_WAPPS_CATEGORY_ERROR').subscribe(sResponse => {
-      sCategoriesError = sResponse;
-    })
-    this.m_oProcessorMediaService.getCategories().subscribe(
-      {
-        next: oResponse => {
-          if (oResponse.length === 0) {
-            this.m_oNotificationDisplayService.openAlertDialog( sCategoriesError);
-          }
-          this.m_asCategoryOptions = oResponse;
-        },
-        error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog( sCategoriesError);
-        }
-      })
-  }
-
-  /**
-   * Get list of Publishers from the server
-   * @returns {void}
-   */
-  getPublishers(): void {
-    let sErrorMsg: string;
-    this.m_oTranslate.get("MSG_WAPPS_PUBLISHERS_ERROR").subscribe(sResponse => {
-      sErrorMsg = sResponse;
-    })
-    this.m_oProcessorMediaService.getPublishersFilterList().subscribe({
-      next: oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          this.m_aoPublishers = oResponse;
-        } else {
-          this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
-        }
-      },
-      error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
-      }
-    });
-  }
-
 
   /**
    * Retrieve the applications list from the server
@@ -152,12 +100,12 @@ export class MarketplaceComponent implements OnInit {
             this.m_bLoadMoreEnabled = false;
           }
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
         }
         this.m_bWaiting = false;
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
         this.m_bWaiting = false;
       }
     })
@@ -205,6 +153,9 @@ export class MarketplaceComponent implements OnInit {
       sMessage = sResponse;
     });
 
+    if (this.m_sNameFilter == undefined) this.m_sNameFilter = "";
+    if (this.m_oAppFilter.name == undefined) this.m_oAppFilter.name = "";
+
     if (this.m_sNameFilter !== this.m_oAppFilter.name) {
       this.m_oAppFilter.page = 0;
       this.m_oAppFilter.name = this.m_sNameFilter;
@@ -229,11 +180,11 @@ export class MarketplaceComponent implements OnInit {
             this.m_bLoadMoreEnabled = false;
           }
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+          this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
       }
     });
   }
@@ -247,18 +198,6 @@ export class MarketplaceComponent implements OnInit {
     this.refreshAppList();
   }
 
-  /**
-   * Handle Changes to the Search Input field on Enter or if Search Button clicked
-   * @param oEvent 
-   * @returns {void}
-   */
-  onSearchInput(oEvent): void {
-    if (oEvent.keyCode === 13 || oEvent.target.attributes.id.nodeValue === "searchBtn") {
-      if (this.m_sNameFilter) {
-        this.refreshAppList();
-      }
-    }
-  }
 
   /**
    * Clear the Search Input Field
@@ -276,20 +215,35 @@ export class MarketplaceComponent implements OnInit {
    * @returns {void}
    */
   developerChanged(oEvent): void {
-    //Add Selected Developers to the App Filter publishers and then get applicatinons
-    this.m_oAppFilter.publishers = this.m_aoSelectedPublishers;
+    let iDeveloperIndex = this.m_aoSelectedPublishers.indexOf(oEvent.publisher)
+    if (iDeveloperIndex === -1) {
+      this.m_aoSelectedPublishers.push(oEvent.publisher);
+    } else {
+      this.m_aoSelectedPublishers.splice(iDeveloperIndex, 1);
+    }
+    //Add Selected Developers to the App Filter publishers and then get applications
     this.m_oAppFilter.page = 0;
     this.getApplications();
 
   }
 
   categoriesChanged(oEvent): void {
+    let iCategoryIndex = this.m_aoSelectedCategories.indexOf(oEvent.id)
+
+    if (iCategoryIndex === -1) {
+      this.m_aoSelectedCategories.push(oEvent.id);
+    } else {
+      this.m_aoSelectedCategories.splice(iCategoryIndex, 1);
+    }
     //Add Selected Categories to the App Filter Categories and then get applications
     this.m_oAppFilter.categories = this.m_aoSelectedCategories;
     this.m_oAppFilter.page = 0;
     this.getApplications();
-
   }
+
+  /**
+   * Handler for Sorting Apps: 
+   */
 
   //TODO: Sort apps based on Success Rate
   successChanged() {
@@ -309,9 +263,28 @@ export class MarketplaceComponent implements OnInit {
   }
 
   ratingChanged(oEvent) {
-    this.m_oAppFilter.score = this.m_iSelectedStarRating;
+    this.m_oAppFilter.score = oEvent;
     this.m_oAppFilter.page = 0;
     this.getApplications();
 
+  }
+
+  getAppFilter(oEvent) {
+    this.m_oAppFilter = oEvent;
+    this.getApplications();
+  }
+
+  setSorting(sColumn: string) {
+    if (this.m_oAppFilter.orderBy === sColumn) {
+      if (this.m_oAppFilter.orderDirection === 1) this.m_oAppFilter.orderDirection = -1;
+      else if (this.m_oAppFilter.orderDirection === -1) this.m_oAppFilter.orderDirection = 1;
+      else this.m_oAppFilter.orderDirection = 1;
+    }
+
+    this.m_oAppFilter.orderBy = sColumn;
+    this.m_oAppFilter.page = 0;
+
+
+    this.refreshAppList();
   }
 }

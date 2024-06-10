@@ -1,30 +1,61 @@
-<div class="register-toolbar d-flex flex-row gap-2 p-2 w-100 justify-content-end">
-    <button class="btn btn-sm btn-success" (click)="keycloakRegister()">
-        Sign Up
-    </button>
-    <button class="btn btn-sm btn-secondary" (click)="keycloakLogin()">
-        Keycloak Login
-    </button>
-</div>
-<form class="col-6 m-auto" name="form" #f="ngForm" (ngSubmit)="f.form.valid && login()" novalidate>
-    <!-- Email input -->
-    <div class="form-outline mb-4">
-        <input type="email" id="form2Example1" class="form-control" [(ngModel)]="form.username" #username="ngModel"
-            name="username" />
-        <label class="form-label" for="form2Example1">
-            Email address
-        </label>
+<main class="flex-fill d-flex flex-row">
+    <div class="form-container mx-auto d-flex flex-column gap-5 col-4">
+        <div class="header-logo-container font-bold d-flex flex-column gap-2">
+            <div class="logos-container d-flex flex-row align-items-center gap-2">
+                <img class="logo-only" src="/assets/icons/logo-only.svg" alt="">
+                <img class="logo-name" src="/assets/icons/logo-name.svg" alt="">
+            </div>
+            Web Advanced Space Developer Interface
+        </div>
+        <div class="d-flex flex-column gap-3">
+            <div>
+                <div class="login-header font-bold">Login</div>
+                <div>Login to WASDI and start your journey<br>
+                    to <strong>Earth Observation</strong></div>
+            </div>
+            <div class="justify-self-center d-flex flex-column gap-3">
+                <app-input-field class="pt-3" [m_sLabel]="'Email Address'" (m_oInputChange)="setUsernameInput($event)"
+                    (keyup.enter)="login()"></app-input-field>
+                <div class="password">
+                    <app-input-field [m_sLabel]="'Password'" [m_sInputType]="'password'" [m_sIconRight]="'visibility'"
+                        (m_oInputChange)="setPasswordInput($event)" (keyup.enter)="login()"></app-input-field>
+                    Forgot password? Reset.
+                </div>
+                <div>
+                    <app-button [m_sSize]="'large'" [m_sLabel]="'Login'" [m_bRounded]="true" (click)="login()"
+                        (keyup.enter)="login()"></app-button>
+
+                    <app-button [m_sSize]="'large'" [m_sLabel]="'Login with Keycloak'" [m_bRounded]="true" (click)="keycloakLogin()"></app-button>
+
+                        <app-button [m_sSize]="'large'" [m_sLabel]="'Login with Keycloak'" [m_bRounded]="true" (click)="login()"
+                        (keyup.enter)="keycloakRegister()"></app-button>
+                    <div class="text-center">You do not have an account? Sign up here</div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="img-container">
+    </div>
+    <!-- <form class="col-6" name="form" #f="ngForm" (ngSubmit)="f.form.valid && login()" novalidate> -->
+    <!-- Email input -->
+    <!-- <div class="form-outline mb-4">
+                <input type="email" id="form2Example1" class="form-control" [(ngModel)]="form.username"
+                    #username="ngModel" name="username" />
+                <label class="form-label" for="form2Example1">
+                    Email address
+                </label>
+            </div> -->
 
     <!-- Password input -->
-    <div class="form-outline mb-4">
-        <input type="password" id="form2Example2" class="form-control" [(ngModel)]="form.password" #password="ngModel"
-            name="password" />
-        <label class="form-label" for="form2Example2">
-            Password
-        </label>
-    </div>
 
+    <!-- <div class="form-outline mb-4">
+                <input type="password" id="form2Example2" class="form-control" [(ngModel)]="form.password"
+                    #password="ngModel" name="password" />
+                <label class="form-label" for="form2Example2">
+                    Password
+                </label>
+            </div> -->
     <!-- Submit button -->
-    <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-</form>
+    <!-- <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+        </form> -->
+</main>

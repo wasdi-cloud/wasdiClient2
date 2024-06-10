@@ -1,0 +1,68 @@
+div.dialog-content {
+    height: 100%;
+}
+
+div.dialog-column {
+    width: 50%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+div.button-container {
+    padding: 8px;
+    border-radius: 8px;
+}
+
+div.button-container,
+div.json-sample-container {
+    background: var(--neutral5);
+}
+
+div.textarea-container {
+    height: 25%;
+}
+
+div.file-container {
+    border: 1px solid #000000;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+div.re-deploy {
+    color: var(--wasdiGreen);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+/* div.drag-drop-container {
+    height: 25%;
+} */
+
+div.json-editor-wrapper {
+    padding: 0px 32px 32px 32px;
+}
+
+table {
+    border-radius: 8px !important;
+    border-collapse: separate !important;
+}
+
+thead>tr {
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+thead>tr>td {
+    background-color: var(--neutral50Brand) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+}
+
+thead>tr>td.isOpen {
+    background-color: var(--neutral70) !important;
+}
+
+tbody>tr>td {
+    border-bottom: none !important;
+}

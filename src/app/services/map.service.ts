@@ -1,37 +1,78 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ConstantsService } from './constants.service';
 import Geocoder from 'leaflet-control-geocoder';
 import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
 import { latLng, Map, tileLayer, featureGroup } from 'leaflet';
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
-import * as L from "leaflet";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ManualBoundingBoxComponent } from '../shared/shared-components/manual-bounding-box/manual-bounding-box.component';
+import { BehaviorSubject } from 'rxjs';
+import 'node_modules/leaflet-mouse-position/src/L.Control.MousePosition.js'
+
+declare const L: any;
+
+
+const iconRetinaUrl = 'assets/marker-icon-2x.png';
+const iconUrl = 'assets/marker-icon.png';
+const shadowUrl = 'assets/marker-shadow.png';
+const iconDefault = L.icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41]
+});
+L.Marker.prototype.options.icon = iconDefault;
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
 
-  constructor(private m_oConstantsService: ConstantsService) {
-    this.initTilelayer();
+  /**
+   * Service constructor.
+   * It initializes the base layers and the draw items.
+   * 
+   * @param m_oConstantsService 
+   * @param m_oDialog 
+   */
+  constructor(private m_oConstantsService: ConstantsService, private m_oDialog: MatDialog, private m_oHttp: HttpClient) {
+    this.initTilelayer()
     this.m_oOptions = {
       layers: [
         this.m_oOSMBasic
       ],
+      zoomControl: false,
       zoom: 3,
       center: latLng(0, 0),
       edit: { featureGroup: this.m_oDrawnItems }
     }
-
   }
 
-  APIURL = this.m_oConstantsService.getAPIURL();
-
-  // Reference to the base Layers
+  /**
+   * OSM Basic Map
+   */
   m_oOSMBasic: any = null;
+  /**
+   * Topography Map
+   */
   m_oOpenTopoMap: any = null;
+  /**
+   * Esri World Streep Maps
+   */
   m_oEsriWorldStreetMap: any = null;
+  /**
+   * Esri Imaging
+   */
   m_oEsriWorldImagery: any = null;
-  m_oNASAGIBSViirsEarthAtNight2012: any = null;
+  /**
+   * Dark Stadia Map
+   */
+  m_oStadiMapDark: any = null;
 
   /**
    * Is the component toggle-albe to 3D map? 
@@ -43,6 +84,9 @@ export class MapService {
    */
   m_oLayersControl: any;
 
+  /**
+   * Object containing the drawings done on the map
+   */
   m_oDrawnItems: L.FeatureGroup = new L.FeatureGroup();
 
   /**
@@ -65,9 +109,21 @@ export class MapService {
    */
   m_oGeocoderControl = new Geocoder();
 
-  //Init options for leaflet-draw
+  /**
+   * Manual Boundig Box Event Listener
+   */
+  m_oManualBoundingBoxSubscription: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  /**
+   * Manual Boundig Box Observable
+   */
+  _m_oManualBoundingBoxSubscription$ = this.m_oManualBoundingBoxSubscription.asObservable();
+
+  /**
+   * Init options for leaflet-draw
+   */
   m_oDrawOptions: any = {
-    position: 'topleft',
+    position: 'topright',
     draw: {
       circle: false,
       circlemarker: false,
@@ -83,6 +139,10 @@ export class MapService {
     }
   }
 
+  /**
+   * Set the map object (when created not by the service)
+   * @param oMap 
+   */
   setMap(oMap: any) {
     this.m_oWasdiMap = oMap;
   }
@@ -95,45 +155,57 @@ export class MapService {
     return this.m_oWasdiMap;
   }
 
+  getOSMBasicLayer() {
+    return this.m_oOSMBasic;
+  }
+
   /**
    * Initalize base layers
    */
   initTilelayer() {
-
-    FadeoutUtils.verboseLog("MapService.initTilelayer: initializing base layers");
-
+    // Basic OSM Layer
     this.m_oOSMBasic = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       maxZoom: 18,
       // this option disables loading tiles outside of the world bounds.
       noWrap: true
     });
+
+    // Topo Map
     this.m_oOpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
       maxZoom: 17,
       attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
     });
+
+    // Esri Streets
     this.m_oEsriWorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
     });
+
+    // Esri Images
     this.m_oEsriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
 
-    this.m_oNASAGIBSViirsEarthAtNight2012 = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
+    // Stadi Dark
+    this.m_oStadiMapDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
       minZoom: 0,
       maxZoom: 20,
-      attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      ext: 'png'
     });
 
-    this.m_oLayersControl = {
-      baseLayers: {
+    // Add all to the layers control
+    this.m_oLayersControl = L.control.layers(
+      {
         'Standard': this.m_oOSMBasic,
         "OpenTopoMap": this.m_oOpenTopoMap,
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
-        "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
-      }
-    }
+        "Stadi Map Dark": this.m_oStadiMapDark
+      }, null,
+      { position: 'bottomright' }
+    )
   }
 
   /**
@@ -147,30 +219,57 @@ export class MapService {
    * Initalize WASDI Map
    */
   initWasdiMap(sMapDiv: string) {
-    FadeoutUtils.verboseLog("MapService.initWasdiMap: initializing Leaflet");
     this.m_oWasdiMap = this.initMap(sMapDiv);
+
+  }
+
+  /**
+   * Adds Mouse Position and Scale to the actual map
+   * @returns 
+   */
+  addMousePositionAndScale(oMap) {
+
+    if (oMap == null) {
+      oMap = this.m_oWasdiMap;
+      return;
+    }
+
+    // coordinates in map find this plugin in lib folder
+    let oMousePosition = L.control.mousePosition();
+
+    if (oMousePosition != null) {
+      oMousePosition.addTo(oMap);
+    }
+
+    L.control.scale({
+      position: "bottomright",
+      imperial: false
+    }).addTo(oMap);
   }
 
   /**
    * Init the Map
    * @param sMapDiv 
    */
-  initMap(sMapDiv) {
+  initMap(sMapDiv: string) {
 
-    FadeoutUtils.verboseLog("MapService.initMap: creating the map");
-
+    // Create the Map Object
     let oMap: L.Map = L.map(sMapDiv, {
       zoomControl: false,
       center: [0, 0],
-      zoom: 3
+      zoom: 3,
+
     });
+
 
     this.m_oOSMBasic.addTo(oMap)
 
-    L.control.scale({
-      position: "bottomright",
-      imperial: false
-    }).addTo(oMap);
+    this.initGeoSearchPluginForOpenStreetMap(oMap);
+    this.addMousePositionAndScale(oMap);
+    L.control.zoom({ position: 'bottomright' }).addTo(oMap);
+    this.m_oLayersControl.addTo(oMap);
+
+
     // center map
     let southWest = L.latLng(0, 0);
     let northEast = L.latLng(0, 0);
@@ -184,10 +283,9 @@ export class MapService {
 
     //add event on base change
     oMap.on('baselayerchange', function (e) {
-      // console.log(e);
-      // e.layer.bringToBack();
       oActiveBaseLayer = e;
     });
+
     return oMap;
   }
 
@@ -196,63 +294,39 @@ export class MapService {
    * @param sMapDiv 
    */
   initMapSingleton(sMapDiv) {
-    FadeoutUtils.verboseLog("MapService.initMapSingleton: creating the singleton map");
 
-    let oOSMBasic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution:
-        '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-      maxZoom: 18,
-      // this map option disables world wrapping. by default, it is false.
-      //continuousWorld: false,
-      // this option disables loading tiles outside of the world bounds.
-      //noWrap: true
-    });
-
-    let oMap = L.map(sMapDiv, {
+    var oMap = L.map(sMapDiv, {
       zoomControl: false,
-      layers: [oOSMBasic],
+      layers: [this.m_oOSMBasic],
       keyboard: false
     });
 
-    //scale control
-    L.control.scale({
-      position: "bottomright",
-      imperial: false
-    }).addTo(oMap);
+    this.initGeoSearchPluginForOpenStreetMap(oMap);
 
+    this.addMousePositionAndScale(oMap);
     //layers control
-    let oLayersControl = L.control.layers(
+    var oLayersControl = L.control.layers(
       {
         "Standard": this.m_oOSMBasic,
         "OpenTopoMap": this.m_oOpenTopoMap,
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
-        "NASAGIBSViirsEarthAtNight2012": this.m_oNASAGIBSViirsEarthAtNight2012
-      },
-      {},
-      {
-        'position': 'bottomright'
-      }
+        "Stadi Map Dark": this.m_oStadiMapDark
+      }, null,
+      { position: 'bottomright' }
     );
 
     oLayersControl.addTo(oMap);
+    L.control.zoom({ position: 'bottomright' }).addTo(oMap);
 
     // center map
-    let southWest = L.latLng(0, 0),
-      northEast = L.latLng(0, 0),
-      oBoundaries = L.latLngBounds(southWest, northEast);
+    var oSouthWest = L.latLng(0, 0),
+      oNorthEast = L.latLng(0, 0),
+      oBoundaries = L.latLngBounds(oSouthWest, oNorthEast);
 
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
-    let oActiveBaseLayer = oOSMBasic;
-
-    //add event on base change
-    oMap.on('baselayerchange', function (e) {
-      // console.log(e);
-      // e.layer.bringToBack();
-      // oActiveBaseLayer = e;
-    });
 
     return oMap;
   }
@@ -283,48 +357,38 @@ export class MapService {
     if (layerType === "rectangle") {
       const rectangleCoordinates = layer._latlngs
       this.m_oDrawnItems.addLayer(layer);
-
       return rectangleCoordinates;
     }
   }
 
-
-  /**
-   * Init map Editor
-   * @param sMapDiv
-   * @returns {boolean}
-   */
-  initMapEditor(sMapDiv) {
-    if (!sMapDiv) {
-      return false;
-    }
-    this.initWasdiMap(sMapDiv)
-    return true;
-  }
-
-
   /**
     * Init geo search plugin, the search bar for geographical reference on the map
-    * @param opt if present, the search bar is placed on the bottom right corner of the map.
     * @references https://github.com/perliedman/leaflet-control-geocoder
     */
-  initGeoSearchPluginForOpenStreetMap() {
-    this.m_oGeocoderControl.options.position = "bottomright";
+  initGeoSearchPluginForOpenStreetMap(oMap) {
 
+    if (oMap == null) {
+      oMap = this.m_oWasdiMap;
+    }
+
+    if (this.m_oGeocoderControl == null) {
+      this.m_oGeocoderControl = L.geocoder();
+    }
+
+    if (this.m_oGeocoderControl != null) {
+      this.m_oGeocoderControl.addTo(oMap);
+    }
   }
+
   /**
    * Clear Map 
    */
   clearMap() {
-    
+
     if (this.m_oWasdiMap) {
-      FadeoutUtils.verboseLog("MapService.clearMap: cleaning the map instance")
       this.m_oDrawnItems.clearLayers();
       this.m_oWasdiMap.remove();
       this.m_oWasdiMap = null;
-    }
-    else{
-      FadeoutUtils.verboseLog("MapService.clearMap: map was already null")
     }
   }
 
@@ -361,30 +425,6 @@ export class MapService {
   /******* LAYER HANDLERS *******/
 
   /**
-   * Set basic map 
-   * @returns {boolean}
-   */
-  setBasicMap() {
-    if (!this.m_oOSMBasic) {
-      return false;
-    }
-    this.m_oWasdiMap.addLayer(this.m_oOSMBasic, true);
-    return true;
-  }
-
-  /**
-   * Remove basic map 
-   * @returns {boolean}
-   */
-  removeBasicMap() {
-    if (!this.m_oOSMBasic) {
-      return false;
-    }
-    this.removeLayerFromMap(this.m_oOSMBasic);
-    return true;
-  }
-
-  /**
    * Remove a layer from the map
    * @param oLayer
    * @returns {boolean}
@@ -396,24 +436,23 @@ export class MapService {
     oLayer.remove();
     return true;
   }
-  /**
-    * Remove all layers from the map
-    */
-  removeLayersFromMap() {
-    this.m_oWasdiMap.eachLayer(function (layer: any) {
-      this.m_oWasdiMap.removeLayer(layer);
-    });
-  }
 
   /**
-   * Convert boundaries
-   * @param sBoundaries
+   * Convert boundaries in an array of points
+   * @param sBbox
    * @returns {Array}
    */
   convertBboxInBoundariesArray(sBbox) {
+
+    let aoReturnValues = [];
+
+    if (sBbox == null) {
+      return aoReturnValues;
+    }
+
     let asBoundaries = sBbox.split(",");
     let iNumberOfBoundaries = asBoundaries.length;
-    let aoReturnValues = [];
+
     let iIndexReturnValues = 0;
     for (let iBoundaryIndex = 0; iBoundaryIndex < iNumberOfBoundaries; iBoundaryIndex++) {
       if (iBoundaryIndex % 2 === 0) {
@@ -513,15 +552,11 @@ export class MapService {
       //mouse over event change rectangle style
       oRectangle.on("mouseover", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
         oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
-        console.log("on-mouse-over-rectangle")
-        // $rootScope.$broadcast('on-mouse-over-rectangle', { rectangle: oRectangle });
         oRectangle.getBounds();
       });
       //mouse out event set default value of style
       oRectangle.on("mouseout", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
         oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
-        console.log("on-mouse-leave-rectangle")
-        //$rootScope.$broadcast('on-mouse-leave-rectangle', { rectangle: oRectangle });
       });
     }
     return oRectangle;
@@ -557,24 +592,18 @@ export class MapService {
       //event on click
       if (sReferenceName) {
         oRectangle.on("click", function (event) {
-          //$rootScope.$broadcast('on-mouse-click-rectangle', { rectangle: oRectangle });\
-          console.log("on-mouse-click-rectangle")
         });
       }
 
       //mouse over event change rectangle style
       oRectangle.on("mouseover", function (event) {
         oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
-        console.log("on-mouse-over-rectangle")
-        //$rootScope.$broadcast('on-mouse-over-rectangle', { rectangle: oRectangle });
         oRectangle.getBounds();
       });
 
       //mouse out event set default value of style
       oRectangle.on("mouseout", function (event) {
         oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
-        console.log("on-mouse-leave-rectangle")
-        //$rootScope.$broadcast('on-mouse-leave-rectangle', { rectangle: oRectangle });
       });
       return oRectangle;
     } catch (e) {
@@ -601,10 +630,19 @@ export class MapService {
 
       for (let iProducts = 0; iProducts < aoProducts.length; iProducts++) {
         let oProduct = aoProducts[iProducts];
-        let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
-        aoBounds = aoBounds.concat(aoProductBounds);
+
+        if (oProduct != null) {
+          if (!FadeoutUtils.utilsIsStrNullOrEmpty(oProduct.bbox)) {
+            let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
+            aoBounds = aoBounds.concat(aoProductBounds);
+          }
+        }
       }
-      this.m_oWasdiMap.flyToBounds([aoBounds]);
+
+      if (aoBounds.length > 0) {
+        this.m_oWasdiMap.flyToBounds([aoBounds]);
+      }
+
       return true;
     }
     catch (e) {
@@ -634,12 +672,16 @@ export class MapService {
    * @param aBounds
    * @returns {boolean}
    */
-  zoomOnBounds(aBounds) {
+  zoomOnBounds(aBounds, oMap = null) {
     try {
       if (!aBounds) { return false; }
       if (aBounds.length == 0) { return false; }
+      if (oMap == null && this.m_oWasdiMap == null) { return false; }
 
-      this.m_oWasdiMap.flyToBounds([aBounds]);
+      if (oMap == null) oMap = this.m_oWasdiMap;
+
+      oMap.flyToBounds([aBounds]);
+
       return true;
     }
     catch (e) {
@@ -729,94 +771,6 @@ export class MapService {
   };
 
   /**
-   * This method works only for s1 products
-   * @param boundingBox The bounding box declared by product
-   * @param geoserverBoundingBox The bounding box declared by the Geo Server when a band has been published
-   * @returns {boolean}
-   */
-  isProductGeoreferenced(boundingBox, geoserverBoundingBox) {
-    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(boundingBox) === true) || (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox) === true)) {
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(boundingBox) === true) {
-        console.debug("Product bounding box is null");
-        // Impossible to assume if is correct or not. Assume true
-        return true;
-      }
-      else if (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox) === true) {
-        console.debug("Geoserver bounding box is null");
-      }
-
-      return false;
-    }
-
-    if ((FadeoutUtils.utilsIsStrNullOrEmpty(boundingBox) === true) || (FadeoutUtils.utilsIsStrNullOrEmpty(geoserverBoundingBox) === true)) {
-      if (FadeoutUtils.utilsIsStrNullOrEmpty(boundingBox) === true) {
-        console.debug("Product bounding box is null");
-        // Impossible to assume if is correct or not. Assume true
-        return true;
-      }
-      else if (FadeoutUtils.utilsIsStrNullOrEmpty(geoserverBoundingBox) === true) {
-        console.debug("Geoserver bounding box is null");
-      }
-      return false;
-    }
-
-    var oGeoserverBoundingBox = this.parseGeoserverBoundingBox(geoserverBoundingBox);
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oGeoserverBoundingBox)) return false;
-
-    var asBoundingBox = this.fromBboxToRectangleArray(boundingBox);
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(asBoundingBox)) return false;
-
-    var aoLatLngs = [];
-
-    for (var iPoints = 0; iPoints < asBoundingBox.length - 2; iPoints += 2) {
-      var oLatLon = [parseFloat(asBoundingBox[iPoints + 1]), parseFloat(asBoundingBox[iPoints])];
-      aoLatLngs.push(oLatLon);
-    }
-
-    var oBBPolygon = L.polygon(aoLatLngs, { color: 'red' });
-
-    var oBBCenter = oBBPolygon.getBounds().getCenter();
-
-    //it takes the center of the bounding box
-    var oMidPointGeoserverBoundingBox = FadeoutUtils.utilsGetMidPoint(oGeoserverBoundingBox.maxx, oGeoserverBoundingBox.maxy, oGeoserverBoundingBox.minx, oGeoserverBoundingBox.miny);
-    //var oMidPointBoundingBox = utilsGetMidPoint( parseFloat(asBoundingBox[0]), parseFloat(asBoundingBox[1]), parseFloat(asBoundingBox[4]), parseFloat(asBoundingBox[5]));
-    var oMidPointBoundingBox: any = {};
-    oMidPointBoundingBox.x = oBBCenter.lng;
-    oMidPointBoundingBox.y = oBBCenter.lat;
-    //TODO FIX IT
-    var isMidPointGeoserverBoundingBoxInBoundingBox = FadeoutUtils.utilsIsPointInsideSquare(oMidPointGeoserverBoundingBox.x, oMidPointGeoserverBoundingBox.y, oBBPolygon.getBounds().getEast(), oBBPolygon.getBounds().getNorth(), oBBPolygon.getBounds().getWest(), oBBPolygon.getBounds().getSouth());
-    var isMidPointBoundingBoxGeoserverBoundingBox = FadeoutUtils.utilsIsPointInsideSquare(oMidPointBoundingBox.x, oMidPointBoundingBox.y, oGeoserverBoundingBox.maxx, oGeoserverBoundingBox.maxy, oGeoserverBoundingBox.minx, oGeoserverBoundingBox.miny);
-    if ((isMidPointBoundingBoxGeoserverBoundingBox === true) && (isMidPointGeoserverBoundingBoxInBoundingBox === true)) {
-      return true;
-    }
-    return false;
-  };
-
-  /**
-   *
-   * @param geoserverBoundingBox
-   * @returns {null}
-   */
-  parseGeoserverBoundingBox(geoserverBoundingBox) {
-    // Check the input
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox)) {
-      console.log("geoserverBoundingBox: geoserverBoundingBox is null");
-      return null;
-    }
-
-    // Parse the bounding box
-    geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
-    var oBoundingBox = JSON.parse('{"miny":43.150066,"minx":-80.030044,"crs":"EPSG:4326","maxy":43.380082,"maxx":-79.710091}');
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oBoundingBox)) {
-      console.log("GlobeService.zoomBandImageOnGeoserverBoundingBox: parsing bouning box is null");
-      return null;
-    }
-    return oBoundingBox;
-  };
-
-  /**
    *
    * @param bbox
    * @returns {*}
@@ -870,21 +824,167 @@ export class MapService {
     return null;
   }
 
-
-  productIsNotGeoreferencedRectangle2DMap(sColor, sGeoserverBBox, asBbox, sLayerId) {
-    if (this.isProductGeoreferenced(asBbox, sGeoserverBBox) === true) {
-      var oRectangleBoundingBoxMap = this.addRectangleByGeoserverBoundingBox(sGeoserverBBox, sColor);
-
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangleBoundingBoxMap) === false) {
-        console.log(oRectangleBoundingBoxMap.options);
-        //the options.layers property is used for remove the rectangle to the map
-        oRectangleBoundingBoxMap.options["layers"] = "wasdi:" + sLayerId;
-      }
+  /**
+ * Adds a Layer to the 2D Map 
+ * @param sLayerId Layer Id
+ * @param sServer  Geoserver address. Of null the default one from Constant Service is taken
+ * @returns True if all is fine, False in case of error
+ */
+  addLayerMap2DByServer(sLayerId: string, sServer: string) {
+    if (sLayerId == null) {
+      return false;
     }
-    if (this.isProductGeoreferenced(asBbox, sGeoserverBBox) === true) {
-      return true;
-    } else {
-      return false
+    if (sServer == null) {
+      sServer = this.m_oConstantsService.getWmsUrlGeoserver();
     }
+
+    let oMap = this.getMap();
+
+    let oWmsLayer = L.tileLayer.wms(sServer, {
+      layers: sLayerId,
+      format: 'image/png',
+      transparent: true,
+      noWrap: true
+    });
+    oWmsLayer.setZIndex(1000);
+    oWmsLayer.addTo(oMap);
+    return true;
   }
+
+
+  addManualBbox(oMap: any) {
+    let oController = this;
+
+    L.Control.Button = L.Control.extend({
+      options: {
+        position: "topright"
+      },
+      onAdd: function (oMap) {
+
+        // Create the container for the dialog
+        let oContainer = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+        // Create the button to add to leaflet
+        let oButton = L.DomUtil.create('a', 'leaflet-control-button', oContainer);
+
+        // Click stops on our button
+        L.DomEvent.disableClickPropagation(oButton);
+
+        // And here we decide what to do with our button
+        L.DomEvent.on(oButton, 'click', function () {
+
+          // We open the Manual Boundig Box Dialog
+          let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent, {
+            height: '420px',
+            width: '600px'
+          })
+
+          // Once is closed...
+          oDialog.afterClosed().subscribe(oResult => {
+
+            // We need a valid result
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+
+              // With all the values for lat and lon
+              if (isNaN(oResult.north) || isNaN(oResult.south) || isNaN(oResult.east) || isNaN(oResult.west)) {
+                return;
+              }
+              else {
+                // Get the actual values
+                let fNorth = parseFloat(oResult.north);
+                let fSouth = parseFloat(oResult.south);
+                let fEast = parseFloat(oResult.east);
+                let fWest = parseFloat(oResult.west);
+
+                // Create the bounds array
+                let aoBounds = [[fNorth, fWest], [fSouth, fEast]];
+
+                // And add the new rectangle layer to the map
+                oController.addManualBboxLayer(oMap, aoBounds);
+              }
+            }
+          })
+        });
+
+        // This is the "icon" of the button added to Leaflet
+        oButton.innerHTML = '<span class="material-symbols-outlined">pin_invoke</span>';
+
+        oContainer.title = "Manual Bounding Box";
+
+        return oContainer;
+      },
+      onRemove: function (map) { },
+    })
+    let oControl = new L.Control.Button();
+    oControl.addTo(oMap);
+  }
+
+  addManualBboxLayer(oMap, aoBounds) {
+    let oLayer = L.rectangle(aoBounds, { color: "#3388ff", weight: 1 });
+
+    //remove old shape
+    if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
+      this.m_oDrawnItems.clearLayers();
+    }
+
+    this.m_oDrawnItems.addLayer(oLayer);
+    this.zoomOnBounds(aoBounds);
+
+    //Emit bounding box to listening componenet:
+    this.m_oManualBoundingBoxSubscription.next(oLayer);
+  }
+
+  /**
+   * Get the URL to request to geoserver (or WMS Server) the feature info of a point
+   * @param sWmsUrl 
+   * @param oPoint 
+   * @param sLayerIdList 
+   * @returns 
+   */
+  getWMSLayerInfoUrl(sWmsUrl: string, oPoint: L.LatLng, sLayerIdList: string): string {
+    const oLat = oPoint.lat;
+    const oLng = oPoint.lng;
+
+    const aoBounds: L.LatLngBounds = L.latLngBounds(L.latLng(oLat - 0.0001, oLng - 0.0001), L.latLng(oLat + 0.0001, oLng + 0.0001));
+    const sVersion = '1.3.0'
+    //set BBox
+    const sBoundsString = [aoBounds.getSouth(), aoBounds.getWest(), aoBounds.getNorth(), aoBounds.getEast()].join(',');
+    const sBbox = (sVersion === '1.3.0') ? sBoundsString : aoBounds.toBBoxString();
+
+    const oWmsParams = {
+      request: 'GetFeatureInfo',
+      service: 'WMS',
+      info_format: 'application/json',
+      query_layers: sLayerIdList,
+      feature_count: 10,
+      version: sVersion,
+      bbox: sBbox,
+      layers: sLayerIdList,
+      height: 101,
+      width: 101,
+    };
+
+
+
+    //set x/y or i/j
+    oWmsParams[sVersion === '1.3.0' ? 'i' : 'x'] = 50;
+    oWmsParams[sVersion === '1.3.0' ? 'j' : 'y'] = 50;
+
+    //Set param version
+    oWmsParams[sVersion === '1.3.0' ? 'crs' : 'srs'] = 'EPSG:4326';
+
+
+    //build url with url and params
+    const sUrl = sWmsUrl + L.Util.getParamString(oWmsParams, sWmsUrl)
+
+    //load data from server
+    return sUrl;
+  }
+
+  getFeatureInfo(sUrl: string) {
+    const aoHeaders = new HttpHeaders()
+      .set('Accept', 'text/html,application/xhtml+xml,application/xml')
+      .set('Cache-Control', 'max-age=0');
+    return this.m_oHttp.get(sUrl, { 'headers': aoHeaders });
+  }
+
 }

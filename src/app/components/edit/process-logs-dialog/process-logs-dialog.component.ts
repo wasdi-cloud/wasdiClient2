@@ -1,6 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { faDownload, faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { CatalogService } from 'src/app/services/api/catalog.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
@@ -9,17 +8,17 @@ import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
+
+import { Clipboard } from '@angular/cdk/clipboard';
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-process-logs-dialog',
   templateUrl: './process-logs-dialog.component.html',
   styleUrls: ['./process-logs-dialog.component.css']
 })
 export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
-  //Font Awesome Imports
-  faXmark = faX;
-  faDownload = faDownload;
 
-  //Member values
   m_oProcess = this.data.process;
   m_aoLogs: any = [];
   m_aoAllLogs: any = [];
@@ -31,21 +30,20 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
   m_iNumberOfLogsPerPage: number = 10;
   m_oTick: any = null;
 
+  m_sTagColor: string = "";
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private m_oAuthService: AuthService,
-    private m_oCatalogService: CatalogService,
-    private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog,
+    private m_oClipboard: Clipboard,
     private m_oDialogRef: MatDialogRef<ProcessLogsDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.getLogsCount(this.m_oProcess.processObjId);
     this.m_oTick = this.startTick(this.m_oProcess.status);
+    this.setTagColor(this.m_oProcess.status)
   }
 
   ngOnDestroy(): void {
@@ -69,8 +67,8 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
 
   //Get the number of Logs for this processor
   getLogsCount(oProcessId: any) {
-    let sErrorMsg: string = 'GURU MEDITATION<br>ERROR READING PROCESSOR LOGS';
-    let sErrorRefreshMsg: string = 'GURU MEDITATION<br>ERROR REFRESHING PROCESSOR STATUS';
+    let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION");
+    let sErrorRefreshMsg: string = this.m_oTranslate.instant("DIALOG_LOGS_REFRESH_ERROR");
     if (!oProcessId) {
       return false;
     }
@@ -82,16 +80,17 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorRefreshMsg);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorRefreshMsg, sErrorHeader, 'danger');
       }
     });
     return true;
   }
 
   handlePagination(oEvent) {
+    console.log(oEvent);
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false && oEvent.pageIndex >= 0) {
-      //Page Index begins at 0: 
-      this.m_iCurrentPage = oEvent.pageIndex + 1;
+      //Page Index begins at 1: 
+      this.m_iCurrentPage = oEvent.pageIndex;
       //Get the Logs Count
       this.getLogsCount(this.m_oProcess.processObjId);
     }
@@ -191,7 +190,30 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
     return oTick;
   }
 
+  setTagColor(sProcessStatus) {
+    if (sProcessStatus === 'ERROR') {
+      this.m_sTagColor = 'red';
+    } else if (sProcessStatus === 'STOPPED') {
+      this.m_sTagColor = 'red';
+      sProcessStatus = "DIALOG_PROCESSES_LOGS_STOP";
+
+    } else if (sProcessStatus === 'DONE') {
+      this.m_sTagColor = 'green';
+    } else {
+      sProcessStatus = 'green';
+    }
+  }
+
+  setSearchString(oEvent) {
+    this.m_sSearch = oEvent.event.target.value;
+  }
+
   dismiss() {
     this.m_oDialogRef.close();
+  }
+
+  copyProcessObjId() {
+    this.m_oClipboard.copy(this.m_oProcess.processObjId);
+    this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD"), '', 'success-snackbar');
   }
 }

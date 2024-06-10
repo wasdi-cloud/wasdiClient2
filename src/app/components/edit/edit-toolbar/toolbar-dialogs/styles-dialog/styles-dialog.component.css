@@ -1,10 +1,28 @@
 div.style-cards-container {
-    height: 80%; 
+    height: 80%;
     overflow-y: scroll;
 }
-p.title {
-    font-size: 0.8rem;
+
+div.column-body-container {
+    padding: 0px 32px;
 }
-p.style-description {
-    font-size: 0.8rem;
+
+.textarea,
+.drag-drop {
+    height: 30%;
+}
+
+.json-wrapper {
+    padding-bottom: 32px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.file-container {
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    padding: 12px;
+    border-radius: 6px;
 }

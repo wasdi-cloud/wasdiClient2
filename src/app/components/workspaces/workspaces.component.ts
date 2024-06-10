@@ -9,18 +9,9 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
-//Import Componenets: 
-import { NewWorkspaceDialogComponent } from './new-workspace-dialog/new-workspace-dialog.component';
 
-//Import Angular Materials:
-import { MatDialog } from '@angular/material/dialog';
-
-//Import Models:
-import { User } from 'src/app/shared/models/user.model';
+//Import Models:;
 import { Workspace } from 'src/app/shared/models/workspace.model';
-
-//Font Awesome Imports:
-import { faArrowsUpDown, faPlay, faPlus, faStop, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 //Import Utilities: 
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
@@ -51,15 +42,11 @@ export interface WorkspaceViewModel {
 @Component({
   selector: 'app-workspaces',
   templateUrl: './workspaces.component.html',
-  styleUrls: ['./workspaces.component.css']
+  styleUrls: ['./workspaces.component.css'],
+  host: { 'class': 'flex-fill' }
 })
+
 export class WorkspacesComponent implements OnInit {
-  //Icons: 
-  faArrowsUpDown = faArrowsUpDown;
-  faPlus = faPlus
-  faPlay = faPlay;
-  faStop = faStop;
-  faTrashcan = faTrash;
 
   /**
    * Array of available workspaces
@@ -100,13 +87,30 @@ export class WorkspacesComponent implements OnInit {
   m_aoSateliteInputTraks: any[] = [];
 
   m_bLoadingWSFiles: boolean = false;
-  
 
+  /**
+   * List of the products in the selected workspace
+   */
   m_aoProducts: Array<any> = [];
+
+  /**
+   * View Model of the selected workspace
+   */
   m_oWorkspaceViewModel: any;
+
+  /**
+   * If a workspace is selected, if a product is selected, is hooked here
+   */
   m_oSelectedProduct: any;
 
+  /**
+   * Filter to the workspace list
+   */
   m_sWorkspaceSearchInput: string = '';
+
+  /**
+   * Available sorting options
+   */
   m_aoSortingOptions = [
     {
       title: "Newest",
@@ -136,23 +140,32 @@ export class WorkspacesComponent implements OnInit {
       direction: "asc"
     }
   ]
+
+  /**
+   * Actual Sorting Option
+   */
   m_oActiveSortingOption: any = {}
+
+  m_oSelectedWorkspace: any = {}
+
+  /**
+   * Flag to know if the component has been destroyed.
+   * It is used in case we receive "old" callbacks after the page changed
+   */
+  m_bDestroyCalled = false;
 
   m_aoSelectedWorkspaces: Array<Workspace> = [];
   constructor(
-    private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog,
+
     private m_oGlobeService: GlobeService,
-    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOpportunitySearchService: OpportunitySearchService,
     private m_oProductService: ProductService,
-    private m_oTranslate: TranslateService,
-    private m_oWorkspaceService: WorkspaceService) { }
+    ) { }
 
 
   ngOnInit(): void {
     console.log("WorkspaceComponent.ngOnInit")
-    this.fetchWorkspaceInfoList();
+    this.m_bDestroyCalled = false;
     this.m_oGlobeService.initRotateGlobe('CesiumContainer3');
     this.getTrackSatellite();
     this.m_bShowSatellites = true;
@@ -165,6 +178,7 @@ export class WorkspacesComponent implements OnInit {
   ngOnDestroy(): void {
 
     console.log("WorkspaceComponent.ngOnDestroy")
+    this.m_bDestroyCalled = true;
 
     //Destroy Interval after closing: 
     if (this.m_oSetIntervalReference) {
@@ -175,50 +189,13 @@ export class WorkspacesComponent implements OnInit {
   }
 
   /**
-   * Get the list of available workspaces
-   */
-  fetchWorkspaceInfoList() {
-
-    let sMessage: string;
-    this.m_oTranslate.get("MSG_MKT_WS_OPEN_ERROR").subscribe(sResponse => {
-      sMessage = sResponse
-    })
-
-    let oUser: User = this.m_oConstantsService.getUser();
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oUser) === false) {
-
-      this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
-        next: oResponse => {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oNotificationDisplayService.openAlertDialog(sMessage);
-          } else {
-            this.m_aoWorkspacesList = oResponse;
-          }
-        },
-        error: oError => { }
-      });
-    }
-  }
-
-  /**
-   * Refresh the list after the delete
-   * @param oWorkspace
-   */
-  onDeleteWorkspace(oWorkspace: Workspace) {
-    this.fetchWorkspaceInfoList();
-  }
-
-  /**
    * The user clicked on a workspace
    * @param oWorkspace 
    */
   onShowWorkspace(oWorkspace: Workspace) {
-    this.m_oWorkspaceService.getWorkspaceEditorViewModel(oWorkspace.workspaceId).subscribe(response => {
-      this.m_oActiveWorkspace = response
-      this.m_asSharedUsers = response.sharedUsers
-      this.loadProductList(oWorkspace);
-    })
+
+    this.m_oGlobeService.removeAllEntities();
+    this.loadProductList(oWorkspace)
   }
 
   /**
@@ -237,13 +214,14 @@ export class WorkspacesComponent implements OnInit {
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveWorkspace) === false) {
       this.m_oActiveWorkspace.workspaceId = oWorkspace.workspaceId;
-      this.deselectWorkspace();
     }
 
     let oWorkspaceId = oWorkspace.workspaceId;
 
     this.m_oProductService.getProductLightListByWorkspace(oWorkspaceId).subscribe({
       next: oResponse => {
+
+        if (this.m_bDestroyCalled) return;
 
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_aoProducts = [];
@@ -256,96 +234,13 @@ export class WorkspacesComponent implements OnInit {
           FadeoutUtils.verboseLog("WorkspacesComponent.loadProductList No products to show")
         } else {
           //add globe bounding box
-          this.createBoundingBoxInGlobe();
+          this.m_oGlobeService.addAllWorkspaceRectanglesOnGlobe(this.m_aoProducts);
         }
 
         this.m_bLoadingWSFiles = false;
       },
       error: oError => { }
     });
-    return true;
-  }
-
-  createBoundingBoxInGlobe() {
-    let oRectangle = null;
-    let aiArraySplit = [];
-    let iArraySplitLength = 0;
-    let aiInvertedArraySplit = [];
-
-    let aoTotalArray = [];
-
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts) === true) {
-      return false;
-    }
-
-    let iProductsLength = this.m_aoProducts.length;
-
-    // For each product
-    for (let iIndexProduct = 0; iIndexProduct < iProductsLength; iIndexProduct++) {
-      aiInvertedArraySplit = [];
-      aiArraySplit = [];
-      // skip if there isn't the product bounding box
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts[iIndexProduct].bbox) === true) continue;
-
-      // Split bbox string
-      aiArraySplit = this.m_aoProducts[iIndexProduct].bbox.split(",");
-      iArraySplitLength = aiArraySplit.length;
-
-      if (iArraySplitLength < 10) continue;
-
-      let bHasNan = false;
-      for (let iValues = 0; iValues < aiArraySplit.length; iValues++) {
-        if (isNaN(aiArraySplit[iValues])) {
-          bHasNan = true;
-          break;
-        }
-      }
-
-      if (bHasNan) continue;
-
-      aoTotalArray.push.apply(aoTotalArray, aiArraySplit);
-
-      for (let iIndex = 0; iIndex < iArraySplitLength - 1; iIndex = iIndex + 2) {
-        aiInvertedArraySplit.push(aiArraySplit[iIndex + 1]);
-        aiInvertedArraySplit.push(aiArraySplit[iIndex]);
-      }
-
-
-      
-      for (let iIndex = 0; iIndex < aiInvertedArraySplit.length; iIndex = iIndex + 1) {
-        if (isNaN(aiInvertedArraySplit[iIndex])) {
-          bHasNan = true;
-          break;
-        }
-      }
-      
-      oRectangle = this.m_oGlobeService.addRectangleOnGlobeParamArray(aiInvertedArraySplit);
-      
-      this.m_aoProducts[iIndexProduct].oRectangle = oRectangle;
-      this.m_aoProducts[iIndexProduct].aBounds = aiInvertedArraySplit;
-    }
-
-
-    let aoBounds = [];
-    for (let iIndex = 0; iIndex < aoTotalArray.length - 1; iIndex = iIndex + 2) {
-      aoBounds.push(new Cesium.Cartographic.fromDegrees(aoTotalArray[iIndex + 1], aoTotalArray[iIndex]));
-    }
-
-    let oWSRectangle = Cesium.Rectangle.fromCartographicArray(aoBounds);
-    let oWSCenter = Cesium.Rectangle.center(oWSRectangle);
-
-    //oGlobe.camera.setView({
-    this.m_oGlobeService.getGlobe().camera.flyTo({
-      destination: Cesium.Cartesian3.fromRadians(oWSCenter.longitude, oWSCenter.latitude, this.m_oGlobeService.getWorkspaceZoom()),
-      orientation: {
-        heading: 0.0,
-        pitch: -Cesium.Math.PI_OVER_TWO,
-        roll: 0.0
-      }
-    });
-
-    this.m_oGlobeService.stopRotationGlobe();
-
     return true;
   }
 
@@ -388,24 +283,6 @@ export class WorkspacesComponent implements OnInit {
     return true;
   }
 
-  deselectWorkspace() {
-
-  }
-
-  openNewWorkspaceDialog() {
-    let oDialogRef = this.m_oDialog.open(NewWorkspaceDialogComponent, {
-      width: '30vw'
-    })
-  }
-
-  stopGlobeRotation() {
-    this.m_oGlobeService.stopRotationGlobe();
-  }
-
-  startGlobeRotation() {
-    this.m_oGlobeService.startRotationGlobe(3);
-  }
-
   getTrackSatellite() {
     let iSat = 0;
 
@@ -419,38 +296,40 @@ export class WorkspacesComponent implements OnInit {
 
       this.m_oOpportunitySearchService.getTrackSatellite(this.m_aoSatelliteInputTracks[iSat].name).subscribe(oResponse => {
         if (oResponse) {
-          for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliteInputTracks.length; iOriginalSat++) {
-            if (this.m_aoSatelliteInputTracks[iOriginalSat].name === oResponse.code) {
-              oActualSat = this.m_aoSatelliteInputTracks[iOriginalSat];
-              break;
+
+          if (oResponse.currentPosition) {
+            for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliteInputTracks.length; iOriginalSat++) {
+              if (this.m_aoSatelliteInputTracks[iOriginalSat].name === oResponse.code) {
+                oActualSat = this.m_aoSatelliteInputTracks[iOriginalSat];
+                break;
+              }
             }
-          }
-
-          let sDescription = oActualSat.description;
-          sDescription += "\n";
-          sDescription += oResponse.currentTime;
-
-          let oActualPosition = this.m_oGlobeService.drawPointWithImage(WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.currentPosition), oActualSat.icon, sDescription, oActualSat.label, 32, 32);
-          this.m_aoSatellitePositions.push(oActualPosition);
-
-          if (this.m_oFakePosition === null) {
-            if (oResponse.lastPositions != null) {
-
-              let iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
-
-              this.m_oFakePosition = oResponse.lastPositions[iFakeIndex];
-
-              let aoUfoPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
-              aoUfoPosition[2] = aoUfoPosition[2] * 4;
-              this.m_oUfoPointer = this.m_oGlobeService.drawPointWithImage(aoUfoPosition, "assets/icons/alien.svg", "U.F.O.", "?");
-
-              iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
-              let aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
-              aoMoonPosition[2] = 384400000;
-
-              this.m_oGlobeService.drawPointWithImage(aoMoonPosition, "assets/icons/sat_death.svg", "Moon", "-");
-
-            }
+  
+            let sDescription = oActualSat.description;
+            sDescription += "\n";
+            sDescription += oResponse.currentTime;
+  
+            let oActualPosition = this.m_oGlobeService.drawPointWithImage(WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.currentPosition), oActualSat.icon, sDescription, oActualSat.label, 32, 32);
+            this.m_aoSatellitePositions.push(oActualPosition);
+  
+            if (this.m_oFakePosition === null) {
+              if (oResponse.lastPositions != null) {
+  
+                let iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
+  
+                this.m_oFakePosition = oResponse.lastPositions[iFakeIndex];
+  
+                let aoUfoPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
+                aoUfoPosition[2] = aoUfoPosition[2] * 4;
+                this.m_oUfoPointer = this.m_oGlobeService.drawPointWithImage(aoUfoPosition, "assets/icons/alien.svg", "U.F.O.", "?");
+  
+                iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
+                let aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
+                aoMoonPosition[2] = 384400000;
+  
+                this.m_oGlobeService.drawPointWithImage(aoMoonPosition, "assets/icons/sat_death.svg", "Moon", "-");
+              }
+            }            
           }
         }
       })
@@ -507,98 +386,86 @@ export class WorkspacesComponent implements OnInit {
     return -1;
   }
 
-  deleteSentinel1a() {
-    if (this.m_bShowSatellites) {
-      this.getTrackSatellite();
-    } else {
-      for (let i = 0; i < this.m_aoSatellitePositions.length; i++) {
-        this.m_oGlobeService.removeEntity(this.m_aoSatellitePositions[i]);
-      }
-
-      this.m_oGlobeService.removeEntity(this.m_oUfoPointer);
-      this.m_oUfoPointer = null;
-      this.m_oFakePosition = null;
-
-      this.m_aoSatellitePositions = [];
-    }
+  getSelectedWorkspace(oEvent) {
+    this.m_oSelectedWorkspace = oEvent;
+    this.onShowWorkspace(this.m_oSelectedWorkspace);
   }
 
-  setSorting(oSortingOption) {
-    let bIsDescending: boolean = false;
-    let propertyName: string = '';
-    //Set Active Sorting Option: 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSortingOption) === false) {
-      this.m_oActiveSortingOption = oSortingOption;
-      oSortingOption.direction === 'asc' ? bIsDescending = true : bIsDescending = false;
-      oSortingOption.column === 'date' ? propertyName = 'creationDate' : oSortingOption.column === 'workspace' ? propertyName = 'workspaceName' : propertyName = 'ownerUserId';
-    }
-    if (propertyName === 'ownerUserId' || propertyName === 'workspaceName') {
-      this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
-        if (oWorkspace1[propertyName].toLowerCase() < oWorkspace2[propertyName].toLowerCase()) {
-          return bIsDescending ? 1 : -1;
-        }
-        if (oWorkspace1[propertyName].toLowerCase() > oWorkspace2[propertyName].toLowerCase()) {
-          return bIsDescending ? -1 : 1;
-        }
-        return 0;
-      });
-    }
-    if (propertyName === 'creationDate') {
-      this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
-        if (bIsDescending === true) {
-          return <any>new Date(oWorkspace2[propertyName]) - <any>new Date(oWorkspace1[propertyName]);
-        } else {
-          return <any>new Date(oWorkspace1[propertyName]) - <any>new Date(oWorkspace2[propertyName]);
-        }
-      });
-    }
+  // setSorting(oSortingOption) {
+  //   let bIsDescending: boolean = false;
+  //   let propertyName: string = '';
+  //   //Set Active Sorting Option: 
+  //   if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSortingOption) === false) {
+  //     this.m_oActiveSortingOption = oSortingOption;
+  //     oSortingOption.direction === 'asc' ? bIsDescending = true : bIsDescending = false;
+  //     oSortingOption.column === 'date' ? propertyName = 'creationDate' : oSortingOption.column === 'workspace' ? propertyName = 'workspaceName' : propertyName = 'ownerUserId';
+  //   }
+  //   if (propertyName === 'ownerUserId' || propertyName === 'workspaceName') {
+  //     this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
+  //       if (oWorkspace1[propertyName].toLowerCase() < oWorkspace2[propertyName].toLowerCase()) {
+  //         return bIsDescending ? 1 : -1;
+  //       }
+  //       if (oWorkspace1[propertyName].toLowerCase() > oWorkspace2[propertyName].toLowerCase()) {
+  //         return bIsDescending ? -1 : 1;
+  //       }
+  //       return 0;
+  //     });
+  //   }
+  //   if (propertyName === 'creationDate') {
+  //     this.m_aoWorkspacesList.sort((oWorkspace1: any, oWorkspace2: any) => {
+  //       if (bIsDescending === true) {
+  //         return <any>new Date(oWorkspace2[propertyName]) - <any>new Date(oWorkspace1[propertyName]);
+  //       } else {
+  //         return <any>new Date(oWorkspace1[propertyName]) - <any>new Date(oWorkspace2[propertyName]);
+  //       }
+  //     });
+  //   }
 
-  }
+  // }
 
-  selectAllWorkspaces(oEvent) {
-    if (oEvent.checked === true) {
-      this.m_aoWorkspacesList.forEach(oWorkspace => {
-        oWorkspace['checked'] = true;
-      })
-      this.m_aoSelectedWorkspaces = this.m_aoWorkspacesList;
-    } else if (oEvent.checked === false) {
-      this.m_aoWorkspacesList.forEach(oWorkspace => {
-        oWorkspace['checked'] = false;
-      })
-      this.m_aoSelectedWorkspaces = [];
-    }
-  }
+  // selectAllWorkspaces(oEvent) {
+  //   if (oEvent.checked === true) {
+  //     this.m_aoWorkspacesList.forEach(oWorkspace => {
+  //       oWorkspace['checked'] = true;
+  //     })
+  //     this.m_aoSelectedWorkspaces = this.m_aoWorkspacesList;
+  //   } else if (oEvent.checked === false) {
+  //     this.m_aoWorkspacesList.forEach(oWorkspace => {
+  //       oWorkspace['checked'] = false;
+  //     })
+  //     this.m_aoSelectedWorkspaces = [];
+  //   }
+  // }
 
-  getWorkspaceSelectionChange(oEvent) {
-    if (oEvent.checked === true) {
-      this.m_aoSelectedWorkspaces.push(oEvent);
-    } else if (oEvent.checked === false) {
-      this.m_aoSelectedWorkspaces = this.m_aoSelectedWorkspaces.filter(oWorkspace => oWorkspace.workspaceId !== oEvent.workspaceId)
-    }
-  }
+  // getWorkspaceSelectionChange(oEvent) {
+  //   if (oEvent.checked === true) {
+  //     this.m_aoSelectedWorkspaces.push(oEvent);
+  //   } else if (oEvent.checked === false) {
+  //     this.m_aoSelectedWorkspaces = this.m_aoSelectedWorkspaces.filter(oWorkspace => oWorkspace.workspaceId !== oEvent.workspaceId)
+  //   }
+  // }
 
-  deleteMultipleWorkspaces() {
-    let sConfirmMsg = `Are you sure you want to delete ${this.m_aoSelectedWorkspaces.length} workspaces?`;
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
-    bConfirmResult.subscribe(oDialogResult => {
-      if (oDialogResult === true) {
-        this.m_aoSelectedWorkspaces.forEach((oWorkspace, iIndex) => {
-          if(oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
-            this.m_oActiveWorkspace = null;
-          }
-          this.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
-            next: oResponse => {
-              this.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
-              if (iIndex === this.m_aoSelectedWorkspaces.length - 1) {
-                this.fetchWorkspaceInfoList();
-              }
-            },
-            error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog(`Error in deleting ${oWorkspace.workspaceName}`);
-            }
-          })
-        })
-      }
-    })
-  }
+  // deleteMultipleWorkspaces() {
+  //   let sConfirmMsg = `Are you sure you want to delete ${this.m_aoSelectedWorkspaces.length} workspaces?`;
+  //   let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
+  //   bConfirmResult.subscribe(oDialogResult => {
+  //     if (oDialogResult === true) {
+  //       this.m_aoSelectedWorkspaces.forEach((oWorkspace, iIndex) => {
+  //         if(oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
+  //           this.m_oActiveWorkspace = null;
+  //         }
+  //         this.m_oWorkspaceService.deleteWorkspace(oWorkspace, true, true).subscribe({
+  //           next: oResponse => {
+  //             this.m_oNotificationDisplayService.openSnackBar(`Removed ${oWorkspace.workspaceName}`, "Close", "right", "bottom");
+  //             if (iIndex === this.m_aoSelectedWorkspaces.length - 1) {
+  //             }
+  //           },
+  //           error: oError => {
+  //             this.m_oNotificationDisplayService.openAlertDialog(`Error in deleting ${oWorkspace.workspaceName}`);
+  //           }
+  //         })
+  //       })
+  //     }
+  //   })
+  // }
 }

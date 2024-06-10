@@ -1,56 +1,71 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FileBufferService } from 'src/app/services/api/file-buffer.service';
 import { TranslateService } from '@ngx-translate/core';
-import { WorkflowService } from 'src/app/services/api/workflow.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
   selector: 'app-workspaces-list-dialog',
   templateUrl: './workspaces-list-dialog.component.html',
   styleUrls: ['./workspaces-list-dialog.component.css']
 })
 export class WorkspacesListDialogComponent implements OnInit {
-  //Font Awesome Icons: 
-  faX = faX;
+  /**
+   * Flag to check if the workspace list has loaded
+   */
+  m_bIsLoadingWorkspaceList: boolean = false;
 
-  @Input() m_bIsDialog: boolean = true;
+  /**
+   * Flag to check if the user is sharing a product (between workspaces) or sending a new product from search
+   */
+  m_bIsSharingProduct: boolean = false;
 
-  m_aoWorkspaceList: Array<any> = [];
-  m_aoSelectedWorkspaces: Array<any> = [];
-
-  m_oActiveWorkspace: Workspace = {} as Workspace;
-
-  m_sCurrentNode: string = '';
-  m_sExcludedWorkspaceId: string = '';
-
-  m_oSelectedProduct: any = null;
+  /**
+   * The selected products for multi-product sending
+   */
   m_aoSelectedProducts: Array<any> = [];
 
-  m_bIsLoadingWorkspaceList: boolean = false;
+  /**
+   * Array of selected workspaces - add active workspace when sending via search
+   */
+  m_aoSelectedWorkspaces: Array<any> = [];
+
+  /**
+   * Array of user's workspaces
+   */
+  m_aoWorkspaceList: Array<any> = [];
+
+  /**
+   * The user's active (open) workspace
+   */
+  m_oActiveWorkspace: Workspace = {} as Workspace;
+
+  /**
+   * The selected product for single selection 
+   */
+  m_oSelectedProduct: any = null;
+
+  /**
+   * Holder for the user's search input
+   */
+  m_sSearch: string = ""
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
     private m_oConstantsService: ConstantsService,
-    private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<WorkspacesListDialogComponent>,
     private m_oFileBufferService: FileBufferService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService,
-    private m_oWorkflowsService: WorkflowService,
     private m_oWorkspaceService: WorkspaceService
-  ) {
-
-  }
+  ) { }
 
   ngOnInit(): void {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
@@ -63,6 +78,10 @@ export class WorkspacesListDialogComponent implements OnInit {
     if (this.m_oData.products) {
       this.m_aoSelectedProducts = this.m_oData.products;
     }
+
+    if (this.m_oData.sharing) {
+      this.m_bIsSharingProduct = this.m_oData.sharing;
+    }
   }
 
   /********** API CALLS **********/
@@ -72,7 +91,6 @@ export class WorkspacesListDialogComponent implements OnInit {
    */
   getWorkspaces() {
     this.m_bIsLoadingWorkspaceList = true;
-
     this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
@@ -80,14 +98,14 @@ export class WorkspacesListDialogComponent implements OnInit {
           this.m_bIsLoadingWorkspaceList = false;
 
           // If there is an Active Workspace, move it to the first position to display first:
-          if (this.m_oActiveWorkspace.workspaceId && this.m_bIsDialog === true) {
+          if (this.m_oActiveWorkspace.workspaceId && this.m_bIsSharingProduct === false) {
             this.m_aoWorkspaceList.forEach((oWorkspace, iIndex) => {
               if (oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
                 this.m_aoWorkspaceList.splice(iIndex, 1);
                 this.m_aoWorkspaceList.unshift(oWorkspace);
                 // Add the workspace to the selected workspaces array:
                 this.m_aoSelectedWorkspaces.push(oWorkspace);
-                oWorkspace.checked = true;
+                oWorkspace.selected = true
               }
             })
           }
@@ -109,15 +127,15 @@ export class WorkspacesListDialogComponent implements OnInit {
   * @param oEvent
   */
   selectAllWorkspaces(oEvent: any): void {
-    if (oEvent.checked === true) {
+    if (oEvent.selected === true) {
       this.m_aoSelectedWorkspaces = this.m_aoWorkspaceList;
       this.m_aoWorkspaceList.forEach(oWorkspace => {
-        oWorkspace.checked = true;
+        oWorkspace.selected = true;
       })
     } else {
       this.m_aoSelectedWorkspaces = [];
       this.m_aoWorkspaceList.forEach(oWorkspace => {
-        oWorkspace.checked = false;
+        oWorkspace.selected = false;
       })
     }
   }
@@ -127,8 +145,9 @@ export class WorkspacesListDialogComponent implements OnInit {
    * @param oWorkspace 
    */
   selectWorkspace(event: any, oWorkspace: any): void {
+    oWorkspace.selected = !oWorkspace.selected;
     //If workspace is checked, add it to the Selected Workspaces Array
-    if (event.checked === true) {
+    if (oWorkspace.selected === true) {
       this.m_aoSelectedWorkspaces.push(oWorkspace);
     } else {
       //If Workspace is not checked, remove it from the Selected Workspaces Array
@@ -166,12 +185,11 @@ export class WorkspacesListDialogComponent implements OnInit {
     if (this.m_aoSelectedProducts.length === 1 && this.m_oSelectedProduct === null) {
       this.m_oSelectedProduct = this.m_aoSelectedProducts[0];
     }
-
     for (let iWorkspaceIndex = 0; iWorkspaceIndex < iNumberOfWorkspaces; iWorkspaceIndex++) {
       oController.m_oSelectedProduct.isDisabledToDoDownload = true;
       let sUrl: string = this.m_oSelectedProduct.link;
       let oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
         oController.m_oSelectedProduct.isDisabledToDoDownload = false;
       };
 
@@ -219,7 +237,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         sMessage = sResponse;
       });
       oCallback = function (data, status) {
-        oController.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "bottom", "right");
+        oController.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
       }
     }
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oError) === true) {
@@ -227,7 +245,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         sMessage = sResponse;
       });
       oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog( sMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
       };
     }
     this.m_oFileBufferService.download(sUrl, sFileName, sWorkspaceId, sBounds, oProvider).subscribe({
@@ -237,7 +255,7 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   }
 
-  shareProductToWorkspace() {
+shareProductToWorkspace() {
     let oController = this;
     let aoWorkspaces = this.m_aoSelectedWorkspaces;
     let oProduct = this.m_oSelectedProduct;
@@ -249,28 +267,28 @@ export class WorkspacesListDialogComponent implements OnInit {
     for (var iIndexWorkspace = 0; iIndexWorkspace < iNumberOfWorkspaces; iIndexWorkspace++) {
 
       oProduct.isDisabledToDoDownload = true;
-      var sUrl = oProduct.link;
-      var oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
+      let sUrl = oProduct.link;
+      let oError = function (data, status) {
+        oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
         oProduct.isDisabledToDoDownload = false;
       };
 
-      var sBound = "";
+      let sBound = "";
 
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds) == false) {
         sBound = oProduct.bounds.toString();
       }
-      //                oThat.shareProduct(sUrl,oProduct.title, aoWorkspaces[iIndexWorkspace].workspaceId,sBound,oProduct.provider,null,oError);
+
       let sOriginWorkspaceId = oController.m_oActiveWorkspace.workspaceId;
       let sDestinationWorkspaceId = aoWorkspaces[iIndexWorkspace].workspaceId;
       let sProductName = oProduct.fileName;
 
       oController.m_oFileBufferService.share(sOriginWorkspaceId, sDestinationWorkspaceId, sProductName).subscribe({
         next: oResponse => {
-          oController.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom")
+          oController.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar')
         },
         error: oError => {
-          oController.m_oNotificationDisplayService.openAlertDialog( sErrorMessage);
+          oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
         }
       });
     }

@@ -1,31 +1,36 @@
-div.dialog {
-    height: 100%;
+.new-workflow {
+    background: var(--neutral5);
+    border: 1px solid var(--neutral10);
+    border-radius: 8px;
+    color: var(--neutral50Brand);
+    padding: 12px;
 }
 
-div.dialog-content {
-    height: 80%;
-}
-
-div.dialog-col-1 {
-    width: 50%;
-}
-
-div.workflow-cards-container {
-    overflow-y: scroll;
-    height: 80%;
-    width: 100%;
-}
-
-div.card {
+.new-workflow>span {
     cursor: pointer;
-    height: 40%;
-    width: 48%;
+    font-size: 20px;
 }
 
-div.info-container {
-    width: 50%;
-    height: 100%;
+.workflows-product-container {
+    padding: 0px 32px;
 }
-a.nav-link {
-    cursor: pointer; 
+
+
+.textarea {
+    height: 40%;
+}
+
+.drag-drop {
+    height: 20%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.options-container {
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    padding: 12px;
+    border-radius: 6px;
 }

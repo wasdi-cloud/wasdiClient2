@@ -1,88 +1,65 @@
-<div class="dialog d-flex flex-column justify-content-between" style="height: 100%">
-    <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between px-4 pt-3 pb-2">
-        <h4 class="dialog-text"><fa-icon [icon]="faRocket"></fa-icon> WASDI Apps</h4>
-        <fa-icon [icon]="faX" (click)="onDismiss()"></fa-icon>
+<div class="apps-dialog d-flex flex-column h-100">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">{{"DIALOG_TITLE_WAPPS" | translate}}
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
     </div>
-    <div class="dialog-content d-flex flex-row justify-content-between px-4 py-2 gap-3" style="height: 80%">
-        <div class="styles-container" style="width: 50%">
-            <ul class="nav nav-tabs d-flex flex-row justify-content-between">
-                <li class="nav-item">
-                    <a class="nav-link active">Processors List</a>
-                </li>
-            </ul>
-            <input class="form-control my-3" type="text" placeholder="Search by Processor Name"
-                [(ngModel)]="m_sSearchString">
-            <div *ngIf="m_bIsLoadingProcessorList === true" class="d-flex flex-row justify-content-center">
-                <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
+    <!--  -->
+    <div *ngIf="m_bShowParamsLibrary === false"
+        class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between"
+        style="height: 100%; overflow: hidden;">
+        <div class="apps-container d-flex flex-column">
+            <div class="search-header font-bold d-flex flex-column gap-2 mb-3">
+                <div class="d-flex flex-row justify-content-between align-items-center">{{"MARKET_SEARCH_APP" |
+                    translate}}
+                    <app-button [m_sLabel]="'EDITOR_OPERATION_TITLE_NEW_PROCESSOR' | translate"
+                        [m_sIconLeft]="'add_box'" (click)="openNewAppDialog()"></app-button>
+                </div>
+                <app-input-field [m_sPlaceholder]="'MARKET_SEARCH_APP' | translate" [m_sIconLeft]="'search'"
+                    (m_oInputChange)="handleSearchChange($event)"></app-input-field>
+            </div>
+            <div *ngIf="m_bIsLoadingProcessorList === true">
+                <app-invader></app-invader>
             </div>
             <div *ngIf="m_bIsLoadingProcessorList === false"
-                class="processor-cards-container d-flex flex-row flex-wrap justify-content-start gap-1"
-                style="width:100%">
-                <div *ngFor="let oProcessor of m_aoProcessorList | filter: m_sSearchString"
-                    class="card d-flex flex-column gap-3 p-2 " style="cursor: pointer; height: 15rem;  width: 32%"
-                    (click)="selectProcessor(oProcessor)">
-                    <div style="height: 30px">
-                        <div class="card-toolbar d-flex flex-row justify-content-end">
-                            <button class="btn btn-sm" (click)="openParametersDialog($event, oProcessor)">
-                                <fa-icon [icon]="faBook"></fa-icon>
-                            </button>
-                            <button class="btn btn-sm" *ngIf="m_sActiveUserId === oProcessor.publisher || oProcessor.sharedWithMe"
-                                (click)="downloadProcessor($event, oProcessor)">
-                                <fa-icon [icon]="faDownload"></fa-icon>
-                            </button>
-                            <button class="btn btn-sm" *ngIf="m_sActiveUserId === oProcessor.publisher || oProcessor.sharedWithMe"
-                                (click)="openEditProcessorDialog($event, oProcessor)">
-                                <fa-icon [icon]="faEdit"></fa-icon>
-                            </button>
-                            <button class="btn btn-sm text-danger"
-                                *ngIf="m_sActiveUserId === oProcessor.publisher || oProcessor.sharedWithMe"
-                                (click)="removeProcessor($event, oProcessor)">
-                                <fa-icon [icon]="faX"></fa-icon>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="cardbody" height="7rem">
-                        <h2 class="text-center">
-                            <fa-icon [icon]="faPaintBrush"></fa-icon>
-                        </h2>
-                        <p class="text-success title">{{oProcessor.processorName}}</p>
-                        <p class="processor-description">{{oProcessor.processorDescription}}</p>
-                    </div>
-                </div>
-
+                class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1" style="overflow-y:scroll">
+                <app-list-item *ngFor="let oProcessor of m_aoProcessorList | filter: m_sSearchString"
+                    [m_bIsSelected]="oProcessor.processorName === m_oSelectedProcessor.processorName"
+                    [m_bSimpleItem]="true" [m_bProcessorItem]="true" [m_sLabel]="oProcessor.processorName"
+                    [m_sDescription]="oProcessor.processorDescription" [m_sIcon]="oProcessor.imgLink"
+                    [m_bHasToolbar]="oProcessor.sharedWithMe === true || m_sActiveUserId === oProcessor.publisher"
+                    (m_oEmitClickEvent)="handleToolbarClick($event, oProcessor)"
+                    (click)="selectProcessor(oProcessor)"></app-list-item>
             </div>
         </div>
-        <div class="info-container card border border-success rounded-1" style="width: 50%;">
-            <div class="px-4 py-4 d-flex flex-column gap-2">
-                <div class="info-header d-flex flex-row justify-content-between">
-                    <h6 *ngIf="!this.m_oSelectedProcessor">JSON Editor</h6>
-                    <h6 *ngIf="this.m_oSelectedProcessor">{{this.m_oSelectedProcessor.processorName}} (JSON)</h6>
-                    <p *ngIf="this.m_oSelectedProcessor">Publisher: {{this.m_oSelectedProcessor.publisher}}</p>
+        <div class="json-container d-flex flex-column justify-content-between">
+            <div class="json-header d-flex flex-column">
+                <div class="processor-name font-bold">{{m_oSelectedProcessor.processorName ?
+                    m_oSelectedProcessor.processorName: 'Select A Processor'}}</div>
+                <p *ngIf="m_oSelectedProcessor.publisher">Publisher: {{m_oSelectedProcessor.publisher}}</p>
+            </div>
+            <div class="json-body flex-fill">
+                <div #editor class="json-editor" style="height: 100%;" (keyup)="getJSONInput($event)"></div>
+            </div>
+
+            <div class="footer d-flex flex-row justify-content-between">
+                <div>
+                    <app-button *ngIf="m_sHelpMsg" [m_bMuted]="true" [m_sLabel]="'WAP_HELP' | translate"
+                        [m_sIconLeft]="'help'" (click)="showHelpMessage(true)"></app-button>
                 </div>
-                <div class="style-xml-container d-flex flex-column">
-                    <textarea class="form-control" name="m_asStyleXml" rows="15" [(ngModel)]="m_sMyJsonString"
-                        placeholder="{}"></textarea>
+                <div class="d-flex flex-row gap-3">
+                    <app-button [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate" [m_bOutline]="true"
+                        (click)="formatJSON()"></app-button>
+                    <app-button [m_sLabel]="'WAP_RUN' | translate" [m_sIconLeft]="'play_circle'"
+                        [m_bDisabled]="!m_oSelectedProcessor.processorName" (click)="runProcessor()"></app-button>
                 </div>
-                <div class="buttons-container d-flex flex-row justify-content-between">
-                    <button class="btn btn-secondary" (click)="formatJSON()">Format JSON</button>
-                    <div class="d-flex gap-3">
-                        <button class="btn btn-success" (click)="runProcessor()" [disabled]="m_bIsReadonly === true">
-                            <fa-icon [icon]="faRun"></fa-icon>
-                            Run
-                        </button>
-                        <button class="btn btn-secondary" (click)="openHelp()">
-                            <fa-icon [icon]="faHelp"></fa-icon>
-                            Help
-                        </button>
-                    </div>
-                </div>
+            </div>
+            <div class="help-container d-flex flex-column gap-1" *ngIf="m_bShowHelpMessage === true" [@slideInUp]>
+                <app-button [m_sLabel]="'KEY_PHRASES.CLOSE' | translate" class="align-self-start" [m_bMuted]="true"
+                    [m_sIconLeft]="'close'" (click)="showHelpMessage(false)"></app-button>
+                <div class="msg-container flex-fill" [innerHTML]="m_sHelpMsg | markdown"></div>
             </div>
         </div>
     </div>
-    <div mat-dialog-actions class="border dialog-footer d-flex flex-row justify-content-end">
-        <button class="btn btn-secondary" (click)="onDismiss()">
-            Close
-        </button>
-    </div>
+    <app-params-library-dialog class="flex-fill" *ngIf="m_bShowParamsLibrary === true"
+        [m_oSelectedProcessor]="m_oSelectedProcessor"
+        (m_oSelectedTemplateEmit)="getParamsTemplate($event)"></app-params-library-dialog>
 </div>

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
 
 @Component({
   selector: 'app-wap-products-combo',
@@ -7,18 +6,18 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
   styleUrls: ['./wap-products-combo.component.css']
 })
 export class WapProductsComboComponent {
-  @Input() productsArray: string[];
-  @Input() oControlSelection: any; 
-  @Output() oControlSelectionChange = new EventEmitter<any>(); 
+  @Input() m_aoProducts: string[];
+  @Input() m_oControlSelection: any;
+  @Output() m_oControlSelectionChange = new EventEmitter<any>();
 
-  constructor(private m_oWorkspaceService: WorkspaceService) { }
+  getUserInput(oEvent) {
 
-
-  getUserInput(event) {
-    console.log(event.option.value)
-    let sUserInput = event.option.value; 
-    this.oControlSelection.sSelectedValues = sUserInput; 
-    
-    this.oControlSelectionChange.emit(this.oControlSelection); 
+    if (oEvent) {
+      if (oEvent.value) {
+        let sUserInput = oEvent.value.fileName;
+        this.m_oControlSelection.sSelectedValues = sUserInput;
+        this.m_oControlSelectionChange.emit(this.m_oControlSelection);    
+      }
+    }
   }
 }

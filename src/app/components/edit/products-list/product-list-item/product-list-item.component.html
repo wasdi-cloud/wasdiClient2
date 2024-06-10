@@ -1,0 +1,135 @@
+<div class="product d-flex flex-row align-items-center gap-4" [class.item-hover]="m_bIsHovering"
+    (mouseenter)="mouseHovering()" (mouseleave)="mouseLeaving()" [cdkContextMenuTriggerFor]="context_menu">
+    <div class=" d-flex flex-row align-items-center" *ngIf="m_bIsOpen">
+        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
+            arrow_drop_down
+        </span>
+        <input class="wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_bIsSelected"
+            (change)="emitProductSelectionChange(m_oProduct, $event)">
+        <span class="product-label-icon material-symbols-outlined">
+            satellite_alt
+        </span>
+        <p class="product-label d-flex flex-row align-items-center gap-1">
+            {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
+    </div>
+    <div class="d-flex flex-row align-items-center" *ngIf="m_bIsOpen === false">
+        <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
+            arrow_right
+        </span>
+        <input class="wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_bIsSelected"
+            (change)="emitProductSelectionChange(m_oProduct, $event)">
+        <span class="product-label-icon material-symbols-outlined">
+            satellite_alt
+        </span>
+        <p class="product-label d-flex flex-row align-items-center gap-1">
+            {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
+    </div>
+    <!-- <div class="align-self-end justify-self-end" *ngIf="m_bIsHovering">
+        <button class="material-symbols-outlined display-more-icon button-icon"
+            [cdkMenuTriggerFor]="context_menu">more_vert</button>
+    </div> -->
+</div>
+
+<!-- Opened dropdown component for Bands and Metadata -->
+<div class="product-bands-container" *ngIf="m_bIsOpen">
+    <ul class="container first-list">
+        <li [class.container]="m_bHasMetadata === true && m_bShowMetadata === true">
+            <p class="d-flex flex-row align-items-center gap-1" (click)="getProductMetaData()">
+                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowMetadata === false">
+                    arrow_right
+                </span>
+                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowMetadata === true">
+                    arrow_drop_down
+                </span><span style="cursor: default !important;"><span class="bands-icon material-symbols-outlined">
+                        code
+                    </span> {{"MENU_METADATA" | translate}}</span>
+            </p>
+            <ul *ngIf="m_bShowMetadata">
+                <li [class.container]="oMetadata.open === true" *ngFor="let oMetadata of m_oProductMetadata.elements">
+                    <p (dblclick)="oMetadata.attributes !== null? attributesDialog(oMetadata): ''"
+                        class="d-flex flex-row align-items-center gap-1" style="cursor: default !important;"
+                        (click)="toggleMetadataOpen(oMetadata)">
+                        <span class="arrow-icon material-symbols-outlined"
+                            *ngIf="oMetadata.elements && !oMetadata.open">
+                            arrow_right
+                        </span>
+                        <span class="arrow-icon material-symbols-outlined"
+                            *ngIf="oMetadata.elements && oMetadata.open === true">
+                            arrow_drop_down
+                        </span>
+                        <span class="arrow-icon material-symbols-outlined" *ngIf="!oMetadata.elements">
+                            info
+                        </span>
+                        {{oMetadata.name}}
+                    </p>
+                    <ul *ngIf="oMetadata.open">
+                        <li [class.container]="oElement.elements && oElement.open"
+                            *ngFor="let oElement of oMetadata.elements">
+                            <p (click)="openElement(oElement)" (dblclick)="attributesDialog(oElement)"
+                                class="d-flex flex-row align-items-center gap-1">
+                                <span class="arrow-icon material-symbols-outlined"
+                                    *ngIf="oElement.elements && !oElement.open">
+                                    arrow_right
+                                </span>
+                                <span class="arrow-icon material-symbols-outlined"
+                                    *ngIf="oElement.elements && oElement.open === true">
+                                    arrow_drop_down
+                                </span>
+                                <span class="arrow-icon material-symbols-outlined" *ngIf="!oElement.elements">
+                                    info
+                                </span>
+                                {{oElement.name}}
+                            </p>
+                            <ul *ngIf="oElement.open">
+                                <li *ngFor="let oNestedElement of oElement.elements">
+                                    <p class="d-flex flex-row align-items-center gap-1"
+                                        (dblclick)="oNestedElement.attributes !== null? attributesDialog(oNestedElement) : ''">
+                                        <span class="arrow-icon material-symbols-outlined">
+                                            info
+                                        </span>
+                                        {{oNestedElement.name}}
+                                    </p>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li [class.container]="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands === true">
+            <p [class.disabled-label]="m_oProduct.bandsGroups.bands.length === 0" (click)="openShowBands()">
+                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowBands === false">
+                    arrow_right
+                </span>
+                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowBands === true">
+                    arrow_drop_down
+                </span>
+                <span class="bands-icon material-symbols-outlined">
+                    map
+                </span><span style="cursor: default !important;"> {{"MENU_BANDS" | translate}}</span>
+            </p>
+            <ul *ngIf="m_oProduct.bandsGroups.bands.length > 0 && m_bShowBands">
+                <li *ngFor="let oBand of m_oProduct.bandsGroups.bands">
+                    <p style="cursor: default !important;">{{oBand.name}}
+                        <span *ngIf="oBand.published === false" class="button-icon material-symbols-outlined"
+                            style="color: green; cursor: pointer !important;"
+                            (click)="showBandsOnMap(oBand, true)">lightbulb</span>
+                        <span *ngIf="oBand.published === true" class="button-icon material-symbols-outlined"
+                            style="color: red; cursor: pointer !important;"
+                            (click)="showBandsOnMap(oBand, false)">light_off</span>
+                    </p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<ng-template #context_menu>
+    <div class="context-menu d-flex flex-column gap-1" cdkMenu>
+        <div class="context-menu-item" cdkMenuItem (click)="openStylesDialog()">{{ "MENU_EDIT_STYLES"| translate}}</div>
+        <div class="context-menu-item" cdkMenuItem (click)="openProductProperties()">{{"MENU_EDIT_PRODUCT_PROPERTIES" | translate}}</div>
+        <div class="context-menu-item" cdkMenuItem (click)="downloadProduct()">{{ "MENU_DOWNLOAD"|translate}}</div>
+        <div class="context-menu-item" cdkMenuItem (click)="openSendToFTP()">{{ "MENU_SHARE"| translate}}</div>
+        <div class="context-menu-item" cdkMenuItem (click)="deleteProduct()">{{"MENU_DELETE"| translate}}</div>
+    </div>
+</ng-template>

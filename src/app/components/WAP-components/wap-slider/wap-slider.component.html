@@ -1,4 +1,5 @@
-<mat-slider style="width: 80%;" min={{oSliderInput.m_iMin}} max={{oSliderInput.m_iMax}} step="10"
-    showTickMarks discrete [displayWith]="formatLabel" (change)="getSliderInput($event)" >
-    <input matSliderThumb >
-</mat-slider>
+<div class="d-flex flex-column">
+    <label for="">{{m_oSliderInput.label}}</label>
+    <app-slider [m_bHasThumbLabel]="true" [m_iMaxValue]="m_oSliderInput.m_iMax" [m_iMinValue]="m_oSliderInput.m_iMin"
+        [m_iValue]="m_oSliderInput.m_iValue" (m_oSelectionChange)="getSelectionChange($event)"></app-slider>
+</div>

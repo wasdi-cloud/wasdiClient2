@@ -1,0 +1,74 @@
+<div class="secondary-nav">
+    <div class="location-header">{{"ROOT_VIEW_NAV_BAR_LINK_APPSTORE" | translate}}</div>
+    <div class="filters-header">{{"MARKET_FILTERS" | translate }} </div>
+    <div class="filters-container" style="height: 90%">
+        <div class="input-container">
+            <app-input-field [m_sIconLeft]="'search'" [m_sPlaceholder]="'MARKET_SEARCH_APP' | translate"
+                [m_sInputValue]="m_sSearchInput" (m_oInputChange)="getSearchInput($event)"
+                [m_sLabel]="'MARKET_SEARCH_APP' | translate"></app-input-field>
+        </div>
+        <div class=" input-container">
+            <div class="search-header">{{ "MARKET_CATEGORY" | translate}}</div>
+            <div class="categories-container">
+                <div class="category-tag" (click)="categoriesChanged(oCategory)"
+                    *ngFor="let oCategory of m_asCategoryOptions"
+                    [class.active]="m_aoSelectedCategories.indexOf(oCategory.id) !== -1">
+                    {{oCategory.category}}</div>
+            </div>
+        </div>
+        <div class="input-container">
+            <div class="search-header">{{"MARKET_DEVELOPER" | translate}}</div>
+            <app-input-field [m_sIconLeft]="'search'" [m_sPlaceholder]="'MARKET_SEARCH_DEVELOPERS' | translate"
+                (m_oInputChange)="getDeveloperInput($event)"
+                [m_sLabel]="'MARKET_DEVELOPER_SEARCH' | translate"></app-input-field>
+            <div class="developers-container">
+                <div class="wasdi-checkbox-container" *ngFor=" let oPublisher of m_aoPublishers | filter:
+                    m_sDeveloperSearch">
+                    <input class="wasdi-checkbox" type="checkbox" name="" id="" (click)="developerChanged(oPublisher)"
+                        [checked]=" this.m_aoSelectedPublishers.indexOf(oPublisher.publisher) !== -1">
+                    <span class="wasdi-checkbox-label">{{oPublisher.publisher}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="input-container">
+            <div class="search-header">{{"MARKET_RATING" | translate}}</div>
+            <div class="review-options">
+                <div class="review-option-container d-flex flex-row align-items-center gap-1"
+                    *ngFor="let iRating of m_aiRatingsFilter">
+                    <input type="radio" name="reviewOption" id="" value="{{iRating}}" (click)="ratingChanged($event)"
+                        [(ngModel)]="m_oAppFilter.score">
+                    <span class="material-symbols-outlined" [class]="iRating > 0 ? 'star-filled' : 'star-grey'">
+                        star
+                    </span>
+                    <span class="material-symbols-outlined" [class]="iRating > 1? 'star-filled' : 'star-grey'">
+                        star
+                    </span>
+                    <span class="material-symbols-outlined" [class]="iRating > 2 ? 'star-filled' : 'star-grey'">
+                        star
+                    </span>
+                    <span class="material-symbols-outlined" [class]="iRating > 3 ? 'star-filled' : 'star-grey'">
+                        star
+                    </span>
+                    <span class="material-symbols-outlined" [class]="iRating > 4 ? 'star-filled' : 'star-grey'">
+                        star
+                    </span>
+                    <span class="review-text">{{"MARKET_MORE_STARS" | translate}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <div class="search-header">{{"MARKET_PRICE"| translate }}</div>
+            <div style="padding-left: 1rem">
+                <app-slider [m_bHasThumbLabel]="true"></app-slider>
+            </div>
+        </div>
+
+    </div>
+    <div class="floating-buttons d-flex flex-row gap-2 justify-content-between">
+        <app-button [m_bMuted]="true" [m_sLabel]="'MARKET_CLEAR_FILTERS' | translate"
+            (click)="clearFilters()"></app-button>
+        <app-button class="flex-fill" [m_sLabel]="'BTN_SEARCH' | translate" [m_sIconLeft]="'search'"
+            (click)="onSearchInput($event)"></app-button>
+    </div>
+</div>

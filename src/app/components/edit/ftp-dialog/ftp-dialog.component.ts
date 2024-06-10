@@ -73,7 +73,7 @@ export class FTPDialogComponent implements OnInit {
     this.m_oCatalogueService.uploadFTPFile(this.m_oFTPRequest, this.m_oActiveWorkspace.workspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
-          this.m_oNotificationDisplayService.openSnackBar("Upload Complete", "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar("Upload Complete");
         } else {
           this.m_oNotificationDisplayService.openAlertDialog( "GURU MEDITATION\nERROR TRANSFERRING FILE TO FTP");
         }

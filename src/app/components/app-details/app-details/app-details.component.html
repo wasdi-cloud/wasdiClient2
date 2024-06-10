@@ -1,57 +1,109 @@
-<div class="toolbar-container d-flex flex-column align-items-center justify-content-center">
-    <div class="col-10 d-flex flex-row justify-content-between">
-        <button class="return-btn btn btn-success" (click)="marketplaceReturn()">
-            Back to the Future
-        </button>
+<main>
+    <div class="hero-image">
     </div>
-</div>
-<div class="info-container d-flex flex-column align-items-center justify-content-center py-2">
-    <div class="d-flex flex-row col-10">
-        <div class="processor-img col" style="background-image: url({{m_asImages[0]}});"></div>
-        <div class="processor-info mx-4 col">
-            <h3>{{m_oApplicationInfo.friendlyName}}</h3>
-            <p>Reviews: {{m_oApplicationInfo.reviewsCount}}</p>
-            <p *ngIf="!m_sActiveUser === m_oApplicationInfo.publisher">Published By: {{m_oApplicationInfo.publisher}}
-            </p>
-            <div *ngIf="m_sActiveUser === m_oApplicationInfo.publisher"
-                class="d-flex flex-row align-items-center gap-3">
-                <div>You are the Master!</div>
-                <button class="btn btn-sm btn-success" (click)="openEditAppDialog(m_oApplicationInfo)">Edit</button>
+    <nav aria-label="marketplace breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/marketplace">{{"ROOT_VIEW_NAV_BAR_LINK_APPSTORE"
+                    | translate}}</a></li>
+            <li class="breadcrumb-item active" attr.aria-current="{{m_oApplicationInfo.friendlyName + ' page'}}">
+                <a>{{m_oApplicationInfo.friendlyName}}</a>
+            </li>
+        </ol>
+    </nav>
+    <div class="processor-info-container d-flex flex-row">
+        <div class="images-container d-flex flex-column gap-1">
+            <div class="processor-img" style="background-image: url({{m_sViewImage}});"></div>
+            <div class="img-caroseul d-flex flex-row flex-wrap gap-1">
+                <div class="sample-img" *ngFor="let sImage of m_asImages" style="background-image: url({{sImage}});"
+                    (click)="setViewImage(sImage)">
+                </div>
             </div>
-            <div class="categories-container">
-                <span>Categories</span>
+        </div>
+        <div class="info-container flex-fill d-flex flex-column">
+            <div>
+                <div class="title-price-container d-flex flex-row justify-content-between">
+                    <h1>{{m_oApplicationInfo.friendlyName}}</h1>
+                    <div class="price-flag align-self-start"
+                        [ngClass]="m_oApplicationInfo.ondemandPrice === 0 ? 'free' : 'paid'">
+                        {{m_oApplicationInfo.ondemandPrice
+                        === 0 ?("WAP_FREE"| translate).toUpperCase():
+                        m_oApplicationInfo.ondemandPrice}}</div>
+                </div>
+                <div class=" basic-info-container d-flex flex-column gap-2">
+                    <div>
+                        <div class="review-option-container d-flex flex-row align-items-center gap-1">
+                            <span class="material-symbols-outlined"
+                                [class]="m_oApplicationInfo.score > 0 ? 'star-filled' : 'star-grey'">
+                                star
+                            </span>
+                            <span class="material-symbols-outlined"
+                                [class]="m_oApplicationInfo.score > 1? 'star-filled' : 'star-grey'">
+                                star
+                            </span>
+                            <span class="material-symbols-outlined"
+                                [class]="m_oApplicationInfo.score > 2 ? 'star-filled' : 'star-grey'">
+                                star
+                            </span>
+                            <span class="material-symbols-outlined"
+                                [class]="m_oApplicationInfo.score > 3 ? 'star-filled' : 'star-grey'">
+                                star
+                            </span>
+                            <span class="material-symbols-outlined"
+                                [class]="m_oApplicationInfo.score > 4 ? 'star-filled' : 'star-grey'">
+                                star
+                            </span>
+                            <span>({{m_oApplicationInfo.reviewsCount}} reviews)</span>
+                        </div>
+                    </div>
+                    <div class="info-tag d-flex flex-row gap-1">
+                        <span class="info-tag">{{"WAP_PUBLISHER" | translate}}:</span>
+                        <span class="info-tag-content">{{m_oApplicationInfo.publisher}}</span>
+                        <app-button *ngIf="m_oApplicationInfo.isMine" [m_sSize]="'small'" [m_sLabel]="'Edit'"
+                            [m_bOutline]="true" (click)="openEditAppDialog(m_oApplicationInfo)"></app-button>
+                    </div>
+                    <div class="d-flex flex-row flex-wrap gap-1">
+                        <div class="category-tag" *ngFor="let sCategory of m_oApplicationInfo.categoryNames">
+                            {{sCategory}}</div>
+                    </div>
+                </div>
             </div>
-            <div class="price-container">
-                {{m_oApplicationInfo.price}}
+            <div class="description-container d-flex flex-column align-items-start">
+                <h2>{{"WAP_DESCRIPTION" | translate}}</h2>
+                <div class="font-light mb-2">
+                    {{m_oApplicationInfo.longDescription ? m_oApplicationInfo.longDescription :
+                    m_oApplicationInfo.processorDescription}}
+                </div>
+                <app-button [m_sLabel]="'WAP_OPEN_APPLICATION' | translate" [m_sIconLeft]="'all_out'"
+                    [m_sIconRight]="'arrow_forward'" (click)="openAppUI(m_oApplicationInfo.processorName)"
+                    [m_sSize]="'large'"></app-button>
             </div>
-            <div class="description-container">
-                {{m_oApplicationInfo.longDescription ? m_oApplicationInfo.longDescription : m_oApplicationInfo.processorDescription}}
+            <div class="app-details d-flex flex-column">
+                <h2>Application details</h2>
+                <div class="d-flex flex-row gap-3">
+                    <div class="app-details-col1">
+                        <p>{{"WAP_PUBLISHER"|translate}}: <span class="wasdi-highlight">{{m_oApplicationInfo.publisher ?
+                                m_oApplicationInfo.publisher : 'N/A'}}</span></p>
+                        <p>{{"WAP_CONTACT"|translate}}: <span class="wasdi-highlight">{{m_oApplicationInfo.email?
+                                m_oApplicationInfo.email : 'N/A'}}</span>
+                        </p>
+                        <p>{{"WAP_WEB"|translate}} <span class="wasdi-highlight">{{m_oApplicationInfo.link?
+                                m_oApplicationInfo.link : 'N/A'}}</span></p>
+                    </div>
+                    <div class="app-details-col2">
+                        <p>{{"WAP_PUBLICATION_DATE"|translate}}: <span>{{m_oApplicationInfo.publishDate |
+                                date}}</span></p>
+                        <p>{{"WAP_LAST_UPDATE"|translate}}: <span>{{m_oApplicationInfo.updateDate |
+                                date}}</span></p>
+                        <p>{{"WAP_EXECUTIONS"|translate}}: <span>{{m_oAppStats.runs}}</span></p>
+                        <p>{{"WAP_SUCCESS_RATE"|translate}}: <span>{{getStatSuccess()}}</span></p>
+                        <p>{{"WAP_MEDIUM_TIME"|translate}}: <span>{{m_oAppStats.mediumTime}}</span>
+                        </p>
+                    </div>
+                </div>
             </div>
-            <a class="open-application btn btn-dark" (click)="openAppUI(m_oApplicationInfo.processorName)">Open
-                Application</a>
+            <div class="reviews-container">
+                <app-app-reviews [oProcessor]="m_oApplicationInfo"></app-app-reviews>
+            </div>
         </div>
     </div>
-    <div class="application-details row col-10 d-flex flex-row justify-content-between py-4">
-        <div class="publisher-info-col col-5">
-            <p>{{"WAP_PUBLISHER"|translate}}: <span class="text-success">{{m_oApplicationInfo.publisher}}</span></p>
-            <p>{{"WAP_CONTACT"|translate}}: <span class="text-success">{{m_oApplicationInfo.email}}</span></p>
-            <p>{{"WAP_WEB"|translate}} <span class="text-success">{{m_oApplicationInfo.link}}</span></p>
-        </div>
-        <div class="application-info-col col-5">
-            <p>{{"WAP_PUBBLICATION_DATE"|translate}} <span class="text-success">{{m_oApplicationInfo.publishDate |
-                    date}}</span></p>
-            <p>{{"WAP_LAST_UPDATE"|translate}} <span class="text-success">{{m_oApplicationInfo.updateDate |
-                    date}}</span></p>
-            <p>{{"WAP_EXECUTIONS"|translate}} <span class="text-success">{{m_oAppStats.runs}}</span></p>
-            <p>{{"WAP_SUCCESS_RATE"|translate}} <span class="text-success">{{getStatSuccess()}}</span></p>
-            <p>{{"WAP_MEDIUM_TIME"|translate}} <span class="text-success">{{m_oAppStats.mediumTime}}</span></p>
-        </div>
-    </div>
-</div>
-<div class="reviews-container d-flex flex-column align-items-center border-top pt-3">
-    <div class="reveiw-header row col-10">
-        <h4>Reviews</h4>
-        <app-app-reviews [oProcessor]="m_oApplicationInfo"></app-app-reviews>
-    </div>
-
-</div>
+</main>

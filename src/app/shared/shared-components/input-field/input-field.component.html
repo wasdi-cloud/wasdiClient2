@@ -1,0 +1,28 @@
+<div class="d-flex flex-column justify-content-between">
+    <label [class.invalid]="!m_bIsValid" [class.readonly]="m_bIsReadonly" for="{{m_sInputName}}"
+        *ngIf="m_sLabel">{{m_sLabel}} <span *ngIf="m_bIsRequired">*</span></label>
+    <div class="input-group" [class.invalid]="!m_bIsValid" [class.readonly]="m_bIsReadonly"
+        [class.icon-left]="m_sIconLeft !== null" [class.icon-right]="m_sIconRight !== null || m_bClearField">
+        <div class="input-group-prepend" *ngIf="m_sIconLeft !== null">
+            <span class="material-symbols-outlined input-group-text" [class.invalid]="!m_bIsValid">
+                {{m_sIconLeft}}
+            </span>
+        </div>
+        <input type="{{m_sInputType}}" class="form-control" name="{{m_sInputName}}" placeholder="{{m_sPlaceholder}}"
+            [readOnly]="m_bIsReadonly" aria-label="InputField" aria-describedby="basic-addon1" pattern="{{m_sPattern}}"
+            [value]="m_sInputValue" (change)="emitInputChange($event)" (keyup)="emitInputChange($event)"
+            max="{{m_sMaxValue}}" min="{{m_sMinValue}}">
+        <div class="icon-right input-group-append" *ngIf="m_sIconRight"
+            (click)="m_sIconRight === 'visibility'? toggleType() : ''">
+            <span class="material-symbols-outlined input-group-text" [class.invalid]="!m_bIsValid">
+                {{m_sIconRight}}
+            </span>
+        </div>
+        <div class="icon-left input-group-append" *ngIf="m_bClearField" (click)="emitClearInput($event)">
+            <span class="clear-icon material-symbols-outlined input-group-text" [class.invalid]="!m_bIsValid">
+                close
+            </span>
+        </div>
+    </div>
+
+</div>

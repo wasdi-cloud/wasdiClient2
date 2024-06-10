@@ -1,0 +1,8 @@
+<div class="chip" [class.primary]="m_sColour === 'primary'" [class.mid-grey]="m_sColour === 'mid-grey'"
+    [class.dark-grey]="m_sColour === 'dark-grey'" [class.success]="m_sColour === 'success'"
+    [class.info]="m_sColour === 'info'" [class.warning]="m_sColour === 'warning'">
+    {{m_sLabel.toUpperCase()}}
+    <span class="material-symbols-outlined chip-close">
+        close
+    </span>
+</div>

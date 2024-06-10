@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, AfterContentInit, AfterContentChecked } from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { SearchService } from 'src/app/search.service';
@@ -19,9 +19,10 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css']
+  styleUrls: ['./search.component.css'],
+  host: { 'class': 'flex-fill' }
 })
-export class SearchComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   //Font Awesome Imports:
   faPlus = faPlus;
 
@@ -99,15 +100,19 @@ export class SearchComponent implements OnInit, OnDestroy {
     private m_oResultsOfSearchService: ResultOfSearchService,
     private m_oSearchService: SearchService,
     private m_oTranslate: TranslateService,
-  ) {
-    this.m_oConfigurationService.loadConfiguration();
-    this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
-  }
+  ) { }
 
   ngOnInit(): void {
     FadeoutUtils.verboseLog("SearchComponent.ngOnInit")
     this.m_oPageService.setFunction(this.executeSearch, this);
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+  }
+
+  //Wait until After Content is initialized and then check - on check call the config file
+  ngAfterContentChecked(): void {
+    if (this.m_oConfigurationService.getConfiguration() != null) {
+      this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
+    }
   }
 
   ngOnDestroy(): void {
@@ -172,6 +177,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   searchAndCount(oProvider) {
+    let sHeader: string = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION");
+    let sErrorSearch: string = this.m_oTranslate.instant("IMPORT_ERROR_SEARCH_REQUEST")
     //If there is no provider selected, return false
     if (this.thereIsAtLeastOneProvider() === false) {
       return false;
@@ -236,7 +243,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         oProvider.isLoaded = true;
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("GURU MEDITATION<br>ERROR IN OPEN SEARCH REQUEST");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorSearch, sHeader, 'alert');
         oProvider.isLoaded = false;
       }
     });
@@ -290,7 +297,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         oProvider.isLoaded = true;
       },
       error: oError => {
-        oController.m_oNotificationDisplayService.openAlertDialog(sMessage);
+        oController.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
         oProvider.isLoaded = true;
       }
     })
@@ -414,9 +421,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (this.m_aoSelectedProviders.length > 0) {
       return true;
     } else {
-      // return false;
-
-      return true; //uncomment before commit
+      return false;
     }
   }
 
@@ -469,7 +474,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       aoData[iIndexData].summary = oSummary;
 
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData[iIndexData].preview) || FadeoutUtils.utilsIsStrNullOrEmpty(aoData[iIndexData].preview))
-        aoData[iIndexData].preview = "assets/icons/ImageNotFound.svg";//default value ( set it if there isn't the image)
+        aoData[iIndexData].preview = "";//default value ( set it if there isn't the image)
 
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData[iIndexData].footprint) == false) {
         //get bounds
@@ -497,26 +502,23 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   deleteProducts(sProviderName: string) {
     //check if layers list is empty
-    if (this.isEmptyProductsList()) return false;
-    var iLengthProductsList = this.m_aoProductsList.length;
-    var oMap = this.m_oMapService.getMap();
-    /* remove rectangle in map*/
-    for (var iIndexProductsList = 0; iIndexProductsList < iLengthProductsList; iIndexProductsList++) {
-      if ((FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProductsList[iIndexProductsList].provider) === false) && (this.m_aoProductsList[iIndexProductsList].provider === sProviderName)) {
-        var oRectangle = this.m_aoProductsList[iIndexProductsList].rectangle;
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle))
-          oRectangle.removeFrom(oMap);
-        if (iIndexProductsList > -1) {
-          this.m_aoProductsList.splice(iIndexProductsList, 1);
-          iLengthProductsList--;
-          iIndexProductsList--;
+    if (!this.isEmptyProductsList()) {
+      const oMap = this.m_oMapService.getMap();
+      /* remove rectangle in map*/
+      for (let oProduct of this.m_aoProductsList) {
+        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.provider) && oProduct.provider === sProviderName) {
+          let oRectangle = oProduct.rectangle;
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
+            this.m_oMapService.removeLayerFromMap(oRectangle);
+          }
         }
       }
-
+      //delete layers list
+      this.m_aoProductsList = [];
+      return true;
+    } else {
+      return false;
     }
-    //delete layers list
-    this.m_aoProductsList = [];
-    return true;
   }
 
   isEmptyProductsList() {
@@ -551,6 +553,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.m_oSearchModel.missionFilter = oEvent.missionFilter;
       this.m_oSearchModel.sensingPeriodFrom = oEvent.sensingPeriodFrom;
       this.m_oSearchModel.sensingPeriodTo = oEvent.sensingPeriodTo;
+    }
+
+    if (this.m_sTypeOfFilterSelected === 'Time period') {
+      this.searchAllSelectedProviders();
+    }
+
+    if (this.m_sTypeOfFilterSelected === 'Time series') {
+      this.searchListAllSelectedProviders();
     }
   }
 
@@ -685,11 +695,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoListOfSelectedProducts) === true) {
       return false;
     }
-    
-    let oDialogRef = this.m_oDialog.open(WorkspacesListDialogComponent, {
+
+    this.m_oDialog.open(WorkspacesListDialogComponent, {
       height: "55vh",
       width: '60vw',
       data: {
+        isSharing: false,
         products: aoListOfSelectedProducts
       }
     })

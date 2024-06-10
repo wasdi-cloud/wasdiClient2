@@ -6,10 +6,6 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 
-
-//Font Awesome Icon Imports:
-import { faRocket, faXmark } from '@fortawesome/free-solid-svg-icons';
-
 //Angular Materials Imports:
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -19,6 +15,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ImageService } from 'src/app/services/api/image.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-new-app-dialog',
@@ -26,14 +23,10 @@ import { ImageService } from 'src/app/services/api/image.service';
   styleUrls: ['./new-app-dialog.component.css']
 })
 export class NewAppDialogComponent implements OnInit {
-  //Font Awesome Imports
-  faRocket = faRocket;
-  faX = faXmark;
-
   /**
    * Edit Mode boolean: are we creating a new processor or editing an existing one?
    */
-  m_bEditMode: boolean;
+  m_bEditMode: boolean = false;
 
   /**
    * UI Changed boolean: was the UI JSON changed in the UI tab?
@@ -50,8 +43,6 @@ export class NewAppDialogComponent implements OnInit {
    */
   m_oActiveWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
   m_oFile: any = null;
-
-
 
   /**
    * Creation for new form builder
@@ -81,7 +72,7 @@ export class NewAppDialogComponent implements OnInit {
   /**
    * Input Processor JSON Parameters Sample
    */
-  m_sJSONSample: string = "";
+  m_sJSONSample: string = "{}";
 
   /**
    * Input Processor Processor Id
@@ -123,7 +114,7 @@ export class NewAppDialogComponent implements OnInit {
   */
   m_oInputProcessor: {
     imgLink: string,
-    isPublic: string,
+    isPublic: any,
     minuteTimeout: number,
     paramsSample: string,
     processorDescription: string,
@@ -136,7 +127,7 @@ export class NewAppDialogComponent implements OnInit {
     type: string
   } = {
       imgLink: "",
-      isPublic: "0",
+      isPublic: 0,
       minuteTimeout: 180,
       paramsSample: "",
       processorDescription: "",
@@ -186,7 +177,8 @@ export class NewAppDialogComponent implements OnInit {
     private m_oFormBuilder: FormBuilder,
     private m_oImageService: ImageService,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oProcessorService: ProcessorService) { }
+    private m_oProcessorService: ProcessorService,
+    private m_oTranslate: TranslateService) { }
 
   ngOnInit(): void {
     //Edit Mode assigned when opening dialog:
@@ -197,24 +189,24 @@ export class NewAppDialogComponent implements OnInit {
       this.initializeProcessorInformation(this.data.inputProcessor.processorId);
 
     } else {
-      //Create form builder with nested elements to pass to tabs: 
       this.initializeFormBuilder();
     }
   }
 
- initializeProcessorInformation(sProcessorId: string) {
+  initializeProcessorInformation(sProcessorId: string) {
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_FETCH_ERROR")
     //Base Input 
     this.m_oProcessorService.getDeployedProcessor(sProcessorId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oNotificationDisplayService.openAlertDialog("Unable to get Processor Information.")
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
         } else {
           this.m_oInputProcessor = oResponse;
           //Marketplace Details
           this.m_oProcessorService.getMarketplaceDetail(this.m_oInputProcessor.processorName).subscribe({
             next: oResponse => {
               if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-                this.m_oNotificationDisplayService.openAlertDialog("Unable to get Processor Information")
+                this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
               } else {
                 this.m_oProcessorDetails = oResponse;
 
@@ -238,13 +230,13 @@ export class NewAppDialogComponent implements OnInit {
               }
             },
             error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog("Unable to get Processor Information")
+              this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
             }
           })
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Unable to get Processor Information.")
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
       }
     })
 
@@ -268,7 +260,7 @@ export class NewAppDialogComponent implements OnInit {
         sShortDescription: this.m_oInputProcessor.processorDescription,
         sJSONSample: this.m_sJSONSample,
         iMinuteTimeout: this.m_iMinuteTimeout,
-        bIsPublic: this.m_bPublic,
+        bIsPublic: this.m_oInputProcessor.isPublic,
         oSelectedFile: this.m_oSelectedFile,
         sSelectedFileName: ""
       }),
@@ -287,7 +279,7 @@ export class NewAppDialogComponent implements OnInit {
 
       //Nested Form Builder for UI tab: 
       processorUIInfo: this.m_oFormBuilder.group({
-        sProcessorUI: "",
+        sProcessorUI: "{\n\"tabs\": []\n}",
         bUIChanged: false
       })
     });
@@ -299,11 +291,12 @@ export class NewAppDialogComponent implements OnInit {
    * @param sProcessorName 
    */
   getMarketplaceDetails(sProcessorName: string) {
+    let sErrorMsg = this.m_oTranslate.instant("DIALOG_PROCESSOR_APP_DETAILS_ERROR")
     this.m_oProcessorService.getMarketplaceDetail(sProcessorName).subscribe({
       next: oResponse => {
         //If oResponse is null or undefined 
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oNotificationDisplayService.openAlertDialog("Error in fetching the application details");
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
         } else {
           //if oResponse vaild, assign response to m_oProcessorDetails
           this.m_oProcessorDetails = oResponse;
@@ -312,12 +305,13 @@ export class NewAppDialogComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in fetching the application details");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
       }
     })
   }
 
   getProcessorUI(sProcessorName: string) {
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_APP_UI_ERROR")
     this.m_oProcessorService.getProcessorUI(sProcessorName).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
@@ -330,7 +324,7 @@ export class NewAppDialogComponent implements OnInit {
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error getting the processor UI");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
       }
     })
   }
@@ -349,12 +343,19 @@ export class NewAppDialogComponent implements OnInit {
    * Function to set the input processor values
    */
   setInputProcessorValues() {
+
     //Is processor public? 
-    if (this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value === false) {
-      this.m_oInputProcessor.isPublic = "0";
-    } else {
-      this.m_oInputProcessor.isPublic = "1";
+    if (!this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value) {
+      this.m_oInputProcessor.isPublic = 0;
     }
+    else {
+      if (this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value === false) {
+        this.m_oInputProcessor.isPublic = 0;
+      } else {
+        this.m_oInputProcessor.isPublic = 1;
+      }
+    }
+
     //Set processor name: 
     this.m_oInputProcessor.processorName = this.m_oProcessorForm.get('processorBasicInfo.sProcessorName').value;
 
@@ -396,7 +397,7 @@ export class NewAppDialogComponent implements OnInit {
       }
 
     } catch (error) {
-      this.m_oNotificationDisplayService.openAlertDialog("There was an error in parsing the JSON");
+      this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("DIALOG_PARSE_JSON_ERROR"));
     }
   }
 
@@ -405,12 +406,22 @@ export class NewAppDialogComponent implements OnInit {
    */
   updateProcessor() {
     this.setInputProcessorValues();
+
+    let sMessage = "Processor Data Updated";
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === false) {
+      sMessage += "<BR>";
+      sMessage += "Updating Processor Files";
+      sMessage += "<BR>";
+      sMessage += "Rebuild Ongoing";
+    }
+
     // Update the processor and the processor details
     this.m_oProcessorService.updateProcessor(this.m_oInputProcessor.processorId, this.m_oInputProcessor).subscribe({
       next: oResponse => {
         this.m_oProcessorService.updateProcessorDetails(this.m_oInputProcessor.processorId, this.m_oProcessorDetails).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("Processor Data Updated", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar(sMessage);
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog(`Error in updating ${this.m_oInputProcessor.processorName}`);
@@ -429,10 +440,10 @@ export class NewAppDialogComponent implements OnInit {
 
       this.m_oProcessorService.updateProcessorFiles(sFileName, this.m_oInputProcessor.processorId, oSelectedFile).subscribe({
         next: oResponse => {
-          console.log(oResponse)
+          //this.m_oNotificationDisplayService.openSnackBar("Processor Files Updated<br>Rebuild ongoing");
         },
         error: oError => {
-          console.log(oError)
+          this.m_oNotificationDisplayService.openAlertDialog(`Error in updating ${this.m_oInputProcessor.processorName} files!!!`);
         }
       })
     }
@@ -440,23 +451,21 @@ export class NewAppDialogComponent implements OnInit {
     // Check if the UI JSON Param was changed: 
 
     // If user has interacted with the Processor UI Textarea:
-    if (this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').touched === true) {
-      //Try parse JSON on UI Input
-      if (this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value)) {
-        this.m_sProcessorUI = this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value);
+    //Try parse JSON on UI Input
+    if (this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value)) {
+      this.m_sProcessorUI = this.checkUIInput(this.m_oProcessorForm.get('processorUIInfo.sProcessorUI').value);
 
-        //If parse JSON is successful -> update the processor UI
-        this.m_oProcessorService.saveProcessorUI(this.m_oInputProcessor.processorName, this.m_sProcessorUI).subscribe({
-          next: oResponse => {
-            console.log("JSON Updated")
-          },
-          error: oError => {
-            console.log(oError);
-          }
-        })
-      }
-
+      //If parse JSON is successful -> update the processor UI
+      this.m_oProcessorService.saveProcessorUI(this.m_oInputProcessor.processorName, this.m_sProcessorUI).subscribe({
+        next: oResponse => {
+          console.log("JSON Updated")
+        },
+        error: oError => {
+          console.log(oError);
+        }
+      })
     }
+
   }
 
   /**
@@ -469,7 +478,7 @@ export class NewAppDialogComponent implements OnInit {
     }
 
     this.setInputProcessorValues();
-    let sType = this.m_oProcessorForm.get('processorBasicInfo.oType').value;
+    let sType = this.m_oProcessorForm.get('processorBasicInfo.oType').value.id;
 
 
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sType)) {
@@ -478,7 +487,6 @@ export class NewAppDialogComponent implements OnInit {
     }
 
     this.m_oInputProcessor.processorName = this.m_oInputProcessor.processorName.toLowerCase();
-
 
     let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value
     let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value
@@ -493,8 +501,20 @@ export class NewAppDialogComponent implements OnInit {
       this.m_oInputProcessor.isPublic,
       oSelectedFile).subscribe({
         next: oResponse => {
-          this.m_oNotificationDisplayService.openSnackBar(`Deployment of ${this.m_oInputProcessor.processorName} has started`, "Close");
-          this.onDismiss();
+
+          let bOk = false;
+
+          if (oResponse != null) {
+            bOk = oResponse.boolValue
+          }
+
+          if (bOk) {
+            this.m_oNotificationDisplayService.openSnackBar(`Deployment of ${this.m_oInputProcessor.processorName} has started`);
+            this.onDismiss();
+          }
+          else {
+            this.m_oNotificationDisplayService.openAlertDialog(`Error: ${oResponse.stringValue}`);
+          }
         },
         error: oError => {
           this.m_oNotificationDisplayService.openAlertDialog(`Error in deploying ${this.m_oInputProcessor.processorName}`);

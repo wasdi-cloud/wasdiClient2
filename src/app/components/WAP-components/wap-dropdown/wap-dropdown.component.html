@@ -1,9 +1,2 @@
-<form>
-    <input type="text" [formControl]="control" [matAutocomplete]="auto"  
-        class="form-control">
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getSelectedOption($event)">
-        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option}}
-        </mat-option>
-    </mat-autocomplete>
-</form>
+<app-dropdown [m_sLabel]="oControlInfo.label" [m_aoDropdownItems]="oControlInfo.asListValues" [m_aoSelectedItems]="oControlInfo.oSelectedValue"
+    (m_oSelectionChange)="getSelectedOption($event)" [m_bHasSearch]="true"></app-dropdown>  

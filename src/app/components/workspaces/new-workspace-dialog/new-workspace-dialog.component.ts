@@ -30,7 +30,6 @@ export class NewWorkspaceDialogComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.m_oData) {
-      console.log(this.m_oData);
       if (this.m_oData.renameWorkspace) {
         this.m_bIsEditingWorkspaceName = true;
         this.m_oInputWorkspace = this.m_oData.workspace;
@@ -45,10 +44,10 @@ export class NewWorkspaceDialogComponent implements OnInit {
 
     }
     this.m_oDialogRef.close();
-    this.m_oNotificationDisplayService.openAlertDialog("WASDI is creating your workspace...")
+    this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("DIALOG_ADD_NEW_WORKSPACE_CREATING"), '', 'alert')
     this.m_oWorkspaceService.createWorkspace(this.m_sWorkspaceName).subscribe(oResponse => {
       if (oResponse.boolValue === false) {
-        console.log("error")
+        this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("MSG_MKT_WS_CREATE_ERROR"), '', 'danger')
         return false;
       }
       oNewWorkspace = this.m_oWorkspaceService.getWorkspaceEditorViewModel(oResponse.stringValue)
@@ -65,7 +64,7 @@ export class NewWorkspaceDialogComponent implements OnInit {
       this.m_oInputWorkspace.name = this.m_sWorkspaceName;
       this.m_oWorkspaceService.updateWorkspace(this.m_oInputWorkspace).subscribe({
         next: oResponse => {
-          this.m_oNotificationDisplayService.openSnackBar(sMessge, "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar(sMessge);
           this.m_oConstantsService.setActiveWorkspace(this.m_oInputWorkspace);
           this.onDismiss();
         },

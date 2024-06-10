@@ -21,7 +21,12 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/images"
+              "src/images",
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images/",
+                "output": "./assets"
+              }
             ],
             "styles": [
               "src/custom-theme.scss",
@@ -41,16 +46,13 @@
           "configurations": {
             "production": {
               "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
+                
               ],
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "5mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -58,7 +60,14 @@
                   "maximumError": "10kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "fonts": true,
+                "styles": false
+              }
+
+
             },
             "staging": {
               "fileReplacements": [

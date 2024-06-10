@@ -1,0 +1,43 @@
+main {
+    height: 100vh !important;
+    padding: 32px;
+}
+
+.header-logo-container {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.logos-container {
+    height: 2rem;
+}
+
+.logo-name {
+    height: 75%;
+}
+
+div.row {
+    /* padding: 64px; */
+}
+
+div.form-container {
+    color: var(--neutral50Brand);
+}
+
+div.login-header {
+    font-size: 24px;
+    line-height: 36px;
+}
+
+div.img-container {
+    background-image: url('src/assets/login-imgs/login-1.jpg');
+    border-radius: 32px;
+    height: 100%;
+    width: 55%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+img {
+    height: 100%;
+}

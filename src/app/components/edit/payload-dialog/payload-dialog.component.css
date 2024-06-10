@@ -1,8 +1,29 @@
+/* div.dialog-parent {
+    height: 100%;
+    width: 100%;
+} */
+
 textarea.process-payload-display {
     width: 100%;
     height: 20rem;
 }
 
-li.nav-item, a.nav-link {
+li.nav-item,
+a.nav-link {
     cursor: pointer;
+}
+
+.charts-container {
+    overflow: scroll;
+    gap: 12px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* Class for 2 columns */
+@media (max-width: 1024px) {
+	.chart-container{
+		width: 50% !important;
+		max-width: 100% !important;
+	}
 }

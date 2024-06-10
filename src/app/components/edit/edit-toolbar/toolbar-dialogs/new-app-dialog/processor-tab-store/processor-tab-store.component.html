@@ -1,40 +1,60 @@
-<div class="" style="width: 100%;" [formGroup]="m_oProcessorStoreInfo">
-    <div class="d-flex flex-row gap-2 pb-1">
-        <div class="flex-fill">
-            <label for="friendlyName">Friendly Name:</label>
-            <input class="form-control" type="text" formControlName="sFriendlyName">
+<div class="d-flex flex-row gap-3" style="height: 100%; width: 100%;">
+    <div class="input-column d-flex flex-column gap-2">
+        <h3 class="app-header font-bold">{{"DIALOG_PROCESSOR_STORE_SUB_TITLE" | translate}}</h3>
+        <app-input-field [m_sLabel]="'Application name in the store'" [m_sPlaceholder]="'DIALOG_PROCESSOR_STORE_FRIEND_NAME' | translate"
+            [m_sInputValue]="m_oProcessorStoreInfo.get('sFriendlyName').value"></app-input-field>
+        <div class="categories-container">
+            <div>{{"DIALOG_PROCESSOR_STORE_CATEGORY" | translate}}</div>
+            <div class="d-flex flex-row flex-wrap gap-1">
+                <div class="category-tag" *ngFor="let oCategory of m_aoCategories" [class.active]="oCategory.checked"
+                    (click)="categoryChanged($event, oCategory)">
+                    {{oCategory.category}}</div>
+            </div>
         </div>
-        <div class="flex-fill">
-            <label for="processorLink">Processor Link:</label>
-            <input class="form-control" type="text" formControlName="sLink">
+        <div class="textarea-wrapper flex-fill">
+            <app-textarea [m_sLabel]="'DIALOG_PROCESSOR_STORE_LONG_DESCRIPTION' | translate"
+                [m_sInputString]="m_oProcessorStoreInfo.get('sLongDescription').value"
+                (keyup)="onTextareaInput($event)"></app-textarea>
         </div>
-        <div class="flex-fill">
-            <label for="email">Email Address:</label>
-            <input class="form-control" type="text" formControlName="sEmail">
-        </div>
+        <app-input-field class="mt-4" [m_sLabel]="'DIALOG_PROCESSOR_STORE_LINK' | translate" [m_sPlaceholder]="'Link'"
+            [m_sInputValue]=" m_oProcessorStoreInfo.get('sLink').value"
+            (m_oInputChange)="m_oProcessorStoreInfo.patchValue({sLink: $event.event.target.value})"></app-input-field>
+        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_STORE_MAIL' | translate" [m_sPlaceholder]="'Email'"
+            [m_sInputValue]=" m_oProcessorStoreInfo.get('sEmail').value"
+            (m_oInputChange)="m_oProcessorStoreInfo.patchValue({sEmail: $event.event.target.value})"></app-input-field>
     </div>
-    <div class="d-flex flex-row gap-2 align-items-center py-1">
-        <div class="">
-            <label for="onDemandPrice">On Demand Price:</label>
-            <input class="form-control" type="number" formControlName="iOnDemandPrice">
+    <div class="input-column d-flex flex-column gap-4">
+        <div class="d-flex flex-row align-items-center gap-2" style="height: 50%">
+            <div style="height:100%; width:50%;">
+                <app-drag-and-drop [m_sPrompt]="'DIALOG_PROCESSOR_STORE_MEDIA_TYPES' | translate" [m_sFormDataType]="'image'"
+                    (m_oSelectedFileOutput)="getSelectedLogo($event)"></app-drag-and-drop>
+            </div>
+            <div class="d-flex flex-column" style="width: 50%;">
+                <p>{{"DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_LINE1" | translate}}</p>
+                <p>{{"DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_LINE2" | translate}}</p>
+                <!-- Uploaded image and Save button container -->
+                <div class="save-example-container d-flex flex-row justify-content-between">
+                    <img src="{{m_oProcessor.imgLink}}" class="img-fluid img-thumbnail"
+                        style="max-height: 100px; max-width: 100px" alt="...">
+                    <app-button class="align-self-end" [m_sLabel]="'KEY_PHRASES.SAVE' | translate" (click)="updateProcessorLogo()"></app-button>
+                </div>
+            </div>
         </div>
-        <div class="">
-            <label for="subscriptionPrice">Subscription Price:</label>
-            <input class="form-control" type="number" formControlName="iSubscriptionPrice">
-        </div>
-        <mat-checkbox [color]="'success'" formControlName="bShowInStore">Show Application App Store</mat-checkbox>
-    </div>
-    <div class="d-flex flex-row gap-2 py-1">
-        <div>
-            <label for="longDescription">Long Description</label>
-            <textarea class="form-control" name="" id="" cols="30" rows="10"
-                formControlName="sLongDescription"></textarea>
-        </div>
-        <div>
-            <span>Categories</span>
-            <div class="d-flex flex-row" *ngFor="let oCategory of m_aoCategories">
-                <mat-checkbox [value]="oCategory.id" id="" (change)="categoryChanged($event, oCategory)"
-                    [checked]="oCategory.checked">{{oCategory.category}}</mat-checkbox>
+        <div style="height: 40%">
+            <div class="image-header font-bold">{{"DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL" | translate}}</div>
+            <div class="d-flex flex-column gap-1" style="height: 100%; width: 100%;">
+                {{"DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL_LINE1" | translate}}
+                <app-drag-and-drop class="flex-fill" [m_sPrompt]="'File must be of type .jpg or .png'" [m_sFormDataType]="'image'"
+                    (m_oSelectedFileOutput)="getSelectedAppImage($event)"></app-drag-and-drop>
+                <div class="d-flex flex-row justify-content-between">
+                    <div class="d-flex flex-row gap-1">
+                        <div *ngFor="let oImage of m_oProcessor.images" class="position-relative">
+                            <img src="{{oImage}}" class="img-fluid img-thumbnail"
+                                style="max-height: 200px; max-width: 200px" alt="...">
+                        </div>
+                    </div>
+                    <app-button class="align-self-end" [m_sLabel]="'KEY_PHRASES.SAVE' | translate" (click)="updateProcessorLogo()"></app-button>
+                </div>
             </div>
         </div>
     </div>

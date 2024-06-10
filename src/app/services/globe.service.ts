@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 
 //Import Fadeout Utilities:
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
+import { ConstantsService } from './constants.service';
 import { MapService } from './map.service';
 
 //Declare Cesium:
@@ -45,33 +46,24 @@ export class GlobeService {
    * Workspaces default zoome
    */
   GLOBE_WORKSPACE_ZOOM: number = 4000000;
+
   /**
-   * Self reference to the controller (this)
+   * Create an instance of the service
+   * @param m_oMapService 
+   * @param m_oConstantsService 
    */
-  oController: any;
-
-
-  oGlobeOptions = {
-    timeline: false,
-    animation: false,
-    baseLayerPicker: true,
-    fullscreenButton: false,
-    infoBox: false,
-    selectionIndicator: false,
-    geocoder: false,
-    navigationHelpButton: false,
-    sceneModePicker: false,
-    homeButton: false,
-    scene3DOnly: true
-  }
-
-  constructor(private m_oMapService: MapService) 
+  constructor(private m_oMapService: MapService, private m_oConstantsService: ConstantsService) 
   { 
-    this.oController = this; 
   }
 
+  /**
+   * Init the Globe on a specific Div
+   * @param sGlobeDiv Div element id
+   */
   initGlobe(sGlobeDiv: string) {
+
     if (window.WebGL2RenderingContext) {
+
       try {
         let oGlobeOptions = {
           timeline: false,
@@ -88,10 +80,8 @@ export class GlobeService {
         };
         Cesium.Ion.defaultAccessToken = environment.cesiumToken;
 
-        FadeoutUtils.verboseLog("GlobeService.initGlobe: creating the globe")
-
         if (this.m_oWasdiGlobe != null) {
-          FadeoutUtils.verboseLog("GlobeService.initGlobe: PROBLEM: the old globe is not null!!")
+          this.clearGlobe();
         }
 
         this.m_oWasdiGlobe = new Cesium.Viewer(sGlobeDiv, oGlobeOptions);
@@ -111,31 +101,54 @@ export class GlobeService {
     }
   }
 
+  /**
+   * Clear the globe to free the resources
+   */
   clearGlobe() {
 
     if (this.m_oWasdiGlobe) {
+      
+      this.removeAllEntities();
+
       this.m_oWasdiGlobe.destroy();
       this.m_oWasdiGlobe = null;
       this.m_aoLayers = null;
-      FadeoutUtils.verboseLog("GlobeService.clearGlobe: cleaned");
     }
     else {
-      FadeoutUtils.verboseLog("GlobeService.clearGlobe: the globe reference was already null");
+      this.m_aoLayers = null;
     }
   }
 
+  /**
+   * Get a reference to the globe
+   * @returns Globe Object
+   */
   getGlobe() {
     return this.m_oWasdiGlobe;
   }
 
+  /**
+   * Get the default Workspace Zoom
+   * @returns 
+   */
   getWorkspaceZoom() {
     return this.GLOBE_WORKSPACE_ZOOM;
   }
 
+  /**
+   * Get the list of layers in the globe
+   * @returns Array of Layers shown in the globe
+   */
   getGlobeLayers = function () {
     return this.m_aoLayers;
   }
 
+  /**
+   * Moves the camera in the coordinates with an animated fligth
+   * @param long Target Long
+   * @param lat Target Lat
+   * @param height Height of the camera
+   */
   flyTo(long: number, lat: number, height: number) {
     this.m_oWasdiGlobe.camera.flyTo({
       destination: Cesium.Cartesian3.fromDegrees(long, lat, height),
@@ -147,6 +160,9 @@ export class GlobeService {
     });
   }
 
+  /**
+   * Moves the camera at home coordinates with an animated fligth
+   */
   flyHome() {
     this.m_oWasdiGlobe.camera.flyTo({
       destination: Cesium.Cartesian3.fromDegrees(this.LONG_HOME, this.LAT_HOME, this.HEIGHT_HOME),
@@ -158,89 +174,30 @@ export class GlobeService {
     });
   }
 
-  addRectangleOnGlobeBoundingBox(bbox) {
-    // Get the array representing the bounding box
-    let aiInvertedArraySplit = this.fromBboxToRectangleArray(bbox);
+  /**
+   * Add a rectangle (ie foot print) ot the globe starting from an array of integers representing lon,lat degrees
+   * 
+   * @param aiArray A list of longitude and latitude values. Values alternate [longitude, latitude, longitude, latitude...].
+   * @returns The Globe entity if added, null in case of errors
+   */
+  addRectangleOnGlobeParamArray(aiArray: any[]) {
 
-    // Add the rectangle to the globe
-    let oRectangle = this.addRectangleOnGlobeParamArray(aiInvertedArraySplit);
-
-
-    if (!oRectangle) {
+    // Safe Programming check
+    if (!aiArray) {
       return null;
     }
 
-    let redRectangle = this.m_oWasdiGlobe.entities.add({
-      name: 'Red translucent rectangle with outline',
-      rectangle: {
-        coordinates: Cesium.Rectangle.fromDegrees(oRectangle[0], oRectangle[1], oRectangle[2], oRectangle[3]),
-        material: Cesium.Color.RED.withAlpha(0.2),
-        outline: true,
-        outlineColor: Cesium.Color.RED
-      }
-    });
-
-    return redRectangle;
-  };
-
-  addRectangleOnGlobeByGeoserverBoundingBox(geoserverBoundingBox, oColor) {
-    try {
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(geoserverBoundingBox)) {
-        console.log("MapService.addRectangleByGeoserverBoundingBox: geoserverBoundingBox is null or empty");
-        return;
-      }
-      if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oColor) === true)) {
-        oColor = Cesium.Color.RED;
-      }
-      geoserverBoundingBox = geoserverBoundingBox.replace(/\n/g, "");
-      var oBoundingBox = JSON.parse('{"miny":43.150066,"minx":-80.030044,"crs":"EPSG:4326","maxy":43.380082,"maxx":-79.710091}');
-      // var bounds = [oBounds.maxy,oBounds.maxx,oBounds.miny,oBounds.minx];
-      // var bounds = [oBounds.maxx,oBounds.maxy,oBounds.minx,oBounds.miny];
-      var oRectangle = Cesium.Rectangle.fromDegrees(oBoundingBox.minx, oBoundingBox.miny, oBoundingBox.maxx, oBoundingBox.maxy);
-
-      // var oRectangle = this.addRectangleOnGlobeParamArray(bounds);
-
-      // var bounds = [ [oBounds.maxy,oBounds.maxx],[oBounds.miny,oBounds.minx] ];
-      // var oRectangle = L.rectangle(bounds, {color: sColor, weight: 2}).addTo(this.m_oWasdiMap);
-      var oReturnRectangle = this.m_oWasdiGlobe.entities.add({
-        name: 'Red translucent rectangle with outline',
-        rectangle: {
-          coordinates: oRectangle,
-          material: Cesium.Color.RED.withAlpha(0.3),
-          
-          // oColor.withAlpha(0.3),
-          outline: true,
-          outlineColor: oColor
-        }
-      });
-      return oReturnRectangle;
-    }
-    catch (e) {
-      console.log(e);
-    }
-    return null;
-  }
-
-  addRectangleOnGlobeParamArray(aiArray: any[]) {
-    // Safe Programming check
-    if (!aiArray) {
-      return false;
-    }
     if (!this.m_oWasdiGlobe) {
-      return false;
+      return null;
     }
 
+    // Check if there are Nan Values in the array ( => it becomes invalid)
     let bHasNan = false;
 
     for (let iIndex = 0; iIndex < aiArray.length; iIndex = iIndex + 1) {
       if (isNaN(aiArray[iIndex])) {
-        bHasNan = true;
-        break;
+        return null;
       }
-    }
-
-    if (bHasNan) {
-      return null;
     }
 
     try {
@@ -272,12 +229,12 @@ export class GlobeService {
         let bIsEqual = true;
 
         // For all the points of the poly already added to the globe
-        for (let j = 0; j < oEntity.polygon.hierarchy.getValue().positions.length; j++) {
+        for (let iPolygonPoints = 0; iPolygonPoints < oEntity.polygon.hierarchy.getValue().positions.length; iPolygonPoints++) {
 
           // Safe programming: index < of size
-          if (j < oNewPolygon.hierarchy.positions.length) {
+          if (iPolygonPoints < oNewPolygon.hierarchy.positions.length) {
             // The position is the same?
-            if (!oEntity.polygon.hierarchy.getValue().positions[j].equalsEpsilon(oNewPolygon.hierarchy.positions[j], 0.1)) {
+            if (!oEntity.polygon.hierarchy.getValue().positions[iPolygonPoints].equalsEpsilon(oNewPolygon.hierarchy.positions[iPolygonPoints], 0.1)) {
               // No! One point different => different poly. Try next one.
               bIsEqual = false;
               break;
@@ -304,28 +261,42 @@ export class GlobeService {
 
       return oRectangle;
     }
-    catch (err) {
-      console.log(err)
+    catch (oError) {
+      console.log(oError)
       return null;
     }
   }
 
+  /**
+   * Removes all the entites added to the globe
+   */
   removeAllEntities() {
-    let oGlobe = this.m_oWasdiGlobe;
-    oGlobe.entities.removeAll();
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oWasdiGlobe)) {
 
+      if (this.m_oWasdiGlobe.entities != null) {
+        this.m_oWasdiGlobe.entities.removeAll();
+      }
+    }
   }
 
+  /**
+   * Init the globe on the specified Div and start to rotate
+   * @param sGlobeDiv 
+   */
   initRotateGlobe(sGlobeDiv: string) {
+
     //check if browser supports WebGL
     if (window.WebGLRenderingContext) {
       // browser supports WebGL
       try {
+
         this.initGlobe(sGlobeDiv);
         let oController = this;
+
         //rotate globe
         this.m_oWasdiGlobe.camera.flyHome(0);
         this.startRotationGlobe(3);
+
         this.m_oWasdiGlobe.scene.preRender.addEventListener(function (scene, time) {
           if (scene.mode !== Cesium.SceneMode.SCENE3D) {
             return;
@@ -347,12 +318,20 @@ export class GlobeService {
     }
   }
 
+  /**
+   * Stop the rotation of the globe
+   */
   stopRotationGlobe() {
     this.m_oWasdiGlobe.clock.multiplier = 0;
     this.m_oWasdiGlobe.clock.canAnimate = true;
     this.m_oWasdiGlobe.clock.shouldAnimate = true;
   }
 
+  /**
+   * Start the rotation of the globe
+   * @param iRotationValue 
+   * @returns 
+   */
   startRotationGlobe(iRotationValue: number) {
     if (typeof iRotationValue !== "number") {
       return false;
@@ -363,61 +342,19 @@ export class GlobeService {
     return true;
   }
 
-  drawOutLined(aPositions: any[], sColor: string, sName: string) {
-    if (!aPositions) {
-      return null;
-    }
-    if (!sName) {
-      sName = "";
-    }
-    if (!sColor) {
-      sColor = Cesium.Color.ORANGE;
-    }
-
-    let oOutLined = this.m_oWasdiGlobe.entities.add({
-      name: sName,
-      polyline: {
-        positions: Cesium.Cartesian3.fromDegreesArrayHeights(aPositions),
-        width: 5,
-        material: new Cesium.PolylineOutlineMaterialProperty({
-          color: sColor,
-          outlineWidth: 2,
-          outlineColor: Cesium.Color.BLACK
-        })
-      }
-    });
-
-    return oOutLined;
-  }
-
-  drawGlowingLine(aPositions: any[], sColor: string, sName: string) {
-    if (!aPositions) {
-      return null;
-    }
-    if (!sName) {
-      sName = "";
-    }
-    if (!sColor) {
-      sColor = Cesium.Color.ORANGE;
-    }
-
-    let oGlowingLine = this.m_oWasdiGlobe.entities.add({
-      name: sName,
-      polyline: {
-        positions: Cesium.Cartesian3.fromDegreesArrayHeights(aPositions),
-        width: 10,
-        material: new Cesium.PolylineGlowMaterialProperty({
-          glowPower: 0.2,
-          color: sColor
-        })
-      }
-    });
-
-    return oGlowingLine;
-  }
-
-  drawPointWithImage = function (aPositionInput: any[], sImageInput: string, sName: string, sDescription: string, iWidth?: number, iHeight?: number) {
-    if (!aPositionInput) {
+  /**
+   * Draws an image in a specific point of the globe
+   * 
+   * @param aiPositionInput Array of integers = [lon, lat, height]
+   * @param sImageInput Name of the image to render (reference to the local asset)
+   * @param sName Name to assign to the icon
+   * @param sDescription Description
+   * @param iWidth  Draw size width in pixel (64 by default)
+   * @param iHeight Draw size heigth in pixel (64 by default)
+   * @returns 
+   */
+  drawPointWithImage = function (aiPositionInput: any[], sImageInput: string, sName: string, sDescription: string, iWidth?: number, iHeight?: number) {
+    if (!aiPositionInput) {
       return null;
     }
     if (!sImageInput) {
@@ -438,7 +375,7 @@ export class GlobeService {
 
     let oPoint = this.m_oWasdiGlobe.entities.add({
       name: sName,
-      position: Cesium.Cartesian3.fromDegrees(aPositionInput[0], aPositionInput[1], aPositionInput[2]),
+      position: Cesium.Cartesian3.fromDegrees(aiPositionInput[0], aiPositionInput[1], aiPositionInput[2]),
       billboard: {
         image: sImageInput,
         width: iWidth,
@@ -457,6 +394,11 @@ export class GlobeService {
     return oPoint;
   }
 
+  /**
+   * Removes an entity from the globe
+   * @param oEntity 
+   * @returns 
+   */
   removeEntity(oEntity: any) {
     if (!oEntity) {
       return false;
@@ -467,6 +409,11 @@ export class GlobeService {
     return true;
   }
 
+  /**
+   * Converts a bbox to a rectangle array
+   * @param bbox String bbox in form Lat,Lon,Lat,Lon...
+   * @returns Integer Array in form [Lon,Lat,Lon,Lat...]
+   */
   fromBboxToRectangleArray(bbox: any) {
     // skip if there isn't the product bounding box
     if (!bbox) {
@@ -474,30 +421,35 @@ export class GlobeService {
     }
 
     let aiInvertedArraySplit = [];
-    let aoArraySplit;
+    let asArraySplit = bbox.split(",");
 
-    // Split bbox string
-    aoArraySplit = bbox.split(",");
-
-    let iArraySplitLength = aoArraySplit.length;
+    let iArraySplitLength = asArraySplit.length;
 
     if (iArraySplitLength < 10) return null;
 
     for (let iIndex = 0; iIndex < iArraySplitLength - 1; iIndex = iIndex + 2) {
-      aiInvertedArraySplit.push(aoArraySplit[iIndex + 1]);
-      aiInvertedArraySplit.push(aoArraySplit[iIndex]);
+      aiInvertedArraySplit.push(asArraySplit[iIndex + 1]);
+      aiInvertedArraySplit.push(asArraySplit[iIndex]);
     }
 
     return aiInvertedArraySplit;
   }
 
+  /**
+   * Update the position of an entity in the globe
+   * @param oEntity 
+   * @param oNewPosition 
+   */
   updateEntityPosition(oEntity: any, oNewPosition: any) {
     if (oEntity && oNewPosition) {
-      //oEntity.go(oNewPosition);
       oEntity.position = oNewPosition;
     }
   }
 
+  /**
+   * Get the array of the supported satellites
+   * @returns 
+   */
   getSatelliteTrackInputList() {
     let aoOutList = [
       {
@@ -542,12 +494,12 @@ export class GlobeService {
         label: "LS8",
         description: "NASA LANDSAT 8"
       },
-      {
+/*      {
         name: "PROBAV",
         icon: "assets/icons/sat_05.svg",
         label: "PROBA-V",
         description: "PROBA VEGETATION"
-      },
+      },*/
       {
         name: "GEOEYE",
         icon: "assets/icons/sat_06.svg",
@@ -642,7 +594,12 @@ export class GlobeService {
 
   }
 
-  addAllWorkspaceRectanglesOnMap(aoProducts: any[]) {
+  /**
+   * Add all the footprints of the products in the workspace to the globe
+   * @param aoProducts 
+   * @returns 
+   */
+  addAllWorkspaceRectanglesOnGlobe(aoProducts: any[]) {
     try {
       let oRectangle: any = null;
       let aoArraySplit: any[] = [];
@@ -650,18 +607,21 @@ export class GlobeService {
 
       let aoTotalArray: any[] = [];
 
+      // Clear the previous footprints
+      this.removeAllEntities();      
+
       // Check we have products
       if (!aoProducts) {
         return false;
       }
 
-      // Clear the previous footprints
-      this.removeAllEntities();
-
       let iProductsLength = aoProducts.length;
 
       // For each product
       for (let iIndexProduct = 0; iIndexProduct < iProductsLength; iIndexProduct++) {
+
+        if (aoProducts[iIndexProduct]==null) continue;
+        if (aoProducts[iIndexProduct].bbox==null) continue;
 
         // Split bbox string
         aoArraySplit = aoProducts[iIndexProduct].bbox.split(",");
@@ -687,6 +647,27 @@ export class GlobeService {
         aoProducts[iIndexProduct].oRectangle = oRectangle;
         aoProducts[iIndexProduct].aBounds = aiInvertedArraySplit;
       }
+
+      let aoBounds = [];
+      for (let iIndex = 0; iIndex < aoTotalArray.length - 1; iIndex = iIndex + 2) {
+        aoBounds.push(new Cesium.Cartographic.fromDegrees(aoTotalArray[iIndex + 1], aoTotalArray[iIndex]));
+      }
+      let oWSRectangle = Cesium.Rectangle.fromCartographicArray(aoBounds);
+      let oWSCenter = Cesium.Rectangle.center(oWSRectangle);
+
+      if (this.getGlobe()!=null) {
+        this.getGlobe().camera.flyTo({
+          destination: Cesium.Cartesian3.fromRadians(oWSCenter.longitude, oWSCenter.latitude, this.GLOBE_WORKSPACE_ZOOM),
+          orientation: {
+            heading: 0.0,
+            pitch: -Cesium.Math.PI_OVER_TWO,
+            roll: 0.0
+          }
+        });  
+
+        this.stopRotationGlobe();
+      }
+
       return true;
     }
     catch (error) {
@@ -778,19 +759,19 @@ export class GlobeService {
     }
   }
 
-  zoomBandImageOnBBox(bbox) {
+  zoomBandImageOnBBox(sBbox) {
     try {
-      if (!bbox) {
+      if (!sBbox) {
         console.log("GlobeService.zoomBandImageOnBBOX: invalid bbox ");
         return;
       }
 
-      if (!bbox) {
+      if (!sBbox) {
         console.log("GlobeService.zoomBandImageOnBBOX: invalid bbox ");
         return;
       }
 
-      let aiRectangle = this.fromBboxToRectangleArray(bbox);
+      let aiRectangle = this.fromBboxToRectangleArray(sBbox);
 
       if (aiRectangle) {
         this.zoomOnLayerParamArray(aiRectangle);
@@ -829,16 +810,40 @@ export class GlobeService {
     }
   }
 
-  productIsNotGeoreferencedRectangle3DMap(sGeoserverBBox, asBbox, sLayerId) {
-    var oRectangle = null;
-    if (this.m_oMapService.isProductGeoreferenced(asBbox, sGeoserverBBox) === false) {
-      oRectangle = this.addRectangleOnGlobeByGeoserverBoundingBox(sGeoserverBBox, '');
-      //the options.layers property is used for remove the rectangle to the map
-      // oRectangleBoundingBoxMap.options.layers = "wasdi:" + sLayerId;
-      oRectangle["layers"] = "wasdi:" + sLayerId;
-    }
-    return oRectangle;
+    /**
+   * Adds a Layer to the 3D Map 
+   * @param sLayerId Layer Id
+   * @param sServer  Geoserver address. Of null the default one from Constant Service is taken
+   * @returns True if all is fine, False in case of error
+   */
+    addLayerMap3DByServer(sLayerId: string, sServer: string) {
+      
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(sLayerId)) {
+        return false;
+      }
 
-  }
+      if (FadeoutUtils.utilsIsStrNullOrEmpty(sServer)) {
+        sServer = this.m_oConstantsService.getWmsUrlGeoserver();
+      }
+  
+      var oGlobeLayers = this.getGlobeLayers();
+  
+      var oWMSOptions = { // wms options
+        transparent: true,
+        format: 'image/png'
+      };
+  
+      // WMS get GEOSERVER
+      var oProvider = new Cesium.WebMapServiceImageryProvider({
+        url: sServer,
+        layers: sLayerId,
+        parameters: oWMSOptions
+  
+      });
+  
+      oGlobeLayers.addImageryProvider(oProvider);
+  
+      return true
+    }  
 }
 

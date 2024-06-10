@@ -1,6 +1,2 @@
-<mat-form-field appearance="fill">
-    <mat-label>Input Name</mat-label>
-    <mat-select multiple (selectionChange)="getSelections($event)">
-        <mat-option *ngFor="let sListElement of oListboxInput.aoElements" [value]="sListElement">{{sListElement}}</mat-option>
-    </mat-select>
-</mat-form-field>
+<app-dropdown [m_bIsMultiSelect]="true" [m_aoDropdownItems]="oListboxInput.aoElements"
+    [m_sLabel]="oListboxInput.label" (m_oSelectionChange)="getSelections($event)" [m_bHasSearch]="true"></app-dropdown>

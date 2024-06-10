@@ -3,31 +3,20 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 //Service Imports:
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { MapService } from 'src/app/services/map.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
-import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { ProductService } from 'src/app/services/api/product.service';
-import { SatelliteNode } from './search-orbit-resources/search-orbit-resources.component';
-import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { TranslateService } from '@ngx-translate/core';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
-
-//Font Awesome Icon Imports:
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 //Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-
 
 @Component({
   selector: 'app-search-orbit',
   templateUrl: './search-orbit.component.html',
-  styleUrls: ['./search-orbit.component.css']
+  styleUrls: ['./search-orbit.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class SearchOrbit implements OnInit, OnDestroy {
-  //Font Awesome Icons: 
-  faSearch = faSearch;
 
   m_bIsVisibleLoadingIcon: boolean;
   m_bIsDisabledSearchButton: boolean = false;
@@ -37,6 +26,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
   m_oActiveWorkspace: any;
   m_aoOrbitResults: Array<any> = []
   m_aoSelectedSatelliteNodes: any = [];
+  m_aoSelectedSatellites: any = [];
 
   m_oGeoJSON: any = null;
   m_sPolygon: string = "";
@@ -56,16 +46,10 @@ export class SearchOrbit implements OnInit, OnDestroy {
   }
 
   constructor(
-    private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
-    private m_oMapService: MapService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oOpportunitySearchService: OpportunitySearchService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    private m_oProductService: ProductService,
-    private m_oRabbitService: RabbitStompService,
     private m_oTranslate: TranslateService,
-    private m_oWorkspaceService: WorkspaceService
   ) { }
 
   ngOnInit(): void {
@@ -73,7 +57,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
     this.getSatellitesResources();
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
   }
-  
+
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("PlanComponent.ngOnDestroy")
   }
@@ -89,11 +73,11 @@ export class SearchOrbit implements OnInit, OnDestroy {
         if (oResponse.length > 0) {
           this.m_aoSatelliteResources = this.setDisabledAllOpportunities(oResponse);
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+          this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger');
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog( sMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger');
       }
     });
   }
@@ -104,13 +88,13 @@ export class SearchOrbit implements OnInit, OnDestroy {
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oGeoJSON)) {
       sErrorMsg += this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
-      this.m_oNotificationDisplayService.openAlertDialog( sErrorMsg);
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
       return false;
     }
 
     // Dates emitted when satellite resource selected - if none
     if (!this.m_oOrbitSearch.acquisitionStartTime || !this.m_aoSelectedSatelliteNodes) {
-      this.m_oNotificationDisplayService.openAlertDialog( "Please select at least one Satellite Resource");
+      this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("ORBIT_SELECT_RESOURCE"), '', 'alert');
       return false;
     }
 
@@ -141,7 +125,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
   }
 
 
-  cleanSatelliteResources(aoSatelliteResources): Array<SatelliteNode> {
+  cleanSatelliteResources(aoSatelliteResources): Array<any> {
     let aoTempResources = aoSatelliteResources
     if (aoTempResources.length > 0) {
       aoTempResources.forEach(oSatellite => {
@@ -167,7 +151,7 @@ export class SearchOrbit implements OnInit, OnDestroy {
     return aoTempResources;
   }
 
-  setDisabledAllOpportunities(aoSatelliteResources): Array<SatelliteNode> {
+  setDisabledAllOpportunities(aoSatelliteResources): Array<any> {
     let iNumberOfSatellites = aoSatelliteResources.length;
     for (let iIndexSatellite = 0; iIndexSatellite < iNumberOfSatellites; iIndexSatellite++) {
       let oSatellite = aoSatelliteResources[iIndexSatellite];
@@ -300,9 +284,13 @@ export class SearchOrbit implements OnInit, OnDestroy {
   }
 
   getNavigationStatus(oEvent: any): void {
-    if(FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
       this.m_bShowSatelliteFilters = true;
       this.getSatellitesResources();
     }
+  }
+
+  handleExecuteSearch(oEvent: any): void {
+    this.executeSearchOrbit();
   }
 }

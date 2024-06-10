@@ -1,0 +1,17 @@
+<button 
+    [matTooltipPosition]="'right'" 
+    [matTooltipDisabled]="m_bIsNavbarOpen"
+    matTooltip="{{m_oMenuItemInfo.label | translate}}"
+    class="menu-list-item"
+    type="button" 
+    [routerLink]="m_sRouterLink ? [m_sRouterLink] : []"
+    (click)="m_sName === 'documentation' && openDocs('https://wasdi.readthedocs.io/en/latest/')"
+    [class.open]="m_bIsNavbarOpen === true"
+    [class.active]="m_sSelectedTab === m_sName.toLowerCase()"
+    attr.aria-label="{{m_sMenuItemLabel}}"
+    [disabled]="m_bEditIsActive === false && m_sName.toLowerCase() === 'edit'">
+    <span class="material-symbols-outlined">
+        {{m_sMaterialIconText}}
+    </span>
+    <span [hidden]="!m_bIsNavbarOpen">{{m_sMenuItemLabel}}</span>
+</button>

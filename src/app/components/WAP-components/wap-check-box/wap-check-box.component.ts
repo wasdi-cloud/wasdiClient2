@@ -6,12 +6,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./wap-check-box.component.css']
 })
 export class WapCheckBoxComponent {
-  @Input() oCheckboxDetails: any;
-  @Output() oCheckboxDetailsChange = new EventEmitter<any>(); 
+  @Input() m_oCheckboxDetails: any;
+  @Output() m_oCheckboxDetailsChange = new EventEmitter<any>(); 
 
   getOutput(oEvent) {
-    console.log(oEvent.checked)
-    this.oCheckboxDetails.m_bValue = oEvent.checked
-    this.oCheckboxDetailsChange.emit(this.oCheckboxDetails); 
+    this.m_oCheckboxDetails.m_bValue = oEvent.target.checked
+    this.m_oCheckboxDetailsChange.emit(this.m_oCheckboxDetails); 
   }
 }

@@ -1,0 +1,45 @@
+.user-icon {
+    background: var(--neutral50Brand);
+    color: #FFFFFF;
+    border-radius: 50%;
+    height: 1.5rem;
+    width: 1.5rem;
+    position: relative;
+}
+
+.user-icon-symbol {
+    font-size: 20px;
+    /* line-height: 16px; */
+    position: absolute;
+    left: 2px;
+
+    top: 2px;
+}
+
+.reviews-name {
+    font-weight: 700;
+}
+
+.review-date {
+    color: var(--neutral50Brand);
+    font-size: 12px;
+}
+
+.review-content {
+    font-size: 14px;
+}
+
+h2 {
+    color: var(--neutral80);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 30px;
+}
+
+.material-symbols-outlined.star-icon {
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}

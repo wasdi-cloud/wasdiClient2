@@ -1,46 +1,71 @@
-<h1 mat-dialog-title>Workspace Details - {{m_oWorkspace.name}}</h1>
+<div class="apps-dialog d-flex flex-column">
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+        {{"DIALOG_WS_INFO_TITLE" | translate}}
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+    </div>
+    <div class="dialog-content flex-fill d-flex flex-row justify-content-between gap-4">
+        <div class="info-container d-flex flex-column gap-4">
+            <div>
+                <div class="font-bold">{{"DIALOG_WS_INFO_NAME" | translate}}</div>
+                <app-input-field [m_sInputValue]="m_oWorkspace.name" [m_bIsReadonly]="m_oWorkspace.readOnly === true"
+                    (m_oInputChange)="m_sInputWorkspaceName = $event.event.target.value"></app-input-field>
+            </div>
+            <div>
+                <div class="font-bold">{{"DIALOG_WS_INFO_NODE" | translate}}</div>
+                <app-dropdown [m_aoDropdownItems]="m_asNodeCodes" [m_aoSelectedItems]="m_oWorkspace.nodeCode"
+                    (m_oSelectionChange)="setNodeCode($event)"></app-dropdown>
+            </div>
+            <div>
+                <div class="font-bold">{{"DIALOG_WS_INFO_ID" | translate}}</div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="" name="workspace-id"
+                        aria-label="Workspace ID Copy Field" value="{{m_oWorkspace.workspaceId}}" readonly disabled
+                        aria-describedby="copy-workspace-id">
+                    <span *ngIf="m_bShowCopied"
+                        class="d-flex flex-row align-items-center copied-indicator font-bold">COPIED!</span>
+                    <span class="input-group-text icon-left" id="copy-workspace-id" (click)="copyWorkspaceId()">
+                        <span class="material-symbols-outlined green-text">
+                            content_copy
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <div class="font-bold">{{"DIALOG_WS_INFO_OWNER" | translate}}</div>
+                <div>{{m_oWorkspace.userId}}</div>
+            </div>
+            <div class="d-flex flex-row" style="width: 100%;">
+                <div class="date-container">
+                    <div class="font-bold">{{"DIALOG_WS_INFO_CREATE" | translate}}</div>
+                    <div>{{m_oWorkspace.creationDate | date}}</div>
+                </div>
+                <div>
+                    <div class="font-bold">{{"DIALOG_WS_INFO_UPDATE" | translate}}</div>
+                    <div>{{m_oWorkspace.lastEditDate | date}}</div>
+                </div>
+            </div>
+        </div>
 
-<div mat-dialog-content class="d-flex flex-row">
-    <div class="d-flex flex-column gap-3">
-        <div>
-            Owner: <span class="text-secondary">{{m_oWorkspace.userId}}</span>
-        </div>
-        <div>
-            Node:<span class="text-secondary">{{m_oWorkspace.nodeCode}}</span>
-        </div>
-
-        <div>
-            Created:<span class="text-secondary">{{m_oWorkspace.creationDate}}</span>
-        </div>
-        <div>
-            Last Update:<span class="text-secondary">{{m_oWorkspace.lastEditDate}}</span>
-        </div>
-        <div>
-            Workspace Id:<span class="text-secondary">{{m_oWorkspace.workspaceId}}</span>
-        </div>
-
-        <!-- <div>
-        Processes Executed:<span class="text-secondary">{{m_oWorkspace.processesCount}}</span>
-    </div> -->
-        <div>
-            Workspace Shared With:
-            <ul>
-                <li *ngFor="let oSharedUser of m_oWorkspace.sharedUsers">
-                    {{oSharedUser}}
-                </li>
-            </ul>
+        <div class="info-container">
+            <div class="font-bold pb-2">{{"DIALOG_WS_INFO_SHARINGS" | translate}}</div>
+            <div class="image-wrapper d-flex flex-column align-items-center gap-2"
+                *ngIf="m_oWorkspace.sharedUsers.length === 0">
+                <img src="/assets/images/collaborators.png" alt="">
+                {{"DIALOG_WS_INFO_NO_SHARES" | translate}}
+                <app-button [m_sLabel]="'Add Collaborators'" (click)="openShareDialog()"></app-button>
+            </div>
+            <div *ngIf="m_oWorkspace.sharedUsers.length > 0">
+                <ul>
+                    <li *ngFor="let oSharedUser of m_oWorkspace.sharedUsers">
+                        {{oSharedUser}}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-    <div>
-        <form #nodeCodeForm="ngForm" id="nodeCodeForm" (ngSubmit)="saveNodeCode()">
-            <label for="m_sCurrentNode">Change Node: </label>
-            <select class="form-contorl" name="m_sCurrentNode" [(ngModel)]="m_sCurrentNode" id="">
-                <option *ngFor="let oNode of m_asNodeCodes" value={{oNode}} [selected]="oNode === m_oWorkspace.nodeCode">{{oNode}}</option>
-            </select>
-        </form>
+    <div class="dialog-footer d-flex flex-row gap-2 justify-content-end">
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true"
+            (click)="onDismiss()"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.SAVE_CHANGES' | translate" (click)="saveChanges()"></app-button>
     </div>
-</div>
-<div mat-dialog-actions class="d-flex flex-row justify-content-end gap-2">
-    <button class="btn btn-primary" form="nodeCodeForm" mat-button>Apply</button>
-    <button class="btn btn-secondary" mat-button mat-dialog-close>Close</button>
 </div>

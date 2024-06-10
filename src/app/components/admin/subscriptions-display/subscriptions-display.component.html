@@ -1,0 +1,82 @@
+<div class="d-flex flex-fill flex-column gap-5">
+    <div class="header font-bold d-flex flex-row justify-content-between">
+        Billings
+    </div>
+    <div class="d-flex flex-column gap-2">
+        <div class="table-wrapper flex-fill">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>Subscription Type</td>
+                        <td>Name</td>
+                        <td>Owner</td>
+                        <td>Organisation</td>
+                        <td>Start date</td>
+                        <td>End date</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oSubscription of m_aoSubscriptions">
+                        <td>{{oSubscription.typeName}}</td>
+                        <td>{{oSubscription.name}}</td>
+                        <td>{{oSubscription.ownerUserId}}</td>
+                        <td>{{oSubscription.organizationName ? oSubscription.organizationName : 'N/A'}}</td>
+                        <td>{{oSubscription.startDate | date:'dd/MM/yyyy'}}</td>
+                        <td>{{oSubscription.endDate | date:'dd/MM/yyyy'}}</td>
+                        <td class="d-flex flex-row justify-content-end gap-1">
+                            <span *ngIf="oSubscription.readOnly=== false" (click)="setActiveSubscription(oSubscription)"
+                                class="material-symbols-outlined" data-bs-toggle="offcanvas" href="#orgEditor"
+                                role="button" aria-controls="orgEditor">
+                                edit
+                            </span>
+                            <span *ngIf="oSubscription.readOnly === false" class="material-symbols-outlined"
+                                (click)="openSharedUsersDialog(oSubscription)">
+                                share
+                            </span>
+                            <span (click)="openProjectsDialog(oSubscription.readOnly, oSubscription)"
+                                data-bs-toggle="offcanvas" class="material-symbols-outlined">
+                                work_outline
+                            </span>
+                            <span class="material-symbols-outlined" (click)="deleteSubscription(oSubscription)">
+                                delete
+                            </span>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- (click)="openEditSubscriptionDialog(oSubscription, false)" -->
+
+<div class="offcanvas offcanvas-end subscription-edit-container d-flex flex-column justify-content-between"
+    data-bs-backdrop="true" tabindex="-1" id="orgEditor" aria-labelledby="orgEditorLabel">
+    <div class="editor-header font-bold pb-3">
+        Edit subscription
+    </div>
+    <div class="d-flex flex-fill flex-column gap-3">
+        <app-input-field [m_sLabel]="'Name'" [m_sInputValue]="m_oEditSubscription? m_oEditSubscription.name : ''"
+            (m_oInputChange)="getInput($event, 'name')"></app-input-field>
+
+        <app-input-field [m_sLabel]="'Days Remaining'" [m_bIsDisabled]="true"
+            [m_sInputValue]="m_iDaysRemaining.toString()" [m_bIsReadonly]="true"></app-input-field>
+
+        <app-textarea [m_sLabel]="'Description'"
+            [m_sInputString]="m_oEditSubscription? m_oEditSubscription.description: ''"
+            (keyup)="getInput($event, 'description')"></app-textarea>
+
+        <app-dropdown class="mt-4" [m_sLabel]="'Organisations'" [m_aoDropdownItems]="m_aoOrganizations"
+            [m_aoSelectedItems]="m_oEditSubscription? m_oEditSubscription.organization: ''"
+            (m_oSelectionChange)="getInput($event, 'organization')"></app-dropdown>
+    </div>
+    <div class=" d-flex flex-row justify-content-between pb-3">
+        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
+        <app-button *ngIf="m_oEditSubscription && m_oEditSubscription.buySuccess" [m_sLabel]="'Save Subscription'"
+            (click)="saveSubscription()"></app-button>
+        <app-button *ngIf="m_oEditSubscription && !m_oEditSubscription.buySuccess" [m_sLabel]="'Complete Purchase'"
+            (click)="checkout()"></app-button>
+    </div>
+</div>

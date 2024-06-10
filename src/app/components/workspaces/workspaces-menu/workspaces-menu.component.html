@@ -1,0 +1,44 @@
+<div class="floating-menu d-flex flex-column gap-2">
+    <div class="menu-header font-bold">Workspaces</div>
+    <div class="menu-dropdown">
+        <div>Workspace</div>
+        <app-autocomplete [m_sPlaceholder]="'Select Workspace'" [m_aoInputs]="m_aoWorkspacesList"
+            (m_oSelectionChange)="setActiveWorkspace($event)" [m_oController]="this"
+            [m_oDeleteFn]="deleteWorkspace"></app-autocomplete>
+    </div>
+    <app-button [m_sLabel]="'Open Workspace'" [m_sSize]="'large'" [m_bDisabled]="m_oActiveWorkspace === null"
+        (click)="openWorkspace(m_oActiveWorkspace)"></app-button>
+    <app-button [m_sLabel]="'New Workspace'" [m_sSize]="'large'" [m_bMuted]="true"
+        (click)="openNewWorkspaceDialog()"></app-button>
+    <div *ngIf="m_oActiveWorkspace !== null">
+        <div class="font-bold menu-header pb-3">{{"WORKSPACE_DETAILS_BOX" | translate}}</div>
+        <div class="property-tag font-bold">{{"WORKSPACES_CLOUD" | translate}}: <span class="font-light">
+                {{m_oActiveWorkspace.cloudProvider}}</span></div>
+        <div class="property-tag font-bold">{{"WORKSPACES_OWNER" | translate}}: <span
+                class="font-light green-text">{{m_oActiveWorkspace.userId}}</span></div>
+        <div class="property-tag font-bold">{{"WORKSPACES_NODE_CODE" | translate}}:
+            <span class="font-light">{{m_oActiveWorkspace.nodeCode}}</span>
+        </div>
+        <div class="property-tag font-bold">{{"WORKSPACES_PRODUCTS" | translate}}: <span
+                class="font-light">{{m_aoProducts.length}}</span>
+        </div>
+        <div class="property-tag font-bold">{{"WORKSPACES_PROC_COUNT" | translate}}:
+            <span class="font-light">{{m_oActiveWorkspace.processesCount}}</span>
+        </div>
+        <div>
+            <label for="workspace-id" class="property-tag font-bold">{{"WORKSPACES_ID" | translate}}:</label>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="" name="workspace-id"
+                    aria-label="Workspace ID Copy Field" value="{{m_oActiveWorkspace.workspaceId}}" readonly disabled
+                    aria-describedby="copy-workspace-id">
+                <span *ngIf="m_bShowCopied"
+                    class="d-flex flex-row align-items-center copied-indicator font-bold">{{"KEY_PHRASES.COPIED" | translate}}</span>
+                <span class="input-group-text icon-left" id="copy-workspace-id" (click)="copyWorkspaceId()">
+                    <span class="material-symbols-outlined green-text">
+                        content_copy
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

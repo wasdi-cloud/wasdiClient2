@@ -1,0 +1,49 @@
+div.pricing-container {
+    height: 100%;
+    width: 100%;
+}
+
+div.store-details {
+    background: var(--wasdiGreenLight);
+    border-radius: 8px;
+    padding: 24px;
+    width: 100%;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+h4 {
+    font-size: 16px;
+}
+
+div.pricing-column,
+div.checkbox-container {
+    width: 50%;
+}
+
+div.pricing-column-2 {
+    background: var(--neutral5);
+    border-radius: 8px;
+    padding: 0rem 5rem;
+}
+
+div.subscriptions-content-wrapper {
+    margin-top: -6rem;
+}
+
+div.subscriptions-text-wrapper {
+    margin-top: -5rem;
+    text-align: center;
+}
+
+div.subscriptions-text-wrapper>div {
+    color: var(--neutral70);
+    font-size: 24px;
+}
+
+div.subscriptions-text-wrapper>p {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}

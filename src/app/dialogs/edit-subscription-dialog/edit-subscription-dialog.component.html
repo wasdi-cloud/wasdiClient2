@@ -1,78 +1,28 @@
-<div class="dialog">
-    <div class="px-4 pt-3 text-secondary d-flex flex-row justify-content-between align-items-center">
-        <h4 *ngIf="m_oEditSubscription.subscriptionId == null">
-            Buy Subscription</h4>
-        <h4 *ngIf="m_oEditSubscription.subscriptionId != null && m_bEditMode">
-            Edit Subscription</h4>
-        <h4 *ngIf="m_oEditSubscription.subscriptionId != null && !m_bEditMode">
-            Subscription (Readonly)</h4>
-        <button class="btn" (click)="onDismiss()">
-            <fa-icon [icon]="faX"></fa-icon>
-        </button>
+<div class="dialog d-flex flex-column gap-3">
+    <div class="header d-flex flex-row justify-content-between">
+        {{m_oEditSubscription.typeName}}
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
     </div>
-    <div class="w-100 d-flex flex-column gap-2 px-3" action="">
-        <div>
-            <label for="">Name</label>
-            <input class="form-control" type="text"
-                placeholder="{{m_oEditSubscription.name? m_oEditSubscription.name : m_oEditSubscription.typeName}}"
-                [(ngModel)]="m_oEditSubscription.name">
-        </div>
-        <div>
-            <label for="">Description</label>
-            <input class="form-control" type="text" placeholder="{{m_oEditSubscription.description}}"
-                [(ngModel)]="m_oEditSubscription.description">
-        </div>
-        <div *ngIf="m_oEditSubscription.subscriptionId !== null && m_bIsPaid === true">
-            <label for="">Acquisition Date</label>
-            <input class="form-control" type="date" name="" id="" [ngModel]="m_sBuyDate | date:'yyyy-MM-dd'" readonly
-                disabled>
-        </div>
-        <div *ngIf="m_oEditSubscription.subscriptionId !== null && m_bIsPaid === true">
-            <label for="">Start Date</label>
-            <input class="form-control" type="date" name="" id="" [ngModel]="m_sStartDate | date:'yyyy-MM-dd'" readonly
-                disabled>
-        </div>
-        <div *ngIf="m_oEditSubscription.subscriptionId !== null && m_bIsPaid === true">
-            <label for="">End Date</label>
-            <input class="form-control" type="date" name="" id="" [ngModel]="m_sEndDate | date:'yyyy-MM-dd'" readonly
-                disabled>
-        </div>
-        <div *ngIf="m_oEditSubscription.subscriptionId !== null && m_bIsPaid === true">
-            <label for="">Days Remaining</label>
-            <input class="form-control" type="text" [(ngModel)]="m_iDaysRemaining" readonly disabled>
-        </div>
-        <div>
-            <label for="">Organization</label>
-            <input *ngIf="m_bIsOwner === false" type="text" name="" id="" class="form-control"
-                value="{{m_oOrganization.name}}" placeholder="Select Organization" readonly disabled>
-            <input *ngIf="m_bIsOwner === true" type="text" [matAutocomplete]="auto" class="form-control" name="style"
-                placeholder="{{m_oOrganization.name}}">
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="getOrganizationName"
-                (optionSelected)="setSelectedOrganization($event)">
-                <mat-option *ngFor="let oOrganization of m_asOrganizations"
-                    [value]="oOrganization">{{oOrganization.name}}</mat-option>
-            </mat-autocomplete>
+    <div class="dialog-content d-flex flex-column gap-3">
+        <app-input-field [m_sLabel]="'SUBSCRIPTION_BUY_NAME' | translate" (m_oInputChange)="setNameInput($event)"
+            [m_sPlaceholder]="'KEY_PHRASES.NAME'| translate"></app-input-field>
+        <app-dropdown [m_sLabel]="'SUBSCRIPTION_BUY_ORGANIZATION' | translate"
+            [m_aoDropdownItems]="m_aoOrganizationsMap"
+            (m_oSelectionChange)="setSelectedOrganization($event)"></app-dropdown>
+        <div class="order-summary mb-3">
+            <div class="summary-header">{{"SUBSCRIPTION_BUY_ORDER_SUMMARY" | translate}}</div>
+            <div class="price-total d-flex flex-row justify-content-between">
+                <div>{{"SUBSCRIPTION_BUY_TOTAL"| translate}}:</div>
+                <div class="price">{{m_oEditSubscription.price}}€</div>
+            </div>
         </div>
     </div>
-    <div class="border-top mt-5 w-100 d-flex flex-column px-5" *ngIf="!m_bEditMode || !m_bIsPaid">
-        <h4>Order Summary</h4>
-        <ul class="list-group">
-            <li class="list-group-item d-flex flex-row justify-content-between">
-                <p>Subtotal:</p>
-                <p>€ {{m_oEditSubscription.price}}</p>
-            </li>
-            <li class="list-group-item d-flex flex-row justify-content-between" style="font-size: 1.5em">
-                <p>Total:</p>
-                <p>€ {{m_oEditSubscription.price}}</p>
-            </li>
-        </ul>
-    </div>
-    <div class="d-flex flex-row justify-content-end gap-3 p-3">
-        <button class="btn btn-secondary" (click)="onDismiss()">Cancel</button>
-        <button class="btn btn-success" *ngIf="!m_bEditMode === true || !m_bIsPaid"
-            (click)="checkout()">Checkout</button>
-        <button class="btn btn-success"
+    <div class="d-flex flex-row justify-content-between">
+        <app-button (click)="onDismiss()" [m_sLabel]="'KEY_PHRASES.CANCEL'| translate" [m_bMuted]="true"></app-button>
+        <app-button [m_sLabel]="'SUBSCRIPTION_BUY_CHECKOUT_STRIPE'| translate" [m_sIconLeft]="'lock'"
+            (click)="checkout()"></app-button>
+        <!-- <button class="btn btn-success"
             *ngIf="m_bEditMode === true && m_oEditSubscription.subscriptionId !== null && m_bIsPaid === true"
-            (click)="saveSubscription()">Save</button>
+            (click)="saveSubscription()">Save</button> -->
     </div>
 </div>

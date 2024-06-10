@@ -1,0 +1,125 @@
+<div class="flex-fill d-flex flex-column gap-3">
+    <div class="header font-bold d-flex flex-row justify-content-between">Manage Nodes
+        <app-button data-bs-toggle="offcanvas" href="#nodeEditor" role="button" aria-controls="nodeEditor"
+            [m_sLabel]="'Create New Node'" (click)="setSelectedNode(null)"></app-button>
+    </div>
+    <div class="d-flex flex-row justify-content-end">
+        <app-input-field [m_sPlaceholder]="'Search by Node Code'"
+            (m_oInputChange)="m_sSearch = $event.event.target.value"></app-input-field>
+    </div>
+    <div class="flex-fill d-flex flex-column gap-2">
+        <div class="table-wrapper">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>Cloud Provider</td>
+                        <td>Node Code</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oNode of m_aoNodes | filter: m_sSearch">
+                        <td>{{oNode.cloudProvider}}</td>
+                        <td>{{oNode.nodeCode}}</td>
+                        <td>
+                            <span (click)="setSelectedNode(oNode)" data-bs-toggle="offcanvas" href="#nodeEditor"
+                                role="button" aria-controls="nodeEditor" class="material-symbols-outlined">
+                                edit
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="header font-bold d-flex flex-row justify-content-between">Node Scores
+    </div>
+    <div class="flex-fill d-flex flex-column gap-2">
+        <div class="table-wrapper">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <th class="text-left">Node Code</th>
+                        <th class="text-left">Timestamp</th>
+                        <th>Processes</th>
+                        <th>Disk Used</th>
+                        <th>Disk Available</th>
+                        <th>Disk Total</th>
+                        <th>Disk Used</th>
+                        <th>Disk Available</th>
+                        <th>RAM Used</th>
+                        <th>RAM Available</th>
+                        <th>RAM Total</th>
+                        <th>RAM Used</th>
+                        <th>RAM Available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oNode of m_aoNodesWithScores | filter: m_sSearch">
+                        <td class="text-left">{{oNode.nodeCode}}</td>
+                        <td class="text-left">{{oNode.timestampAsString}}</td>
+                        <td>{{oNode.numberOfProcesses}}</td>
+                        <td>{{oNode.diskPercentageUsed + " %"}}</td>
+                        <td>{{oNode.diskPercentageAvailable + " %"}}</td>
+                        <td>{{oNode.diskAbsoluteTotal | convertBytesToHigherUnit:2}}</td>
+                        <td>{{oNode.diskAbsoluteUsed | convertBytesToHigherUnit:2}}</td>
+                        <td>{{oNode.diskAbsoluteAvailable | convertBytesToHigherUnit:2}}</td>
+                        <td>{{oNode.memoryPercentageUsed + " %"}}</td>
+                        <td>{{oNode.memoryPercentageAvailable + " %"}}</td>
+                        <td>{{oNode.memoryAbsoluteTotal | convertBytesToHigherUnit:2}}</td>
+                        <td>{{oNode.memoryAbsoluteUsed | convertBytesToHigherUnit:2}}</td>
+                        <td>{{oNode.memoryAbsoluteAvailable | convertBytesToHigherUnit:2}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end org-create-container d-flex flex-column justify-content-between"
+    data-bs-backdrop="true" tabindex="-1" id="nodeEditor" aria-labelledby="nodeEditorLabel">
+    <div class="editor-header font-bold pb-3">
+        {{m_bEditMode ? 'Edit' : 'Create'}} Node
+    </div>
+    <div class="d-flex flex-fill flex-column gap-3">
+        <app-input-field [m_sLabel]="'Cloud Provider'"
+            [m_sInputValue]="m_oSelectedNode? (m_oSelectedNode.cloudProvider ? m_oSelectedNode.cloudProvider : '' ) : ''"
+            (m_oInputChange)="m_oSelectedNode.cloudProvider = $event.event.target.value"></app-input-field>
+
+        <app-input-field [m_sLabel]="'Node Code'"
+            [m_sInputValue]="m_oSelectedNode?  (m_oSelectedNode.nodeCode ? m_oSelectedNode.nodeCode : '' ): ''"
+            (m_oInputChange)="m_oSelectedNode.nodeCode = $event.event.target.value"></app-input-field>
+
+        <app-input-field [m_sLabel]="'API Url'"
+            [m_sInputValue]="m_oSelectedNode?  (m_oSelectedNode.apiUrl ? m_oSelectedNode.apiUrl : '' ): ''"
+            (m_oInputChange)="m_oSelectedNode.apiUrl = $event.event.target.value"></app-input-field>
+
+        <app-input-field [m_sLabel]="'Node Geoserver Address'"
+            [m_sInputValue]="m_oSelectedNode? (m_oSelectedNode.nodeGeoserverAddress ? m_oSelectedNode.nodeGeoserverAddress : '' ): ''"
+            (m_oInputChange)="m_oSelectedNode.nodeGeoserverAddress = $event.event.target.value"></app-input-field>
+
+        <app-textarea [m_sLabel]="'Node Description'"
+            [m_sInputString]="m_oSelectedNode? (m_oSelectedNode.nodeDescription ? m_oSelectedNode.nodeDescription : '' ): ''"
+            (m_oInputChange)="m_oSelectedNode.nodeDescription"></app-textarea>
+
+        <div class="d-flex flex-row gap-4 mt-4">
+            <div class="d-flex flex-row gap-2 align-items-center">
+                <input type="checkbox" name="isActive" id="" class="wasdi-checkbox"
+                    [checked]="m_oSelectedNode? m_oSelectedNode.active : ''"
+                    (change)="getCheckedValue($event, 'active')">
+                <label for="isActive">Active</label>
+            </div>
+            <div class="d-flex flex-row gap-2 align-items-center">
+                <input type="checkbox" name="isShared" id="" class="wasdi-checkbox"
+                    [checked]="m_oSelectedNode? m_oSelectedNode.shared : ''"
+                    (change)="getCheckedValue($event, 'shared')">
+                <label for="isShared">Shared</label>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between pb-3">
+        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
+        <app-button *ngIf="!m_bEditMode" [m_sLabel]="'Create Node'" (click)="createNode()"></app-button>
+        <app-button *ngIf="m_bEditMode" [m_sLabel]="'Save Node'" (click)="updateNode()"></app-button>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+div.dialog-content {
+    width: 100%;
+    height: 72vh;
+}
+
+div.invader-wrapper {
+    overflow: hidden;
+}
+
+div.table-wrapper {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+}
+
+thead.table-header {
+    background-color: #FFFFFF;
+    box-shadow: inset 0px -1px #D1D5DB;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+td>span.material-symbols-outlined {
+    color: var(--wasdiGreen);
+    cursor: pointer;
+}
+
+td,
+th,
+tr {
+    font-size: 14px;
+    padding: 6px 12px 6px 8px;
+    height: 44px;
+    /* width: fit-content; */
+    max-width: 30vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+td {
+    font-size: 14px;
+    cursor: default;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+span.upgrade-tag {
+    border-radius: 4px;
+    background: var(--wasdiGreen);
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    padding: 6px;
+    line-height: 12px;
+}

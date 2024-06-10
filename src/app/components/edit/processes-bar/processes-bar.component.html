@@ -1,22 +1,44 @@
-<div class="navbar bg-secondary d-flex flex-row gap-5 px-3"
-    style="position: absolute; bottom: 0; width: 100vw">
-    <div *ngIf="m_bShowDownloadProgress" class="text-light">
-        Downloading: {{m_sDownloadProductName}}
-        <mat-progress-bar [mode]="'indeterminate'" [color]="'success'" style="width: 300px;"></mat-progress-bar>
+<div class="processes-bar-container d-flex flex-column">
+    <!-- Progress indicator for closed bar -->
+    <div *ngIf="m_oLastProcesses !== null" class="bg-success" [matTooltip]="m_oLastProcesses.progressPerc + '%'"
+        [matTooltipPosition]="'above'"
+        [style.width]="m_oLastProcesses.progressPerc ? m_oLastProcesses.progressPerc + '%' : '0%'" style="height: 5px;">
     </div>
-    <div class="d-flex flex-row gap-5 align-items-center justify-self-end " style="margin-left:auto">
-        <div class="py-2 px-3" style="border-radius: 100%;"
-            [ngClass]="m_iIsWebsocketConnected ? 'bg-success' : 'bg-danger'">
-            <fa-icon class="text-light" [icon]="faPlug"></fa-icon>
+    <div class="processes-bar d-flex flex-row justify-content-between align-items-center px-3 flex-fill gap-3">
+        <div *ngIf="m_oLastProcesses !== null" class="current-process flex-fill">
+            <div class="d-flex flex-row align-items-center gap-2">
+                <img src="/assets/images/process-spinner/Satellite.gif" alt="" style="height: 40px; width: 40px">
+                <div>{{"DIALOG_LOGS_DATE" | translate}}: <span
+                        class="font-bold">{{m_oLastProcesses.operationStartDate}}</span></div>
+                <div>{{"DIALOG_LOGS_OPERATION_TYPE" | translate}}: <span
+                        class="font-bold">{{m_oLastProcesses.operationType}}</span></div>
+                <div>{{ ("ROOT_LABEL_NUMBER_OF_RUNNING_PROCESSES" | translate)}}: <span
+                        class="font-bold">{{m_oLastProcesses.productName}}</span>
+                </div>
+            </div>
         </div>
-        <div class="d-flex flex-row align-items-center gap-1">
-            CREATED: <span class="badge rounded-pill bg-primary">{{m_iWaitingProcesses}}</span>
+        <div class="running-queue-container d-flex flex-row align-items-center justify-content-between gap-3">
+            <div *ngIf="m_oLastProcesses === null" class="d-flex flex-row align-items-center gap-1">
+                {{("ROOT_LABEL_NUMBER_OF_RUNNING_PROCESSES" | translate)}}: <span
+                    class="font-bold">{{m_iNumberOfProcesses}} </span>
+            </div>
+            <div class="d-flex flex-row align-items-center gap-1">
+                {{("ROOT_TABLE_HEAD_OPERATION_DATA" | translate)}}: <span
+                    class="font-bold">{{m_iWaitingProcesses}}</span>
+            </div>
         </div>
-        <div class="d-flex flex-row align-items-center gap-1">
-            RUNNING: <span class="badge rounded-pill bg-success">{{m_iNumberOfProcesses}} </span>
+        <div class="process-utilities d-flex flex-row gap-2">
+            <div class="rabbit-connect"
+                [ngClass]="m_iIsWebsocketConnected ? 'rabbit-connected' : 'rabbit-not-connected'">
+                <span class="material-symbols-outlined">
+                    electric_bolt
+                </span>
+            </div>
+            <div class="card-divider"></div>
+            <div class="logs-open-container d-flex flex-row align-items-center gap-2">
+                <app-button [m_sSize]="'small'" [m_bDisabled]="false" [m_bLink]="false" [m_bRounded]="false"
+                    [m_sIconLeft]="m_bIsOpen ? 'expand_more' : 'expand_less'" (click)="openProcessesBar()"></app-button>
+            </div>
         </div>
-        <button class="btn btn-dark" style="border-radius: 100%;" (click)="openProcessesBar()">
-            <fa-icon [icon]="faArrowUp"></fa-icon>
-        </button>
     </div>
 </div>

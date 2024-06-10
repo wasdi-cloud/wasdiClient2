@@ -1,0 +1,67 @@
+<div class="d-flex flex-fill flex-column gap-5">
+    <div class="header font-bold d-flex flex-row justify-content-between">
+        Organisations
+        <app-button [m_sLabel]="'Add new Organisation'" data-bs-toggle="offcanvas" href="#orgEditor" role="button"
+            aria-controls="orgEditor" (click)="setActiveOrganization(null, false)"></app-button>
+    </div>
+    <div class="d-flex flex-column gap-2">
+        <div class="table-wrapper flex-fill">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>Organisation name</td>
+                        <td>Owner</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oOrganization of m_aoOrganizations">
+                        <td>{{oOrganization.name}}</td>
+                        <td>{{oOrganization.ownerUserId}}</td>
+                        <td class="d-flex gap-1 justify-content-end">
+                            <span *ngIf="oOrganization.readOnly === false"
+                                (click)="setActiveOrganization(oOrganization, true)" data-bs-toggle="offcanvas"
+                                href="#orgEditor" role="button" aria-controls="orgEditor"
+                                class="material-symbols-outlined">
+                                edit
+                            </span>
+                            <span class="material-symbols-outlined"
+                                (click)="openOrganizationShareDialog(oOrganization)">
+                                share
+                            </span>
+                            <span class="material-symbols-outlined" (click)="removeOrganization(oOrganization)">
+                                delete
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end org-create-container d-flex flex-column justify-content-between"
+    data-bs-backdrop="true" tabindex="-1" id="orgEditor" aria-labelledby="orgEditorLabel">
+    <div class="editor-header font-bold pb-3">
+        {{m_bIsEditing? 'Edit Organisation' :'Add new Organisation' }}
+    </div>
+    <div class="d-flex flex-fill flex-column gap-3">
+        <app-input-field [m_sLabel]="'Organisation name'" [m_sInputValue]="m_oOrganisation? m_oOrganisation.name : ''"
+            [m_bIsRequired]="true" (m_oInputChange)="getUserInput($event, 'name')"
+            [m_bIsValid]="m_bNameIsValid"></app-input-field>
+        <app-input-field [m_sLabel]="'Organisation e-mail'" [m_sInputType]="'email'"
+            [m_sInputValue]="m_oOrganisation? m_oOrganisation.email : ''" [m_bIsRequired]="true"
+            (m_oInputChange)="getUserInput($event, 'email')" [m_bIsValid]="m_bEmailIsValid"></app-input-field>
+        <app-input-field [m_sLabel]="'Organisation website'" [m_sInputValue]="m_oOrganisation? m_oOrganisation.url : ''"
+            (m_oInputChange)="getUserInput($event, 'url')"></app-input-field>
+        <app-input-field [m_sLabel]="'Organisation address'"
+            [m_sInputValue]="m_oOrganisation? m_oOrganisation.address : ''"
+            (m_oInputChange)="getUserInput($event, 'address')"></app-input-field>
+        <app-textarea [m_sLabel]="'Description'" [m_sInputString]="m_oOrganisation? m_oOrganisation.description: ''"
+            (keyup)="getUserInput($event, 'description')"></app-textarea>
+    </div>
+    <div class="d-flex flex-row justify-content-between pb-3">
+        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'Cancel'" [m_bMuted]="true"></app-button>
+        <app-button [m_sLabel]="'Save Organisation'" (click)="saveOrganisation()"></app-button>
+    </div>
+</div>

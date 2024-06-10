@@ -1,46 +1,35 @@
-div.products-container {
-    height: 35vh; 
-    overflow-y: scroll;
-    overflow-x: hidden;
-    width: 35vw; 
-  
-  }
-  h3.products-header {
-    width: 35vw;
-    z-index: 1; 
-  }
-  .tree-btn {
-    padding: 0; 
-  }
-  .tree-invisible {
-    display: none;
-  }
-  .tree-nested-node {
-    padding-left: 1rem;
-  }
-  
-  .mat-tree-node {
-    background-color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 0;
-  }
-  
-  span.product-name {
-    display: block; 
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 12rem;
-  }
-  
-  ul,
-  li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  li.tree-container {
-    border-bottom: 0;
-  }
+.secondary-nav {
+  height: calc(100vh - 6rem);
+  width: 480px;
+}
+
+.check-circle {
+  color: var(--wasdiGreen) !important;
+}
+
+.filters-container {
+  overflow-y: scroll;
+}
+
+.filter-instructions {
+  background: var(--wasdiGreenLight);
+  border-radius: 4px 3px;
+  color: #000000;
+  font-size: 14px;
+  padding: 1rem;
+}
+
+.date-inputs {
+  max-width:50%
+}
+
+div.floating-buttons {
+  background: #FFFFFF;
+  /* width: 22rem; */
+  padding: 1rem;
+}
+
+div.plan-tree-container {
+  height: 85%;
+  overflow: scroll;
+}

@@ -149,8 +149,8 @@ export class ProcessorService {
      * @returns {*}
      */
   getProcessorLogs(oProcessId: object) {
-    var oWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    var sUrl = this.APIURL;
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
 
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
@@ -210,8 +210,6 @@ export class ProcessorService {
      * @returns {*}
      */
   updateProcessor(sProcessorId: string, oBody: object) {
-    console.log(oBody)
-
     return this.m_oHttp.post(this.APIURL + '/processors/update?processorId=' + encodeURI(sProcessorId), oBody);
   };
   /**
@@ -238,7 +236,7 @@ export class ProcessorService {
     let oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     let sWorkspaceId;
 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sWorkspaceId) == false) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oActiveWorkspace) == false) {
       sWorkspaceId = oActiveWorkspace.workspaceId;
     }
     else {
@@ -373,4 +371,22 @@ export class ProcessorService {
   getProcessorLogsBuild(sProcessorId: string) {
     return this.m_oHttp.get<any>(this.APIURL + '/processors/logs/build?processorId=' + sProcessorId);
   }
+
+
+  addAppPayment(oAppPaymentVM: any) {
+    return this.m_oHttp.post<any>(this.APIURL + "/processors/addAppPayment", oAppPaymentVM);
+  }
+
+  getStripeOnDemandPaymentUrl(sProcessorId: string, sPaymentId: string) {
+    return this.m_oHttp.get<any>(this.APIURL + '/processors/stripe/onDemandPaymentUrl?processor=' + sProcessorId + '&appPayment=' + sPaymentId)
+
+  }
+
+  getIsAppPurchased(sProcessorId: string) {
+    return this.m_oHttp.get<any>(this.APIURL + '/processors/isAppPurchased?processor=' + sProcessorId);
+  }
+
+  getAppPaymentById(sPaymentId: string) {
+    return this.m_oHttp.get<any>(this.APIURL + '/processors/byAppPaymentId?appPayment=' + sPaymentId);
+   }
 }

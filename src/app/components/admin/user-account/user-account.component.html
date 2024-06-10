@@ -1,0 +1,42 @@
+<div class="flex-fill d-flex flex-column gap-5">
+    <div class="header font-bold d-flex flex-row justify-content-between">Account <app-button
+            [m_sLabel]="'Save changes'" (click)="onSaveChanges()"></app-button></div>
+    <div class="d-flex flex-column gap-2">
+        <div class="input-header font-bold">User Information</div>
+        <p class="mb-0 pb-0">This information will be visible if you develop and release an application for
+            <strong>Wasdi</strong>.
+        </p>
+        <div class="d-flex flex-row justify-items-stretch gap-1">
+            <app-input-field class="flex-fill" [m_sLabel]="'Name'" [m_sPlaceholder]="''" [m_sInputValue]="m_oUser.name"
+                (m_oInputChange)="getUserInfoInput($event)"></app-input-field>
+            <app-input-field class="flex-fill" [m_sLabel]="'Surname'" [m_sPlaceholder]="''"
+                [m_sInputValue]="m_oUser.surname" (m_oInputChange)="getUserInfoInput($event)"></app-input-field>
+        </div>
+        <app-input-field [m_sLabel]="'Username'" [m_sPlaceholder]="''"></app-input-field>
+    </div>
+    <div class="d-flex flex-column gap-2">
+        <div class="input-header font-bold">System Language</div>
+        <p>Select the system language you want to use for <strong>Wasdi</strong>.</p>
+        <div class="input-wrapper">
+            <app-dropdown [m_sLabel]="'Language'" [m_aoDropdownItems]="m_aoLanguages" (m_oSelectionChange)="translateLanguageTo($event)"></app-dropdown>
+        </div>
+    </div>
+    <div>
+        <div class="input-header font-bold">Connection email address</div>
+        <p><strong>Wasdi</strong> will use this e-mail to connect and send notifications. You can change your
+            notification settings here</p>
+        <div class="input-wrapper d-flex flex-column gap-2">
+            <app-input-field [m_sLabel]="'Email'"></app-input-field>
+        </div>
+    </div>
+    <div>
+        <div class="input-header font-bold">Password and security</div>
+
+        <div class="input-wrapper d-flex flex-column gap-2">
+            <app-input-field [m_sLabel]="'Current password'"></app-input-field>
+            <app-input-field [m_sLabel]="'New password'"></app-input-field>
+            <app-input-field [m_sLabel]="'Confirm new password'"></app-input-field>
+
+        </div>
+    </div>
+</div>

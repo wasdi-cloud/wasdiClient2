@@ -1,7 +1,30 @@
-a.nav-link {
-    cursor: pointer;
+.secondary-nav {
+    padding-right: 32px;
+    overflow-y: scroll;
+    /* Override original width for extra space */
+    width: 478px !important;
 }
 
-mat-option {
-    min-width: fit-content !important;
+label {
+    color: var(--neutral95);
+    margin-bottom: 4px;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.filters-container {
+    margin-bottom: 1rem;
+}
+
+p.clear-btn {
+    color: var(--wasdiGreen);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    margin: 0;
+}
+
+.container {
+    padding: 0 !important;
 }

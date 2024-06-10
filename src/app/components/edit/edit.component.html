@@ -1,25 +1,36 @@
-<app-edit-toolbar [m_oActiveWorkspace]="m_oActiveWorkspace" [m_aoProducts]="m_aoProducts" [m_bJupyterIsReady]="m_bJupyterIsReady"
-    (m_sSearchString)="getSearchString($event)"></app-edit-toolbar>
-<main>
-    <div class="d-flex flex-row px-3">
-        <div class="productlist-navigation-container d-flex flex-column " style="height: 70vh">
-            <div style="height: 50%;">
-                <app-products-list [m_aoWorkspaceProductsList]="m_aoProducts" [m_sSearchString]="m_sSearchString"
-                [m_bIsLoadingProducts]="m_bIsLoadingProducts"
-                    [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
-                    (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)" (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
+<main class="d-flex flex-row flex-fill">
+    <!-- Side Bar Container -->
+    <div class="editor-sidebar d-flex flex-column">
+        <div class="workspace-location d-flex flex-column">
+            <div class="d-flex flex-row gap-3 align-items-center">
+                <app-button class="align-self-start" [m_sLabel]="'KEY_PHRASES.BACK' | translate" [m_bOutline]="true"
+                    [m_sSize]="'small'" [m_sIconLeft]="'arrow_left'" (click)="navigateToWorkspaces()"></app-button>
+                <div class="workspace-subheading">{{"DIALOG_WS_INFO_ID" | translate}} - <span class="workspace-id-copy"
+                        (click)="copyWorkspaceId()">{{m_oActiveWorkspace?.workspaceId}}</span></div>
             </div>
-            <div style="height: 50%">
-                <app-nav-layers [m_aoVisibleBands]="m_aoVisibleBands" [m_aoVisibleBands]="m_aoVisibleBands"
-                    [m_aoProducts]="m_aoProducts" [m_b2DMapModeOn]="m_b2DMapModeOn"></app-nav-layers>
+            <div>
+                <div class="workspace-name d-flex flex-row justify-content-between py-2">
+                    <div>
+                        <span class="workspace-id-copy"
+                            (click)="copyWorkspaceName()">{{m_oActiveWorkspace?.name}}</span> ({{m_iFilteredProducts}})
+                    </div>
+                    <app-button matTooltip="Workspace Properties" [m_sSize]="'small'" [m_sIconLeft]="'settings_suggest'"
+                        [m_bOutline]="true" (click)="openPropertiesDialog()"></app-button>
+                </div>
             </div>
         </div>
-        <div style="height: 75vh; width: 100%">
-            <app-edit-map [m_aoProducts]="m_aoProducts" [m_aoVisibleBands]="m_aoVisibleBands"
-                (m_b2DMapModeOutput)="getMapMode($event)"></app-edit-map>
-        </div>
+        <app-products-list class="product-list-container flex-fill" [m_aoWorkspaceProductsList]="m_aoProducts"
+            [m_aoVisibleBands]="m_aoVisibleBands" [m_bIsLoadingProducts]="m_bIsLoadingProducts"
+            [m_b2DMapMode]="m_b2DMapModeOn" (m_aoVisibleBandsOutput)="getVisibleBands($event)"
+            (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)"
+            (m_iFilteredProducts)="getFilteredProductsLength($event)"
+            (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
+        <app-nav-layers class="justify-self-end" style="height: 40%;" [m_aoVisibleBands]="m_aoVisibleBands"
+            (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
     </div>
-    <div>
-        <app-processes-bar [m_oActiveWorkspace]="m_oActiveWorkspace" [m_bShowDownloadProgress]="m_bShowProductDownload" [m_sDownloadProductName]="m_sDownloadProductName"></app-processes-bar>
+    <!-- Map Container with Floating Nav-->
+    <div class="map map-container flex-grow-1">
+        <app-edit-map [aoProducts]="m_aoProducts" [m_aoVisibleBands]="m_aoVisibleBands"
+            [bIsLoadingProducts]="m_bIsLoadingProducts" (m_b2DMapModeOutput)="getMapMode($event)"></app-edit-map>
     </div>
 </main>

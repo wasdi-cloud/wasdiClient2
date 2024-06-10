@@ -1,0 +1,33 @@
+button.menu-list-item {
+    align-items: center;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 48px;
+    color: #FFFFFF;
+    width: 100%;
+}
+
+button.menu-list-item:hover {
+    background: var(--neutral70);
+}
+
+button.menu-list-item.active {
+    border-left: 8px solid var(--wasdiGreen);
+    background: var(--neutral80);
+}
+
+button.menu-list-item.open {
+    gap: 8px;
+    justify-content: flex-start;
+    padding-left: 20px;
+}
+
+button.menu-list-item:disabled,
+button.menu-list-item:disabled>span.material-symbols-outlined {
+    cursor: not-allowed;
+}
+

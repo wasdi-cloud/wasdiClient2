@@ -1,0 +1,59 @@
+<div class="editor-container d-flex flex-column">
+    <div class="editor-header d-flex flex-row justify-content-between">
+        <div class="d-flex flex-row gap-2">
+            <div class="user-icon">
+                <span class="material-symbols-outlined user-icon-symbol">
+                    account_circle
+                </span>
+            </div>
+            <div class="reviews-name font-bold">{{m_sUserId}}</div>
+
+        </div>
+        <!-- Show star rating input if a REVIEW -->
+        <div *ngIf="m_bIsReview" class="d-flex-flex-row">
+            <span class="material-symbols-outlined star-icon"
+                [ngClass]="m_oUserReview.vote >= 1 || m_iPreviewRating >= 1 ? 'star-filled' : 'star-grey'"
+                (click)="m_oUserReview.vote = 1" (mouseover)="m_iPreviewRating = 1" (mouseout)="m_iPreviewRating= 0">
+                star
+            </span>
+            <span class="material-symbols-outlined star-icon"
+                [ngClass]="m_oUserReview.vote >= 2 || m_iPreviewRating >= 2 ? 'star-filled' : 'star-grey'"
+                (click)="m_oUserReview.vote = 2" (mouseover)="m_iPreviewRating = 2" (mouseout)="m_iPreviewRating= 0">
+                star
+            </span>
+            <span class="material-symbols-outlined star-icon"
+                [ngClass]="m_oUserReview.vote >= 3 || m_iPreviewRating >=3 ? 'star-filled' : 'star-grey'"
+                (click)="m_oUserReview.vote = 3" (mouseover)="m_iPreviewRating = 3" (mouseout)="m_iPreviewRating= 0">
+                star
+            </span>
+            <span class="material-symbols-outlined star-icon"
+                [ngClass]="m_oUserReview.vote >= 4|| m_iPreviewRating >= 4 ? 'star-filled' : 'star-grey'"
+                (click)="m_oUserReview.vote = 4" (mouseover)="m_iPreviewRating = 4" (mouseout)="m_iPreviewRating= 0">
+                star
+            </span>
+            <span class="material-symbols-outlined star-icon"
+                [ngClass]="m_oUserReview.vote >= 5|| m_iPreviewRating >= 5 ? 'star-filled' : 'star-grey'"
+                (click)="m_oUserReview.vote = 5" (mouseover)="m_iPreviewRating = 5" (mouseout)="m_iPreviewRating= 0">
+                star
+            </span>
+        </div>
+    </div>
+    <div class="editor-textarea-wrapper">
+        <app-textarea (keyup)="getUserInput($event)" [m_sInputString]="m_sReviewText"></app-textarea>
+    </div>
+    <!-- Review Handling Buttons -->
+    <div *ngIf="m_bIsReview" class="d-flex flex-row justify-content-end gap-2">
+        <app-button *ngIf="!m_bIsEditing" [m_sLabel]="'POST REVIEW'" (click)="addReview()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'DELETE'" [m_bIsDelete]="true"
+            (click)="deleteReview()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'UPDATE REVIEW'" (click)="updateReview()"></app-button>
+    </div>
+
+    <!-- Comment Handling Buttons -->
+    <div *ngIf="!m_bIsReview" class="d-flex flex-row justify-content-end gap-2">
+        <app-button *ngIf="!m_bIsEditing" [m_sLabel]="'POST COMMENT'" (click)="addComment()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'DELETE'" [m_bIsDelete]="true"
+            (click)="deleteComment()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'UPDATE COMMENT'" (click)="updateComment()"></app-button>
+    </div>
+</div>

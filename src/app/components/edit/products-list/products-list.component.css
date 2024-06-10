@@ -1,52 +1,21 @@
-div.products-container {
-  height: 35vh;
+div.products-tree-container {
+  padding: 8px 0px 0px 0px;
+  min-height: 100%;
+}
+
+.products-container {
   overflow-y: scroll;
-  overflow-x: hidden;
-  width: 35vw;
-
 }
 
-h3.products-header {
-  width: 35vw;
-  z-index: 1;
+h3 {
+  color: var(--neutral60);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
 }
 
-.tree-btn {
-  border: 0;
-  padding: 0;
-}
-
-.tree-invisible {
-  display: none;
-}
-
-.tree-nested-node {
-  padding-left: 1rem;
-}
-
-
-.mat-tree-node {
-  background-color: #FFFFFF;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 0;
-}
-
-span.product-name {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 14rem;
-}
-
-ul,
-li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-li.tree-container {
-  border-bottom: 0;
+input {
+  width: 100%;
+  margin-bottom: 1rem;
 }

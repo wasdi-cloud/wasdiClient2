@@ -1,30 +1,73 @@
-div.toolbar-container {
-    background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0))
+main {
+    min-height: calc(100vh - 3rem);
+    height: 100%
 }
 
-.collapsible {
-    overflow: hidden;
+div.hero-image {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url("src/assets/images/hero-images/hero-img1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    left: -2rem;
+    height: 200px;
+    width: calc(100% + 2rem);
 }
 
-div.controls-container {
-    height: 70vh;
+nav,
+div.app-ui-container {
+    padding: 0px 32px;
+    margin: auto;
+    max-width: 1000px;
 }
 
-div.controls-container>div {
-    height: 100%;
+nav {
+    --bs-breadcrumb-divider: '>';
+    --bs-breadcrumb-item-active-color: #000000;
+    padding-top: 16px;
+    padding-bottom: 8px;
 }
 
-ul.list-group {
-    border-radius: 0;
+ol.breadcrumb {
+    font-size: 12px;
 }
 
-li.list-group-item {
+li.breadcrumb-item {
     cursor: pointer;
 }
 
-/* History Table */
-.scroll-bar {
-    position: relative;
+li.breadcrumb-item.active {
+    font-weight: 700;
+    color: #000000;
+}
+
+li.breadcrumb-item>a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.processor-help {
+    max-width: 75%;
+}
+
+div.table-wrapper {
     height: 100%;
     overflow: auto;
+    display: inline-block;
+    width: 100%;
+    margin: auto;
+}
+
+table {
+    width: 98%;
+    margin: auto;
+    /* height: 100%; */
+}
+
+.table-heading-container {
+    background-color: #FFFFFF;
+    box-shadow: inset 0px -1px #D1D5DB;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: 700;
 }

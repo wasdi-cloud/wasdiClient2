@@ -13,12 +13,11 @@ import { KeycloakService } from 'keycloak-angular';
 })
 export class AuthService {
 
-  constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient, public oJwtHelper: JwtHelperService, private m_oKeycloakService: KeycloakService) { }
-  m_bKeycloakInit: boolean = false
+  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient, public m_oJwtHelper: JwtHelperService,  private m_oKeycloakService: KeycloakService) { }
 
-  APIURL: string = this.oConstantsService.getAPIURL();
-  AUTHURL: string = this.oConstantsService.getAUTHURL();
-  m_bIgnoreWorkspaceApiUrl: boolean = this.oConstantsService.getIgnoreWorkspaceApiUrl();
+  APIURL: string = this.m_oConstantsService.getAPIURL();
+  AUTHURL: string = this.m_oConstantsService.getAUTHURL();
+  m_bIgnoreWorkspaceApiUrl: boolean = this.m_oConstantsService.getIgnoreWorkspaceApiUrl();
 
   acSessionChangedEvent: string = 'ac-session-changed';
 
@@ -33,9 +32,9 @@ export class AuthService {
 
   keycloakConfiguration = {
     //'token_endpoint': window.app.url.oidcIssuer + "protocol/openid-connect/token/",
-    'token_endpoint': this.oConstantsService.getAUTHURL() + "/protocol/openid-connect/token",
+    'token_endpoint': this.m_oConstantsService.getAUTHURL() + "/protocol/openid-connect/token",
     //'end_session_endpoint': window.app.url.oidcIssuer + "protocol/openid-connect/logout/"
-    'end_session_endpoint': this.oConstantsService.getAUTHURL() + "/protocol/openid-connect/logout"
+    'end_session_endpoint': this.m_oConstantsService.getAUTHURL() + "/protocol/openid-connect/logout"
   }
 
   /**
@@ -65,7 +64,7 @@ export class AuthService {
   }
 
   // public logout(): void {
-  //   this.m_oKeycloakService.logout();
+    
   // }
 
   public redirectToProfile(): void {
@@ -79,7 +78,7 @@ export class AuthService {
   public isAuthenticated(): boolean {
     const token = localStorage.getItem('refresh_token');
 
-    return !this.oJwtHelper.isTokenExpired(token);
+    return !this.m_oJwtHelper.isTokenExpired(token);
   }
   //Get token Object
   getTokenObject() {
@@ -98,8 +97,9 @@ export class AuthService {
     localStorage.setItem('access_token', token)
     localStorage.setItem('refresh_token', token)
   }
+  
   legacyLogin(oCredentials: any) {
-    return this.oHttp.post<any>(this.APIURL + '/auth/login', oCredentials)
+    return this.m_oHttp.post<any>(this.APIURL + '/auth/login', oCredentials)
   }
   /**
    * logout
@@ -107,7 +107,8 @@ export class AuthService {
 
   logout() {
     //CLEAN COOKIE
-    return this.oHttp.get(this.APIURL + '/auth/logout')
+    this.m_oKeycloakService.logout();
+    return this.m_oHttp.get(this.APIURL + '/auth/logout')
   }
 
   /**
@@ -115,7 +116,7 @@ export class AuthService {
    * @param oUser
    */
   signingUser(oUser: User) {
-    return this.oHttp.post(this.APIURL + '/auth/register', oUser);
+    return this.m_oHttp.post(this.APIURL + '/auth/register', oUser);
   }
 
   /**
@@ -124,13 +125,13 @@ export class AuthService {
    * @returns {*}
    */
   createAccountUpload(sEmailInput: string) {
-    let oWorkspace = this.oConstantsService.getActiveWorkspace();
-    let sUrl = this.APIURL;
-    if (oWorkspace?.apiUrl && !this.m_bIgnoreWorkspaceApiUrl) {
+    var oWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    var sUrl = this.APIURL;
+    if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.post(sUrl + '/auth/upload/createaccount', sEmailInput);//JSON.stringify({"sEmail":sEmailInput})
+    return this.m_oHttp.post(sUrl + '/auth/upload/createaccount', sEmailInput);//JSON.stringify({"sEmail":sEmailInput})
   }
   /**
     * Delete sftp account
@@ -142,7 +143,7 @@ export class AuthService {
       return null;
     }
 
-    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
@@ -161,13 +162,13 @@ export class AuthService {
     if (sEmailInput)
       return null;
 
-    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     let sUrl: string = this.APIURL;
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.post<any>(sUrl + '/auth/upload/updatepassword', sEmailInput);
+    return this.m_oHttp.post<any>(sUrl + '/auth/upload/updatepassword', sEmailInput);
   };
 
   /**
@@ -175,13 +176,13 @@ export class AuthService {
    * @returns {*}
    */
   isCreatedAccountUpload() {
-    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     var sUrl: string = this.APIURL;
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get(sUrl + '/auth/upload/existsaccount');
+    return this.m_oHttp.get(sUrl + '/auth/upload/existsaccount');
   };
 
   /**
@@ -189,32 +190,36 @@ export class AuthService {
    * @returns {*}
    */
   getListFilesUpload() {
-    let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
+    let oWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     let sUrl: string = this.APIURL;
     if (oWorkspace != null && oWorkspace.apiUrl != null && !this.m_bIgnoreWorkspaceApiUrl) {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.oHttp.get(sUrl + '/auth/upload/list');
+    return this.m_oHttp.get(sUrl + '/auth/upload/list');
   };
 
   changePassword(oPasswords: object) {
-    return this.oHttp.post(this.APIURL + '/auth/changePassword', oPasswords);
+    return this.m_oHttp.post(this.APIURL + '/auth/changePassword', oPasswords);
   };
 
   changeUserInfo(oUserInfo: object) {
-    return this.oHttp.post(this.APIURL + '/auth/editUserDetails', oUserInfo);
+    return this.m_oHttp.post<any>(this.APIURL + '/auth/editUserDetails', oUserInfo);
   };
 
   validateUser(sEmail: string, sValidationCode: string) {
-    return this.oHttp.get(this.APIURL + '/auth/validateNewUser?email=' + sEmail + '&validationCode=' + sValidationCode);
+    return this.m_oHttp.get(this.APIURL + '/auth/validateNewUser?email=' + sEmail + '&validationCode=' + sValidationCode);
   }
 
   recoverPassword(sEmail: string) {
-    return this.oHttp.get(this.APIURL + '/auth/lostPassword?userId=' + sEmail);
+    return this.m_oHttp.get(this.APIURL + '/auth/lostPassword?userId=' + sEmail);
   }
 
   checkSession() {
-    return this.oHttp.get<any>(this.APIURL + '/auth/checksession');
+      return this.m_oHttp.get<any>(this.APIURL + '/auth/checksession');
+  }
+
+  getClientConfig() {
+    return this.m_oHttp.get(this.APIURL + "/auth/config");
   }
 }

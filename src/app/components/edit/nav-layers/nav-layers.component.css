@@ -1,28 +1,65 @@
-div.parent {
+.parent {
     height: 100%;
 }
-div.nav-layers-bar {
-    position: absolute;
-    bottom: 0;
+
+#smallMapContainer {
+    height: 100%
 }
 
-li.nav-item {
+.list-group-item {
+    border: 1px solid var(--neutral10);
+    border-radius: 8px;
+    width: 100%;
+}
+
+
+div.layer-title {
+    width: 100%;
+}
+
+div.legend-container {
+    border: 1px solid var(--neutral10);
+    border-radius: 16px;
     cursor: pointer;
+    padding: 4px;
+    gap: 2px;
 }
 
-div.layers-tab {
-    height: 100%;
-    overflow-y: scroll;
+div.legend-dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: var(--neutral25);
 }
 
-label {
-    font-size: 10px;
+div.dot-2 {
+    background-color: var(--wasdiWarn);
 }
 
-span.product-name {
-    display: block; 
-    white-space: nowrap; 
-    overflow: hidden;
+div.dot-3 {
+
+    background-color: var(--wasdiDanger);
+}
+
+.band-title {
+    font-size: 14px;
+    max-width: 65%;
+}
+
+p.band-info {
+    width: 100%;
+    white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: 12rem;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.layers-tab {
+    overflow-y: scroll;
+    height: 100%;
+}
+
+div.slider-container {
+    padding-left: 2px; 
 }

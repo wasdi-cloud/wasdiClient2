@@ -1,26 +1,39 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
+import { AppUIItems } from 'src/app/components/navbar/menu-list-item/menu-items';
+import { JsonEditorService } from 'src/app/services/json-editor.service';
 @Component({
   selector: 'app-processor-tab-ui',
   templateUrl: './processor-tab-ui.component.html',
   styleUrls: ['./processor-tab-ui.component.css']
 })
-export class ProcessorTabUiComponent implements OnInit {
+export class ProcessorTabUiComponent implements OnInit, AfterViewInit {
   //Declare name for appui id
   public readonly appui = "appui";
-
+  @ViewChild('editor') editorRef!: ElementRef;
   m_bUIChanged: boolean = false;
   m_sProcessorUI: string = "{}";
   m_sJSONSample: string;
+  m_sTextToInsert: string = "";
   @Input() m_oProcessor?: any;
   @Input() m_oProcessorUIInfo: FormGroup;
+  @Output() m_sProcessorUIChange: EventEmitter<any> = new EventEmitter<any>()
 
-  constructor() { }
+  m_aoAppUIItems = AppUIItems;
+
+  constructor(
+    private m_oJsonEditorService: JsonEditorService
+  ) { }
 
   ngOnInit(): void {
     this.m_sProcessorUI = this.m_oProcessorUIInfo.get('sProcessorUI').value;
+    console.log(this.m_oProcessorUIInfo)
+  }
 
+  ngAfterViewInit(): void {
+    this.m_oJsonEditorService.setEditor(this.editorRef);
+    this.m_oJsonEditorService.initEditor();
+    this.m_oJsonEditorService.setText(this.m_sProcessorUI);
   }
 
   /**
@@ -81,8 +94,13 @@ export class ProcessorTabUiComponent implements OnInit {
     this.insetText(sTextToInsert);
 
     this.m_oProcessorUIInfo.patchValue({
-      bUIChanged: false
+      bUIChanged: true
     });
+  }
+
+  getJsonText(oEvent) {
+    this.m_sProcessorUI = this.m_oJsonEditorService.getValue();
+    this.patchProcessorValue();
   }
 
   /**
@@ -90,20 +108,23 @@ export class ProcessorTabUiComponent implements OnInit {
    * @param sText 
    */
   insetText(sText: string) {
-    const oTextarea = document.querySelector<HTMLTextAreaElement>(
-      `#${this.appui}`);
-
-    if (oTextarea) {
-      oTextarea.setRangeText(sText, oTextarea.selectionStart, oTextarea.selectionEnd, 'end');
-    }
+    this.m_oJsonEditorService.insertText(sText);
+    this.m_sProcessorUI = this.m_oJsonEditorService.getValue();
+    this.patchProcessorValue();
   }
 
   /**
    * Format JSON 
    */
   formatJSON() {
-    let oController = this;
-    let sStringParsed = ""
-    sStringParsed = oController.m_sProcessorUI = JSON.stringify(JSON.parse(oController.m_sProcessorUI.replaceAll("'", '"')), null, 4);
+    this.m_sProcessorUI = JSON.stringify(JSON.parse(this.m_sProcessorUI.replaceAll("'", '"')), null, 4);
+    this.m_oJsonEditorService.setText(this.m_sProcessorUI);
+    this.patchProcessorValue();
+  }
+
+  patchProcessorValue() {
+    this.m_oProcessorUIInfo.patchValue({
+      sProcessorUI: this.m_sProcessorUI
+    })
   }
 }

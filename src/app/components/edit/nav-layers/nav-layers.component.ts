@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 // Font Awesome Icon Imports:
 import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +8,7 @@ import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
 import { MapService } from 'src/app/services/map.service';
+import { StylesDialogComponent } from 'src/app/components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
 
 //Import Models:
 import { Band } from 'src/app/shared/models/band.model';
@@ -31,73 +33,54 @@ export class NavLayersComponent implements OnInit, OnChanges {
   //Set opacity to 100% by default
   m_iOpacityVal = 100;
 
-  @Input() m_b2DMapModeOn: boolean = true;
+  /**
+   * Linked list of the visible bands
+   */
   @Input() m_aoVisibleBands: Array<any> = []
+  /**
+   * List of the products in the workspace
+   */
   @Input() m_aoProducts: Array<any> = [];
+  /**
+   * Event to notify that the list of visible bands is changed
+   */
   @Output() m_aoVisibleBandsChange = new EventEmitter();
 
-
+  /**
+   * Actually active tab
+   */
   m_sActiveTab: string = 'nav';
-  m_oActiveBand: any;
   m_iOpacity: string;
 
-  mapOptions: any;
-  m_oNavMap: any;
-  m_oNavGlobe: any;
-  layersControl: any;
-  layersControlOptions: any = { position: 'bottomleft' };
+  /**
+   * 2D/3D Flag: is a property linked the flag in edit component
+   */
+  private m_b2DMapModeOn: boolean = true;
 
-  oController = this;
+  public get b2DMapModeOn(): boolean {
+    return this.m_b2DMapModeOn;
+  }
+
+  @Input() public set b2DMapModeOn(bValue: boolean) {
+    this.m_b2DMapModeOn = bValue;
+  } 
 
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oGlobeService: GlobeService,
-    private m_oMapService: MapService
+    private m_oMapService: MapService,
+    private m_oDialog: MatDialog
   ) { }
 
   ngOnInit(): void {
-    console.log("NavLayersComponent.ngOnInit")
-    this.initMaps();
+    
   }
-
 
   ngOnChanges(): void {
-    console.log("NavLayersComponent.ngOnChanges")
     //Only set active tab to layers if it is the FIRST band published
     if (this.m_aoVisibleBands !== undefined && this.m_aoVisibleBands.length === 1) {
+      console.log("NavLayersComponent.ngOnChanges: swithc to layers tab")
       this.setActiveTab('layers');
-    }
-  }
-
-  /**
-   * Initializes the 2D and 3D maps 
-   */
-  initMaps() {
-    // The main map is 2D or 3D?
-    if (this.m_b2DMapModeOn === true && this.m_oNavGlobe === undefined) {
-      // The big map is 2D: we need to show here the little navigation globe
-      // clear the old globe (if present)
-      this.m_oGlobeService.clearGlobe();
-
-      // And create it in the small navigation tab
-      console.log("NavLayersComponent.initMaps: call init Globe")
-      this.m_oGlobeService.initGlobe('cesiumContainer2');
-
-      //Add the Products to the globe on load: 
-      this.m_oGlobeService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts);
-      this.m_oGlobeService.flyToWorkspaceBoundingBox(this.m_aoProducts);
-    }
-    else {
-      // The big map is 3d: here we need to show only the 2d map
-      this.m_oMapService.clearMap();
-      this.m_oMapService.initWasdiMap('navMap');
-
-      //Set timeout with Arrow function to preserve `this` context within `setTimeout`
-      setTimeout(() => {
-        this.m_oMapService.getMap().invalidateSize();
-        this.m_oMapService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts, '');
-        this.m_oMapService.flyToWorkspaceBoundingBox(this.m_aoProducts);
-      }, 500)
     }
   }
 
@@ -108,12 +91,12 @@ export class NavLayersComponent implements OnInit, OnChanges {
   /********** Band Visibility Options *********/
   /**
    * Handle Opacity input from opacity slider
-   * @param event 
+   * @param iValue 
    * @param sLayerId 
    * @returns {void}
    */
-  setOpacity(event, sLayerId): void {
-    let iOpacity = event.srcElement.value;
+  setOpacity(iValue, sLayerId): void {
+    let iOpacity = iValue;
     let oMap = this.m_oMapService.getMap();
     let fPercentage = iOpacity / 100;
 
@@ -131,14 +114,16 @@ export class NavLayersComponent implements OnInit, OnChanges {
    */
   removeBandImageFromVisibleList(oBand): void {
     let iVisibleBandCount = 0;
+    let oRemovedBand;
 
     if (this.m_aoVisibleBands.length > 0) {
       iVisibleBandCount = this.m_aoVisibleBands.length;
     }
     for (let iIndex = 0; iIndex < iVisibleBandCount;) {
       if (this.m_aoVisibleBands[iIndex].layerId == oBand.layerId && this.m_aoVisibleBands[iIndex].name == oBand.name) {
+        oRemovedBand = oBand;
         this.m_aoVisibleBands.splice(iIndex, 1);
-        this.m_aoVisibleBandsChange.emit(this.m_aoVisibleBands);
+        this.m_aoVisibleBandsChange.emit({ visibleBands: this.m_aoVisibleBands, removedBand: oRemovedBand });
         iVisibleBandCount--;
       } else {
         iIndex++;
@@ -156,7 +141,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
       console.log("NavLayersComponent.removeBandImage: Error in removing band image");
       return false;
     }
-    this.m_oActiveBand = null;
+
     let sLayerId = 'wasdi:' + oBand.layerId;
 
     if (this.m_b2DMapModeOn) {
@@ -276,5 +261,14 @@ export class NavLayersComponent implements OnInit, OnChanges {
     sGeoserverUrl = sGeoserverUrl + "request=GetLegendGraphic&format=image/png&WIDTH=12&HEIGHT=12&legend_options=fontAntiAliasing:true;fontSize:10&LEGEND_OPTIONS=forceRule:True&LAYER=";
     sGeoserverUrl = sGeoserverUrl + "wasdi:" + oBand.layerId;
     return sGeoserverUrl;
+  }
+
+  openStylesDialog(): void {
+    this.m_oDialog.open(StylesDialogComponent, {
+      height: '90vh',
+      width: '90vw',
+      maxWidth: '1500px',
+      
+    })
   }
 }

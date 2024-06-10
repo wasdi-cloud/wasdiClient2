@@ -1,0 +1,144 @@
+<div class="list-item-container d-flex flex-row gap-2" [class.parent-item]="m_bParentItem"
+    [class.product-item]="m_bProductItem" [class.highlighted]="m_oProductListItem.hovering"
+    [class.hover]="m_bProcessorItem || m_bProcessorItem || m_bProductItem"
+    [class.selected]="m_bIsSelected && !m_bParentItem">
+    <!-- Contents if List Item is of Parent Type: -->
+    <div class="d-flex flex-row justify-content-between align-items-center w-100" *ngIf="m_bParentItem">
+        <div>
+            {{"Provider: " + m_sLabel}} | {{(m_sDescription === 0 || m_sDescription === -1)? 0 : m_sDescription + "
+            Results"}}
+        </div>
+        <span class="material-symbols-outlined" *ngIf="m_bParentIsOpen === false">
+            expand_more
+        </span>
+        <span class="material-symbols-outlined" *ngIf="m_bParentIsOpen === true">
+            expand_less
+        </span>
+    </div>
+    <!-- Contents if the List item is of Product Type: -->
+    <div class="product-item-container d-flex flex-row justify-content-between align-items-start gap-3 w-100"
+        *ngIf="m_bProductItem">
+        <div *ngIf="!m_oProductListItem.preview"
+            class="no-img-container d-flex flex-column align-items-center justify-content-center text-center h-100">
+            <span class="material-symbols-outlined">
+                image
+            </span>
+            <span class="img-size">
+                NO IMAGE
+            </span>
+        </div>
+        <div *ngIf="m_oProductListItem.preview"
+            class=" preview-layer-image h-100 d-flex flex-column justify-content-center">
+            <img src={{m_oProductListItem.preview}} alt="Image" style="height: 80px;width: 80px;">
+        </div>
+        <div class="product-info-container flex-fill d-flex flex-column gap-2">
+            <!--Product Name and controls -->
+            <div>
+                <div class="d-flex flex-row justify-content-between"><span class="label">Name: </span>
+                    <div *ngIf="m_bIsLightProduct === false" class="toolbar d-flex flex-row gap-1">
+                        <span class="material-symbols-outlined" (click)="m_oInfoCallbackFn(m_oProductListItem)"
+                            matTooltip="Properties">
+                            info
+                        </span>
+                        <span class="material-symbols-outlined"
+                            (click)="m_oZoomCallbackFn(m_oProductListItem.rectangle)" matTooltip="Zoom to Product">
+                            zoom_in
+                        </span>
+                        <span class="material-symbols-outlined" (click)="m_oAddCallbackFn(m_oProductListItem)"
+                            matTooltip="Add to Workspace">
+                            add_box
+                        </span>
+                    </div>
+                </div>
+                {{m_oProductListItem.title}}
+            </div>
+            <div class="row">
+                <div class="col-6"
+                    *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.relativeorbitnumber">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_ORBIT'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.relativeorbitnumber}}</span>
+                </div>
+
+                <div class="col-6" *ngIf="m_oProductListItem.provider">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_PROVIDER'|translate}}: </span>
+                    <span>{{m_oProductListItem.provider}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.platformname">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_PLATFORM'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.platformname}}</span>
+                </div>
+                <div class="col-6"
+                    *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.sensoroperationalmode">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_SENSOR'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.sensoroperationalmode}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.variables">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_VARIABLES'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.variables}}</span>
+                </div>
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.protocol">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_PROTOCOL'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.protocol}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.productType">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_TYPE'|translate}}: </span>
+                    <span>{{m_oProductListItem.properties.productType}}</span>
+                </div>
+                <div class="col-6" *ngIf="m_oProductListItem.properties && m_oProductListItem.properties.dataset">
+                    <span class="font-bold">{{'IMPORT_PRODUCT_LIST_DATASET'|translate}}</span>
+                    <span>{{m_oProductListItem.properties.dataset}}</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div *ngIf="m_bProcessorItem" class="processor-item d-flex flex-row gap-2 w-100" matTooltip="{{m_sDescription}}"
+        [matTooltipPosition]="'below'">
+        <!--div class="preview-img" style="background: url('/assets/images/hero-images/hero-img1.jpg');"-->
+        <div *ngIf="m_bHasImg" class="preview-img d-flex flex-column align-items-center"
+            style="background-size: contain; background-position: center; background-image: url('{{m_sIcon}}')"></div>
+        <div class="d-flex flex-column flex-fill" style="width: 85%;">
+            <div class="d-flex flex-row w-100 justify-content-between">
+                <div class="font-bold">{{m_sLabel}}</div>
+                <div *ngIf="m_bHasToolbar" class="processor-toolbar d-flex flex-row align-items-center gap-2">
+                    <span *ngIf="!m_oProcessorItem.styleId && !m_oProcessorItem.workflowId"
+                        class="material-symbols-outlined" matTooltip="Parameters Library"
+                        (click)="emitToolbarClick('params')">
+                        data_object
+                    </span>
+                    <span class="material-symbols-outlined" matTooltip="Download"
+                        (click)="emitToolbarClick('download')">
+                        download
+                    </span>
+                    <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
+                        class="material-symbols-outlined" matTooltip="Share"
+                        (click)="emitToolbarClick('share'); $event.stopPropagation()">share</span>
+                    <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
+                        class="material-symbols-outlined" matTooltip="Open XML"
+                        (click)="emitToolbarClick('xml'); $event.stopPropagation()">code</span>
+
+                    <span class="material-symbols-outlined" matTooltip="{{'WAP_EDIT' | translate}}"
+                        (click)="emitToolbarClick('edit'); $event.stopPropagation()">
+                        edit_square
+                    </span>
+                    <span class="material-symbols-outlined" matTooltip="Remove"
+                        (click)="emitToolbarClick('delete'); $event.stopPropagation()">
+                        delete
+                    </span>
+                </div>
+            </div>
+            <div class="">
+                <p class="processor-description">
+                    {{m_sDescription}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

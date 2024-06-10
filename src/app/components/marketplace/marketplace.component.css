@@ -1,94 +1,52 @@
-.filters-container {
-    background-image: linear-gradient(180deg, lightgray, rgba(255, 255, 255, 0));
-    padding: 0.5rem;
+.app-cards-container {
+	margin: 0 auto;
+	padding: 16px;
+	max-width: 1280px;
 }
 
-.box2 {
-    background-color: azure;
-    height: 50%;
-    width: fit-content;
+.processor-cards-container {
+	width: 100%;
 }
 
-.hbody-text {
-    padding-top: 1rem;
-    color: #43516a;
-    font-weight: bolder;
-    padding-left: 1rem;
+.wasdi-card {
+	min-width: 250px;
+	max-width: 400px;
 }
 
-.search-container {
-    margin-left: auto;
+/* Class for 4 COLUMNS */
+@media (min-width: 1440px) {
+	.wasdi-card {
+		width: 22% !important;
+	}
 }
 
-/* .form-select {
-    position: relative;
-    top: 0.33rem;
-    font-size: 0.75rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
+/* Class for 3 Columns */
+@media (max-width: 1440px) {
+	.wasdi-card {
+		width: 33.333% !important;
+	}
+
+	.wasdi-card:nth-last-child(-n+2) {
+		width: 33.333% !important;
+	}
 }
 
-.form-label {
-    --bs-gutter-x: 1.5rem;
-    position: relative;
-    top: 0.6rem;
-    font-size: 0.75rem;
-  
-} */
-
-.search1 {
-    position: absolute;
-    right: 0px;
+/* Class for 2 columns */
+@media (max-width: 1024px) {
+	.wasdi-card {
+		width: 50% !important;
+		max-width: 100% !important;
+	}
 }
 
-.division_line {
-    background-color: lightgray;
-    height: 1px;
-    margin: 1rem;
+
+
+
+div.category-tag>.material-symbols-outlined {
+	font-size: 16px;
 }
 
-.btn-primary {
-    background-color: #43516a;
-    border: none;
-}
-
-.card-text {
-    font-size: smaller;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    height: 80px;
-}
-
-.card {
-    border: none;
-    height: 20rem;
-    box-shadow: 4px 4px 16px lightgray;
-    overflow: auto;
-    margin-bottom: 1rem;
-}
-
-.price-tag {
-    background-color: #009036;
-    float: right;
-    color: white;
-    padding: 8px;
-}
-
-.publisher .pub-name {
-    color: #009036;
-}
-
-/* .row>* {
-    flex-shrink: 1;
-} */
-
-/* a {
-    margin-bottom: 1rem;
-} */
-
-h5 {
-    color: #009036;
+p {
+	margin: 0;
+	padding: 0;
 }

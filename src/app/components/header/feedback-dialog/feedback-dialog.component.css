@@ -1,0 +1,18 @@
+div.discord-cta {
+    background: linear-gradient(0deg, #5865F2, #5865F2),
+        linear-gradient(86.13deg, rgba(10, 16, 80, 0.2) -1.48%, rgba(88, 101, 242, 0.2) 98.76%);
+    border-radius: 8px;
+    color: #FFFFFF;
+    padding: 24px;
+    width: 100%;
+}
+
+
+.discord-header {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+img {
+    height: 40px;
+}

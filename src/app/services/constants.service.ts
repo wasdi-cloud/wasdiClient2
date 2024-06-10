@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 //Import Services:
 import { NotificationDisplayService } from './notification-display.service';
 
-
 //Import enviornment information: 
 import { environment } from 'src/environments/environment';
 import { secrets } from 'src/environments/secrets'
@@ -16,6 +15,7 @@ import { Workspace } from '../shared/models/workspace.model';
 //Import Utilities:
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 import { Title } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -69,7 +69,8 @@ export class ConstantsService {
 
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oTitleService: Title
+    private m_oTitleService: Title,
+    private m_oTranslate: TranslateService
   ) { }
 
   // isMobile() {
@@ -311,17 +312,15 @@ export class ConstantsService {
    */
   checkProjectSubscriptionsValid() {
     let sMessage: string;
-    console.log(this.m_oActiveProject);
     if (this.m_aoActiveSubscriptions.length === 0) {
-      sMessage = "You do not have an Active Subscription at the moment";
-      this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+      sMessage = this.m_oTranslate.instant("ACTIVE_SUBSCRIPTION_ERROR_2");
+      this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
       return false;
     }
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProject) === true || this.m_oActiveProject.projectId === null) {
-      sMessage = "You do not have an Active Project at the moment. Please select one in the navbar";
-      console.log(this.m_oActiveProject);
-      this.m_oNotificationDisplayService.openAlertDialog(sMessage);
+      sMessage = this.m_oTranslate.instant("ACTIVE_SUBSCRIPTION_ERROR");
+      this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
       return false;
     }
 

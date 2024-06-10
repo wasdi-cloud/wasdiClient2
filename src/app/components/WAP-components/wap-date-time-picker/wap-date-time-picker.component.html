@@ -1,6 +1,4 @@
-<mat-form-field appearance="fill">
-    <mat-label>Choose Date</mat-label>
-    <input matInput [matDatepicker]="picker" (dateChange)="getDate($event)">
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-</mat-form-field>
+<div class="date-container d-flex flex-row justify-content-start">
+    <app-input-field [m_sInputType]="'date'" [m_sLabel]="m_oDateControl.label" [m_sPlaceholder]="'Select Date'"
+        (m_oInputChange)="getDate($event)" [m_sInputValue]="this.m_sInputDate"></app-input-field>
+</div>

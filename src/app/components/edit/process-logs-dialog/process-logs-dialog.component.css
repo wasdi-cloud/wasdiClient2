@@ -1,7 +1,15 @@
-label.form-label {
-    white-space: nowrap;
+.log-filter-container {
+    padding: 1rem;
+    background: var(--neutral5);
+    border-radius: 8px;
 }
 
-th.date-cell {
-    width: 15rem;
+td,
+th {
+    padding: 6px 12px 6px 12px;
+}
+
+.click-and-copy:hover {
+	color: var(--wasdiGreen);
+	cursor: pointer;
 }

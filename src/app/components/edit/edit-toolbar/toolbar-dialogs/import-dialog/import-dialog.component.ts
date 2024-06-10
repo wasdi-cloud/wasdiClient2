@@ -11,14 +11,12 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { ProductService } from 'src/app/services/api/product.service';
 import { StyleService } from 'src/app/services/api/style.service';
 
-//Font Awesome Import: 
-import { faUpload, faX } from '@fortawesome/free-solid-svg-icons';
-
 //Model Imports
 import { User } from 'src/app/shared/models/user.model';
 
 //Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-import-dialog',
@@ -26,10 +24,6 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   styleUrls: ['./import-dialog.component.css']
 })
 export class ImportDialogComponent implements OnInit {
-  //Font Awesome Icon Imports
-  faUpload = faUpload;
-  faX = faX;
-
   m_sActiveTab: string = "upload"
 
   m_oUser: User = this.m_oConstantsService.getUser();
@@ -37,11 +31,11 @@ export class ImportDialogComponent implements OnInit {
   m_bIsLoading: boolean = false;
   m_bIsUploading: boolean = false;
 
-  m_sWorkspaceId: string = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-  m_oStyle: string = "";
+  m_oWorkspace: any = this.m_oConstantsService.getActiveWorkspace();
 
-  m_asStyles: Array<string> = [];
-  m_aoStylesMap: any = [];
+  m_sWorkspaceId: string = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+
+  m_aoStyles: Array<any> = [];
   m_oFile: any;
   m_sFileName: string = "";
 
@@ -56,6 +50,8 @@ export class ImportDialogComponent implements OnInit {
 
   m_bIsReadOnly: boolean = true;
 
+  m_oSelectedStyle: any = null;
+
 
   constructor(
     private m_oAuthService: AuthService,
@@ -64,7 +60,8 @@ export class ImportDialogComponent implements OnInit {
     private m_oDialogRef: MatDialogRef<ImportDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
-    private m_oStyleService: StyleService) { }
+    private m_oStyleService: StyleService,
+    private m_oTranslate: TranslateService) { }
 
   ngOnInit(): void {
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
@@ -81,9 +78,7 @@ export class ImportDialogComponent implements OnInit {
   getStyles() {
     this.m_oStyleService.getStylesByUser().subscribe(oResponse => {
       if (oResponse) {
-        oResponse.map(oStyle => {
-          this.m_aoStylesMap.push(oStyle.name)
-        })
+        this.m_aoStyles = oResponse
       }
     })
   }
@@ -94,18 +89,24 @@ export class ImportDialogComponent implements OnInit {
     this.m_oFile = oEvent.file
   }
 
-  onUploadFile() {
+  getSelectedStyle(oEvent) {
+    this.m_oSelectedStyle = oEvent.value;
+  }
 
+  onUploadFile() {
     this.m_bIsLoading = true;
     let sStyle = "";
 
     //Add paywalling in this area on subscriptions
     if (this.m_oConstantsService.checkProjectSubscriptionsValid() === false) {
+      let sNoSubscription: string = this.m_oTranslate.instant("ACTIVE_SUBSCRIPTION_ERROR")
+      this.m_oNotificationDisplayService.openAlertDialog(sNoSubscription, '', 'alert');
       return false;
     }
 
     if (this.m_bIsReadOnly === true) {
-      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to import products to this workspace.");
+      let sNoPermission: string = this.m_oTranslate.instant("DIALOG_IMPORT_READONLY");
+      this.m_oNotificationDisplayService.openAlertDialog(sNoPermission, '', 'alert');
     }
 
     //Check for active workspace:
@@ -120,29 +121,28 @@ export class ImportDialogComponent implements OnInit {
     }
 
     //If the Style Input is filled apply the style: 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oStyle) === false) {
-      sStyle = this.m_oStyle;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedStyle) === false) {
+      sStyle = this.m_oSelectedStyle.name;
     }
 
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_IMPORT_UPLOAD_ERROR")
     this.m_oProductService.uploadFile(this.m_sWorkspaceId, this.m_oFile, this.m_sFileName, sStyle).subscribe(
       {
         next: (oResponse) => {
+          let sHeader: string = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION")
           if (oResponse.status !== 200) {
-            let sErrorMsg: string = "GURU MEDITATION<br>ERROR IN UPLOADING FILE"
-            this.m_oNotificationDisplayService.openSnackBar(sErrorMsg, "Close", "right", "bottom");
+
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sHeader, 'danger');
           } else {
-            let sMessage: string = "FILE UPLOADED";
-            this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
-            //Clean Drag and Drop
+            let sMessage: string = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS");
+            this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
             this.onDismiss();
           }
           this.m_bIsUploading = false;
         },
         error: (oError) => {
-          let sErrorMessage: string = "ERROR IN UPLOADING FILE";
           this.m_bIsUploading = false;
-          //Clean Drag and Drop
-          this.m_oNotificationDisplayService.openSnackBar(sErrorMessage, "Close", "right", "bottom");
+          this.m_oNotificationDisplayService.openSnackBar(sErrorMsg, '', 'danger');
         }
       });
     return true
@@ -287,6 +287,12 @@ export class ImportDialogComponent implements OnInit {
       }
     });
     return true;
+  }
+
+  getFileInput(oEvent: any) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
+      this.m_oFile = oEvent;
+    }
   }
 
   onDismiss() {

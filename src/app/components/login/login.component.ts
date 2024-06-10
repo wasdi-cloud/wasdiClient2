@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
+import { ConfigurationService } from 'src/app/services/configuration.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent, ErrorDialogModel } from 'src/app/shared/dialogs/error-dialog/error-dialog.component';
@@ -13,7 +14,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class LoginComponent implements OnInit {
   form: any = {
@@ -34,7 +36,8 @@ export class LoginComponent implements OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oKeycloakService: KeycloakService,
     private m_oJwtService: JwtHelperService,
-    private m_oRouter: Router) { }
+    private m_oRouter: Router,
+    private m_oConfigurationService: ConfigurationService) { }
 
   ngOnInit(): void {
     this.m_oKeycloak = this.m_oKeycloakService.getKeycloakInstance();
@@ -129,6 +132,42 @@ export class LoginComponent implements OnInit {
 
         }
       })
+
+    // We need sessionId
+    // if (data.hasOwnProperty("sessionId")) {
+    //   if (data.sessionId == null) {
+    //     // If it is null, the login failed
+    //     let oDialogData = new ErrorDialogModel("Error logging in.", "Please check Email and Password");
+    //     let dialogRef = this.m_oDialog.open(ErrorDialogComponent, {
+    //       maxWidth: "400px",
+    //       data: oDialogData
+    //     })
+    //   }
+    //   else {
+    //     // Ok we have a valid session Id
+    //     let oUser = {} as User;
+    //     oUser.userId = data.userId;
+    //     oUser.authProvider = 'wasdi';
+    //     oUser.name = data.name;
+    //     oUser.surname = data.surname;
+    //     oUser.sessionId = data.sessionId;
+    //     oUser.role = data.role;
+    //     oUser.type = data.type;
+    //     oUser.grantedAuthorities = data.grantedAuthorities;
+
+    //     //set user and cookie
+    //     this.m_oConstantsService.setUser(oUser);
+    //     this.m_oAuthService.saveToken(data.sessionId);
+
+    //     this.m_oAuthService.checkSession().subscribe({
+    //       next: oResponse => {
+    //         oController.m_oConfigurationService.loadConfiguration();
+    //         oController.m_oRouter.navigateByUrl('/marketplace');
+    //       }
+    //     })
+
+    //   }
+
     }
 
   }
@@ -139,5 +178,13 @@ export class LoginComponent implements OnInit {
 
   keycloakRegister() {
     this.m_oKeycloakService.register();
+  }
+
+  setUsernameInput(oEvent) {
+    this.form.username = oEvent.event.target.value;
+  }
+
+  setPasswordInput(oEvent) {
+    this.form.password = oEvent.event.target.value;
   }
 }

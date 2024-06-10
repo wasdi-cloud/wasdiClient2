@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { trigger, transition, animate, style } from '@angular/animations'
 
 //Angular Materials Modules: 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -7,13 +8,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
-import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
-import { ProductService } from 'src/app/services/api/product.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
-
-//Font Awesome Icons: 
-import { faBook, faDownload, faEdit, faPaintBrush, faPlay, faPlus, faQuestionCircle, faRocket, faX } from '@fortawesome/free-solid-svg-icons';
+import { ImageService } from 'src/app/services/api/image.service';
 
 //Components Imports:
 import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
@@ -21,24 +17,30 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { HelpDialogComponent } from './help-dialog/help-dialog.component';
+import { Application } from 'src/app/components/app-ui/app-ui.component';
+import { JsonEditorService } from 'src/app/services/json-editor.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-apps-dialog',
   templateUrl: './apps-dialog.component.html',
-  styleUrls: ['./apps-dialog.component.css']
+  styleUrls: ['./apps-dialog.component.css'],
+  animations: [
+    trigger('slideInUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)' }),
+        animate('500ms ease-in', style({ transform: 'translateY(0%)' }))
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({ transform: 'translateY(100%)' }))
+      ])
+    ])
+  ]
 })
-export class AppsDialogComponent implements OnInit, OnDestroy {
-  //Font Awesome Icon Imports
-  faBook = faBook;
-  faDownload = faDownload;
-  faEdit = faEdit;
-  faHelp = faQuestionCircle;
-  faPaintBrush = faPaintBrush;
-  faPlus = faPlus;
-  faRocket = faRocket;
-  faRun = faPlay;
-  faX = faX;
+export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('editor') m_oEditorRef!: ElementRef;
 
   m_sActiveUserId: string = "";
   m_aoWorkspaceList: any[] = [];
@@ -51,29 +53,33 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
   m_sJson: any = {};
   m_sMyJsonString: string = "";
   m_sSearchString = ""
-  m_oSelectedProcessor: any;
+  m_oSelectedProcessor: any = {} as Application;
   m_bIsReadonly: boolean = true;
+  m_iHookIndex: Number = -1;
 
-  m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
-    "DELETEPROCESSOR",
-    this,
-    this.rabbitMessageHook
-  )
+  m_bShowHelpMessage: boolean = false;
+  m_sHelpMsg: string = '';
 
+  m_bShowParamsLibrary: boolean = false;
 
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oDialogRef: MatDialogRef<AppsDialogComponent>,
+    private m_oJsonEditorService: JsonEditorService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
-    private m_oProcessWorkspaceService: ProcessWorkspaceService,
-    private m_oProductService: ProductService,
     private m_oRabbitStompService: RabbitStompService,
-    private m_oWorkspaceService: WorkspaceService,
+    private m_oImageService: ImageService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
+    this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
+      "DELETEPROCESSOR",
+      this,
+      this.rabbitMessageHook
+    )    
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.m_bIsReadonly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getProcessorsList();
@@ -83,21 +89,28 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
   }
 
+  ngAfterViewInit(): void {
+    this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+    this.m_oJsonEditorService.initEditor()
+    this.m_oJsonEditorService.setText(this.m_sMyJsonString);
+  }
+
   /**
    * Get the list of processors from the server
    */
   getProcessorsList() {
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_APPS_PROCESSORS_ERROR");
     this.m_oProcessorService.getProcessorsList().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoProcessorList = this.setDefaultImages(oResponse);
           this.m_bIsLoadingProcessorList = false;
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog("Error in getting processors");
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error in getting processors");
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
       }
     });
   }
@@ -112,13 +125,14 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
       return aoProcessorList;
     }
 
-    let sDefaultImage = "";
+    let sDefaultImage = "assets/wasdi/miniLogoWasdi.png";
     let iNumberOfProcessors = aoProcessorList.length;
 
     for (let iIndexProcessor = 0; iIndexProcessor < iNumberOfProcessors; iIndexProcessor++) {
-      if (!aoProcessorList.imgLink) {
+      if (!aoProcessorList[iIndexProcessor].imgLink) {
         aoProcessorList[iIndexProcessor].imgLink = sDefaultImage
       }
+      this.m_oImageService.updateProcessorLogoImageUrl(aoProcessorList[iIndexProcessor]);
     }
     return aoProcessorList;
   }
@@ -129,10 +143,14 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    */
   selectProcessor(oProcessor) {
     this.m_oSelectedProcessor = oProcessor;
-
+    this.m_oProcessorService.getHelpFromProcessor(oProcessor.processorName).subscribe({
+      next: oResponse => {
+        this.m_sHelpMsg = oResponse.stringValue;
+      }
+    })
     if (oProcessor.paramsSample) {
       this.m_sMyJsonString = decodeURIComponent(oProcessor.paramsSample);
-
+      this.m_oJsonEditorService.setText(this.m_sMyJsonString);
       try {
         let oParsed = JSON.parse(this.m_sMyJsonString);
 
@@ -152,8 +170,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @param oEvent 
    * @param oProcessor 
    */
-  openParametersDialog(oEvent: MouseEvent, oProcessor) {
-    oEvent.preventDefault();
+  openParametersDialog(oProcessor) {
     let oDialog = this.m_oDialog.open(ParamsLibraryDialogComponent, {
       height: '80vh',
       width: '80vw',
@@ -173,10 +190,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @param oProcessor 
    * @returns 
    */
-  downloadProcessor(oEvent: MouseEvent, oProcessor: any) {
-    oEvent.preventDefault();
-    if (!oProcessor) {
-      return false;
+  downloadProcessor(oProcessor: any) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oProcessor)) {
+      // return false;
     }
 
     return this.m_oProcessorService.downloadProcessor(oProcessor.processorId);
@@ -187,14 +203,24 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @param oEvent 
    * @param oProcessor 
    */
-  openEditProcessorDialog(oEvent: MouseEvent, oProcessor: any) {
-    let oDialog = this.m_oDialog.open(NewAppDialogComponent, {
-      height: '80vh',
-      width: '80vw',
+  openEditProcessorDialog(oProcessor: any) {
+    this.m_oDialog.open(NewAppDialogComponent, {
+      height: '95vh',
+      width: '95vw',
+      minWidth: '95vw',
       data: {
         editMode: true,
         inputProcessor: oProcessor
       }
+    })
+  }
+
+  openNewAppDialog(): void {
+    this.m_oDialog.open(NewAppDialogComponent, {
+      height: '95vh',
+      width: '95vw',
+      maxWidth: '95vw',
+      data: { editMode: false }
     })
   }
 
@@ -204,20 +230,23 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * @param oProcessor 
    * @returns 
    */
-  removeProcessor(oEvent: MouseEvent, oProcessor: any) {
+  removeProcessor(oProcessor: any) {
     if (!oProcessor) {
       return false;
     }
+    let sConfirmHeader: string = this.m_oTranslate.instant("KEY_PHRASES.CONFIRM_REMOVAL");
 
-    let sConfirmOwner = `Are you sure you want to delete ${oProcessor.processorName}?`;
-    let sConfirmShared = `Are you sure you want to remove your permissions from ${oProcessor.processorName}?`
+    let sConfirmOwner = `${this.m_oTranslate.instant("DIALOG_APPS_DELETE_OWNER")}<li> ${oProcessor.processorName}</li>`;
+    let sConfirmShared = `${this.m_oTranslate.instant("DIALOG_APPS_DELETE_SHARED")}<li> ${oProcessor.processorName}</li>`;
+
+    let sDeleteErrorMsg: string = this.m_oTranslate.instant("DIALOG_APPS_ERROR_DELETE");
 
     let bConfirmResult: any;
 
     if (oProcessor.sharedWithMe) {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared, sConfirmHeader, 'alert');
     } else {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner);
+      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner, sConfirmHeader, 'alert');
     }
 
     bConfirmResult.subscribe(bDialogResult => {
@@ -227,7 +256,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
           next: oResponse => {
             //Next actions are handled on RabbitMessageHook function
           },
-          error: oError => { }
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog(sDeleteErrorMsg, '', 'danger');
+          }
         }
         );
       }
@@ -239,7 +270,12 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * Format the JSON textbox
    */
   formatJSON() {
-    this.m_sMyJsonString = JSON.stringify(JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')), null, 2);
+    let sJsonError = this.m_oTranslate.instant("DIALOG_FORMAT_JSON_ERROR")
+    try {
+      this.m_sMyJsonString = JSON.stringify(JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')), null, 3);
+    } catch (oError) {
+      this.m_oNotificationDisplayService.openAlertDialog(sJsonError, '', 'alert');
+    }
   }
 
   /**
@@ -251,7 +287,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     }
 
     if (this.m_bIsReadonly === true) {
-      this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to edit this workspace.");
+      let sCannotEditMsg: string = this.m_oTranslate.instant("DIALOG_APPS_CANNOT_EDIT")
+      this.m_oNotificationDisplayService.openAlertDialog(sCannotEditMsg, '', 'alert');
       return false;
     }
     console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
@@ -271,15 +308,15 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
     try {
       JSON.parse(sStringJSON);
     } catch (oError) {
-      let sErrorMessage = "INVALID JSON INPUT PARAMETERS<br>" + oError.toString();
+      let sErrorMessage = this.m_oTranslate.instant("DIALOG_APPS_INVALID_JSON") + "<br>" + oError.toString();
 
-      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, '', 'alert');
     }
 
     this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-        let sNotificationMsg = "PROCESSOR SCHEDULED";
-        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, "Close", "right", "bottom")
+        let sNotificationMsg = this.m_oTranslate.instant("MSG_MKT_PROC_SCHEDULED");
+        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, '', 'success-snackbar')
       }
       this.m_oDialogRef.close();
     })
@@ -292,27 +329,74 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    * Open the help dialog
    */
   openHelp() {
+    let sHelpMessage = ""
     this.m_oProcessorService.getHelpFromProcessor(this.m_oSelectedProcessor.processorName).subscribe(oResponse => {
       if (oResponse.stringValue) {
-        let sHelpMessage = oResponse.stringValue;
+        sHelpMessage = oResponse.stringValue;
         if (sHelpMessage) {
           try {
             let oHelp = JSON.parse(sHelpMessage);
 
-            sHelpMessage = oHelp.help
+            sHelpMessage = oHelp
           } catch (oError) {
             sHelpMessage = oResponse.stringValue;
           }
-        } else {
-          sHelpMessage = "";
         }
-        //If the message is empty from the server or is null
-        if (sHelpMessage === "") {
-          sHelpMessage = "There isn't any help message."
-        }
-
       }
     })
+  }
+
+  handleToolbarClick(oEvent, oProcessor) {
+    switch (oEvent) {
+      case 'params':
+        this.selectProcessor(oProcessor);
+        this.showParametersLibrary(true);
+        break;
+      case 'download':
+        this.downloadProcessor(oProcessor);
+        break;
+      case 'edit':
+        this.openEditProcessorDialog(oProcessor);
+        break;
+      default:
+        this.removeProcessor(oProcessor)
+    }
+  }
+
+  handleSearchChange(oEvent) {
+    this.m_sSearchString = oEvent.event.target.value;
+  }
+
+  getJSONInput(oEvent) {
+    this.m_sMyJsonString = this.m_oJsonEditorService.getValue();
+  }
+
+
+  rabbitMessageHook(oRabbitMessage: any, oController: any) {
+    console.log("RECEVIED " + oRabbitMessage)
+    oController.getProcessorsList();
+  }
+
+  showHelpMessage(bShowMessage: boolean) {
+    this.m_bShowHelpMessage = bShowMessage;
+  }
+
+  showParametersLibrary(bShowLibrary: boolean) {
+    this.m_bShowParamsLibrary = bShowLibrary;
+  }
+
+  getParamsTemplate(oEvent) {
+    this.m_bShowParamsLibrary = false;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
+      this.m_sMyJsonString = decodeURIComponent(oEvent.jsonParameters)
+    }
+
+    //Re-init the JSON editor with time to re-set the DOM
+    setTimeout(() => {
+      this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+      this.m_oJsonEditorService.initEditor()
+      this.m_oJsonEditorService.setText(this.m_sMyJsonString);
+    }, 500)
   }
 
   /**
@@ -320,9 +404,5 @@ export class AppsDialogComponent implements OnInit, OnDestroy {
    */
   onDismiss() {
     this.m_oDialogRef.close();
-  }
-
-  rabbitMessageHook(oRabbitMessage: any, oController: any) {
-    oController.getProcessorsList();
   }
 }

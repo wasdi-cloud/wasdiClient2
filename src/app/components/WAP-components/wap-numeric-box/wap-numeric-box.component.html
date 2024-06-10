@@ -1,1 +1,5 @@
-<input #numericBox type="number" class="form-control" (click)="getUserInput(numericBox.value)" value="{{inputText}}">
+<!-- <input #numericBox type="number" class="form-control" (click)="getUserInput(numericBox.value)" value="{{inputText}}"> -->
+
+<app-input-field [m_sLabel]="m_oLocalNumericInfo.label" [m_sInputType]="'number'" [m_sInputValue]="m_oLocalNumericInfo.m_sText"
+    (m_oInputChange)="getUserInput($event)" [m_sMaxValue]="m_oLocalNumericInfo.m_fMax"
+    [m_sMinValue]="m_oLocalNumericInfo.m_fMin" matTooltip="{{m_oLocalNumericInfo.tooltip}}"></app-input-field>

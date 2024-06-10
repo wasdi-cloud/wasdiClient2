@@ -1,105 +1,7 @@
 {
-    "debugMode": false,
-    "webAppRoot": "/",
-    "logged": false,
-    "version": "Data Hub System #version published here is developed by a Serco (http://serco.com/) and Gael Systems (http://www.gael.fr/) consortium under a contract with the European Space Agency (http://www.esa.int) in the frame of the Copernicus Programme. ",
-    "settings": {
-        "logo": "images/datahub.png",
-        "signup": true,
-        "editprofile": true,
-        "showcart": true,
-        "showmap": true,
-        "bgimage": "images/bg_s3.jpg",
-        "showquicklook": true,
-        "show_userguide": false,
-        "show_home": false,
-        "show_extended_list": false,
-        "showsensingfilter": true,
-        "showingestionfilter": true,
-        "querytitle": "Request Done: ",
-        "toolbar" : {
-            "title": "Data Hub System - OSF Installation",
-            "userguide_link": "",
-            "userguide_title": "User Guide",
-            "home_link": "",
-            "home_title": "Scientific Data Hub Portal",
-            "logos": [
-
-            ],
-            "rightlogos": []
-        },
-        "availableRoles": [
-            {"id":"SEARCH", "title":"Search"},
-            {"id":"DOWNLOAD", "title":"Download"},
-            {"id":"UPLOAD", "title":"Upload"},
-            {"id":"USER_MANAGER", "title":"User Manager"},
-            {"id":"ARCHIVE_MANAGER", "title":"Archive Manager"},
-            {"id":"DATA_MANAGER", "title":"Data Manager"},
-            {"id":"SYSTEM_MANAGER", "title":"System Manager"},
-            {"id":"STATISTICS", "title":"Statistics"}
-        ],
-        "managementRoles": ["USER_MANAGER","DATA_MANAGER", "SYSTEM_MANAGER"],
-        "synchronizerRoles": ["UPLOAD"],
-        "uploadRoles": ["UPLOAD"],
-
-        "isMapLayerSwitcherVisible":true,
-        "map":{
-            "Satellite":{
-                "sources":[{
-                    "class":"MapQuest",
-                    "params":{
-                        "layer":"sat",
-                        "wrapX": false
-                    }
-                }],
-                "title": "Satellite",
-                "type":"base",
-                "visible":false
-            },
-            "Road":{
-                "sources":[{
-                    "class":"OSM",
-                    "params":{
-                        "wrapX": false
-                    }
-                }],
-                "title": "Road",
-                "type":"base",
-                "visible":true
-            },
-            "Hybrid":{
-                "sources":[  {
-                        "class": "MapQuest",
-                        "params":{
-                            "layer":"sat",
-                            "wrapX": false
-                        }
-                    },
-                    {
-                        "class": "MapQuest",
-                        "params":{
-                            "layer":"hyb",
-                            "wrapX": false
-                        }
-                    }],
-                "title": "Hybrid",
-                "type":"base",
-                "visible":false
-            }
-        },
-
-        "miniMap":{
-            "sources":[{
-                "class":"OSM",
-                "params":{
-                    "wrapX": false
-                }
-            }],
-            "title": "Road",
-            "type":"base",
-            "visible":true
-        }
-    },
+    "cesiumToken": "",
+    "rabbit_user": "",
+    "rabbit_password": "",
     "missions": [
         {
             "name": "S1",
@@ -423,7 +325,7 @@
                 {
                     "indexname": "pressureLevels",
                     "indexlabel": "Pressure levels in hPa",
-                    "indexvalues": "1|2|1+2|1000",
+                    "indexvalues": "1|2|1+2|1000|all_available_pressure_levels",
                     "regex": ".*",
                     "visibilityConditions": "dataset:reanalysis-era5-pressure-levels",
                     "indexvalue":"1000"
@@ -439,7 +341,7 @@
                 {
                     "indexname": "variables",
                     "indexlabel": "Variables",
-                    "indexvalues": "RH|U|V|RH+U+V",
+                    "indexvalues": "RH|U|V|RH+U+V|specific_humidity|temperature|ozone_mass_mixing_ratio|RH+SH+T+OMMR",
                     "regex": ".*",
                     "visibilityConditions": "dataset:reanalysis-era5-pressure-levels",
                     "indexvalue":"RH+U+V"
@@ -447,7 +349,7 @@
                 {
                     "indexname": "variables",
                     "indexlabel": "Variables",
-                    "indexvalues": "SST+SP+TP|10U+10V+2DT+2T+SP",
+                    "indexvalues": "toa_incident_solar_radiation|total_column_water_vapour|total_sky_direct_solar_radiation_at_surface|SST+SP+TP|10U+10V+2DT+2T+SP|TISR+TCWV+TSDSRAS",
                     "regex": ".*",
                     "visibilityConditions": "dataset:reanalysis-era5-single-levels",
                     "indexvalue":"SST+SP+TP"
@@ -455,7 +357,7 @@
                 {
                     "indexname": "variables",
                     "indexlabel": "Variables",
-                    "indexvalues": "2m_temperature|total_precipitation|2m_dewpoint_temperature|lake_bottom_temperature|lake_ice_depth|lake_ice_temperature|lake_mix_layer_depth|lake_mix_layer_temperature|lake_shape_factor|lake_total_layer_temperature|skin_temperature|soil_temperature_level_1|soil_temperature_level_2|soil_temperature_level_3|soil_temperature_level_4|snow_albedo|snow_cover|snow_density|snow_depth|snow_depth_water_equivalent|snowfall|snowmelt|temperature_of_snow_layer|skin_reservoir_content|volumetric_soil_water_layer_1|volumetric_soil_water_layer_2|volumetric_soil_water_layer_3|volumetric_soil_water_layer_4|forecast_albedo|surface_latent_heat_flux|surface_net_solar_radiation|surface_net_thermal_radiation|surface_sensible_heat_flux|surface_solar_radiation_downwards|surface_thermal_radiation_downwards",
+                    "indexvalues": "2m_temperature|total_precipitation|2m_dewpoint_temperature|lake_bottom_temperature|lake_ice_depth|lake_ice_temperature|lake_mix_layer_depth|lake_mix_layer_temperature|lake_shape_factor|lake_total_layer_temperature|skin_temperature|soil_temperature_level_1|soil_temperature_level_2|soil_temperature_level_3|soil_temperature_level_4|snow_albedo|snow_cover|snow_density|snow_depth|snow_depth_water_equivalent|snowfall|snowmelt|temperature_of_snow_layer|skin_reservoir_content|volumetric_soil_water_layer_1|volumetric_soil_water_layer_2|volumetric_soil_water_layer_3|volumetric_soil_water_layer_4|forecast_albedo|surface_latent_heat_flux|surface_net_solar_radiation|surface_net_thermal_radiation|surface_sensible_heat_flux|surface_solar_radiation_downwards|surface_thermal_radiation_downwards|2DT+2T+ST+SP+SSRD",
                     "regex": ".*",
                     "visibilityConditions": "dataset:reanalysis-era5-land",
                     "indexvalue":"2m_temperature"

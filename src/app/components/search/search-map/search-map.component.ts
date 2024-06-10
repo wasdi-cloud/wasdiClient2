@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output, OnChanges, SimpleChanges, AfterViewChecked } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MapService } from 'src/app/services/map.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -10,9 +10,9 @@ import * as L from 'leaflet';
   templateUrl: './search-map.component.html',
   styleUrls: ['./search-map.component.css']
 })
-export class SearchMapComponent implements OnInit {
+export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() m_aoProducts: Observable<any>;
-  m_aoProductsList
+  m_aoProductsList: any;
   @Input() oMapInput: any = {
     maxArea: 0,
     maxRatioSide: 0,
@@ -25,59 +25,62 @@ export class SearchMapComponent implements OnInit {
   @Output() m_oMapInputChange = new EventEmitter;
 
   m_oDrawnItems: any;
-  m_oLayersControl: any;
   m_oDrawOptions: any;
+  m_oLayersControl: any;
   m_sErrorMessage: string;
   m_bIsValid: boolean;
   m_oMapOptions: any;
+  m_oManualBboxSubscription: any;
+  m_oMap: any;
 
   constructor(
-    private m_oMapService: MapService,
+    public m_oMapService: MapService,
     private m_oTranslate: TranslateService
-  ) { }
-
-  ngOnInit(): void {
-
-    //this.m_oMapService.setDrawnItems();
-    //this.m_oMapService.initTilelayer();
-
+  ) {
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
-    this.m_oLayersControl = this.m_oMapService.m_oLayersControl;
     this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
     this.m_oDrawnItems = this.m_oMapService.m_oDrawnItems;
-
     this.m_oDrawOptions.edit.featureGroup = this.m_oDrawnItems;
+  }
 
+  ngOnInit(): void {
     this.m_sErrorMessage = "Error:"
     this.m_bIsValid = true;
 
-    this.m_aoProductsList = this.m_aoProducts.subscribe(oResponse => {
-      if (oResponse.length > 0) {
-        let aaoAllBounds = [];
-        oResponse.forEach((oProduct, index) => {
-
-          let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(oProduct.bounds, null, index);
-          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
-            oProduct.rectangle = oRectangle;
-          }
-          aaoAllBounds.push(oProduct.bounds);
-        })
-        if (aaoAllBounds.length > 0 && aaoAllBounds[0] && aaoAllBounds[0].length) {
-          this.m_oMapService.zoomOnBounds(aaoAllBounds);
-        }
+    this.m_oManualBboxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+        this.formatManualBbox(oResult);
       }
     })
   }
 
+
+  ngAfterViewChecked(): void {
+    this.m_oMap.invalidateSize();
+  }
+
+  ngOnDestroy(): void {
+    FadeoutUtils.verboseLog("SearchMapComponent.ngOnDestroy")
+    this.m_oMapService.setMap(null);
+    this.m_oMapService.setDrawnItems()
+  }
+
   onMapReady(oMap: L.Map) {
+    this.m_oMap = oMap;
+
     this.m_oMapService.setMap(oMap);
+    this.m_oMapService.addMousePositionAndScale(oMap);
+    L.control.zoom({ position: 'bottomright' }).addTo(oMap);
+    this.m_oMapService.m_oLayersControl.addTo(oMap);
+    this.m_oMapService.initGeoSearchPluginForOpenStreetMap(oMap);
+    this.m_oMapService.addManualBbox(oMap);
   }
 
   onDrawCreated(oEvent: any) {
 
-     if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
-          this.m_oDrawnItems.clearLayers();
-        }
+    if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
+      this.m_oDrawnItems.clearLayers();
+    }
     let oDrawnItem = this.m_oMapService.onSearchDrawCreated(oEvent);
 
     //Add layer to map
@@ -189,4 +192,26 @@ export class SearchMapComponent implements OnInit {
     }
   }
 
+  formatManualBbox(oLayer) {
+    let sFilter = '( footprint:"intersects(POLYGON((';
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oLayer)) {
+      let iNumberOfPoints = oLayer._latlngs[0].length;
+      let aaLatLngs = oLayer._latlngs[0];
+      /*open search want the first point as end point */
+      let iLastlat = aaLatLngs[0].lat;
+      let iLastlng = aaLatLngs[0].lng;
+      for (let iIndexBounds = 0; iIndexBounds < iNumberOfPoints; iIndexBounds++) {
+
+        sFilter = sFilter + aaLatLngs[iIndexBounds].lng + " " + aaLatLngs[iIndexBounds].lat + ",";
+        //if(iIndexBounds != (iNumberOfPoints-1))
+        //    sFilter = sFilter + ",";
+      }
+      sFilter = sFilter + iLastlng + " " + iLastlat + ')))" )';
+    }
+    //(%20footprint:%22Intersects(POLYGON((5.972671999999995%2036.232811331264955,20.123062624999992%2036.232811331264955,20.123062624999992%2048.3321995971576,5.972671999999995%2048.3321995971576,5.972671999999995%2036.232811331264955)))%22%20)
+    //set filter
+
+    this.oMapInput = sFilter;
+    this.m_oMapInputChange.emit(this.oMapInput);
+  }
 }

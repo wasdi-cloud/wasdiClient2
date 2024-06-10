@@ -1,0 +1,70 @@
+<div class="flex-fill d-flex flex-column gap-3">
+    <div class="header font-bold d-flex flex-row justify-content-between">
+        Manage Sharing
+    </div>
+    <div class="d-flex flex-column gap-3">
+        <div>
+            Find a Resource
+            <div class="d-flex flex-row gap-2 mt-1">
+                <app-dropdown class="flex-fill" [m_aoDropdownItems]="m_aoResourceTypes"
+                    [m_sLabel]="'Select Resource Type'" (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
+                <app-input-field class="flex-fill" [m_sLabel]="'Resource ID'"
+                    (m_oInputChange)="setResourceId($event)"></app-input-field>
+                <app-input-field class="flex-fill" [m_sLabel]="'User ID'"
+                    (m_oInputChange)="setUserId($event)"></app-input-field>
+                <app-button class="align-self-end" [m_sLabel]="'Find Resources'"
+                    (click)="findResourcePermissions(m_sSelectedType, m_sResourceId, m_sUserId)"></app-button>
+            </div>
+        </div>
+        <div *ngIf="m_aoFoundResources.length > 0">
+            <div class="table-wrapper">
+                <table>
+                    <thead class="table-heading-container">
+                        <tr>
+                            <td>Created By</td>
+                            <td>Date Created</td>
+                            <td>Owner Id</td>
+                            <td>Permission</td>
+                            <td>Resource Id</td>
+                            <td>Shared With</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let oResource of m_aoFoundResources">
+                            <td>{{oResource.createdBy}}</td>
+                            <td>{{oResource.createdDate | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{oResource.ownerId}}</td>
+                            <td>{{oResource.permissions}}</td>
+                            <td class="copy-to-clipboard" (click)="copyToClipboard(oResource.resourceId)">
+                                {{oResource.resourceId}}</td>
+                            <td>{{oResource.userId}}</td>
+                            <td>
+                                <span class="material-symbols-outlined"
+                                    (click)="removeResourcePermission(oResource.resourceType, oResource.resourceId, oResource.userId)">
+                                    delete
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div>
+            Share a Resource
+            <div class="d-flex flex-row gap-2 mt-1">
+                <app-dropdown class="flex-fill" [m_aoDropdownItems]="m_aoResourceTypes"
+                    [m_sLabel]="'Select Resource Type'" (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
+                <app-input-field class="flex-fill" [m_sLabel]="'Resource ID'"
+                    (m_oInputChange)="setResourceId($event)"></app-input-field>
+                <app-input-field class="flex-fill" [m_sLabel]="'User ID'"
+                    (m_oInputChange)="setUserId($event)"></app-input-field>
+                <app-dropdown [m_sLabel]="'Select Permission Rights'" [m_aoDropdownItems]="m_aoShareOptions"
+                    (m_oSelectionChange)="setPermissionRights($event)"></app-dropdown>
+                <app-button class="align-self-end" [m_sLabel]="'Add Permission'"
+                    (click)="addResourcePermission(m_sSelectedType, m_sResourceId, m_sUserId, m_sRights)"></app-button>
+            </div>
+        </div>
+    </div>
+</div>

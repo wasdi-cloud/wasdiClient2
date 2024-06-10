@@ -1,9 +1,21 @@
-div.processor-cards-container {
-    height: 80%;
-    overflow-y: scroll;
+.hidden {
+    display: none !important;
 }
 
-p.processor-description {
-    font-size: 1rem;
-    margin-bottom: 0;
+.json-container {
+    position:relative; 
+
+}
+.help-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #FFFFFF;
+    width: 100%;
+    z-index: 999;
+}
+
+.msg-container {
+    overflow: scroll;
 }

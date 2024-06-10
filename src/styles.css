@@ -1,19 +1,588 @@
-/* You can add global styles to this file, and also import other style files */
+/* Custom Colour Sets */
+:root {
+  /* Main Colours */
+  --darkAccessible: #006526;
+  --wasdiGreen: #009036;
+  --wasdiBlue: #212F45;
+  --wasdiWarn: #FBAC00;
+  --wasdiDanger: #FF3D00;
+
+  /* Shade Variants */
+  --wasdiWarn10: #FEF5E0;
+  --wasdiDanger10: #FFE7E0;
+  --wasdiGreen10: #E0F1E6;
+  --wasdiBlue10: #E1EAFB;
+
+  /* Lighter Shade Variants */
+  --wasdiWarnLight: #FFF9EB;
+  --wasdiDangerLight: #FFF0EB;
+  --wasdiGreenLight: #EBF7EF;
+  --wasdiBluelight: #F0F5FD;
+
+  /* Neutrals */
+  --neutral5: #ECEEF0;
+  --neutral10: #D9DCE1;
+  --neutral15: #C7CBD3;
+  --neutral20: #B4BAC4;
+  --neutral25: #8E97A6;
+  --neutral30: #697589;
+  --neutral50Brand: #43526B;
+  --neutral60: #364256;
+  --neutral70: #283140;
+  --neutral80: #1B212B;
+  --neutral85: #141920;
+  --neutral90: #0D1015;
+  --neutral95: #07080B;
+}
+
+/* BROWSER RESETS */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* border: 1px red solid; */
+}
 
 html,
 body {
-    height: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "Poppins", sans-serif !important;
 }
 
-.mat-bottom-sheet-container-medium,
+button {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+main {
+  width: 100%;
+  min-height: calc(100vh - 6rem);
+}
+
+div.app-outlet {
+  min-height: 100vh;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-light {
+  font-weight: 400;
+}
+
+.text-white {
+  color: #FFFFFF;
+}
+
+mat-bottom-sheet-container-medium,
 .mat-bottom-sheet-container-large,
 .mat-bottom-sheet-container-xlarge {
-    min-width: 100vw !important;
-    max-width: 100vw !important;
-    padding: 0 !important;
+  min-width: 100vw !important;
+  max-width: 100vw !important;
+  max-height: 97vh !important;
+  padding: 0 !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.32);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.32);
+}
+
+/* Secondary Nav (Filters) Styling */
+.secondary-nav {
+  align-self: stretch;
+  color: var(--neutral60);
+  border-right: 1px solid #D9DCE1;
+  font-weight: 700;
+  display: flex;
+  height: 100%;
+  max-height: 100%;
+  padding: 16px 16px 16px 8px;
+  flex-direction: column;
+  gap: var(--Radius-or-Spacings-S, 8px);
+  width: 22rem;
+  overflow-y: hidden;
+}
+
+.location-header {
+  color: var(--neutral50Brand);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.filters-header {
+  color: #000000;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+
+/* Custom Search Input with Search Icon */
+.search-input {
+  align-self: stretch;
+  background: #FFFFFF;
+  border-radius: 4px;
+  border: 1px solid var(--neutral20);
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  height: 32px;
+  padding: 8px;
+  width: 314px;
+  padding-left: 24px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  text-align: center;
+  pointer-events: none;
+}
+
+.material-symbols-outlined.form-control-feedback {
+  line-height: 2rem;
+  padding-left: 0.25rem;
+  font-size: 20px;
+}
+
+.wasdi-checkbox {
+  border: 1.5px solid var(--Colors-Neutrals-30, #697589);
+  background: var(--Colors-Neutrals-0, #FFF);
+  width: 16px;
+  height: 16px;
+
+}
+
+/* Custom Checkbox */
+.wasdi-checkbox-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wasdi-checkbox {
+  cursor: pointer;
+}
+
+.wasdi-checkbox:checked {
+  accent-color: var(--Colors-Primary-10, #009036);
+}
+
+.wasdi-checkbox:checked:hover {
+  accent-color: var(--Colors-Primary-10, #009036);
+}
+
+.wasdi-checkbox-label {
+  align-self: stretch;
+  color: #000000;
+  cursor: default;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.star-filled {
+  color: #FBAC00;
+}
+
+.star-grey {
+  color: #C7CBD3;
+}
+
+/* Formatting for WASDI Tags (e.g., in Table and marketplace) */
+.category-tag {
+  border-radius: 4px;
+  border: 1px solid var(--neutral50Brand);
+  background: #FFFFFF;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  padding: 6px;
+  line-height: 12px;
+}
+
+.category-tag:hover {
+  background: var(--wasdiGreenLight);
+  transition: ease-out 300ms;
+}
+
+.category-tag.active {
+  border: 1px solid var(--wasdiGreen);
+  background: var(--wasdiGreen);
+  color: #FFFFFF;
+}
+
+.category-tag.yellow,
+.category-tag.red,
+.category-tag.green {
+  border: none;
+  color: #FFFFFF !important;
+  cursor: default !important;
+}
+
+.category-tag.yellow {
+  background: var(--wasdiWarn);
+  color: #000000;
+}
+
+.category-tag.red {
+  background: var(--wasdiDanger);
+}
+
+.category-tag.green {
+  background: var(--wasdiGreen);
+}
+
+.category-tag.outlined.red {
+  background: #FFFFFF !important;
+  border: 1px solid var(--wasdiDanger) !important;
+  color: var(--wasdiDanger) !important;
+  cursor: pointer !important;
+}
+
+.category-tag.outlined.red:hover {
+  background: var(--wasdiDangerLight) !important;
+}
+
+
+/* Custom Styling for WASDI Checkbox - Angular Materials OVERRIDES! */
+.mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background {
+  border-color: #009036 !important;
+  background-color: #009036 !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background {
+  border-color: #009036 !important;
+  background-color: #009036 !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control[disabled]:checked~.mdc-checkbox__background {
+  background-color: #B4BAC4 !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control[disabled]:indeterminate~.mdc-checkbox__background {
+  background-color: #B4BAC4 !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control[disabled]:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+  border-color: #B4BAC4 !important;
+}
+
+.mat-ripple {
+  display: none !important;
+}
+
+.mdc-checkbox__ripple {
+  height: 0px;
+  width: 0px;
+}
+
+.mdc-checkbox {
+  flex: 0 0 8px !important;
+}
+
+.map-container {
+  z-index: 0;
+}
+
+.floating-menu {
+  background: #FFFFFF;
+}
+
+span.close-btn {
+  cursor: pointer;
+}
+
+/* Styles for Dialogs in the Editor Tab */
+
+div.apps-dialog {
+  padding: 24px;
+  width: 100%;
+}
+
+.dialog-header {
+  font-size: 20px;
+  line-height: 30px;
+  padding-bottom: 16px;
+}
+
+.search-header {
+  color: var(--neutral60);
+  font-size: 16px;
+}
+
+.apps-container,
+.json-container {
+  width: 49.5%
+}
+
+.json-container {
+  background: var(--neutral10);
+  border-radius: 8px;
+  height: 100%;
+  padding-top: 32px;
+}
+
+.json-header,
+.json-body {
+  padding: 0px 32px;
+}
+
+.json-body {
+  padding-bottom: 1rem;
+}
+
+p {
+  font-size: 14px;
+
+}
+
+.footer {
+  background-color: #FFFFFF;
+  padding: 16px 32px;
+}
+
+/* Selector for Leaflet buttons - excluding Geocoder and attributions */
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+  background-color: rgba(13, 16, 21, 0.8) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+  border: none !important;
+}
+
+
+
+/* Selector for the Leaflet Geocoder */
+button.leaflet-control-geocoder-icon {
+  background-color: rgba(13, 16, 21, 0.8) !important;
+  background-image: url('src/assets/icons/search-map-icon.svg');
+  border: none !important;
+  border-radius: 50% !important;
+  color: #FFFFFF !important;
+  height: 36px !important;
+  width: 36px !important;
+}
+
+a.leaflet-control-button,
+.leaflet-draw-draw-rectangle {
+  border-radius: 50% !important;
+}
+
+.leaflet-control-button {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+}
+
+.leaflet-control-zoom-in {
+  border-top-left-radius: 50% !important;
+  border-top-right-radius: 50% !important;
+}
+
+.leaflet-control-zoom-out {
+  border-bottom-left-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
+}
+
+.leaflet-touch .leaflet-control-layers-toggle {
+  border-radius: 50%;
+}
+
+.leaflet-control-layers,
+.leaflet-control-geocoder {
+  background-color: transparent !important;
+}
+
+.leaflet-control-geocoder-expanded {
+  background-color: rgba(13, 16, 21, 0.8) !important;
+  border-radius: 24px !important;
+  color: #FFFFFF;
+}
+
+.leaflet-control-geocoder-form input {
+  width: 200px !important;
+  color: #FFFFFF;
+}
+
+.leaflet-control-geocoder-expanded>.leaflet-control-geocoder-icon {
+  background-color: transparent !important;
+}
+
+.leaflet-control-geocoder-form {
+  color: #FFFFFF !important;
+  padding-left: 8px;
+}
+
+.leaflet-control-geocoder-address-context {
+  color: #FFFFFF !important;
+}
+
+.leaflet-touch .leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  font-size: 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.leaflet-control-layers-expanded {
+  background-color: rgba(13, 16, 21, 0.8) !important;
+  font-family: "Poppins", sans-serif !important;
+  color: #FFFFFF !important;
+}
+
+.leaflet-control-layers-toggle,
+.leaflet-touch .leaflet-control-layers-toggle {
+  background-image: url('src/assets/icons/layers-map-icon.svg') !important;
+}
+
+.leaflet-retina .leaflet-control-layers-toggle {
+  /* background-image: url('src/assets/icons/layers-map-icon.svg') !important; */
+  background-size: 22px 22px !important;
+}
+
+.leaflet-draw-draw-rectangle {
+  background-size: 22px 22px !important;
+}
+
+/* .leaflet-retina.leaflet-draw-toolbar a {
+  background-image: url('src/assets/icons/draw-map-icon.svg') !important;
+  background-size: 22px 22px !important;
+} */
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-rectangle {
+  background-image: url('src/assets/icons/draw-map-icon.svg') !important;
+  background-position: center !important;
+}
+
+.leaflet-control-geocoder-alternatives>li:last-child {
+  border-bottom-left-radius: 24px !important;
+  border-bottom-right-radius: 24px !important;
+}
+
+.leaflet-control-geocoder-alternatives>li>a {
+  background-color: transparent !important;
+  width: 250px !important;
+  line-height: 18px !important;
+}
+
+.leaflet-control-geocoder-alternatives>li:hover,
+.leaflet-control-geocoder-alternatives>li>a:hover {
+  background-color: rgba(13, 16, 21, 0.9) !important;
+}
+
+.leaflet-control-layers-toggle,
+.leaflet-draw-draw-rectangle,
+.leaflet-control-button,
+.leaflet-control-zoom-out,
+.leaflet-control-zoom-in {
+  height: 36px !important;
+  width: 36px !important;
+}
+
+/* Styles for Leaflet Popup Content */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background-color: rgba(13, 16, 21, 0.8) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.leaflet-popup-content ul {
+  padding-left: 1rem !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: #FFFFFF !important;
+}
+
+.offcanvas-backdrop.show {
+  opacity: 0 !important;
+}
+
+.cdk-overlay-container {
+  z-index: 99999 !important;
+}
+
+
+.mdc-snackbar__label,
+.mdc-snackbar__surface {
+  padding: 0px !important;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: 8px !important;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__label {
+  color: var(--neutral80) !important;
+}
+
+.generic-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--neutral20) !important;
+  background-color: #FFFFFF !important;
+}
+
+
+.success-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--wasdiGreen) !important;
+  background-color: var(--wasdiGreenLight) !important;
+}
+
+.alert-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--wasdiWarn) !important;
+  background-color: var(--wasdiWarnLight) !important;
+}
+
+.danger-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--wasdiDanger) !important;
+  background-color: var(--wasdiDangerLight) !important;
+}
+
+.info-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border: 1px solid var(--neutral50Brand) !important;
+  background-color: var(--wasdiBluelight) !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 8px !important;
 }

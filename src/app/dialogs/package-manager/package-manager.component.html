@@ -1,0 +1,132 @@
+<div class="dialog-content d-flex flex-column">
+    <div class="manager-header d-flex flex-row justify-content-between">
+        <div class="d-flex flex-column">
+            <div class="font-bold">Package manager version</div>
+            <div>{{m_sPackageManagerName.toUpperCase()}} {{m_sPackageManagerVersion}}</div>
+        </div>
+        <div class="d-flex flex-row gap-1">
+            <app-button [m_sLabel]="'PACKAGE_MANAGER_REFRESH' | translate" [m_bMuted]="" [m_sIconLeft]="'refresh'"
+                [m_bMuted]="true" (click)="updateLibraryList(m_sProcessorId)"></app-button>
+            <app-button [m_sLabel]="'PACKAGE_MANAGER_ROLLBACK' | translate" [m_sIconLeft]="'hourglass_bottom'"
+                (click)="resetActionList(m_sProcessorId)"></app-button>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-start">
+        <app-input-field [m_sLabel]="'PACKAGE_MANAGER_SEARCH' | translate" [m_sInputValue]="m_sPackageSearch"
+            (m_oInputChange)="m_sPackageSearch = $event.event.target.value"></app-input-field>
+    </div>
+    <div *ngIf="m_bIsLoading" class="flex-fill">
+        <app-invader></app-invader>
+    </div>
+    <div *ngIf="!m_bIsLoading" class="table-wrapper flex-fill">
+        <table>
+            <thead class="table-header">
+                <tr>
+                    <td>{{"PACKAGE_MANAGER_NAME" | translate}}</td>
+                    <td>{{"PACKAGE_MANAGER_CURRENT_VERSION" | translate}}</td>
+                    <td>{{"PACKAGE_MANAGER_LATEST_VERSION" | translate}}</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let oPackage of m_aoPackages | filter: m_sPackageSearch">
+                    <td>{{oPackage.packageName}}</td>
+                    <td>{{oPackage.currentVersion}}</td>
+                    <td class="d-flex flex-row align-items-center gap-1">
+                        {{oPackage.latestVersion? oPackage.latestVersion : oPackage.currentVersion}}
+                        <span class="upgrade-tag" *ngIf="oPackage.latestVersion"
+                            (click)="updatePackage(m_sProcessorId, oPackage.packageName, oPackage.latestVersion)">UPDATE</span>
+                    </td>
+                    <td class="">
+                        <span class="material-symbols-outlined" [matTooltip]="'Delete'"
+                            (click)="removeLibrary(m_sProcessorId, oPackage.packageName)">
+                            delete
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="!m_bIsLoading" class="mt-1 d-flex flex-column gap-2">
+        <div *ngIf="m_bShowInputFields" class="d-flex flex-row justify-content-between align-items-center gap-3">
+            <app-input-field class="flex-fill" [m_sLabel]="'Package Name'" [m_sInputValue]="m_sPackageToAdd"
+                (m_oInputChange)="m_sPackageToAdd = $event.event.target.value"></app-input-field>
+            <app-input-field class="flex-fill" [m_sLabel]="'Version (Optional)'" [m_sInputValue]="m_sPackageVersion"
+                (m_oInputChange)="m_sPackageVersion = $event.event.target.value"></app-input-field>
+            <div class="d-flex flex-row gap-2 align-self-end">
+                <app-button [m_sLabel]="'Add Package'" (click)="addLibrary(m_sProcessorId, m_sPackageToAdd, m_sPackageVersion)"></app-button>
+                <app-button class="align-self-end" *ngIf="m_bShowInputFields" [m_sLabel]="'Cancel'"
+                    (click)="toggleShowInput(false)" [m_bOutline]="true"></app-button>
+            </div>
+        </div>
+        <app-button class="align-self-start" *ngIf="!m_bShowInputFields" [m_sLabel]="'PACKAGE_MANAGER_ADD' | translate"
+            (click)="toggleShowInput(true)"></app-button>
+    </div>
+</div>
+
+
+<!-- <div class="dialog d-flex flex-column justify-content-between" style="height: 100%;">
+    <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between p-2">
+        <h4 class="dialog-text m-0 p-0">
+            <fa-icon [icon]="faFolder"></fa-icon>
+            Package Manager
+        </h4>
+    </div>
+    <div class="dialog-content p-2 flex-fill" *ngIf="m_bIsLoading === false">
+        <div class="content-header">
+            <h3>{{m_sProcessorName}} Packages - <span class="text-success">{{m_sPackageManagerName}}
+                    {{m_sPackageManagerVersion}}</span></h3>
+
+            <div class="d-flex flex-row justify-content-between pb-2">
+                <form #f="ngForm" (ngSubmit)="f.form && addLibrary(m_sProcessorId, m_sPackageToAdd)" action="" class="d-flex flex-row gap-1 flex-fill">
+                    <div class="input-field w-25">
+                        <input class="form-control" type="text" name="m_sPackageToAdd" id="" placeholder="Package Name"
+                            [(ngModel)]="m_sPackageToAdd">
+                    </div>
+                    <button class="btn btn-secondary" type="submit">Add Package</button>
+                    <button class="btn btn-secondary" (click)="updateLibraryList(m_sProcessorId)">Refresh List</button>
+                    <button class="btn btn-secondary" (click)="resetActionList(m_sProcessorId)">Reset Actions</button>
+                </form>
+                <div class="input-field w-30">
+                    <input class="form-control" type="text" name="" id="" placeholder="Search Packages" [(ngModel)]="m_sPackageSearch">
+                </div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="table table-light table-striped table-hover">
+                <thead class="table-header">
+                    <tr>
+                        <th scope="col">Package Name</th>
+                        <th scope="col">Current Version</th>
+                        <th scope="col">Latest Version</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oPackage of m_aoPackages | filter: m_sPackageSearch">
+                        <td>{{oPackage.packageName}}</td>
+                        <td>{{oPackage.currentVersion}}</td>
+                        <td ngClass="{{oPackage.latestVersion? 'text-danger' : 'text-success'}}">
+                            {{oPackage.latestVersion? oPackage.latestVersion : oPackage.currentVersion}}</td>
+                        <td class="d-flex gap-1">
+                            <button matTooltip="Update Package" class="btn btn-success btn-sm"
+                                [disabled]="oPackage.latestVersion === null"
+                                (click)="updatePackage(m_sProcessorId, oPackage.packageName, oPackage.latestVersion)">
+                                <fa-icon [icon]="faArrowUp"></fa-icon>
+                            </button>
+                            <button matTooltip="Remove Package" class="btn btn-secondary btn-sm"
+                                (click)="removeLibrary(m_sProcessorId, oPackage.packageName)">
+                                <fa-icon [icon]="faTrashcan"></fa-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dialog-content text-center d-flex flex-column align-items-center justify-content-center"
+        *ngIf="m_bIsLoading === true">
+        <h2>Updating Packages - Please Wait...</h2>
+        <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
+    </div>
+</div> -->

@@ -5,15 +5,16 @@ import { FormGroup } from '@angular/forms';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+import { TranslateService } from '@ngx-translate/core';
 
 //Angular Material Import: 
+import { Clipboard } from '@angular/cdk/clipboard';
 import { MatDialog } from '@angular/material/dialog';
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 //Component Imports
-import { BuildLogsComponent } from 'src/app/components/dialogs/build-logs/build-logs.component';
-import { PackageManagerComponent } from 'src/app/components/dialogs/package-manager/package-manager.component';
+import { PackageManagerComponent } from 'src/app/dialogs/package-manager/package-manager.component';
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -48,7 +49,7 @@ export class ProcessorTabContentComponent implements OnInit {
   /**
    * JSON Input Parameters Sample
    */
-  m_sJSONSample: string = "";
+  m_sJSONSample: string = "{}";
 
   /**
    * Selected Processor Type
@@ -83,7 +84,7 @@ export class ProcessorTabContentComponent implements OnInit {
   /**
    * Edit Mode status
    */
-  @Input() m_bEditMode: boolean;
+  @Input() m_bEditMode: boolean = false;
 
   /**
    * Processor Id
@@ -95,7 +96,7 @@ export class ProcessorTabContentComponent implements OnInit {
    */
   @Input() m_sProcessorName?: string = "";
 
-  @Input() m_sPublisher?: string = ""; 
+  @Input() m_sPublisher?: string = "";
 
 
   /**
@@ -108,19 +109,26 @@ export class ProcessorTabContentComponent implements OnInit {
    */
   m_sSelectedFileName: string;
 
+  /**
+   * Is the build log component currently being shown? 
+   */
+  m_bShowBuildLogs: boolean = false;
+
   @Input() m_oProcessorBasicInfo: FormGroup;
 
-
+  m_asBuildLogs: Array<any> = [];
+  m_sBuildLogs: string = "";
 
   m_aoProcessorTypes = [
     { name: "Ubuntu 22.04 + Python 3.10", id: "python_pip_2" },
-    { name: "OGC Application Package", id: "eoepca" },
     { name: "Python 3.x Pip One Shot", id: "pip_oneshot" },
+    { name: "OGC Application Package", id: "eoepca" },
     { name: "IDL 3.7.2", id: "ubuntu_idl372" },
     { name: "OCTAVE 6.x", id: "octave" },
+    { name: "Ubuntu 20.04 + Python 3.8", id: "python_pip_2_ubuntu_20" },
     { name: "Python 3.x Conda", id: "conda" },
-    { name: "C# .NET Core", id: "csharp" },
-    { name: "Ubuntu 20.04 + Python 3.8", id: "ubuntu_python37_snap" }
+    { name: "C# .NET Core", id: "csharp" }//,
+    //{ name: "Ubuntu 20.04 + Python 3.8 - Deprecated", id: "ubuntu_python37_snap" }
   ];
 
   m_aoProcessorTypesMap = this.m_aoProcessorTypes.map(oProcessorType => {
@@ -129,18 +137,20 @@ export class ProcessorTabContentComponent implements OnInit {
 
 
   constructor(
+    private m_oClipboard: Clipboard,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oProcessorService: ProcessorService) {
+    private m_oProcessorService: ProcessorService,
+    private m_oTranslate: TranslateService) {
   }
 
   ngOnInit(): void {
     //Set the active workspace from the constants service
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    //console.log(this.m_oProcessorBasicInfo)
 
     this.displayProcessorType();
-    console.log(this.m_sPublisher)
     let sType = this.m_oProcessorBasicInfo.get('oType').value;
     this.m_aoProcessorTypes.forEach(type => {
       if (type.id === sType) {
@@ -148,6 +158,20 @@ export class ProcessorTabContentComponent implements OnInit {
         this.m_oProcessorBasicInfo.controls['oType'].setValue(sType)
       }
     })
+
+    //Set ui for isPublic flag
+    if (this.m_oProcessorBasicInfo.get('bIsPublic').value === 0) {
+      this.m_bIsPublic = false
+    } else {
+      this.m_bIsPublic = true
+    }
+
+    if (this.m_oProcessorBasicInfo.get('iMinuteTimeout')) {
+      this.m_iMinuteTimeout = parseInt(this.m_oProcessorBasicInfo.get('iMinuteTimeout').value)
+    }
+    if (this.m_oProcessorBasicInfo.get('sJSONSample')) {
+      this.m_sJSONSample = this.m_oProcessorBasicInfo.get('sJSONSample').value;
+    }
   }
 
   /**
@@ -179,11 +203,11 @@ export class ProcessorTabContentComponent implements OnInit {
     return false;
   };
 
-  setSelectedType(event: any) {
+  setSelectedType(oEvent: any) {
     this.m_aoProcessorTypes.forEach(oType => {
-      if (oType.name === event.option.value) {
+      if (oType.name === oEvent.name) {
         this.m_oProcessorBasicInfo.patchValue({
-          oType: oType.id
+          oType: oType
         })
       }
     });
@@ -223,45 +247,36 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   forceLibUpdate(sProcessorId: string) {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId) === true) {
-      return false;
+    let sUpdateMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_LIB_SCHEDULE")
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_LIB_ERROR")
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId) === false) {
+      this.m_oProcessorService.forceLibUpdate(sProcessorId).subscribe({
+        next: oResponse => {
+          this.m_oNotificationDisplayService.openSnackBar(sUpdateMsg, '', 'success-snackbar');
+        },
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
+        }
+      })
     }
-
-    let sConfirnMsg = "Are you sure you want to update this Processor?"
-
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirnMsg);
-
-    bConfirmResult.subscribe(bDialogResult => {
-      if (bDialogResult === true) {
-        this.m_oProcessorService.forceLibUpdate(sProcessorId).subscribe({
-          next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("LIBRARY UPDATE SCHEDULED", "Close", "right", "bottom");
-          },
-          error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in Updating Library")
-          }
-        })
-      }
-    });
-    return true;
   }
 
   forceProcessorRefresh(sProcessorId: string) {
+    let sConfirmMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_REFRESH_CONFIRM");
+    let sSuccessMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_REFRESH_SUCCESS")
+    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_PROCESSOR_BASE_REFRESH_ERROR")
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId)) {
       return false;
     }
 
-    let sConfirmMsg = "Are you sure you want to Redeploy this processor?";
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg);
-
-    bConfirmResult.subscribe(oDialogResult => {
+    this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmMsg).subscribe(oDialogResult => {
       if (oDialogResult === true) {
         this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
           next: oResponse => {
-            this.m_oNotificationDisplayService.openSnackBar("PROCESSOR REFRESH SCHEDULED", "Close", "right", "bottom");
+            this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, '', 'success-snackbar');
           },
           error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog("Error in Refreshing Processor")
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
           }
 
         })
@@ -274,9 +289,10 @@ export class ProcessorTabContentComponent implements OnInit {
    * Open Package Manager Dialog
    */
   openPackageManager() {
-    let oDialog = this.m_oDialog.open(PackageManagerComponent, {
+    this.m_oDialog.open(PackageManagerComponent, {
       height: '90vh',
       width: '90vw',
+      maxWidth: '1500px',
       data: {
         sProcessorId: this.m_sProcessorId,
         sProcessorName: this.m_sProcessorName
@@ -284,16 +300,6 @@ export class ProcessorTabContentComponent implements OnInit {
     });
   }
 
-  openBuildLogs() {
-    let oDialog = this.m_oDialog.open(BuildLogsComponent, {
-      height: '70vh',
-      width: '70vw',
-      data: {
-        sProcessorId: this.m_sProcessorId,
-        sProcessorName: this.m_sProcessorName
-      }
-    })
-  }
 
   /**
    * on file drop handler
@@ -302,5 +308,65 @@ export class ProcessorTabContentComponent implements OnInit {
     this.onFileSelect($event);
   }
 
+  onPublicChange(event) {
+    console.log(event)
+    let oForm = this.m_oProcessorBasicInfo;
+    if (event.target.checked) {
+      oForm.patchValue({
+        bIsPublic: true
+      })
+    } else {
+      oForm.patchValue({
+        bIsPublic: false
+      })
+    }
+  }
 
+  onTextareaInput(oEvent) {
+    this.m_oProcessorBasicInfo.patchValue({
+      sShortDescription: oEvent.target.value
+    })
+  }
+
+  onJsonInput(oEvent) {
+    this.m_oProcessorBasicInfo.patchValue({
+      sJSONSample: oEvent
+    })
+  }
+
+  showBuildLogs(bShowLogs: boolean) {
+    this.m_bShowBuildLogs = bShowLogs
+
+    if (this.m_bShowBuildLogs === true) {
+      this.getProcessorBuildLogs(this.m_sProcessorId);
+    }
+  }
+
+  getProcessorBuildLogs(sProcessoId: string) {
+    this.m_oProcessorService.getProcessorLogsBuild(sProcessoId).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          this.m_sBuildLogs = oResponse;
+          this.m_asBuildLogs = oResponse.map((sBuildLog, iIndex) => {
+            return { logNumber: iIndex, logs: sBuildLog.split("Step"), isOpen: false }
+          })
+        }
+      },
+      error: oError => { }
+    })
+  }
+
+  openBuildLog(oBuildLog) {
+    oBuildLog.isOpen = !oBuildLog.isOpen;
+  }
+
+  copyBuildLogToClipboard(oBuildLog) {
+    let sCopiedMsg = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD")
+    this.m_oClipboard.copy(oBuildLog);
+    this.m_oNotificationDisplayService.openSnackBar(sCopiedMsg, '', 'success-snackbar')
+  }
+
+  downloadProcessor(sProcessorId: string) {
+    this.m_oProcessorService.downloadProcessor(sProcessorId)
+  }
 }

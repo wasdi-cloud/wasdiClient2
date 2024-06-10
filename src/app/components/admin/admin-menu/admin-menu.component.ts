@@ -1,0 +1,81 @@
+import { Component, EventEmitter, Output } from '@angular/core';
+import { ConstantsService } from 'src/app/services/constants.service';
+
+@Component({
+  selector: 'app-admin-menu',
+  templateUrl: './admin-menu.component.html',
+  styleUrls: ['./admin-menu.component.css']
+})
+export class AdminMenuComponent {
+  @Output() m_sSelectedTab: EventEmitter<string> = new EventEmitter<string>();
+
+  m_bIsAdmin: boolean = false;
+
+  m_aoMenuButtons = [
+    {
+      title: "account",
+      label: "Account",
+      icon: "person"
+    },
+    {
+      title: "preferences",
+      label: "Notification Preferences",
+      icon: "notifications_active"
+    },
+    {
+      title: "organisations",
+      label: "Organisations",
+      icon: "supervisor_account"
+    },
+    {
+      title: "subscriptions",
+      label: "Subscriptions",
+      icon: "rocket"
+    },
+    {
+      title: "billings",
+      label: "Billings",
+      icon: "paid"
+    },
+
+  ]
+
+  m_aoAdminMenuItems = [
+    {
+      title: 'users',
+      label: 'Users',
+      icon: 'passkey'
+    },
+    {
+      title: 'resources',
+      label: 'Subscriptions',
+      icon: 'category'
+    },
+    {
+      title: 'sharing',
+      label: 'Sharing',
+      icon: 'send'
+    },
+    {
+      title: 'nodes',
+      label: 'Nodes',
+      icon: 'network_node'
+    }
+  ]
+  m_sActiveTab: string = "account";
+
+
+  constructor(private m_oConstantsService: ConstantsService) {
+    console.log(this.m_oConstantsService.getUser().role)
+
+    if (this.m_oConstantsService.getUser().role === 'ADMIN') {
+      this.m_bIsAdmin = true;
+    }
+  }
+
+
+  setActiveTab(sInputTab: string) {
+    this.m_sActiveTab = sInputTab;
+    this.m_sSelectedTab.emit(this.m_sActiveTab);
+  }
+}

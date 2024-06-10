@@ -1,153 +1,64 @@
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid ">
-        <div class="d-flex align-items-center">
-            <a class="navbar-brand" href="#">
-                <img class="brand-logo" src="assets/images/wasdi_logo_header.png" alt="">
-            </a>
-            <input class="form-control new-workspace-name" type="text" *ngIf="m_bEditIsActive"
-                value="{{m_oActiveWorkspace.name}}" (click)="reNameWorkspace(m_oActiveWorkspace)" readonly>
+<header class="d-flex flex-row justify-content-between ps-4 pe-3">
+    <div class="header-logo-container d-flex flex-row align-items-center gap-1">
+        <img src="/assets/icons/logo-only.svg" alt="">
+        <img src="/assets/icons/logo-name.svg" alt="">
+    </div>
+    <div class="d-flex flex-row align-items-center gap-3">
+        <div class="project-selection-container">
+            <div class="dropdown">
+                <button class="btn" type="button" id="projectSelectButton" data-bs-toggle="dropdown"
+                    aria-expanded="false" aria-haspopup="true">
+                    {{m_oSelectedProject ? m_oSelectedProject.name : "Select Project"}}
+                    <div class="dropdown-icon material-symbols-outlined">
+                        expand_more
+                    </div>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="projectSelectButton">
+                    <li><a class="dropdown-item" (click)="setActiveProject(oProject)"
+                            *ngFor="let oProject of m_aoUserProjectsMap">{{oProject.name}}</a></li>
+                </ul>
+            </div>
         </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto-sm ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/marketplace"><fa-icon [icon]="faSpaceShip"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_APPSTORE' | translate}}</a>
+        <div class="card-divider"></div>
+        <div class="dropdown">
+            <div class="user-greeting-container d-flex flex-row align-items-center gap-2" data-bs-toggle="dropdown"
+                aria-expanded="false" aria-haspopup="true">
+                <div class="d-flex flex-column align-items-end">
+                    <span class="greeting">{{"ROOT_HEADER_WELCOME" | translate}}</span>
+                    <span class="username">{{m_oUser.name}}</span>
+                </div>
+                <div class="user-icon">
+                    <span class="material-symbols-outlined">
+                        account_circle
+                    </span>
+                </div>
+            </div>
+            <ul class="dropdown-menu">
+                <li class=""><a class="dropdown-item" routerLink="/settings"><span class="material-symbols-outlined">
+                            settings
+                        </span>{{"ROOT_MENU_USER_DASHBOARD" | translate }}</a></li>
+                <li class=""><a class="dropdown-item" (click)="goToSubscriptions()"><span
+                            class="material-symbols-outlined">
+                            rocket_launch
+                        </span>{{"ROOT_MENU_SUBSCRIPTION" | translate }}</a></li>
+                <!-- Open Off Canvas Feedback Form -->
+                <li class=""><a class="dropdown-item" (click)="openFeedbackDialog()"><span
+                            class="material-symbols-outlined">
+                            chat
+                        </span>{{"DIALOG_FEEDBACK_SEND" | translate}}</a></li>
+                <li class=""><a class="dropdown-item" (click)="openDocs()"><span class="material-symbols-outlined">
+                            support
+                        </span>
+                        <div class="help-btn">{{"KEY_PHRASES.HELP" | translate}}</div> <span
+                            class="material-symbols-outlined align-self-end">
+                            open_in_new
+                        </span>
+                    </a></li>
+                <li>
+                    <hr class="dropdown-divider">
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/workspaces"><fa-icon [icon]="faFloppyDisk"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/plan"><fa-icon [icon]="faCalendar"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' |
-                        translate}}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/search"><fa-icon [icon]="faMagnifyingGlass"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_IMPORT' | translate}}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" [ngClass]="{'disabled' : !sActiveWorkspaceId}"
-                        routerLink="/edit/{{sActiveWorkspaceId}}"><fa-icon [icon]="faGlobe"></fa-icon>
-                        {{'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate}}</a>
-                </li>
-                <li class="nav-item">
-                    <a *ngIf="m_oUser.role !== 'USER'" class="nav-link" routerLink="/admin"><fa-icon
-                            [icon]="faGears"></fa-icon> {{'ROOT_VIEW_NAV_BAR_LINK_ADMIN' |
-                        translate}}</a>
-
-                </li>
-
-                <li class="nav-item dropdown-center">
-                    <a href="" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">Project:
-                        {{m_oSelectedProject.name}}</a>
-                    <ul class="dropdown-menu">
-                        <li style="cursor:pointer;" class="dropdown-item" *ngFor="let oProject of m_aoUserProjectsMap"
-                            (click)="setActiveProject(oProject)">
-                            {{oProject.name}}</li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" role="button" data-bs-toggle="dropdown" (click)="clearNotification()">
-                        <div class="position-relative">
-                            <fa-icon [icon]="faEnvelope"></fa-icon>
-                            <span *ngIf="m_bHasNotifications"
-                                class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle">
-                                <span class="visually-hidden">New alerts</span>
-                            </span>
-                        </div>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notifications">
-                        <li *ngIf="m_aoNotifications.length === 0" class="text-center">You have no notifications.</li>
-                        <li *ngFor="let oMessage of m_aoNotifications.reverse()"
-                            class="d-flex flex-row justify-content-between px-1 notification-container">
-                            <div class="d-flex flex-column">
-                                <div class="notification-text" [innerHTML]="oMessage.date + ' ' + oMessage.time"></div>
-                                <div class="notification-text" [innerHTML]="oMessage.displayMessage"></div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <!-- Account Type: -->
-                <li class="nav-item">
-                    <!-- User with brand new WASDI Account -->
-                    <a class="nav-link" routerLink="/subscriptions" href=""
-                        *ngIf="m_sUserAccount !== 'FREE' && m_sUserAccount !== 'PROFESSIONAL' && m_sUserAccount !==  'STANDARD'">PURCHASE
-                        SUBSCRIPTION</a>
-                    <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
-                        *ngIf="m_sUserAccount === 'FREE'">FREE</a>
-                    <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
-                        *ngIf="m_sUserAccount === 'PROFESSIONAL'"><fa-icon [icon]="faStar"></fa-icon> PRO</a>
-                    <a class="nav-link" routerLink="/subscriptions" role="button" data-bs-toggle="dropdown" href=""
-                        *ngIf="m_sUserAccount === 'STANDARD'"><fa-icon [icon]="faCertificate"></fa-icon> STND</a>
-                </li>
-                <app-language-switch></app-language-switch>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
-                        <fa-icon [icon]="faUser"></fa-icon>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a href="" class="dropdown-item" (click)="openUserSettings($event)"><fa-icon
-                                    [icon]="faGauge"></fa-icon> User Dashboard</a></li>
-                        <li><a href="https://wasdi.readthedocs.io/en/latest/index.html" target="_blank"
-                                class="dropdown-item"><fa-icon [icon]="faDocumentation"></fa-icon>
-                                Documentation</a></li>
-                        <li><a href="" class="dropdown-item" data-bs-toggle="offcanvas"
-                                data-bs-target="#feedbackOffcanvas" aria-controls="feedbackOffcanvas"><fa-icon
-                                    [icon]="faComment"></fa-icon> Send
-                                Feedback</a></li>
-                        <a class="dropdown-item" routerLink="" (click)="logout()"><fa-icon [icon]="faLogout"></fa-icon>
-                            Logout</a>
-                    </ul>
-                </li>
+                <li><a class="dropdown-item" (click)="logout()">{{"ROOT_MENU_LOGOUT"| translate}}</a></li>
             </ul>
         </div>
     </div>
-</nav>
-
-
-
-<!-- Feedback Form OffCanvas -->
-<div class="offcanvas offcanvas-end" id="feedbackOffcanvas">
-    <div class="offcanvas-header d-flex flex-row justify-content-start gap-3 p-0 m-0">
-        <button type="button" class="btn btn-secondary close-feedback-btn" data-bs-dismiss="offcanvas"
-            aria-label="Close">
-            <fa-icon [icon]="faArrowLeft"></fa-icon>
-        </button>
-        <h5 class="offcanvas-title">Send Feedback to WASDI</h5>
-    </div>
-    <div class="offcanvas-body">
-        <form name="m_oFeedback" #f="ngForm" (ngSubmit)="f.form && sendFeedback()">
-            <div class="user-contact-info mb-3">
-                <h6>As:</h6>
-                <p class="m-0 p-0">{{m_oUser.name}} {{m_oUser.surname}}</p>
-                <p class="m-0 p-0">{{m_oUser.userId}}</p>
-            </div>
-            <label for="">
-                <h6>Reason:</h6>
-            </label>
-            <select class="form-control mb-3" name="title" [(ngModel)]="m_oFeedback.title">
-                <option value="" selected disabled hidden>Select a reason</option>
-                <option value="I found a bug/problem">I found a bug/problem</option>
-                <option value="I need help with something">I need help with something</option>
-                <option value="I want to suggest a feature">I want to suggest a feature</option>
-            </select>
-            <label for="">
-                <h6>Tell us more:</h6>
-            </label>
-            <textarea class="form-control" name="message" cols="30" rows="10"
-                [(ngModel)]="m_oFeedback.message"></textarea>
-            <div class="btn-container d-flex flex-row gap-2 mt-5 justify-content-end">
-                <a class="btn btn-secondary" href="https://discord.gg/JYuNhPaZbE" target="_blank">Live
-                    Support</a>
-                <button class="btn btn-success" type="submit">Send</button>
-
-            </div>
-        </form>
-    </div>
-</div>
+</header>
