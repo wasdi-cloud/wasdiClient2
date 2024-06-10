@@ -10,7 +10,8 @@ import { EditSubscriptionDialogComponent } from 'src/app/dialogs/edit-subscripti
 @Component({
   selector: 'app-subscriptions-purchase',
   templateUrl: './subscriptions-purchase.component.html',
-  styleUrls: ['./subscriptions-purchase.component.css']
+  styleUrls: ['./subscriptions-purchase.component.css'],
+  host: { 'class': 'flex-fill' }
 })
 export class SubscriptionsPurchaseComponent implements OnInit {
   m_aoTypes: any = [];

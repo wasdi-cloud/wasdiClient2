@@ -1,4 +1,5 @@
 div.parent {
+    min-height: calc(100vh - 3rem);
     position: relative;
 }
 

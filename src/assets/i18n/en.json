@@ -240,7 +240,7 @@
     "IMPORT_PRODUCT_LIST_VARIABLES": "Variables",
     "IMPORT_PRODUCT_LIST_PROTOCOL": "Protocol",
     "IMPORT_ERROR_SEARCH_REQUEST": "Error in opening search request",
-    
+
     "IMPORT_CRONTAB_YEAR": "Year",
     "IMPORT_CRONTAB_SEASON": "Season",
     "IMPORT_CRONTAB_MONTH": "Month",
@@ -1071,6 +1071,28 @@
     "USER_SUBSCRIPTION_ID_ERROR": "Could not find subscription by ID",
     "USER_SUBSCRIPTION_SAVE_ERROR": "Could not save subscription",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Could not get user organisations",
+
+    "SUBSCRIPTIONS_HEADER": "Choose your <strong>space-y</strong> plan",
+    "SUBSCRIPTIONS_UP_TO": "Up to",
+    "SUBSCRIPTIONS_STARTER": "Starter",
+    "SUBSCRIPTIONS_STANDARD": "Standard",
+    "SUBSCRIPTIONS_PRO": "Professional",
+    "SUBSCRIPTIONS_STORAGE": "Storage",
+    "SUBSCRIPTIONS_PRIORITY": "<strong>Priority</strong> assistance",
+    "SUBSCRIPTIONS_DISCORD": "<strong>Discord</strong> assistance",
+    "SUBSCRIPTIONS_ASSISTANCE": "<strong>Discord and email</strong> assistance",
+    "SUBSCRIPTIONS_TRIAL": "3 Months free trial",
+    "SUBSCRIPTIONS_DEDICATED_NODE": "Dedicated <strong>node</strong> (1 Year only)",
+    "SUBSCRIPTIONS_DEDICATED_TEAM": "Dedicated <strong>team</strong>",
+    "SUBSCRIPTIONS_ONE_YEAR": "(1 Year Only)",
+    "SUBSCRIPTIONS_DAY": "Day",
+    "SUBSCRIPTIONS_WEEK": "Week",
+
+    "SUBSCRIPTION_BUY_NAME": "Give your subscription a name so you can keep track of your projects (optional)",
+    "SUBSCRIPTION_BUY_ORGANIZATION": "Select the organisation for which you are buying this plan (optional)",
+    "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
+    "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Order Summary",
+    "SUBSCRIPTION_BUY_TOTAL": "Total",
   
     "DIALOG_ADD_SUBSCRIPTION": "Add Subscription",
     "DIALOG_EDIT_SUBSCRIPTION": "Edit Subscription",
