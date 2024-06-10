@@ -58,8 +58,6 @@ export class ShareUiComponent implements OnInit {
     this.getEnabledUsers();
 
     this.m_bIsReadOnly = this.resource.readOnly;
-    console.log(this.resource)
-
   }
 
   getEnabledUsers() {
@@ -96,7 +94,6 @@ export class ShareUiComponent implements OnInit {
             }
           },
           error: oError => {
-            console.log(oError);
           }
         });
       }
@@ -150,7 +147,7 @@ export class ShareUiComponent implements OnInit {
 
   onAddEnabledUser() {
     if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sUserIdSearch)) {
-      this.m_oNotificationDisplayService.openAlertDialog("Please enter a valid user");
+      this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("DIALOG_SHARE_ENTER_USER"), '', 'alert')
     }
 
     if (this.resourceType && this.resource && this.m_sUserIdSearch.length !== 0) {
@@ -159,15 +156,17 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
+              let sMessage = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS")
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
             }
             if (oResponse.boolValue === false) {
               let sErrorMsg = this.m_oTranslate.instant(oResponse.stringValue);
-              this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+              this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
             }
           },
           error: oError => {
             let sErrorMsg = "Error in Sharing Workspace";
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         })
       }
@@ -177,16 +176,15 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
-              console.log(this.resource);
-              let sMessage = `Successfully Shared ${this.resource.name}`
-              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              let sMessage = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS")
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue);
             }
           },
           error: oError => {
-            let sErrorMsg = "Error in sharing this style";
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_STYLE_ERROR");
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         });
       }
@@ -196,16 +194,16 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
-              let sMessage = `Successfully Shared ${this.resource.name}`
-              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              let sMessage = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS")
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
             } else {
               let sErrorMsg = this.m_oTranslate.instant(oResponse.stringValue)
-              this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+              this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
             }
           },
           error: oError => {
-            let sErrorMsg = "Error in sharing this Processor Parameters Template";
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_PARAMS_ERROR");
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         })
       }
@@ -215,15 +213,15 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse.stringValue === "Done") {
               this.getEnabledUsers();
-              let sMessage = `Successfully shared ${this.resource.name}`
-              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              let sMessage = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS")
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
             } else {
-              this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue);
+              this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue, '', 'alert');
             }
           },
           error: oError => {
-            let sErrorMsg = "Error in sharing this workflow";
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_WORKFLOW_ERROR");
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         })
       }
@@ -233,15 +231,15 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse.boolValue === true) {
               this.getEnabledUsers();
-              let sMessage = `Successfully shared ${this.resource.processorName}`;
-              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              let sMessage = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS")
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue)
             }
           },
           error: oError => {
-            let sErrorMsg = "Error in sharing this workflow";
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_PROCESSOR_ERROR");
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         });
       }
@@ -251,15 +249,15 @@ export class ShareUiComponent implements OnInit {
           next: oResponse => {
             if (oResponse.message === "Done") {
               this.getEnabledUsers();
-              let sMessage = `Successfully shared ${this.resource.name}`;
-              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              let sMessage = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS")
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue)
             }
           },
           error: oError => {
-            let sErrorMsg = "Error in sharing this workflow";
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_WORKFLOW_ERROR");
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         })
       }
@@ -268,15 +266,15 @@ export class ShareUiComponent implements OnInit {
         this.m_oSubscriptionService.addSubscriptionSharing(this.resource.subscriptionId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
           next: oResponse => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.message === "Done") {
-              let sMessage = `Successfully shared ${this.resource.name}`;
-              // this.m_oNotificationDisplayService.openSnackBar(sMessage, "Close", "right", "bottom");
+              let sMessage = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS")
+              this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
             } else {
               this.m_oNotificationDisplayService.openAlertDialog(oResponse.stringValue)
             }
           },
           error: oError => {
-            let sErrorMsg = "Error in sharing this workflow";
-            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_SUBSCRIPTION_ERROR")
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         })
       }
@@ -288,24 +286,42 @@ export class ShareUiComponent implements OnInit {
     FadeoutUtils.utilsRemoveSpaces(sUserId);
     if (this.resourceType && this.resource) {
       if (this.resourceType === 'workspace') {
-        this.m_oWorkspaceService.deleteUserSharedWorkspace(this.resource.workspaceId, sUserId).subscribe(oResponse => {
-          if (oResponse.intValue === 200 && oResponse.stringValue === "Done") {
-            this.getEnabledUsers();
+        this.m_oWorkspaceService.deleteUserSharedWorkspace(this.resource.workspaceId, sUserId).subscribe({
+          next: oResponse => {
+            if (oResponse.intValue === 200 && oResponse.stringValue === "Done") {
+              this.getEnabledUsers();
+            }
+          },
+          error: oError => {
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_SUBSCRIPTION_ERROR")
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         })
       }
 
       if (this.resourceType === 'style') {
-        this.m_oStyleService.removeStyleSharing(this.resource.styleId, sUserId).subscribe(oResponse => {
-          if (oResponse.stringValue === "Done") {
-            this.getEnabledUsers();
+        this.m_oStyleService.removeStyleSharing(this.resource.styleId, sUserId).subscribe({
+          next: oResponse => {
+            if (oResponse.intValue === 200 && oResponse.stringValue === "Done") {
+              this.getEnabledUsers();
+            }
+          },
+          error: oError => {
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_SUBSCRIPTION_ERROR")
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         })
       }
 
       if (this.resourceType === 'PROCESSORPARAMETERSTEMPLATE') {
-        this.m_oAdminDashboardService.removeResourcePermission(this.resourceType, this.resource.templateId, sUserId).subscribe(oResponse => {
-          this.getEnabledUsers();
+        this.m_oAdminDashboardService.removeResourcePermission(this.resourceType, this.resource.templateId, sUserId).subscribe({
+          next: oResponse => {
+            this.getEnabledUsers();
+          },
+          error: oError => {
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_SUBSCRIPTION_ERROR")
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
+          }
         })
       }
 
@@ -313,12 +329,15 @@ export class ShareUiComponent implements OnInit {
         this.m_oWorkflowService.removeWorkflowSharing(this.resource.workflowId, sUserId).subscribe({
           next: oResponse => {
             if (oResponse.stringValue === 'Unauthorized') {
-              this.m_oNotificationDisplayService.openAlertDialog("You do not have the permissions to remove this user");
+              this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("DIALOG_SHARE_PERMISSION_ERROR"), '', 'alert');
             } else {
               this.getEnabledUsers();
             }
           },
-          error: oError => { }
+          error: oError => {
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_SUBSCRIPTION_ERROR")
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
+          }
         })
       }
 
@@ -328,8 +347,8 @@ export class ShareUiComponent implements OnInit {
             this.getEnabledUsers();
           },
           error: (oError) => {
-            console.log("ERROR IN REMOVING USER")
-
+            let sErrorMsg = this.m_oTranslate.instant("DIALOG_SHARE_SUBSCRIPTION_ERROR")
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'alert');
           }
         });
       }
@@ -338,11 +357,13 @@ export class ShareUiComponent implements OnInit {
     if (this.resourceType === 'organization') {
       this.m_oOrganizationsService.removeOrganizationSharing(this.resource.organizationId, sUserId).subscribe({
         next: oResponse => {
-          console.log("Removal Successful");
+          let sMessage = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS")
+          this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
           this.getEnabledUsers();
         },
         error: oError => {
-          console.log("Error in Removing User");
+          let sMessage = this.m_oTranslate.instant("DIALOG_SHARE_USER_ERROR")
+          this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert')
         }
       });
     }
@@ -350,7 +371,8 @@ export class ShareUiComponent implements OnInit {
     if (this.resourceType === 'subscription') {
       this.m_oSubscriptionService.removeSubscriptionSharing(this.resource.subscriptionId, sUserId).subscribe({
         next: oResponse => {
-          console.log("Removal Successful");
+          let sMessage = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS")
+          this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
           this.getEnabledUsers();
         },
         error: oError => { }

@@ -4,9 +4,9 @@
     m_aoSharedUsers.length===0) && (!m_bShowUsers) && !m_bLoadingUsers"
     class="image-wrapper d-flex flex-column align-items-center justify-content-center">
     <img src="/assets/images/collaborators.png" alt="">
-    <div class="header-text font-bold">There is no one here...</div>
-    <div class="collab-text mt-2">You can add collaborators to help you manage your {{resourceType}}</div>
-    <app-button class="mt-4" [m_sSize]="'large'" [m_sLabel]="'Add Collaborator'"
+    <div class="header-text font-bold">{{"DIALOG_SHARE_NO_ONE" | translate}}</div>
+    <div class="collab-text mt-2">{{"DIALOG_SHARE_ADD_TO_MANAGE" | translate}} {{resourceType}}</div>
+    <app-button class="mt-4" [m_sSize]="'large'" [m_sLabel]="'DIALOG_SHARE_ADD_COLLABORATOR' | translate"
         (click)="openSharedUsers()"></app-button>
 </div>
 <div [class.pannel]="resourceType === 'workflow' || resourceType === 'style' "
@@ -15,8 +15,8 @@
         <table>
             <thead class="table-heading-container">
                 <tr>
-                    <td class="font-bold">Email Address</td>
-                    <td class="font-bold thead-fixed-width">Access Type</td>
+                    <td class="font-bold">{{"LOGIN_PLACEHOLDER_EMAIL"| translate}}</td>
+                    <td class="font-bold thead-fixed-width">{{"DIALOG_SHARE_ACCESS_TYPE" | translate}}</td>
                     <td class="thead-fixed-width"></td>
                 </tr>
             </thead>
@@ -46,7 +46,8 @@
                             (m_oSelectionChange)="getPermissionInput($event)"></app-dropdown>
                     </td>
                     <td class="d-flex flex-row justify-content-end">
-                        <app-button class="" [m_sLabel]="'Add User'" (click)="!m_bIsReadOnly? onAddEnabledUser() : ''"
+                        <app-button class="" [m_sLabel]="'DIALOG_SHARE_ORGANIZATION_ADD_USER' | translate"
+                            (click)="!m_bIsReadOnly? onAddEnabledUser() : ''"
                             [m_bDisabled]="this.m_bIsReadOnly === true"></app-button>
                     </td>
                 </tr>
@@ -54,6 +55,7 @@
         </table>
     </div>
 
-    <app-button [m_sLabel]="!m_bShowInput ? 'Add collaborator' : 'Cancel'" class="align-self-start pt-2 ps-3"
-        (click)="toggleShowInput()"></app-button>
+    <app-button
+        [m_sLabel]="!m_bShowInput ? ('DIALOG_SHARE_ADD_COLLABORATOR' | translate) : ('KEY_PHRASES.CANCEL' | translate)"
+        class="align-self-start pt-2 ps-3" (click)="toggleShowInput()"></app-button>
 </div>

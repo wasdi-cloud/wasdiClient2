@@ -993,6 +993,20 @@
 
     "MARKET_CARD_PUBLISHER": "Publisher",
     "MARKET_CARD_PRICE": "Free",
+
+    "DIALOG_SHARE_UI": "Collaborators",
+    "DIALOG_SHARE_NO_ONE": "There is no one here...",
+    "DIALOG_SHARE_ADD_TO_MANAGE": "You can add collaborators to help you manage your",
+    "DIALOG_SHARE_ADD_COLLABORATOR": "Add Collaborator",
+    "DIALOG_SHARE_ACCESS_TYPE": "Access Type",
+    "DIALOG_SHARE_ENTER_USER": "Please enter a valid user",
+    "DIALOG_SHARE_STYLE_ERROR": "Could not share this style",
+    "DIALOG_SHARE_PARAMS_ERROR": "Could not share Parameters Template",
+    "DIALOG_SHARE_WORKFLOW_ERROR": "Could not share Workflow",
+    "DIALOG_SHARE_PROCESSOR_ERROR": "Could not share processor",
+    "DIALOG_SHARE_SUBSCRIPTION_ERROR": "Could not share Subscription",
+    "DIALOG_SHARE_PERMISSION_ERROR": "You do not have the permissions to remove this user",
+    "DIALOG_SHARE_USER_ERROR": "Could not remove user",
     
     "DIALOG_PACKAGE_MANAGER_VIEWING": "Viewing Packages For",
     "DIALOG_PACKAGE_MANAGER_HEADER": "Package Manager",
