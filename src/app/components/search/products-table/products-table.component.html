@@ -5,7 +5,7 @@
     <div class="d-flex flex-row justify-content-between">
         <!-- <app-button class="align-self-start" [m_sLabel]="'Select All'" [m_bOutline]="true"
             (click)="selectAllProducts()"></app-button> -->
-        <app-button [m_sLabel]="'MSG_ADD_TO_WS'" [m_bOutline]="true" (click)="openAddToWorkspaceDialog()"
+        <app-button [m_sLabel]="'MSG_ADD_TO_WS' | translate" [m_bOutline]="true" (click)="openAddToWorkspaceDialog()"
             *ngIf="m_aoSelectedProducts.length > 0"></app-button>
     </div>
     <div class="results-container">
