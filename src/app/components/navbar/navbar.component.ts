@@ -37,11 +37,6 @@ export class NavbarComponent implements OnInit {
 
   m_sUserAccount: string = "";
 
-  m_oFeedback: {
-    title: string | null,
-    message: string | null
-  } = { title: null, message: null }
-
   m_oRouterEvents: any;
 
   m_sSelectedTab: string = 'marketplace'
@@ -134,23 +129,5 @@ export class NavbarComponent implements OnInit {
 
   openCloseNavbar() {
     this.m_bIsNavbarOpen = !this.m_bIsNavbarOpen;
-  }
-
-  sendFeedback() {
-    if (typeof this.m_oFeedback === undefined || !this.m_oFeedback.title || !this.m_oFeedback.message) {
-      console.log("Error sending message");
-      return false;
-    }
-
-    this.m_oFeedbackService.sendFeedback(this.m_oFeedback).subscribe(oResponse => {
-      if (typeof oResponse !== null && typeof oResponse !== undefined && oResponse.boolValue === true) {
-        console.log("feedback sent")
-        return true;
-      } else {
-        console.log("error sending feedback");
-        return false;
-      }
-    });
-    return true;
   }
 }
