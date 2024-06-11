@@ -4,7 +4,7 @@ import { environment } from "src/environments/environment";
 export function initializeKeycloak(m_oKeycloak: KeycloakService): () => Promise<boolean> {
     const m_oOptions: KeycloakOptions = {
         config: {
-            url: environment.keycloakJs,
+            url: environment.baseurl + "auth",
             realm: 'wasdi',
             clientId: 'wasdi_client',
         },
