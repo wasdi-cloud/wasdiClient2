@@ -269,7 +269,6 @@
     "DIALOG_GET_CAPABILITIES_EXIT": "Exit",
     "DIALOG_GET_CAPABILITIES_SEARCH": "Search",
     "DIALOG_GET_CAPABILITIES_LOADING": "Loading...",
-    
    
     "DIALOG_FORMAT_JSON_ERROR": "Could not format your JSON input. Please ensure it is a valid JSON",
     "DIALOG_PARSE_JSON_ERROR": "There was an error in parsing the JSON payload", 
@@ -394,7 +393,7 @@
     "DIALOG_TITLE_WAPPS": "WASDI Apps",
     "DIALOG_TITLE_STYLES": "WASDI Styles",
     "DIALOG_TITLE_PAYLOAD": "View Payload",
-    
+
     "DIALOG_EDIT_USER": "Update user info",
     "DIALOG_EDIT_USER_OLD_PASSWORD": "Old password",
     "DIALOG_EDIT_USER_NEW_PASSWORD": "New password",
@@ -578,17 +577,11 @@
     "DIALOG_MANAGE_RESOURCE_PERMISSION_SEARCH": "Search",
  
     "DIALOG_MANAGE_USERS_TITLE": "Manage Users",
- 
     "DIALOG_MANAGE_WORKSPACES_TITLE": "Manage Workspaces",
-
     "DIALOG_MANAGE_PROCESSORS_TITLE": "Manage Processors",
-
     "DIALOG_MANAGE_USERS_USER_PARTIAL_NAME": "User name or email",
- 
     "DIALOG_MANAGE_WORKSPACES_WORKSPACE_PARTIAL_NAME": "Workspace name or ID",
- 
     "DIALOG_MANAGE_PROCESSORS_PROCESSOR_PARTIAL_NAME": "Processor name or ID",
- 
     "DIALOG_MANAGE_USERS_SEARCH": "Search",
  
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TIME_TITLE": "Total Running Time of Process Workspace",
@@ -628,22 +621,16 @@
     "DIALOG_PARAMS_TITLE": "Parameters list",
     "DIALOG_PARAMS_SELECTED_APP": "Selected App",
     "DIALOG_PARAMS_FILTER_HELP": "Search by parameters name",
-    "DIALOG_PARAMS_ADD": "Add",
-    "DIALOG_PARAMS_APPLY": "Apply",
     "DIALOG_PARAMS_DELETE": "Delete",
     "DIALOG_PARAMS_NO_PARAMS": "No parameters available for this app, do you want to",
     "DIALOG_PARAMS_ADD_ONE": "add one?",
     "DIALOG_PARAMS_PUBLISHER": "Publisher",
     "DIALOG_PARAMS_NAME": "Parameter Name",
-    "DIALOG_PARAMS_DESCRIPTION": "Description",
-    "DIALOG_PARAMS_CREATE_DATE": "Creation Date",
-    "DIALOG_PARAMS_UPDATE_DATE": "Update Date",
     "DIALOG_PARAMS_PARAMS": "Parameters",
     "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Are you sure you want to delete the following parameters template?", 
     "DIALOG_PARAMS_CONFIRM_DELETE_SHARE": "Are you sure you want to remove your permissions from the following parameters template?",
     "DIALOG_PARAMS_DELETE_ERROR": "Could not delete your parameters template",
     "DIALOG_PARAMS_SAVE_ERROR": "Could not save your parameters template",
-   
     "DIALOG_PARAMS_SHARE": "Share",
     "DIALOG_PARAMS_SHARE_HEADER": "Share Parameters",
     "DIALOG_PARAMS_SHARE_EMAIL": "WASDI Email Address",
@@ -656,16 +643,9 @@
     "DIALOG_PARAMS_SHARE_REMOVE_CONFIRM": "REMOVE PERMISSIONS FROM ",
    
     "DIALOG_STYLE_TAB_BASE": "Style",
-    "DIALOG_STYLE_TAB_SHARE": "Share",
     "DIALOG_STYLE_EDIT_XML": "Edit XML",
-    "DIALOG_STYLE_NAME": "Name",
-    "DIALOG_STYLE_DESCRIPTION": "Description",
     "DIALOG_STYLE_SET_PUBLIC": "Set Style public",
-    "DIALOG_STYLE_XML": "Style XML",
-    "DIALOG_STYLE_SHARE": "Share Style",
-    "DIALOG_STYLE_SHARE_MAIL": "Insert WASDI User email",
     "DIALOG_STYLE_SHARE_SHARE": "Share",
-    "DIALOG_STYLE_SHARE_ACTIVE": "Active sharings",
     "DIALOG_STYLE_SHARE_REMOVE": "Remove",
     "DIALOG_STYLE_OWNER": "Owner",
     "DIALOG_STYLE_FILTER": "Filter Style Name...",
@@ -680,9 +660,6 @@
     "DIALOG_PAYLOAD_DASHBOARD": "Dashboard",
     "DIALOG_PAYLOAD_NO_INFO": "No payload information is available for the selected process",
     "DIALOG_PAYLOAD_FETCH_ERROR": "Problem getting Payload String",
- 
-    "DIALOG_WORKSPACE_DETAILS_APPLY": "Apply",
-    "DIALOG_WORKSPACE_DETAILS_CLOSE": "Close",
  
     "WAP_SELECT_AREA_BASE": "The selected area exceeds the limits imposed for the application",
     "WAP_SELECT_AREA_OVER_AREA": "<br> - The area is too big",
