@@ -175,6 +175,7 @@ export class LoginComponent implements OnInit {
   keycloakLogin() {
     this.m_oKeycloakService.login();
   }
+  
 
   keycloakRegister() {
     this.m_oKeycloakService.register();

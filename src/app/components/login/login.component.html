@@ -24,11 +24,14 @@
                 <div>
                     <app-button [m_sSize]="'large'" [m_sLabel]="'Login'" [m_bRounded]="true" (click)="login()"
                         (keyup.enter)="login()"></app-button>
+<br>
+                    <app-button [m_sSize]="'large'" [m_sLabel]="'Login with Keycloak'" [m_bRounded]="true" (click)="keycloakLogin()">
 
-                    <app-button [m_sSize]="'large'" [m_sLabel]="'Login with Keycloak'" [m_bRounded]="true" (click)="keycloakLogin()"></app-button>
+                    </app-button>
+<br>
+                        <app-button [m_sSize]="'large'" [m_sLabel]="'Register with Keycloak'" [m_bRounded]="true" (click)="keycloakRegister()"></app-button>
 
-                        <app-button [m_sSize]="'large'" [m_sLabel]="'Login with Keycloak'" [m_bRounded]="true" (click)="login()"
-                        (keyup.enter)="keycloakRegister()"></app-button>
+
                     <div class="text-center">You do not have an account? Sign up here</div>
                 </div>
             </div>
