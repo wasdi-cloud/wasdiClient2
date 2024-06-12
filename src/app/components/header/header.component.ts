@@ -1,16 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+
+import { FeedbackDialogComponent } from './feedback-dialog/feedback-dialog.component';
+
 import { ConstantsService } from 'src/app/services/constants.service';
-import { FeedbackService } from 'src/app/services/api/feedback.service';
+import { KeycloakService } from 'keycloak-angular';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { ProjectService } from 'src/app/services/api/project.service';
+import { TranslateService } from '@ngx-translate/core';
+
 import { User } from 'src/app/shared/models/user.model';
 
-import { ProjectService } from 'src/app/services/api/project.service';
-
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { Router } from '@angular/router';
-import { FeedbackDialogComponent } from './feedback-dialog/feedback-dialog.component';
-import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from 'src/app/auth/service/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -26,9 +29,11 @@ export class HeaderComponent implements OnInit {
   m_oSelectedProject: any = { name: "No Active Project", projectId: null };
 
   constructor(
+    private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oKeycloakService: KeycloakService,
     private m_oProjectService: ProjectService,
     private m_oRouter: Router,
     private m_oTranslate: TranslateService
@@ -89,7 +94,7 @@ export class HeaderComponent implements OnInit {
       error: oError => {
         let sErrorMessage = "Error in getting your projects";
         this.m_oProject = oFirstProjectElement;
-        // this.m_oAlertDialog.openDialog(4000, sErrorMessage);
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
       }
     });
   }
@@ -125,8 +130,8 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
+    this.m_oAuthService.logout();
     this.m_oConstantsService.logOut();
-    this.m_oRouter.navigateByUrl("login");
   }
 
   openDocs() {

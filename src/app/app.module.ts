@@ -65,7 +65,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
 
 //Import Services
-import { AuthService } from './services/auth/auth.service';
+import { AuthService } from './auth/service/auth.service';
 import { ConstantsService } from './services/constants.service';
 
 
@@ -137,6 +137,9 @@ import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { DragAndDropComponent } from './shared/drag-and-drop/drag-and-drop.component';
 import { NotificationSnackbarComponent } from './shared/dialogs/notification-snackbar/notification-snackbar.component';
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
+
+import { initializeKeycloak } from './auth/keycloak-init.factory';
+import { KeycloakAngularModule,KeycloakService } from 'keycloak-angular'
 import { ManualBoundingBoxComponent } from './shared/shared-components/manual-bounding-box/manual-bounding-box.component';
 import { HelpDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/help-dialog/help-dialog.component';
 import { MarketplaceFiltersComponent } from './components/marketplace/marketplace-filters/marketplace-filters.component';
@@ -337,6 +340,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatChipsModule,
     MatProgressBarModule,
     NgxChartsModule,
+    KeycloakAngularModule,
     CdkContextMenuTrigger,
     CdkMenu,
     CdkMenuItem,
@@ -355,13 +359,22 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatDatepickerModule,
     MatNativeDateModule,
     { provide: RabbitStompService },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   multi: true,
+    //   deps: [ConfigurationService],
+    //   useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
+    // },
     {
       provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
       multi: true,
-      deps: [ConfigurationService],
-      useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
+
+      deps: [KeycloakService, ConfigurationService],
+      // useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
     },
     { provide: MatBottomSheetRef, useValue: {} },
+// >>>>>>> main
   ],
   bootstrap: [AppComponent],
   entryComponents: [ConfirmationDialogComponent],

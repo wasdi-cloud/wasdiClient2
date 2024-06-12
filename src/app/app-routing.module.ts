@@ -15,11 +15,12 @@ import { SubscriptionsPurchaseComponent } from './components/subscriptions-purch
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 
 //import auth guard
-import { AuthGuard } from './services/auth/auth.guard';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'marketplace', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'login&iss', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'settings', component: AdminComponent },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
@@ -34,7 +35,7 @@ const routes: Routes = [
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent, canActivate: [AuthGuard] }
 ]
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {useHash: true, onSameUrlNavigation: 'reload' })],
+  imports: [RouterModule.forRoot(routes, { useHash: true, onSameUrlNavigation: 'reload' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

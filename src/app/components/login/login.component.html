@@ -13,45 +13,25 @@
                 <div>Login to WASDI and start your journey<br>
                     to <strong>Earth Observation</strong></div>
             </div>
-            <div class="justify-self-center d-flex flex-column gap-3">
-
-                <app-input-field class="pt-3" [m_sLabel]="'Email Address'"
-                    (m_oInputChange)="setUsernameInput($event)" (keyup.enter)="login()"></app-input-field>
+            <div class="login-container justify-self-center d-flex flex-column">
+                <app-input-field class="pt-3" [m_sLabel]="'Email Address'" (m_oInputChange)="setUsernameInput($event)" [m_sInputValue]="form.username"
+                    (keyup.enter)="login()"></app-input-field>
                 <div class="password">
                     <app-input-field [m_sLabel]="'Password'" [m_sInputType]="'password'" [m_sIconRight]="'visibility'"
                         (m_oInputChange)="setPasswordInput($event)" (keyup.enter)="login()"></app-input-field>
-                    Forgot password? Reset.
                 </div>
                 <div>
-                    <app-button [m_sSize]="'large'" [m_sLabel]="'Login'" [m_bRounded]="true"
-                        (click)="login()"  (keyup.enter)="login()"></app-button>
-                    <div class="text-center">You do not have an account? Sign up here</div>
+                    Forgot password? <span class="call-to-action" (click)="resetPassword()">Reset</span>
+                </div>
+                <div>
+                    <app-button [m_sSize]="'large'" [m_sLabel]="'Login'" [m_bRounded]="true" (click)="login()"
+                        (keyup.enter)="login()"></app-button>
+                    <div class="text-center">You do not have an account yet? <span class="call-to-action"
+                            (click)="keycloakRegister()">Sign up here</span></div>
                 </div>
             </div>
         </div>
     </div>
     <div class="img-container">
     </div>
-    <!-- <form class="col-6" name="form" #f="ngForm" (ngSubmit)="f.form.valid && login()" novalidate> -->
-    <!-- Email input -->
-    <!-- <div class="form-outline mb-4">
-                <input type="email" id="form2Example1" class="form-control" [(ngModel)]="form.username"
-                    #username="ngModel" name="username" />
-                <label class="form-label" for="form2Example1">
-                    Email address
-                </label>
-            </div> -->
-
-    <!-- Password input -->
-    <!-- <div class="form-outline mb-4">
-                <input type="password" id="form2Example2" class="form-control" [(ngModel)]="form.password"
-                    #password="ngModel" name="password" />
-                <label class="form-label" for="form2Example2">
-                    Password
-                </label>
-            </div> -->
-
-    <!-- Submit button -->
-    <!-- <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-        </form> -->
 </main>
