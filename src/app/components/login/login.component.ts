@@ -6,10 +6,11 @@ import { User } from 'src/app/shared/models/user.model';
 import { ConfigurationService } from 'src/app/services/configuration.service';
 
 import { MatDialog } from '@angular/material/dialog';
-import { ErrorDialogComponent, ErrorDialogModel } from 'src/app/shared/dialogs/error-dialog/error-dialog.component';
 import { KeycloakService } from 'keycloak-angular';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-login',
@@ -32,12 +33,15 @@ export class LoginComponent implements OnInit {
   constructor(
     //  @Inject(Keycloak) private m_oKeycloak: any,
     private m_oAuthService: AuthService,
+    private m_oConfigurationService: ConfigurationService,
     private m_oDialog: MatDialog,
     private m_oConstantsService: ConstantsService,
     private m_oKeycloakService: KeycloakService,
     private m_oJwtService: JwtHelperService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oRouter: Router,
-    private m_oConfigurationService: ConfigurationService) { }
+    private m_oTranslate: TranslateService
+  ) { }
 
   ngOnInit(): void {
     this.m_oKeycloak = this.m_oKeycloakService.getKeycloakInstance();
@@ -79,7 +83,6 @@ export class LoginComponent implements OnInit {
    * @param oController 
    */
   callbackLogin(m_oData: any, oController: this) {
-
     //Ensure controller is defined: 
     if (!oController) {
       oController = this;
@@ -132,42 +135,6 @@ export class LoginComponent implements OnInit {
 
         }
       })
-
-    // We need sessionId
-    // if (data.hasOwnProperty("sessionId")) {
-    //   if (data.sessionId == null) {
-    //     // If it is null, the login failed
-    //     let oDialogData = new ErrorDialogModel("Error logging in.", "Please check Email and Password");
-    //     let dialogRef = this.m_oDialog.open(ErrorDialogComponent, {
-    //       maxWidth: "400px",
-    //       data: oDialogData
-    //     })
-    //   }
-    //   else {
-    //     // Ok we have a valid session Id
-    //     let oUser = {} as User;
-    //     oUser.userId = data.userId;
-    //     oUser.authProvider = 'wasdi';
-    //     oUser.name = data.name;
-    //     oUser.surname = data.surname;
-    //     oUser.sessionId = data.sessionId;
-    //     oUser.role = data.role;
-    //     oUser.type = data.type;
-    //     oUser.grantedAuthorities = data.grantedAuthorities;
-
-    //     //set user and cookie
-    //     this.m_oConstantsService.setUser(oUser);
-    //     this.m_oAuthService.saveToken(data.sessionId);
-
-    //     this.m_oAuthService.checkSession().subscribe({
-    //       next: oResponse => {
-    //         oController.m_oConfigurationService.loadConfiguration();
-    //         oController.m_oRouter.navigateByUrl('/marketplace');
-    //       }
-    //     })
-
-    //   }
-
     }
 
   }
@@ -175,7 +142,7 @@ export class LoginComponent implements OnInit {
   keycloakLogin() {
     this.m_oKeycloakService.login();
   }
-  
+
 
   keycloakRegister() {
     this.m_oKeycloakService.register();
@@ -187,5 +154,14 @@ export class LoginComponent implements OnInit {
 
   setPasswordInput(oEvent) {
     this.form.password = oEvent.event.target.value;
+  }
+
+  resetPassword() {
+
+    var sMessage = "Password recover is executed through our Keycloak portal. Press 'Yes' to continue."
+    this.m_oNotificationDisplayService.openConfirmationDialog(sMessage, '', 'alert').subscribe(bResult => {
+      this.keycloakLogin()
+    })
+    return true;
   }
 }
