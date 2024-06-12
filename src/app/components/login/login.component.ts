@@ -158,9 +158,11 @@ export class LoginComponent implements OnInit {
 
   resetPassword() {
 
-    var sMessage = "Password recover is executed through our Keycloak portal. Press 'Yes' to continue."
+    var sMessage = "Password recovery is executed through our Keycloak portal. Press 'Yes' to continue."
     this.m_oNotificationDisplayService.openConfirmationDialog(sMessage, '', 'alert').subscribe(bResult => {
-      this.keycloakLogin()
+      if(bResult) {
+        this.keycloakLogin()
+      }
     })
     return true;
   }
