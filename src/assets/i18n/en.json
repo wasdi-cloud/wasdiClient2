@@ -128,7 +128,6 @@
     "PROCESSING_BAR_ERROR": "Error",
     "PROCESSING_BAR_LOGS": "Logs",
     "PROCESSING_BAR_PAYLOAD": "Payload",
-    "PROCESSING_BAR_LOAD_MORE": "Load more...",
     
     "WORKSPACES_PLACEHOLDER_SEARCH": "Search WorkSpace...",
     "WORKSPACES_BUTTON_NEW_WORKSPACE": "New Workspace",
@@ -144,7 +143,6 @@
     "WORKSPACES_OWNER": "Owner",
     "WORKSPACES_NODE_CODE": "Node Code",
     "WORKSPACES_PRODUCTS": "Products",
-    "WORKSPACES_NAME": "Name",
     "WORKSPACES_ID": "Workspace ID",
     "WORKSPACES_PROC_COUNT": "Processes Executed",
     "WORKSPACES_SHARED_WITH": "Shared with",
@@ -383,13 +381,6 @@
     "DIALOG_CRONOTAB_CLEAR_BUTTON": "Clear",
     "DIALOG_CRONOTAB_TITLE": "TIME SERIES SELECTOR",
     
-    "DIALOG_LIST_OF_WORKSPACES_TITLE_TABLE_LIST_OF_WORKSPACES": "List of Workspaces",
-    "DIALOG_LIST_OF_WORKSPACES_TH_TABLE_WORKSPACE_NAME": "Workspace name",
-    "DIALOG_LIST_OF_WORKSPACES_TH_TABLE_OWNER": "Owner",
-    "DIALOG_LIST_OF_WORKSPACES_ADD_NEW_WORKSPACE_BUTTON": "Add new workspace",
-    "DIALOG_LIST_OF_WORKSPACES_MANAGER_WORKFLOWS_BUTTON": "Manager workflows",
-    "DIALOG_LIST_OF_WORKSPACES_SHOW_WORKFLOWS_BUTTON": "Show workflows",
-    
     "DIALOG_TITLE_WAPPS": "WASDI Apps",
     "DIALOG_TITLE_STYLES": "WASDI Styles",
     "DIALOG_TITLE_PAYLOAD": "View Payload",
@@ -618,6 +609,7 @@
     "DIALOG_WS_INFO_SHARINGS": "Shared with",
     "DIALOG_WS_INFO_NO_SHARES": "There's no one here, but you can add collaborators!",
  
+    "DIALOG_WS_INFO_PUBLIC": "Make Workspace Public",
     "DIALOG_PARAMS_TITLE": "Parameters list",
     "DIALOG_PARAMS_SELECTED_APP": "Selected App",
     "DIALOG_PARAMS_FILTER_HELP": "Search by parameters name",
@@ -866,7 +858,7 @@
   
     "MSG_MKT_APP_UI_ERROR": "ERROR: READING APP UI",
     "MSG_MKT_APP_UI_INVALID": "The following inputs are required or have an invalid input",
-    "MSG_MKT_APP_UI_WORKSPACE": "Either select a workpace or create a new one",
+    "MSG_MKT_APP_UI_WORKSPACE": "Either select a workspace or create a new one",
     "MSG_MKT_APP_DATA_ERROR": "ERROR GETTING APPLICATION DATA",
     "MSG_MKT_APP_HELP_ERROR": "ERROR READING APP HELP",
     "MSG_MKT_APP_NO_HELP": "There isn't any help message.",
@@ -875,7 +867,6 @@
     "MSG_MKT_RUN_ERROR": "ERROR RUNNING APPLICATION",
     "MSG_MKT_REQUIRED": " is required",
     "MSG_MKT_INSERT_REQUIRED": "PLEASE INSERT REQUIRED FIELDS<br>AND CHECK INSERTED VALUES",
-    "MSG_MKT_GURU": "GURU MEDITATION <BR>",
     "MSG_MKT_WS_CREATE_ERROR": "ERROR CREATING WORKSPACE",
     "MSG_MKT_WS_OPEN_ERROR": "ERROR OPENING THE WORKSPACE",
     "MSG_MKT_WS_OPEN_NODE_INACTIVE": "THE NODE IS NO LONGER ACTIVE",
