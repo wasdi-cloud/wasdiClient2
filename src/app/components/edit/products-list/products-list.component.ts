@@ -422,8 +422,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     let sMessage = `<ul>${asProductsMsg.toString().replaceAll(",", "")}</ul>`
 
-    console.log(asProductsMsg)
-
     let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sMessage, sTitle, 'danger');
 
     bConfirmResult.subscribe(oDialogResult => {

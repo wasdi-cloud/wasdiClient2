@@ -187,7 +187,6 @@ export class ProductListItemComponent {
 
   emitProductSelectionChange(oProduct: any, oEvent: any): void {
     let bChecked = oEvent.target.checked
-    console.log(oProduct)
     this.m_oProductSelectionChange.emit({
       product: this.m_oProduct.fileName,
       checked: bChecked
@@ -216,7 +215,6 @@ export class ProductListItemComponent {
   }
 
   attributesDialog(oElement) {
-    console.log(oElement)
     this.m_oDialog.open(MetadataAttributesDialogComponent, {
       data: {
         element: oElement
