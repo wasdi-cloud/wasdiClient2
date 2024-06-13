@@ -30,7 +30,7 @@ export class WorkspacesListDialogComponent implements OnInit {
   /**
    * The selected products for multi-product sending
    */
-  m_aoSelectedProducts: Array<any> = [];
+  m_aoSelectedProducts: Array<any> = null;
 
   /**
    * Array of selected workspaces - add active workspace when sending via search
@@ -255,43 +255,74 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   }
 
-shareProductToWorkspace() {
+  shareProductToWorkspace() {
     let oController = this;
     let aoWorkspaces = this.m_aoSelectedWorkspaces;
     let oProduct = this.m_oSelectedProduct;
     let iNumberOfWorkspaces = aoWorkspaces.length;
+    let aoProducts = this.m_aoSelectedProducts;
 
     let sMessage = this.m_oTranslate.instant("MSG_SHARE_WITH_WS");
     let sErrorMessage = this.m_oTranslate.instant("MSG_ERROR_SHARING");
 
     for (var iIndexWorkspace = 0; iIndexWorkspace < iNumberOfWorkspaces; iIndexWorkspace++) {
+      if (aoProducts) {
+        aoProducts.forEach(oProduct => {
+          oProduct.isDisabledToDoDownload = true;
+          let sUrl = oProduct.link;
+          let oError = function (data, status) {
+            oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
+            oProduct.isDisabledToDoDownload = false;
+          };
 
-      oProduct.isDisabledToDoDownload = true;
-      let sUrl = oProduct.link;
-      let oError = function (data, status) {
-        oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
-        oProduct.isDisabledToDoDownload = false;
-      };
+          let sBound = "";
 
-      let sBound = "";
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds) == false) {
+            sBound = oProduct.bounds.toString();
+          }
 
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds) == false) {
-        sBound = oProduct.bounds.toString();
-      }
+          let sOriginWorkspaceId = oController.m_oActiveWorkspace.workspaceId;
+          let sDestinationWorkspaceId = aoWorkspaces[iIndexWorkspace].workspaceId;
+          let sProductName = oProduct.fileName;
 
-      let sOriginWorkspaceId = oController.m_oActiveWorkspace.workspaceId;
-      let sDestinationWorkspaceId = aoWorkspaces[iIndexWorkspace].workspaceId;
-      let sProductName = oProduct.fileName;
+          oController.m_oFileBufferService.share(sOriginWorkspaceId, sDestinationWorkspaceId, sProductName).subscribe({
+            next: oResponse => {
+              oController.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar')
+            },
+            error: oError => {
+              oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
+            }
+          });
+        })
+      } else if (oProduct) {
+        oProduct.isDisabledToDoDownload = true;
+        let sUrl = oProduct.link;
+        let oError = function (data, status) {
+          oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
+          oProduct.isDisabledToDoDownload = false;
+        };
 
-      oController.m_oFileBufferService.share(sOriginWorkspaceId, sDestinationWorkspaceId, sProductName).subscribe({
-        next: oResponse => {
-          oController.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar')
-        },
-        error: oError => {
-          oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
+        let sBound = "";
+
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds) == false) {
+          sBound = oProduct.bounds.toString();
         }
-      });
+
+        let sOriginWorkspaceId = oController.m_oActiveWorkspace.workspaceId;
+        let sDestinationWorkspaceId = aoWorkspaces[iIndexWorkspace].workspaceId;
+        let sProductName = oProduct.fileName;
+
+        oController.m_oFileBufferService.share(sOriginWorkspaceId, sDestinationWorkspaceId, sProductName).subscribe({
+          next: oResponse => {
+            oController.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar')
+          },
+          error: oError => {
+            oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
+          }
+        });
+      }
     }
+    this.onDismiss()
   }
 
   /**

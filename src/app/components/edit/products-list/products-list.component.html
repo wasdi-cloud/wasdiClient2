@@ -17,14 +17,16 @@
     </div>
     <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
     <!-- Product Tree -> Scrollable -->
-    <div *ngIf="m_asSelectedProducts.length > 0"
-        class="btn-header d-flex flex-row align-items-start gap-2">
+    <div *ngIf="m_aoSelectedProducts.length > 0" class="btn-header d-flex flex-row align-items-start gap-2">
         <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'download'"
-            [m_sLabel]="'DOWNLOAD ' + '[' + m_asSelectedProducts.length + ']'"
+            [m_sLabel]="'DOWNLOAD ' + '[' + m_aoSelectedProducts.length + ']'"
             (click)="downloadMultipleProducts()"></app-button>
         <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'delete'"
-            [m_sLabel]="'DELETE ' + '[' + m_asSelectedProducts.length + ']'"
+            [m_sLabel]="'DELETE ' + '[' + m_aoSelectedProducts.length + ']'"
             (click)="deleteMultipleProducts()"></app-button>
+        <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'share'"
+            [m_sLabel]="'SHARE ' + '[' + m_aoSelectedProducts.length + ']'"
+            (click)="sendProductsToWorkspace()"></app-button>
     </div>
     <div class="products-container flex-fill"
         *ngIf="m_bIsLoadingProducts === false && (m_aoWorkspaceProductsList.length >0 )">

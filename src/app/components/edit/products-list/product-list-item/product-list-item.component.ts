@@ -188,7 +188,7 @@ export class ProductListItemComponent {
   emitProductSelectionChange(oProduct: any, oEvent: any): void {
     let bChecked = oEvent.target.checked
     this.m_oProductSelectionChange.emit({
-      product: this.m_oProduct.fileName,
+      product: this.m_oProduct,
       checked: bChecked
     });
   }

@@ -109,8 +109,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   //Wait until After Content is initialized and then check - on check call the config file
-  ngAfterContentChecked(): void {
-    if (this.m_oConfigurationService.getConfiguration() != null) {
+  ngAfterContentChecked(): void { 
+    if (this.m_oConfigurationService.getConfiguration() !== null) {
       this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
     }
   }

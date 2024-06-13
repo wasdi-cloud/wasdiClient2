@@ -27,6 +27,7 @@ import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
 import { GlobeService } from 'src/app/services/globe.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
+import { WorkspacesListDialogComponent } from '../../search/workspaces-list-dialog/workspaces-list-dialog.component';
 
 declare let Cesium: any;
 
@@ -118,11 +119,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * Counter to track the amount of times the "sort" button has been clicked (max 3);
    */
   m_iSortClick: number = 0;
-
-  /** 
-   * Array containing file names for selected products
-  */
-  m_asSelectedProducts: Array<string> = [];
 
   /** 
    * Flag to see if all products are selected
@@ -236,8 +232,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         this.m_aoWorkspaceProductsList.forEach(oProduct => {
           if (oProduct.fileName.toLowerCase().indexOf(this.m_sSearchString.toLowerCase()) !== -1 || oProduct.name.toLowerCase().indexOf(this.m_sSearchString.toLowerCase()) !== -1) {
             aoFiltered.push(oProduct)
-          }
-          else if (oProduct.productFriendlyName) {
+          } else if (oProduct.productFriendlyName) {
             if (oProduct.productFriendlyName.toLowerCase().indexOf(this.m_sSearchString.toLowerCase()) !== -1) {
               aoFiltered.push(oProduct)
             }
@@ -249,8 +244,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
       } else {
         this.m_aoFilteredProducts = this.m_aoWorkspaceProductsList;
       }
-    }
-    else {
+    } else {
       this.m_aoFilteredProducts = [];
       this.m_bIsLoadingProducts = false;
     }
@@ -267,15 +261,12 @@ export class ProductsListComponent implements OnChanges, OnInit {
       this.m_aoFilteredProducts.forEach(oProduct => {
         oProduct['checked'] = true;
       })
-
       this.m_aoSelectedProducts = this.m_aoFilteredProducts;
-      this.m_asSelectedProducts = this.m_aoSelectedProducts.map(oProduct => oProduct.fileName)
     } else {
       this.m_aoFilteredProducts.forEach(oProduct => {
         oProduct['checked'] = false;
       })
       this.m_aoSelectedProducts = [];
-      this.m_asSelectedProducts = [];
     }
   }
 
@@ -294,8 +285,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   downloadMultipleProducts() {
     let oController = this;
-    this.m_asSelectedProducts.forEach(oProduct => {
-      oController.downloadProductByName(oProduct);
+    this.m_aoSelectedProducts.forEach(oProduct => {
+      oController.downloadProductByName(oProduct.fileName);
     })
   }
 
@@ -414,10 +405,10 @@ export class ProductsListComponent implements OnChanges, OnInit {
     let bDeleteLayer = true;
     let bDeleteFile = true;
 
-    let sTitle: string = this.m_oTranslate.instant("EDITOR_PRODUCTS_REMOVE") + ` (${this.m_asSelectedProducts.length})`
+    let sTitle: string = this.m_oTranslate.instant("EDITOR_PRODUCTS_REMOVE") + ` (${this.m_aoSelectedProducts.length})`
 
-    let asProductsMsg = this.m_asSelectedProducts.map(sProduct => {
-      return `<li>${sProduct}</li>`
+    let asProductsMsg = this.m_aoSelectedProducts.map(oProduct => {
+      return `<li>${oProduct.fileName}</li>`
     })
 
     let sMessage = `<ul>${asProductsMsg.toString().replaceAll(",", "")}</ul>`
@@ -428,24 +419,35 @@ export class ProductsListComponent implements OnChanges, OnInit {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oDialogResult) || oDialogResult === false) {
         return;
       } else {
-        this.m_asSelectedProducts.forEach(oProduct => {
-          this.m_oProductService.deleteProductFromWorkspace(oProduct, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe({
+        this.m_aoSelectedProducts.forEach(oProduct => {
+          this.m_oProductService.deleteProductFromWorkspace(oProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe({
             next: oResponse => {
               if (oResponse.boolValue) {
                 this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
-                this.m_asSelectedProducts = [];
+                this.m_aoSelectedProducts = [];
                 return true;
               } else {
-                this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct);
+                this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
                 return false;
               }
             },
             error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct);
+              this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
               return false;
             }
           })
         })
+      }
+    })
+  }
+
+  sendProductsToWorkspace() { 
+    this.m_oDialog.open(WorkspacesListDialogComponent, {
+      height: '600px', 
+      width: '800px',
+      data: {
+        sharing: true,
+        products: this.m_aoSelectedProducts
       }
     })
   }
@@ -629,19 +631,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
     })
   }
 
-  /**
-   * Track By Function needed by angular to determine the uniquess of an item in the list
-   * This is used for the product list
-   * 
-   * @param iIndex 
-   * @param oItem 
-   * @returns 
-   */
-  trackByItem(iIndex: number, oItem: any) {
-    return oItem.fileName
-  }
-
-
   getSearchString(oEvent: any) {
     // If the Enter key is hit, execute the search
     if (oEvent.code === 'Enter') {
@@ -693,22 +682,22 @@ export class ProductsListComponent implements OnChanges, OnInit {
   }
 
   /**
-   * Managee the selected products array
+   * Manage the selected products array
    * @param oEvent 
    */
   getProductSelection(oEvent): void {
     //If the product is checked (to be added to the array)
     if (oEvent.checked === true) {
-      if (this.m_asSelectedProducts.length === 0) {
-        this.m_asSelectedProducts.push(oEvent.product);
-      } else if (!this.m_asSelectedProducts.includes(oEvent.product)) {
-        this.m_asSelectedProducts.push(oEvent.product)
+      if (this.m_aoSelectedProducts.length === 0) {
+        this.m_aoSelectedProducts.push(oEvent.product);
+      } else if (!this.m_aoSelectedProducts.includes(oEvent.product)) {
+        this.m_aoSelectedProducts.push(oEvent.product)
       }
     } else {
       //If the product should be removed from the array
-      if (this.m_asSelectedProducts.includes(oEvent.product)) {
-        let iIndex = this.m_asSelectedProducts.indexOf(oEvent.product);
-        this.m_asSelectedProducts.splice(iIndex, 1);
+      if (this.m_aoSelectedProducts.includes(oEvent.product)) {
+        let iIndex = this.m_aoSelectedProducts.indexOf(oEvent.product);
+        this.m_aoSelectedProducts.splice(iIndex, 1);
       }
     }
   }
