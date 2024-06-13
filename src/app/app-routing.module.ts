@@ -16,10 +16,11 @@ import { WorkspacesComponent } from './components/workspaces/workspaces.componen
 
 //import auth guard
 import { AuthGuard } from './auth/auth.guard';
+import { IsSignedInGuard } from './auth/is-signed-in.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [IsSignedInGuard] },
   { path: 'login&iss', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'settings', component: AdminComponent },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
