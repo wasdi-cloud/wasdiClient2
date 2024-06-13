@@ -45,7 +45,7 @@ export class ProductListItemComponent {
   /**
    * Flag to track whether or not the product is selected
    */
-  m_bIsSelected: boolean = false;
+  @Input() m_bIsSelected: boolean = false;
 
   /**
    * Flag to track whether or not the product has metadata - possible change when user elects to get metadata
@@ -187,6 +187,7 @@ export class ProductListItemComponent {
 
   emitProductSelectionChange(oProduct: any, oEvent: any): void {
     let bChecked = oEvent.target.checked
+    console.log(oProduct)
     this.m_oProductSelectionChange.emit({
       product: this.m_oProduct.fileName,
       checked: bChecked

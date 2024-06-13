@@ -9,13 +9,16 @@
                 <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
                 <app-button [matTooltip]="'Sort products'" [m_bOutline]="true" [m_sIconLeft]="'sort_by_alpha'"
                     (click)="productSort()"></app-button>
+                <app-button [matTooltip]="'Select all'" [m_bOutline]="true" [m_sIconLeft]="'check_box'"
+                    (click)="selectAllProducts()"></app-button>
             </div>
         </div>
 
     </div>
     <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
     <!-- Product Tree -> Scrollable -->
-    <div *ngIf="m_asSelectedProducts.length > 0" class="btn-header d-flex flex-row align-items-start gap-2">
+    <div *ngIf="m_asSelectedProducts.length > 0"
+        class="btn-header d-flex flex-row align-items-start gap-2">
         <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'download'"
             [m_sLabel]="'DOWNLOAD ' + '[' + m_asSelectedProducts.length + ']'"
             (click)="downloadMultipleProducts()"></app-button>
@@ -26,7 +29,8 @@
     <div class="products-container flex-fill"
         *ngIf="m_bIsLoadingProducts === false && (m_aoWorkspaceProductsList.length >0 )">
         <app-product-list-item *ngFor="let oProduct of m_aoFilteredProducts; let iIndex = index" [m_oProduct]="oProduct"
-            (m_oProductChange)="handleBandSelection($event, iIndex)" (m_oProductInfoChange)="emitProductInfoChange()"
+            [m_bIsSelected]="oProduct.checked" (m_oProductChange)="handleBandSelection($event, iIndex)"
+            (m_oProductInfoChange)="emitProductInfoChange()"
             (m_oProductSelectionChange)="getProductSelection($event)"></app-product-list-item>
     </div>
 

@@ -124,6 +124,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
   */
   m_asSelectedProducts: Array<string> = [];
 
+  /** 
+   * Flag to see if all products are selected
+  */
+  m_bSelectAllProduct: boolean = false
+
 
   constructor(
     private m_oCatalogService: CatalogService,
@@ -255,20 +260,22 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Handle the click on the select (de-select) all button
-   * @param oEvent 
    */
-  selectAllProducts(oEvent) {
-    if (oEvent.currentTarget.checked === true) {
+  selectAllProducts() {
+    this.m_bSelectAllProduct = !this.m_bSelectAllProduct
+    if (this.m_bSelectAllProduct === true) {
       this.m_aoFilteredProducts.forEach(oProduct => {
         oProduct['checked'] = true;
       })
 
       this.m_aoSelectedProducts = this.m_aoFilteredProducts;
+      this.m_asSelectedProducts = this.m_aoSelectedProducts.map(oProduct => oProduct.fileName)
     } else {
       this.m_aoFilteredProducts.forEach(oProduct => {
         oProduct['checked'] = false;
       })
       this.m_aoSelectedProducts = [];
+      this.m_asSelectedProducts = [];
     }
   }
 
@@ -377,22 +384,27 @@ export class ProductsListComponent implements OnChanges, OnInit {
     let oFoundProduct = this.m_aoWorkspaceProductsList.find(oProduct => oProduct.fileName === node.fileName);
     let sTitle = this.m_oTranslate.instant("EDITOR_PRODUCT_REMOVE");
 
-    let bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(oFoundProduct.name, sTitle, 'alert');
-
-    bConfirmResult.subscribe(oDialogResult => {
+    this.m_oNotificationDisplayService.openConfirmationDialog(oFoundProduct.name, sTitle, 'alert').subscribe(oDialogResult => {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oDialogResult) || oDialogResult === false) {
         return false;
       } else {
-        this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(oResponse => {
-          if (oResponse.boolValue) {
-            this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
-            return true;
-          }
-          return false
-        });
-        return true;
+        this.m_oProductService.deleteProductFromWorkspace(oFoundProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe(
+          {
+            next: oResponse => {
+              if (oResponse.boolValue) {
+                this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
+                return true;
+              } else {
+                return false
+              }
+            },
+            error: oError => {
+              return false
+            }
+          })
+        return false
       }
-    });
+    })
   }
 
   /**
