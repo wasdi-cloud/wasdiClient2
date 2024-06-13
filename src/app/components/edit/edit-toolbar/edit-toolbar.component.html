@@ -10,7 +10,7 @@
         </li>
         <li class="nav-item">
             <app-button [m_sLabel]="'NOTEBOOK'" [m_sIconRight]="'laptop_mac'" [m_bMuted]="true"
-                (click)="openJupyterNotebookPage()" [m_sSize]="'small'" [m_bRounded]="true"></app-button>
+                (click)="openJupyterNotebookPage()" [m_sSize]="'small'" [m_bDisabled]="!m_bJupyterIsReady" [m_bRounded]="true"></app-button>
         </li>
 
         <li class="nav-item">

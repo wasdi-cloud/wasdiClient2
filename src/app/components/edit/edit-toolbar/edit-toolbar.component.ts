@@ -26,14 +26,13 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class EditToolbarComponent implements OnInit, OnDestroy {
   @Input() m_aoProducts: Product[];
-  @Input() m_bJupyterIsReady: boolean = false;
+  @Input() m_bJupyterIsReady: boolean = true;
   @Input() m_b2DMapModeOn: boolean = true;
   m_bFeatureInfoMode: boolean = false;
 
   @Output() m_b2DMapModeOnChange: EventEmitter<boolean> = new EventEmitter;
   @Output() m_b2DFeatureInfoModeChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  m_bNotebookIsReady: boolean = false;
   m_sFilterText: string;
 
   m_sWorkspaceId: string = "";
@@ -92,24 +91,33 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     })
   }
 
-  openJupyterNotebookPage(): boolean {
+  openJupyterNotebookPage() {
+    this.m_bJupyterIsReady = false
     //Check if user has valid subscription and active project
     if (this.m_oConstantsService.checkProjectSubscriptionsValid() === false) {
       return false;
     } else {
       let sMessage = this.m_oTranslate.instant("EDITOR_NOTEBOOK_PREPARE");
       //If user has subscription and project, prepare notebook:
-      this.m_oConsoleService.createConsole(this.m_oConstantsService.getActiveWorkspace().workspaceId).subscribe(oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
-
-          if (oResponse.stringValue.includes("http")) {
-            window.open(oResponse.stringValue, '_blank');
-          } else {
-            sMessage = sMessage + "<br>" + oResponse.stringValue;
-            this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger');
+      this.m_oConsoleService.createConsole(this.m_oConstantsService.getActiveWorkspace().workspaceId).subscribe({
+        next: oResponse => {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false && oResponse.boolValue === true) {
+            if (oResponse.stringValue.includes("http")) {
+              window.open(oResponse.stringValue, '_blank');
+              this.m_bJupyterIsReady = true
+            } else {
+              sMessage = sMessage + "<br>" + oResponse.stringValue;
+              this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
+              this.m_bJupyterIsReady = false
+            }
           }
+          return true;
+        },
+        error: oError => {
+          this.m_bJupyterIsReady = true;
+          return true
         }
-      });
+      })
       return true;
     }
   }
@@ -125,7 +133,10 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   rabbitMessageHook(oRabbitMessage, oController): void {
     if (oRabbitMessage.messageResult === "OK") {
-      oController.m_bJupyterIsReady = true;
+      // Set timeout to allow for jupyter status to update
+      setTimeout(() => {
+        oController.m_bJupyterIsReady = true;
+      }, 1000)
     }
   }
 
