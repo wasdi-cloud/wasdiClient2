@@ -1,7 +1,9 @@
-<div class="secondary-nav">
+<div class="secondary-nav d-flex flex-column">
     <div class="location-header">{{"ROOT_VIEW_NAV_BAR_LINK_APPSTORE" | translate}}</div>
-    <div class="filters-header">{{"MARKET_FILTERS" | translate }} </div>
-    <div class="filters-container" style="height: 90%">
+    <div class="filters-header d-flex flex-row justify-content-between">{{"MARKET_FILTERS" | translate }} 
+        <app-button class="close-btn" [m_bOutline]="true" [m_sLabel]="('KEY_PHRASES.CLOSE' | translate).toUpperCase()" [m_sSize]="'small'"  data-bs-dismiss="offcanvas" aria-label="Close"></app-button>
+    </div>
+    <div class="filters-container flex-fill d-flex flex-column">
         <div class="input-container">
             <app-input-field [m_sIconLeft]="'search'" [m_sPlaceholder]="'MARKET_SEARCH_APP' | translate"
                 [m_sInputValue]="m_sSearchInput" (m_oInputChange)="getSearchInput($event)"
@@ -16,7 +18,7 @@
                     {{oCategory.category}}</div>
             </div>
         </div>
-        <div class="input-container">
+        <div class="input-container developers-wrapper">
             <div class="search-header">{{"MARKET_DEVELOPER" | translate}}</div>
             <app-input-field [m_sIconLeft]="'search'" [m_sPlaceholder]="'MARKET_SEARCH_DEVELOPERS' | translate"
                 (m_oInputChange)="getDeveloperInput($event)"
@@ -72,3 +74,4 @@
             (click)="onSearchInput($event)"></app-button>
     </div>
 </div>
+
