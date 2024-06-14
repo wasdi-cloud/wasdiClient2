@@ -182,7 +182,7 @@ export class WorkspacesListDialogComponent implements OnInit {
     let oController = this;
 
     // If the single selected product is null, the user has only selected 1 product from products list - transfer it to the Selected Proudct Object
-    if (this.m_aoSelectedProducts.length === 1 && this.m_oSelectedProduct === null) {
+    if ((!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoSelectedProducts) && this.m_aoSelectedProducts.length === 1) && this.m_oSelectedProduct === null) {
       this.m_oSelectedProduct = this.m_aoSelectedProducts[0];
     }
     for (let iWorkspaceIndex = 0; iWorkspaceIndex < iNumberOfWorkspaces; iWorkspaceIndex++) {

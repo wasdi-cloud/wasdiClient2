@@ -23,7 +23,7 @@
         <app-button *ngIf="!m_bIsSharingProduct && m_oSelectedProduct"
             [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? ('SHARE_SEND_PRODUCT' | translate) : ('SHARE_SEND_PRODUCT_WORKSPACES' | translate)"
             (click)="addProductToWorkspace()"></app-button>
-        <app-button *ngIf="!m_bIsSharingProduct && m_aoSelectedProducts.length > 0"
+        <app-button *ngIf="!m_bIsSharingProduct && m_aoSelectedProducts"
             [m_sLabel]="m_aoSelectedWorkspaces.length <= 1 ? ('SHARE_SEND_PRODUCTS' | translate) : ('SHARE_SEND_PRODUCTS_WORKSPACES' | translate)"
             (click)="addMultipleProductsToWorkspace()"></app-button>
         <app-button *ngIf="m_bIsSharingProduct"
