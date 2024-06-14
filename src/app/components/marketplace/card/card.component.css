@@ -100,7 +100,6 @@ div.card-price {
     line-height: normal;
     color: var(--Colors-Neutrals-0, #FFF);
     z-index: 2;
-
 }
 
 .overlay {

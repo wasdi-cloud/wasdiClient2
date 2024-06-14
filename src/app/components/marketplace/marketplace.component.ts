@@ -65,6 +65,11 @@ export class MarketplaceComponent implements OnInit {
   m_sDeveloperSearch: string = "";
 
   m_oActiveUser: User = {} as User;
+
+  /**
+   * Boolean to flag whether or not the fitlers are shown
+   */
+  m_bShowFilters: boolean = true
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oImageService: ImageService,
@@ -75,7 +80,7 @@ export class MarketplaceComponent implements OnInit {
 
   ngOnInit(): void {
     this.m_oActiveUser = this.m_oConstantsService.getUser();
-  
+
     this.getApplications();
   }
 
@@ -293,5 +298,9 @@ export class MarketplaceComponent implements OnInit {
 
 
     this.refreshAppList();
+  }
+
+  toggleShowFilters(bShowFilters: boolean) {
+    this.m_bShowFilters = bShowFilters
   }
 }

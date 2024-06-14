@@ -1,54 +1,61 @@
 <main class="d-flex flex-row flex-fill">
     <div class="d-flex flex-row flex-fill">
-        <app-marketplace-filters (m_oAppFilterOutput)="getAppFilter($event)"></app-marketplace-filters>
+        <app-marketplace-filters class="collapse-closed"
+            (m_oAppFilterOutput)="getAppFilter($event)"></app-marketplace-filters>
         <!-- Marketplace App Cards -->
         <div class="app-cards-container w-100 ">
             <!-- Sorting Container -->
-            <div class="d-flex flex-row pb-2 gap-2 justify-content-end align-items-center">
-                <p class="font-bold m-0 p-0">{{"SORT_BY" | translate}}:</p>
-                <div class="category-tag flex-row align-items-center gap-1" (click)="setSorting('name')"
-                    [class.active]="m_oAppFilter.orderBy === 'name'">
-                    <span class="material-symbols-outlined">
-                        sort_by_alpha
-                    </span>
-                    <p>{{"MARKET_NAME" | translate}}</p>
-                    <span *ngIf="m_oAppFilter.orderBy === 'name'" class="material-symbols-outlined">
-                        {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-                    </span>
-                </div>
-                <div class="category-tag d-flex flex-row align-items-center gap-1" (click)="setSorting('date')"
-                    [class.active]="m_oAppFilter.orderBy === 'date'">
-                    <span class="material-symbols-outlined">
-                        sort_by_alpha
-                    </span>
-                    <p>{{ "MARKET_DATE" | translate}}</p>
-                    <span *ngIf="m_oAppFilter.orderBy === 'date'" class="material-symbols-outlined">
-                        {{m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-                    </span>
-                </div>
-                <div class="category-tag flex-row align-items-center gap-1" (click)="setSorting('price')"
-                    [class.active]="m_oAppFilter.orderBy === 'price'">
-                    <span class="material-symbols-outlined">
-                        sort_by_alpha
-                    </span>
-                    <p>{{ "MARKET_PRICE" | translate}}</p>
+            <div class="d-flex flex-row pb-3 gap-2 justify-content-between align-items-center">
+                <app-button class="show-filter-btn" [m_bOutline]="true" [m_sLabel]="'Filters'.toUpperCase()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"></app-button>
+                <div class="d-flex flex-row gap-2 justify-content-end align-items-center">
+                    <p class="font-bold m-0 p-0">{{"SORT_BY" | translate}}:</p>
+                    <div class="category-tag flex-row align-items-center gap-1" (click)="setSorting('name')"
+                        [class.active]="m_oAppFilter.orderBy === 'name'">
+                        <span class="material-symbols-outlined">
+                            sort_by_alpha
+                        </span>
+                        <p>{{"MARKET_NAME" | translate}}</p>
+                        <span *ngIf="m_oAppFilter.orderBy === 'name'" class="material-symbols-outlined">
+                            {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                        </span>
+                    </div>
+                    <div class="category-tag d-flex flex-row align-items-center gap-1" (click)="setSorting('date')"
+                        [class.active]="m_oAppFilter.orderBy === 'date'">
+                        <span class="material-symbols-outlined">
+                            sort_by_alpha
+                        </span>
+                        <p>{{ "MARKET_DATE" | translate}}</p>
+                        <span *ngIf="m_oAppFilter.orderBy === 'date'" class="material-symbols-outlined">
+                            {{m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                        </span>
+                    </div>
+                    <div class="category-tag flex-row align-items-center gap-1" (click)="setSorting('price')"
+                        [class.active]="m_oAppFilter.orderBy === 'price'">
+                        <span class="material-symbols-outlined">
+                            sort_by_alpha
+                        </span>
+                        <p>{{ "MARKET_PRICE" | translate}}</p>
 
-                    <span *ngIf="m_oAppFilter.orderBy === 'price'" class="material-symbols-outlined">
-                        {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-                    </span>
+                        <span *ngIf="m_oAppFilter.orderBy === 'price'" class="material-symbols-outlined">
+                            {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                        </span>
+                    </div>
                 </div>
             </div>
 
-            <div class="processor-cards-container d-flex flex-row flex-wrap gap-4 ">
-                <app-card class="wasdi-card flex-fill" *ngFor="let oProcessor of m_aoApplications"
-                    [m_oProcessor]="oProcessor"></app-card>
+            <div class="processor-cards-container row p-0">
+                <app-card class="pb-4 col-xxl-3 col-xl-4 col-lg-6 col-md-6 col-sm-6"
+                    *ngFor="let oProcessor of m_aoApplications" [m_oProcessor]="oProcessor"></app-card>
             </div>
-
             <div class="d-flex flex-row justify-content-center my-3">
-
                 <app-button class="m-auto" [m_sLabel]="'Load More'" [m_bDisabled]="!m_bLoadMoreEnabled"
                     (click)="loadMore()"></app-button>
             </div>
         </div>
     </div>
 </main>
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <app-marketplace-filters
+            (m_oAppFilterOutput)="getAppFilter($event)"></app-marketplace-filters>
+</div>
