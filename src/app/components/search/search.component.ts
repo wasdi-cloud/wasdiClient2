@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, AfterContentInit, AfterContentChecked } from '@angular/core';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Component, OnInit, OnDestroy, AfterContentChecked } from '@angular/core';
 
 import { SearchService } from 'src/app/search.service';
 import { ConfigurationService } from 'src/app/services/configuration.service';
@@ -23,9 +22,6 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   host: { 'class': 'flex-fill' }
 })
 export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
-  //Font Awesome Imports:
-  faPlus = faPlus;
-
   m_oConfiguration: any;
   m_aoMissions: Array<any> = [];
 
@@ -106,10 +102,13 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     FadeoutUtils.verboseLog("SearchComponent.ngOnInit")
     this.m_oPageService.setFunction(this.executeSearch, this);
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    if (this.m_oConfigurationService.getConfiguration() === null) {
+      this.m_oConfigurationService.loadConfiguration();
+    }
   }
 
   //Wait until After Content is initialized and then check - on check call the config file
-  ngAfterContentChecked(): void { 
+  ngAfterContentChecked(): void {
     if (this.m_oConfigurationService.getConfiguration() !== null) {
       this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
     }

@@ -359,12 +359,12 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatDatepickerModule,
     MatNativeDateModule,
     { provide: RabbitStompService },
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [ConfigurationService],
-      useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
-    },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   multi: true,
+    //   deps: [ConfigurationService],
+    //   useFactory: (appConfigService: ConfigurationService) => () => appConfigService.loadConfiguration()
+    // },
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
