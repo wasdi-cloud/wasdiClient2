@@ -1,3 +1,11 @@
+.header-link {
+    cursor: pointer;
+}
+
+.header-link:hover {
+    text-decoration: underline;
+}
+
 .new-workflow {
     background: var(--neutral5);
     border: 1px solid var(--neutral10);

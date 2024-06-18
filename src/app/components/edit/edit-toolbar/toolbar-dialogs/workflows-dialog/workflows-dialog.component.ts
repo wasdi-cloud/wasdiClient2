@@ -19,6 +19,11 @@ export class WorkflowsDialogComponent implements OnInit {
   // Workflows (fetched from server)
   m_aoWorkflows: any[] = [];
 
+  /**
+   * Workflows to be shown and filtered in the client (manipulated based on single input vs batch processing)
+   */
+  m_aoShownWorkflows: Array<any> = [];
+
   // Products present in the open workspace
   m_aoProducts: any[] = [];
 
@@ -71,6 +76,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   m_bShowShare: boolean = false;
 
+  m_bIsBatchProcessing: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
@@ -104,6 +110,7 @@ export class WorkflowsDialogComponent implements OnInit {
       next: oResponse => {
         if (oResponse.body) {
           this.m_aoWorkflows = oResponse.body;
+          this.m_aoShownWorkflows = oResponse.body;
           if (!this.m_oSelectedWorkflow.name) {
             this.setSelectedWorkflow(this.m_aoWorkflows[0])
           }
@@ -113,6 +120,20 @@ export class WorkflowsDialogComponent implements OnInit {
         this.m_oNotificationDisplayService.openAlertDialog("Error in getting the workflows.")
       }
     })
+  }
+
+  /**
+   * Get single input SNAP workflows from the server
+   */
+  getSingleInputWorkflows(): void {
+    var iNumberOfWorkflows = this.m_aoWorkflows.length;
+    var aoReturnArray = [];
+    for (var iIndexWorkflow = 0; iIndexWorkflow < iNumberOfWorkflows; iIndexWorkflow++) {
+      if (this.m_aoWorkflows[iIndexWorkflow].inputNodeNames.length < 2) {
+        aoReturnArray.push(this.m_aoWorkflows[iIndexWorkflow]);
+      }
+    }
+    this.m_aoShownWorkflows = aoReturnArray;
   }
 
   /**
@@ -162,7 +183,7 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   /**
-   * Set the visiblity for new workflow creation inputs
+   * Set the visibility for new workflow creation inputs
    * @param bShowInputs 
    * @param bIsEditing 
    */
@@ -240,6 +261,11 @@ export class WorkflowsDialogComponent implements OnInit {
     })
   }
 
+  /**
+   * Delete existing workflow
+   * @param oWorkflow 
+   * @returns 
+   */
   removeWorkflow(oWorkflow: Workflow) {
     if (!oWorkflow) {
       return false;
@@ -309,7 +335,7 @@ export class WorkflowsDialogComponent implements OnInit {
       this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to execute a workflow in this workspace");
       return false;
     }
-    let iNumberOfProducts = this.m_aoSelectedProducts.length;
+    let iNumberOfProducts = this.m_oSelectedWorkflow.inputFileNames.length;
     for (let iSelectedProductIndex = 0; iSelectedProductIndex < iNumberOfProducts; iSelectedProductIndex++) {
       let aoSingleInputFiles: Array<string> = [];
       aoSingleInputFiles.push(this.m_oSelectedWorkflow.inputFileNames[iSelectedProductIndex]);
@@ -325,7 +351,6 @@ export class WorkflowsDialogComponent implements OnInit {
     }
     return true;
   }
-
 
   getObjectExecuteGraph(sWorkflowId, sName, sDescription, asInputNodeNames,
     asInputFileNames, asOutputNodeNames, asOutputFileNames) {
@@ -381,10 +406,17 @@ export class WorkflowsDialogComponent implements OnInit {
    * @param oEvent 
    */
   getSingleSelection(oEvent: any, oNode: any) {
-    if (oEvent.value) {
+    console.log(oEvent)
+    if (!oEvent.value.length) {
       //Set the inputFileName value to reflect SINGLE input: 
       this.m_oSelectedWorkflow.inputFileNames = [oEvent.value.name];
+    } else {
+      this.m_oSelectedWorkflow.inputFileNames = oEvent.value.map(oProduct => {
+        return oProduct.name;
+      })
     }
+
+    console.log(this.m_oSelectedWorkflow.inputFileNames)
   }
 
   /**
@@ -457,10 +489,6 @@ export class WorkflowsDialogComponent implements OnInit {
     }
   }
 
-  onDismiss() {
-    this.m_oMatDialogRef.close()
-  }
-
   getWorkflowImageLink(oWorkflow) {
     return "/assets/icons/style-placeholder.svg"
   }
@@ -514,6 +542,20 @@ export class WorkflowsDialogComponent implements OnInit {
     this.m_bShowShare = false;
   }
 
+  toggleBatchProcessing() {
+    this.m_bIsBatchProcessing = !this.m_bIsBatchProcessing
+    if (this.m_bIsBatchProcessing === true) {
+      this.getSingleInputWorkflows();
+    } else {
+      this.m_aoShownWorkflows = this.m_aoWorkflows;
+    }
+
+    this.m_oSelectedWorkflow =  this.m_aoShownWorkflows[0]
+  }
+
+  onDismiss() {
+    this.m_oMatDialogRef.close()
+  }
 
   /********** Workflow XML Handlers **********/
   getWorkflowXML() {

@@ -367,6 +367,11 @@
 	"DIALOG_WORKFLOW_TAB_SHARE_WF": "Partager des flux de travail",
 	"DIALOG_WORKFLOW_FILTER_NAME": "Nom du flux de travail pour filtrer...",
 	"DIALOG_WORKFLOW_FILE": "Fichier",
+	"DIALOG_WORKFLOW_NEW": "Votre nouveau workflow apparaîtra ici",
+    "DIALOG_WORKFLOW_SEARCH_WORKFLOWS": "Rechercher des workflows",
+    "DIALOG_WORKFLOW_DISCARD": "Annuler le workflow",
+    "DIALOG_WORKFLOW_SHARE": "Partagez votre workflow avec un autre utilisateur",
+    "DIALOG_WORKFLOW_EDIT": "Modifier le workflow",
 
 	"DIALOG_STYLE_DROP_OR_CLICK": "Faites glisser et déposez le style XML ici ou cliquez pour télécharger",
 	"DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "Le glisser/déposer de fichiers n'est pas pris en charge pour ce navigateur",

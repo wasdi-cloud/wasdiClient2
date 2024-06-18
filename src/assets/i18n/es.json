@@ -368,6 +368,11 @@
     "DIALOG_WORKFLOW_TAB_SHARE_WF": "Compartir flujos de trabajo",
     "DIALOG_WORKFLOW_FILTER_NAME": "Filtrar nombre de flujo de trabajo...",
     "DIALOG_WORKFLOW_FILE": "Archivo",
+    "DIALOG_WORKFLOW_NEW": "Tu nuevo flujo de trabajo aparecerá aquí",
+    "DIALOG_WORKFLOW_SEARCH_WORKFLOWS": "Buscar flujos de trabajo",
+    "DIALOG_WORKFLOW_DISCARD": "Descartar flujo de trabajo",
+    "DIALOG_WORKFLOW_SHARE": "Comparte tu flujo de trabajo con otro usuario",
+    "DIALOG_WORKFLOW_EDIT": "Editar flujo de trabajo",
 
 	"DIALOG_STYLE_DROP_OR_CLICK": "Arrastra y suelta el estilo XML aquí o haz clic para cargar",
 	"DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "Arrastrar/soltar archivos no es compatible con este navegador",

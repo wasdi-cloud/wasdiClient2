@@ -254,6 +254,12 @@
 	"DIALOG_WORKFLOW_TAB_SHARE_WF": "Partajează Fluxuri de lucru",
 	"DIALOG_WORKFLOW_FILTER_NAME": "Filtrați numele fluxului de lucru...",
 	"DIALOG_WORKFLOW_FILE": "Fişier",
+	"DIALOG_WORKFLOW_NEW": "Noul flux de lucru va apărea aici",
+    "DIALOG_WORKFLOW_SEARCH_WORKFLOWS": "Căutare fluxuri de lucru",
+    "DIALOG_WORKFLOW_DISCARD": "Renunțați la fluxul de lucru",
+    "DIALOG_WORKFLOW_SHARE": "Partajați fluxul de lucru cu alt utilizator",
+    "DIALOG_WORKFLOW_EDIT": "Editați fluxul de lucru",
+	
 	"DIALOG_STYLE_DROP_OR_CLICK": "Trageți și plasați fişierul de stil în format XML aici sau faceți clic pentru a încărca",
 	"DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "Funcționalitatea Drag/Drop nu este disponibilă pentru acest browser",
 	"DIALOG_STYLE_MANAGER_TAB_LIST": "Lista de stiluri",

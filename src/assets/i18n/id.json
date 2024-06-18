@@ -111,9 +111,8 @@
 	"EDITOR_PRODUCTS_FILTER_CLEAN": "Hapus Filter",
 	"EDITOR_PRODUCTS_FILTER_SELECT": "Pilih",
 	"EDITOR_PRODUCTS_WS_INFO": "Info Area Kerja",
-	"EDITOR_PRODUCT_REMOVE":  "Konfirmasi penghapusan produk", 
-    "EDITOR_PRODUCTS_REMOVE": "Konfirmasi penghapusan produk",
-
+	"EDITOR_PRODUCT_REMOVE": "Konfirmasi penghapusan produk",
+	"EDITOR_PRODUCTS_REMOVE": "Konfirmasi penghapusan produk",
 	"IMPORT_PRODUCTS_PER_PAGE_LABEL": "Produk per halaman",
 	"IMPORT_PAGE_LABEL": "Halaman",
 	"IMPORT_OF_LABEL": "dari",
@@ -254,6 +253,12 @@
 	"DIALOG_WORKFLOW_TAB_SHARE_WF": "Bagikan Alur Kerja",
 	"DIALOG_WORKFLOW_FILTER_NAME": "Filter Nama Alur Kerja...",
 	"DIALOG_WORKFLOW_FILE": "File",
+	"DIALOG_WORKFLOW_NEW": "Alur kerja baru Anda akan muncul di sini",
+	"DIALOG_WORKFLOW_SEARCH_WORKFLOWS": "Alur Kerja Penelusuran",
+	"DIALOG_WORKFLOW_DISCARD": "Buang Alur Kerja",
+	"DIALOG_WORKFLOW_SHARE": "Bagikan alur kerja Anda dengan pengguna lain",
+	"DIALOG_WORKFLOW_EDIT": "Edit Alur Kerja"
+	,
 	"DIALOG_STYLE_DROP_OR_CLICK": "Drag dan drop SNAP alur kerja XML di sini atau klik untuk mengunggah",
 	"DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "Drag/Drop File tidak dapat dilakukan untuk browser ini",
 	"DIALOG_STYLE_MANAGER_TAB_LIST": "Daftar Style",
@@ -691,20 +696,17 @@
 	"DIALOG_PACKAGE_MANAGER_LATEST_VERSION": "Versi terbaru",
 	"DIALOG_PACKAGE_MANAGER_ACTIONS": "tindakan",
 	"EDITOR_ERROR_CONSOLE_NOT_REACHABLE": "Kesalahan saat menghubungi layanan JupyterLab",
-	
 	"USER_ORGANIZATIONS_ERROR_FETCHING": "Tidak dapat mengambil organisasi Anda",
-    "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Tidak dapat mengambil informasi organisasi",
-    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Konfirmasi Penghapusan Organisasi", 
-    "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Apakah Anda yakin ingin menghapus organisasi ini?",
-    "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Konfirmasi penghapusan izin",
-    "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Apakah Anda yakin ingin menghapus izin Anda pada organisasi ini?",
-    "USER_ORGANIZATIONS_DELETE_SUCCESS": "Organisasi dihapus",
-    "USER_ORGANIZATION_SAVE_SUCCESS": "Organisasi disimpan",
-    "USER_ORGANIZATION_INVALID_INPUT": "Masukan organisasi tidak valid",
-    "USER_ORGANIZATION_SAVE_ERROR": "Tidak dapat menyelamatkan organisasi Anda",
-    "USER_ORGANIZATION_DELETE_ERROR": "Tidak dapat menghapus organisasi Anda",
-
+	"USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Tidak dapat mengambil informasi organisasi",
+	"USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Konfirmasi Penghapusan Organisasi",
+	"USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Apakah Anda yakin ingin menghapus organisasi ini?",
+	"USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Konfirmasi penghapusan izin",
+	"USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Apakah Anda yakin ingin menghapus izin Anda pada organisasi ini?",
+	"USER_ORGANIZATIONS_DELETE_SUCCESS": "Organisasi dihapus",
+	"USER_ORGANIZATION_SAVE_SUCCESS": "Organisasi disimpan",
+	"USER_ORGANIZATION_INVALID_INPUT": "Masukan organisasi tidak valid",
+	"USER_ORGANIZATION_SAVE_ERROR": "Tidak dapat menyelamatkan organisasi Anda",
+	"USER_ORGANIZATION_DELETE_ERROR": "Tidak dapat menghapus organisasi Anda",
 	"READ_ONLY": "Read Only",
-	
-"MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Diperlukan langganan yang valid dan proyek aktif. Silakan lihat Dasbor Pengguna."
+	"MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Diperlukan langganan yang valid dan proyek aktif. Silakan lihat Dasbor Pengguna."
 }

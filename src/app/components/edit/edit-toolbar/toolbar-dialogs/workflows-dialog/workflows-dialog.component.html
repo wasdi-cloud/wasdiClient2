@@ -1,6 +1,6 @@
 <div class="apps-dialog d-flex flex-column" style="height: 100%; width: 100%;">
     <div class="dialog-header d-flex flex-row justify-content-between font-bold">
-        Wasdi workflows
+        <div class="header-link">{{"DIALOG_WORKFLOW_MANAGER_TITLE" | translate}}</div>
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
     <div class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between "
@@ -9,11 +9,16 @@
             <div class="search-header font-bold d-flex flex-column gap-2 mb-3">
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     Search workflows
-                    <app-button [m_sLabel]="'New Workflow'" [m_sIconLeft]="'add_box'"
-                        (click)="toggleShowInputs(true, false)"></app-button>
+                    <div class="d-flex flex-row gap-1 align-items-center">
+                        <app-button [m_bOutline]="true"
+                            [m_sLabel]="!m_bIsBatchProcessing ? ('DIALOG_WORKFLOW_MANAGER_TAB_BATCH_WORKFLOW'| translate) : ('DIALOG_WORKFLOW_MANAGER_TAB_EXECUTE_SAVED_WORKFLOW' | translate)"
+                            (click)="toggleBatchProcessing()"></app-button>
+                        <app-button [m_sLabel]="'DIALOG_WORKFLOW_MANAGER_TAB_UPLOAD_WORKFLOW' | translate"
+                            [m_sIconLeft]="'add_box'" (click)="toggleShowInputs(true, false)"></app-button>
+                    </div>
                 </div>
-                <app-input-field [m_sPlaceholder]="'Search workflow'" [m_sIconLeft]="'search'"
-                    (m_oInputChange)="getInputChanges($event, 'search')"></app-input-field>
+                <app-input-field [m_sPlaceholder]="'DIALOG_WORKFLOW_SEARCH_WORKFLOWS'| translate"
+                    [m_sIconLeft]="'search'" (m_oInputChange)="getInputChanges($event, 'search')"></app-input-field>
             </div>
             <div *ngIf="m_bIsLoadingWorkflow === true">
                 <app-invader></app-invader>
@@ -22,16 +27,17 @@
                 class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1" style="overflow-y:scroll">
                 <div *ngIf="m_bShowInputs && m_bCreatingWorkflow"
                     class="new-workflow d-flex flex-row justify-content-between font-bold"
-                    [matTooltip]="'Discard Workflow'">
-                    Your workflow will appear here
+                    [matTooltip]="'DIALOG_WORKFLOW_DISCARD'| translate">
+                    {{'DIALOG_WORKFLOW_NEW' | translate}}
                     <span class="material-symbols-outlined" (click)="toggleShowInputs(false, false)">
                         delete
                     </span>
                 </div>
-                <app-list-item *ngFor="let oWorkflow of m_aoWorkflows | filter: m_sSearchString" [m_bHasImg]="false"
-                    [m_oProcessorItem]="oWorkflow " [m_bIsSelected]="oWorkflow.name === m_oSelectedWorkflow.name"
-                    [m_bSimpleItem]="true" [m_bProcessorItem]="true" [m_sLabel]="oWorkflow.name"
-                    [m_sDescription]="oWorkflow.description" [m_sIcon]="getWorkflowImageLink(oWorkflow)"
+                <app-list-item *ngFor="let oWorkflow of m_aoShownWorkflows | filter: m_sSearchString"
+                    [m_bHasImg]="false" [m_oProcessorItem]="oWorkflow "
+                    [m_bIsSelected]="oWorkflow.name === m_oSelectedWorkflow.name" [m_bSimpleItem]="true"
+                    [m_bProcessorItem]="true" [m_sLabel]="oWorkflow.name" [m_sDescription]="oWorkflow.description"
+                    [m_sIcon]="getWorkflowImageLink(oWorkflow)"
                     [m_bHasToolbar]="oWorkflow .sharedWithMe === true || m_sUserId === oWorkflow .userId"
                     (m_oEmitClickEvent)="handleListItemClick($event, oWorkflow)"
                     (click)="setSelectedWorkflow(oWorkflow, true)"></app-list-item>
@@ -41,18 +47,18 @@
         <!-- Inputs to Create a New Workflow -->
         <div *ngIf="m_bShowInputs" class="json-container d-flex flex-column">
             <div class="json-header font-bold">
-                New workflow
+                {{'DIALOG_WORKFLOW_MANAGER_TAB_UPLOAD_WORKFLOW' | translate}}
             </div>
             <div class="workflows-product-container d-flex flex-column flex-fill gap-3">
                 <app-input-field [m_sLabel]="'Workflow name'"
                     (m_oInputChange)="getInputChanges($event, 'name')"></app-input-field>
-                <app-textarea class="textarea" [m_sLabel]="'Workflow description'"
+                <app-textarea class="textarea" [m_sLabel]="'DIALOG_WORKFLOW_MANAGER_TABLE_DESCRIPTION' | translate"
                     (keyup)="getInputChanges($event, 'description')"></app-textarea>
                 <app-drag-and-drop class="drag-drop"
                     (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
                 <div class="d-flex flex-row align-items-center gap-2">
                     <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox">
-                    <label for="isPublic">Set as public</label>
+                    <label for="isPublic">{{'DIALOG_WORKFLOW_SET_PUBLIC' | translate}}</label>
                 </div>
             </div>
             <div class="footer d-flex flex-row justify-content-end">
@@ -70,9 +76,10 @@
 
         <!-- Inputs to Edit an Existing Workflow -->
         <div *ngIf="m_bShowEditInputs" class="json-container d-flex flex-column">
-            <div class="json-header font-bold mb-2">Edit details</div>
+            <div class="json-header font-bold mb-2">{{'DIALOG_WORKFLOW_EDIT' | translate}}</div>
             <div class="workflows-product-container d-flex flex-column flex-fill gap-3">
-                <app-input-field [m_sLabel]="'Workflow name'" [m_sInputValue]="m_sWorkflowName"
+                <app-input-field [m_sLabel]="'DIALOG_WORKFLOW_MANAGER_TABLE_NAME' | translate"
+                    [m_sInputValue]="m_sWorkflowName"
                     (m_oInputChange)="getInputChanges($event, 'name')"></app-input-field>
                 <app-textarea class="textarea" [m_sLabel]="'Workflow description'"
                     [m_sInputString]="m_sWorkflowDescription"
@@ -92,12 +99,12 @@
                     </div>
                 </div>
                 <app-drag-and-drop class="drag-drop"
-                (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
+                    (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
                 <div class="d-flex flex-row align-items-center gap-2">
                     <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox"
                         [checked]="m_oSelectedWorkflow.public" (change)="getInputChanges($event, 'isPublic')"
                         [disabled]="m_oSelectedWorkflow.readOnly">
-                    <label for="isPublic">Set as public</label>
+                    <label for="isPublic">{{'DIALOG_WORKFLOW_SET_PUBLIC' | translate}}</label>
                 </div>
 
             </div>
@@ -111,20 +118,37 @@
             <div class="json-header d-flex flex-column">
                 <div class="processor-name font-bold">{{m_oSelectedWorkflow.name ?
                     m_oSelectedWorkflow.name: 'Select A Workflow'}}</div>
-                <p *ngIf="m_oSelectedWorkflow.userId">Publisher: {{m_oSelectedWorkflow.userId}}</p>
+                <p *ngIf="m_oSelectedWorkflow.userId">{{'WAP_PUBLISHER' | translate}}: {{m_oSelectedWorkflow.userId}}
+                </p>
             </div>
-            <div class="flex-fill workflows-product-container">
+            <div *ngIf="!m_bIsBatchProcessing" class="flex-fill workflows-product-container">
                 <div *ngFor="let oNode of m_oSelectedWorkflow.inputNodeNames">
                     <app-dropdown [m_bIsMultiSelect]="false" [m_aoDropdownItems]="m_aoProducts" [m_bHasSearch]="true"
                         [m_bFileExt]="true" (m_oSelectionChange)="getSingleSelection($event, oNode)"
-                        [m_sLabel]="'Read'"></app-dropdown>
+                        [m_sLabel]="'DIALOG_WORKFLOW_MANAGER_EXECUTE_WORKFLOW_LABEL'| translate"></app-dropdown>
+                </div>
+            </div>
+            <div *ngIf="m_bIsBatchProcessing" class="flex-fill workflows-product-container">
+                <div *ngFor="let oNode of m_oSelectedWorkflow.inputNodeNames">
+
+                    <app-dropdown [m_bIsMultiSelect]="true" [m_aoDropdownItems]="m_aoProducts" [m_bHasSearch]="true"
+                        [m_bFileExt]="true" [m_sLabel]="'DIALOG_WORKFLOW_MANAGER_EXECUTE_WORKFLOW_LABEL'| translate"
+                        (m_oSelectionChange)="getSingleSelection($event, oNode)"></app-dropdown>
                 </div>
             </div>
 
             <div class="footer d-flex flex-row justify-content-end">
                 <div class="d-flex flex-row gap-3">
-                    <app-button [m_sLabel]="'Run'" [m_sIconLeft]="'play_circle'"
-                        [m_bDisabled]="!m_oSelectedWorkflow.name || this.m_oSelectedWorkflow.inputFileNames.length <= 0" (click)="runSingleInputWorkflow()"></app-button>
+                    <app-button *ngIf="!m_bIsBatchProcessing"
+                        [m_sLabel]="'DIALOG_WORKFLOW_MANAGER_EXECUTE_WORKFLOW_BUTTON'| translate"
+                        [m_sIconLeft]="'play_circle'"
+                        [m_bDisabled]="!m_oSelectedWorkflow.name || this.m_oSelectedWorkflow.inputFileNames.length <= 0"
+                        (click)="runSingleInputWorkflow()"></app-button>
+                    <app-button *ngIf="m_bIsBatchProcessing"
+                        [m_sLabel]="'DIALOG_WORKFLOW_MANAGER_EXECUTE_WORKFLOW_BUTTON'| translate"
+                        [m_sIconLeft]="'play_circle'"
+                        [m_bDisabled]="!m_oSelectedWorkflow.name || this.m_oSelectedWorkflow.inputFileNames.length <= 0"
+                        (click)="runMultiInputWorkflow()"></app-button>
                 </div>
             </div>
         </div>
@@ -132,7 +156,7 @@
         <!-- XML editor container -->
         <div [class.hidden]="!m_bShowXML" class="json-container d-flex flex-column justify-content-between gap-3">
             <div class="json-header font-bold d-flex flex-column">
-                Edit XML</div>
+                {{'DIALOG_STYLE_EDIT_XML'| translate}}</div>
             <div class="flex-fill workflows-product-container">
                 <div class="json-wrapper" style="height: 100%; width: 100%;">
                     <div #editor class="json-editor" style="height: 100%;"></div>
@@ -144,7 +168,7 @@
         </div>
 
         <div *ngIf="m_bShowShare" class="json-container d-flex flex-column flex-fill ms-2">
-            <div class="json-header font-bold mb-2">Share workflow with WASDI user</div>
+            <div class="json-header font-bold mb-2">{{'DIALOG_WORKFLOW_SHARE' | translate}}</div>
             <div class="workflows-product-container">
                 <app-share-ui [resource]="m_oSelectedWorkflow" [resourceType]="'workflow'"></app-share-ui>
             </div>

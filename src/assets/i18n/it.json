@@ -4,7 +4,6 @@
 		"ERROR": "Errore",
 		"SUCCESS": "Successo"
 	},
-
 	"BTN_SEARCH": "Ricerca",
 	"BTN_IMPORT": "Importa",
 	"SORT_BY": "Ordina per",
@@ -252,6 +251,12 @@
 	"DIALOG_WORKFLOW_TAB_SHARE_WF": "Condividi Workflows",
 	"DIALOG_WORKFLOW_FILTER_NAME": "Filtra WorkFlow Name...",
 	"DIALOG_WORKFLOW_FILE": "File",
+	"DIALOG_WORKFLOW_NEW": "Il nuovo flusso di lavoro apparirà qui",
+	"DIALOG_WORKFLOW_SEARCH_WORKFLLOWS": "Ricerca flussi di lavoro",
+	"DIALOG_WORKFLOW_DISCARD": "Elimina flusso di lavoro",
+	"DIALOG_WORKFLOW_SHARE": "Condividi il tuo flusso di lavoro con un altro utente",
+	"DIALOG_WORKFLOW_EDIT": "Modifica flusso di lavoro",
+	
 	"DIALOG_STYLE_DROP_OR_CLICK": "Drag and drop l'XML dello stile qui o clicca per caricare",
 	"DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "Drag & Drop non è supportato per questo browser",
 	"DIALOG_STYLE_MANAGER_TAB_LIST": "Lista degli stili",
@@ -688,21 +693,18 @@
 	"DIALOG_PACKAGE_MANAGER_CURRENT_VERSION": "Versione attuale",
 	"DIALOG_PACKAGE_MANAGER_LATEST_VERSION": "Ultima versione",
 	"DIALOG_PACKAGE_MANAGER_ACTIONS": "Azioni",
-
 	"EDITOR_ERROR_CONSOLE_NOT_REACHABLE": "Errore nel servizio JupyterLab",
 	"USER_ORGANIZATIONS_ERROR_FETCHING": "Impossibile recuperare le tue organizzazioni",
-    "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Impossibile recuperare le informazioni sull'organizzazione",
-    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Conferma rimozione organizzazione", 
-    "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Sei sicuro di voler rimuovere questa organizzazione?",
-    "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Conferma rimozione permessi",
-    "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Sei sicuro di voler rimuovere le tue autorizzazioni con questa organizzazione?",
-    "USER_ORGANIZATIONS_DELETE_SUCCESS": "Organizzazione rimossa",
-    "USER_ORGANIZATION_SAVE_SUCCESS": "Organizzazione salvata",
-    "USER_ORGANIZATION_INVALID_INPUT": "L'input dell'organizzazione non è valido",
-    "USER_ORGANIZATION_SAVE_ERROR": "Impossibile salvare la tua organizzazione",
-    "USER_ORGANIZATION_DELETE_ERROR": "Impossibile eliminare la tua organizzazione",
-
+	"USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Impossibile recuperare le informazioni sull'organizzazione",
+	"USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Conferma rimozione organizzazione",
+	"USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Sei sicuro di voler rimuovere questa organizzazione?",
+	"USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Conferma rimozione permessi",
+	"USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Sei sicuro di voler rimuovere le tue autorizzazioni con questa organizzazione?",
+	"USER_ORGANIZATIONS_DELETE_SUCCESS": "Organizzazione rimossa",
+	"USER_ORGANIZATION_SAVE_SUCCESS": "Organizzazione salvata",
+	"USER_ORGANIZATION_INVALID_INPUT": "L'input dell'organizzazione non è valido",
+	"USER_ORGANIZATION_SAVE_ERROR": "Impossibile salvare la tua organizzazione",
+	"USER_ORGANIZATION_DELETE_ERROR": "Impossibile eliminare la tua organizzazione",
 	"READ_ONLY": "Read Only",
-
 	"MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Sono richiesti un abbonamento valido e un progetto attivo. Consulta la dashboard dell'utente."
 }

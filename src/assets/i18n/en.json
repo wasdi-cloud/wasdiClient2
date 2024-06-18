@@ -367,6 +367,11 @@
     "DIALOG_WORKFLOW_TAB_SHARE_WF": "Share Workflows",
     "DIALOG_WORKFLOW_FILTER_NAME": "Filter WorkFlow Name...",
     "DIALOG_WORKFLOW_FILE": "File",
+    "DIALOG_WORKFLOW_NEW": "You new workflow will appear here",
+    "DIALOG_WORKFLOW_SEARCH_WORKFLOWS": "Search Workflows",
+    "DIALOG_WORKFLOW_DISCARD": "Discard Workflow",
+    "DIALOG_WORKFLOW_SHARE": "Share your workflow with another user",
+    "DIALOG_WORKFLOW_EDIT": "Edit Workflow",
     
     "DIALOG_STYLE_DROP_OR_CLICK": "Drag and drop style XML here or click to upload",
     "DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "File Drag/Drop is not supported for this browser",

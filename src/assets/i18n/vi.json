@@ -254,6 +254,12 @@
     "DIALOG_WORKFLOW_TAB_SHARE_WF": "Chia sẻ quy trình làm việc",
     "DIALOG_WORKFLOW_FILTER_NAME": "Lọc Tên Quy trình Làm việc...",
     "DIALOG_WORKFLOW_FILE": "Tệp",
+    "DIALOG_WORKFLOW_NEW": "Quy trình làm việc mới của bạn sẽ xuất hiện ở đây",
+    "DIALOG_WORKFLOW_SEARCH_WORKFLOWS": "Tìm kiếm quy trình công việc",
+    "DIALOG_WORKFLOW_DISCARD": "Hủy quy trình làm việc",
+    "DIALOG_WORKFLOW_SHARE": "Chia sẻ quy trình làm việc của bạn với người dùng khác",
+    "DIALOG_WORKFLOW_EDIT": "Chỉnh sửa quy trình làm việc",
+    
     "DIALOG_STYLE_DROP_OR_CLICK": "Kéo và thả kiểu XML ở đây hoặc nhấp để tải lên",
     "DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "Trình duyệt này không hỗ trợ Kéo/Thả tệp",
     "DIALOG_STYLE_MANAGER_TAB_LIST": "Danh sách phong cách",
