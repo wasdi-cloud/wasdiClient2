@@ -200,7 +200,6 @@
 
 	"IMPORT_SEARCH_RESULTS": "Hasil Pencarian",
     "IMPORT_BACK_TO_SEARCH": "Kembali ke Pencarian",
-    "IMPORT_PRODUCTs_PER_PAGE_LABEL": "Produk per halaman",
 	"IMPORT_PAGE_LABEL": "Halaman",
 	"IMPORT_OF_LABEL": "dari",
 	"IMPORT_PANEL_HEAD_TITLE_FILTERS": "Filter",
@@ -297,7 +296,6 @@
 	"DIALOG_SFTP_UPLOAD_DELETE_ACCOUNT_BUTTON": "Hapus",
 	"DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "Daftar file",
 	"DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Tambahkan ke Area Kerja",
-	"DIALOG_SFTP_UPLOAD_CLOSE_BUTTON": "Tutup",
 
 	"DIALOG_IMPORT_HEADER": "Impor ke dalam ruang kerja",
 	"DIALOG_IMPORT_LOCATION": "Impor file ke",

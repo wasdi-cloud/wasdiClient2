@@ -200,7 +200,6 @@
     
     "IMPORT_SEARCH_RESULTS": "Search Results",
     "IMPORT_BACK_TO_SEARCH": "Back to Search",
-    "IMPORT_PRODUCTS_PER_PAGE_LABEL": "Products per page",
     "IMPORT_PAGE_LABEL": "Page",
     "IMPORT_OF_LABEL": "of",
     "IMPORT_PANEL_HEAD_TITLE_FILTERS": "Filters",
@@ -297,7 +296,6 @@
     "DIALOG_SFTP_UPLOAD_DELETE_ACCOUNT_BUTTON": "Delete",
     "DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "List of files",
     "DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Add to workspace",
-    "DIALOG_SFTP_UPLOAD_CLOSE_BUTTON": "Close",
     
     "DIALOG_IMPORT_HEADER": "Import inside workspace",
     "DIALOG_IMPORT_LOCATION": "Import files to",
@@ -375,8 +373,7 @@
     "DIALOG_STYLE_DROP_OR_CLICK": "Drag and drop style XML here or click to upload",
     "DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "File Drag/Drop is not supported for this browser",
     "DIALOG_STYLE_MANAGER_TAB_LIST": "Style List",
-    "DIALOG_STYLE_MANAGER_TAB_NEW": "New Style",
-    
+    "DIALOG_STYLE_MANAGER_TAB_NEW": "New Style",   
     "DIALOG_CRONOTAB_FILTERS_BOX": "Filters",
     "DIALOG_CRONOTAB_CRONOTAB_BOX": "Crontab",
     "DIALOG_CRONOTAB_OK_BUTTON": "Ok",

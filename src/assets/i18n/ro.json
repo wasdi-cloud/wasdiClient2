@@ -113,7 +113,6 @@
 	"EDITOR_PRODUCT_REMOVE": "Confirmați eliminarea produsului", 
     "EDITOR_PRODUCTS_REMOVE": "Confirmați eliminarea produselor",
 
-	"IMPORT_PRODUCTS_PER_PAGE_LABEL": "Produse pe pagină",
 	"IMPORT_PAGE_LABEL": "Pagină",
 	"IMPORT_OF_LABEL": "de",
 	"IMPORT_PANEL_HEAD_TITLE_FILTERS": "Filtre",
@@ -190,7 +189,6 @@
 	"DIALOG_SFTP_UPLOAD_DELETE_ACCOUNT_BUTTON": "Elimină",
 	"DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "Listă de fișiere",
 	"DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Adăugă la spațiul de lucru",
-	"DIALOG_SFTP_UPLOAD_CLOSE_BUTTON": "Închide",
 	"DIALOG_IMPORT_HEADER": "Importați în spațiul de lucru",
 	"DIALOG_IMPORT_LOCATION": "Importați fișiere în",
 	"DIALOG_IMPORT_FILE_TYPES": "Puteți importa în interiorul acestui spațiu de lucru tipuri de fișiere, cum ar fi .tiff și .zip",
@@ -398,7 +396,7 @@
 	"DIALOG_WS_INFO_PROCS": "Procese executate ",
 	"DIALOG_WS_INFO_SHARINGS": "Partajare spațiului de lucru ",
 	"DIALOG_WS_INFO_PUBLIC": "Make Workspace Public",
-	
+
 	"DIALOG_PARAMS_TITLE": "Parametrii librăriei",
 	"DIALOG_PARAMS_FILTER_HELP": "Filtrare nume șablon...",
 	"DIALOG_PARAMS_ADD": "Adaugă",
@@ -683,7 +681,6 @@
 	"DIALOG_PACKAGE_MANAGER_HEADER": "Manager de pachete",
 	"DIALOG_PACKAGE_MANAGER_NAME": "Numele pachetului",
 	"DIALOG_PACKAGE_MANAGER_VERSION": "Versiunea pachetului",
-	"DIALOG_PACKAGE_MANAGER_ADD": "Adăugați pachet",
 	"DIALOG_PACKAGE_MANAGER_UPDATE": "Actualizați pachetul",
 	"DIALOG_PACKAGE_MANAGER_REFRESH_LIST": "Actualizați lista",
 	"DIALOG_PACKAGE_MANAGER_CLEAR": "Selecție clară",

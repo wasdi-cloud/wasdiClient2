@@ -200,7 +200,6 @@
 	
 	"IMPORT_SEARCH_RESULTS": "Risultati della ricerca",
 	"IMPORT_BACK_TO_SEARCH": "Torna alla ricerca",
-	"IMPORT_PRODUCTS_PER_PAGE_LABEL": "Prodotti per pagina",
 	"IMPORT_PAGE_LABEL": "Pagina",
 	"IMPORT_OF_LABEL": "di",
 	"IMPORT_PANEL_HEAD_TITLE_FILTERS": "Filtri",
@@ -297,7 +296,6 @@
 	"DIALOG_SFTP_UPLOAD_DELETE_ACCOUNT_BUTTON": "Elimina",
 	"DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "Lista di file",
 	"DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Aggiuingi al workspace",
-	"DIALOG_SFTP_UPLOAD_CLOSE_BUTTON": "Chiudi",
 
 	"DIALOG_IMPORT_HEADER": "Importa all'interno dell'area di lavoro",
 	"DIALOG_IMPORT_LOCATION": "Importa file in",

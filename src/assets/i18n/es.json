@@ -200,7 +200,6 @@
 
 	"IMPORT_SEARCH_RESULTS": "Resultados de la búsqueda",
 	"IMPORT_BACK_TO_SEARCH": "Volver a la búsqueda",
-	"IMPORT_PRODUCTS_PER_PAGE_LABEL": "Productos por página",
 	"IMPORT_PAGE_LABEL": "Página",
 	"IMPORT_OF_LABEL": "de",
 	"IMPORT_PANEL_HEAD_TITLE_FILTERS": "Filtros",
@@ -297,8 +296,7 @@
 	"DIALOG_SFTP_UPLOAD_DELETE_ACCOUNT_BUTTON": "Eliminar",
 	"DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "Lista de archivos",
 	"DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Agregar al espacio de trabajo",
-	"DIALOG_SFTP_UPLOAD_CLOSE_BUTTON": "Cerrar",
-
+    
 	"DIALOG_IMPORT_HEADER": "Importar dentro del espacio de trabajo",
     "DIALOG_IMPORT_LOCATION": "Importar archivos a",
     "DIALOG_IMPORT_FILE_TYPES": "Puedes importar dentro de este espacio de trabajo tipos de archivos como .tiff y .zip",
