@@ -104,7 +104,6 @@
     "ROOT_LABEL_NUMBER_OF_WAITING_PROCESSES": "Esperando",
     "ROOT_TABLE_HEAD_OPERATION_DATA": "Creado",
     "ROOT_TABLE_HEAD_OPERATION_START": "Iniciado",
-    "ROOT_TABLE_HEAD_TYPE_OF_OPERATION": "Operación",
     "ROOT_TABLE_HEAD_NAME": "Nombre",
     "ROOT_TABLE_HEAD_ID_USER": "Usuario",
     "ROOT_TABLE_HEAD_TIME": "Duración",
@@ -128,8 +127,7 @@
 	"PROCESSING_BAR_ERROR": "Error",
 	"PROCESSING_BAR_LOGS": "Logs",
 	"PROCESSING_BAR_PAYLOAD": "Carga",
-	"PROCESSING_BAR_LOAD_MORE": "Añade más...",
-
+    
 	"WORKSPACES_PLACEHOLDER_SEARCH": "Buscar Espacio de trabajo...",
 	"WORKSPACES_BUTTON_NEW_WORKSPACE": "Nuevo Espacio de trabajo",
 	"WORKSPACES_THEAD_WORKSPACES": "Espacio de trabajo",
@@ -386,13 +384,6 @@
     "DIALOG_CRONOTAB_ADD_BUTTON": "Agregar",
     "DIALOG_CRONOTAB_CLEAR_BUTTON": "Borrar",
     "DIALOG_CRONOTAB_TITLE": "SELECTOR DE SERIE TIEMPO",
-
-	"DIALOG_LIST_OF_WORKSPACES_TITLE_TABLE_LIST_OF_WORKSPACES": "Lista de espacios de trabajo",
-    "DIALOG_LIST_OF_WORKSPACES_TH_TABLE_WORKSPACE_NAME": "Nombre del espacio de trabajo",
-    "DIALOG_LIST_OF_WORKSPACES_TH_TABLE_OWNER": "Propietario",
-    "DIALOG_LIST_OF_WORKSPACES_ADD_NEW_WORKSPACE_BUTTON": "Agregar nuevo espacio de trabajo",
-    "DIALOG_LIST_OF_WORKSPACES_MANAGER_WORKFLOWS_BUTTON": "Administrador de flujos de trabajo",
-    "DIALOG_LIST_OF_WORKSPACES_SHOW_WORKFLOWS_BUTTON": "Mostrar flujos de trabajo",
     
     "DIALOG_TITLE_WAPPS": "Aplicaciones WASDI",
     "DIALOG_TITLE_STYLES": "Estilos WASDI",
@@ -504,7 +495,7 @@
     "DIALOG_PROCESSOR_STORE_MEDIA_TYPES": "El archivo debe ser de tipo .jpg o .png",
     "DIALOG_PROCESSOR_STORE_PRICE_TITLE": "Planes de precios",
     "DIALOG_PROCESSOR_STORE_PRICE_DESCRIPTION": "WASDI te da la oportunidad de monetizar tu trabajo: puedes configurar un precio para tu aplicación. Si un usuario compra tu aplicación, WASDI te pagará el 70% del monto y se quedará con el 30%. Consulta nuestros Términos y condiciones para más detalles.",
-    "DIALOG_PROCESSOR_STORE_PRICE_STORE_DETALS": "Detalles de la tienda",
+    "DIALOG_PROCESSOR_STORE_PRICE_STORE_DETAILS": "Detalles de la tienda",
     "DIALOG_PROCESSOR_STORE_PRICE_STORE_FREE": "La aplicación es gratuita",
     "DIALOG_PROCESSOR_STORE_ONDEMAND_DESCRIPTION": "El modelo de precios bajo demanda, también conocido como modelo de 'pago por uso', ofrece a los usuarios la flexibilidad de pagar solo por la aplicación cuando realmente la usan.",
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_LINE1": "Esta imagen aparecerá en tu Tienda como la imagen principal de la aplicación.",
@@ -621,8 +612,8 @@
     "DIALOG_WS_INFO_PROCS": "Procesos ejecutados",
     "DIALOG_WS_INFO_SHARINGS": "Compartido con",
     "DIALOG_WS_INFO_NO_SHARES": "¡No hay nadie aquí, pero puedes agregar colaboradores!",
-
 	"DIALOG_WS_INFO_PUBLIC": "Make Workspace Public",
+
 	"DIALOG_PARAMS_TITLE": "Librería de parámetros de App",
 	"DIALOG_PARAMS_SELECTED_APP": "Aplicación seleccionada",
 	"DIALOG_PARAMS_FILTER_HELP": "Filtra por nombre de Template...",
