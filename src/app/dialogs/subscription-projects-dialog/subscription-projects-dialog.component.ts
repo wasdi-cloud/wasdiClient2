@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { faEdit, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProjectService } from 'src/app/services/api/project.service';
 import { ProjectInfoDialogComponent } from '../project-info-dialog/project-info-dialog.component';
@@ -14,10 +13,6 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
   styleUrls: ['./subscription-projects-dialog.component.css']
 })
 export class SubscriptionProjectsDialogComponent implements OnInit {
-  faPlus = faPlus;
-  faX = faX;
-  faEdit = faEdit;
-
   m_oSubscription: any;
   m_aoProjects: Array<any> = [];
 

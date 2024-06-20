@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { faArrowLeft, faInfoCircle, faPlus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -23,11 +22,6 @@ export class ProductsTableComponent implements OnInit {
   @Output() m_oNavigateBackOutput: EventEmitter<any> = new EventEmitter<boolean>();
 
   m_aoProductsList: any = [];
-  //font awesome icons: 
-  faBack = faArrowLeft;
-  faPlus = faPlus;
-  faSearch = faSearchPlus;
-  faInfoCircle = faInfoCircle;
 
   m_aoProvidersList: Array<any> = [];
   m_oActiveProvider: any = null;

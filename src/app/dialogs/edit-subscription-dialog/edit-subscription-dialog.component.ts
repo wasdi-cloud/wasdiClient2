@@ -1,7 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
-import { faX } from '@fortawesome/free-solid-svg-icons';
-
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { OrganizationsService } from 'src/app/services/api/organizations.service';
@@ -21,9 +19,6 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
   styleUrls: ['./edit-subscription-dialog.component.css']
 })
 export class EditSubscriptionDialogComponent implements OnInit {
-  //Font Awesome Imports:
-  faX = faX;
-
   m_oUser = this.m_oConstantsService.getUser();
 
   //Organizations Properties:

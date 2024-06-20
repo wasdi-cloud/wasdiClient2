@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LegendPosition } from '@swimlane/ngx-charts';
-import { faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -13,7 +12,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./payload-dialog.component.css']
 })
 export class PayloadDialogComponent implements OnInit {
-  faXmark = faX;
   m_oProcess = this.m_oData.process;
   m_sActiveTab: string = "payload"
   m_sPayloadString: string = "";

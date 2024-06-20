@@ -1,9 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-// Font Awesome Icon Imports:
-import { faExpand, faList, faX } from '@fortawesome/free-solid-svg-icons';
-
 //Import Services:
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
@@ -25,11 +22,6 @@ declare const L: any;
   styleUrls: ['./nav-layers.component.css']
 })
 export class NavLayersComponent implements OnInit, OnChanges {
-  //Font Awesome Icons:
-  faExpand = faExpand;
-  faList = faList;
-  faX = faX;
-
   //Set opacity to 100% by default
   m_iOpacityVal = 100;
 

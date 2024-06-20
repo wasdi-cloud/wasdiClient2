@@ -1,11 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import { TranslateService } from '@ngx-translate/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog} from '@angular/material/dialog';
 import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
 import { ManualBoundingBoxComponent } from '../../../shared/shared-components/manual-bounding-box/manual-bounding-box.component';
-import { faL } from '@fortawesome/free-solid-svg-icons';
 
 declare const L: any;
 

@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { faX } from '@fortawesome/free-solid-svg-icons';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 //Service Imports:
@@ -17,8 +16,6 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
   styleUrls: ['./ftp-dialog.component.css']
 })
 export class FTPDialogComponent implements OnInit {
-  faX = faX;
-
   m_sActiveTab: string = "sendToWorkspace";
 
   m_oActiveWorkspace: Workspace;

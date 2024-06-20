@@ -58,9 +58,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressBarModule } from '@angular/material/progress-bar'
 
-//Import FontAwesome
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
 //Import Interceptor
 import { SessionInjectorInterceptor } from './services/interceptors/session-injector.interceptor';
 
@@ -331,7 +328,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MatCheckboxModule,
     MatBottomSheetModule,
     MatTooltipModule,
-    FontAwesomeModule,
     ClipboardModule,
     MatPaginatorModule,
     MatSnackBarModule,
