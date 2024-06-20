@@ -2,7 +2,7 @@
     <div class="ui-btns-container d-flex flex-column">
         <div class="ui-list-item" *ngFor="let oAppUIItem of m_aoAppUIItems"
             (click)="addUIElement(oAppUIItem.clickInput)">
-            {{oAppUIItem.label}}
+            {{oAppUIItem.label | translate}}
         </div>
     </div>
     <div class="JSON-container flex-fill d-flex flex-column gap-1" style="height: 100%; width: 100%;">

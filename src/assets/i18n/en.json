@@ -523,6 +523,7 @@
     "DIALOG_PROCESSOR_UI_SEARCH_EO_IMAGE": "Search EO Image",
     "DIALOG_PROCESSOR_UI_LISTBOX": "List Box",
     "DIALOG_PROCESSOR_UI_HIDDEN_FIELD": "Hidden Field",
+    "DIALOG_PROCESSOR_UI_HIDDEN_TABLE": "Table",
   
     "DIALOG_LOGS_TITLE": "WASDI Processor Logs ID",
     "DIALOG_LOGS_SEARCH_TEXT": "Search by text",
