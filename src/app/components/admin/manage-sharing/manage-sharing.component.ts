@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-sharing',
@@ -26,7 +27,8 @@ export class ManageSharingComponent implements OnInit {
   constructor(
     private m_oAdminDashboard: AdminDashboardService,
     private m_oClipboard: Clipboard,
-    private m_oNotificationDisplayService: NotificationDisplayService
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -64,7 +66,9 @@ export class ManageSharingComponent implements OnInit {
   addResourcePermission(sResourceType: string, sResourceId: string, sUserId: string, sRights: string) {
     this.m_oAdminDashboard.addResourcePermission(sResourceType, sResourceId, sUserId, sRights).subscribe({
       next: oResponse => {
-        console.log(oResponse);
+        let sMsg = this.m_oTranslate.instant("USER_SUBSCRIPTION_URL")
+        this.m_oNotificationDisplayService.openSnackBar(sMsg, '', 'success-snackbar');
+
       },
       error: oError => { }
     })

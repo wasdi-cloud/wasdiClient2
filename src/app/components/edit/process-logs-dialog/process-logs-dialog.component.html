@@ -16,7 +16,7 @@
     </div>
     <div class="log-filter-container d-flex flex-row justify-content-between">
         <app-input-field class="flex-fill" style="max-width: 50%;" [m_sLabel]="'DIALOG_LOGS_SEARCH_TEXT' | translate"
-            [m_sPlaceholder]="'BTN_SEARCH' | translate" (m_oInputChange)="setSearchString($event)"></app-input-field>
+            [m_sPlaceholder]="'KEY_PHRASES.SEARCH' | translate" (m_oInputChange)="setSearchString($event)"></app-input-field>
         <div class="buttons-container align-self-end d-flex flex-row gap-2">
             <app-button [m_sLabel]="'DIALOG_LOGS_DOWNLOAD' | translate" [m_sIconLeft]="'download'"
                 (click)="downloadLogFile()"></app-button>

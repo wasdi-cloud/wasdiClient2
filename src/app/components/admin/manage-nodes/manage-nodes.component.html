@@ -1,10 +1,10 @@
 <div class="flex-fill d-flex flex-column gap-3">
-    <div class="header font-bold d-flex flex-row justify-content-between">Manage Nodes
+    <div class="header font-bold d-flex flex-row justify-content-between">{{"ADMIN_NODES_TITLE" | translate}}
         <app-button data-bs-toggle="offcanvas" href="#nodeEditor" role="button" aria-controls="nodeEditor"
-            [m_sLabel]="'Create New Node'" (click)="setSelectedNode(null)"></app-button>
+            [m_sLabel]="'ADMIN_NODES_NEW' | translate" (click)="setSelectedNode(null)"></app-button>
     </div>
     <div class="d-flex flex-row justify-content-end">
-        <app-input-field [m_sPlaceholder]="'Search by Node Code'"
+        <app-input-field [m_sPlaceholder]="'ADMIN_NODES_SEARCH_TIP' | translate"
             (m_oInputChange)="m_sSearch = $event.event.target.value"></app-input-field>
     </div>
     <div class="flex-fill d-flex flex-column gap-2">
@@ -12,8 +12,8 @@
             <table>
                 <thead class="table-heading-container">
                     <tr>
-                        <td>Cloud Provider</td>
-                        <td>Node Code</td>
+                        <td>{{"ADMIN_NODES_CLOUD" | translate}}</td>
+                        <td>{{"WORKSPACES_NODE_CODE" | translate}}</td>
                         <td></td>
                     </tr>
                 </thead>
@@ -39,19 +39,19 @@
             <table>
                 <thead class="table-heading-container">
                     <tr>
-                        <th class="text-left">Node Code</th>
-                        <th class="text-left">Timestamp</th>
-                        <th>Processes</th>
-                        <th>Disk Used</th>
-                        <th>Disk Available</th>
-                        <th>Disk Total</th>
-                        <th>Disk Used</th>
-                        <th>Disk Available</th>
-                        <th>RAM Used</th>
-                        <th>RAM Available</th>
-                        <th>RAM Total</th>
-                        <th>RAM Used</th>
-                        <th>RAM Available</th>
+                        <th class="text-left">{{"WORKSPACES_NODE_CODE" | translate}}</th>
+                        <th class="text-left">{{"ADMIN_NODES_TIMESTAMP" | translate}}</th>
+                        <th>{{"ADMIN_NODES_PROCS" | translate}}</th>
+                        <th>{{"ADMIN_NODES_DISK_USED" | translate}}</th>
+                        <th>{{"ADMIN_NODES_DISK_AVAILABLE" | translate}}</th>
+                        <th>{{"ADMIN_NODES_DISK_TOTAL" | translate}}</th>
+                        <th>{{"ADMIN_NODES_DISK_USED" | translate}}</th>
+                        <th>{{"ADMIN_NODES_DISK_AVAILABLE" | translate}}</th>
+                        <th>{{"ADMIN_NODES_RAM_USED" | translate}}</th>
+                        <th>{{"ADMIN_NODES_RAM_AVAILABLE" | translate}}</th>
+                        <th>{{"ADMIN_NODES_RAM_TOTAL" | translate}}</th>
+                        <th>{{"ADMIN_NODES_RAM_USED" | translate}}</th>
+                        <th>{{"ADMIN_NODES_RAM_AVAILABLE" | translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,26 +79,26 @@
 <div class="offcanvas offcanvas-end org-create-container d-flex flex-column justify-content-between"
     data-bs-backdrop="true" tabindex="-1" id="nodeEditor" aria-labelledby="nodeEditorLabel">
     <div class="editor-header font-bold pb-3">
-        {{m_bEditMode ? 'Edit' : 'Create'}} Node
+        {{m_bEditMode ? 'Edit' : 'Create'}} {{"ADMIN_NODES_NODE" | translate}}
     </div>
     <div class="d-flex flex-fill flex-column gap-3">
-        <app-input-field [m_sLabel]="'Cloud Provider'"
+        <app-input-field [m_sLabel]="'ADMIN_NODES_CLOUD' | translate"
             [m_sInputValue]="m_oSelectedNode? (m_oSelectedNode.cloudProvider ? m_oSelectedNode.cloudProvider : '' ) : ''"
             (m_oInputChange)="m_oSelectedNode.cloudProvider = $event.event.target.value"></app-input-field>
 
-        <app-input-field [m_sLabel]="'Node Code'"
+        <app-input-field [m_sLabel]="'WORKSPACES_NODE_CODE' | translate"
             [m_sInputValue]="m_oSelectedNode?  (m_oSelectedNode.nodeCode ? m_oSelectedNode.nodeCode : '' ): ''"
             (m_oInputChange)="m_oSelectedNode.nodeCode = $event.event.target.value"></app-input-field>
 
-        <app-input-field [m_sLabel]="'API Url'"
+        <app-input-field [m_sLabel]="'ADMIN_NODES_APIURL' | translate"
             [m_sInputValue]="m_oSelectedNode?  (m_oSelectedNode.apiUrl ? m_oSelectedNode.apiUrl : '' ): ''"
             (m_oInputChange)="m_oSelectedNode.apiUrl = $event.event.target.value"></app-input-field>
 
-        <app-input-field [m_sLabel]="'Node Geoserver Address'"
+        <app-input-field [m_sLabel]="'ADMIN_NODES_GEOSERVER' | translate"
             [m_sInputValue]="m_oSelectedNode? (m_oSelectedNode.nodeGeoserverAddress ? m_oSelectedNode.nodeGeoserverAddress : '' ): ''"
             (m_oInputChange)="m_oSelectedNode.nodeGeoserverAddress = $event.event.target.value"></app-input-field>
 
-        <app-textarea [m_sLabel]="'Node Description'"
+        <app-textarea [m_sLabel]="'ADMIN_NODES_DESCRIPTION' | translate"
             [m_sInputString]="m_oSelectedNode? (m_oSelectedNode.nodeDescription ? m_oSelectedNode.nodeDescription : '' ): ''"
             (m_oInputChange)="m_oSelectedNode.nodeDescription"></app-textarea>
 
@@ -107,13 +107,13 @@
                 <input type="checkbox" name="isActive" id="" class="wasdi-checkbox"
                     [checked]="m_oSelectedNode? m_oSelectedNode.active : ''"
                     (change)="getCheckedValue($event, 'active')">
-                <label for="isActive">Active</label>
+                <label for="isActive">{{"ADMIN_NODES_ACTIVE" | translate}}</label>
             </div>
             <div class="d-flex flex-row gap-2 align-items-center">
                 <input type="checkbox" name="isShared" id="" class="wasdi-checkbox"
                     [checked]="m_oSelectedNode? m_oSelectedNode.shared : ''"
                     (change)="getCheckedValue($event, 'shared')">
-                <label for="isShared">Shared</label>
+                <label for="isShared">{{"ADMIN_NODES_SHARED" | translate}}</label>
             </div>
         </div>
     </div>

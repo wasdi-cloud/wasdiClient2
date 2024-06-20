@@ -1143,5 +1143,47 @@
     "DASHBOARD_CONFIRM_NODE_TITLE": "Confirm Node Update",
 
     "PAGE_NOT_FOUND": "Page not found!",
-    "PAGE_NOT_FOUND_MARKETPLACE": "Return to Marketplace"
+    "PAGE_NOT_FOUND_MARKETPLACE": "Return to Marketplace",
+
+    "ADMIN_MENU_USER": "User account",
+    "ADMIN_MENU_ADMIN": "Admin Dashboard",
+    "ADMIN_MENU_ACCOUNT": "Account",
+    "ADMIN_MENU_PREF": "Notifications",
+    "ADMIN_MENU_ORGANIZATIONS": "Organisations",
+    "ADMIN_MENU_SUBSCRIPTIONS": "Subscriptions",
+    "ADMIN_MENU_BILLINGS": "Billings",
+    "ADMIN_MENU_USERS": "Users",
+    "ADMIN_MENU_SHARINGS": "Sharings",
+    "ADMIN_MENU_NODES": "Nodes",
+
+    "EMAIL_PREF_TITLE": "Email preferences",
+    "EMAIL_PREF_NEW_CONTENT": "New Content Annoucements",
+    "EMAIL_PREF_NEW_CONTENT_HELP": "Stay up to date on new content (e.g., features or promising processors) in WASDI.",
+    "EMAIL_PREF_BETA": "Beta Testing Invitations",
+    "EMAIL_PREF_BETA_HELP": "Be invited to participate as a beta tester for new WASDI features and give feedback.",
+    "EMAIL_PREF_PROM": "Special Promotions and Events",
+    "EMAIL_PREF_PROM_HELP": "Be notified of special promotions or events (in-person or online).",
+    "EMAIL_PREF_PROGRESS": "Progress Updates",
+    "EMAIL_PREF_PROGRESS_HELP": "Be notified of progress on bugs or new features in WASDI.",
+
+    "ADMIN_NODES_TITLE":"Manage Nodes",
+    "ADMIN_NODES_NEW":"Create New Node",
+    "ADMIN_NODES_SEARCH_TIP":"Search by Node Code",
+    "ADMIN_NODES_CLOUD":"Cloud Provider",
+
+    "ADMIN_NODES_SCORES":"Node Scores",
+    "ADMIN_NODES_PROCS":"Processes",
+    "ADMIN_NODES_DISK_USED":"Disk Used",
+    "ADMIN_NODES_DISK_AVAILABLE":"Disk Available",
+    "ADMIN_NODES_DISK_TOTAL":"Disk Total",
+    "ADMIN_NODES_RAM_USED":"RAM Used",
+    "ADMIN_NODES_RAM_AVAILABLE":"RAM Available",
+    "ADMIN_NODES_RAM_TOTAL":"RAM Total",
+    "ADMIN_NODES_TIMESTAMP":"Timestamp",
+    "ADMIN_NODES_NODE":"Node",
+    "ADMIN_NODES_APIURL":"API Url",
+    "ADMIN_NODES_GEOSERVER":"Node Geoserver Address",
+    "ADMIN_NODES_DESCRIPTION":"Node Description",
+    "ADMIN_NODES_ACTIVE":"Active",
+    "ADMIN_NODES_SHARED":"Shared"
 }

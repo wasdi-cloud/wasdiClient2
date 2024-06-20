@@ -46,7 +46,7 @@ export class AuthService {
       const m_oUserDetails: KeycloakTokenParsed | undefined = this.m_oKeycloakService.getKeycloakInstance().idTokenParsed;
       return m_oUserDetails;
     } catch (oError) {
-      console.error("AuthService.getLoggedUser:", oError);
+      
       return undefined;
     }
   }
@@ -106,8 +106,6 @@ export class AuthService {
     if (this.m_oKeycloakService.isLoggedIn()) {
       this.m_oKeycloakService.logout();
     }
-
-    // return this.m_oHttp.get(this.APIURL + '/auth/logout')
   }
 
   /**
