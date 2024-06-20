@@ -57,6 +57,14 @@ export class ManageUsersComponent implements OnInit {
     this.m_sStartDate.getDate() - 7
   ).toISOString().slice(0, 10);
 
+  m_oUserTotals = null;
+
+  m_asUserTypes = ["freeUsers", "noneUsers", "organizations", "proUsers", "standardUsers", "totalUsers"]
+
+  m_iShownNumber: number = null;
+
+  m_sTotalUsers: string = "totalUsers ";
+
   constructor(private m_oAdminDashboardService: AdminDashboardService,
     private m_oNodeService: NodeService,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -83,7 +91,10 @@ export class ManageUsersComponent implements OnInit {
   getUsersSummary() {
     this.m_oAdminDashboardService.getUsersSummary().subscribe({
       next: oResponse => {
-        this.m_iTotalUsers = oResponse.totalUsers
+        this.m_iTotalUsers = oResponse.totalUsers;
+        this.m_oUserTotals = oResponse;
+
+        this.m_iShownNumber = oResponse.totalUsers;
       },
       error: oError => {
         this.m_oNotificationDisplayService.openAlertDialog("Could not load user information");
@@ -125,7 +136,6 @@ export class ManageUsersComponent implements OnInit {
   }
 
   deleteUser(oUser: any) {
-    console.log(oUser);
     this.m_oNotificationDisplayService.openConfirmationDialog(`Are you sure you wish to DELETE ${oUser.userId}? <br> This is a destructive action and cannot be undone`).subscribe(oResponse => {
       if (oResponse === true) {
         this.m_oAdminDashboardService.deleteUser(oUser.userId).subscribe({
@@ -149,7 +159,6 @@ export class ManageUsersComponent implements OnInit {
             this.m_oNotificationDisplayService.openAlertDialog("Could not load user information")
           } else {
             this.m_oSelectedUser = oResponse
-            console.log(this.m_oSelectedUser);
           }
         },
         error: oError => { }
@@ -259,5 +268,11 @@ export class ManageUsersComponent implements OnInit {
       },
       error: oError => { }
     })
+  }
+
+  setUsersNumber(oEvent) {
+    this.m_iShownNumber = this.m_oUserTotals[oEvent.value]
+
+    this.m_sTotalUsers = oEvent.value
   }
 }
