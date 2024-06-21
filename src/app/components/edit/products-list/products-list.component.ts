@@ -312,10 +312,19 @@ export class ProductsListComponent implements OnChanges, OnInit {
         }
         if (oResponse.type === HttpEventType.Response) {
           this.m_oDownloadProgress.emit({ downloadStatus: "complete", productName: sFileName })
+
+          let sDownloadedFilename = sFileName          
+        
+          let sHeaderContentDisposition = oResponse.headers.get("Content-Disposition");
+          if (!FadeoutUtils.utilsIsStrNullOrEmpty(sHeaderContentDisposition)) {
+            sDownloadedFilename = sHeaderContentDisposition.split(';')[1].split('=')[1].replace(/\"/g, '');
+          }
+          
+
           const a = document.createElement('a');
           const objectUrl = URL.createObjectURL(oResponse.body);
           a.href = objectUrl;
-          a.download = sFileName;
+          a.download = sDownloadedFilename;
           a.click();
           URL.revokeObjectURL(objectUrl);
           this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("EDITOR_DOWNLOAD_COMPLETE"), '', 'success-snackbar');

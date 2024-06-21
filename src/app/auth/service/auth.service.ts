@@ -106,6 +106,8 @@ export class AuthService {
     if (this.m_oKeycloakService.isLoggedIn()) {
       this.m_oKeycloakService.logout();
     }
+
+    // return this.m_oHttp.get(this.APIURL + '/auth/logout')
   }
 
   /**
