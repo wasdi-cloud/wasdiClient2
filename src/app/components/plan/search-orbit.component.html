@@ -7,7 +7,7 @@
     <app-search-orbit-results *ngIf="m_bShowSatelliteFilters === false" [m_aoSearchOrbits]="m_aoOrbitResults"
         (m_oBackToFiltersEmit)="getNavigationStatus($event)"></app-search-orbit-results>
     <div class="map map-container flex-fill">
-        <app-plan-map (m_oSearchInputhange)="getBoundingBox($event)"></app-plan-map>
+        <app-plan-map (m_oSearchInputChange)="getBoundingBox($event)"></app-plan-map>
     </div>
 
     <!-- <div class="d-flex flex-row" style="height: 92%; width: 100%;">

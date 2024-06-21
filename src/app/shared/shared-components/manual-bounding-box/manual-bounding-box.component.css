@@ -1,3 +1,20 @@
 .dialog {
     padding: 24px;
 }
+
+.JSON-container {
+    position: relative;
+}
+
+.json-button {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+}
+
+.info-button {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 4;
+}

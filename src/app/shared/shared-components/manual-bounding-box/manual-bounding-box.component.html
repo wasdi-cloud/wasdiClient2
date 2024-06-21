@@ -3,24 +3,40 @@
         {{ "DIALOG_MANUAL_INSERT_BBOX_TITLE" | translate}}
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
-    <div class="dialog-content flex-fill d-flex flex-column justify-content-around align-items-center">
-        <app-input-field [m_sLabel]="'DIALOG_MANUAL_INSERT_BBOX_NORTH' | translate"
+    <div class="d-flex flex-row justify-content-end">
+        <app-button *ngIf="!m_bShowJSON" [m_sLabel]="'JSON Input'" [m_sSize]="'small'"
+            (click)="toggleShowJSON()"></app-button>
+        <app-button *ngIf="m_bShowJSON" [m_sLabel]="'Input Fields'" [m_sSize]="'small'"
+            (click)="toggleShowJSON()"></app-button>
+    </div>
+    <div *ngIf="!m_bShowJSON"
+        class="dialog-content flex-fill d-flex flex-column justify-content-around align-items-center">
+        <app-input-field [m_sLabel]="'DIALOG_MANUAL_INSERT_BBOX_NORTH' | translate" [m_sInputValue]="m_oBBox.north"
             (m_oInputChange)="m_oBBox.north = $event.event.target.value"
             [m_sPlaceholder]="'ex. 50.1280516628'"></app-input-field>
         <div class="d-flex flex-row w-100 justify-content-between">
-            <app-input-field [m_sLabel]="'DIALOG_MANUAL_INSERT_BBOX_WEST' | translate"
+            <app-input-field [m_sLabel]="'DIALOG_MANUAL_INSERT_BBOX_WEST' | translate" [m_sInputValue]="m_oBBox.west"
                 (m_oInputChange)="m_oBBox.west = $event.event.target.value"
                 [m_sPlaceholder]="'ex. 6.24275109216'"></app-input-field>
-            <app-input-field [m_sLabel]="'DIALOG_MANUAL_INSERT_BBOX_EAST' | translate"
+            <app-input-field [m_sLabel]="'DIALOG_MANUAL_INSERT_BBOX_EAST' | translate" [m_sInputValue]="m_oBBox.east"
                 (m_oInputChange)="m_oBBox.east = $event.event.target.value"
                 [m_sPlaceholder]="'ex. 5.67405195478'"></app-input-field>
         </div>
-        <app-input-field [m_sLabel]="'DIALOG_MANUAL_INSERT_BBOX_SOUTH' | translate"
+        <app-input-field [m_sLabel]="'DIALOG_MANUAL_INSERT_BBOX_SOUTH' | translate" [m_sInputValue]="m_oBBox.south"
             (m_oInputChange)="m_oBBox.south = $event.event.target.value"
             [m_sPlaceholder]="'ex. 49.4426671413'"></app-input-field>
     </div>
+    <div [hidden]="!m_bShowJSON" class="flex-fill my-2 JSON-container">
+        <div #editor class="json-editor" style="height: 100%; width: 100%;" (keyup)="getJsonInput($event)"
+            (change)="getJsonInput($event)"></div>
+        <app-button class="info-button" [m_sIconLeft]="'info'" [m_sSize]="'small'"
+            (click)="openInfoDialog()"></app-button>
+        <app-button class="json-button" [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate"
+            [m_sSize]="'small'" (click)="checkJSON()"></app-button>
+    </div>
     <div class="d-flex flex-row justify-content-end gap-3">
-        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true" (click)="onDismiss()"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true"
+            (click)="onDismiss()"></app-button>
         <app-button [m_sLabel]="'DIALOG_MANUAL_INSERT_BBOX_DRAW' | translate" (click)="saveBoundingBox()"></app-button>
     </div>
 </div>

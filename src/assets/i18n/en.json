@@ -433,6 +433,7 @@
     "DIALOG_MANUAL_INSERT_BBOX_SOUTH": "South",
     "DIALOG_MANUAL_INSERT_BBOX_EAST": "East",
     "DIALOG_MANUAL_INSERT_BBOX_WEST": "West",
+    "DIALOG_MANUAL_INSERT_BBOX_INFO": "Input JSON in the following format:<br>",
 
     "DIALOG_PROCESSOR_FETCH_ERROR": "Could not get processor information",
     "DIALOG_PROCESSOR_APP_DETAILS_ERROR": "Could not get application detail",

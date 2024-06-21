@@ -51,7 +51,7 @@ export class PlanMapComponent implements OnInit, AfterViewChecked {
   /**
    * Event for the search params
    */
-  @Output() m_oSearchInputhange = new EventEmitter;
+  @Output() m_oSearchInputChange = new EventEmitter;
 
   constructor(public m_oMapService: MapService) {
     this.m_oMapOptions = this.m_oMapService.m_oOptions;
@@ -65,9 +65,11 @@ export class PlanMapComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.m_aoManualBBoxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+        console.log(oResult)
         this.m_oGeoJSON = oResult.toGeoJSON();
         this.m_sPolygon = this.getPolygon();
-
+        console.log(this.m_oGeoJSON)
+        console.log(this.m_sPolygon)
         this.emitMapInputs();
       }
     })
@@ -102,6 +104,8 @@ export class PlanMapComponent implements OnInit, AfterViewChecked {
     this.m_aoDrawnItems.addLayer(oLayer);
 
     this.m_oGeoJSON = oLayer.toGeoJSON();
+
+    console.log(this.m_oGeoJSON)
     this.m_sPolygon = this.getPolygon();
 
     //Emit Changes to Search Orbit Component: 
@@ -143,7 +147,7 @@ export class PlanMapComponent implements OnInit, AfterViewChecked {
   }
 
   emitMapInputs() {
-    this.m_oSearchInputhange.emit({
+    this.m_oSearchInputChange.emit({
       geoJSON: this.m_oGeoJSON,
       polygon: this.m_sPolygon
     });

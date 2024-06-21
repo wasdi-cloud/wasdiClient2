@@ -874,7 +874,7 @@ export class MapService {
 
           // We open the Manual Boundig Box Dialog
           let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent, {
-            height: '420px',
+            height: '500px',
             width: '600px'
           })
 
