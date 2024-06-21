@@ -33,8 +33,8 @@
         <div class="json-container d-flex flex-column justify-content-between">
             <div class="json-header d-flex flex-column">
                 <div class="processor-name font-bold">{{m_oSelectedProcessor.processorName ?
-                    m_oSelectedProcessor.processorName: 'Select A Processor'}}</div>
-                <p *ngIf="m_oSelectedProcessor.publisher">Publisher: {{m_oSelectedProcessor.publisher}}</p>
+                    m_oSelectedProcessor.processorName: 'WAP_SELECT_PROCESSOR' | translate}}</div>
+                <p *ngIf="m_oSelectedProcessor.publisher">{{"WAP_PUBLISHER" | translate}}: {{m_oSelectedProcessor.publisher}}</p>
             </div>
             <div class="json-body flex-fill">
                 <div #editor class="json-editor" style="height: 100%;" (keyup)="getJSONInput($event)"></div>

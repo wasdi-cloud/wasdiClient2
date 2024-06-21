@@ -10,7 +10,7 @@
                 (m_oInputChange)="m_sWorkspaceName = $event.event.target.value"></app-input-field>
     </div>
     <div class="dialog-footer d-flex flex-row gap-1 justify-content-between">
-        <app-button [m_sLabel]="'DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON' |
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' |
         translate" (click)="onDismiss()" [m_bMuted]="true"></app-button>
         <app-button *ngIf="m_bIsEditingWorkspaceName === false" [m_sLabel]="'DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON' |
         translate" (click)="onCreateWorkspace()"></app-button>

@@ -43,17 +43,17 @@
     </div>
     <!-- Review Handling Buttons -->
     <div *ngIf="m_bIsReview" class="d-flex flex-row justify-content-end gap-2">
-        <app-button *ngIf="!m_bIsEditing" [m_sLabel]="'POST REVIEW'" (click)="addReview()"></app-button>
-        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'DELETE'" [m_bIsDelete]="true"
+        <app-button *ngIf="!m_bIsEditing" [m_sLabel]="'WAP_WRITE_REVIEW' | translate" (click)="addReview()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'KEY_PHRASES.DELETE' | translate" [m_bIsDelete]="true"
             (click)="deleteReview()"></app-button>
-        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'UPDATE REVIEW'" (click)="updateReview()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'KEY_PHRASES.UPDATE' | translate" (click)="updateReview()"></app-button>
     </div>
 
     <!-- Comment Handling Buttons -->
     <div *ngIf="!m_bIsReview" class="d-flex flex-row justify-content-end gap-2">
-        <app-button *ngIf="!m_bIsEditing" [m_sLabel]="'POST COMMENT'" (click)="addComment()"></app-button>
-        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'DELETE'" [m_bIsDelete]="true"
+        <app-button *ngIf="!m_bIsEditing" [m_sLabel]="'WAP_POST_COMMENT' | translate" (click)="addComment()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'KEY_PHRASES.DELETE'" [m_bIsDelete]="true"
             (click)="deleteComment()"></app-button>
-        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'UPDATE COMMENT'" (click)="updateComment()"></app-button>
+        <app-button *ngIf="m_bIsEditing" [m_sLabel]="'KEY_PHRASES.UPDATE' | translate" (click)="updateComment()"></app-button>
     </div>
 </div>

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-sharing',
@@ -26,7 +27,8 @@ export class ManageSharingComponent implements OnInit {
   constructor(
     private m_oAdminDashboard: AdminDashboardService,
     private m_oClipboard: Clipboard,
-    private m_oNotificationDisplayService: NotificationDisplayService
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -37,7 +39,8 @@ export class ManageSharingComponent implements OnInit {
     this.m_oAdminDashboard.getResourceTypes().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oNotificationDisplayService.openAlertDialog("An error occured while getting the Resource Types");
+          let sMsg = this.m_oTranslate.instant("ADMIN_SHARING_SHARE_ERROR_GET_TYPES");
+          this.m_oNotificationDisplayService.openAlertDialog(sMsg);
         } else {
           console.log(oResponse);
           this.m_aoResourceTypes = oResponse;
@@ -51,7 +54,8 @@ export class ManageSharingComponent implements OnInit {
     this.m_oAdminDashboard.findResourcePermissions(sResourceType, sResourceId, sUserId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          this.m_oNotificationDisplayService.openAlertDialog("Error while finding resources");
+          let sMsg = this.m_oTranslate.instant("ADMIN_SHARING_SHARE_ERROR_GET_RES");
+          this.m_oNotificationDisplayService.openAlertDialog(sMsg);
         } else {
           this.m_aoFoundResources = oResponse;
           console.log(this.m_aoFoundResources);
@@ -64,7 +68,9 @@ export class ManageSharingComponent implements OnInit {
   addResourcePermission(sResourceType: string, sResourceId: string, sUserId: string, sRights: string) {
     this.m_oAdminDashboard.addResourcePermission(sResourceType, sResourceId, sUserId, sRights).subscribe({
       next: oResponse => {
-        console.log(oResponse);
+        let sMsg = this.m_oTranslate.instant("USER_SUBSCRIPTION_URL")
+        this.m_oNotificationDisplayService.openSnackBar(sMsg, '', 'success-snackbar');
+
       },
       error: oError => { }
     })
@@ -97,6 +103,7 @@ export class ManageSharingComponent implements OnInit {
 
   copyToClipboard(sResourceId: string) {
     this.m_oClipboard.copy(sResourceId);
-    this.m_oNotificationDisplayService.openSnackBar("Copied Resource Id to clipboard!");
+    let sMsg = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD")
+    this.m_oNotificationDisplayService.openSnackBar(sMsg);
   }
 }

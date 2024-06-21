@@ -1,18 +1,18 @@
 <div class="flex-fill d-flex flex-column gap-3">
     <div class="header font-bold d-flex flex-row justify-content-between">
-        Manage Sharing
+        {{"ADMIN_SHARING_TITLE" | translate}}
     </div>
     <div class="d-flex flex-column gap-3">
         <div>
-            Find a Resource
+            {{ "ADMIN_SHARING_FIND" | translate}}
             <div class="d-flex flex-row gap-2 mt-1">
                 <app-dropdown class="flex-fill" [m_aoDropdownItems]="m_aoResourceTypes"
-                    [m_sLabel]="'Select Resource Type'" (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
-                <app-input-field class="flex-fill" [m_sLabel]="'Resource ID'"
+                    [m_sLabel]="'ADMIN_SHARING_RES_TYPE' | translate" (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
+                <app-input-field class="flex-fill" [m_sLabel]="'ADMIN_SHARING_RES_ID' | translate"
                     (m_oInputChange)="setResourceId($event)"></app-input-field>
-                <app-input-field class="flex-fill" [m_sLabel]="'User ID'"
+                <app-input-field class="flex-fill" [m_sLabel]="'DIALOG_EDIT_USER_USER_ID' | translate"
                     (m_oInputChange)="setUserId($event)"></app-input-field>
-                <app-button class="align-self-end" [m_sLabel]="'Find Resources'"
+                <app-button class="align-self-end" [m_sLabel]="'ADMIN_SHARING_SEARCH' | translate"
                     (click)="findResourcePermissions(m_sSelectedType, m_sResourceId, m_sUserId)"></app-button>
             </div>
         </div>
@@ -21,12 +21,12 @@
                 <table>
                     <thead class="table-heading-container">
                         <tr>
-                            <td>Created By</td>
-                            <td>Date Created</td>
-                            <td>Owner Id</td>
-                            <td>Permission</td>
-                            <td>Resource Id</td>
-                            <td>Shared With</td>
+                            <td>{{"ADMIN_SHARING_CREATED_BY" | translate}}</td>
+                            <td>{{"ADMIN_SHARING_DATE_CREATED" | translate}}</td>
+                            <td>{{"ADMIN_SHARING_OWNER_ID" | translate}}</td>
+                            <td>{{"ADMIN_SHARING_PERMISSION" | translate}}</td>
+                            <td>{{"ADMIN_SHARING_RES_ID" | translate}}</td>
+                            <td>{{"WORKSPACES_SHARED_WITH" | translate}}</td>
                             <td></td>
                         </tr>
                     </thead>
@@ -52,17 +52,17 @@
 
         </div>
         <div>
-            Share a Resource
+            {{"ADMIN_SHARING_SHARE" | translate}}
             <div class="d-flex flex-row gap-2 mt-1">
                 <app-dropdown class="flex-fill" [m_aoDropdownItems]="m_aoResourceTypes"
-                    [m_sLabel]="'Select Resource Type'" (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
-                <app-input-field class="flex-fill" [m_sLabel]="'Resource ID'"
+                    [m_sLabel]="'ADMIN_SHARING_RES_TYPE' | translate" (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
+                <app-input-field class="flex-fill" [m_sLabel]="'ADMIN_SHARING_RES_ID' | translate"
                     (m_oInputChange)="setResourceId($event)"></app-input-field>
-                <app-input-field class="flex-fill" [m_sLabel]="'User ID'"
+                <app-input-field class="flex-fill" [m_sLabel]="'DIALOG_EDIT_USER_USER_ID' | translate"
                     (m_oInputChange)="setUserId($event)"></app-input-field>
-                <app-dropdown [m_sLabel]="'Select Permission Rights'" [m_aoDropdownItems]="m_aoShareOptions"
+                <app-dropdown [m_sLabel]="'ADMIN_SHARING_SELECT_RIGHT' | translate" [m_aoDropdownItems]="m_aoShareOptions"
                     (m_oSelectionChange)="setPermissionRights($event)"></app-dropdown>
-                <app-button class="align-self-end" [m_sLabel]="'Add Permission'"
+                <app-button class="align-self-end" [m_sLabel]="'ADMIN_SHARING_ADD' | translate"
                     (click)="addResourcePermission(m_sSelectedType, m_sResourceId, m_sUserId, m_sRights)"></app-button>
             </div>
         </div>

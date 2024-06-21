@@ -54,59 +54,59 @@ export const Documentation = {
 
 export const AppUIItems = [
     {
-        label: "Tab",
+        label: "DIALOG_PROCESSOR_UI_TAB",
         clickInput: "tab"
     },
     {
-        label: "Render as Strings",
+        label: "DIALOG_PROCESSOR_UI_STRINGS",
         clickInput: "renderAsStrings"
     },
     {
-        label: "Textbox",
+        label: "DIALOG_PROCESSOR_UI_TEXTBOX",
         clickInput: "textbox"
     },
     {
-        label: "Numeric Field",
+        label: "DIALOG_PROCESSOR_UI_NUMERIC_FIELD",
         clickInput: "numeric"
     },
     {
-        label: "Dropdown",
+        label: "DIALOG_PROCESSOR_UI_DROPDOWN",
         clickInput: "dropdown"
     },
     {
-        label: "Select Area",
+        label: "DIALOG_PROCESSOR_UI_SELECT_AREA",
         clickInput: "bbox"
     },
     {
-        label: "Number Slider",
+        label: "DIALOG_PROCESSOR_UI_NUMBER_SLIDE",
         clickInput: "slider"
     },
     {
-        label: "Date",
+        label: "DIALOG_PROCESSOR_UI_DATE",
         clickInput: "date"
     },
     {
-        label: "Boolean",
+        label: "DIALOG_PROCESSOR_UI_BOOL",
         clickInput: "boolean"
     },
     {
-        label: "Product Combo Box",
+        label: "DIALOG_PROCESSOR_UI_PRODUCT_COMBO",
         clickInput: "productscombo"
     },
     {
-        label: "Search EO Images",
+        label: "DIALOG_PROCESSOR_UI_SEARCH_EO_IMAGE",
         clickInput: "searcheoimage"
     },
     {
-        label: "listbox",
+        label: "DIALOG_PROCESSOR_UI_LISTBOX",
         clickInput: "List Box"
     },
     {
-        label: "Hidden Field",
+        label: "DIALOG_PROCESSOR_UI_HIDDEN_FIELD",
         clickInput: "hidden"
     },
     {
-        label: "Table",
+        label: "DIALOG_PROCESSOR_UI_HIDDEN_TABLE",
         clickInput: "table"
     }
 ]

@@ -74,7 +74,7 @@
     <div class="reviews-list p-3 mb-4">
         <!-- If no comments, show message -->
         <div *ngIf="!m_aoComments.length" class="d-flex align-items-center justify-content-between">
-            There are no comments
+            {{ "WAP_NO_COMMENTS"| translate}}
         </div>
     </div>
     <!-- Comments -->

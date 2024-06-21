@@ -1,6 +1,6 @@
 <div class="d-flex flex-row justify-content-between align-items-center pb-2">
     <h2>{{"WAP_REVIEWS2" | translate}}</h2>
-    <app-button *ngIf="m_bUserHasReviewed === false && !m_bIsOwner" [m_sLabel]="' WAP_ADD_REVIEW' | translate"
+    <app-button *ngIf="m_bUserHasReviewed === false && !m_bIsOwner" [m_sLabel]="'WAP_ADD_REVIEW' | translate"
         (click)="showReviewInput()"></app-button>
 </div>
 <div *ngIf="m_bShowReviewBox">

@@ -14,27 +14,27 @@ export class AdminMenuComponent {
   m_aoMenuButtons = [
     {
       title: "account",
-      label: "Account",
+      label: "ADMIN_MENU_ACCOUNT",
       icon: "person"
     },
     {
       title: "preferences",
-      label: "Notification Preferences",
+      label: "ADMIN_MENU_PREF",
       icon: "notifications_active"
     },
     {
       title: "organisations",
-      label: "Organisations",
+      label: "ADMIN_MENU_ORGANIZATIONS",
       icon: "supervisor_account"
     },
     {
       title: "subscriptions",
-      label: "Subscriptions",
+      label: "ADMIN_MENU_SUBSCRIPTIONS",
       icon: "rocket"
     },
     {
       title: "billings",
-      label: "Billings",
+      label: "ADMIN_MENU_BILLINGS",
       icon: "paid"
     },
 
@@ -43,22 +43,22 @@ export class AdminMenuComponent {
   m_aoAdminMenuItems = [
     {
       title: 'users',
-      label: 'Users',
+      label: 'ADMIN_MENU_USERS',
       icon: 'passkey'
     },
     {
       title: 'resources',
-      label: 'Subscriptions',
+      label: 'ADMIN_MENU_SUBSCRIPTIONS',
       icon: 'category'
     },
     {
       title: 'sharing',
-      label: 'Sharing',
+      label: 'ADMIN_MENU_SHARINGS',
       icon: 'send'
     },
     {
       title: 'nodes',
-      label: 'Nodes',
+      label: 'ADMIN_MENU_NODES',
       icon: 'network_node'
     }
   ]

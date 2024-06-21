@@ -3,7 +3,7 @@
         <div class="hero-text text-light text-center">
             <h1 class="font-bold">{{m_oProcessorInformation.friendlyName}}</h1>
             <div class="d-flex flex-row gap-3 justify-content-center">
-                <p class="font-bold">Publisher: <span class="font-light">{{m_oProcessorInformation.publisher}}</span>
+                <p class="font-bold">{{"MARKET_CARD_PUBLISHER" | translate}}: <span class="font-light">{{m_oProcessorInformation.publisher}}</span>
                 </p>
                 <app-button *ngIf="m_oProcessorInformation.isMine" [m_sSize]="'small'"
                     [m_sLabel]="'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate"
@@ -49,9 +49,9 @@
                 <table class="history-table table">
                     <thead class="table-heading-container">
                         <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Workspace</th>
+                            <th scope="col">{{"KEY_PHRASES.DATE" | translate}}</th>
+                            <th scope="col">{{"KEY_PHRASES.STATUS" | translate}}</th>
+                            <th scope="col">{{"WORKSPACES_THEAD_WORKSPACES" | translate}}</th>
                         </tr>
                     </thead>
                     <tbody>
