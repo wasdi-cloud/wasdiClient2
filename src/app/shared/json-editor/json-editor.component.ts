@@ -15,6 +15,7 @@ import {
 import { Ace, config, edit } from 'ace-builds';
 import 'ace-builds';
 import 'ace-builds/src-noconflict/theme-dracula';
+import 'ace-builds/src-noconflict/ext-searchbox'
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
@@ -48,7 +49,7 @@ export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
   constructor() { }
 
   ngOnInit(): void {
-    
+
   }
 
   ngAfterViewInit(): void {
@@ -86,7 +87,7 @@ export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private initEditor_(): void {
-  console.log(this.m_sText)
+    console.log(this.m_sText)
     this.m_oEditor = edit(this.editorRef.nativeElement);
     this.m_oEditor.setOptions(this.options);
     this.m_oEditor.setValue(this.m_sText, -1);
@@ -95,6 +96,7 @@ export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
     this.setEditorMode_();
     this.m_oEditor.session.setUseWorker(false);
     this.m_oEditor.on('change', () => this.onEditorTextChange_());
+    this.m_oEditor.execCommand('find');
   }
 
   private onExternalUpdate_(): void {
