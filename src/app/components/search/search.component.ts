@@ -84,6 +84,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   m_sTypeOfFilterSelected: string = "Time period";
 
+  m_oMouseLocation: any = null;
+
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,
     private m_oConfigurationService: ConfigurationService,
@@ -116,6 +118,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("SearchComponent.ngOnDestroy")
+    this.m_oMouseLocation.unsubscribe();
   }
 
   m_fUtcDateConverter(oDate) {

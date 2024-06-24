@@ -119,6 +119,10 @@ export class MapService {
    */
   _m_oManualBoundingBoxSubscription$ = this.m_oManualBoundingBoxSubscription.asObservable();
 
+  private m_oMouseEnterLocation: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  m_oMouseEnterLocation$ = this.m_oMouseEnterLocation.asObservable();
+
   /**
    * Init options for leaflet-draw
    */
@@ -528,6 +532,7 @@ export class MapService {
     * @returns {null}
     */
   addRectangleByBoundsArrayOnMap(aaBounds, sColor, iIndexLayers) {
+    let oController = this;
     if (!aaBounds) {
       return null;
     }
@@ -548,15 +553,28 @@ export class MapService {
         //->problematic here
         console.log("on-mouse-click-rectangle")
         //$rootScope.$broadcast('on-mouse-click-rectangle', { rectangle: oRectangle });//SEND MESSAGE TO IMPORTCONTROLLER
+        oController.m_oMouseEnterLocation.next({
+          rectangle: oRectangle,
+          isMouseover: true
+        })
       });
       //mouse over event change rectangle style
       oRectangle.on("mouseover", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
         oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
         oRectangle.getBounds();
+        oController.m_oMouseEnterLocation.next({
+          rectangle: oRectangle,
+          isMouseover: true
+        })
+      
       });
       //mouse out event set default value of style
       oRectangle.on("mouseout", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
         oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
+        oController.m_oMouseEnterLocation.next({
+          rectangle: oRectangle,
+          isMouseover: false
+        })
       });
     }
     return oRectangle;

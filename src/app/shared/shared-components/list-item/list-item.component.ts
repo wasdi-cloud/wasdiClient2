@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { MapService } from 'src/app/services/map.service';
@@ -8,7 +8,7 @@ import { MapService } from 'src/app/services/map.service';
   templateUrl: './list-item.component.html',
   styleUrls: ['./list-item.component.css']
 })
-export class ListItemComponent {
+export class ListItemComponent implements OnInit {
   /**
    * List item with picture, title, description and (optional) toolbar
    */
@@ -60,12 +60,14 @@ export class ListItemComponent {
   @Input() m_oProcessorItem?: any = {};
 
   @Input() m_bHasImg?: boolean = true;
-  
+
   @Input() m_sIcon?: string = "";
 
   @Input() m_sImageSize?: string = "";
 
   @Input() m_bIsLightProduct?: boolean = false;
+
+  m_bIsHovering?: boolean = true
 
   @Input() m_oInfoCallbackFn?: (args: any) => void;
 
@@ -75,11 +77,26 @@ export class ListItemComponent {
 
   @Output() m_oEmitClickEvent: EventEmitter<any> = new EventEmitter<any>();
 
+  m_oMouseLocation
+
   constructor(
     private m_oDialog: MatDialog,
     private m_oMapService: MapService,
     private m_oProcessorService: ProcessorService
   ) { }
+
+
+  ngOnInit(): void {
+    if (this.m_oProductListItem) {
+      this.m_oMouseLocation = this.m_oMapService.m_oMouseEnterLocation$.subscribe(oResponse => {
+        if (oResponse) {
+          if (this.m_oProcessorItem.rectangle === oResponse.rectangle) {
+            this.m_bIsHovering = oResponse.isMouseover
+          }
+        }
+      })
+    }
+  }
 
   emitToolbarClick(sLocation: string) {
     this.m_oEmitClickEvent.emit(sLocation)

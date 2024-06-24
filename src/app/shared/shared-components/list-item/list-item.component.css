@@ -15,6 +15,10 @@ span.label {
     font-weight: 700;
 }
 
+.highlighted {
+    background-color: green;
+}
+
 .hover:hover,
 .highlighted {
     background: var(--neutral10);
