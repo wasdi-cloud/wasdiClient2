@@ -1083,6 +1083,9 @@
     "SUBSCRIPTIONS_ONE_YEAR": "(1 Year Only)",
     "SUBSCRIPTIONS_DAY": "Day",
     "SUBSCRIPTIONS_WEEK": "Week",
+    "SUBSCRIPTIONS_TRIAL_DESC": "The standard trial of WASDI",
+    "SUBSCRIPTIONS_STND_DESC": "For those looking to process medium amounts of data.",
+    "SUBSCRIPTIONS_PRO_DESC": "For individuals and organizations that may require large amounts of processing space.",
 
     "SUBSCRIPTION_BUY_NAME": "Give your subscription a name so you can keep track of your projects (optional)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Select the organisation for which you are buying this plan (optional)",
