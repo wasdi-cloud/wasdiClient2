@@ -95,7 +95,7 @@ export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
     this.setEditorMode_();
     this.m_oEditor.session.setUseWorker(false);
     this.m_oEditor.on('change', () => this.onEditorTextChange_());
-    this.m_oEditor.execCommand('find');
+    // this.m_oEditor.execCommand('find');
   }
 
   private onExternalUpdate_(): void {
