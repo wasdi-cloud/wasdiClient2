@@ -9,6 +9,8 @@
             *ngIf="m_aoSelectedProducts.length > 0"></app-button>
     </div>
     <div class="results-container">
+        <!-- Invader animation -->
+        <app-invader *ngIf="!m_aoProvidersList.length"></app-invader>
         <div *ngFor="let oProvider of m_aoProvidersList">
             <div class="mb-1 d-flex flex-column">
                 <app-list-item [m_bParentItem]="true" [m_sLabel]="oProvider.name"
