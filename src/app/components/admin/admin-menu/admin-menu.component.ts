@@ -17,11 +17,11 @@ export class AdminMenuComponent {
       label: "ADMIN_MENU_ACCOUNT",
       icon: "person"
     },
-    {
-      title: "preferences",
-      label: "ADMIN_MENU_PREF",
-      icon: "notifications_active"
-    },
+    // {
+    //   title: "preferences",
+    //   label: "ADMIN_MENU_PREF",
+    //   icon: "notifications_active"
+    // },
     {
       title: "organisations",
       label: "ADMIN_MENU_ORGANIZATIONS",
