@@ -207,6 +207,7 @@ export class ManageUsersComponent implements OnInit {
   }
 
   setInputSelections(oEvent: any, sLabel: string) {
+    console.log(oEvent)
     switch (sLabel) {
       case 'isActive':
         this.m_oSelectedUser.active = oEvent.target.checked;
@@ -223,6 +224,9 @@ export class ManageUsersComponent implements OnInit {
       case 'node':
         this.m_oSelectedUser.defaultNode = oEvent.event.target.value;
         break;
+      case 'role':
+        this.m_oSelectedUser.role = oEvent.value;
+        break
       default:
         break;
     }

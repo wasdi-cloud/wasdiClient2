@@ -102,7 +102,7 @@
             (m_oSelectionChange)="setInputSelections($event, 'node')"></app-dropdown>
         <!-- Role -->
         <app-dropdown [m_sLabel]="'User Role'" [m_aoDropdownItems]="m_asRoles"
-            [m_aoSelectedItems]="m_oSelectedUser.role"></app-dropdown>
+            [m_aoSelectedItems]="m_oSelectedUser.role" (m_oSelectionChange)="setInputSelections($event, 'role')"></app-dropdown>
         <div class="d-flex flex-row align-items-center gap-2">
             <input type="checkbox" class="wasdi-checkbox" name="isActive" id="" [checked]="m_oSelectedUser.active"
                 (change)="setInputSelections($event, 'isActive')">
