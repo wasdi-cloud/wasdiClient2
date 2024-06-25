@@ -85,7 +85,7 @@
                         [m_sLabel]="oFilter.indexlabel" (m_oSelectionChange)="getMissionInput($event, oFilter)"
                         [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
                     <app-input-field *ngIf="oFilter.indexvalues === ''" [m_sPlaceholder]="oFilter.indexhint"
-                        [m_sLabel]="oFilter.indexlabel" [m_sPattern]="oFilter.regex"></app-input-field>
+                        [m_sLabel]="oFilter.indexlabel" [m_sPattern]="oFilter.regex" (m_oInputChange)="getMissionInput($event.event.target, oFilter)"></app-input-field>
                 </div>
                 <div *ngIf="m_oActiveMission.name === 'ERA5'">
                     <label *ngIf="oFilter.indexvalues !== ''" for="">{{oFilter.indexlabel}}</label>
@@ -100,7 +100,7 @@
                         [m_sPlaceholder]="oFilter.indexvalue"></app-dropdown>
                     <app-input-field
                         *ngIf="oFilter.indexvalues === '' && oFilter.indexname !== 'pressureLevels' && oFilter.indexname !== 'variables'"
-                        [m_sPlaceholder]="oFilter.indexhint" [m_sPattern]="oFilter.regex"></app-input-field>
+                        [m_sPlaceholder]="oFilter.indexhint" [m_sPattern]="oFilter.regex" (m_oInputChange)="getMissionInput($event.event.target, oFilter)"></app-input-field>
                 </div>
             </div>
         </div>
