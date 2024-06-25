@@ -100,7 +100,7 @@
 
         <app-textarea [m_sLabel]="'ADMIN_NODES_DESCRIPTION' | translate"
             [m_sInputString]="m_oSelectedNode? (m_oSelectedNode.nodeDescription ? m_oSelectedNode.nodeDescription : '' ): ''"
-            (m_oInputChange)="m_oSelectedNode.nodeDescription"></app-textarea>
+            (keyup)="getNodeDescription($event)"></app-textarea>
 
         <div class="d-flex flex-row gap-4 mt-4">
             <div class="d-flex flex-row gap-2 align-items-center">

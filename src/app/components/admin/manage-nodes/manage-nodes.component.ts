@@ -58,6 +58,12 @@ export class ManageNodesComponent implements OnInit {
     }
   }
 
+  getNodeDescription(oEvent) {
+    if (oEvent.target.value) { 
+      this.m_oSelectedNode.nodeDescription = oEvent.target.value;
+    }
+  }
+
   updateNode() {
     this.m_oNotificationDisplayService.openConfirmationDialog("Are you sure you want to update this node?").subscribe(bDialogResult => {
       if (bDialogResult) {
