@@ -229,7 +229,6 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
     if (!oTemplate) {
       return false;
     }
-    console.log(oTemplate)
 
     let sConfirmOwner = `${this.m_oTranslate.instant("DIALOG_PARAMS_CONFIRM_DELETE_OWNER")} <br> <li>${oTemplate.name}</li>`;
     let sConfirmShared = `${this.m_oTranslate.instant("DIALOG_PARAMS_CONFIRM_DELETE_SHARE")} <br> <li>${oTemplate.name}</li>`;

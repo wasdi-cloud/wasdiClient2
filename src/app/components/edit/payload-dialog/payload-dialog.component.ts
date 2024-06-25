@@ -123,11 +123,9 @@ export class PayloadDialogComponent implements OnInit {
   checkWasdiDashboard(oPayload: any) {
     if (oPayload.hasOwnProperty('wasdi_dashboard')) {
       this.m_bIsWasdiDashboard = true;
-      console.log(oPayload.wasdi_dashboard)
       this.m_aoChartsInformation = oPayload.wasdi_dashboard;
       this.m_sActiveTab = 'dashboard';
       oPayload.wasdi_dashboard.forEach(oChart => {
-        console.log(oChart)
         if (oChart['x-axis-name'] !== false) {
           this.m_bShowXAxisLabel = true;
         }
@@ -135,7 +133,6 @@ export class PayloadDialogComponent implements OnInit {
           this.m_bShowYAxisLabel = true;
         }
       });
-      console.log(this.m_aoChartsInformation);
     } else {
       this.getPayloadString();
     }

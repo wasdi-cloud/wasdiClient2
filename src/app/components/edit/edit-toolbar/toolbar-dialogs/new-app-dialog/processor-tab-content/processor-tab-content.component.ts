@@ -309,7 +309,6 @@ export class ProcessorTabContentComponent implements OnInit {
   }
 
   onPublicChange(event) {
-    console.log(event)
     let oForm = this.m_oProcessorBasicInfo;
     if (event.target.checked) {
       oForm.patchValue({

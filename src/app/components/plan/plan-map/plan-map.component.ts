@@ -65,11 +65,8 @@ export class PlanMapComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.m_aoManualBBoxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
-        console.log(oResult)
         this.m_oGeoJSON = oResult.toGeoJSON();
         this.m_sPolygon = this.getPolygon();
-        console.log(this.m_oGeoJSON)
-        console.log(this.m_sPolygon)
         this.emitMapInputs();
       }
     })
@@ -105,7 +102,6 @@ export class PlanMapComponent implements OnInit, AfterViewChecked {
 
     this.m_oGeoJSON = oLayer.toGeoJSON();
 
-    console.log(this.m_oGeoJSON)
     this.m_sPolygon = this.getPolygon();
 
     //Emit Changes to Search Orbit Component: 

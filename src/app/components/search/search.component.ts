@@ -152,16 +152,14 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
     // Check input data
     if (this.thereIsAtLeastOneProvider() === false) {
-      // var sError= this.m_oTranslate.instant("MSG_SEARCH_SELECT_PROVIDER");
-      // utilsVexDialogAlertDefault(sError,null);
-      console.log("error")
+      let sError = this.m_oTranslate.instant("MSG_SEARCH_SELECT_PROVIDER");
+      this.m_oNotificationDisplayService.openAlertDialog(sError, '', 'alert')
       return false;
     }
 
     if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oSearchModel.geoselection)) {
-      // var sError= this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
-      // utilsVexDialogAlertDefault(sError,null);
-      console.log("error");
+      let sError = this.m_oTranslate.instant("MSG_SEARCH_ERROR_BBOX");
+      this.m_oNotificationDisplayService.openAlertDialog(sError, '', 'alert')
       return false;
     }
 
@@ -392,7 +390,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       }
     })
 
-    // var sMessage = oController.m_oTranslate.instant("MSG_SEARCH_ERROR");
+    let sMessage = oController.m_oTranslate.instant("MSG_SEARCH_ERROR");
 
     // // Call the complete Search for all the queries of this provider
     oController.m_oSearchService.searchList(asTimePeriodsFilters).subscribe({
@@ -406,13 +404,12 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
         }
       },
       error: oError => {
-        console.log(oError);
+        oController.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'danger')
 
-        oController.m_bIsVisibleListOfLayers = false;//visualize filter list
+        oController.m_bIsVisibleListOfLayers = false;
         oController.m_oResultsOfSearchService.setIsVisibleListOfProducts(oController.m_bIsVisibleListOfLayers);
       }
     });
-
     return true;
   }
 

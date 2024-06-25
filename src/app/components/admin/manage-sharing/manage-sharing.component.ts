@@ -42,7 +42,6 @@ export class ManageSharingComponent implements OnInit {
           let sMsg = this.m_oTranslate.instant("ADMIN_SHARING_SHARE_ERROR_GET_TYPES");
           this.m_oNotificationDisplayService.openAlertDialog(sMsg);
         } else {
-          console.log(oResponse);
           this.m_aoResourceTypes = oResponse;
         }
       },
@@ -58,7 +57,6 @@ export class ManageSharingComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog(sMsg);
         } else {
           this.m_aoFoundResources = oResponse;
-          console.log(this.m_aoFoundResources);
         }
       },
       error: oError => { }

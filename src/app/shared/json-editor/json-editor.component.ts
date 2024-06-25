@@ -87,7 +87,6 @@ export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private initEditor_(): void {
-    console.log(this.m_sText)
     this.m_oEditor = edit(this.editorRef.nativeElement);
     this.m_oEditor.setOptions(this.options);
     this.m_oEditor.setValue(this.m_sText, -1);

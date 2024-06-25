@@ -66,8 +66,6 @@ export class AdminMenuComponent {
 
 
   constructor(private m_oConstantsService: ConstantsService) {
-    console.log(this.m_oConstantsService.getUser().role)
-
     if (this.m_oConstantsService.getUser().role === 'ADMIN') {
       this.m_bIsAdmin = true;
     }

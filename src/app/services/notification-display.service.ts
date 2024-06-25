@@ -70,7 +70,6 @@ export class NotificationDisplayService {
    * @returns result of the dialog (boolean)
    */
   openConfirmationDialog(sMessage: string, sTitle?: string, sClassName?: string) {
-    console.log(sClassName)
     let oDialogRef = this.m_oMatDialog.open(ConfirmationDialogComponent, {
       width: '500px',
       panelClass: sClassName ? sClassName : 'generic',

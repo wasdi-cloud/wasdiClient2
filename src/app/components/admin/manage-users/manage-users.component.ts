@@ -228,19 +228,19 @@ export class ManageUsersComponent implements OnInit {
     }
   }
 
-  showUserSubscriptions(oUser) {
-    this.m_oAdminDashboardService.getResourceTypes().subscribe(oResponse => {
-      console.log(oResponse);
-    })
-    this.m_oAdminDashboardService.findResourcePermissions("STYLE", null, oUser.userId).subscribe({
-      next: oResponse => {
-        console.log(oResponse);
-      },
-      error: oError => {
-        console.log(oError)
-      }
-    })
-  }
+  // showUserSubscriptions(oUser) {
+  //   this.m_oAdminDashboardService.getResourceTypes().subscribe(oResponse => {
+  //     console.log(oResponse);
+  //   })
+  //   this.m_oAdminDashboardService.findResourcePermissions("STYLE", null, oUser.userId).subscribe({
+  //     next: oResponse => {
+  //       console.log(oResponse);
+  //     },
+  //     error: oError => {
+  //       console.log(oError)
+  //     }
+  //   })
+  // }
 
   setDateInput(oEvent, sLabel) {
     if (sLabel === 'to') {

@@ -139,7 +139,6 @@ export class LightSearchService {
 
     this.m_oSearchService.search().subscribe({
       next: oResponse => {
-        console.log(oResponse)
         oCallback(oResponse);
       },
       error: oError => {

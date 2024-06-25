@@ -170,7 +170,6 @@ export class WorkflowsDialogComponent implements OnInit {
         if (bDialogResult === false) {
           this.m_bCreatingWorkflow = false;
           this.m_bShowInputs = false;
-          console.log(this.m_oSelectedWorkflow);
           this.m_oSelectedWorkflow = oWorkflow;
           this.selectedMultiInputWorkflow(oWorkflow);
         }
@@ -223,7 +222,6 @@ export class WorkflowsDialogComponent implements OnInit {
           this.m_oNotificationDisplayService.openSnackBar(sMessage)
           this.getWorkflowsByUser();
           this.m_bShowInputs = false;
-          console.log(oResponse)
         },
         error: oError => {
           this.m_oNotificationDisplayService.openAlertDialog("INVALID SNAP FILE!");
@@ -406,7 +404,6 @@ export class WorkflowsDialogComponent implements OnInit {
    * @param oEvent 
    */
   getSingleSelection(oEvent: any, oNode: any) {
-    console.log(oEvent)
     if (!oEvent.value.length) {
       //Set the inputFileName value to reflect SINGLE input: 
       this.m_oSelectedWorkflow.inputFileNames = [oEvent.value.name];
@@ -415,8 +412,6 @@ export class WorkflowsDialogComponent implements OnInit {
         return oProduct.name;
       })
     }
-
-    console.log(this.m_oSelectedWorkflow.inputFileNames)
   }
 
   /**
@@ -507,7 +502,6 @@ export class WorkflowsDialogComponent implements OnInit {
         break;
       case 'isPublic':
         this.m_bWorkflowIsPublic = oEvent.target.checked;
-        console.log(oEvent.target.checked);
         break;
     }
   }

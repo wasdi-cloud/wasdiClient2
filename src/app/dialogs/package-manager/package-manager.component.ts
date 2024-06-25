@@ -87,7 +87,6 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
         }
       },
       error: oError => {
-        console.log(oError);
         this.m_bIsLoading = false;
       }
     })

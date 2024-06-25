@@ -52,9 +52,6 @@ export class ProcessorTabStoreComponent implements OnInit {
     //Uncomment when committing
     this.getCategories();
     this.m_aoSelectedCategories = this.m_oProcessorStoreInfo.get('aoCategories').value;
-
-    console.log(this.m_oProcessorStoreInfo)
-    console.log(this.m_oProcessor)
   }
 
   getCategories() {

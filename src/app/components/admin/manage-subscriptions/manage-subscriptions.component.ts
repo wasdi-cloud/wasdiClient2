@@ -57,7 +57,6 @@ export class ManageSubscriptionsComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscriptions")
         } else {
           this.m_aoSubscriptions = oResponse;
-          console.log(this.m_aoSubscriptions)
         }
       },
       error: oError => { }
@@ -81,18 +80,18 @@ export class ManageSubscriptionsComponent implements OnInit {
   }
 
   setSelectedSubscription(oSubscription: any) {
-    console.log(oSubscription)
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSubscription) === false) {
       this.m_oSubscriptionService.getSubscriptionById(oSubscription.subscriptionId).subscribe({
         next: oResponse => {
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscription information");
+            this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscription information", '', 'danger');
           } else {
             this.m_oSelectedSubscription = oResponse;
-            console.log(oResponse);
           }
         },
-        error: oError => { }
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscription information", '', 'danger');
+        }
       })
     } else {
       this.m_oSelectedSubscription = {};
@@ -127,8 +126,6 @@ export class ManageSubscriptionsComponent implements OnInit {
           this.m_asTypesMap = this.m_aoTypes.map(oType => {
             return oType.name;
           })
-          console.log(this.m_aoTypes)
-
         }
       }
     })
@@ -154,21 +151,20 @@ export class ManageSubscriptionsComponent implements OnInit {
     this.m_oSubscriptionService.updateSubscription(oSubscription).subscribe({
       next: oResponse => {
         if (oResponse) {
-          this.m_oNotificationDisplayService.openSnackBar("Updated Subscription");
+          this.m_oNotificationDisplayService.openSnackBar("Updated Subscription", '', 'success-snackbar');
           this.getSubscriptions();
         }
       },
       error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog("Error while updating subscription");
+        this.m_oNotificationDisplayService.openAlertDialog("Error while updating subscription", '', 'alert');
       }
     })
   }
 
   createNewSubscription(oSubscription) {
-    console.log(oSubscription)
     this.m_oSubscriptionService.createSubscription(oSubscription).subscribe({
       next: oResponse => {
-        console.log(oResponse);
+        this.m_oNotificationDisplayService.openSnackBar("Updated Subscription", '', 'success-snackbar');
       },
       error: oError => { }
     })

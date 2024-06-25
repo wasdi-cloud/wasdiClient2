@@ -182,7 +182,6 @@ export class EditComponent implements OnInit, OnDestroy {
       if (FadeoutUtils.utilsIsStrNullOrEmpty(oMessage.payload) === false) sErrorDescription = oMessage.payload;
       if (FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription) === false) sErrorDescription = "<br>" + sErrorDescription;
 
-      console.log('here')
       oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + `<li>${sOperation}</li>` + sErrorDescription, 10000);
 
       return;

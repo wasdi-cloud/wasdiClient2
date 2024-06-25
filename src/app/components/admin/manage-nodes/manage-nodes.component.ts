@@ -41,7 +41,6 @@ export class ManageNodesComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog("Could not get node information");
         } else {
           this.m_aoNodes = oResponse;
-          console.log(this.m_aoNodes)
         }
       },
       error: oError => { }
@@ -64,7 +63,10 @@ export class ManageNodesComponent implements OnInit {
       if (bDialogResult) {
         this.m_oNodeService.updateNode(this.m_oSelectedNode).subscribe({
           next: oResponse => {
-            console.log(oResponse)
+            this.m_oNotificationDisplayService.openSnackBar("Node updated", "Success", 'success-snackbar')
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog(oError.message, 'Error', 'danger')
           }
         })
       }
@@ -74,20 +76,23 @@ export class ManageNodesComponent implements OnInit {
   createNode() {
     this.m_oNodeService.createNode(this.m_oSelectedNode).subscribe({
       next: oResponse => {
-        console.log(oResponse);
+        this.m_oNotificationDisplayService.openSnackBar("Node Created", "Success", "success-snackbar")
         this.getNodes();
       },
-      error: oError => { }
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog(oError.message, 'Error', 'danger')
+      }
     })
   }
 
   getNodesSortedByScore() {
     this.m_oProcessWorkspaceService.getAvailableNodesSortedByScore().subscribe({
-      next: oResponse => { 
+      next: oResponse => {
         this.m_aoNodesWithScores = oResponse;
-        console.log(this.m_aoNodesWithScores)
       },
-      error: oError => { }
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog(oError.message, 'Error', 'danger')
+      }
     })
   }
 
@@ -98,10 +103,11 @@ export class ManageNodesComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog("Error getting Node Information");
         } else {
           this.m_oSelectedNode = oResponse;
-          console.log(this.m_oSelectedNode)
         }
       },
-      error: oError => { }
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog(oError.message, 'Error', 'danger')
+      }
     })
   }
 

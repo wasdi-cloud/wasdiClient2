@@ -71,7 +71,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     //Only set active tab to layers if it is the FIRST band published
     if (this.m_aoVisibleBands !== undefined && this.m_aoVisibleBands.length === 1) {
-      console.log("NavLayersComponent.ngOnChanges: swithc to layers tab")
+      console.log("NavLayersComponent.ngOnChanges: switch to layers tab")
       this.setActiveTab('layers');
     }
   }

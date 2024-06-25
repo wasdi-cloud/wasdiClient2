@@ -164,7 +164,6 @@ export class ImportDialogComponent implements OnInit {
       },
       error: oError => {
         //ADD ERROR DIALOG
-        console.log(oError);
         console.log("Import Dialog Controller:  error during delete account");
         this.m_bIsVisibleLoadIcon = false;
       }
