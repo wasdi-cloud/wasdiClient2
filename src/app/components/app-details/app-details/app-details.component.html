@@ -27,7 +27,7 @@
                         [ngClass]="m_oApplicationInfo.ondemandPrice === 0 ? 'free' : 'paid'">
                         {{m_oApplicationInfo.ondemandPrice
                         === 0 ?("WAP_FREE"| translate).toUpperCase():
-                        m_oApplicationInfo.ondemandPrice}} €</div>
+                        '€ ' + m_oApplicationInfo.ondemandPrice }}</div>
                 </div>
                 <div class=" basic-info-container d-flex flex-column gap-2">
                     <div>
