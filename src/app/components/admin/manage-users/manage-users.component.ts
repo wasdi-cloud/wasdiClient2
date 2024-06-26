@@ -207,7 +207,6 @@ export class ManageUsersComponent implements OnInit {
   }
 
   setInputSelections(oEvent: any, sLabel: string) {
-    console.log(oEvent)
     switch (sLabel) {
       case 'isActive':
         this.m_oSelectedUser.active = oEvent.target.checked;

@@ -55,9 +55,10 @@ export class OrganizationsDisplayComponent implements OnInit {
   getUserOrganizations() {
     this.m_oOrganizationsService.getOrganizationsListByUser().subscribe({
       next: oResponse => {
-        console.log(oResponse);
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoOrganizations = oResponse.body;
+        } else {
+          this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_ORGANIZATION_ERROR"), '', 'danger')
         }
       },
       error: oError => { }
