@@ -144,6 +144,9 @@ export class UserAccountComponent implements OnInit {
     if (oEvent.label === 'Surname') {
       this.m_oEditUser.lname = oEvent.event.target.value;
     }
+    if (oEvent.label === 'Email') {
+      this.m_oEditUser.userId = oEvent.event.target.value;
+    }
     this.m_bEditingUserInfo = true;
   }
 }

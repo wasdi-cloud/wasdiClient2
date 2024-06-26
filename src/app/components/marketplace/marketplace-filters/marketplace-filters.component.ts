@@ -22,7 +22,7 @@ export class MarketplaceFiltersComponent implements OnInit {
   m_sDeveloperSearch: string = "";
   m_aoSelectedPublishers: any = [];
 
-  m_aiRatingsFilter: Array<number> = [4, 3, 2, 1];
+  m_aiRatingsFilter: Array<number> = [5, 4, 3, 2, 1];
 
   m_sSearchInput: string = "";
 

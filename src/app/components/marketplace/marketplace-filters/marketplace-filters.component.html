@@ -1,7 +1,8 @@
 <div class="secondary-nav d-flex flex-column">
     <div class="location-header">{{"ROOT_VIEW_NAV_BAR_LINK_APPSTORE" | translate}}</div>
-    <div class="filters-header d-flex flex-row justify-content-between">{{"MARKET_FILTERS" | translate }} 
-        <app-button class="close-btn" [m_bOutline]="true" [m_sLabel]="('KEY_PHRASES.CLOSE' | translate).toUpperCase()" [m_sSize]="'small'"  data-bs-dismiss="offcanvas" aria-label="Close"></app-button>
+    <div class="filters-header d-flex flex-row justify-content-between">{{"MARKET_FILTERS" | translate }}
+        <app-button class="close-btn" [m_bOutline]="true" [m_sLabel]="('KEY_PHRASES.CLOSE' | translate).toUpperCase()"
+            [m_sSize]="'small'" data-bs-dismiss="offcanvas" aria-label="Close"></app-button>
     </div>
     <div class="filters-container flex-fill d-flex flex-column">
         <div class="input-container">
@@ -37,8 +38,7 @@
             <div class="review-options">
                 <div class="review-option-container d-flex flex-row align-items-center gap-1"
                     *ngFor="let iRating of m_aiRatingsFilter">
-                    <input type="radio" name="reviewOption" id="" value="{{iRating}}" (click)="ratingChanged($event)"
-                        [(ngModel)]="m_oAppFilter.score">
+                    <input type="radio" [(ngModel)]="m_oAppFilter.score" [value]="iRating">
                     <span class="material-symbols-outlined" [class]="iRating > 0 ? 'star-filled' : 'star-grey'">
                         star
                     </span>
@@ -54,24 +54,22 @@
                     <span class="material-symbols-outlined" [class]="iRating > 4 ? 'star-filled' : 'star-grey'">
                         star
                     </span>
-                    <span class="review-text">{{"MARKET_MORE_STARS" | translate}}</span>
+                    <span *ngIf="iRating !== 5" class="review-text">{{"MARKET_MORE_STARS" | translate}}</span>
                 </div>
             </div>
-        </div>
 
-        <div class="input-container">
-            <div class="search-header">{{"MARKET_PRICE"| translate }}</div>
-            <div style="padding-left: 1rem">
-                <app-slider [m_bHasThumbLabel]="true"></app-slider>
+            <div class="input-container">
+                <div class="search-header">{{"MARKET_PRICE"| translate }}</div>
+                <div style="padding-left: 1rem">
+                    <app-slider [m_bHasThumbLabel]="true"></app-slider>
+                </div>
             </div>
+
         </div>
-
+        <div class="floating-buttons d-flex flex-row gap-2 justify-content-between">
+            <app-button [m_bMuted]="true" [m_sLabel]="'MARKET_CLEAR_FILTERS' | translate"
+                (click)="clearFilters()"></app-button>
+            <app-button class="flex-fill" [m_sLabel]="'KEY_PHRASES.SEARCH' | translate" [m_sIconLeft]="'search'"
+                (click)="onSearchInput($event)"></app-button>
+        </div>
     </div>
-    <div class="floating-buttons d-flex flex-row gap-2 justify-content-between">
-        <app-button [m_bMuted]="true" [m_sLabel]="'MARKET_CLEAR_FILTERS' | translate"
-            (click)="clearFilters()"></app-button>
-        <app-button class="flex-fill" [m_sLabel]="'KEY_PHRASES.SEARCH' | translate" [m_sIconLeft]="'search'"
-            (click)="onSearchInput($event)"></app-button>
-    </div>
-</div>
-
