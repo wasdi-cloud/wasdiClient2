@@ -17,7 +17,6 @@ import { ParamsLibraryDialogComponent } from './params-library-dialog/params-lib
 
 //Fadeout Utilities Import: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { Application } from 'src/app/components/app-ui/app-ui.component';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
 import { TranslateService } from '@ngx-translate/core';

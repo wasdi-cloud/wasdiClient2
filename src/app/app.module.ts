@@ -138,7 +138,6 @@ import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 import { initializeKeycloak } from './auth/keycloak-init.factory';
 import { KeycloakAngularModule,KeycloakService } from 'keycloak-angular'
 import { ManualBoundingBoxComponent } from './shared/shared-components/manual-bounding-box/manual-bounding-box.component';
-import { HelpDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/apps-dialog/help-dialog/help-dialog.component';
 import { MarketplaceFiltersComponent } from './components/marketplace/marketplace-filters/marketplace-filters.component';
 import { MenuListItemComponent } from './components/navbar/menu-list-item/menu-list-item.component';
 import { ButtonComponent } from './shared/shared-components/button/button.component';
@@ -256,7 +255,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     NotificationSnackbarComponent,
     ConvertMsToTimePipe,
     ManualBoundingBoxComponent,
-    HelpDialogComponent,
     CardComponent,
     MarketplaceFiltersComponent,
     MenuListItemComponent,
