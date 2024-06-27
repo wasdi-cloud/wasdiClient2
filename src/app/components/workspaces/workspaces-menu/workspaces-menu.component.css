@@ -1,7 +1,13 @@
-div.floating-menu {
+.floating-menu {
     border-radius: 16px;
     padding: 20px;
     width: 22rem;
+    height: 14.75rem;
+    position: relative;
+}
+
+.active {
+    height: 30rem;
 }
 
 .menu-header {
@@ -16,7 +22,30 @@ div.floating-menu {
     line-height: 21px;
 }
 
+.expanded-menu, .expanded-menu.active{
+    width: 50vw !important;
+    height: 80vh !important;
+}
 
+.expanded-workspace-menu {
+    overflow: scroll;
+}
+.expand-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.expanded-workspace-card {
+    padding: 8px;
+    border: 1px solid var(--neutral10);
+    border-radius: 8px;
+}
+
+.expanded-workspace-card.selected {
+    border: 1px solid var(--wasdiGreen);
+    background-color: var(--wasdiGreenLight);
+}
 
 input.form-control {
     border-right: none;

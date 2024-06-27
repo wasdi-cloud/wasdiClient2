@@ -21,6 +21,8 @@ export class WorkspacesMenuComponent implements OnInit {
 
   m_bShowCopied: boolean = false;
 
+  m_bExpandedMenu: boolean = false;
+
   @Input() m_aoProducts: Array<any> = [];
 
   @Output() m_oActiveWorkspaceOutput: EventEmitter<any> = new EventEmitter<any>();
@@ -52,10 +54,12 @@ export class WorkspacesMenuComponent implements OnInit {
    * Set the Active Workspace upon workspace selection (Reveals the Properties Component)
    */
   setActiveWorkspace(oEvent: any) {
+    this.m_aoWorkspacesList.forEach(oWorkspace => oWorkspace.workspaceId === oEvent.workspaceId ? oWorkspace.selected = true : oWorkspace.selected = false)
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(oEvent.workspaceId).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_oActiveWorkspace = oResponse;
+          this.m_oActiveWorkspace.selected = true;
           this.m_oActiveWorkspaceOutput.emit(this.m_oActiveWorkspace);
         }
       }
@@ -139,6 +143,9 @@ export class WorkspacesMenuComponent implements OnInit {
     setTimeout(() => {
       this.m_bShowCopied = false
     }, 1000)
+  }
 
+  toggleExpandMenu() {
+    this.m_bExpandedMenu = !this.m_bExpandedMenu;
   }
 }

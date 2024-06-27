@@ -1,15 +1,33 @@
-<div class="floating-menu d-flex flex-column gap-2">
+<div class="floating-menu d-flex flex-column gap-2" [class.expanded-menu]="m_bExpandedMenu"
+    [class.active]="m_oActiveWorkspace? true : false">
     <div class="menu-header font-bold">{{'ROOT_VIEW_NAV_BAR_LINK_WORKSPACES' | translate}}</div>
     <div class="menu-dropdown">
         <div>{{'WORKSPACES_THEAD_WORKSPACES' | translate}}</div>
-        <app-autocomplete [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate" [m_aoInputs]="m_aoWorkspacesList"
-            (m_oSelectionChange)="setActiveWorkspace($event)" [m_oController]="this"
+        <app-autocomplete *ngIf="!m_bExpandedMenu" [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate"
+            [m_aoInputs]="m_aoWorkspacesList" (m_oSelectionChange)="setActiveWorkspace($event)" [m_oController]="this"
             [m_oDeleteFn]="deleteWorkspace"></app-autocomplete>
+        <app-input-field *ngIf="m_bExpandedMenu" [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate"></app-input-field>
     </div>
-    <app-button [m_sLabel]="'WORKSPACES_TOOLTIP_EDIT' | translate" [m_sSize]="'large'"
+    <div *ngIf="m_bExpandedMenu" class="expanded-workspace-menu flex-fill">
+        <div *ngFor="let oWorkspace of m_aoWorkspacesList"
+            class="expanded-workspace-card d-flex flex-row align-items-center justify-content-between my-1"
+            [class.selected]="oWorkspace.selected" (click)="setActiveWorkspace(oWorkspace)">
+            <div class="d-flex flex-column gap-1">
+                {{oWorkspace.workspaceName}}
+                <span class="user-id">{{oWorkspace.ownerUserId}}</span>
+            </div>
+            <div class="d-flex flex-row gap-2">
+                <app-button [m_sLabel]="'Open'" [m_bMuted]="true" [m_sSize]="'small'"
+                    (click)="openWorkspace(oWorkspace)"></app-button>
+                <app-button [m_sIconLeft]="'delete'" [m_bMuted]="true" [m_sSize]="'small'"
+                    (click)="deleteWorkspace(oWorkspace, this)"></app-button>
+            </div>
+        </div>
+    </div>
+    <app-button *ngIf="!m_bExpandedMenu" [m_sLabel]="'WORKSPACES_TOOLTIP_EDIT' | translate" [m_sSize]="'large'"
         [m_bDisabled]="m_oActiveWorkspace === null" (click)="openWorkspace(m_oActiveWorkspace)"></app-button>
-    <app-button [m_sLabel]="'WORKSPACES_BUTTON_NEW_WORKSPACE' | translate" [m_sSize]="'large'" [m_bMuted]="true"
-        (click)="openNewWorkspaceDialog()"></app-button>
+    <app-button *ngIf="!m_bExpandedMenu" [m_sLabel]="'WORKSPACES_BUTTON_NEW_WORKSPACE' | translate" [m_sSize]="'large'"
+        [m_bMuted]="true" (click)="openNewWorkspaceDialog()"></app-button>
     <div *ngIf="m_oActiveWorkspace !== null">
         <div class="font-bold menu-header pb-3">{{"WORKSPACE_DETAILS_BOX" | translate}}</div>
         <div class="property-tag font-bold">{{"WORKSPACES_CLOUD" | translate}}: <span class="font-light">
@@ -42,4 +60,7 @@
             </div>
         </div>
     </div>
+    <app-button class="expand-btn" [m_sSize]="'small'" [m_bRounded]="true" [m_bMuted]="true"
+        [m_sIconLeft]="!m_bExpandedMenu ? 'expand_content' : 'collapse_content'"
+        (click)="toggleExpandMenu()"></app-button>
 </div>
