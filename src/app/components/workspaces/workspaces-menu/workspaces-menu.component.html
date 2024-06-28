@@ -6,10 +6,10 @@
         <app-autocomplete *ngIf="!m_bExpandedMenu" [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate"
             [m_aoInputs]="m_aoWorkspacesList" (m_oSelectionChange)="setActiveWorkspace($event)" [m_oController]="this"
             [m_oDeleteFn]="deleteWorkspace"></app-autocomplete>
-        <app-input-field *ngIf="m_bExpandedMenu" [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate"></app-input-field>
+        <app-input-field *ngIf="m_bExpandedMenu" [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate" (m_oInputChange)="m_sSearchString = $event.event.target.value"></app-input-field>
     </div>
     <div *ngIf="m_bExpandedMenu" class="expanded-workspace-menu flex-fill">
-        <div *ngFor="let oWorkspace of m_aoWorkspacesList"
+        <div *ngFor="let oWorkspace of m_aoWorkspacesList | filter: m_sSearchString"
             class="expanded-workspace-card d-flex flex-row align-items-center justify-content-between my-1"
             [class.selected]="oWorkspace.selected" (click)="setActiveWorkspace(oWorkspace)">
             <div class="d-flex flex-column gap-1">

@@ -22,6 +22,8 @@ export class WorkspacesMenuComponent implements OnInit {
   m_bShowCopied: boolean = false;
 
   m_bExpandedMenu: boolean = false;
+  
+  m_sSearchString: string = '';
 
   @Input() m_aoProducts: Array<any> = [];
 
