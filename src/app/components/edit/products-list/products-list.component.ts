@@ -480,7 +480,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * @param oBand
    */
   openBandImage(oBand: any, iIndex: number) {
-    let sFileName = this.m_aoWorkspaceProductsList[iIndex].fileName;
+    let sFileName = this.m_aoFilteredProducts[iIndex].fileName;
 
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
 
