@@ -406,7 +406,7 @@ export class WorkflowsDialogComponent implements OnInit {
   getSingleSelection(oEvent: any, oNode: any) {
     if (!oEvent.value.length) {
       //Set the inputFileName value to reflect SINGLE input: 
-      this.m_oSelectedWorkflow.inputFileNames = [oEvent.value.name];
+      this.m_oSelectedWorkflow.inputFileNames = [oEvent.value.fileName];
     } else {
       this.m_oSelectedWorkflow.inputFileNames = oEvent.value.map(oProduct => {
         return oProduct.name;

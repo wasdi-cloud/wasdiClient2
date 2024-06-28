@@ -56,10 +56,13 @@ mat-select {
     padding: 12px !important;
     /* Override min-height imposed by Angular Materials */
     min-height: 0px !important;
+    overflow: visible !important;
+    padding-left: 12px !important;
 }
 
 ::ng-deep .mat-mdc-option:hover {
     background-color: #ECEEF0 !important;
+    width: 100%;
 }
 
 ::ng-deep .mat-mdc-option.divider {
