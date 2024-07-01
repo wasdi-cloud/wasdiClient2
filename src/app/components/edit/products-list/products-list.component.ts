@@ -313,13 +313,13 @@ export class ProductsListComponent implements OnChanges, OnInit {
         if (oResponse.type === HttpEventType.Response) {
           this.m_oDownloadProgress.emit({ downloadStatus: "complete", productName: sFileName })
 
-          let sDownloadedFilename = sFileName          
-        
+          let sDownloadedFilename = sFileName
+
           let sHeaderContentDisposition = oResponse.headers.get("Content-Disposition");
           if (!FadeoutUtils.utilsIsStrNullOrEmpty(sHeaderContentDisposition)) {
             sDownloadedFilename = sHeaderContentDisposition.split(';')[1].split('=')[1].replace(/\"/g, '');
           }
-          
+
 
           const a = document.createElement('a');
           const objectUrl = URL.createObjectURL(oResponse.body);
@@ -450,9 +450,9 @@ export class ProductsListComponent implements OnChanges, OnInit {
     })
   }
 
-  sendProductsToWorkspace() { 
+  sendProductsToWorkspace() {
     this.m_oDialog.open(WorkspacesListDialogComponent, {
-      height: '600px', 
+      height: '600px',
       width: '800px',
       data: {
         sharing: true,
@@ -709,5 +709,29 @@ export class ProductsListComponent implements OnChanges, OnInit {
         this.m_aoSelectedProducts.splice(iIndex, 1);
       }
     }
+
+    let oWorkspaceProduct = this.getProductFromProductArray(oEvent.product, this.m_aoWorkspaceProductsList);
+    if (oWorkspaceProduct != null) oWorkspaceProduct.checked = oEvent.checked;
+
+    let oFilteredProduct = this.getProductFromProductArray(oEvent.product, this.m_aoFilteredProducts);
+    if (oFilteredProduct != null) oFilteredProduct.checked = oEvent.checked;
+
   }
+
+  getProductFromProductArray(oProduct, aoProductArray) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct)) return null;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoProductArray)) return null;
+
+    let iIndex = 0;
+
+    for (iIndex = 0; iIndex < aoProductArray.length; iIndex++) {
+      let oActualProd = aoProductArray[iIndex];
+      if (oActualProd.fileName === oProduct.fileName) {
+        return oActualProd;
+      }
+    }
+    
+    return null;
+  }
+
 }
