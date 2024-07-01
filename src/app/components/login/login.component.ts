@@ -56,9 +56,14 @@ export class LoginComponent implements OnInit {
       userId: this.form.username,
       userPassword: this.form.password
     }
+    // let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.ERROR")
     this.m_oConstantsService.setUser({} as User);
     this.m_oAuthService.legacyLogin(oLoginInfo).subscribe((oResponse => {
-      this.callbackLogin(oResponse, this)
+      if (oResponse.sessionId) {
+        this.callbackLogin(oResponse, this)
+      } else {
+        this.m_oNotificationDisplayService.openAlertDialog("Could not complete login.<br>Please ensure both email and password are correct.", "", 'danger')
+      }
     }))
   }
 
@@ -160,7 +165,7 @@ export class LoginComponent implements OnInit {
 
     var sMessage = "Password recovery is executed through our Keycloak portal. Press 'Yes' to continue."
     this.m_oNotificationDisplayService.openConfirmationDialog(sMessage, '', 'alert').subscribe(bResult => {
-      if(bResult) {
+      if (bResult) {
         this.keycloakLogin()
       }
     })
