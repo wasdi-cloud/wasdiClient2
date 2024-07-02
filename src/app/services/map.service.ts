@@ -298,8 +298,14 @@ export class MapService {
     var oMap = L.map(sMapDiv, {
       zoomControl: false,
       layers: [this.m_oOSMBasic],
-      keyboard: false
+      keyboard: false,
+      fullscreenControl: true,
+      fullscreenControlOptions: {
+        position: 'topleft'
+      }
     });
+
+    oMap.fullscreenControl.link.innerHTML = "<span class='material-symbols-outlined'>fullscreen</span>"
 
     this.initGeoSearchPluginForOpenStreetMap(oMap);
 

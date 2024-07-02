@@ -398,6 +398,17 @@ button.leaflet-control-geocoder-icon {
   width: 36px !important;
 }
 
+a.leaflet-control-zoom-fullscreen {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  color: #FFFFFF !important;
+  height: 36px !important;
+  width: 36px !important;
+}
+
 a.leaflet-control-button,
 .leaflet-draw-draw-rectangle {
   border-radius: 50% !important;

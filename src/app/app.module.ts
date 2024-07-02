@@ -136,7 +136,7 @@ import { NotificationSnackbarComponent } from './shared/dialogs/notification-sna
 import { ConvertMsToTimePipe } from './shared/pipes/convert-ms-to-time.pipe';
 
 import { initializeKeycloak } from './auth/keycloak-init.factory';
-import { KeycloakAngularModule,KeycloakService } from 'keycloak-angular'
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular'
 import { ManualBoundingBoxComponent } from './shared/shared-components/manual-bounding-box/manual-bounding-box.component';
 import { MarketplaceFiltersComponent } from './components/marketplace/marketplace-filters/marketplace-filters.component';
 import { MenuListItemComponent } from './components/navbar/menu-list-item/menu-list-item.component';

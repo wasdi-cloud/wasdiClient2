@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import { TranslateService } from '@ngx-translate/core';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { MatDialog} from '@angular/material/dialog';
-import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
 import { ManualBoundingBoxComponent } from '../../../shared/shared-components/manual-bounding-box/manual-bounding-box.component';
+import { MatDialog } from '@angular/material/dialog';
 
 declare const L: any;
+import 'node_modules/leaflet-draw/dist/leaflet.draw-src.js';
+import 'leaflet.fullscreen';
 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
   selector: 'app-wap-select-area',
   templateUrl: './wap-select-area.component.html',
