@@ -1,7 +1,6 @@
-/* div.dialog-parent {
-    height: 100%;
-    width: 100%;
-} */
+div.dialog-header {
+    padding-bottom: 0px !important;
+}
 
 textarea.process-payload-display {
     width: 100%;
@@ -20,10 +19,15 @@ a.nav-link {
     margin: 0 auto;
 }
 
+.click-and-copy:hover {
+    color: var(--wasdiGreen);
+    cursor: pointer;
+}
+
 /* Class for 2 columns */
 @media (max-width: 1024px) {
-	.chart-container{
-		width: 50% !important;
-		max-width: 100% !important;
-	}
+    .chart-container {
+        width: 50% !important;
+        max-width: 100% !important;
+    }
 }

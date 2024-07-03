@@ -169,4 +169,9 @@ export class PayloadDialogComponent implements OnInit {
   onDismiss() {
     this.m_oDialogRef.close();
   }
+
+  copyProcessObjId() {
+    this.m_oClipboard.copy(this.m_oProcess.processObjId);
+    this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD"), '', 'success-snackbar');
+  }
 }

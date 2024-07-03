@@ -1,14 +1,21 @@
 <div class="apps-dialog d-flex flex-column h-100">
-    <div class="dialog-header d-flex flex-row justify-content-between font-bold mb-1">
-        <div class="d-flex flex-row">
-            <app-tab [m_sLabel]="'DIALOG_PROCESSES_LOGS_PAYLOAD' | translate" (click)="setActiveTab('payload')"
-                [m_bIsActive]="m_sActiveTab === 'payload'"></app-tab>
-            <app-tab *ngIf="m_bIsWasdiDashboard === true" [m_sLabel]="'DIALOG_PAYLOAD_DASHBOARD' | translate"
-                (click)="setActiveTab('dashboard')" [m_bIsActive]="m_sActiveTab === 'dashboard'"></app-tab>
+    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+        <div class="d-flex flex-column gap-2">
+            <div>
+                {{"PROCESSING_BAR_PAYLOAD" | translate}}: <span class="click-and-copy"
+                    (click)="copyProcessObjId()">{{m_oProcess.processObjId}}</span>
+            </div>
+            <div class="d-flex flex-row">
+                <app-tab [m_sLabel]="'DIALOG_PROCESSES_LOGS_PAYLOAD' | translate" (click)="setActiveTab('payload')"
+                    [m_sSize]="'small'" [m_bIsActive]="m_sActiveTab === 'payload'"></app-tab>
+                <app-tab *ngIf="m_bIsWasdiDashboard === true" [m_sLabel]="'DIALOG_PAYLOAD_DASHBOARD' | translate"
+                    [m_sSize]="'small'" (click)="setActiveTab('dashboard')"
+                    [m_bIsActive]="m_sActiveTab === 'dashboard'"></app-tab>
+            </div>
         </div>
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
     </div>
-    <div class=" payload-info d-flex flex-row justify-content-between my-3">
+    <div class="payload-info d-flex flex-row justify-content-between my-2">
         <div>
             {{"KEY_PHRASES.NAME" | translate}}: {{m_oProcess.productName?
             m_oProcess.productName: 'N/A'}} | Status
