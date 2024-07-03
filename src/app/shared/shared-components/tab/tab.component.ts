@@ -25,7 +25,7 @@ export class TabComponent {
   /**
    * Tab size - Large or Default (medium)
    */
-  @Input() m_sSize?: 'default' | 'large' = 'default';
+  @Input() m_sSize?: 'default' | 'large' | 'small' = 'default';
 
   @Input() m_bHasBorder?: boolean = true;
 }

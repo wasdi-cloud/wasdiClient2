@@ -26,12 +26,7 @@ a.nav-link.active {
 }
 
 div.nav-item {
-    height: 30px;
     width: fit-content;
-}
-
-div.nav-item.tab-large {
-    height: 50px;
 }
 
 div.nav-item.tab-large>a.nav-link {
@@ -40,9 +35,15 @@ div.nav-item.tab-large>a.nav-link {
     border-top-right-radius: 8px;
 }
 
+div.nav-item.tab-small>a.nav-link {
+    font-size: 16px;
+    padding: 4px 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
 div.nav-item.tab-large>a.nav-link:hover {
     background: #ECEEF0;
-
 }
 
 div.disabled>a {
