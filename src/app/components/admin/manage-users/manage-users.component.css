@@ -15,9 +15,9 @@ div.table-wrapper {
 }
 
 table {
-    width: 98%;
+    width: 100%;
     margin: auto;
-    /* height: 100%; */
+    overflow: scroll;
 }
 
 .table-heading-container {
@@ -65,6 +65,11 @@ th {
 a.page-link {
     cursor: pointer;
 }
+
 a.page-link.disabled {
     color: var(--neutral20);
+}
+
+.sorting-header {
+    cursor: pointer;
 }
