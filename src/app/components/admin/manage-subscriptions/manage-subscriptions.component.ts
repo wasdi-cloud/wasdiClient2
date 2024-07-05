@@ -35,6 +35,8 @@ export class ManageSubscriptionsComponent implements OnInit {
   m_iDurationDays: number = 0;
   m_iDaysRemaining: number | string;
 
+  m_oOrganization: any = "";
+
 
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -51,7 +53,7 @@ export class ManageSubscriptionsComponent implements OnInit {
   }
 
   getSubscriptions() {
-    this.m_oSubscriptionService.getPaginatedSubscriptions("", "", "", this.m_iOffset, this.m_iLimit).subscribe({
+    this.m_oSubscriptionService.getPaginatedSubscriptions("", "", this.m_sSearch, this.m_iOffset, this.m_iLimit).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscriptions")
@@ -140,7 +142,13 @@ export class ManageSubscriptionsComponent implements OnInit {
         this.m_oSelectedSubscription.userId = oEvent.event.target.value;
         break;
       case 'orgId':
-        this.m_oSelectedSubscription.organizationId = oEvent.event.target.value;
+        this.m_oOrganization = oEvent.event.target.value;
+        break;
+      case 'startDate':
+        this.m_sStartDate = oEvent.event.target.value;
+        break;
+      case 'endDate':
+        this.m_sEndDate = oEvent.event.target.value;
         break;
       default:
         break;
@@ -161,32 +169,75 @@ export class ManageSubscriptionsComponent implements OnInit {
     })
   }
 
-  createNewSubscription(oSubscription) {
-    this.m_oSubscriptionService.createSubscription(oSubscription).subscribe({
-      next: oResponse => {
-        this.m_oNotificationDisplayService.openSnackBar("Updated Subscription", '', 'success-snackbar');
-      },
-      error: oError => { }
-    })
+  createSubscriptionObject() {
+    if (!this.m_oSelectedSubscription.name) {
+      this.m_oSelectedSubscription.name = this.m_oSelectedSubscription.typeName;
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oOrganization)) {
+      this.m_oSelectedSubscription.organizationId = "";
+    } else {
+      this.m_oSelectedSubscription.organizationId = this.m_oOrganization.organizationId;
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.startDate)) {
+      this.m_oSelectedSubscription.startDate = new Date(this.m_sStartDate).toISOString();
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.endDate)) {
+      this.m_oSelectedSubscription.endDate = new Date(this.m_sEndDate).toISOString();
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.durationDays)) {
+      this.m_oSelectedSubscription.durationDays = this.m_iDurationDays;
+    }
   }
 
+  createNewSubscription(oSubscription) {
+    this.createSubscriptionObject();
+    console.log(this.m_oSelectedSubscription)
+    if (this.checkIsSubscriptionValid() === true) {
+      this.m_oSubscriptionService.createSubscription(oSubscription).subscribe({
+        next: oResponse => {
+          this.m_oNotificationDisplayService.openSnackBar("Subscription Created!", '', 'success-snackbar');
+        },
+        error: oError => { }
+      })
+    } else {
+      this.m_oNotificationDisplayService.openAlertDialog("Subscription is not valid", "", "alert")
+    }
+  }
+
+  checkIsSubscriptionValid() {
+    let bReturnValue = true;
+    if (!this.m_oSelectedSubscription.userId) {
+      bReturnValue = false;
+    }
+    if (!this.m_oSelectedSubscription.startDate) {
+      bReturnValue = false
+    }
+    if (!this.m_oSelectedSubscription.endDate) {
+      bReturnValue = false
+    }
+    // The start and end date should not be the same
+    if (this.m_oSelectedSubscription.startDate === this.m_oSelectedSubscription.endDate) {
+      bReturnValue = false
+    }
+    return bReturnValue
+  }
+
+  getDaysRemaining() {}
   /********** Pagination Handlers **********/
   stepOnePage() {
     this.m_iOffset += this.m_iLimit;
-
     this.m_bStepPageDisabled = false
     this.getSubscriptions();
     this.m_bMinusPageDisabled = false;
   }
 
-
   minusOnePage() {
     this.m_iOffset -= this.m_iLimit;
     this.m_bStepPageDisabled = false;
     this.getSubscriptions();
-    if (this.m_iOffset <= 0) {
-      this.m_bMinusPageDisabled = true;
-    }
   }
 
   setSubscriptionSearch(oEvent) {
@@ -201,6 +252,7 @@ export class ManageSubscriptionsComponent implements OnInit {
         this.m_oSelectedSubscription.typeName = oType.name;
       }
     })
+    this.initDates()
   }
 
   initDates() {
@@ -219,14 +271,16 @@ export class ManageSubscriptionsComponent implements OnInit {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.endDate)) {
       this.m_sEndDate = new Date();
 
-      if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("day")) {
-        this.m_sEndDate.setDate(this.m_sStartDate.getDate() + 1);
-      } else if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("week")) {
-        this.m_sEndDate.setDate(this.m_sStartDate.getDate() + 7);
-      } else if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("month")) {
-        this.m_sEndDate.setMonth(this.m_sStartDate.getMonth() + 1);
-      } else if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("year")) {
-        this.m_sEndDate.setFullYear(this.m_sStartDate.getFullYear() + 1);
+      if (this.m_oSelectedSubscription.typeId) {
+        if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("day")) {
+          this.m_sEndDate.setDate(this.m_sStartDate.getDate() + 1);
+        } else if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("week")) {
+          this.m_sEndDate.setDate(this.m_sStartDate.getDate() + 7);
+        } else if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("month")) {
+          this.m_sEndDate.setMonth(this.m_sStartDate.getMonth() + 1);
+        } else if (this.m_oSelectedSubscription.typeId.toLowerCase().includes("year")) {
+          this.m_sEndDate.setFullYear(this.m_sStartDate.getFullYear() + 1);
+        }
       }
     } else {
       this.m_sEndDate = new Date(this.m_oSelectedSubscription.endDate);

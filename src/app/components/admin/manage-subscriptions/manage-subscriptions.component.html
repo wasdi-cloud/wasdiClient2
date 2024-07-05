@@ -77,7 +77,7 @@
         <app-input-field [m_sLabel]="'ADMIN_SUBSCRIPTIONS_OWNER_UID' | translate"
             [m_sInputValue]="m_oSelectedSubscription.userId? m_oSelectedSubscription.userId : ''"
             (m_oInputChange)="setInputSelections($event, 'userId')"></app-input-field>
-        <app-input-field [m_sLabel]="'ADMIN_SUBSCRIPTIONS_ORG_ID'" [m_sInputValue]="m_oSelectedSubscription.organizationName? m_oSelectedSubscription.
+        <app-input-field [m_sLabel]="'ADMIN_SUBSCRIPTIONS_ORG_ID' | translate" [m_sInputValue]="m_oSelectedSubscription.organizationName? m_oSelectedSubscription.
             organizationName: ''" (m_oInputChange)="setInputSelections($event, 'orgId')"></app-input-field>
         <app-dropdown [m_sLabel]="'ADMIN_SUBSCRIPTIONS_TYPE' | translate" [m_aoDropdownItems]="m_asTypesMap"
             [m_aoSelectedItems]="m_oSelectedSubscription.typeName"
@@ -87,20 +87,24 @@
                 [m_sInputValue]="m_oSelectedSubscription? (m_oSelectedSubscription.buyDate | date: 'yyyy-MM-dd'): ''"
                 [m_bIsReadonly]="true"></app-input-field>
             <div class="col">
-                <strong>{{"ADMIN_SUBSCRIPTIONS_DURATION" | translate}} </strong>{{m_oSelectedSubscription? m_oSelectedSubscription.durationDays: ''}} Day(s)
+                <strong>{{"ADMIN_SUBSCRIPTIONS_DURATION" | translate}} </strong>{{m_oSelectedSubscription.durationDays?
+                m_oSelectedSubscription.durationDays: m_iDurationDays}} Day(s)
             </div>
         </div>
         <div class="row">
             <app-input-field class="col" [m_sLabel]="'ADMIN_SUBSCRIPTIONS_START' | translate"
                 [m_sInputType]="m_oSelectedSubscription.subscriptionId? 'text': 'date'"
-                [m_sInputValue]="m_oSelectedSubscription? (m_oSelectedSubscription.startDate | date: 'yyyy-MM-dd'): ''"
-                [m_bIsReadonly]="m_oSelectedSubscription.subscriptionId"></app-input-field>
+                [m_sInputValue]="(m_oSelectedSubscription.startDate? m_oSelectedSubscription.startDate : m_sStartDate) | date: 'yyyy-MM-dd'"
+                [m_bIsReadonly]="m_oSelectedSubscription.subscriptionId"
+                (m_oInputChange)="setInputSelections($event, 'startDate')"></app-input-field>
             <app-input-field class="col" [m_sLabel]="'ADMIN_SUBSCRIPTIONS_END' | translate" [m_sInputType]="'date'"
-                [m_sInputValue]="m_oSelectedSubscription? (m_oSelectedSubscription.endDate | date: 'yyyy-MM-dd'): ''"></app-input-field>
+                [m_sInputValue]="(m_oSelectedSubscription.endDate? m_oSelectedSubscription.endDate : m_sEndDate) | date: 'yyyy-MM-dd'"
+                (m_oInputChange)="setInputSelections($event, 'endDate')"></app-input-field>
         </div>
         <div class="row">
             <div class="col">
-                <strong>{{"ADMIN_SUBSCRIPTIONS_DAYS_REMAINING" | translate}} </strong>{{subscriptionActive(m_oSelectedSubscription)}}
+                <strong>{{"ADMIN_SUBSCRIPTIONS_DAYS_REMAINING" | translate}}
+                </strong> {{subscriptionActive(m_oSelectedSubscription)}}
             </div>
             <div class="col">
                 <strong>{{"ADMIN_SUBSCRIPTIONS_PURCHASED" | translate}} </strong>{{m_oSelectedSubscription.buySuccess}}
@@ -108,10 +112,12 @@
         </div>
     </div>
     <div class="d-flex flex-row justify-content-between pb-3">
-        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bMuted]="true"></app-button>
+        <app-button data-bs-dismiss="offcanvas" [m_sLabel]="'KEY_PHRASES.CANCEL' | translate"
+            [m_bMuted]="true"></app-button>
         <app-button *ngIf="m_oSelectedSubscription.subscriptionId" [m_sLabel]="'ADMIN_SUBSCRIPTIONS_UPDATE' | translate"
             (click)="updateSubscription(m_oSelectedSubscription)"></app-button>
-        <app-button *ngIf="!m_oSelectedSubscription.subscriptionId" [m_sLabel]="'ADMIN_SUBSCRIPTIONS_CREATE' | translate"
+        <app-button *ngIf="!m_oSelectedSubscription.subscriptionId"
+            [m_sLabel]="'ADMIN_SUBSCRIPTIONS_CREATE' | translate"
             (click)="createNewSubscription(m_oSelectedSubscription)"></app-button>
     </div>
 </div>
