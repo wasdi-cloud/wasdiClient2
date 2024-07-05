@@ -18,7 +18,7 @@ export class AdminDashboardService {
    * @returns 
    */
   findUsersByPartialName(sPartialName: string) {
-    return this.m_oHttp.get(this.APIURL + '/admin/usersByPartialName?partialName=' + sPartialName);
+    return this.m_oHttp.get<any>(this.APIURL + '/admin/usersByPartialName?partialName=' + sPartialName);
   };
 
   /**
@@ -142,7 +142,9 @@ export class AdminDashboardService {
       else {
         sUrl += "&";
       }
-      sUrl += "sortedby=" + sSortedBy;
+    } else {
+      sUrl += "&sortedby=" + sSortedBy;
+
     }
 
     if (FadeoutUtils.utilsIsStrNullOrEmpty(sOrder)) {
