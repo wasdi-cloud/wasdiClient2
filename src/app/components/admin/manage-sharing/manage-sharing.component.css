@@ -45,3 +45,11 @@ td.copy-to-clipboard {
     cursor: pointer;
     color: var(--wasdiGreen);
 }
+
+.user-name {
+    background-color: var(--neutral70);
+    color: #FFFFFF;
+    border-radius: 8px;
+    width: 100%;
+    padding: 16px;
+}

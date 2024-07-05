@@ -7,7 +7,8 @@
             {{ "ADMIN_SHARING_FIND" | translate}}
             <div class="d-flex flex-row gap-2 mt-1">
                 <app-dropdown class="flex-fill" [m_aoDropdownItems]="m_aoResourceTypes"
-                    [m_sLabel]="'ADMIN_SHARING_RES_TYPE' | translate" (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
+                    [m_sLabel]="'ADMIN_SHARING_RES_TYPE' | translate"
+                    (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
                 <app-input-field class="flex-fill" [m_sLabel]="'ADMIN_SHARING_RES_ID' | translate"
                     (m_oInputChange)="setResourceId($event)"></app-input-field>
                 <app-input-field class="flex-fill" [m_sLabel]="'DIALOG_EDIT_USER_USER_ID' | translate"
@@ -16,24 +17,71 @@
                     (click)="findResourcePermissions(m_sSelectedType, m_sResourceId, m_sUserId)"></app-button>
             </div>
         </div>
-        <div *ngIf="m_aoFoundResources.length > 0">
-            <div class="table-wrapper">
-                <table>
-                    <thead class="table-heading-container">
-                        <tr>
-                            <td>{{"ADMIN_SHARING_CREATED_BY" | translate}}</td>
-                            <td>{{"ADMIN_SHARING_DATE_CREATED" | translate}}</td>
-                            <td>{{"ADMIN_SHARING_OWNER_ID" | translate}}</td>
-                            <td>{{"ADMIN_SHARING_PERMISSION" | translate}}</td>
-                            <td>{{"ADMIN_SHARING_RES_ID" | translate}}</td>
-                            <td>{{"WORKSPACES_SHARED_WITH" | translate}}</td>
-                            <td></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let oResource of m_aoFoundResources">
+        <!-- If the search executed was an entire userId -->
+        <div class="table-wrapper" *ngIf="m_aoFoundResources.length > 0 && !m_aoFoundResources[0].name">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>{{"ADMIN_SHARING_CREATED_BY" | translate}}</td>
+                        <td>{{"ADMIN_SHARING_DATE_CREATED" | translate}}</td>
+                        <td>{{"DIALOG_MANAGE_RESOURCE_PERMISSION_RESOURCE_TYPE"| translate}}</td>
+                        <td>{{"ADMIN_SHARING_OWNER_ID" | translate}}</td>
+                        <td>{{"ADMIN_SHARING_PERMISSION" | translate}}</td>
+                        <td>{{"ADMIN_SHARING_RES_ID" | translate}}</td>
+                        <td>{{"WORKSPACES_SHARED_WITH" | translate}}</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tr *ngFor="let oResource of m_aoFoundResources">
+                    <td>{{oResource.createdBy}}</td>
+                    <td>{{oResource.createdDate | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{oResource.resourceType}}</td>
+                    <td>{{oResource.ownerId}}</td>
+                    <td>{{oResource.permissions}}</td>
+                    <td class="copy-to-clipboard" (click)="copyToClipboard(oResource.resourceId)">
+                        {{oResource.resourceId}}</td>
+                    <td>{{oResource.userId}}</td>
+                    <td>
+                        <span class="material-symbols-outlined"
+                            (click)="removeResourcePermission(oResource.resourceType, oResource.resourceId, oResource.userId)">
+                            delete
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div *ngIf="m_aoFoundResources.length>0 && m_aoFoundResources[0].name">
+            <div class="user-card" *ngFor="let oUser of m_aoFoundResources">
+                <div class="user-name d-flex flex-row justify-content-between" (click)="oUser.isOpen = !oUser.isOpen"
+                    style="cursor:pointer;">
+                    <div>{{oUser.name}}</div>
+                    <span class="material-symbols-outlined">
+                        {{oUser.isOpen? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+                    </span>
+                </div>
+                <div class="table-wrapper">
+                    <div *ngIf="oUser.foundResources.length === 0 && oUser.isOpen === true">
+                        No sharings found
+                    </div>
+                    <table
+                        *ngIf="oUser.foundResources.length >= 1 && (m_aoFoundResources.length === 1 || oUser.isOpen === true)">
+                        <thead class="table-heading-container">
+                            <tr>
+                                <td>{{"ADMIN_SHARING_CREATED_BY" | translate}}</td>
+                                <td>{{"ADMIN_SHARING_DATE_CREATED" | translate}}</td>
+                                <td>{{"DIALOG_MANAGE_RESOURCE_PERMISSION_RESOURCE_TYPE"| translate}}
+                                </td>
+                                <td>{{"ADMIN_SHARING_OWNER_ID" | translate}}</td>
+                                <td>{{"ADMIN_SHARING_PERMISSION" | translate}}</td>
+                                <td>{{"ADMIN_SHARING_RES_ID" | translate}}</td>
+                                <td>{{"WORKSPACES_SHARED_WITH" | translate}}</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tr *ngFor="let oResource of oUser.foundResources">
                             <td>{{oResource.createdBy}}</td>
                             <td>{{oResource.createdDate | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{oResource.resourceType}}</td>
                             <td>{{oResource.ownerId}}</td>
                             <td>{{oResource.permissions}}</td>
                             <td class="copy-to-clipboard" (click)="copyToClipboard(oResource.resourceId)">
@@ -46,21 +94,70 @@
                                 </span>
                             </td>
                         </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- <div>
+            <div class="table-wrapper">
+                <table>
+                    <thead class="table-heading-container">
+                        <tr>
+                            <td>Found Users</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let oUser of m_aoFoundResources">
+                            <td (click)="oUser.isOpen = !oUser.isOpen" style="cursor:pointer;">{{oUser.userId}}
+                                <table
+                                    *ngIf="oUser.foundResources.length > 1 && (m_aoFoundResources.length === 1 || oUser.isOpen === true)">
+                                    <thead class="table-heading-container">
+                                        <tr>
+                                            <td>{{"ADMIN_SHARING_CREATED_BY" | translate}}</td>
+                                            <td>{{"ADMIN_SHARING_DATE_CREATED" | translate}}</td>
+                                            <td>{{"DIALOG_MANAGE_RESOURCE_PERMISSION_RESOURCE_TYPE"| translate}}</td>
+                                            <td>{{"ADMIN_SHARING_OWNER_ID" | translate}}</td>
+                                            <td>{{"ADMIN_SHARING_PERMISSION" | translate}}</td>
+                                            <td>{{"ADMIN_SHARING_RES_ID" | translate}}</td>
+                                            <td>{{"WORKSPACES_SHARED_WITH" | translate}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                    <tr *ngFor="let oResource of oUser.foundResources">
+                                        <td>{{oResource.createdBy}}</td>
+                                        <td>{{oResource.createdDate | date: 'dd/MM/yyyy'}}</td>
+                                        <td>{{oResource.resourceType}}</td>
+                                        <td>{{oResource.ownerId}}</td>
+                                        <td>{{oResource.permissions}}</td>
+                                        <td class="copy-to-clipboard" (click)="copyToClipboard(oResource.resourceId)">
+                                            {{oResource.resourceId}}</td>
+                                        <td>{{oResource.userId}}</td>
+                                        <td>
+                                            <span class="material-symbols-outlined"
+                                                (click)="removeResourcePermission(oResource.resourceType, oResource.resourceId, oResource.userId)">
+                                                delete
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-            </div>
-
-        </div>
+            </div> -->
+        <!-- </div> -->
         <div>
             {{"ADMIN_SHARING_SHARE" | translate}}
             <div class="d-flex flex-row gap-2 mt-1">
                 <app-dropdown class="flex-fill" [m_aoDropdownItems]="m_aoResourceTypes"
-                    [m_sLabel]="'ADMIN_SHARING_RES_TYPE' | translate" (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
+                    [m_sLabel]="'ADMIN_SHARING_RES_TYPE' | translate"
+                    (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
                 <app-input-field class="flex-fill" [m_sLabel]="'ADMIN_SHARING_RES_ID' | translate"
                     (m_oInputChange)="setResourceId($event)"></app-input-field>
                 <app-input-field class="flex-fill" [m_sLabel]="'DIALOG_EDIT_USER_USER_ID' | translate"
                     (m_oInputChange)="setUserId($event)"></app-input-field>
-                <app-dropdown [m_sLabel]="'ADMIN_SHARING_SELECT_RIGHT' | translate" [m_aoDropdownItems]="m_aoShareOptions"
+                <app-dropdown [m_sLabel]="'ADMIN_SHARING_SELECT_RIGHT' | translate"
+                    [m_aoDropdownItems]="m_aoShareOptions"
                     (m_oSelectionChange)="setPermissionRights($event)"></app-dropdown>
                 <app-button class="align-self-end" [m_sLabel]="'ADMIN_SHARING_ADD' | translate"
                     (click)="addResourcePermission(m_sSelectedType, m_sResourceId, m_sUserId, m_sRights)"></app-button>

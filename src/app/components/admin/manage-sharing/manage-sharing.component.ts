@@ -50,17 +50,52 @@ export class ManageSharingComponent implements OnInit {
   }
 
   findResourcePermissions(sResourceType: string, sResourceId: string, sUserId: string) {
-    this.m_oAdminDashboard.findResourcePermissions(sResourceType, sResourceId, sUserId).subscribe({
-      next: oResponse => {
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          let sMsg = this.m_oTranslate.instant("ADMIN_SHARING_SHARE_ERROR_GET_RES");
-          this.m_oNotificationDisplayService.openAlertDialog(sMsg);
-        } else {
-          this.m_aoFoundResources = oResponse;
+    this.m_aoFoundResources = [];
+    if (sUserId) {
+      this.m_oAdminDashboard.findUsersByPartialName(sUserId).subscribe({
+        next: oResponse => {
+          oResponse.forEach(element => {
+            let oUserInfo = {
+              name: element.userId,
+              foundResources: []
+            }
+            this.m_oAdminDashboard.findResourcePermissions(sResourceType, sResourceId, element.userId).subscribe({
+              next: oResponse => {
+                if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+                  let sMsg = this.m_oTranslate.instant("ADMIN_SHARING_SHARE_ERROR_GET_RES");
+                  this.m_oNotificationDisplayService.openAlertDialog(sMsg);
+                } else {
+                  oUserInfo.foundResources = oResponse;
+                  this.m_aoFoundResources.push(oUserInfo)
+                }
+              },
+              error: oError => {
+                this.m_oNotificationDisplayService.openAlertDialog("Could not retrieve resources", "", "alert")
+              }
+            })
+          });
         }
-      },
-      error: oError => { }
-    })
+      })
+    } else {
+      this.m_oAdminDashboard.findResourcePermissions(sResourceType, sResourceId, sUserId).subscribe({
+        next: oResponse => {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+            let sMsg = this.m_oTranslate.instant("ADMIN_SHARING_SHARE_ERROR_GET_RES");
+            this.m_oNotificationDisplayService.openAlertDialog(sMsg);
+          } else {
+            this.m_aoFoundResources = oResponse
+            console.log(oResponse)
+          }
+          if (!oResponse.length) {
+            this.m_oNotificationDisplayService.openAlertDialog("No resources found", "", "alert")
+          }
+        },
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog("Could not retrieve resources", "", "alert")
+        }
+      })
+
+    }
   }
 
   addResourcePermission(sResourceType: string, sResourceId: string, sUserId: string, sRights: string) {
@@ -68,7 +103,6 @@ export class ManageSharingComponent implements OnInit {
       next: oResponse => {
         let sMsg = this.m_oTranslate.instant("USER_SUBSCRIPTION_URL")
         this.m_oNotificationDisplayService.openSnackBar(sMsg, '', 'success-snackbar');
-
       },
       error: oError => { }
     })
