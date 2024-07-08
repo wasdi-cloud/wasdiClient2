@@ -21,9 +21,9 @@
             <table>
                 <thead class="table-heading-container">
                     <tr>
-                        <td>User Id</td>
-                        <td>Surname</td>
-                        <td>First Name</td>
+                        <td class="sorting-header" (click)="getSortedUsers('userId')">User Id</td>
+                        <td class="sorting-header"  (click)="getSortedUsers('surname')">Surname</td>
+                        <td class="sorting-header"  (click)="getSortedUsers('name')">First Name</td>
                         <td>Last Login</td>
                         <td></td>
                     </tr>

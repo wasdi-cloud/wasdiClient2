@@ -65,6 +65,10 @@ export class ManageUsersComponent implements OnInit {
 
   m_sTotalUsers: string = "totalUsers ";
 
+  m_sSortOrder: 'asc' | 'desc' = 'asc'
+
+  m_sSortBy: string = '';
+
   constructor(private m_oAdminDashboardService: AdminDashboardService,
     private m_oNodeService: NodeService,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -277,5 +281,15 @@ export class ManageUsersComponent implements OnInit {
     this.m_iShownNumber = this.m_oUserTotals[oEvent.value]
 
     this.m_sTotalUsers = oEvent.value
+  }
+
+  getSortedUsers(sSortBy) {
+
+    this.m_oAdminDashboardService.getUsersPaginatedList("", this.m_iOffset, this.m_iLimit, sSortBy, this.m_sSortOrder).subscribe({
+      next: oResponse => {
+        console.log(oResponse);
+      },
+      error: oError => { }
+    })
   }
 }
