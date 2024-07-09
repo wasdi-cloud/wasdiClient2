@@ -61,6 +61,12 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   m_bShowParamsLibrary: boolean = false;
 
+  /**
+   * If the app has been purchased (1 time run) - if the app is Free, remains TRUE
+   */
+  m_bIsPurchased: boolean = true;
+
+ m_oAppPaymentVM: any = null;
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
@@ -78,7 +84,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
       "DELETEPROCESSOR",
       this,
       this.rabbitMessageHook
-    )    
+    )
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.m_bIsReadonly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getProcessorsList();
@@ -142,10 +148,18 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   selectProcessor(oProcessor) {
     this.m_oSelectedProcessor = oProcessor;
+    console.log(oProcessor)
     this.m_oProcessorService.getHelpFromProcessor(oProcessor.processorName).subscribe({
       next: oResponse => {
         this.m_sHelpMsg = oResponse.stringValue;
       }
+    })
+
+    this.m_oProcessorService.getIsAppPurchased(this.m_oSelectedProcessor.processorId).subscribe({
+      next: oResponse => {
+        this.m_bIsPurchased = oResponse;
+      },
+      error: oError => { }
     })
     if (oProcessor.paramsSample) {
       this.m_sMyJsonString = decodeURIComponent(oProcessor.paramsSample);
@@ -290,6 +304,11 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
       this.m_oNotificationDisplayService.openAlertDialog(sCannotEditMsg, '', 'alert');
       return false;
     }
+
+    if (!this.m_bIsPurchased) {
+
+      return false;
+    }
     console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
 
     let sJSON = this.m_sMyJsonString;
@@ -398,6 +417,45 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     }, 500)
   }
 
+  getExecutePurchase() {
+    this.createAppPaymentObject();
+    this.m_oNotificationDisplayService.openConfirmationDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_MSG"), this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_TITLE"), 'info').subscribe(bDialogResult => {
+      if (bDialogResult) {
+        this.saveAndGetStripePaymentUrl()
+      }
+    })
+  }
+
+  createAppPaymentObject() {
+    this.m_oAppPaymentVM = {
+      paymentName: `${this.m_oSelectedProcessor.processorName}_${new Date().toISOString()}`,
+      processorId: this.m_oSelectedProcessor.processorId,
+      buyDate: new Date().toISOString()
+    }
+  }
+
+  saveAndGetStripePaymentUrl() {
+    this.m_oProcessorService.addAppPayment(this.m_oAppPaymentVM).subscribe(oResponse => {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+        this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_FAIL"), '', 'danger');
+      } else {
+        this.m_oProcessorService.getStripeOnDemandPaymentUrl(this.m_oAppPaymentVM.processorId, oResponse.message).subscribe({
+          next: oResponse => {
+            if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
+              this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("USER_SUBSCRIPTION_URL"), '', 'success-snackbar');
+
+              let sUrl = oResponse.message;
+
+              window.open(sUrl, '_blank');
+            }
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_URL_ERROR"), '', 'danger');
+          }
+        })
+      }
+    })
+  }
   /**
    * Close the Apps Dialog
    */

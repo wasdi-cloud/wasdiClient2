@@ -34,7 +34,8 @@
             <div class="json-header d-flex flex-column">
                 <div class="processor-name font-bold">{{m_oSelectedProcessor.processorName ?
                     m_oSelectedProcessor.processorName: 'WAP_SELECT_PROCESSOR' | translate}}</div>
-                <p *ngIf="m_oSelectedProcessor.publisher">{{"WAP_PUBLISHER" | translate}}: {{m_oSelectedProcessor.publisher}}</p>
+                <p *ngIf="m_oSelectedProcessor.publisher">{{"WAP_PUBLISHER" | translate}}:
+                    {{m_oSelectedProcessor.publisher}}</p>
             </div>
             <div class="json-body flex-fill">
                 <div #editor class="json-editor" style="height: 100%;" (keyup)="getJSONInput($event)"></div>
@@ -48,8 +49,9 @@
                 <div class="d-flex flex-row gap-3">
                     <app-button [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate" [m_bOutline]="true"
                         (click)="formatJSON()"></app-button>
-                    <app-button [m_sLabel]="'WAP_RUN' | translate" [m_sIconLeft]="'play_circle'"
-                        [m_bDisabled]="!m_oSelectedProcessor.processorName" (click)="runProcessor()"></app-button>
+                    <app-button [m_sLabel]="(m_bIsPurchased ? 'WAP_RUN' : 'APP_UI_PURCHASE') | translate"
+                        [m_sIconLeft]="'play_circle'" [m_bDisabled]="!m_oSelectedProcessor.processorName"
+                        (click)="m_bIsPurchased ? runProcessor() : getExecutePurchase()"></app-button>
                 </div>
             </div>
             <div class="help-container d-flex flex-column gap-1" *ngIf="m_bShowHelpMessage === true" [@slideInUp]>
