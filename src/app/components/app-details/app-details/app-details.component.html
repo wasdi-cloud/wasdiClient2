@@ -65,6 +65,14 @@
                         <div class="category-tag" *ngFor="let sCategory of m_oApplicationInfo.categoryNames">
                             {{sCategory}}</div>
                     </div>
+                    <div class="images-container-responsive d-flex flex-column gap-2">
+                        <div class="processor-img" style="background-image: url({{m_sViewImage}});"></div>
+                        <div class="img-caroseul d-flex flex-row flex-wrap my-2">
+                            <div class="sample-img" *ngFor="let sImage of m_asImages" style="background-image: url({{sImage}});"
+                                (click)="setViewImage(sImage)">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="description-container d-flex flex-column align-items-start">

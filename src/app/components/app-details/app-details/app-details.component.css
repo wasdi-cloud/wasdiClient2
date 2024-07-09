@@ -89,6 +89,9 @@ h2 {
     gap: 3rem;
 }
 
+.images-container-responsive {
+    display: none !important;
+}
 
 .app-details {
     background: var(--neutral5);
@@ -103,8 +106,6 @@ h2 {
         'GRAD' 0,
         'opsz' 24
 }
-
-
 
 .price-flag {
     border-radius: 0px 0px 4px 4px;
@@ -169,4 +170,21 @@ p>span.wasdi-highlight {
     text-decoration: underline;
 }
 
-/* 16px, 32px, 8px, 32px */
+@media screen and (max-width: 950px) {
+    .images-container {
+        display: none !important;
+    }
+
+    .images-container-responsive {
+        display: inline !important;
+        gap: 12px;
+    }
+
+    .images-container-responsive>.processor-img {
+        width: 100%;
+    }
+
+    .info-container {
+        gap: 2rem !important;
+    }
+}
