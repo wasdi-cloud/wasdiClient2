@@ -65,7 +65,7 @@ export class ManageUsersComponent implements OnInit {
 
   m_sTotalUsers: string = "totalUsers ";
 
-  m_sSortOrder: 'asc' | 'desc' = 'asc'
+  m_sSortOrder: string = ''
 
   m_sSortBy: string = '';
 
@@ -83,7 +83,7 @@ export class ManageUsersComponent implements OnInit {
   }
 
   getPaginatedList() {
-    this.m_oAdminDashboardService.getUsersPaginatedList("", this.m_iOffset, this.m_iLimit, null, null).subscribe({
+    this.m_oAdminDashboardService.getUsersPaginatedList("", this.m_iOffset, this.m_iLimit, this.m_sSortBy, this.m_sSortOrder).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoUsers = oResponse;
@@ -284,12 +284,12 @@ export class ManageUsersComponent implements OnInit {
   }
 
   getSortedUsers(sSortBy) {
-
-    this.m_oAdminDashboardService.getUsersPaginatedList("", this.m_iOffset, this.m_iLimit, sSortBy, this.m_sSortOrder).subscribe({
-      next: oResponse => {
-        console.log(oResponse);
-      },
-      error: oError => { }
-    })
+    this.m_sSortBy = sSortBy
+    if (this.m_sSortBy !== sSortBy) {
+      this.m_sSortOrder = 'asc'
+    } else {
+      this.m_sSortOrder === 'asc' ? this.m_sSortOrder = 'desc' : this.m_sSortOrder = 'asc';
+    }
+    this.getPaginatedList()
   }
 }

@@ -134,7 +134,7 @@ export class AdminDashboardService {
     }
 
 
-    if (FadeoutUtils.utilsIsStrNullOrEmpty(sSortedBy)) {
+    if (!FadeoutUtils.utilsIsStrNullOrEmpty(sSortedBy)) {
       if (!bQuestionMarkAdded) {
         sUrl += "?"
         bQuestionMarkAdded = true;
@@ -142,12 +142,11 @@ export class AdminDashboardService {
       else {
         sUrl += "&";
       }
-    } else {
-      sUrl += "&sortedby=" + sSortedBy;
+      sUrl += "sortedby=" + sSortedBy;
 
     }
 
-    if (FadeoutUtils.utilsIsStrNullOrEmpty(sOrder)) {
+    if (!FadeoutUtils.utilsIsStrNullOrEmpty(sOrder)) {
       if (!bQuestionMarkAdded) {
         sUrl += "?"
         bQuestionMarkAdded = true;
@@ -157,7 +156,6 @@ export class AdminDashboardService {
       }
       sUrl += "order=" + sOrder;
     }
-
     return this.m_oHttp.get(sUrl);
   }
 
