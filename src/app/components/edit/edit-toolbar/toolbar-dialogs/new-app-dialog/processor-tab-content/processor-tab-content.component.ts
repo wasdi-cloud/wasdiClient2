@@ -175,8 +175,6 @@ export class ProcessorTabContentComponent implements OnInit {
     if(this.m_oProcessorBasicInfo.get('sProcessorName')) {
       this.m_sProcessorName = this.m_oProcessorBasicInfo.get('sProcessorName').value
     }
-
-    console.log(this.m_oProcessorBasicInfo)
   }
 
   /**
