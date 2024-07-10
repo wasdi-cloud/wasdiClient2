@@ -1,12 +1,17 @@
 <div class="dialog-content d-flex flex-row gap-2" *ngIf="m_oProcessorBasicInfo && !m_bShowBuildLogs"
     [formGroup]="m_oProcessorBasicInfo">
     <div class="dialog-column form-input-container d-flex flex-column gap-3">
-        <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_NAME' | translate" [m_bIsReadonly]="m_bEditMode"
-            [m_sInputValue]="m_sProcessorName"
-            (m_oInputChange)="m_oProcessorBasicInfo.patchValue({sProcessorName: $event.event.target.value})"></app-input-field>
+        <div class="d-flex flex-row gap-1">
+            <app-input-field class="flex-fill" [m_sLabel]="'DIALOG_PROCESSOR_BASE_NAME' | translate"
+                [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_oProcessorBasicInfo.get('sProcessorName').value"
+                (m_oInputChange)="m_oProcessorBasicInfo.patchValue({sProcessorName: $event.event.target.value})"></app-input-field>
+            <app-input-field class="flex-fill" *ngIf="m_bEditMode" [m_sLabel]="'DIALOG_PARAMS_PUBLISHER' | translate"
+                [m_bIsReadonly]="true" [m_sInputValue]="m_sPublisher"></app-input-field>
+        </div>
         <app-input-field [m_sLabel]="'DIALOG_PROCESSOR_BASE_TYPE' | translate" *ngIf="m_bEditMode"
             [m_bIsReadonly]="m_bEditMode" [m_sInputValue]="m_sTypeNameOnly"></app-input-field>
         <app-autocomplete [m_sLabel]="'DIALOG_PROCESSOR_BASE_SELECT_LANG' | translate" *ngIf="!m_bEditMode"
+            [m_sPlaceholder]="m_oProcessorBasicInfo.get('oType').value ?m_oProcessorBasicInfo.get('oType').value.name : ''"
             [m_aoInputs]="m_aoProcessorTypes" (m_oSelectionChange)="setSelectedType($event)"></app-autocomplete>
         <div class="textarea-container">
             <app-textarea [m_sLabel]="'DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION' | translate"

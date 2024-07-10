@@ -148,16 +148,15 @@ export class ProcessorTabContentComponent implements OnInit {
   ngOnInit(): void {
     //Set the active workspace from the constants service
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
-    //console.log(this.m_oProcessorBasicInfo)
 
     this.displayProcessorType();
-    let sType = this.m_oProcessorBasicInfo.get('oType').value;
-    this.m_aoProcessorTypes.forEach(type => {
-      if (type.id === sType) {
-        sType = type.name
-        this.m_oProcessorBasicInfo.controls['oType'].setValue(sType)
-      }
-    })
+    // let sType = this.m_oProcessorBasicInfo.get('oType').value;
+    // this.m_aoProcessorTypes.forEach(type => {
+    //   if (type.id === sType) {
+    //     sType = type.name
+    //     this.m_oProcessorBasicInfo.controls['oType'].setValue(sType)
+    //   }
+    // })
 
     //Set ui for isPublic flag
     if (this.m_oProcessorBasicInfo.get('bIsPublic').value === 0) {
@@ -172,6 +171,12 @@ export class ProcessorTabContentComponent implements OnInit {
     if (this.m_oProcessorBasicInfo.get('sJSONSample')) {
       this.m_sJSONSample = this.m_oProcessorBasicInfo.get('sJSONSample').value;
     }
+
+    if(this.m_oProcessorBasicInfo.get('sProcessorName')) {
+      this.m_sProcessorName = this.m_oProcessorBasicInfo.get('sProcessorName').value
+    }
+
+    console.log(this.m_oProcessorBasicInfo)
   }
 
   /**
@@ -209,6 +214,7 @@ export class ProcessorTabContentComponent implements OnInit {
         this.m_oProcessorBasicInfo.patchValue({
           oType: oType
         })
+        console.log(oType)
       }
     });
   }
