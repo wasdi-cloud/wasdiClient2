@@ -74,6 +74,8 @@ export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.m_oMapService.m_oLayersControl.addTo(oMap);
     this.m_oMapService.initGeoSearchPluginForOpenStreetMap(oMap);
     this.m_oMapService.addManualBbox(oMap);
+
+    this.m_oMap.fullscreenControl.link.innerHTML = "<span class='material-symbols-outlined'>fullscreen</span>"
   }
 
   onDrawCreated(oEvent: any) {

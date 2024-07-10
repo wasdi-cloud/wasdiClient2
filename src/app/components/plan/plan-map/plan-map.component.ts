@@ -1,5 +1,5 @@
 
-import { AfterViewChecked, Component, EventEmitter,  OnInit, Output } from '@angular/core';
+import { AfterViewChecked, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import * as L from 'leaflet';
@@ -85,13 +85,16 @@ export class PlanMapComponent implements OnInit, AfterViewChecked {
     this.m_oMapService.m_oLayersControl.addTo(oMap);
     this.m_oMapService.initGeoSearchPluginForOpenStreetMap(oMap);
     this.m_oMapService.addManualBbox(oMap);
+
+
+    this.m_oMap.fullscreenControl.link.innerHTML = "<span class='material-symbols-outlined'>fullscreen</span>"
   }
 
 
   ngOnDestroy(): void {
     FadeoutUtils.verboseLog("PlanMapComponent.ngOnDestroy")
     this.m_oMapService.setMap(null);
-  }    
+  }
 
   onDrawCreated(oEvent): void {
     let oLayer = oEvent.layer;

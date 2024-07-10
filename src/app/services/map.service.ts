@@ -49,7 +49,11 @@ export class MapService {
       zoomControl: false,
       zoom: 3,
       center: latLng(0, 0),
-      edit: { featureGroup: this.m_oDrawnItems }
+      edit: { featureGroup: this.m_oDrawnItems },
+      fullscreenControl: true,
+      fullscreenControlOptions: {
+        position: 'topleft'
+      }
     }
   }
 
