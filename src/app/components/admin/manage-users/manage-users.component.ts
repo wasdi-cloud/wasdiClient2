@@ -165,7 +165,9 @@ export class ManageUsersComponent implements OnInit {
             this.m_oSelectedUser = oResponse
           }
         },
-        error: oError => { }
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog("Could not load user information", "", "alert")
+        }
       })
     }
   }
@@ -273,7 +275,9 @@ export class ManageUsersComponent implements OnInit {
           this.m_iUserProcessingTime = oResponse;
         }
       },
-      error: oError => { }
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Could not compute running time", "", "alert")
+      }
     })
   }
 
