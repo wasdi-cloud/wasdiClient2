@@ -45,7 +45,9 @@ export class ManageSharingComponent implements OnInit {
           this.m_aoResourceTypes = oResponse;
         }
       },
-      error: oError => { }
+      error: oError => { 
+        this.m_oNotificationDisplayService.openAlertDialog("Could not get resource types", "", "alert")
+      }
     })
   }
 
@@ -84,7 +86,6 @@ export class ManageSharingComponent implements OnInit {
             this.m_oNotificationDisplayService.openAlertDialog(sMsg);
           } else {
             this.m_aoFoundResources = oResponse
-            console.log(oResponse)
           }
           if (!oResponse.length) {
             this.m_oNotificationDisplayService.openAlertDialog("No resources found", "", "alert")
@@ -99,12 +100,14 @@ export class ManageSharingComponent implements OnInit {
   }
 
   addResourcePermission(sResourceType: string, sResourceId: string, sUserId: string, sRights: string) {
+    sResourceId = sResourceId.trim();
     this.m_oAdminDashboard.addResourcePermission(sResourceType, sResourceId, sUserId, sRights).subscribe({
       next: oResponse => {
-        let sMsg = this.m_oTranslate.instant("USER_SUBSCRIPTION_URL")
-        this.m_oNotificationDisplayService.openSnackBar(sMsg, '', 'success-snackbar');
+        this.m_oNotificationDisplayService.openSnackBar("Resource permission added", '', 'success-snackbar');
       },
-      error: oError => { }
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Could not add resource permission", '', 'alert')
+      }
     })
   }
 
@@ -113,7 +116,9 @@ export class ManageSharingComponent implements OnInit {
       next: oResponse => {
         this.m_oAdminDashboard.findResourcePermissions(sResourceType, sResourceId, sUserId);
       },
-      error: oError => { }
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Could not remove resource permission", '', 'alert')
+      }
     })
   }
 
