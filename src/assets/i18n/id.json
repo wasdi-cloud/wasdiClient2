@@ -120,6 +120,7 @@
     "ROOT_MENU_SUBSCRIPTION": "Berlangganan",
     "ROOT_MENU_LOGOUT": "Keluar",
     "ROOT_HEADER_WELCOME": "Selamat Datang Kembali",
+	"ROOT_HEADER_NO_NOTIFICATIONS": "Tidak ada notifikasi yang ditampilkan!",
 
 	"PROCESSING_BAR_WAITING": "Menunggu",
 	"PROCESSING_BAR_LOG": "Log",

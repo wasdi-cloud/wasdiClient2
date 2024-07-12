@@ -120,6 +120,7 @@
     "ROOT_MENU_SUBSCRIPTION": "Đăng ký",
     "ROOT_MENU_LOGOUT": "Đăng xuất",
     "ROOT_HEADER_WELCOME": "Chào mừng quay lại",
+    "ROOT_HEADER_NO_NOTIFICATIONS": "Không có thông báo nào hiển thị!",
 
     "PROCESSING_BAR_WAITING": "Đang chờ",
     "PROCESSING_BAR_LOG": "Log",

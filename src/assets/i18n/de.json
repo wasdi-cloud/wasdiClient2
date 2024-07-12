@@ -120,6 +120,7 @@
     "ROOT_MENU_SUBSCRIPTION": "Abonnement",
     "ROOT_MENU_LOGOUT": "Abmeldung",
     "ROOT_HEADER_WELCOME": "Willkommen zurück",
+    "ROOT_HEADER_NO_NOTIFICATIONS": "Keine Benachrichtigungen zum Anzeigen!",
 	
 	"PROCESSING_BAR_WAITING": "Warten",
 	"PROCESSING_BAR_LOG": "Log",

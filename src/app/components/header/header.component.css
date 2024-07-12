@@ -42,10 +42,10 @@ header {
     color: #FFFFFF;
 }
 
-.user-icon>.material-symbols-outlined {
+.user-icon>.material-symbols-outlined,
+.mail-icon>.material-symbols-outlined {
     position: absolute;
     left: 4px;
-
     top: 4px;
     font-variation-settings:
         'FILL' 0,
@@ -54,12 +54,33 @@ header {
         'opsz' 24
 }
 
+.mail-icon {
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid var(--wasdiGreen);
+    height: 2rem;
+    width: 2rem;
+    background: #FFFFFF;
+    color: var(--wasdiGreen);
+    ;
+}
+
+.notification-dot {
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    background-color: var(--wasdiDanger);
+    border-radius: 50%;
+
+    top: 0;
+    right: 0;
+}
+
 .card-divider {
     background: var(--neutral10);
     width: 1px;
     height: 36px;
     max-height: 36px;
-
 }
 
 .dropdown-menu {
@@ -93,7 +114,6 @@ a.dropdown-item {
     color: var(--neutral50Brand);
     cursor: pointer;
     font-size: 14px;
-    /* 171.429% */
 }
 
 .help-btn {
@@ -104,26 +124,22 @@ a.dropdown-item:hover {
     background: var(--wasdiBlue10);
 }
 
-/* input.new-workspace-name {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    border-bottom: 2px solid black;
+.notifications-menu {
+    width: 400px;
+    padding: 0px;
+    max-height: 40rem;
+    overflow: auto;
 }
 
-.offcanvas {
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
-    height: 80vh;
+.notification {
+    border-bottom: 1px solid #B4BAC4;
 }
 
-.offcanvas.offcanvas-end {
-    top: auto !important;
+.notification:hover {
+    background-color: var(--neutral10);
+    cursor: pointer;
 }
 
-button.close-feedback-btn {
-    border: none;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-}  */
+.notification:hover>.workspace-id {
+    color: var(--wasdiGreen);
+}

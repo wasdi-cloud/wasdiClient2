@@ -120,6 +120,7 @@
     "ROOT_MENU_SUBSCRIPTION": "Suscripción",
     "ROOT_MENU_LOGOUT": "Cerrar sesión",
     "ROOT_HEADER_WELCOME": "Bienvenido de nuevo",
+    "ROOT_HEADER_NO_NOTIFICATIONS": "¡No hay notificaciones para mostrar!",
 
 	"PROCESSING_BAR_WAITING": "Esperando",
 	"PROCESSING_BAR_LOG": "Log",

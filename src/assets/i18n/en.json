@@ -123,6 +123,7 @@
     "ROOT_MENU_SUBSCRIPTION": "Subscription",
     "ROOT_MENU_LOGOUT": "Logout",
     "ROOT_HEADER_WELCOME": "Welcome Back",
+    "ROOT_HEADER_NO_NOTIFICATIONS": "No notifications to show!",
 
     "PROCESSING_BAR_WAITING": "Waiting",
     "PROCESSING_BAR_LOG": "Log",

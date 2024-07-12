@@ -208,6 +208,9 @@ export class EditComponent implements OnInit, OnDestroy {
         // oController.getProductListByWorkspace();
         break;
     }
+    if (oMessage.payload.includes("DONE")) {
+      oController.m_oNotificationsQueueService.setNotifications(oMessage);
+    }
 
     WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate, oController);
   }

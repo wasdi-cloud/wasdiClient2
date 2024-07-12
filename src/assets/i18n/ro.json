@@ -120,6 +120,7 @@
     "ROOT_MENU_SUBSCRIPTION": "Abonament",
     "ROOT_MENU_LOGOUT": "Deconectare",
     "ROOT_HEADER_WELCOME": "Bine ați revenit",
+    "ROOT_HEADER_NO_NOTIFICATIONS": "Fără notificări de afișat!",
 	
 	"PROCESSING_BAR_WAITING": "În aşteptare",
 	"PROCESSING_BAR_LOG": "Jurnal",

@@ -40,7 +40,7 @@ export class RabbitStompService {
   m_oReconnectTimerFlag = null;
 
   /**
-   * Counter of the rabbit reconnection attemps
+   * Counter of the rabbit reconnection attempts
    */
   m_iRabbitReconnectAttemptCount = 0;
 
@@ -121,7 +121,7 @@ export class RabbitStompService {
    * Init = 0,
    * Connected = 1,
    * Lost = 2
-   * Used in the client to show the status of the asynch communication channel
+   * Used in the client to show the status of the async communication channel
    */
   m_iConnectionState = new BehaviorSubject<number>(RabbitConnectionState.Init);
   _m_iConnectionState$ = this.m_iConnectionState.asObservable();

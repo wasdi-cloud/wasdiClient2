@@ -14,6 +14,7 @@ import { User } from 'src/app/shared/models/user.model';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { AuthService } from 'src/app/auth/service/auth.service';
+import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 
 @Component({
   selector: 'app-header',
@@ -27,13 +28,14 @@ export class HeaderComponent implements OnInit {
   m_aoUserProjectsMap: Array<any> = [];
   m_oProject: any;
   m_oSelectedProject: any = { name: "No Active Project", projectId: null };
-
+  m_aoNotifications: any = [];
+  m_bHasNotifications: boolean = false;
   constructor(
     private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oKeycloakService: KeycloakService,
+    private m_oNotificationsQueueService: NotificationsQueueService,
     private m_oProjectService: ProjectService,
     private m_oRouter: Router,
     private m_oTranslate: TranslateService
@@ -42,9 +44,13 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.m_oUser = this.m_oConstantsService.getUser();
     this.initializeProjectsInfo();
-    this.m_oProjectService.getProjectsListByUser().subscribe({
-      next: oResponse => { },
-      error: oError => { }
+    this.m_oNotificationsQueueService.m_aoNotificationSubscription$.subscribe({
+      next: oResponse => {
+        this.m_aoNotifications = oResponse
+        if (this.m_aoNotifications.length !== 0) {
+          this.m_bHasNotifications = true;
+        }
+      }
     })
   }
 
