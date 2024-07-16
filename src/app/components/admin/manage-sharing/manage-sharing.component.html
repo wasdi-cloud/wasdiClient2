@@ -4,7 +4,19 @@
     </div>
     <div class="d-flex flex-column gap-3">
         <div>
-            {{ "ADMIN_SHARING_FIND" | translate}}
+            Find Resources By Resource Name
+            <div class="d-flex flex-row gap-2 mt-1">
+                <app-dropdown class="flex-fill" [m_aoDropdownItems]="m_aoResourceTypes"
+                    [m_sLabel]="'ADMIN_SHARING_RES_TYPE' | translate"
+                    (m_oSelectionChange)="setResourceType($event)"></app-dropdown>
+                <app-input-field class="flex-fill" [m_sLabel]="'Resource Name'"
+                    (m_oInputChange)="m_sResourceName = $event.event.target.value"></app-input-field>
+                <app-button class="align-self-end" [m_sLabel]="'ADMIN_SHARING_SEARCH' | translate"
+                    (click)="findResourceByPartialName()"></app-button>
+            </div>
+        </div>
+        <div>
+            Find Resources Shared with a User
             <div class="d-flex flex-row gap-2 mt-1">
                 <app-dropdown class="flex-fill" [m_aoDropdownItems]="m_aoResourceTypes"
                     [m_sLabel]="'ADMIN_SHARING_RES_TYPE' | translate"
@@ -18,7 +30,8 @@
             </div>
         </div>
         <!-- If the search executed was an entire userId -->
-        <div class="table-wrapper" *ngIf="m_aoFoundResources.length > 0 && !m_aoFoundResources[0].name">
+        <div class="table-wrapper"
+            *ngIf="m_aoFoundResources.length > 0 && !m_aoFoundResources[0].name && m_bSearchedByResourceName === false">
             <table>
                 <thead class="table-heading-container">
                     <tr>
@@ -50,7 +63,7 @@
                 </tr>
             </table>
         </div>
-        <div *ngIf="m_aoFoundResources.length>0 && m_aoFoundResources[0].name">
+        <div *ngIf="(m_aoFoundResources.length>0 && m_aoFoundResources[0].name) && m_bSearchedByResourceName === false">
             <div class="user-card" *ngFor="let oUser of m_aoFoundResources">
                 <div class="user-name d-flex flex-row justify-content-between" (click)="oUser.isOpen = !oUser.isOpen"
                     style="cursor:pointer;">
@@ -98,6 +111,33 @@
                 </div>
             </div>
         </div>
+        <div class="table wrapper" *ngIf="m_bSearchedByResourceName === true">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>Name</td>
+                        <td>Resource Type</td>
+                        <td>{{"ADMIN_SHARING_OWNER_ID" | translate}}</td>
+                        <td>Resource ID</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tr *ngFor="let oResource of m_aoFoundResources">
+                    <td>{{oResource.resourceName}}</td>
+                    <td>{{oResource.resourceType}}</td>
+                    <td>{{oResource.userId}}</td>
+                    <td class="copy-to-clipboard" (click)="copyToClipboard(oResource.resourceId)">
+                        {{oResource.resourceId}}</td>
+                    <td>
+                        <span class="material-symbols-outlined"
+                            (click)="openCollaborators(oResource.resourceType, oResource)">
+                            share
+                        </span>
+                    </td>
+                </tr>
+            </table>
+            <app-paginator [m_iItemsPerPage]="m_iLimit" (m_oClickEmitter)="handlePagination($event, 'resource-by-name')"></app-paginator>
+        </div>
         <!-- <div>
             <div class="table-wrapper">
                 <table>
@@ -144,8 +184,8 @@
                         </tr>
                     </tbody>
                 </table>
-            </div> -->
-        <!-- </div> -->
+            </div>
+        </div> -->
         <div>
             {{"ADMIN_SHARING_SHARE" | translate}}
             <div class="d-flex flex-row gap-2 mt-1">

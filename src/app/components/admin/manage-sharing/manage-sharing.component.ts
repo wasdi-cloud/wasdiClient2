@@ -4,6 +4,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-sharing',
@@ -24,9 +26,18 @@ export class ManageSharingComponent implements OnInit {
   m_sUserId: string = "";
   m_sRights: string = "";
 
+  m_bSearchedByResourceName: boolean = false;
+
+  m_sResourceName: string = "";
+
+  m_iLimit: number = 10;
+
+  m_iOffset: number = 10;
+
   constructor(
     private m_oAdminDashboard: AdminDashboardService,
     private m_oClipboard: Clipboard,
+    private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService
   ) { }
@@ -45,7 +56,7 @@ export class ManageSharingComponent implements OnInit {
           this.m_aoResourceTypes = oResponse;
         }
       },
-      error: oError => { 
+      error: oError => {
         this.m_oNotificationDisplayService.openAlertDialog("Could not get resource types", "", "alert")
       }
     })
@@ -69,6 +80,7 @@ export class ManageSharingComponent implements OnInit {
                 } else {
                   oUserInfo.foundResources = oResponse;
                   this.m_aoFoundResources.push(oUserInfo)
+                  this.m_bSearchedByResourceName = false;
                 }
               },
               error: oError => {
@@ -86,6 +98,7 @@ export class ManageSharingComponent implements OnInit {
             this.m_oNotificationDisplayService.openAlertDialog(sMsg);
           } else {
             this.m_aoFoundResources = oResponse
+            this.m_bSearchedByResourceName = false;
           }
           if (!oResponse.length) {
             this.m_oNotificationDisplayService.openAlertDialog("No resources found", "", "alert")
@@ -143,4 +156,60 @@ export class ManageSharingComponent implements OnInit {
     let sMsg = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD")
     this.m_oNotificationDisplayService.openSnackBar(sMsg);
   }
+
+  findResourceByPartialName() {
+    this.m_oAdminDashboard.findResourceByPartialName(this.m_sResourceName, this.m_sSelectedType.toLowerCase(), this.m_iOffset, this.m_iLimit).subscribe({
+      next: oResponse => {
+        if (oResponse.length === 0) {
+          this.m_oNotificationDisplayService.openAlertDialog("Did not find any resources with these parameters", "", "alert")
+        } else {
+          this.m_bSearchedByResourceName = true;
+          this.m_aoFoundResources = oResponse;
+          this.m_iOffset = 10;
+        }
+      },
+      error: oError => {
+        if (oError.message) {
+          this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("MSG_ERROR_INVALID_PARTIAL_NAME"), '', "alert")
+        } else {
+          this.m_oNotificationDisplayService.openAlertDialog("Could not find resources with these parameters", '', "alert")
+        }
+        this.m_aoFoundResources = []
+      }
+    });
+  }
+
+  openCollaborators(sResourceType, oResource) {
+    let dialogData = new ShareDialogModel(sResourceType.toLowerCase(), oResource);
+    this.m_oDialog.open(ShareDialogComponent, {
+      width: '50vw',
+      height: '60vh',
+      data: dialogData
+    })
+  }
+
+  handlePagination(oEvent, sTable) {
+    console.log(oEvent)
+    if (oEvent.previousPageIndex < oEvent.pageIndex) {
+      this.m_iOffset += this.m_iLimit
+    } else {
+      this.m_iOffset -= this.m_iLimit
+    }
+    if (sTable === 'resource-by-name') {
+      this.findResourceByPartialName()
+    }
+  }
 }
+
+// resourceId
+// :
+// "02ae1152-4468-4a4b-b1d1-eed7c35a6192"
+// resourceName
+// :
+// "test_2"
+// resourceType
+// :
+// "PROCESSOR"
+// userId
+// :
+// "betty.spurgeon@wasdi.cloud"

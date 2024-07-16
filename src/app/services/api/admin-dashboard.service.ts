@@ -201,5 +201,13 @@ export class AdminDashboardService {
   getResourceTypes() {
     return this.m_oHttp.get<any>(this.APIURL + '/admin/resourcePermissions/types');
   };
+
+  /**
+   * Find resources by a partial name
+   * @returns
+   */
+  findResourceByPartialName(sSearchName, sResourceType, iOffset, iLimit) {
+    return this.m_oHttp.get<any>(this.APIURL + "/admin/resourceByPartialName?resourceType=" + sResourceType + "&partialName=" + sSearchName + "&offset=" + iOffset + "&limit=" + iLimit)
+  }
 }
 
