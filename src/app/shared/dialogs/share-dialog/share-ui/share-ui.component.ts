@@ -55,6 +55,10 @@ export class ShareUiComponent implements OnInit {
     private m_oWorkspaceService: WorkspaceService) { }
 
   ngOnInit() {
+    //Handle inputs coming from the admin dashboard
+    if(this.resource.resourceId) {
+      this.resource[ `${this.resource.resourceType.toLowerCase()}Id`] = this.resource.resourceId;
+    }
     this.getEnabledUsers();
 
     this.m_bIsReadOnly = this.resource.readOnly;
