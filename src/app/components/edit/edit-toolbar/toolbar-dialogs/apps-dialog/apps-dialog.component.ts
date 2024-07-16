@@ -148,7 +148,6 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   selectProcessor(oProcessor) {
     this.m_oSelectedProcessor = oProcessor;
-    console.log(oProcessor)
     this.m_oProcessorService.getHelpFromProcessor(oProcessor.processorName).subscribe({
       next: oResponse => {
         this.m_sHelpMsg = oResponse.stringValue;
@@ -391,7 +390,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   rabbitMessageHook(oRabbitMessage: any, oController: any) {
-    console.log("RECEVIED " + oRabbitMessage)
+    console.log("RECEIVED " + oRabbitMessage)
     oController.getProcessorsList();
   }
 
