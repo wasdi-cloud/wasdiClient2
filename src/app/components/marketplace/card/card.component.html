@@ -30,7 +30,10 @@
         </div>
         <span class="app-total-votes">({{m_oProcessor.votes}})</span>
     </div>
-    <div class="app-title">{{m_oProcessor.friendlyName}}</div>
+    <div>
+        <div class="app-title">{{m_oProcessor.friendlyName}}</div>
+        <div class="app-subtitle">{{m_oProcessor.processorName}}</div>
+    </div>
     <div class="app-description">{{m_oProcessor.processorDescription ? m_oProcessor.processorDescription : ''}}</div>
     <div class="card-divider"></div>
     <div class="app-publisher">{{ "MARKET_CARD_PUBLISHER" | translate}}: <span
