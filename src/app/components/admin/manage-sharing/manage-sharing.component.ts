@@ -32,7 +32,7 @@ export class ManageSharingComponent implements OnInit {
 
   m_iLimit: number = 10;
 
-  m_iOffset: number = 10;
+  m_iOffset: number = 0;
 
   constructor(
     private m_oAdminDashboard: AdminDashboardService,
