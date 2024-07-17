@@ -167,6 +167,9 @@
     "DIALOG_APPS_CANNOT_EDIT": "Sie haben keine Berechtigung, diesen Arbeitsbereich zu bearbeiten",
     "DIALOG_APPS_INVALID_JSON": "Ungültige JSON-Eingabe",
 	
+    "EDITOR_TOOLTIP_2D": "Zur 2D-Karte wechseln",
+    "EDITOR_TOOLTIP_3D": "Zum Globus wechseln",
+    "EDITOR_TOOLTIP_SHOW_FEATURE": "Funktionsinfo umschalten",
 	"EDITOR_TOOLTIP_SWITCH_3D_2D": "Umschalten zwischen 3D-Globus und 2D-Karte",
 	"EDITOR_TOOLTIP_SYNCHRONIZE_MAP_3D": "Diesen Globus mit der 2D-Navigationsansicht synchronisieren",
 	"EDITOR_TOOLTIP_SYNCHRONIZE_MAP_2D": "Diese Karte mit der 3D-Navigationsansicht synchronisieren",

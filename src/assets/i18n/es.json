@@ -166,7 +166,10 @@
     "DIALOG_APPS_ERROR_DELETE": "Se produjo un error al intentar eliminar su procesador",
     "DIALOG_APPS_CANNOT_EDIT": "No tienes permiso para editar este espacio de trabajo",
     "DIALOG_APPS_INVALID_JSON": "Entrada JSON no válida",
-
+    
+    "EDITOR_TOOLTIP_2D": "Cambiar a mapa 2D",
+    "EDITOR_TOOLTIP_3D": "Cambiar a Globo",
+    "EDITOR_TOOLTIP_SHOW_FEATURE": "Alternar información de función",
 	"EDITOR_TOOLTIP_SWITCH_3D_2D": "Cambiar entre globo terráqueo 3D y mapa 2D",
     "EDITOR_TOOLTIP_SYNCHRONIZE_MAP_3D": "Sincroniza este globo con la Vista de navegación 2D",
     "EDITOR_TOOLTIP_SYNCHRONIZE_MAP_2D": "Sincronizar este mapa con la Vista de navegación 3D",

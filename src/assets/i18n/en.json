@@ -170,6 +170,9 @@
     "DIALOG_APPS_CANNOT_EDIT": "You do not have permission to edit this workspace",
     "DIALOG_APPS_INVALID_JSON": "Invalid JSON input", 
 
+    "EDITOR_TOOLTIP_2D": "Switch to 2D Map",
+    "EDITOR_TOOLTIP_3D": "Switch to Globe",
+    "EDITOR_TOOLTIP_SHOW_FEATURE": "Toggle Feature Info",
     "EDITOR_TOOLTIP_SWITCH_3D_2D": "Switch between 3D globe and 2D map",
     "EDITOR_TOOLTIP_SYNCHRONIZE_MAP_3D": "Synchronize this globe to the 2D Navigation View",
     "EDITOR_TOOLTIP_SYNCHRONIZE_MAP_2D": "Synchronize this map to the 3D Navigation View",

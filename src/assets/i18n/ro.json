@@ -166,7 +166,10 @@
     "DIALOG_APPS_ERROR_DELETE": "A apărut o eroare la încercarea de a șterge procesorul",
     "DIALOG_APPS_CANNOT_EDIT": "Nu aveți permisiunea de a edita acest spațiu de lucru",
     "DIALOG_APPS_INVALID_JSON": "Intrare JSON nevalidă",
-
+        
+    "EDITOR_TOOLTIP_2D": "Comutați la harta 2D",
+    "EDITOR_TOOLTIP_3D": "Comută la Glob",
+    "EDITOR_TOOLTIP_SHOW_FEATURE": "Comută informațiile despre funcții",
 	"EDITOR_TOOLTIP_SWITCH_3D_2D": "Comută între globul 3D și harta 2D",
 	"EDITOR_TOOLTIP_SYNCHRONIZE_MAP_3D": "Sincronizați acest glob cu vizualizarea de navigare 2D",
 	"EDITOR_TOOLTIP_SYNCHRONIZE_MAP_2D": "Sincronizați această hartă cu vizualizarea de navigare 3D",

@@ -166,7 +166,10 @@
     "DIALOG_APPS_ERROR_DELETE": "Đã xảy ra lỗi khi cố gắng xóa bộ xử lý của bạn",
     "DIALOG_APPS_CANNOT_EDIT": "Bạn không có quyền chỉnh sửa không gian làm việc này",
     "DIALOG_APPS_INVALID_JSON": "Đầu vào JSON không hợp lệ",
-
+  
+    "EDITOR_TOOLTIP_2D": "Chuyển sang Bản đồ 2D",
+    "EDITOR_TOOLTIP_3D": "Chuyển sang hình cầu",
+    "EDITOR_TOOLTIP_SHOW_FEATURE": "Chuyển đổi thông tin tính năng",
     "EDITOR_TOOLTIP_SWITCH_3D_2D": "Chuyển đổi giữa hình cầu 3D và bản đồ 2D",
     "EDITOR_TOOLTIP_SYNCHRONIZE_MAP_3D": "Đồng bộ hóa hình cầu này vào Chế độ xem Điều hướng 2D",
     "EDITOR_TOOLTIP_SYNCHRONIZE_MAP_2D": "Đồng bộ hóa bản đồ này vào chế độ xem Điều hướng 3D",
