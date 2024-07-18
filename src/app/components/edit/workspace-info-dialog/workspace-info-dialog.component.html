@@ -47,7 +47,9 @@
         </div>
 
         <div class="info-container">
-            <div class="font-bold pb-2">{{"DIALOG_WS_INFO_SHARINGS" | translate}}</div>
+            <div class="font-bold pb-2 d-flex flex-row justify-content-between">{{"DIALOG_WS_INFO_SHARINGS" |
+                translate}} <app-button *ngIf="m_oWorkspace.sharedUsers.length > 0" [m_sSize]="'small'" [m_sLabel]="'Manage Collaborators'"
+                    [m_bOutline]="true" (click)="openShareDialog()"></app-button></div>
             <div class="image-wrapper d-flex flex-column align-items-center gap-2"
                 *ngIf="m_oWorkspace.sharedUsers.length === 0">
                 <img src="/assets/images/collaborators.png" alt="">
