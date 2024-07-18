@@ -622,6 +622,7 @@
     "DIALOG_WS_INFO_SHARINGS": "Dibagikan dengan",
     "DIALOG_WS_INFO_NO_SHARES": "Tidak ada seorang pun di sini, tetapi Anda dapat menambahkan kolaborator!",
 	"DIALOG_WS_INFO_PUBLIC": "Jadikan Ruang Kerja Publik",
+	"DIALOG_WS_INFO_MANAGE_SHARE": "Kelola Kolaborator",
 
 	"DIALOG_PARAMS_TITLE": "Pustaka Parameter Aplikasi",
 	"DIALOG_PARAMS_SELECTED_APP": "Aplikasi yang Dipilih",

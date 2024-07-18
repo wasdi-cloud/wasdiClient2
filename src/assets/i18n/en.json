@@ -624,6 +624,7 @@
     "DIALOG_WS_INFO_SHARINGS": "Shared with",
     "DIALOG_WS_INFO_NO_SHARES": "There's no one here, but you can add collaborators!",
     "DIALOG_WS_INFO_PUBLIC": "Make Workspace Public",
+    "DIALOG_WS_INFO_MANAGE_SHARE": "Manage Collaborators",
  
     "DIALOG_PARAMS_TITLE": "Parameters list",
     "DIALOG_PARAMS_SELECTED_APP": "Selected App",

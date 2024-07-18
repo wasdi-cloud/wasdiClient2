@@ -620,6 +620,7 @@
     "DIALOG_WS_INFO_PROCS": "Ausgeführte Prozesse",
     "DIALOG_WS_INFO_SHARINGS": "Geteilt mit",
     "DIALOG_WS_INFO_NO_SHARES": "Hier gibt es niemanden, aber Sie können Mitwirkende hinzufügen!",
+    "DIALOG_WS_INFO_MANAGE_SHARE":"Mitarbeiter verwalten",
 
 	"DIALOG_PARAMS_TITLE": "Parameterliste",
     "DIALOG_PARAMS_SELECTED_APP": "Ausgewählte App",

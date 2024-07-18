@@ -620,7 +620,8 @@
 	"DIALOG_WS_INFO_PROCS": "Processi eseguiti ",
 	"DIALOG_WS_INFO_SHARINGS": "Condivisioni del Workspace ",
 	"DIALOG_WS_INFO_NO_SHARES": "Non c'è nessuno qui, ma puoi aggiungere collaboratori!",
-	"DIALOG_WS_INFO_PUBLIC": "Make Workspace Public",
+	"DIALOG_WS_INFO_PUBLIC": "Rendi pubblica l'area di lavoro",
+	"DIALOG_WS_INFO_MANAGE_SHARE": "Gestisci collaboratori",
 
 	"DIALOG_PARAMS_TITLE": "Libreria parametri app",
 	"DIALOG_PARAMS_SELECTED_APP": "App selezionata",

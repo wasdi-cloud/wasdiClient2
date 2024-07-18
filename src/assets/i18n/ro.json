@@ -621,6 +621,7 @@
     "DIALOG_WS_INFO_SHARINGS": "Partajat cu",
     "DIALOG_WS_INFO_NO_SHARES": "Nu este nimeni aici, dar puteți adăuga colaboratori!",
     "DIALOG_WS_INFO_PUBLIC": "Faceți spațiul de lucru public",
+    "DIALOG_WS_INFO_MANAGE_SHARE": "Gestionați colaboratorii",
 
 	"DIALOG_PARAMS_TITLE": "Lista parametrilor",
     "DIALOG_PARAMS_SELECTED_APP": "Aplicație selectată",
