@@ -87,7 +87,7 @@
                     [m_bDisabled]="(!m_oSelectedTemplate.name || !m_sParametersString)"
                     [m_sLabel]="'KEY_PHRASES.SAVE' | translate"
                     (click)="m_oSelectedTemplate.name && m_sParametersString ? saveProcessorParam() :''"></app-button>
-                <app-button [m_sLabel]="'KEY_PHRASES.APPLY' | translate"
+                <app-button [m_sLabel]="'KEY_PHRASES.APPLY' | translate" [m_bDisabled]="m_bEditMode"
                     (click)="applyProcessorParams(this.m_oSelectedTemplate.templateId)"></app-button>
             </div>
         </div>

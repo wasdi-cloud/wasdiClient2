@@ -245,51 +245,46 @@ export class ProcessWorkspaceService {
    * @param sTypeOfProcess
    * @returns {boolean}
    */
-  // checkIfFileIsDownloading(oLayer: object, sTypeOfProcess: string) {
-  //   if (!oLayer) {
-  //     return false;
-  //   }
-  //   let sProcessName = oLayer.title;
-  //   let sLink = oLayer.link;
-  //   if (!sProcessName) {
-  //     return false;
-  //   }
-  //   if (!sTypeOfProcess) {
-  //     return false;
-  //   }
+  checkIfFileIsDownloading(oLayer: any, sTypeOfProcess: string) {
+    if (!oLayer) {
+      return false;
+    }
+    let sProcessName = oLayer.title;
+    let sLink = oLayer.link;
+    if (!sProcessName) {
+      return false;
+    }
+    if (!sTypeOfProcess) {
+      return false;
+    }
 
-  //   let sProcess: {
-  //     productName: string,
-  //     operationType: string,
-  //     sTypeOfProcess: string,
-  //     link: string
-  //   } = { productName: sProcessName, operationType: sTypeOfProcess, link: sLink };
+    let sProcess = { productName: sProcessName, operationType: sTypeOfProcess, link: sLink };
 
-  //   if (!sProcess) {
-  //     return false;
-  //   }
+    if (!sProcess) {
+      return false;
+    }
 
-  //   var aoProcesses = this.getProcesses();
-  //   if (!aoProcesses) {
-  //     return false;
-  //   }
+    let aoProcesses = this.getProcesses();
+    if (!aoProcesses) {
+      return false;
+    }
 
-  //   var iNumberOfProcesses = aoProcesses.length;
+    // var iNumberOfProcesses = aoProcesses.length;
 
-  //   for (var iIndex = 0; iIndex < iNumberOfProcesses; iIndex++) {
-  //     /*check if the processes are equals*/
-  //     //aoProcesses[iIndex].productName == sProcess.productName
-  //     // if ((utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.productName) === true || utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.link) === true)
-  //     //   && aoProcesses[iIndex].operationType == sProcess.operationType && aoProcesses[iIndex].status === "RUNNING") {
-  //     //   return true;
-  //     // }
-  //   }
-  //   return false;
+    // for (var iIndex = 0; iIndex < iNumberOfProcesses; iIndex++) {
+      /*check if the processes are equals*/
+      //aoProcesses[iIndex].productName == sProcess.productName
+      // if ((utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.productName) === true || utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.link) === true)
+      //   && aoProcesses[iIndex].operationType == sProcess.operationType && aoProcesses[iIndex].status === "RUNNING") {
+      //   return true;
+      // }
+    // }
+    return false;
 
-  // };
+  };
 
   /**
-   * Return the downlod Proc Type
+   * Return the download Proc Type
    * @returns {string}
    */
   getTypeOfProcessProductDownload() {

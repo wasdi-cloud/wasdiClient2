@@ -126,7 +126,15 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
         this.cleanTemplateListSelectedStatus(oResponse);
         // Update the list
         this.m_aoParametersTemplateList = oResponse;
-        this.viewProcessorParams(this.m_aoParametersTemplateList[0]);
+        if(this.m_oSelectedTemplate.name) { 
+          this.m_aoParametersTemplateList.forEach(oTemplate => {
+            if(oTemplate.name === this.m_oSelectedTemplate.name) {
+              this.viewProcessorParams(oTemplate);
+            }
+          })
+        } else {
+          this.viewProcessorParams(this.m_aoParametersTemplateList[0]);
+        }
       }
     })
     return true;
@@ -134,7 +142,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
 
   /**
    * Clean the selected flag in all elements
-   * @param aoList List of Paramenter Template Light View Models
+   * @param aoList List of Parameter Template Light View Models
    */
   cleanTemplateListSelectedStatus(aoList) {
     for (let iTemplates = 0; iTemplates < aoList.length; iTemplates++) {
@@ -244,6 +252,9 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
 
     bConfirmResult.subscribe(bDialogResult => {
       if (bDialogResult === true) {
+        if(this.m_oSelectedTemplate.templateId === oTemplate.templateId) {
+          this.m_oSelectedTemplate = null;
+        }
         this.m_oProcessorParametersTemplateService.deleteProcessorParameterTemplate(oTemplate.templateId).subscribe({
           next: oResponse => {
             this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
@@ -287,7 +298,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
     if (!FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oSelectedTemplate.templateId)) {
       // This is an existing one: update
       this.m_oProcessorParametersTemplateService.updateProcessorParameterTemplate(this.m_oSelectedTemplate).subscribe(oResponse => {
-        this.getProcessorParametersTemplateList(this.m_oSelectedTemplate.processorId);
+        this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
       })
     }
     else {
@@ -298,7 +309,6 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
       // And call the API
       this.m_oProcessorParametersTemplateService.addProcessorParameterTemplate(this.m_oSelectedTemplate).subscribe({
         next: oResponse => {
-          this.m_oSelectedTemplate = null;
           this.m_bIsLoading = false;
           this.getProcessorParametersTemplateList(this.m_oSelectedProcessor.processorId);
         },
