@@ -37,6 +37,13 @@ export class ManageSubscriptionsComponent implements OnInit {
 
   m_oOrganization: any = "";
 
+  m_sSubscriptionSortBy: string = "User Id";
+
+  m_sUserIdSearch = "";
+  m_sSubscriptionIdSearch = "";
+  m_sSubscriptionNameSearch = "";
+
+  m_asSortOptions: Array<string> = ["User Id", "Subscription Id", "Subscription Name"]
 
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -61,7 +68,9 @@ export class ManageSubscriptionsComponent implements OnInit {
           this.m_aoSubscriptions = oResponse;
         }
       },
-      error: oError => { }
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Could not get subscriptions")
+      }
     })
   }
 
@@ -196,11 +205,13 @@ export class ManageSubscriptionsComponent implements OnInit {
     this.createSubscriptionObject();
     console.log(this.m_oSelectedSubscription)
     if (this.checkIsSubscriptionValid() === true) {
-      this.m_oSubscriptionService.createSubscription(oSubscription).subscribe({
+      this.m_oSubscriptionService.createSubscription(this.m_oSelectedSubscription).subscribe({
         next: oResponse => {
           this.m_oNotificationDisplayService.openSnackBar("Subscription Created!", '', 'success-snackbar');
         },
-        error: oError => { }
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog("An error occurred while creating this subscription")
+        }
       })
     } else {
       this.m_oNotificationDisplayService.openAlertDialog("Subscription is not valid", "", "alert")
@@ -225,7 +236,19 @@ export class ManageSubscriptionsComponent implements OnInit {
     return bReturnValue
   }
 
-  getDaysRemaining() {}
+  getDaysRemaining(sStartDate: any, sEndDate: any) {
+    let sCurrentDate = Date.now();
+    let sEndTimestamp = Date.parse(sEndDate);
+
+    let iRemaningDays = Math.ceil((sEndTimestamp - sCurrentDate) / (1000 * 3600 * 24));
+
+    if (iRemaningDays <= 0) {
+      this.m_iDaysRemaining = "Expired"
+    } else {
+      this.m_iDaysRemaining = `${iRemaningDays}`;
+    }
+  }
+  
   /********** Pagination Handlers **********/
   stepOnePage() {
     this.m_iOffset += this.m_iLimit;
@@ -289,5 +312,9 @@ export class ManageSubscriptionsComponent implements OnInit {
     let lDifferenceInTime = this.m_sEndDate.getTime() - this.m_sStartDate.getTime();
     this.m_iDurationDays = lDifferenceInTime / (1000 * 3600 * 24);
     this.m_iDurationDays = Math.round(this.m_iDurationDays);
+  }
+
+  setSortType(oEvent) {
+    this.m_sSubscriptionSortBy = oEvent.value;
   }
 }
