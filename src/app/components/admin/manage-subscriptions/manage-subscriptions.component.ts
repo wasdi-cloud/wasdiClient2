@@ -199,6 +199,9 @@ export class ManageSubscriptionsComponent implements OnInit {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.durationDays)) {
       this.m_oSelectedSubscription.durationDays = this.m_iDurationDays;
     }
+
+    //When creating from the Admin Panel - ensure buySuccess = true
+    this.m_oSelectedSubscription.buySuccess = true;
   }
 
   createNewSubscription(oSubscription) {
@@ -248,7 +251,7 @@ export class ManageSubscriptionsComponent implements OnInit {
       this.m_iDaysRemaining = `${iRemaningDays}`;
     }
   }
-  
+
   /********** Pagination Handlers **********/
   stepOnePage() {
     this.m_iOffset += this.m_iLimit;
