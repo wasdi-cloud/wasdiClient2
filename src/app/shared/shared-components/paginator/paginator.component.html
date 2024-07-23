@@ -1,7 +1,7 @@
 <div class="d-flex flex-row justify-content-between w-100">
     <div class="d-flex flex-row align-items-center gap-4">
         <div *ngIf="m_bFullPaginator">{{m_iTotalItems > 1? m_iTotalItems : 0}} {{"PAGINATOR_ITEMS"| translate}}</div>
-        <span class="material-symbols-outlined" (click)="!m_bIsMinusEnabled? '' : handlePagination('first')"
+        <span *ngIf="m_bMaxPaginator" class="material-symbols-outlined" (click)="!m_bIsMinusEnabled? '' : handlePagination('first')"
             [class.disabled]="!m_bIsMinusEnabled">
             first_page
         </span>
@@ -9,7 +9,10 @@
             [class.disabled]="m_bIsMinusEnabled === false">
             arrow_back_ios
         </span>
-        <div class="d-flex flex-row align-items-center gap-2">
+        <div *ngIf="!m_bShowTotalPages">
+            {{m_iCurrentPage}}
+        </div>
+        <div *ngIf="m_bShowTotalPages" class="d-flex flex-row align-items-center gap-2">
             <input type="text" class="form-control" [(ngModel)]="m_iCurrentPage">
             <div class="d-flex flex-row align-items-center">
                 / {{getTotalPages()}}
@@ -19,7 +22,7 @@
             [class.disabled]="!m_bIsStepEnabled">
             arrow_forward_ios
         </span>
-        <span class="material-symbols-outlined" (click)="m_bIsStepEnabled ? handlePagination('last') : ''"
+        <span *ngIf="m_bMaxPaginator" class="material-symbols-outlined" (click)="m_bIsStepEnabled ? handlePagination('last') : ''"
             [class.disabled]="!m_bIsStepEnabled">
             last_page
         </span>

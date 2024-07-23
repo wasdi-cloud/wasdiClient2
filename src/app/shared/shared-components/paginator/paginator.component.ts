@@ -31,6 +31,16 @@ export class PaginatorComponent {
    */
   @Input() m_iTotalItems: number = 0;
 
+  /**
+   * Option to show total pages - particularly for view models where the total items cannot be known
+   */
+  @Input() m_bShowTotalPages?: boolean = true;
+
+  /**
+   * Show the maximum page selection in the paginator (first page and last page buttons)
+   */
+  @Input() m_bMaxPaginator?: boolean = true;
+
   @Output() m_oClickEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   @Output() m_iItemsPerPageChange: EventEmitter<any> = new EventEmitter<any>();
