@@ -256,6 +256,19 @@ export class ManageSubscriptionsComponent implements OnInit {
   }
 
   /********** Pagination Handlers **********/
+  handleItemsPerPageChange(oEvent) {
+    this.m_iLimit = oEvent
+    this.getSubscriptions();
+  }
+
+  handlePagination(oEvent) {
+    if (oEvent.previousPageIndex > oEvent.pageIndex) {
+      this.minusOnePage();
+    } else {
+      this.stepOnePage();
+    }
+  }
+
   stepOnePage() {
     this.m_iOffset += this.m_iLimit;
     this.m_bStepPageDisabled = false
@@ -272,9 +285,9 @@ export class ManageSubscriptionsComponent implements OnInit {
   setSubscriptionSearch(oEvent) {
     this.clearSearchInputs();
 
-    if(this.m_sSubscriptionSortBy === "User Id") {
+    if (this.m_sSubscriptionSortBy === "User Id") {
       this.m_sUserSearch = oEvent.event.target.value;
-    } else if(this.m_sSubscriptionSortBy === "Subscription Id") {
+    } else if (this.m_sSubscriptionSortBy === "Subscription Id") {
       this.m_sIdSearch = oEvent.event.target.value;
     } else {
       this.m_sNameSearch = oEvent.event.target.value;
