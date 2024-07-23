@@ -6,9 +6,11 @@
     </div>
     <div class="d-flex flex-row align-items-end justify-content-end">
         <div class="d-flex flex-row gap-2">
+            <div class="d-flex flex-row align-items-center gap-1">Search By:
+                <app-dropdown class="input-field" [m_aoDropdownItems]="m_asSortOptions" [m_aoSelectedItems]="m_sSubscriptionSortBy" (m_oSelectionChange)="setSortType($event)"></app-dropdown>
+            </div>
             <app-input-field [m_sPlaceholder]="'ADMIN_SUBSCRIPTIONS_SEARCH' | translate"
-                (m_oInputChange)="setSubscriptionSearch($event)" [m_sInputValue]="m_sSearch"
-                [m_bClearField]="true"></app-input-field>
+                (m_oInputChange)="setSubscriptionSearch($event)"></app-input-field>
             <app-button [m_sIconLeft]="'search'" (click)="getSubscriptions()"></app-button>
         </div>
     </div>

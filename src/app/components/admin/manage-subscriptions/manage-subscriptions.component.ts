@@ -26,7 +26,9 @@ export class ManageSubscriptionsComponent implements OnInit {
   m_bStepPageDisabled: boolean = false;
   m_bMinusPageDisabled: boolean = true;
 
-  m_sSearch: string = "";
+  m_sNameSearch: string = "";
+  m_sUserSearch: string = "";
+  m_sIdSearch: string = "";
 
   //Date Properties:
   m_sBuyDate: string | Date = "";
@@ -37,7 +39,7 @@ export class ManageSubscriptionsComponent implements OnInit {
 
   m_oOrganization: any = "";
 
-  m_sSubscriptionSortBy: string = "User Id";
+  m_sSubscriptionSortBy: string = "Subscription Name";
 
   m_sUserIdSearch = "";
   m_sSubscriptionIdSearch = "";
@@ -60,7 +62,8 @@ export class ManageSubscriptionsComponent implements OnInit {
   }
 
   getSubscriptions() {
-    this.m_oSubscriptionService.getPaginatedSubscriptions("", "", this.m_sSearch, this.m_iOffset, this.m_iLimit).subscribe({
+    console.log(this.m_sIdSearch)
+    this.m_oSubscriptionService.getPaginatedSubscriptions(this.m_sUserSearch, this.m_sIdSearch, this.m_sNameSearch, this.m_iOffset, this.m_iLimit).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscriptions")
@@ -267,7 +270,15 @@ export class ManageSubscriptionsComponent implements OnInit {
   }
 
   setSubscriptionSearch(oEvent) {
-    this.m_sSearch = oEvent.event.target.value;
+    this.clearSearchInputs();
+
+    if(this.m_sSubscriptionSortBy === "User Id") {
+      this.m_sUserSearch = oEvent.event.target.value;
+    } else if(this.m_sSubscriptionSortBy === "Subscription Id") {
+      this.m_sIdSearch = oEvent.event.target.value;
+    } else {
+      this.m_sNameSearch = oEvent.event.target.value;
+    }
   }
 
   getTypeSelection(oEvent) {
@@ -319,5 +330,11 @@ export class ManageSubscriptionsComponent implements OnInit {
 
   setSortType(oEvent) {
     this.m_sSubscriptionSortBy = oEvent.value;
+  }
+
+  clearSearchInputs() {
+    this.m_sNameSearch = "";
+    this.m_sUserSearch = "";
+    this.m_sIdSearch = "";
   }
 }

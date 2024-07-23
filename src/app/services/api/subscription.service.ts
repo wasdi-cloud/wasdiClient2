@@ -10,9 +10,7 @@ export class SubscriptionService {
 
   APIURL: string = this.m_oConstantsService.getAPIURL();
 
-  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient) {
-
-  }
+  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient) { }
 
   /**
    * Get the list of subscriptions of a user
@@ -123,62 +121,62 @@ export class SubscriptionService {
     let bQuestionMarkAdded = false;
     let sUrl = this.APIURL + "/subscriptions/list"
 
-    if (FadeoutUtils.utilsIsStrNullOrEmpty(sUserFilter)) {
-      if (!bQuestionMarkAdded) {
-        sUrl += "?"
-        bQuestionMarkAdded = true;
-      }
-      else {
-        sUrl += "&";
-      }
-      sUrl += "userfilter=" + sUserFilter;
-    }
+    // if (FadeoutUtils.utilsIsStrNullOrEmpty(sUserFilter)) {
+    //   if (!bQuestionMarkAdded) {
+    //     sUrl += "?"
+    //     bQuestionMarkAdded = true;
+    //   }
+    //   else {
+    //     sUrl += "&";
+    //   }
+    //   sUrl += "userfilter=" + sUserFilter;
+    // }
 
-    if (iOffset != null) {
-      if (!bQuestionMarkAdded) {
-        sUrl += "?"
-        bQuestionMarkAdded = true;
-      }
-      else {
-        sUrl += "&";
-      }
-      sUrl += "offset=" + iOffset;
-    }
+    // if (iOffset != null) {
+    //   if (!bQuestionMarkAdded) {
+    //     sUrl += "?"
+    //     bQuestionMarkAdded = true;
+    //   }
+    //   else {
+    //     sUrl += "&";
+    //   }
+    //   sUrl += "offset=" + iOffset;
+    // }
 
-    if (iLimit != null) {
-      if (!bQuestionMarkAdded) {
-        sUrl += "?"
-        bQuestionMarkAdded = true;
-      }
-      else {
-        sUrl += "&";
-      }
-      sUrl += "limit=" + iLimit;
-    }
+    // if (iLimit != null) {
+    //   if (!bQuestionMarkAdded) {
+    //     sUrl += "?"
+    //     bQuestionMarkAdded = true;
+    //   }
+    //   else {
+    //     sUrl += "&";
+    //   }
+    //   sUrl += "limit=" + iLimit;
+    // }
 
 
-    if (FadeoutUtils.utilsIsStrNullOrEmpty(sIdFilter)) {
-      if (!bQuestionMarkAdded) {
-        sUrl += "?"
-        bQuestionMarkAdded = true;
-      }
-      else {
-        sUrl += "&";
-      }
-      sUrl += "idfilter=" + sIdFilter;
-    }
+    // if (FadeoutUtils.utilsIsStrNullOrEmpty(sIdFilter)) {
+    //   if (!bQuestionMarkAdded) {
+    //     sUrl += "?"
+    //     bQuestionMarkAdded = true;
+    //   }
+    //   else {
+    //     sUrl += "&";
+    //   }
+    //   sUrl += "idfilter=" + sIdFilter;
+    // }
 
-    if (FadeoutUtils.utilsIsStrNullOrEmpty(sNameFilter)) {
-      if (!bQuestionMarkAdded) {
-        sUrl += "?"
-        bQuestionMarkAdded = true;
-      }
-      else {
-        sUrl += "&";
-      }
-      sUrl += "namefilter=" + sNameFilter;
-    }
+    // if (FadeoutUtils.utilsIsStrNullOrEmpty(sNameFilter)) {
+    //   if (!bQuestionMarkAdded) {
+    //     sUrl += "?"
+    //     bQuestionMarkAdded = true;
+    //   }
+    //   else {
+    //     sUrl += "&";
+    //   }
+    //   sUrl += "namefilter=" + sNameFilter;
+    // }
 
-    return this.m_oHttp.get<Array<any>>(sUrl);
+    return this.m_oHttp.get<Array<any>>(`${sUrl}?userfilter=${sUserFilter}&offset=${iOffset}&limit=${iLimit}&idfilter=${sIdFilter}&namefilter=${sNameFilter}`);
   }
 }

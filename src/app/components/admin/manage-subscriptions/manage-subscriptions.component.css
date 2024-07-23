@@ -59,3 +59,7 @@ a.page-link {
 a.page-link.disabled {
     color: var(--neutral20);
 }
+
+.input-field {
+    width: 12rem;
+}
