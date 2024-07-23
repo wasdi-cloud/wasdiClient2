@@ -188,7 +188,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
 
       let sTimestamp = (new Date()).toISOString().replace(/[^0-9]/g, "_").slice(0, 19);
 
-      oLink.download = "processes_" + this.m_oActiveWorkspace.name + "_" + sTimestamp;
+      oLink.download = "processes_" + this.m_oActiveWorkspace.name + "_" + sTimestamp + ".csv";
 
       oLink.click();
 
