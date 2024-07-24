@@ -44,7 +44,9 @@
                     </div>
                     <div class="d-flex flex-row gap-3">
                         <div class="re-deploy d-flex flex-row gap-2 align-items-center"
-                            (click)="forceProcessorRefresh(m_sProcessorId)"><span class="material-symbols-outlined">
+                            [class.disabled]="m_bRedeployOngoing"
+                            (click)="!m_bRedeployOngoing? forceProcessorRefresh(m_sProcessorId) : ''"><span
+                                class="material-symbols-outlined">
                                 code
                             </span>
                             {{"DIALOG_PROCESSOR_BASE_REDEPLOY" | translate}}

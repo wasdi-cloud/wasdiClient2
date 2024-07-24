@@ -35,9 +35,10 @@ div.re-deploy {
     line-height: 24px;
 }
 
-/* div.drag-drop-container {
-    height: 25%;
-} */
+div.re-deploy.disabled {
+    color: var(--neutral15) !important;
+    cursor: not-allowed;
+}
 
 div.json-editor-wrapper {
     padding: 0px 32px 32px 32px;
