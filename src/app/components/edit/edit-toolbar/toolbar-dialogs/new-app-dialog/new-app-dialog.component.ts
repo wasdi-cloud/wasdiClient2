@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 
 //Service Imports:
@@ -16,6 +16,7 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ImageService } from 'src/app/services/api/image.service';
 import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-new-app-dialog',
@@ -113,6 +114,7 @@ export class NewAppDialogComponent implements OnInit {
   * Processor Inputted from opening dialog
   */
   m_oInputProcessor: {
+    deploymentOngoing: boolean,
     imgLink: string,
     isPublic: any,
     minuteTimeout: number,
@@ -126,6 +128,7 @@ export class NewAppDialogComponent implements OnInit {
     sharedWithMe: boolean,
     type: string
   } = {
+      deploymentOngoing: false,
       imgLink: "",
       isPublic: 0,
       minuteTimeout: 180,
@@ -170,6 +173,8 @@ export class NewAppDialogComponent implements OnInit {
     userRuns: 0, // NOTE: not set at the moment
   };
 
+  m_bDeploymentOngoing: boolean = false;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private m_oConstantsService: ConstantsService,
@@ -202,6 +207,8 @@ export class NewAppDialogComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
         } else {
           this.m_oInputProcessor = oResponse;
+          this.m_bDeploymentOngoing = oResponse.deploymentOngoing
+
           //Marketplace Details
           this.m_oProcessorService.getMarketplaceDetail(this.m_oInputProcessor.processorName).subscribe({
             next: oResponse => {
@@ -524,6 +531,9 @@ export class NewAppDialogComponent implements OnInit {
     return true;
 
   }
+
+
+
 
   onDismiss() {
     this.m_oDialogRef.close();

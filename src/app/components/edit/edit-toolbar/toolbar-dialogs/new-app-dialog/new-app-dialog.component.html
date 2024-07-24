@@ -5,25 +5,28 @@
         <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
     </div>
     <div class="processor-tabs d-flex flex-row pb-4">
-        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_BASE' | translate" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PROCESSOR'"
-            (click)="changeActiveTab('PROCESSOR')"></app-tab>
-        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_PACKAGE_MANAGER' | translate" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PACKAGES'"
-            (click)="changeActiveTab('PACKAGES')" *ngIf="m_bEditMode"></app-tab>
-        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_DETAILS' | translate" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'STORE'"
-            (click)="changeActiveTab('STORE')" *ngIf="m_bEditMode"></app-tab>
-        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_STORE' | translate" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'PRICING'"
-            (click)="changeActiveTab('PRICING')" *ngIf="m_bEditMode"></app-tab>
-        <app-tab [m_sLabel]="'KEY_PHRASES.SHARE' | translate" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'SHARE'"
-            (click)="changeActiveTab('SHARE')" *ngIf="m_bEditMode"></app-tab>
-        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_UI' | translate" [m_bHasBorder]="false" [m_bIsActive]="m_sActiveTab === 'UI'"
-            (click)="changeActiveTab('UI')"></app-tab>
+        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_BASE' | translate" [m_bHasBorder]="false"
+            [m_bIsActive]="m_sActiveTab === 'PROCESSOR'" (click)="changeActiveTab('PROCESSOR')"></app-tab>
+        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_PACKAGE_MANAGER' | translate" [m_bHasBorder]="false"
+            [m_bIsActive]="m_sActiveTab === 'PACKAGES'" (click)="changeActiveTab('PACKAGES')"
+            *ngIf="m_bEditMode"></app-tab>
+        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_DETAILS' | translate" [m_bHasBorder]="false"
+            [m_bIsActive]="m_sActiveTab === 'STORE'" (click)="changeActiveTab('STORE')" *ngIf="m_bEditMode"></app-tab>
+        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_STORE' | translate" [m_bHasBorder]="false"
+            [m_bIsActive]="m_sActiveTab === 'PRICING'" (click)="changeActiveTab('PRICING')"
+            *ngIf="m_bEditMode"></app-tab>
+        <app-tab [m_sLabel]="'KEY_PHRASES.SHARE' | translate" [m_bHasBorder]="false"
+            [m_bIsActive]="m_sActiveTab === 'SHARE'" (click)="changeActiveTab('SHARE')" *ngIf="m_bEditMode"></app-tab>
+        <app-tab [m_sLabel]="'DIALOG_PROCESSOR_TAB_UI' | translate" [m_bHasBorder]="false"
+            [m_bIsActive]="m_sActiveTab === 'UI'" (click)="changeActiveTab('UI')"></app-tab>
     </div>
     <div class="flex-fill mt-2">
         <!-- Default Page - Processor Information -->
         <app-processor-tab-content *ngIf="m_sActiveTab === 'PROCESSOR' && m_oProcessorForm" [m_bEditMode]="m_bEditMode"
             [m_oProcessorBasicInfo]="m_oProcessorForm.get('processorBasicInfo')"
             [m_sProcessorId]="m_oInputProcessor ? m_oInputProcessor.processorId : ''" [m_sProcessorName]="m_sName"
-            [m_sPublisher]="m_oProcessorDetails.publisher"></app-processor-tab-content>
+            [m_sPublisher]="m_oProcessorDetails.publisher"
+            [m_bRedeployOngoing]="m_bDeploymentOngoing"></app-processor-tab-content>
         <!-- Package Manager -->
         <app-package-manager *ngIf="m_sActiveTab === 'PACKAGES'"
             [m_oProcessorInfo]="m_oInputProcessor"></app-package-manager>
@@ -43,8 +46,11 @@
 
     </div>
     <div class="dialog-footer d-flex flex-row justify-content-between mt-2">
-        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true" (click)="onDismiss()"></app-button>
-        <app-button *ngIf="m_bEditMode" [m_sLabel]="'KEY_PHRASES.APPLY' | translate" (click)="updateProcessor()"></app-button>
-        <app-button *ngIf="!m_bEditMode" [m_sLabel]="'DIALOG_PROCESSOR_SAVE_APP' | translate" (click)="postNewProcessor()"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true"
+            (click)="onDismiss()"></app-button>
+        <app-button *ngIf="m_bEditMode" [m_sLabel]="'KEY_PHRASES.APPLY' | translate"
+            (click)="updateProcessor()"></app-button>
+        <app-button *ngIf="!m_bEditMode" [m_sLabel]="'DIALOG_PROCESSOR_SAVE_APP' | translate"
+            (click)="postNewProcessor()"></app-button>
     </div>
 </div>

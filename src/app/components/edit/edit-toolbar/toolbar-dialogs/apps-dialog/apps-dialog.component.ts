@@ -148,6 +148,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   selectProcessor(oProcessor) {
     this.m_oSelectedProcessor = oProcessor;
+    console.log(this.m_oSelectedProcessor)
     this.m_oProcessorService.getHelpFromProcessor(oProcessor.processorName).subscribe({
       next: oResponse => {
         this.m_sHelpMsg = oResponse.stringValue;
