@@ -67,6 +67,7 @@ export class ListItemComponent {
 
   @Input() m_bIsLightProduct?: boolean = false;
 
+  @Input() m_bIsDisabled?: boolean = false;
   @Input() m_oInfoCallbackFn?: (args: any) => void;
 
   @Input() m_oZoomCallbackFn?: (args: any) => void;

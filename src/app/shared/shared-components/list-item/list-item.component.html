@@ -1,7 +1,7 @@
 <div class="list-item-container d-flex flex-row gap-2" [class.parent-item]="m_bParentItem"
     [class.product-item]="m_bProductItem" [class.highlighted]="m_oProductListItem.hovering"
     [class.hover]="m_bProcessorItem || m_bProcessorItem || m_bProductItem"
-    [class.selected]="m_bIsSelected && !m_bParentItem">
+    [class.selected]="m_bIsSelected && !m_bParentItem" [class.disabled]="m_bIsDisabled">
     <!-- Contents if List Item is of Parent Type: -->
     <div class="d-flex flex-row justify-content-between align-items-center w-100" *ngIf="m_bParentItem">
         <div>
