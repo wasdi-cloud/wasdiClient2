@@ -376,7 +376,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
    * @param node 
    */
   deleteProduct(node: any) {
-
     let bDeleteLayer = true;
     let bDeleteFile = true;
 
@@ -392,6 +391,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
           {
             next: oResponse => {
               if (oResponse.boolValue) {
+                this.m_aoSelectedProducts = [];
                 this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
                 return true;
               } else {

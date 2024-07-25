@@ -115,9 +115,9 @@ export class ProductListItemComponent {
   }
 
   /**
- * Open the send to ftp dialog
- * @param oNode 
- */
+   * Open the send to ftp dialog
+   * @param oNode 
+   */
   openSendToFTP() {
     this.m_oDialog.open(WorkspacesListDialogComponent, {
       height: "65vh",
