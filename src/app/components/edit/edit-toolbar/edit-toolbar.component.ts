@@ -136,7 +136,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
       // Set timeout to allow for jupyter status to update
       setTimeout(() => {
         oController.m_bJupyterIsReady = true;
-      }, 1000)
+      }, 2000)
     }
   }
 
