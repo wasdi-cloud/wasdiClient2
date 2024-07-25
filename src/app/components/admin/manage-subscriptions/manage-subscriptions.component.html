@@ -7,22 +7,74 @@
     <div class="d-flex flex-row align-items-end justify-content-end">
         <div class="d-flex flex-row gap-2">
             <div class="d-flex flex-row align-items-center gap-1">Search By:
-                <app-dropdown class="input-field" [m_aoDropdownItems]="m_asSortOptions" [m_aoSelectedItems]="m_sSubscriptionSortBy" (m_oSelectionChange)="setSortType($event)"></app-dropdown>
+                <app-dropdown class="input-field" [m_aoDropdownItems]="m_asSortOptions"
+                    [m_aoSelectedItems]="m_sSubscriptionSortBy"
+                    (m_oSelectionChange)="setSortType($event)"></app-dropdown>
             </div>
             <app-input-field [m_sPlaceholder]="'ADMIN_SUBSCRIPTIONS_SEARCH' | translate"
-                (m_oInputChange)="setSubscriptionSearch($event)"></app-input-field>
-            <app-button [m_sIconLeft]="'search'" (click)="getSubscriptions()"></app-button>
+                (m_oInputChange)="setSubscriptionSearch($event)" [m_sInputValue]="m_sSearch" (m_oClearInput)="clearSearchInputs()" [m_bClearField]="true"></app-input-field>
+            <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
         </div>
     </div>
-    <div class="flex-fill d-flex flex-column gap-2">
+    <div *ngIf="m_bMultiTables === true && m_aoSubscriptions.length > 0">
+        <div class="user-card" *ngFor="let oUser of m_aoSubscriptions">
+            <div class="user-name d-flex flex-row justify-content-between" (click)="oUser.isOpen = !oUser.isOpen"
+                style="cursor:pointer;">
+                <div>{{oUser.userId}}</div>
+                <span class="material-symbols-outlined">
+                    {{oUser.isOpen? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+                </span>
+            </div>
+            <div class="table-wrapper">
+                <div
+                    *ngIf="((!oUser.foundSubscriptions) || oUser.foundSubscriptions.length === 0) && oUser.isOpen === true">
+                    No subscriptions Found
+                </div>
+                <table
+                    *ngIf="(oUser.foundSubscriptions && oUser.foundSubscriptions.length > 0) && (m_aoSubscriptions.length === 1 || oUser.isOpen === true)">
+                    <thead class="table-heading-container">
+                        <tr>
+                            <td>{{"ADMIN_SUBSCRIPTIONS_SUBID" | translate}}</td>
+                            <td (click)="getSortedOrder('name')">{{"KEY_PHRASES.NAME" | translate}}</td>
+                            <td (click)="getSortedOrder('userId')">{{"KEY_PHRASES.OWNER" | translate}}</td>
+                            <td (click)="getSortedOrder('endDate')">{{"KEY_PHRASES.STATUS" | translate}}</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="!oUser.foundSubscriptions">
+                            No more subscriptions to show.
+                        </tr>
+                        <tr *ngFor="let oSubscription of oUser.foundSubscriptions">
+                            <td class="copy-to-clipboard" (click)="copyToClipboard(oSubscription.subscriptionId)">{{oSubscription.subscriptionId}}</td>
+                            <td>{{oSubscription.name}}</td>
+                            <td>{{oSubscription.ownerUserId}}</td>
+                            <td>{{subscriptionActive(oSubscription)}}</td>
+                            <td class="d-flex flex-row justify-content-end">
+                                <span (click)="setSelectedSubscription(oSubscription)" data-bs-toggle="offcanvas"
+                                    href="#subscriptionEditor" role="button" aria-controls="subscriptionEditor"
+                                    class="material-symbols-outlined">
+                                    edit
+                                </span>
+                                <span class="material-symbols-outlined" (click)="deleteSubscription(oSubscription)">
+                                    delete
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="m_bMultiTables === false" class="flex-fill d-flex flex-column gap-2">
         <div class="table-wrapper">
             <table>
                 <thead class="table-heading-container">
                     <tr>
                         <td>{{"ADMIN_SUBSCRIPTIONS_SUBID" | translate}}</td>
-                        <td>{{"KEY_PHRASES.NAME" | translate}}</td>
-                        <td>{{"KEY_PHRASES.OWNER" | translate}}</td>
-                        <td>{{"KEY_PHRASES.STATUS" | translate}}</td>
+                        <td (click)="getSortedOrder('name')">{{"KEY_PHRASES.NAME" | translate}}</td>
+                        <td (click)="getSortedOrder('userId')">{{"KEY_PHRASES.OWNER" | translate}}</td>
+                        <td (click)="getSortedOrder('endDate')">{{"KEY_PHRASES.STATUS" | translate}}</td>
                         <td></td>
                     </tr>
                 </thead>
@@ -31,7 +83,7 @@
                         No more subscriptions to show.
                     </tr>
                     <tr *ngFor="let oSubscription of m_aoSubscriptions">
-                        <td>{{oSubscription.subscriptionId}}</td>
+                        <td class="copy-to-clipboard" (click)="copyToClipboard(oSubscription.subscriptionId)">{{oSubscription.subscriptionId}}</td>
                         <td>{{oSubscription.name}}</td>
                         <td>{{oSubscription.ownerUserId}}</td>
                         <td>{{subscriptionActive(oSubscription)}}</td>
@@ -50,8 +102,8 @@
             </table>
         </div>
         <app-paginator [m_bMaxPaginator]="false" [m_bFullPaginator]="false"
-        (m_iItemsPerPageChange)="handleItemsPerPageChange($event)" (m_oClickEmitter)="handlePagination($event)"
-        [m_bShowTotalPages]="false"></app-paginator>
+            (m_iItemsPerPageChange)="handleItemsPerPageChange($event)" (m_oClickEmitter)="handlePagination($event)"
+            [m_bShowTotalPages]="false"></app-paginator>
     </div>
 </div>
 <div class="offcanvas offcanvas-end org-create-container d-flex flex-column justify-content-between"

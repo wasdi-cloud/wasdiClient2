@@ -289,7 +289,7 @@ export class ManageUsersComponent implements OnInit {
     this.m_sTotalUsers = oEvent.value
   }
 
-  getSortedUsers(sSortBy) {
+  getSortedUsers(sSortBy: string) {
     this.m_sSortBy = sSortBy
     if (this.m_sSortBy !== sSortBy) {
       this.m_sSortOrder = 'asc'

@@ -117,7 +117,7 @@ export class SubscriptionService {
     return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/stripe/paymentUrl?subscription=' + sSubscriptionId + '&workspace=' + sWorkspaceId);
   }
 
-  getPaginatedSubscriptions(sUserFilter: string, sIdFilter: string, sNameFilter: string, iOffset: number, iLimit: number) {
+  getPaginatedSubscriptions(sUserFilter: string, sIdFilter: string, sNameFilter: string, iOffset: number, iLimit: number, sSortBy: string, sSortOrder: string) {
     let bQuestionMarkAdded = false;
     let sUrl = this.APIURL + "/subscriptions/list"
 
@@ -177,6 +177,6 @@ export class SubscriptionService {
     //   sUrl += "namefilter=" + sNameFilter;
     // }
 
-    return this.m_oHttp.get<Array<any>>(`${sUrl}?userfilter=${sUserFilter}&offset=${iOffset}&limit=${iLimit}&idfilter=${sIdFilter}&namefilter=${sNameFilter}`);
+    return this.m_oHttp.get<Array<any>>(`${sUrl}?userfilter=${sUserFilter}&offset=${iOffset}&limit=${iLimit}&idfilter=${sIdFilter}&namefilter=${sNameFilter}&sortby=${sSortBy}&order=${sSortOrder}`);
   }
 }

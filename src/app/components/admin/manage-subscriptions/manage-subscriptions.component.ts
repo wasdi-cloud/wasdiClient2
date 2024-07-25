@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
 import { SubscriptionService } from 'src/app/services/api/subscription.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { TranslateService } from '@ngx-translate/core';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-manage-subscriptions',
@@ -28,7 +31,9 @@ export class ManageSubscriptionsComponent implements OnInit {
 
   m_sNameSearch: string = "";
   m_sUserSearch: string = "";
+  m_sUserNameSearch: string = "";
   m_sIdSearch: string = "";
+  m_sSearch: string = "";
 
   //Date Properties:
   m_sBuyDate: string | Date = "";
@@ -41,14 +46,21 @@ export class ManageSubscriptionsComponent implements OnInit {
 
   m_sSubscriptionSortBy: string = "Subscription Name";
 
-  m_sUserIdSearch = "";
-  m_sSubscriptionIdSearch = "";
-  m_sSubscriptionNameSearch = "";
 
-  m_asSortOptions: Array<string> = ["User Id", "Subscription Id", "Subscription Name"]
+  m_sSortBy: string = ""
+  m_sSortOrder: string = ""
+
+  m_bMultiTables = false;
+
+  m_aoFoundUsers = [];
+
+  m_asSortOptions: Array<string> = ["User Id", "Subscription Id", "Subscription Name", "User First Name", "User Last Name"]
 
   constructor(
+    private m_oAdminDashboardService: AdminDashboardService,
+    private m_oClipboard: Clipboard,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTranslate: TranslateService,
     private m_oSubscriptionService: SubscriptionService,
   ) { }
 
@@ -63,7 +75,7 @@ export class ManageSubscriptionsComponent implements OnInit {
 
   getSubscriptions() {
     console.log(this.m_sIdSearch)
-    this.m_oSubscriptionService.getPaginatedSubscriptions(this.m_sUserSearch, this.m_sIdSearch, this.m_sNameSearch, this.m_iOffset, this.m_iLimit).subscribe({
+    this.m_oSubscriptionService.getPaginatedSubscriptions(this.m_sUserSearch, this.m_sIdSearch, this.m_sNameSearch, this.m_iOffset, this.m_iLimit, this.m_sSortBy, this.m_sSortOrder).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscriptions")
@@ -283,15 +295,7 @@ export class ManageSubscriptionsComponent implements OnInit {
   }
 
   setSubscriptionSearch(oEvent) {
-    this.clearSearchInputs();
-
-    if (this.m_sSubscriptionSortBy === "User Id") {
-      this.m_sUserSearch = oEvent.event.target.value;
-    } else if (this.m_sSubscriptionSortBy === "Subscription Id") {
-      this.m_sIdSearch = oEvent.event.target.value;
-    } else {
-      this.m_sNameSearch = oEvent.event.target.value;
-    }
+    this.m_sSearch = oEvent.event.target.value;
   }
 
   getTypeSelection(oEvent) {
@@ -349,5 +353,72 @@ export class ManageSubscriptionsComponent implements OnInit {
     this.m_sNameSearch = "";
     this.m_sUserSearch = "";
     this.m_sIdSearch = "";
+    this.m_sSearch = "";
+
+    this.m_bMultiTables = false;
+    this.getSubscriptions()
+  }
+
+  getSortedOrder(sSortBy: string) {
+    this.m_sSortBy = sSortBy
+    if (this.m_sSortBy !== sSortBy) {
+      this.m_sSortOrder = 'asc'
+    } else {
+      this.m_sSortOrder === 'asc' ? this.m_sSortOrder = 'desc' : this.m_sSortOrder = 'asc';
+    }
+
+    this.getSubscriptions()
+  }
+
+  executeSearch() {
+    switch (this.m_sSubscriptionSortBy) {
+      case 'User Id':
+        this.m_sUserSearch = this.m_sSearch;
+        break;
+      case 'Subscription Id':
+        this.m_sIdSearch = this.m_sSearch
+        break;
+      case 'Subscription Name':
+        this.m_sNameSearch = this.m_sSearch
+        break;
+      default:
+        this.m_sUserNameSearch = this.m_sSearch;
+        break;
+    }
+    // If searching by partial of user's NAME: 
+    if (this.m_sSubscriptionSortBy === 'User First Name' || this.m_sSubscriptionSortBy === 'User Last Name') {
+      this.m_bMultiTables = true;
+      this.m_oAdminDashboardService.findUsersByPartialName(this.m_sUserNameSearch).subscribe({
+        next: oResponse => {
+          if (oResponse.length === 0) {
+            this.m_oNotificationDisplayService.openAlertDialog("Could not find users with this name")
+          } else {
+            this.m_aoSubscriptions = oResponse
+            this.m_aoSubscriptions.forEach(oUser => {
+              this.m_oSubscriptionService.getPaginatedSubscriptions(oUser.userId, "", "", this.m_iOffset, this.m_iLimit, this.m_sSortBy, this.m_sSortOrder).subscribe({
+                next: oResponse => {
+                  oUser.foundSubscriptions = oResponse
+                },
+                error: oError => {
+                  this.m_bMultiTables = false;
+                }
+              })
+            })
+          }
+        },
+        error: oError => {
+          this.m_oNotificationDisplayService.openAlertDialog("Could not get users");
+        }
+      })
+    } else {
+      this.m_bMultiTables = false;
+      this.getSubscriptions()
+    }
+  }
+
+  copyToClipboard(sSubscriptionId: string) {
+    this.m_oClipboard.copy(sSubscriptionId);
+    let sMsg = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD")
+    this.m_oNotificationDisplayService.openSnackBar(sMsg);
   }
 }

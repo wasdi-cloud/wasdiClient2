@@ -56,10 +56,24 @@ th {
 a.page-link {
     cursor: pointer;
 }
+
 a.page-link.disabled {
     color: var(--neutral20);
 }
 
 .input-field {
     width: 12rem;
+}
+
+td.copy-to-clipboard {
+    cursor: pointer;
+    color: var(--wasdiGreen);
+}
+
+.user-name {
+    background-color: var(--neutral70);
+    color: #FFFFFF;
+    border-radius: 8px;
+    width: 100%;
+    padding: 16px;
 }
