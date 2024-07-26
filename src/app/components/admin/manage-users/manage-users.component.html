@@ -91,22 +91,6 @@
         <app-paginator [m_bMaxPaginator]="false" [m_bFullPaginator]="false"
             (m_iItemsPerPageChange)="handleItemsPerPageChange($event)" (m_oClickEmitter)="handlePagination($event)"
             [m_bShowTotalPages]="false"></app-paginator>
-        <!-- <nav class="align-self-end" aria-label="Users table navigation">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" aria-label="Previous" (click)="!m_bMinusPageDisabled? minusOnePage() : ''"
-                        [class.disabled]="m_bMinusPageDisabled">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" aria-label="Next" (click)="!m_bStepPageDisabled? stepOnePage() : ''"
-                        [class.disabled]="m_bStepPageDisabled">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav> -->
     </div>
 </div>
 

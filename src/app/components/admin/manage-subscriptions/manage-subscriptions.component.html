@@ -12,7 +12,8 @@
                     (m_oSelectionChange)="setSortType($event)"></app-dropdown>
             </div>
             <app-input-field [m_sPlaceholder]="'ADMIN_SUBSCRIPTIONS_SEARCH' | translate"
-                (m_oInputChange)="setSubscriptionSearch($event)" [m_sInputValue]="m_sSearch" (m_oClearInput)="clearSearchInputs()" [m_bClearField]="true"></app-input-field>
+                (m_oInputChange)="setSubscriptionSearch($event)" [m_sInputValue]="m_sSearch"
+                (m_oClearInput)="clearSearchInputs()" [m_bClearField]="true"></app-input-field>
             <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
         </div>
     </div>
@@ -46,7 +47,8 @@
                             No more subscriptions to show.
                         </tr>
                         <tr *ngFor="let oSubscription of oUser.foundSubscriptions">
-                            <td class="copy-to-clipboard" (click)="copyToClipboard(oSubscription.subscriptionId)">{{oSubscription.subscriptionId}}</td>
+                            <td class="copy-to-clipboard" (click)="copyToClipboard(oSubscription.subscriptionId)">
+                                {{oSubscription.subscriptionId}}</td>
                             <td>{{oSubscription.name}}</td>
                             <td>{{oSubscription.ownerUserId}}</td>
                             <td>{{subscriptionActive(oSubscription)}}</td>
@@ -72,9 +74,42 @@
                 <thead class="table-heading-container">
                     <tr>
                         <td>{{"ADMIN_SUBSCRIPTIONS_SUBID" | translate}}</td>
-                        <td (click)="getSortedOrder('name')">{{"KEY_PHRASES.NAME" | translate}}</td>
-                        <td (click)="getSortedOrder('userId')">{{"KEY_PHRASES.OWNER" | translate}}</td>
-                        <td (click)="getSortedOrder('endDate')">{{"KEY_PHRASES.STATUS" | translate}}</td>
+                        <td class="sorting-header" (click)="getSortedOrder('name')">
+                            <div class="d-flex flex-row align-items-center">
+                                {{"KEY_PHRASES.NAME" | translate}} <span
+                                    *ngIf="m_sSortOrder==='asc' && m_sSortBy === 'name'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_down
+                                </span> <span *ngIf="m_sSortOrder==='desc' && m_sSortBy === 'name'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_up
+                                </span>
+                            </div>
+                        </td>
+                        <td class="sorting-header" (click)="getSortedOrder('userId')">
+                            <div class="d-flex flex-row align-items-center">
+                                {{"KEY_PHRASES.OWNER" | translate}} <span
+                                    *ngIf="m_sSortOrder==='asc' && m_sSortBy === 'userId'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_down
+                                </span> <span *ngIf="m_sSortOrder==='desc' && m_sSortBy === 'userId'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_up
+                                </span>
+                            </div>
+                        </td>
+                        <td class="sorting-header" (click)="getSortedOrder('endDate')">
+                            <div class="d-flex flex-row align-items-center">
+                                {{"KEY_PHRASES.STATUS" | translate}} <span
+                                    *ngIf="m_sSortOrder==='asc' && m_sSortBy === 'endDate'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_down
+                                </span> <span *ngIf="m_sSortOrder==='desc' && m_sSortBy === 'endDate'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_up
+                                </span>
+                            </div>
+                        </td>
                         <td></td>
                     </tr>
                 </thead>
@@ -83,7 +118,8 @@
                         No more subscriptions to show.
                     </tr>
                     <tr *ngFor="let oSubscription of m_aoSubscriptions">
-                        <td class="copy-to-clipboard" (click)="copyToClipboard(oSubscription.subscriptionId)">{{oSubscription.subscriptionId}}</td>
+                        <td class="copy-to-clipboard" (click)="copyToClipboard(oSubscription.subscriptionId)">
+                            {{oSubscription.subscriptionId}}</td>
                         <td>{{oSubscription.name}}</td>
                         <td>{{oSubscription.ownerUserId}}</td>
                         <td>{{subscriptionActive(oSubscription)}}</td>
