@@ -52,8 +52,8 @@
                 </div>
                 {{m_oProductListItem.title}}
                 <div>
-                    <!-- Remove 'z' in date string so it is not converted to user's local time. -->
-                    <span class="label">Date: </span> {{m_oProductListItem.properties.date.slice(0, -1) | date: 'dd/MM/yyyy HH:mm:ss' }}
+                    <span class="label">Date: </span>
+                    {{getFormatDateString(m_oProductListItem) | date: 'dd/MM/yyyy HH:mm:ss' }}
                 </div>
             </div>
             <div class="row">
