@@ -61,6 +61,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   m_bShowParamsLibrary: boolean = false;
 
+  m_bNotification: boolean = false;
   /**
    * If the app has been purchased (1 time run) - if the app is Free, remains TRUE
    */
@@ -312,9 +313,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
 
     let sJSON = this.m_sMyJsonString;
-
     let sStringJSON = "";
 
+    // Ensure that the JSON has been transformed into a STRING type
     if (typeof sJSON !== "string") {
       sStringJSON = JSON.stringify(sJSON);
     } else if (sJSON === '') {
@@ -331,16 +332,14 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
       this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, '', 'alert');
     }
 
-    this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON).subscribe(oResponse => {
+    this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON, this.m_bNotification).subscribe(oResponse => {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
         let sNotificationMsg = this.m_oTranslate.instant("MSG_MKT_PROC_SCHEDULED");
         this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, '', 'success-snackbar')
       }
       this.m_oDialogRef.close();
     })
-
     return true;
-
   }
 
   /**
@@ -388,7 +387,6 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   getJSONInput(oEvent) {
     this.m_sMyJsonString = this.m_oJsonEditorService.getValue();
   }
-
 
   rabbitMessageHook(oRabbitMessage: any, oController: any) {
     console.log("RECEIVED " + oRabbitMessage)
@@ -456,6 +454,11 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     })
   }
+
+  openNotificationHelp() {
+    this.m_oNotificationDisplayService.openAlertDialog("WASDI will send you an email notification upon completion of this processor", "Info", "info")
+  }
+
   /**
    * Close the Apps Dialog
    */

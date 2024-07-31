@@ -82,7 +82,7 @@ export class ProcessorService {
     * @param sJSON
     * @returns {*}
     */
-  runProcessor(sProcessorName: string, sJSON: string) {
+  runProcessor(sProcessorName: string, sJSON: string, bNotify?: boolean) {
     let sEncodedJSON: string = encodeURI(sJSON);
     //Get active workspace
     let oActiveWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
@@ -94,7 +94,7 @@ export class ProcessorService {
     else {
       sWorkspaceId = "-";
     }
-    return this.m_oHttp.post(this.APIURL + '/processors/run?name=' + sProcessorName + '&workspace=' + sWorkspaceId, sEncodedJSON);
+    return this.m_oHttp.post(this.APIURL + '/processors/run?name=' + sProcessorName + '&workspace=' + sWorkspaceId + '&notify=' + bNotify, sEncodedJSON);
   };
 
   /**
@@ -388,5 +388,5 @@ export class ProcessorService {
 
   getAppPaymentById(sPaymentId: string) {
     return this.m_oHttp.get<any>(this.APIURL + '/processors/byAppPaymentId?appPayment=' + sPaymentId);
-   }
+  }
 }

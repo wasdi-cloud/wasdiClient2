@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
   selector: 'app-app-ui-menu',
@@ -27,11 +28,13 @@ export class AppUiMenuComponent {
 
   m_bRunInNewWorkspace: boolean = true;
   m_sNewWorkspaceName: string = "";
+  m_bNotification: boolean = false;
 
 
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oWorkspaceService: WorkspaceService
   ) { }
 
@@ -53,6 +56,7 @@ export class AppUiMenuComponent {
       this.m_oActiveWorkspace = oEvent;
       let oEmitObject = {
         isCreating: this.m_bRunInNewWorkspace,
+        notification: this.m_bNotification,
         workspace: oEvent
       }
       this.m_oSelectedWorkspace.emit(oEmitObject)
@@ -60,7 +64,7 @@ export class AppUiMenuComponent {
   }
 
   executeApp() {
-    if(this.m_bRunInNewWorkspace) {
+    if (this.m_bRunInNewWorkspace) {
       this.getSelectedWorkspace(this.m_sNewWorkspaceName);
       this.m_oExecuteAppEmitter.emit(true);
     } else {
@@ -76,6 +80,9 @@ export class AppUiMenuComponent {
 
   newOrExistingWorkspaceChanged() {
     this.m_bRunInNewWorkspace = !this.m_bRunInNewWorkspace;
+  }
 
+  openNotificationHelp() {
+    this.m_oNotificationDisplayService.openAlertDialog("WASDI will send you an email notification upon completion of this processor", "Info", "info")
   }
 }

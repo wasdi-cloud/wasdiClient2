@@ -155,6 +155,10 @@ export class AppUiComponent implements OnInit {
    */
   m_bRunInNewWorkspace: boolean = true;
 
+  /**
+   * Flag to know if the user wants an email notification
+   */
+  m_bNotification: boolean = false;
 
   ngOnInit(): void {
     // Take our user id
@@ -368,7 +372,7 @@ export class AppUiComponent implements OnInit {
   executeProcessorInWorkspace(oController, sApplicationName: string, oProcessorInput, oWorkspace) {
     if (this.m_oConstantsService.checkProjectSubscriptionsValid() === true) {
       oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
-      oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput)).subscribe(oResponse => {
+      oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput), this.m_bNotification).subscribe(oResponse => {
         if (oResponse) {
           this.m_oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
         }
@@ -401,6 +405,8 @@ export class AppUiComponent implements OnInit {
       this.m_oSelectedWorkspace = oEvent.workspace;
       this.m_bRunInNewWorkspace = false;
     }
+
+    this.m_bNotification = oEvent.notification
   }
 
   checkParams() {

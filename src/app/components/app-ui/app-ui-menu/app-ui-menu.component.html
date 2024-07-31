@@ -30,5 +30,12 @@
             <app-button *ngIf="!m_bIsPurchased" [m_sLabel]="'APP_UI_PURCHASE' | translate"
                 [m_sIconLeft]="'rocket_launch'" [m_sSize]="'large'" (click)="saveAppPurchase()"></app-button>
         </div>
+        <div class="notification-container d-flex flex-row align-items-center gap-2 pt-2">
+            <input type="checkbox" class="wasdi-checkbox" name="bNotify" id="" [(ngModel)]="m_bNotification">
+            <label for="bNotify">Notification </label>
+            <span (click)="openNotificationHelp()" class="help-icon material-symbols-outlined">
+                help
+            </span>
+        </div>
     </div>
 </div>
