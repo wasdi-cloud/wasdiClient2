@@ -175,6 +175,7 @@ import { CdkContextMenuTrigger, CdkMenuTrigger, CdkMenuItem, CdkMenu } from '@an
 import { PaginatorComponent } from './shared/shared-components/paginator/paginator.component';
 import { SaveParamsDialogComponent } from './dialogs/save-params-dialog/save-params-dialog.component';
 import { MetadataAttributesDialogComponent } from './components/edit/products-list/metadata-attributes-dialog/metadata-attributes-dialog.component';
+import { ResizableDirective } from './directives/resizable.directive';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -292,7 +293,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ConvertBytesToHigherUnitPipe,
     PaginatorComponent,
     SaveParamsDialogComponent,
-    MetadataAttributesDialogComponent
+    MetadataAttributesDialogComponent,
+    ResizableDirective
 
   ],
   imports: [
