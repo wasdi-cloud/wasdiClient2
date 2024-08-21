@@ -240,6 +240,7 @@
 	"IMPORT_PRODUCT_LIST_VARIABLES": "Variabile",
 	"IMPORT_PRODUCT_LIST_PROTOCOL": "Protocol",
 	"IMPORT_ERROR_SEARCH_REQUEST": "Eroare la deschiderea cererii de căutare",
+    "IMPORT_INVALID_DATE_RANGE": "Vă rugăm să introduceți un interval de date valid.",
 
 	"IMPORT_CRONTAB_YEAR": "An",
     "IMPORT_CRONTAB_SEASON": "Sezon",

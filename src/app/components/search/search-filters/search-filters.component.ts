@@ -14,6 +14,8 @@ import { MatSelectChange } from '@angular/material/select';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { MatDialog } from '@angular/material/dialog';
 import { OpenSearchService } from 'src/app/services/api/open-search.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-search-filters',
@@ -85,8 +87,10 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
     private m_oOpenSearchService: OpenSearchService,
     private m_oPagesService: PagesService,
     private m_oMissionFiltersService: MissionFiltersService,
+    private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oResultsOfSearchService: ResultOfSearchService,
-    private m_oSearchService: SearchService
+    private m_oSearchService: SearchService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -407,7 +411,23 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
    * Notification to Parent on when to execute the search
    */
   executeSearch() {
-    this.m_oSearchFilter.emit(this.m_oMissionObject);
+    if (this.checkValidDates() === true) {
+      this.m_oSearchFilter.emit(this.m_oMissionObject);
+    }
+  }
+
+
+  checkValidDates(): boolean {
+    let sFirstDate = new Date(this.m_sDateFrom);
+    let sSecondDate = new Date(this.m_sDateTo);
+    let sCurrentDate = new Date();
+
+    if (sFirstDate > sSecondDate || (sFirstDate > sCurrentDate)) {
+      this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("IMPORT_INVALID_DATE_RANGE"), "", "alert")
+      return false;
+    } else {
+      return true
+    }
   }
 
   /**
