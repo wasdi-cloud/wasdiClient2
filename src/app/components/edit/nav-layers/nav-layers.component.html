@@ -25,14 +25,17 @@
                     </div>
                     <div class="button-options d-flex flex-row gap-1">
                         <app-button [m_bMuted]="true" [m_sIconLeft]="'imagesearch_roller'" [m_sSize]="'small'"
-                            (click)="openStylesDialog()"></app-button>
+                            (click)="openStylesDialog()" matTooltip="{{'DIALOG_IMPORT_UPLOAD_STYLE' |
+                            translate }}"></app-button>
                         <app-button [m_bMuted]="true" [m_sIconLeft]="'fullscreen'" [m_sSize]="'small'"
-                            (click)="zoomOnBandImage(oBand.geoserverBoundingBox)"></app-button>
+                            (click)="zoomOnBandImage(oBand.geoserverBoundingBox)" matTooltip="{{'IMPORT_TOOLTIP_ZOOM_ON_PRODUCT' |
+                            translate }}"></app-button>
                         <app-button [m_bMuted]="true" [m_sIconLeft]="'close'" [m_sSize]="'small'"
-                            (click)="removeBandImage(oBand)"></app-button>
+                            (click)="removeBandImage(oBand)" matTooltip="{{'KEY_PHRASES.CLOSE' |
+                            translate }}"></app-button>
                     </div>
                 </div>
-                <div class="font-bold d-flex flex-row align-items-center gap-2 pe-2">
+                <div class=" font-bold d-flex flex-row align-items-center gap-2 pe-2">
                     Opacity:
                     <div class="slider-container flex-fill">
                         <app-slider [m_bHasThumbLabel]="true" [m_iValue]="m_iOpacityVal"
