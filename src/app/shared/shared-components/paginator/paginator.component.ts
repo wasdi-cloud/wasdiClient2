@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-paginator',
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.css']
 })
-export class PaginatorComponent {
+export class PaginatorComponent implements OnChanges {
   /**
    * Is the paginator the full paginator (for use with tables) or partial (for use in sidebars)?
    */
@@ -56,9 +56,12 @@ export class PaginatorComponent {
 
   constructor() { }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.isButtonDisabled();
+  }
+
   getTotalPages() {
     this.m_iTotalPages = this.m_iTotalItems / this.m_iItemsPerPage;
-
     return Math.ceil(this.m_iTotalPages);
   }
 
@@ -110,6 +113,11 @@ export class PaginatorComponent {
       oController.m_bIsMinusEnabled = false;
       oController.m_bIsStepEnabled = false;
     }
+
+    if (oController.m_iItemsPerPage <= oController.m_iTotalItems) {
+      oController.m_bIsMinusEnabled = true;
+      oController.m_bIsStepEnabled = true;
+    }
     //  else {
     //   oController.m_bIsMinusEnabled = true;
     //   oController.m_bIsStepEnabled = true;
@@ -126,6 +134,5 @@ export class PaginatorComponent {
     } else if (oController.m_iCurrentPage !== oController.getTotalPages()) {
       this.m_bIsStepEnabled = true;
     }
-
   }
 }

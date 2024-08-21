@@ -1,8 +1,8 @@
 <div class="d-flex flex-row justify-content-between w-100">
     <div class="d-flex flex-row align-items-center gap-4">
         <div *ngIf="m_bFullPaginator">{{m_iTotalItems > 1? m_iTotalItems : 0}} {{"PAGINATOR_ITEMS"| translate}}</div>
-        <span *ngIf="m_bMaxPaginator" class="material-symbols-outlined" (click)="!m_bIsMinusEnabled? '' : handlePagination('first')"
-            [class.disabled]="!m_bIsMinusEnabled">
+        <span *ngIf="m_bMaxPaginator" class="material-symbols-outlined"
+            (click)="!m_bIsMinusEnabled? '' : handlePagination('first')" [class.disabled]="!m_bIsMinusEnabled">
             first_page
         </span>
         <span class="material-symbols-outlined step-btn" (click)="!m_bIsMinusEnabled? '' : handlePagination('minus')"
@@ -22,14 +22,13 @@
             [class.disabled]="!m_bIsStepEnabled">
             arrow_forward_ios
         </span>
-        <span *ngIf="m_bMaxPaginator" class="material-symbols-outlined" (click)="m_bIsStepEnabled ? handlePagination('last') : ''"
-            [class.disabled]="!m_bIsStepEnabled">
+        <span *ngIf="m_bMaxPaginator" class="material-symbols-outlined"
+            (click)="m_bIsStepEnabled ? handlePagination('last') : ''" [class.disabled]="!m_bIsStepEnabled">
             last_page
         </span>
     </div>
-    <div *ngIf="m_bFullPaginator || m_bShowItemsPerPage" class="d-flex flex-row align-items-center gap-3">
+    <div *ngIf="(m_bFullPaginator || m_bShowItemsPerPage) && m_iTotalItems > 10" class="d-flex flex-row align-items-center gap-3">
         {{"PAGINATOR_PER_PAGE" | translate}}
-        <app-dropdown [m_aoDropdownItems]="m_aiItemsPerPage" [m_aoSelectedItems]="m_iItemsPerPage"
-            (m_oSelectionChange)="getItemsPerPageChange($event)"></app-dropdown>
+        <app-dropdown [m_aoDropdownItems]="m_aiItemsPerPage" [m_aoSelectedItems]="m_iItemsPerPage" (m_oSelectionChange)="getItemsPerPageChange($event)"></app-dropdown>
     </div>
 </div>
