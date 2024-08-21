@@ -6,8 +6,8 @@
             [m_bIsActive]="m_sActiveTab === 'layers'" (click)="setActiveTab('layers')"></app-tab>
     </div>
     <!-- Navigation and Layers content -->
-    <div class="map-container-panel flex-fill h-100" [hidden]="m_sActiveTab !== 'nav'">
-        <div class="" id="smallMapContainer" class=""></div>
+    <div class="map-container-panel flex-fill" [hidden]="m_sActiveTab !== 'nav'">
+        <div class="" id="smallMapContainer" [class.cesium-map]="b2DMapModeOn === true"></div>
     </div>
     <div class="layers-tab h-100" *ngIf="m_sActiveTab === 'layers'">
         <ul class="list-group pe-1">
