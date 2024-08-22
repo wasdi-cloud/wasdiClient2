@@ -80,6 +80,14 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
 
   public m_bIsLoadMoreBtnClickable: boolean = true;
 
+  private m_aoSelectedProcesses: Array<any> = [];
+
+  public getSelectedProcesses(): Array<any> {
+    return this.m_aoSelectedProcesses;
+  }
+
+  public m_bShowProcesses: boolean = true;
+
   /**
    * Interval function - set in ngOnInit
    */
@@ -323,7 +331,6 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     return sNumber;
   }
 
-
   getDuration(oProcess): string {
     let sStartDate = oProcess.operationStartDate;
     if (!oProcess.operationStartDate.endsWith("Z")) {
@@ -379,4 +386,73 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     return sTimeSpan;
   }
 
+  /**
+   * Change handler for Process Checkbox - either add or remove from m_oSelectedProcesses
+   * @param oEvent 
+   */
+  handleProcessSelection(oProcessLog, oEvent): void {
+    //If the checkbox is CHECKED (true) - handle adding to the array
+    if (oEvent.target.checked === true) {
+      // If there are no processes in the array, add it: 
+      if (this.m_aoSelectedProcesses.length === 0) {
+        this.m_aoSelectedProcesses.push(oProcessLog);
+      } else {
+        //Check if the process is already in the array
+        let bIncluded = false;
+        this.m_aoSelectedProcesses.forEach(oProcess => {
+          if (oProcess.processObjId === oProcessLog.processObjId) {
+            bIncluded = true;
+          }
+        })
+        //If it is NOT already in the array, then add it
+        if (bIncluded === false) {
+          this.m_aoSelectedProcesses.push(oProcessLog);
+        }
+      }
+    } else {
+      //Only execute action if there are selected processes
+      if (this.m_aoSelectedProcesses.length !== 0) {
+        let iIndex = null;
+        this.m_aoSelectedProcesses.forEach((oProcess, iLogIndex) => {
+          if (oProcess.processObjId === oProcessLog.processObjId) {
+            iIndex = iLogIndex;
+          }
+        })
+
+        if (iIndex !== null) {
+          this.m_aoSelectedProcesses.splice(iIndex, 1);
+        }
+      }
+    }
+  }
+
+  /**
+   * Click handler to hide the processes that are selected
+   */
+  hideProcesses() {
+    this.m_bShowProcesses = false;
+    this.m_aoAllProcessesLogs.forEach(oProcess => {
+      this.m_aoSelectedProcesses.forEach(oSelectedProcess => {
+        if (oProcess.processObjId === oSelectedProcess.processObjId) {
+          oProcess.selected = true;
+        }
+      })
+    })
+    //Clear the interval (Pause)
+    clearInterval(this.m_oInterval)
+  }
+
+  showAllProcesses() {
+    this.m_bShowProcesses = true;
+    this.m_aoSelectedProcesses = [];
+
+    //Unselect all Processes
+    this.m_aoAllProcessesLogs.forEach(oProcess => {
+      oProcess.selected = false;
+    })
+    //Restart the interval timer: 
+    this.m_oInterval = setInterval(() => {
+      this.getLastProcessesLogs();
+    }, 5000)
+  }
 }

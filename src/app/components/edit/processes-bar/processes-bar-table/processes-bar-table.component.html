@@ -1,23 +1,21 @@
 <div class="bottom-sheet-container d-flex flex-column" style="height: 95vh">
     <app-processes-bar [m_bIsOpen]="true"></app-processes-bar>
     <div class="processes-filter d-flex flex-row align-items-center justify-content-between gap-3 mx-3 p-2">
-        <div class="flex-fill d-flex flex-row gap-3 justify-content-between align-self-end" style="width: 70%;">
-            <app-dropdown class="flex-fill" style="width: 33%" [m_sLabel]="'DIALOG_LOGS_STATUS' | translate"
+        <div class="flex-fill d-flex flex-row gap-3 justify-content-between align-self-end">
+            <app-dropdown class="flex-fill" [m_sLabel]="'DIALOG_LOGS_STATUS' | translate"
                 [m_sPlaceholder]="'DIALOG_LOGS_STATUS_PLACEHOLDER' | translate" [m_aoSelectedItems]="m_oSelectedStatus"
                 [m_aoDropdownItems]="m_aoProcessStatuses"
                 (m_oSelectionChange)="catchFilterChange($event, 'status')"></app-dropdown>
-            <app-dropdown class="flex-fill" style="width: 33%" [m_sLabel]="'DIALOG_LOGS_OPERATION_TYPE' | translate"
+            <app-dropdown class="flex-fill" [m_sLabel]="'DIALOG_LOGS_OPERATION_TYPE' | translate"
                 [m_aoSelectedItems]="m_oSelectedType" [m_sPlaceholder]="'DIALOG_LOGS_OPERATION_SELECT'| translate "
                 [m_aoDropdownItems]="m_aoProcessTypes"
                 (m_oSelectionChange)="catchFilterChange($event, 'type')"></app-dropdown>
-            <app-input-field style="padding-bottom: 2px" class="flex-fill" style="width: 33%"
-                [m_sLabel]="'DIALOG_LOGS_NAME' | translate" [m_sInputValue]="m_oFilter.sName"
-                [m_sPlaceholder]="'DIALOG_LOGS_SEARCH_NAME'| translate"
+            <app-input-field style="padding-bottom: 2px" class="flex-fill" [m_sLabel]="'DIALOG_LOGS_NAME' | translate"
+                [m_sInputValue]="m_oFilter.sName" [m_sPlaceholder]="'DIALOG_LOGS_SEARCH_NAME'| translate"
                 (m_oInputChange)="catchFilterChange($event, 'name')"></app-input-field>
 
         </div>
         <div class="d-flex flex-row gap-2 align-self-end">
-
             <div class="button-container align-self-end d-flex gap-2 flex-row">
                 <app-button [m_sLabel]="'EDITOR_PRODUCTS_FILTER_APPLY' | translate"
                     (click)="applyFilters()"></app-button>
@@ -26,12 +24,17 @@
             </div>
             <app-button class="" [m_sLabel]="'DIALOG_LOGS_DOWNLOAD' | translate" [m_bOutline]="true"
                 (click)="downloadProcessesFile()"></app-button>
+            <app-button *ngIf="getSelectedProcesses().length > 0" class="" [m_sLabel]="'Hide Processes'"
+                [m_bOutline]="true" (click)="hideProcesses()"></app-button>
+            <app-button *ngIf="getSelectedProcesses().length  > 0 && m_bShowProcesses === false" class=""
+                [m_sLabel]="'Show All Processes'" [m_bOutline]="true" (click)="showAllProcesses()"></app-button>
         </div>
     </div>
     <div class="table-wrapper flex-fill pb-3">
         <table>
             <thead class="table-heading-container">
                 <tr>
+                    <td></td>
                     <th>{{"DIALOG_LOGS_STATUS" | translate}}</th>
                     <th>{{"DIALOG_LOGS_OPERATION" | translate}}</th>
                     <th>{{"DIALOG_LOGS_NAME" | translate}}</th>
@@ -42,7 +45,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let oProcessLog of m_aoAllProcessesLogs">
+                <tr *ngFor="let oProcessLog of m_aoAllProcessesLogs" [hidden]="oProcessLog.selected">
+                    <td>
+                        <input type="checkbox" class="wasdi-checkbox" [checked]="oProcessLog.selected"
+                            (change)="handleProcessSelection(oProcessLog, $event)">
+                    </td>
                     <td>
                         <app-table-cell [m_sLabel]="oProcessLog.status" [m_bIsTag]="true"></app-table-cell>
                     </td>
