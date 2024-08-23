@@ -1,4 +1,4 @@
-import { Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { PayloadDialogComponent } from 'src/app/components/edit/payload-dialog/payload-dialog.component';
 import { ProcessLogsDialogComponent } from 'src/app/components/edit/process-logs-dialog/process-logs-dialog.component';
@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './processes-bar-table.component.html',
   styleUrls: ['./processes-bar-table.component.css']
 })
-export class ProcessesBarTableComponent implements OnInit, OnChanges, OnDestroy {
+export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   /**
    * Filter Inputs from header
    */
@@ -124,15 +124,11 @@ export class ProcessesBarTableComponent implements OnInit, OnChanges, OnDestroy 
 
     this.getAllProcessesLogs();
 
-    // this.m_oInterval = setInterval(() => {
-    //   this.getLastProcessesLogs();
-    // }, 5000)
+    this.m_oInterval = setInterval(() => {
+      this.getLastProcessesLogs();
+    }, 5000)
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-
-  }
-  
   ngOnDestroy(): void {
     clearInterval(this.m_oInterval)
   }
@@ -203,7 +199,6 @@ export class ProcessesBarTableComponent implements OnInit, OnChanges, OnDestroy 
       oLink.download = "processes_" + this.m_oActiveWorkspace.name + "_" + sTimestamp + ".csv";
 
       oLink.click();
-
     })
   }
 
@@ -397,6 +392,7 @@ export class ProcessesBarTableComponent implements OnInit, OnChanges, OnDestroy 
   handleProcessSelection(oProcessLog, oEvent): void {
     //If the checkbox is CHECKED (true) - handle adding to the array
     if (oEvent.target.checked === true) {
+      clearInterval(this.m_oInterval);
       // If there are no processes in the array, add it: 
       if (this.m_aoSelectedProcesses.length === 0) {
         this.m_aoSelectedProcesses.push(oProcessLog);
@@ -426,6 +422,13 @@ export class ProcessesBarTableComponent implements OnInit, OnChanges, OnDestroy 
         if (iIndex !== null) {
           this.m_aoSelectedProcesses.splice(iIndex, 1);
         }
+      }
+
+      //Execute after the Selected Process was removed and restart the interval
+      if(this.m_aoSelectedProcesses.length === 0) {
+        this.m_oInterval = setInterval(() => {
+          this.getLastProcessesLogs();
+        }, 5000)
       }
     }
   }

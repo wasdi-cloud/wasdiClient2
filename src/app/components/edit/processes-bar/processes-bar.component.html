@@ -12,12 +12,12 @@
                         class="font-bold">{{m_oLastProcesses.operationStartDate}}</span></div>
                 <div>{{"DIALOG_LOGS_OPERATION_TYPE" | translate}}: <span
                         class="font-bold">{{m_oLastProcesses.operationType}}</span></div>
-                <div>{{ ("ROOT_LABEL_NUMBER_OF_RUNNING_PROCESSES" | translate)}}: <span
-                        class="font-bold">{{m_oLastProcesses.productName}}</span>
+                <div *ngIf="m_oLastProcesses.productName">{{"ROOT_LABEL_NUMBER_OF_RUNNING_PROCESSES" | translate}}:
+                    <span class="font-bold">{{m_oLastProcesses.productName}}</span>
                 </div>
             </div>
         </div>
-        <div class="running-queue-container d-flex flex-row align-items-center justify-content-between gap-3">
+        <div class="running-queue-container d-flex flex-row align-items-center gap-3">
             <div *ngIf="m_oLastProcesses === null" class="d-flex flex-row align-items-center gap-1">
                 {{("ROOT_LABEL_NUMBER_OF_RUNNING_PROCESSES" | translate)}}: <span
                     class="font-bold">{{m_iNumberOfProcesses}} </span>
