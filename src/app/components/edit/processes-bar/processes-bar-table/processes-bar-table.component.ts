@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { PayloadDialogComponent } from 'src/app/components/edit/payload-dialog/payload-dialog.component';
 import { ProcessLogsDialogComponent } from 'src/app/components/edit/process-logs-dialog/process-logs-dialog.component';
@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './processes-bar-table.component.html',
   styleUrls: ['./processes-bar-table.component.css']
 })
-export class ProcessesBarTableComponent implements OnInit, OnDestroy {
+export class ProcessesBarTableComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Filter Inputs from header
    */
@@ -124,11 +124,15 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
 
     this.getAllProcessesLogs();
 
-    this.m_oInterval = setInterval(() => {
-      this.getLastProcessesLogs();
-    }, 5000)
+    // this.m_oInterval = setInterval(() => {
+    //   this.getLastProcessesLogs();
+    // }, 5000)
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+
+  }
+  
   ngOnDestroy(): void {
     clearInterval(this.m_oInterval)
   }
