@@ -75,7 +75,7 @@ export class ProcessesBarComponent implements OnInit {
 
   ngOnInit() {
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-    this.getSummary();
+    // this.getSummary();
 
     this.m_oProcessesBarSubscription = this.m_oProcessWorkspaceService.updateProcessBarMsg.subscribe(oResponse => {
       if (oResponse.message === "m_aoProcessesRunning:updated" && oResponse.data === true) {
