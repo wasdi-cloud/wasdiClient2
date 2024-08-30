@@ -395,11 +395,11 @@ export class AppUiComponent implements OnInit {
   /**
    * Called to set the workspace where the user wants to run the app
    * @param oEvent Notification of the selection of a Workspace
-   * @returns 
    */
-  getSelectedWorkspaceId(oEvent) {
+  getSelectedWorkspaceId(oEvent): void {
     if (oEvent.isCreating) {
       this.m_oWorkspaceForm.sNewWorkspaceName = oEvent.workspace;
+      this.m_oSelectedWorkspace = {} as Workspace;
       this.m_bRunInNewWorkspace = true;
     } else {
       this.m_oSelectedWorkspace = oEvent.workspace;
@@ -409,9 +409,12 @@ export class AppUiComponent implements OnInit {
     this.m_bNotification = oEvent.notification
   }
 
-  checkParams() {
+  /**
+   * Check if the inputted parameters in the WAPPS component were valid
+   * @returns boolean
+   */
+  checkParams(): boolean {
     let bIsValid: boolean = true;
-
     let asMessages: string[] = [];
 
     this.m_sMessage = this.m_oTranslate.instant("MSG_MKT_APP_UI_INVALID") + ":";
@@ -427,9 +430,7 @@ export class AppUiComponent implements OnInit {
       for (let iMessages = 0; iMessages < asMessages.length; iMessages++) {
         this.m_sMessage += `<li>${asMessages[iMessages]}</li>`;
       }
-
     }
-
     return bIsValid;
   }
 
@@ -449,10 +450,6 @@ export class AppUiComponent implements OnInit {
 
   setSelectedWorkspace(oEvent: any) {
     this.m_oWorkspaceForm.sExistingWorkspace = oEvent.value;
-  }
-
-  toggleCollapse() {
-    this.m_bIsCollapsed = !this.m_bIsCollapsed;
   }
 
   marketplaceReturn() {
@@ -531,7 +528,6 @@ export class AppUiComponent implements OnInit {
     } else {
       sTagContent = 'green';
     }
-
     return sTagColor;
   }
 

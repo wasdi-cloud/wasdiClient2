@@ -115,13 +115,13 @@ export class WapDisplayComponent implements OnInit {
   /**
    * Get products for workspace and pass to ProductsCombo child
    */
-  getWorkspaceProducts(): any {
+  getWorkspaceProducts(): void{
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.workspaceId)) {
-      return [];
+      this.m_aoProductsArray = [];
     } else {
       this.m_oProductService.getProductListByWorkspace(this.workspaceId).subscribe(oResponse => {
         this.m_aoProductsArray = oResponse
-        return this.m_asProductNames = this.m_aoProductsArray.map(element => {
+        this.m_asProductNames = this.m_aoProductsArray.map(element => {
           return element.name
         });
       })

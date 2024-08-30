@@ -78,8 +78,19 @@ export class AppUiMenuComponent {
     this.m_oExecutePurchaseEmitter.emit(true);
   }
 
-  newOrExistingWorkspaceChanged() {
+  /**
+   * Handle change to new/existing workspace checkbox. If switching back to new, emit Selected Workspace with default options
+   */
+  newOrExistingWorkspaceChanged(): void {
     this.m_bRunInNewWorkspace = !this.m_bRunInNewWorkspace;
+    if (this.m_bRunInNewWorkspace === true) {
+
+      this.m_oSelectedWorkspace.emit({
+        isCreating: this.m_bRunInNewWorkspace,
+        notification: this.m_bNotification,
+        workspace: null
+      });
+    }
   }
 
   openNotificationHelp() {
