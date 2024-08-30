@@ -121,7 +121,6 @@ export class WapDisplayComponent implements OnInit {
     } else {
       this.m_oProductService.getProductListByWorkspace(this.workspaceId).subscribe(oResponse => {
         this.m_aoProductsArray = oResponse
-
         return this.m_asProductNames = this.m_aoProductsArray.map(element => {
           return element.name
         });

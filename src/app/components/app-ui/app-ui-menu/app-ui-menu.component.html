@@ -20,7 +20,7 @@
                     translate}}</label>
             </div>
             <app-autocomplete [m_aoInputs]="m_aoWorkspaces" *ngIf="!m_bRunInNewWorkspace"
-                (m_oSelectionChange)="this.m_oActiveWorkspace = $event"
+                (m_oSelectionChange)="getSelectedWorkspace($event)"
                 [m_sPlaceholder]="m_oActiveWorkspace.name ? m_oActiveWorkspace.name : 'APP_UI_SEARCH_WS' | translate"></app-autocomplete>
             <app-input-field *ngIf="m_bRunInNewWorkspace"
                 [m_sPlaceholder]="'APP_UI_AUTOMATIC_NAME_PLACEHOLDER' | translate"
