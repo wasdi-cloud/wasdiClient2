@@ -205,10 +205,10 @@ export class EditComponent implements OnInit, OnDestroy {
         oController.receivedNewProductMessage(oMessage);
         break;
       case "DELETE":
-        // oController.getProductListByWorkspace();
+        oController.getProductList();
         break;
     }
-    if (oMessage.payload.includes("DONE")) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) && oMessage.payload.includes("DONE")) {
       oController.m_oNotificationsQueueService.setNotifications(oMessage);
     }
 
