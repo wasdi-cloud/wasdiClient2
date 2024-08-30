@@ -81,6 +81,11 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   public m_bIsLoadMoreBtnClickable: boolean = true;
 
   /**
+   * Flag to check if we are getting the filtered process logs or the unfiltered logs 
+   */
+  private m_bGetFilteredLog: boolean = false;
+
+  /**
    * Interval function - set in ngOnInit
    */
   private m_oInterval: any;
@@ -135,7 +140,21 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, 0, 40, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe({
+    //Placeholder values to pass to getFilteredProcessesFromWorkspace function
+    let sName: string = "";
+    let sStatus: string = "";
+    let sType: string = "";
+    let sDate: string = ""
+
+    //If the filters have been set, set the placeholder values;
+    if (this.m_bGetFilteredLog) {
+      sName = this.m_oFilter.sName;
+      sStatus = this.m_oFilter.sStatus;
+      sType = this.m_oFilter.sType;
+      sDate = this.m_oFilter.sDate;
+    }
+
+    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, 0, 40, sStatus, sType, sDate, sName).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           if (oResponse.length > 0) {
@@ -252,6 +271,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   applyFilters() {
     this.resetCounters();
     this.m_aoAllProcessesLogs = [];
+    this.m_bGetFilteredLog = true;
     this.getAllProcessesLogs();
   }
 
@@ -269,6 +289,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     this.m_oSelectedStatus = [];
     this.m_oSelectedType = [];
     this.resetCounters();
+    this.m_bGetFilteredLog = false;
     this.getAllProcessesLogs();
   }
 
