@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="dialog-footer d-flex flex-row gap-2 justify-content-end mt-3">
-        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bMuted]="true"></app-button>
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bMuted]="true" (click)="onDismiss()"></app-button>
         <app-button [m_sLabel]="'DIALOG_IMPORT_IMPORT' | translate" [m_bDisabled]="!m_oFile"
             (click)="onUploadFile()"></app-button>
     </div>
