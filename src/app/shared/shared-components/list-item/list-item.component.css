@@ -110,6 +110,11 @@ div.processor-toolbar>span.material-symbols-outlined {
     font-size: 16px;
 }
 
-.disabled, .disabled:hover {
+.disabled,
+.disabled:hover {
     background-color: var(--neutral15) !important;
+}
+
+.parent-disabled {
+    background-color: var(--neutral25) !important;
 }

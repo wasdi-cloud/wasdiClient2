@@ -59,11 +59,16 @@ export class ProductsTableComponent implements OnInit {
     //Set the products array value
     this.m_aoProducts.subscribe(oResponse => {
       if (oResponse.length > 0) {
-        this.m_aoProductsList = oResponse;
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProvider) === false) {
-          if (this.m_oActiveProvider.name) {
-            this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
-          }
+          this.m_aoProductsList = [];
+          oResponse.forEach(oProduct => {
+            if (oProduct.provider === this.m_oActiveProvider.name) {
+              this.m_aoProductsList.push(oProduct);
+            }
+            if (this.m_oActiveProvider.name) {
+              this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
+            }
+          })
         }
       }
     });
@@ -83,11 +88,17 @@ export class ProductsTableComponent implements OnInit {
       return false;
     }
 
-    this.m_oActiveProvider = oProvider;
-    this.getNumberOfProductsByProdvider(oProvider);
-    this.updateLayerListForActiveTab(oProvider)
-    this.m_oActiveProviderChange.emit(this.m_oActiveProvider);
-    return true;
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProvider) && (oProvider.name === this.m_oActiveProvider.name)) {
+      return true;
+    } else {
+      this.m_oActiveProvider = oProvider;
+      this.m_oActiveProvider.isOpen = true;
+      this.getNumberOfProductsByProvider(oProvider);
+      this.updateLayerListForActiveTab(oProvider)
+      this.m_oActiveProviderChange.emit(this.m_oActiveProvider);
+      return true;
+    }
+
   }
 
   /**
@@ -111,11 +122,10 @@ export class ProductsTableComponent implements OnInit {
    */
   isProviderLayerListEmpty(sProviderName: string) {
     if (!sProviderName) {
-      console.log("no provider")
       return false;
     }
-    var iNumberOfProduct = this.m_aoProductsList.length;
-    var bIsEmpty = true;
+    let iNumberOfProduct = this.m_aoProductsList.length;
+    let bIsEmpty = true;
 
     for (let iIndexProduct = 0; iIndexProduct < iNumberOfProduct; iIndexProduct++) {
       if (this.m_aoProductsList[iIndexProduct].provider === sProviderName) {
@@ -177,15 +187,14 @@ export class ProductsTableComponent implements OnInit {
         }
       }
     }
-
     return null;
   }
 
-  getNumberOfProductsByProdvider(sProviderName) {
+  getNumberOfProductsByProvider(sProviderName) {
     return this.m_oPageService.getNumberOfProductsByProvider(sProviderName)
   }
 
-  deleteLayers() {
+  deleteLayers(): boolean {
     if (this.isProductListEmpty() === true) {
       return false;
     }
@@ -206,9 +215,9 @@ export class ProductsTableComponent implements OnInit {
 
   /********** Button Handler Functions **********/
   /**
-   * 
+   * Navigate the user back to the filters list
    */
-  navigateBackToFilters() {
+  navigateBackToFilters(): void {
     this.m_aoProvidersList = [];
     this.m_oNavigateBackOutput.emit(false);
   }
@@ -216,7 +225,7 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Add checked product to selected products array
    */
-  addProductSelectedProducts(oInputProduct) {
+  addProductSelectedProducts(oInputProduct): void {
     oInputProduct.selected = !oInputProduct.selected
 
     if (oInputProduct.selected === true) {
@@ -238,7 +247,7 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Open dialog to add single product to a workspace
    */
-  sendSingleProductToWorkspace(oProduct) {
+  sendSingleProductToWorkspace(oProduct): void {
     let oDialog = this.m_oDialog.open(WorkspacesListDialogComponent, {
       height: "70vh",
       width: '50vw',
@@ -251,7 +260,7 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Move map to selected Product
    */
-  zoomToProduct(oRectangle) {
+  zoomToProduct(oRectangle): void {
     let oBounds = oRectangle.getBounds();
     let oNorthEast = oBounds.getNorthEast();
     let oSouthWest = oBounds.getSouthWest();
@@ -269,8 +278,9 @@ export class ProductsTableComponent implements OnInit {
 
   /**
    * Open the information dialog for product
+   * @returns void
    */
-  openProductInfoDialog(oProduct) {
+  openProductInfoDialog(oProduct): void {
     let oDialog = this.m_oDialog.open(ProductInfoComponent, {
       data: {
         product: oProduct
@@ -283,8 +293,9 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Handle mouseover on product card
    * @param oRectangle
+   * @returns boolean
    */
-  changeRectangleStyleMouseOver(oRectangle) {
+  changeRectangleStyleMouseOver(oRectangle): boolean {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
       console.log("Error: rectangle is undefined ");
       return false;
@@ -317,7 +328,12 @@ export class ProductsTableComponent implements OnInit {
   }
 
   /********** OPEN DIALOG HANDLERS **********/
-  openAddToWorkspaceDialog() {
+
+  /**
+   * Open the add to Workspace Dialog
+   * @returns boolean
+   */
+  openAddToWorkspaceDialog(): boolean {
     let aoListOfSelectedProducts = this.m_aoSelectedProducts;
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoListOfSelectedProducts) === true) {
@@ -334,19 +350,42 @@ export class ProductsTableComponent implements OnInit {
     return true;
   }
 
+  /**
+   * Toggle the expand more/less chevron in the list item component
+   * @param oEvent 
+   * @param oProvider 
+   */
+  toggleActiveProviderOpen(oEvent, oProvider: any): void {
+    if (oProvider.name === this.m_oActiveProvider.name) {
+      this.m_oActiveProvider.isOpen = !this.m_oActiveProvider.isOpen;
+    }
+  }
+
   /********** Pagination Handler Functions **********/
 
-  changeNumberOfProductsPerPage(event) {
+  /**
+   * Handle change in number of products per page from paginator
+   * @param event 
+   */
+  changeNumberOfProductsPerPage(event): void {
     this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event;
     this.m_oPageService.changeNumberOfProductsPerPage(this.m_oActiveProvider.name);
   }
 
+  /**
+   * Read pagination object + change page from paginator
+   * @param oEvent 
+   * @param sProviderName 
+   */
   handlePagination(oEvent, sProviderName: string) {
-    console.log(oEvent)
     this.m_oPageService.changePage(oEvent.pageIndex, sProviderName)
   }
 
-  getProductsPerPageOptions() {
+  /**
+   * Get the page number options for paginator
+   * @returns number[]
+   */
+  getProductsPerPageOptions(): number[] {
     return this.m_oPageService.getProvidersPerPageOptions();
   }
 }

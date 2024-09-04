@@ -115,7 +115,7 @@ export class ListItemComponent {
    * @param sLocation 
    */
   emitToolbarClick(sLocation: string): void {
-    this.m_oEmitClickEvent.emit(sLocation)
+    this.m_oEmitClickEvent.emit(sLocation);
   }
 
   /**

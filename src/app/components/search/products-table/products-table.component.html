@@ -15,15 +15,18 @@
             <div class="mb-1 d-flex flex-column">
                 <app-list-item [m_bParentItem]="true" [m_sLabel]="oProvider.name"
                     [m_sDescription]="oProvider.totalOfProducts"
-                    [m_bParentIsOpen]="m_oActiveProvider.name === oProvider.name"
+                    [m_bParentIsOpen]="(m_oActiveProvider.name === oProvider.name) && m_oActiveProvider.isOpen"
+                    (m_oEmitClickEvent)="toggleActiveProviderOpen($event, oProvider)"
+                    [m_bIsDisabled]="oProvider.totalOfProducts <= 0"
                     (click)="setActiveProvider(oProvider)"></app-list-item>
                 <!-- If there are no products -->
-                <div class="ps-1" *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts <= 0">
+                <div class="ps-1"
+                    *ngIf="(m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts <= 0) && m_oActiveProvider.isOpen">
                     Could not find any products.
                 </div>
 
                 <div class="d-flex flex-column gap-1 px-1"
-                    *ngIf="m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 0">
+                    *ngIf="(m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 0) && m_oActiveProvider.isOpen">
                     <app-paginator (m_oClickEmitter)="handlePagination($event, oProvider.name)"
                         [m_bFullPaginator]="false" [m_iTotalItems]="oProvider.totalOfProducts"
                         (m_iItemsPerPageChange)="changeNumberOfProductsPerPage($event)"></app-paginator>

@@ -227,7 +227,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     this.m_oSearchService.setOffset(iOffset);//default 0 (index page)
     this.m_oSearchService.setLimit(oProvider.productsPerPageSelected);// default 10 (total of element per page)
     oProvider.isLoaded = false;
-    oProvider.totalOfProductss = 0;
+    oProvider.totalOfProducts = 0;
 
     this.m_oSearchService.getProductsCount().subscribe({
       next: oResponse => {
