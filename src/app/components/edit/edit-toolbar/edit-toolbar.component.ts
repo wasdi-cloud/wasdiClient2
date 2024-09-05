@@ -16,6 +16,7 @@ import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/wor
 import { Product } from 'src/app/shared/models/product.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
+import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
 
 
 
@@ -129,6 +130,14 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
       width: '70vw',
       data: oDialogData
     });
+  }
+
+  openStylesDialog(): void {
+    this.m_oDialog.open(StylesDialogComponent, {
+      height: '90vh',
+      width: '90vw',
+      maxWidth: '1500px',
+    })
   }
 
   rabbitMessageHook(oRabbitMessage, oController): void {
