@@ -185,12 +185,8 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(sWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
       if (oResponse) {
         //this replace the word download by fetch in the process coming for the server and also change the processes.payload the same way
-        var re = /DOWNLOAD/gi;
         for (const oResponseElement of oResponse) {
-          oResponseElement.payload.replace(re, "FETCH")
-          if (oResponseElement.operationType == "DOWNLOAD") {
-            oResponseElement.operationType = "FETCH"
-          }
+          this.changeDownloadToFetch(oResponseElement);
         }
         this.m_aoAllProcessesLogs = this.m_aoAllProcessesLogs.concat(oResponse);
         this.calculateNextListOfProcesses();
@@ -206,6 +202,17 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  private changeDownloadToFetch(oResponseElement) {
+    var re = /DOWNLOAD/gi;
+
+    if (oResponseElement.payload) {
+      oResponseElement.payload.replace(re, "FETCH")
+    }
+    if (oResponseElement.operationType == "DOWNLOAD") {
+      oResponseElement.operationType = "FETCH"
+    }
+  }
+
   calculateNextListOfProcesses() {
     this.m_iFirstProcess += this.m_iNumberOfProcessForRequest;
     this.m_iLastProcess += this.m_iNumberOfProcessForRequest;
@@ -214,12 +221,9 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   downloadProcessesFile() {
     this.m_oProcessWorkspaceService.getAllProcessesFromServer(this.m_oActiveWorkspace.workspaceId, null, null).subscribe(oResponse => {
       //this replace the word download by fetch in the process coming for the server and also change the processes.payload the same way
-      var re = /DOWNLOAD/gi;
+
       for (const oResponseElement of oResponse) {
-        oResponseElement.payload.replace(re, "FETCH")
-        if (oResponseElement.operationType == "DOWNLOAD") {
-          oResponseElement.operationType = "FETCH"
-        }
+        this.changeDownloadToFetch(oResponseElement)
       }
       this.m_aoAllProcessesLogs = oResponse;
       let file = this.generateLogFile();
@@ -266,7 +270,8 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
       let sOperationDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationStartDate;
       let sFileSize = this.m_aoAllProcessesLogs[iIndexProcessLog].fileSize;
       let sOperationEndDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationEndDate;
-      let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType == "DOWNLOAD" ? "FETCH" : this.m_aoAllProcessesLogs[iIndexProcessLog].operationType;
+      // let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType == "DOWNLOAD" ? "FETCH" : this.m_aoAllProcessesLogs[iIndexProcessLog].operationType;
+      let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType
       let sPid = this.m_aoAllProcessesLogs[iIndexProcessLog].pid;
       let sProductName = this.m_aoAllProcessesLogs[iIndexProcessLog].productName;
       let sProgressPerc = this.m_aoAllProcessesLogs[iIndexProcessLog].progressPerc;
