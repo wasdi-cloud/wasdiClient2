@@ -1,2 +1,3 @@
 <app-dropdown [m_bIsMultiSelect]="true" [m_aoDropdownItems]="oListboxInput.aoElements"
-    [m_sLabel]="oListboxInput.label" (m_oSelectionChange)="getSelections($event)" [m_bHasSearch]="true"></app-dropdown>
+    [matTooltip]="oListboxInput?.tooltip" [m_sLabel]="oListboxInput.label" (m_oSelectionChange)="getSelections($event)"
+    [m_bHasSearch]="true"></app-dropdown>
