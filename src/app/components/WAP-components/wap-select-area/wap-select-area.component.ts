@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ManualBoundingBoxComponent } from '../../../shared/shared-components/manual-bounding-box/manual-bounding-box.component';
@@ -18,12 +18,17 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 /**
  * WASDI Select Area User Control
  */
-export class WapSelectAreaComponent implements OnInit {
+export class WapSelectAreaComponent implements OnInit, OnChanges {
 
   /**
    * Map input as described by the User Interface
    */
   @Input() m_oMapInput;
+
+  /**
+   * Is the map located on the active tab?
+   */
+  @Input() m_bParentTabActive: boolean = false;
 
   /**
    * Event about map changed
@@ -71,7 +76,7 @@ export class WapSelectAreaComponent implements OnInit {
    * @param m_oTranslateService 
    */
   constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService, private m_oDialog: MatDialog) {
-    //console.log("Creating WAP Map Component with MapId: " + this.m_sMapId)
+    // console.log("Creating WAP Map Component with MapId: " + this.m_sMapId)
   }
 
   /**
@@ -109,6 +114,12 @@ export class WapSelectAreaComponent implements OnInit {
       oController.addManualBbox(oMap);
       oController.addBoundingBoxDrawerOnMap(oMap);
     }, 500);
+  }
+
+  ngOnChanges() { 
+    if(this.m_bParentTabActive === true) {
+      this.m_oMap.invalidateSize();
+    }
   }
 
   ngOnDestroy(): void {
