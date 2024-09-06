@@ -51,7 +51,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-    //RabbitStomp service call 
+    //RabbitStomp service call
     this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("LAUNCHJUPYTERNOTEBOOK",
       this,
       this.rabbitMessageHook, true)
@@ -88,7 +88,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   openImportDialog(): void {
     this.m_oDialog.open(ImportDialogComponent, {
       height: '425px',
-      width: '660px'
+      width: '660px',
     })
   }
 
