@@ -99,7 +99,7 @@ export const AppUIItems = [
     },
     {
         label: "DIALOG_PROCESSOR_UI_LISTBOX",
-        clickInput: "List Box"
+        clickInput: "listbox"
     },
     {
         label: "DIALOG_PROCESSOR_UI_HIDDEN_FIELD",

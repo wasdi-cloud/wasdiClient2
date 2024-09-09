@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div class="d-flex flex-column" [matTooltip]="m_oSliderInput?.tooltip">
     <label for="">{{m_oSliderInput.label}}</label>
     <app-slider [m_bHasThumbLabel]="true" [m_iMaxValue]="m_oSliderInput.m_iMax" [m_iMinValue]="m_oSliderInput.m_iMin"
         [m_iValue]="m_oSliderInput.m_iValue" (m_oSelectionChange)="getSelectionChange($event)"></app-slider>
