@@ -12,8 +12,9 @@
         <div *ngIf="!m_bShowTotalPages">
             {{m_iCurrentPage}}
         </div>
-        <div *ngIf="m_bShowTotalPages" class="d-flex flex-row align-items-center gap-2">
-            <input type="text" class="form-control" [(ngModel)]="m_iCurrentPage">
+
+      <div *ngIf="m_bShowTotalPages" class="d-flex flex-row align-items-center gap-2">
+            <input type="number" class="form-control" [(ngModel)]="m_iCurrentPage">
             <div class="d-flex flex-row align-items-center">
                 / {{getTotalPages()}}
             </div>
