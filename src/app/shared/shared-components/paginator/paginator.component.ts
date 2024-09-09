@@ -76,6 +76,14 @@ export class PaginatorComponent implements OnChanges {
 
   handlePagination(sLabel) {
     let oController = this;
+    // Ensure the current page is within valid bounds (1 to total pages)
+    if (this.m_iCurrentPage > oController.getTotalPages()) {
+      this.m_iCurrentPage = oController.getTotalPages();
+    }
+    if (this.m_iCurrentPage < 1) {
+      this.m_iCurrentPage = 1;
+    }
+
     let oPagination = {
       previousPageIndex: this.m_iCurrentPage,
       pageIndex: null,
@@ -94,10 +102,17 @@ export class PaginatorComponent implements OnChanges {
         break
       case 'minus':
         this.m_iCurrentPage -= 1;
+
+        if (this.m_iCurrentPage < 1) {
+          this.m_iCurrentPage = 1;
+        }
         oPagination.pageIndex = this.m_iCurrentPage;
         break;
       case 'step':
         this.m_iCurrentPage += 1;
+        if (this.m_iCurrentPage > oController.getTotalPages()) {
+          this.m_iCurrentPage = oController.getTotalPages();
+        }
         oPagination.pageIndex = this.m_iCurrentPage;
         break;
       default:
