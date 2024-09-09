@@ -115,6 +115,9 @@ export class PaginatorComponent implements OnChanges {
         }
         oPagination.pageIndex = this.m_iCurrentPage;
         break;
+      case 'input':  // For when Enter is pressed after inputting a number
+        oPagination.pageIndex = this.m_iCurrentPage;
+        break;
       default:
     }
     this.isButtonDisabled();

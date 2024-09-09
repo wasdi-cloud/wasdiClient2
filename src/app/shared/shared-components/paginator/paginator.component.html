@@ -14,7 +14,7 @@
         </div>
 
       <div *ngIf="m_bShowTotalPages" class="d-flex flex-row align-items-center gap-2">
-            <input type="number" class="form-control" [(ngModel)]="m_iCurrentPage">
+            <input type="number" class="form-control" [(ngModel)]="m_iCurrentPage" (keyup.enter)="handlePagination('input')" >
             <div class="d-flex flex-row align-items-center">
                 / {{getTotalPages()}}
             </div>
