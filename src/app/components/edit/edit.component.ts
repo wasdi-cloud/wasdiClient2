@@ -208,9 +208,14 @@ export class EditComponent implements OnInit, OnDestroy {
         oController.getProductList();
         break;
     }
-    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload) && oMessage.payload.includes("DONE")) {
-      oController.m_oNotificationsQueueService.setNotifications(oMessage);
-    }
+
+    // Set the notification
+    // if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload)) {
+    //   //Ensure the payload is a string (can be a product object) 
+    //   if (typeof oMessage.payload === 'string' && oMessage.payload.includes("DONE")) {
+    //     oController.m_oNotificationsQueueService.setNotifications(oMessage);
+    //   }
+    // }
 
     WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate, oController);
   }
