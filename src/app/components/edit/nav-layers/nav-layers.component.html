@@ -19,7 +19,7 @@
                         <div class="legend-dot dot-2"></div>
                         <div class="legend-dot dot-3"></div>
                     </div>
-                    <div class="band-title d-flex flex-column gap-1">
+                    <div class="band-title d-flex flex-column flex-fill gap-1"  matTooltip="{{oBand.layerId}}" (click)="copyLayerId(oBand.layerId)">
                         <p class="band-info">{{oBand.productName}}</p>
                         <p class="band-info">{{oBand.name}}</p>
                     </div>
