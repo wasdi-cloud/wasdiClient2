@@ -84,6 +84,8 @@ export class ListItemComponent {
    */
   @Input() m_bIsDisabled?: boolean = false;
 
+  @Input() m_bIsHovering?: boolean = false;
+
   /**
    * Callback function for opening the info dialog
    */

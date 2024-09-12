@@ -128,6 +128,10 @@ export class MapService {
    */
   m_oManualBboxInput: any = null;
 
+  m_oSelectedRectangle: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  _m_oSelectedRectangle$ = this.m_oSelectedRectangle.asObservable();
+
   /**
    * Init options for leaflet-draw
    */
@@ -541,6 +545,7 @@ export class MapService {
     * @returns {null}
     */
   addRectangleByBoundsArrayOnMap(aaBounds, sColor, iIndexLayers) {
+    let oController = this;
     if (!aaBounds) {
       return null;
     }
@@ -560,16 +565,19 @@ export class MapService {
       oRectangle.on("click", function (event) {
         //->problematic here
         console.log("on-mouse-click-rectangle")
-        //$rootScope.$broadcast('on-mouse-click-rectangle', { rectangle: oRectangle });//SEND MESSAGE TO IMPORTCONTROLLER
+        oController.m_oSelectedRectangle.next({ action: 'scroll-to', rectangle: oRectangle });
+        //$rootScope.$broadcast('on-mouse-click-rectangle', { rectangle: oRectangle });//SEND MESSAGE TO IMPORT CONTROLLER
       });
       //mouse over event change rectangle style
       oRectangle.on("mouseover", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
         oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
         oRectangle.getBounds();
+        oController.m_oSelectedRectangle.next({ action: 'highlight', rectangle: oRectangle })
       });
       //mouse out event set default value of style
       oRectangle.on("mouseout", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
         oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
+        oController.m_oSelectedRectangle.next({ action: 'un-highlight', rectangle: oRectangle })
       });
     }
     return oRectangle;

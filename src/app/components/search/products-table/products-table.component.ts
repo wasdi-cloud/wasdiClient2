@@ -73,6 +73,21 @@ export class ProductsTableComponent implements OnInit {
       }
     });
 
+    this.m_oMapService._m_oSelectedRectangle$.subscribe(oResponse => {
+      this.m_aoProductsList.forEach(oProduct => {
+        if (oResponse.rectangle === oProduct.rectangle) {
+          if (oResponse.action === 'highlight') {
+            console.log("hovering")
+            oProduct.isHovering = true;
+          }
+          else {
+            console.log("not hovering")
+            oProduct.isHovering = false
+          }
+        }
+      })
+    })
+
     //Get Products Per Page Options:
     this.m_aiProductsPerPageOptions = this.getProductsPerPageOptions();
   }

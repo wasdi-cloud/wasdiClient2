@@ -118,3 +118,7 @@ div.processor-toolbar>span.material-symbols-outlined {
 .parent-disabled {
     background-color: var(--neutral25) !important;
 }
+
+.hovering {
+    background-color: red!important;
+}

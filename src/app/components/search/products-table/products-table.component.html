@@ -34,6 +34,7 @@
                         [m_oProductListItem]="oProduct" [m_bIsSelected]="oProduct.selected"
                         [m_oInfoCallbackFn]="openProductInfoDialog" [m_oZoomCallbackFn]="zoomToProduct"
                         [m_oAddCallbackFn]="sendSingleProductToWorkspace"
+                        [m_bIsHovering]="oProduct.isHovering"
                         (mouseover)="changeRectangleStyleMouseOver(oProduct.rectangle)"
                         (mouseleave)="changeRectangleStyleMouseLeave(oProduct.rectangle)"
                         (click)="addProductSelectedProducts(oProduct)"></app-list-item>
