@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, ElementRef, Input, OnInit, ViewChild, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -36,6 +36,7 @@ export class ManualBoundingBoxComponent implements OnInit {
   public m_bShowJSON: boolean = false;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) private m_oData: any,
     private m_oConstantsService: ConstantsService,
     private m_oDialogRef: MatDialogRef<ManualBoundingBoxComponent>,
     private m_oJsonEditorService: JsonEditorService,
@@ -44,7 +45,10 @@ export class ManualBoundingBoxComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oData.input) === false) { 
+      this.m_oBBox = this.m_oData.input;
+      this.getJsonInput()
+    }
   }
 
   saveBoundingBox() {
@@ -60,7 +64,7 @@ export class ManualBoundingBoxComponent implements OnInit {
     }
   }
 
-  getJsonInput(oEvent) {
+  getJsonInput() {
     this.m_sJSONParam = this.m_oJsonEditorService.getValue();
 
     try {

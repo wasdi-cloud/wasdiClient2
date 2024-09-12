@@ -27,8 +27,8 @@
             [m_sPlaceholder]="'ex. 49.4426671413'"></app-input-field>
     </div>
     <div [hidden]="!m_bShowJSON" class="flex-fill my-2 JSON-container">
-        <div #editor class="json-editor" style="height: 100%; width: 100%;" (keyup)="getJsonInput($event)"
-            (change)="getJsonInput($event)"></div>
+        <div #editor class="json-editor" style="height: 100%; width: 100%;" (keyup)="getJsonInput()"
+            (change)="getJsonInput()"></div>
         <app-button class="info-button" [m_sIconLeft]="'info'" [m_sSize]="'small'"
             (click)="openInfoDialog()"></app-button>
         <app-button class="json-button" [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate"

@@ -114,14 +114,19 @@ export class MapService {
   m_oGeocoderControl = new Geocoder();
 
   /**
-   * Manual Boundig Box Event Listener
+   * Manual Bounding Box Event Listener
    */
   m_oManualBoundingBoxSubscription: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   /**
-   * Manual Boundig Box Observable
+   * Manual Bounding Box Observable
    */
   _m_oManualBoundingBoxSubscription$ = this.m_oManualBoundingBoxSubscription.asObservable();
+
+  /**
+   * Manual Bounding Box Input
+   */
+  m_oManualBboxInput: any = null;
 
   /**
    * Init options for leaflet-draw
@@ -337,7 +342,6 @@ export class MapService {
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
-
     return oMap;
   }
 
@@ -376,7 +380,6 @@ export class MapService {
     * @references https://github.com/perliedman/leaflet-control-geocoder
     */
   initGeoSearchPluginForOpenStreetMap(oMap) {
-
     if (oMap == null) {
       oMap = this.m_oWasdiMap;
     }
@@ -394,11 +397,11 @@ export class MapService {
    * Clear Map 
    */
   clearMap() {
-
     if (this.m_oWasdiMap) {
       this.m_oDrawnItems.clearLayers();
       this.m_oWasdiMap.remove();
       this.m_oWasdiMap = null;
+      this.clearManualResult();
     }
   }
 
@@ -882,15 +885,17 @@ export class MapService {
         // And here we decide what to do with our button
         L.DomEvent.on(oButton, 'click', function () {
 
-          // We open the Manual Boundig Box Dialog
+          // We open the Manual Bounding Box Dialog
           let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent, {
+            data: { input: oController.m_oManualBboxInput },
             height: '500px',
             width: '600px'
           })
 
           // Once is closed...
           oDialog.afterClosed().subscribe(oResult => {
-
+            //Hold result if user re-opens box
+            oController.setManualResult(oResult)
             // We need a valid result
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
 
@@ -939,7 +944,7 @@ export class MapService {
     this.m_oDrawnItems.addLayer(oLayer);
     this.zoomOnBounds(aoBounds);
 
-    //Emit bounding box to listening componenet:
+    //Emit bounding box to listening component:
     this.m_oManualBoundingBoxSubscription.next(oLayer);
   }
 
@@ -997,4 +1002,15 @@ export class MapService {
     return this.m_oHttp.get(sUrl, { 'headers': aoHeaders });
   }
 
+  /**
+   * Set manual bounding box result to hold
+   */
+  setManualResult(oBboxResult: any): void {
+    this.m_oManualBboxInput = oBboxResult;
+  }
+
+  /**
+   * Clear manual bounding box result
+   */
+  clearManualResult(): void { }
 }
