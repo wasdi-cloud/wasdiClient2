@@ -36,6 +36,8 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
 
   m_bAllSelected: boolean = false;
 
+  m_iItemsPerPage: number = 10;
+
   m_oClickSubscription: Subscription;
   constructor(
     public m_oDialog: MatDialog,
@@ -163,7 +165,6 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
    * @param sProviderName
    */
   updateLayerListForActiveTab(sProvider: string) {
-
     let aaoAllBounds = [];
 
     this.deleteLayers();
@@ -379,6 +380,8 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   toggleActiveProviderOpen(oEvent, oProvider: any): void {
     if (oProvider.name === this.m_oActiveProvider.name) {
       this.m_oActiveProvider.isOpen = !this.m_oActiveProvider.isOpen;
+    } else {
+      this.setActiveProvider(oProvider);
     }
   }
 
@@ -389,8 +392,16 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
    * @param event 
    */
   changeNumberOfProductsPerPage(event): void {
-    this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event;
-    this.m_oPageService.changeNumberOfProductsPerPage(this.m_oActiveProvider.name);
+    this.m_iItemsPerPage = event;
+    if (this.m_aoProvidersList.length > 1) {
+      this.m_aoProvidersList.forEach(oProvider => {
+        this.m_oPageService.getProviderObject(oProvider.name).productsPerPageSelected = event;
+        this.m_oPageService.changeNumberOfProductsPerPage(oProvider.name);
+      })
+    } else {
+      this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event;
+      this.m_oPageService.changeNumberOfProductsPerPage(this.m_oActiveProvider.name);
+    }
   }
 
   /**
