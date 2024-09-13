@@ -539,18 +539,18 @@ export class MapService {
   }
   /**
     * Add a rectangle shape on the map
-    * @param aaBounds
+    * @param oProduct
     * @param sColor
     * @param iIndexLayers
     * @returns {null}
     */
-  addRectangleByBoundsArrayOnMap(aaBounds, sColor, iIndexLayers) {
+  addRectangleByBoundsArrayOnMap(oProduct, sColor, iIndexLayers) {
     let oController = this;
-    if (!aaBounds) {
+    if (!oProduct) {
       return null;
     }
-    for (let iIndex = 0; iIndex < aaBounds.length; iIndex++) {
-      if (!aaBounds[iIndex]) {
+    for (let iIndex = 0; iIndex < oProduct.bounds.length; iIndex++) {
+      if (!oProduct.bounds[iIndex]) {
         return null;
       }
     }
@@ -559,32 +559,33 @@ export class MapService {
 
     // create an colored rectangle
     // weight = line thickness
-    let oRectangle = L.polygon(aaBounds, { color: sColor, weight: 1 }).addTo(this.m_oWasdiMap);
+    oProduct.rectangle = L.polygon(oProduct.bounds, { color: sColor, weight: 1 }).addTo(this.m_oWasdiMap);
 
     if (iIndexLayers) {//event on click
-      oRectangle.on("click", function (event) {
+      oProduct.rectangle.on("click", function (event) {
         //->problematic here
         console.log("on-mouse-click-rectangle")
-        oController.m_oSelectedRectangle.next({ action: 'scroll-to', rectangle: oRectangle });
+        // oProduct.isHovering = !oProduct.isHovering;
         //$rootScope.$broadcast('on-mouse-click-rectangle', { rectangle: oRectangle });//SEND MESSAGE TO IMPORT CONTROLLER
       });
       //mouse over event change rectangle style
-      oRectangle.on("mouseover", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
-        oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
-        oRectangle.getBounds();
-        oController.m_oSelectedRectangle.next({ action: 'highlight', rectangle: oRectangle })
+      oProduct.rectangle.on("mouseover", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
+        oProduct.rectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
+        oProduct.isHovering = true;
+        oController.m_oSelectedRectangle.next(oProduct)
       });
       //mouse out event set default value of style
-      oRectangle.on("mouseout", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
-        oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
-        oController.m_oSelectedRectangle.next({ action: 'un-highlight', rectangle: oRectangle })
+      oProduct.rectangle.on("mouseout", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
+        oProduct.rectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
+        oProduct.isHovering = false;
+        oController.m_oSelectedRectangle.next(oProduct)
       });
     }
-    return oRectangle;
+    return oProduct.rectangle;
   }
   /**
   * Add a rectangle shape on the map
-  * @param aaBounds
+  * @param oProduct
   * @param sColor
   * @param sReferenceName
   * @returns {null}

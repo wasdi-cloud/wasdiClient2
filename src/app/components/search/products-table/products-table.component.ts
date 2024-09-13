@@ -72,22 +72,6 @@ export class ProductsTableComponent implements OnInit {
         }
       }
     });
-
-    this.m_oMapService._m_oSelectedRectangle$.subscribe(oResponse => {
-      this.m_aoProductsList.forEach(oProduct => {
-        if (oResponse.rectangle === oProduct.rectangle) {
-          if (oResponse.action === 'highlight') {
-            console.log("hovering")
-            oProduct.isHovering = true;
-          }
-          else {
-            console.log("not hovering")
-            oProduct.isHovering = false
-          }
-        }
-      })
-    })
-
     //Get Products Per Page Options:
     this.m_aiProductsPerPageOptions = this.getProductsPerPageOptions();
   }
@@ -164,8 +148,8 @@ export class ProductsTableComponent implements OnInit {
 
     for (let iIndexData = 0; iIndexData < this.m_aoProductsList.length; iIndexData++) {
       if (this.m_aoProductsList[iIndexData].provider !== sProvider) continue;
-
-      let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(this.m_aoProductsList[iIndexData].bounds, null, iIndexData);
+      let oProduct = this.m_aoProductsList[iIndexData]
+      let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(oProduct, null, iIndexData);
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
         this.m_aoProductsList[iIndexData].rectangle = oRectangle
       }
