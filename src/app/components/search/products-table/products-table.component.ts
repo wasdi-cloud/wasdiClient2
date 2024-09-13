@@ -94,7 +94,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.m_aoProducts.unsubscribe();
+    // this.m_aoProducts.unsubscribe();
     this.m_oClickSubscription.unsubscribe();
     this.m_oSelectedProducts.unsubscribe();
   }
