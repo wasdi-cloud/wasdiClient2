@@ -565,20 +565,19 @@ export class MapService {
       oProduct.rectangle.on("click", function (event) {
         //->problematic here
         console.log("on-mouse-click-rectangle")
-        // oProduct.isHovering = !oProduct.isHovering;
-        //$rootScope.$broadcast('on-mouse-click-rectangle', { rectangle: oRectangle });//SEND MESSAGE TO IMPORT CONTROLLER
+        oController.m_oSelectedRectangle.next({ action: 'click', product: oProduct })
       });
       //mouse over event change rectangle style
-      oProduct.rectangle.on("mouseover", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
+      oProduct.rectangle.on("mouseover", function (event) {
         oProduct.rectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
         oProduct.isHovering = true;
-        oController.m_oSelectedRectangle.next(oProduct)
+        oController.m_oSelectedRectangle.next({ action: 'mouse-move', product: oProduct })
       });
       //mouse out event set default value of style
-      oProduct.rectangle.on("mouseout", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
+      oProduct.rectangle.on("mouseout", function (event) {
         oProduct.rectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
         oProduct.isHovering = false;
-        oController.m_oSelectedRectangle.next(oProduct)
+        oController.m_oSelectedRectangle.next({ action: 'mouse-move', product: oProduct })
       });
     }
     return oProduct.rectangle;

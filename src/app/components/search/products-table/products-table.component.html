@@ -8,10 +8,10 @@
         <app-button [m_sLabel]="'MSG_ADD_TO_WS' | translate" [m_bOutline]="true" (click)="openAddToWorkspaceDialog()"
             *ngIf="m_aoSelectedProducts.length > 0"></app-button>
     </div>
-    <div class="results-container">
+    <div id="results-table" class="results-container">
         <!-- Invader animation -->
         <app-invader *ngIf="!m_aoProvidersList.length"></app-invader>
-        <div *ngFor="let oProvider of m_aoProvidersList">
+        <div *ngFor="let oProvider of m_aoProvidersList" id="{{'results-table' + oProvider.name}}">
             <div class="mb-1 d-flex flex-column">
                 <app-list-item [m_bParentItem]="true" [m_sLabel]="oProvider.name"
                     [m_sDescription]="oProvider.totalOfProducts"
@@ -33,8 +33,7 @@
                     <app-list-item *ngFor="let oProduct of m_aoProductsList" [m_bProductItem]="true" class="my-1"
                         [m_oProductListItem]="oProduct" [m_bIsSelected]="oProduct.selected"
                         [m_oInfoCallbackFn]="openProductInfoDialog" [m_oZoomCallbackFn]="zoomToProduct"
-                        [m_oAddCallbackFn]="sendSingleProductToWorkspace"
-                        [m_bIsHovering]="oProduct.isHovering"
+                        [m_oAddCallbackFn]="sendSingleProductToWorkspace" [m_bIsHovering]="oProduct.isHovering"
                         (mouseover)="changeRectangleStyleMouseOver(oProduct.rectangle)"
                         (mouseleave)="changeRectangleStyleMouseLeave(oProduct.rectangle)"
                         (click)="addProductSelectedProducts(oProduct)"></app-list-item>

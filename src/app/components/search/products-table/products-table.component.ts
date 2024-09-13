@@ -1,22 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { WorkspacesListDialogComponent } from '../workspaces-list-dialog/workspaces-list-dialog.component';
 import { ProductInfoComponent } from '../product-info/product-info.component';
 import { MapService } from 'src/app/services/map.service';
 import { PagesService } from 'src/app/services/pages.service';
 
+import * as $ from 'jquery';
+
 @Component({
   selector: 'app-products-table',
   templateUrl: './products-table.component.html',
   styleUrls: ['./products-table.component.css']
 })
-export class ProductsTableComponent implements OnInit {
+export class ProductsTableComponent implements OnInit, OnDestroy {
   @Input() m_bIsVisibleListOfLayers: boolean = false;
   @Input() m_bIsPaginatedList: boolean;
-  @Input() m_aoProducts: Observable<any>;
-  @Input() m_aoSelectedProviders: Observable<any>;
+  @Input() m_aoProducts: any;
+  @Input() m_aoSelectedProviders: any;
   @Output() m_oActiveProviderChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oSelectedProducts: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oNavigateBackOutput: EventEmitter<any> = new EventEmitter<boolean>();
@@ -34,6 +36,7 @@ export class ProductsTableComponent implements OnInit {
 
   m_bAllSelected: boolean = false;
 
+  m_oClickSubscription: Subscription;
   constructor(
     public m_oDialog: MatDialog,
     private m_oMapService: MapService,
@@ -72,10 +75,29 @@ export class ProductsTableComponent implements OnInit {
         }
       }
     });
+
+    this.m_oClickSubscription = this.m_oMapService.m_oSelectedRectangle.subscribe(oResponse => {
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+        if (oResponse.action === 'click') {
+          let container = $('#results-table')
+          let scrollTo = $('#' + oResponse.product.id);
+
+          //http://stackoverflow.com/questions/2905867/how-to-scroll-to-specific-item-using-jquery
+          container.animate({
+            scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
+          });
+        }
+      }
+    })
     //Get Products Per Page Options:
     this.m_aiProductsPerPageOptions = this.getProductsPerPageOptions();
   }
 
+  ngOnDestroy(): void {
+    this.m_aoProducts.unsubscribe();
+    this.m_oClickSubscription.unsubscribe();
+    this.m_oSelectedProducts.unsubscribe();
+  }
   /**
    * Sets the Active Provider and emits the Provider to the Parent for Switching Layers List
    * @param oProvider 
