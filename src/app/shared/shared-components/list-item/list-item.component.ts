@@ -1,14 +1,17 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { MapService } from 'src/app/services/map.service';
+
+import * as $ from 'jquery';
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-list-item',
   templateUrl: './list-item.component.html',
   styleUrls: ['./list-item.component.css']
 })
-export class ListItemComponent {
+export class ListItemComponent implements OnInit {
   /**
    * List item with picture, title, description and (optional) toolbar
    */
@@ -107,11 +110,20 @@ export class ListItemComponent {
   @Output() m_oEmitClickEvent: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
+    private m_oChangeDetector: ChangeDetectorRef,
     private m_oDialog: MatDialog,
     private m_oMapService: MapService,
     private m_oProcessorService: ProcessorService
   ) { }
-
+  ngOnInit(): void {
+    this.m_oMapService.m_oSelectedRectangle.subscribe(oResponse => {
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProductListItem.rectangle) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+        if (oResponse.rectangle === this.m_oProductListItem.rectangle) {
+          $("#" + oResponse.id).toggleClass('highlighted');
+        }
+      }
+    })
+  }
   /**
    * Emitter function to emit the location of the button clicked to the apps dialog
    * @param sLocation 
