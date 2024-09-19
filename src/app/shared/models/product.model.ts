@@ -11,7 +11,7 @@ export interface Product {
     fileName: string,
     metadata: any,
     metadataFileCreated: string,
-    metadataFielReference: any,
+    metadataFileReference: any,
     name: string,
     productFriendlyName: string,
     style: any,
