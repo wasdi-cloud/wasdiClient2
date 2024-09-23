@@ -107,31 +107,33 @@
         <div class="d-flex flex-column flex-fill" style="width: 85%;">
             <div class="d-flex flex-row w-100 justify-content-between">
                 <div class="font-bold">{{m_sLabel}}</div>
-                <div *ngIf="m_bHasToolbar" class="processor-toolbar d-flex flex-row align-items-center gap-2">
+                <div class="processor-toolbar d-flex flex-row align-items-center gap-2">
                     <span *ngIf="!m_oProcessorItem.styleId && !m_oProcessorItem.workflowId"
                         class="material-symbols-outlined" matTooltip="Parameters Library"
                         (click)="emitToolbarClick('params')">
                         data_object
                     </span>
-                    <span class="material-symbols-outlined" matTooltip="Download"
-                        (click)="emitToolbarClick('download')">
-                        download
-                    </span>
-                    <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
-                        class="material-symbols-outlined" matTooltip="Share"
-                        (click)="emitToolbarClick('share'); $event.stopPropagation()">share</span>
-                    <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
-                        class="material-symbols-outlined" matTooltip="Open XML"
-                        (click)="emitToolbarClick('xml'); $event.stopPropagation()">code</span>
+                    <div class="processor-toolbar d-flex flex-row align-items-center gap-2" *ngIf="m_bHasToolbar">
+                        <span class="material-symbols-outlined" matTooltip="Download"
+                            (click)="emitToolbarClick('download')">
+                            download
+                        </span>
+                        <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
+                            class="material-symbols-outlined" matTooltip="Share"
+                            (click)="emitToolbarClick('share'); $event.stopPropagation()">share</span>
+                        <span *ngIf="m_oProcessorItem.styleId  || m_oProcessorItem.workflowId"
+                            class="material-symbols-outlined" matTooltip="Open XML"
+                            (click)="emitToolbarClick('xml'); $event.stopPropagation()">code</span>
 
-                    <span class="material-symbols-outlined" matTooltip="{{'WAP_EDIT' | translate}}"
-                        (click)="emitToolbarClick('edit'); $event.stopPropagation()">
-                        edit_square
-                    </span>
-                    <span class="material-symbols-outlined" matTooltip="Remove"
-                        (click)="emitToolbarClick('delete'); $event.stopPropagation()">
-                        delete
-                    </span>
+                        <span class="material-symbols-outlined" matTooltip="{{'WAP_EDIT' | translate}}"
+                            (click)="emitToolbarClick('edit'); $event.stopPropagation()">
+                            edit_square
+                        </span>
+                        <span class="material-symbols-outlined" matTooltip="Remove"
+                            (click)="emitToolbarClick('delete'); $event.stopPropagation()">
+                            delete
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="">
