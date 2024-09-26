@@ -10,7 +10,7 @@
             satellite_alt
         </span>
         <p class="product-label d-flex flex-row align-items-center gap-1">
-            {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
+            {{m_oProduct?.productFriendlyName ? this.m_oProduct.productFriendlyName : this.m_oProduct.name}}</p>
     </div>
     <div class="d-flex flex-row align-items-center" *ngIf="m_bIsOpen === false">
         <span class="arrow-icon material-symbols-outlined" (click)="openProductBands()">
@@ -22,7 +22,7 @@
             satellite_alt
         </span>
         <p class="product-label d-flex flex-row align-items-center gap-1">
-            {{m_oProduct?.friendlyName ? this.m_oProduct.friendlyName : this.m_oProduct.name}}</p>
+            {{m_oProduct?.productFriendlyName ? this.m_oProduct.productFriendlyName : this.m_oProduct.name}}</p>
     </div>
     <!-- <div class="align-self-end justify-self-end" *ngIf="m_bIsHovering">
         <button class="material-symbols-outlined display-more-icon button-icon"
