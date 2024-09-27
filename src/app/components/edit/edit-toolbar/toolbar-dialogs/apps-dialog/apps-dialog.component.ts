@@ -285,7 +285,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   formatJSON() {
     let sJsonError = this.m_oTranslate.instant("DIALOG_FORMAT_JSON_ERROR")
     try {
+      console.log("JSON")
       this.m_sMyJsonString = JSON.stringify(JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')), null, 3);
+      this.m_oJsonEditorService.setText(this.m_sMyJsonString);
     } catch (oError) {
       this.m_oNotificationDisplayService.openAlertDialog(sJsonError, '', 'alert');
     }
