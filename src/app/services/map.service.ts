@@ -549,38 +549,45 @@ export class MapService {
     if (!oProduct) {
       return null;
     }
-    for (let iIndex = 0; iIndex < oProduct.bounds.length; iIndex++) {
-      if (!oProduct.bounds[iIndex]) {
-        return null;
+
+    //Catch to ensure we're only attempting to draw if the product has bounds
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds)) {
+      return null
+    } else {
+      for (let iIndex = 0; iIndex < oProduct.bounds.length; iIndex++) {
+        if (!oProduct.bounds[iIndex]) {
+          return null;
+        }
       }
-    }
-    //default color
-    if (!sColor) { sColor = "#ff7800"; }
 
-    // create an colored rectangle
-    // weight = line thickness
-    oProduct.rectangle = L.polygon(oProduct.bounds, { color: sColor, weight: 1 }).addTo(this.m_oWasdiMap);
+      //default color
+      if (!sColor) { sColor = "#ff7800"; }
 
-    if (iIndexLayers) {//event on click
-      oProduct.rectangle.on("click", function (event) {
-        //->problematic here
-        console.log("on-mouse-click-rectangle")
-        oController.m_oSelectedRectangle.next({ action: 'click', product: oProduct })
-      });
-      //mouse over event change rectangle style
-      oProduct.rectangle.on("mouseover", function (event) {
-        oProduct.rectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
-        oProduct.isHovering = true;
-        oController.m_oSelectedRectangle.next({ action: 'mouse-move', product: oProduct })
-      });
-      //mouse out event set default value of style
-      oProduct.rectangle.on("mouseout", function (event) {
-        oProduct.rectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
-        oProduct.isHovering = false;
-        oController.m_oSelectedRectangle.next({ action: 'mouse-move', product: oProduct })
-      });
+      // create an colored rectangle
+      // weight = line thickness
+      oProduct.rectangle = L.polygon(oProduct.bounds, { color: sColor, weight: 1 }).addTo(this.m_oWasdiMap);
+
+      if (iIndexLayers) {//event on click
+        oProduct.rectangle.on("click", function (event) {
+          //->problematic here
+          console.log("on-mouse-click-rectangle")
+          oController.m_oSelectedRectangle.next({ action: 'click', product: oProduct })
+        });
+        //mouse over event change rectangle style
+        oProduct.rectangle.on("mouseover", function (event) {
+          oProduct.rectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
+          oProduct.isHovering = true;
+          oController.m_oSelectedRectangle.next({ action: 'mouse-move', product: oProduct })
+        });
+        //mouse out event set default value of style
+        oProduct.rectangle.on("mouseout", function (event) {
+          oProduct.rectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
+          oProduct.isHovering = false;
+          oController.m_oSelectedRectangle.next({ action: 'mouse-move', product: oProduct })
+        });
+      }
+      return oProduct.rectangle;
     }
-    return oProduct.rectangle;
   }
   /**
   * Add a rectangle shape on the map
