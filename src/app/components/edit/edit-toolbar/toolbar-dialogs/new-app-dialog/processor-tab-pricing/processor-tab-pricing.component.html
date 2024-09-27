@@ -24,7 +24,7 @@
             {{"DIALOG_PROCESSOR_STORE_ONDEMAND_DESCRIPTION" | translate}}
         </p>
         <app-input-field class="align-self-start" [m_sLabel]="'On demand price'" [m_sInputType]="'number'"
-            [m_sPlaceholder]='"DIALOG_PROCESSOR_STORE_ONDEMAND_PRICE" | translate'
+            [m_bIsDisabled]="m_bIsFree" [m_sPlaceholder]='"DIALOG_PROCESSOR_STORE_ONDEMAND_PRICE" | translate'
             [m_sInputValue]="m_iOnDemandPrice.toString()"
             (m_oInputChange)="patchOnDemandPrice($event)"></app-input-field>
     </div>
