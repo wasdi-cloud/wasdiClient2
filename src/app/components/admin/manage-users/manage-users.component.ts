@@ -82,7 +82,10 @@ export class ManageUsersComponent implements OnInit {
     this.getNodesList();
   }
 
-  getPaginatedList() {
+  getPaginatedList(oEvent?: any) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
+      this.m_sUserSearch = "";
+    }
     this.m_oAdminDashboardService.getUsersPaginatedList("", this.m_iOffset, this.m_iLimit, this.m_sSortBy, this.m_sSortOrder).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
