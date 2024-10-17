@@ -196,7 +196,6 @@ export class AppUiComponent implements OnInit {
       this.m_oSelectedWorkspace = this.m_oConstantsService.getActiveWorkspace();
       this.m_oWorkspaceForm.sExistingWorkspace = this.m_oConstantsService.getActiveWorkspace();
     }
-
   }
 
   /**
