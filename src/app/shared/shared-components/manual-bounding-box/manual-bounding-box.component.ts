@@ -45,7 +45,7 @@ export class ManualBoundingBoxComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oData.input) === false) { 
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oData.input) === false) {
       this.m_oBBox = this.m_oData.input;
       this.getJsonInput()
     }
