@@ -25,7 +25,7 @@ import {Subscription} from "rxjs";
   templateUrl: './import-dialog.component.html',
   styleUrls: ['./import-dialog.component.css']
 })
-export class ImportDialogComponent implements OnInit, OnDestroy {
+export class  ImportDialogComponent implements OnInit, OnDestroy {
 
 
   m_sActiveTab: string = "upload"

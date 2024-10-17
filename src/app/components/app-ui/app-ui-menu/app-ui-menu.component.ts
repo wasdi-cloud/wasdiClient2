@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
@@ -13,37 +13,48 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 @Component({
   selector: 'app-app-ui-menu',
   templateUrl: './app-ui-menu.component.html',
-  styleUrls: ['./app-ui-menu.component.css']
+  styleUrls: ['./app-ui-menu.component.css'],
 })
-export class AppUiMenuComponent {
+export class AppUiMenuComponent implements OnInit {
   @Input() m_oActiveWorkspace: Workspace = null;
-  @Input() m_sActiveTab: string = "";
+  @Input() m_sActiveTab: string = '';
   @Input() m_aoTabs: Array<any> = [];
   @Input() m_aoWorkspaces: Array<any> = [];
   @Input() m_bIsPurchased: boolean = true;
   @Output() m_sSelectedTab: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oSelectedWorkspace: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oExecuteAppEmitter: EventEmitter<any> = new EventEmitter<any>();
-  @Output() m_oExecutePurchaseEmitter: EventEmitter<any> = new EventEmitter<any>();
+  @Output() m_oExecutePurchaseEmitter: EventEmitter<any> =
+    new EventEmitter<any>();
 
   m_bRunInNewWorkspace: boolean = true;
-  m_sNewWorkspaceName: string = "";
+  m_sNewWorkspaceName: string = '';
   m_bNotification: boolean = false;
-
 
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oWorkspaceService: WorkspaceService
-  ) { }
+  ) {}
+
+  ngOnInit(): void {
+    if (this.m_oActiveWorkspace) {
+      this.m_bRunInNewWorkspace = false;
+    }
+  }
 
   openNewWorkspaceDialog() {
-    this.m_oDialog.open(NewWorkspaceDialogComponent).afterClosed().subscribe(oResponse => {
-      this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe(oResponse => {
-        this.m_aoWorkspaces = oResponse
-      })
-    })
+    this.m_oDialog
+      .open(NewWorkspaceDialogComponent)
+      .afterClosed()
+      .subscribe((oResponse) => {
+        this.m_oWorkspaceService
+          .getWorkspacesInfoListByUser()
+          .subscribe((oResponse) => {
+            this.m_aoWorkspaces = oResponse;
+          });
+      });
   }
 
   setActiveTab(sTabName: string) {
@@ -57,9 +68,9 @@ export class AppUiMenuComponent {
       let oEmitObject = {
         isCreating: this.m_bRunInNewWorkspace,
         notification: this.m_bNotification,
-        workspace: oEvent
-      }
-      this.m_oSelectedWorkspace.emit(oEmitObject)
+        workspace: oEvent,
+      };
+      this.m_oSelectedWorkspace.emit(oEmitObject);
     }
   }
 
@@ -71,7 +82,6 @@ export class AppUiMenuComponent {
       this.getSelectedWorkspace(this.m_oActiveWorkspace);
       this.m_oExecuteAppEmitter.emit(false);
     }
-
   }
 
   saveAppPurchase() {
@@ -84,16 +94,19 @@ export class AppUiMenuComponent {
   newOrExistingWorkspaceChanged(): void {
     this.m_bRunInNewWorkspace = !this.m_bRunInNewWorkspace;
     if (this.m_bRunInNewWorkspace === true) {
-
       this.m_oSelectedWorkspace.emit({
         isCreating: this.m_bRunInNewWorkspace,
         notification: this.m_bNotification,
-        workspace: null
+        workspace: null,
       });
     }
   }
 
   openNotificationHelp() {
-    this.m_oNotificationDisplayService.openAlertDialog("WASDI will send you an email notification upon completion of this processor", "Info", "info")
+    this.m_oNotificationDisplayService.openAlertDialog(
+      'WASDI will send you an email notification upon completion of this processor',
+      'Info',
+      'info'
+    );
   }
 }

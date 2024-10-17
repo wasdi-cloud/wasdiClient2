@@ -72,8 +72,8 @@ export class WapSelectAreaComponent implements OnInit, OnChanges {
 
   /**
    * Create the component
-   * @param m_oMapService 
-   * @param m_oTranslateService 
+   * @param m_oMapService
+   * @param m_oTranslateService
    */
   constructor(public m_oMapService: MapService, private m_oTranslateService: TranslateService, private m_oDialog: MatDialog) {
     // console.log("Creating WAP Map Component with MapId: " + this.m_sMapId)
@@ -116,14 +116,14 @@ export class WapSelectAreaComponent implements OnInit, OnChanges {
     }, 500);
   }
 
-  ngOnChanges() { 
+  ngOnChanges() {
     if(this.m_bParentTabActive === true) {
       this.m_oMap.invalidateSize();
     }
   }
 
   ngOnDestroy(): void {
-    //Clear Map 
+    //Clear Map
     if (this.m_oMap) {
       this.m_oDrawnItems.clearLayers();
       this.m_oMap.remove();
@@ -132,6 +132,7 @@ export class WapSelectAreaComponent implements OnInit, OnChanges {
   }
 
   addManualBbox(oMap: any) {
+
     let oController = this;
 
     L.Control.Button = L.Control.extend({
@@ -243,7 +244,7 @@ export class WapSelectAreaComponent implements OnInit, OnChanges {
     let oController = this;
 
     oMap.on(L.Draw.Event.CREATED, function (event) {
-      // Clear out old layer: 
+      // Clear out old layer:
       oController.m_oDrawnItems.clearLayers();
       let oLayer = event.layer;
 
@@ -276,7 +277,7 @@ export class WapSelectAreaComponent implements OnInit, OnChanges {
     //Add layer to map
     this.m_oDrawnItems.addLayer(event.layer)
 
-    //on draw created -> need to check area 
+    //on draw created -> need to check area
     let bValid = this.checkArea(event.layer)
 
     //If not valid after check
@@ -285,7 +286,7 @@ export class WapSelectAreaComponent implements OnInit, OnChanges {
       event.layer.options.color = "#FF0000"
       return false;
     }
-    //If valid after check: 
+    //If valid after check:
     this.m_oMapInput.oBoundingBox.northEast = event.layer._bounds._northEast;
     this.m_oMapInput.oBoundingBox.southWest = event.layer._bounds._southWest;
 
@@ -310,7 +311,7 @@ export class WapSelectAreaComponent implements OnInit, OnChanges {
 
     let bIsValid = false;
     /**
-     The following happens in this.onDrawCreated():  
+     The following happens in this.onDrawCreated():
      */
     this.m_oMapInput.oBoundingBox.northEast = oLayer._bounds._northEast;
     this.m_oMapInput.oBoundingBox.southWest = oLayer._bounds._southWest;

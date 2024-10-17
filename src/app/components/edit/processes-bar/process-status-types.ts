@@ -57,8 +57,8 @@ export const ProcessTypes = [
         value: "INGEST"
     },
     {
-        name: "FETCH",
-        value: "FETCH"
+        name: "DOWNLOAD",
+        value: "DOWNLOAD"
     },
     {
         name: "PUBLISHBAND",
