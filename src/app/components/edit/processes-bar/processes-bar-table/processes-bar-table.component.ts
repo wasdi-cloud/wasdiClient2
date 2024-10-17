@@ -1,15 +1,15 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
-import { PayloadDialogComponent } from 'src/app/components/edit/payload-dialog/payload-dialog.component';
-import { ProcessLogsDialogComponent } from 'src/app/components/edit/process-logs-dialog/process-logs-dialog.component';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
+import {PayloadDialogComponent} from 'src/app/components/edit/payload-dialog/payload-dialog.component';
+import {ProcessLogsDialogComponent} from 'src/app/components/edit/process-logs-dialog/process-logs-dialog.component';
+import {NotificationDisplayService} from 'src/app/services/notification-display.service';
+import {ProcessWorkspaceService} from 'src/app/services/api/process-workspace.service';
 
-import { ProcessStatuses, ProcessTypes } from '../process-status-types';
+import {ProcessStatuses, ProcessTypes} from '../process-status-types';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { MatDialog } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
+import {MatDialog} from '@angular/material/dialog';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-processes-bar-table',
@@ -81,6 +81,11 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   public m_bIsLoadMoreBtnClickable: boolean = true;
 
   /**
+   * Flag to check if we are getting the filtered process logs or the unfiltered logs
+   */
+  private m_bGetFilteredLog: boolean = false;
+
+  /**
    * Interval function - set in ngOnInit
    */
   private m_oInterval: any;
@@ -91,7 +96,8 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oTranslate: TranslateService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.setActiveWorkspace(this.m_oData.workspace);
@@ -135,17 +141,37 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, 0, 40, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe({
+    //Placeholder values to pass to getFilteredProcessesFromWorkspace function
+    let sName: string = "";
+    let sStatus: string = "";
+    let sType: string = "";
+    let sDate: string = ""
+
+    //If the filters have been set, set the placeholder values;
+    if (this.m_bGetFilteredLog) {
+      sName = this.m_oFilter.sName;
+      sStatus = this.m_oFilter.sStatus;
+      sType = this.m_oFilter.sType;
+      sDate = this.m_oFilter.sDate;
+    }
+
+    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(this.m_sActiveWorkspaceId, 0, 40, sStatus, sType, sDate, sName).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           if (oResponse.length > 0) {
+            for (const oResponseElement of oResponse) {
+              if (oResponseElement.operationType == "DOWNLOAD") {
+                oResponseElement.operationType = "FETCH"
+              }
+            }
             oResponse.forEach((oElement, iIndex) => {
               this.m_aoAllProcessesLogs[iIndex] = oElement;
             })
           }
         }
       },
-      error: oError => { }
+      error: oError => {
+      }
     })
     return true;
   }
@@ -158,6 +184,11 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     let sWorkspaceId = this.m_oActiveWorkspace.workspaceId;
     this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(sWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
       if (oResponse) {
+        //this replace the word download by fetch in the process coming for the server and also change the processes.payload the same way
+        for (let oResponseElement of oResponse) {
+          oResponseElement = this.changeDownloadToFetch(oResponseElement);
+        }
+
         this.m_aoAllProcessesLogs = this.m_aoAllProcessesLogs.concat(oResponse);
         this.calculateNextListOfProcesses();
       } else {
@@ -172,6 +203,19 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  private changeDownloadToFetch(oResponseElement) {
+    const re = /DOWNLOAD/gi;
+
+    if (oResponseElement.payload) {
+      oResponseElement.payload = oResponseElement.payload.replace(re, "FETCH");
+    }
+    if (oResponseElement.operationType == "DOWNLOAD") {
+      oResponseElement.operationType = "FETCH"
+    }
+
+    return oResponseElement;
+  }
+
   calculateNextListOfProcesses() {
     this.m_iFirstProcess += this.m_iNumberOfProcessForRequest;
     this.m_iLastProcess += this.m_iNumberOfProcessForRequest;
@@ -179,7 +223,11 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
 
   downloadProcessesFile() {
     this.m_oProcessWorkspaceService.getAllProcessesFromServer(this.m_oActiveWorkspace.workspaceId, null, null).subscribe(oResponse => {
+      //this replace the word download by fetch in the process coming for the server and also change the processes.payload the same way
 
+      for (let oResponseElement of oResponse) {
+        oResponseElement = this.changeDownloadToFetch(oResponseElement);
+      }
       this.m_aoAllProcessesLogs = oResponse;
       let file = this.generateLogFile();
 
@@ -188,7 +236,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
 
       let sTimestamp = (new Date()).toISOString().replace(/[^0-9]/g, "_").slice(0, 19);
 
-      oLink.download = "processes_" + this.m_oActiveWorkspace.name + "_" + sTimestamp;
+      oLink.download = "processes_" + this.m_oActiveWorkspace.name + "_" + sTimestamp + ".csv";
 
       oLink.click();
 
@@ -205,7 +253,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     let textFile = null;
     let sType = 'text/csv';
 
-    let data = new Blob([sText], { type: sType });
+    let data = new Blob([sText], {type: sType});
 
     textFile = window.URL.createObjectURL(data);
 
@@ -225,7 +273,8 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
       let sOperationDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationStartDate;
       let sFileSize = this.m_aoAllProcessesLogs[iIndexProcessLog].fileSize;
       let sOperationEndDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationEndDate;
-      let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType;
+      let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType == "DOWNLOAD" ? "FETCH" : this.m_aoAllProcessesLogs[iIndexProcessLog].operationType;
+      // let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType
       let sPid = this.m_aoAllProcessesLogs[iIndexProcessLog].pid;
       let sProductName = this.m_aoAllProcessesLogs[iIndexProcessLog].productName;
       let sProgressPerc = this.m_aoAllProcessesLogs[iIndexProcessLog].progressPerc;
@@ -252,6 +301,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   applyFilters() {
     this.resetCounters();
     this.m_aoAllProcessesLogs = [];
+    this.m_bGetFilteredLog = true;
     this.getAllProcessesLogs();
   }
 
@@ -269,6 +319,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
     this.m_oSelectedStatus = [];
     this.m_oSelectedType = [];
     this.resetCounters();
+    this.m_bGetFilteredLog = false;
     this.getAllProcessesLogs();
   }
 
@@ -277,8 +328,8 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
       height: '90vh',
       width: '100vw',
       minWidth: '100vw',
-      position: { bottom: "0" },
-      data: { process: oProcess }
+      position: {bottom: "0"},
+      data: {process: oProcess}
     })
   }
 
@@ -288,8 +339,8 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
       width: '100vw',
       minWidth: '100vw',
       height: '90vh',
-      position: { bottom: "0" },
-      data: { process: oProcess }
+      position: {bottom: "0"},
+      data: {process: oProcess}
     })
   }
 

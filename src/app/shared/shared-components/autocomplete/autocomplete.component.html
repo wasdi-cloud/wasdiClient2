@@ -1,6 +1,6 @@
 <label for="" *ngIf="m_sLabel">{{m_sLabel}}</label>
 <input type="search" name="m_sStyle" [placeholder]="m_sPlaceholder" [matAutocomplete]="auto" class="form-control"
-    [(ngModel)]="m_sSearchString">
+    [(ngModel)]="m_sSearchString" (ngModelChange)="m_bEmitOutput? emitTextChanges(m_sSearchString): ''">
 <mat-autocomplete #auto="matAutocomplete" [displayWith]="getOptionText" (optionSelected)="emitSelectionChange($event)">
     <mat-option *ngFor="let oInput of m_aoInputs | filter: m_sSearchString" [value]="oInput">
         <div class="w-100 d-flex flex-row justify-content-between align-items-center gap-2">

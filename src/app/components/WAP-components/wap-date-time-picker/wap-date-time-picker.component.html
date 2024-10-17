@@ -1,4 +1,4 @@
 <div class="date-container d-flex flex-row justify-content-start">
-    <app-input-field [m_sInputType]="'date'" [m_sLabel]="m_oDateControl.label" [m_sPlaceholder]="'Select Date'"
+    <app-input-field [m_sInputType]="'date'" matTooltip="{{m_oDateControl?.tooltip}}" [m_sLabel]="m_oDateControl.label" [m_sPlaceholder]="'Select Date'"
         (m_oInputChange)="getDate($event)" [m_sInputValue]="this.m_sInputDate"></app-input-field>
 </div>

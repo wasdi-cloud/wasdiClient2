@@ -181,7 +181,7 @@ export class WorkspacesListDialogComponent implements OnInit {
     let sErrorMessage = this.m_oTranslate.instant("MSG_ERROR_IMPORTING");
     let oController = this;
 
-    // If the single selected product is null, the user has only selected 1 product from products list - transfer it to the Selected Proudct Object
+    // If the single selected product is null, the user has only selected 1 product from products list - transfer it to the Selected Product Object
     if ((!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoSelectedProducts) && this.m_aoSelectedProducts.length === 1) && this.m_oSelectedProduct === null) {
       this.m_oSelectedProduct = this.m_aoSelectedProducts[0];
     }
@@ -203,7 +203,13 @@ export class WorkspacesListDialogComponent implements OnInit {
     this.onDismiss();
   }
 
-  addMultipleProductsToWorkspace() {
+  /**
+   * Add multiple products to an amount of workspaces
+   * @returns boolean
+   */
+  addMultipleProductsToWorkspace(): boolean {
+    let sErrorMessage = this.m_oTranslate.instant("MSG_ERROR_IMPORTING");
+    let oController = this;
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoSelectedProducts)) {
       return false;
     }
@@ -212,16 +218,24 @@ export class WorkspacesListDialogComponent implements OnInit {
 
     let iNumberOfProducts = this.m_aoSelectedProducts.length;
 
+    //For each selected workspace:
     for (let iWorkspaceIndex = 0; iWorkspaceIndex < iNumberOfWorkspaces; iWorkspaceIndex++) {
+      // Check the workspace exists
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoSelectedWorkspaces[iWorkspaceIndex])) {
+        //For each selected product:
         for (let iIndexProduct = 0; iIndexProduct < iNumberOfProducts; iIndexProduct++) {
-          this.m_aoSelectedProducts[iIndexProduct].isDisabledToDoDownload = true;
-          let url = this.m_aoSelectedProducts[iIndexProduct].link;
+          let oProduct = this.m_aoSelectedProducts[iIndexProduct];
+          oProduct.isDisabledToDoDownload = true;
+          let sUrl: string = oProduct.link;
+          // Set the error:
           let oError = function (data, status) {
-            //FadeoutUtils.utilsVexDialogAlertTop(sMessage);
-            this.m_aoSelectedProducts[iIndexProduct].isDisabledToDoDownload = false;
+            oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
+            oController.m_oSelectedProduct.isDisabledToDoDownload = false;
           }
-          this.downloadProduct(url, this.m_aoSelectedProducts[iIndexProduct].title, this.m_aoSelectedWorkspaces[iWorkspaceIndex].workspaceId, this.m_aoSelectedProducts[iIndexProduct].bounds.toString(), this.m_aoSelectedProducts[iIndexProduct].provider, null, oError);
+
+          let sBounds = this.getBounds(this);
+
+          this.downloadProduct(sUrl, oProduct.title, this.m_aoSelectedWorkspaces[iWorkspaceIndex].workspaceId, sBounds, oProduct.provider, null, oError);
         }
       }
     }
@@ -229,6 +243,16 @@ export class WorkspacesListDialogComponent implements OnInit {
     return true;
   }
 
+  /**
+   * Callback function to download a product
+   * @param sUrl 
+   * @param sFileName 
+   * @param sWorkspaceId 
+   * @param sBounds 
+   * @param oProvider 
+   * @param oCallback 
+   * @param oError 
+   */
   downloadProduct(sUrl: string, sFileName: string, sWorkspaceId: string, sBounds: string, oProvider: any, oCallback: any, oError: any) {
     let sMessage: string;
     let oController = this;
@@ -255,7 +279,10 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   }
 
-  shareProductToWorkspace() {
+  /**
+   * Share a product between workspaces
+   */
+  shareProductToWorkspace(): void {
     let oController = this;
     let aoWorkspaces = this.m_aoSelectedWorkspaces;
     let oProduct = this.m_oSelectedProduct;
@@ -269,18 +296,6 @@ export class WorkspacesListDialogComponent implements OnInit {
       if (aoProducts) {
         aoProducts.forEach(oProduct => {
           oProduct.isDisabledToDoDownload = true;
-          let sUrl = oProduct.link;
-          let oError = function (data, status) {
-            oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
-            oProduct.isDisabledToDoDownload = false;
-          };
-
-          let sBound = "";
-
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds) == false) {
-            sBound = oProduct.bounds.toString();
-          }
-
           let sOriginWorkspaceId = oController.m_oActiveWorkspace.workspaceId;
           let sDestinationWorkspaceId = aoWorkspaces[iIndexWorkspace].workspaceId;
           let sProductName = oProduct.fileName;
@@ -291,23 +306,12 @@ export class WorkspacesListDialogComponent implements OnInit {
             },
             error: oError => {
               oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
+              oProduct.isDisabledToDoDownload = false;
             }
           });
         })
       } else if (oProduct) {
         oProduct.isDisabledToDoDownload = true;
-        let sUrl = oProduct.link;
-        let oError = function (data, status) {
-          oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
-          oProduct.isDisabledToDoDownload = false;
-        };
-
-        let sBound = "";
-
-        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds) == false) {
-          sBound = oProduct.bounds.toString();
-        }
-
         let sOriginWorkspaceId = oController.m_oActiveWorkspace.workspaceId;
         let sDestinationWorkspaceId = aoWorkspaces[iIndexWorkspace].workspaceId;
         let sProductName = oProduct.fileName;
@@ -318,6 +322,7 @@ export class WorkspacesListDialogComponent implements OnInit {
           },
           error: oError => {
             oController.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, oController.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION"), 'danger');
+            oProduct.isDisabledToDoDownload = false;
           }
         });
       }
@@ -326,9 +331,23 @@ export class WorkspacesListDialogComponent implements OnInit {
   }
 
   /**
-   * Close Dialog Window
+   * Get the bounds of a product and make it a string
+   * @param oProduct 
+   * @returns string
    */
-  onDismiss() {
+  getBounds(oProduct): string {
+    let sBounds: string = ""
+    if (oProduct.bounds) {
+      sBounds = oProduct.bounds.toString();
+    }
+    return sBounds
+  }
+
+  /**
+   * Close Dialog Window
+   * @returns void
+   */
+  onDismiss(): void {
     this.m_oDialogRef.close();
   }
 }

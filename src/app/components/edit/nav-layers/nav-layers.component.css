@@ -3,7 +3,11 @@
 }
 
 #smallMapContainer {
-    height: 100%
+    height: 97%
+}
+
+.map-container-panel {
+    height: 100%;
 }
 
 .list-group-item {
@@ -11,7 +15,6 @@
     border-radius: 8px;
     width: 100%;
 }
-
 
 div.layer-title {
     width: 100%;
@@ -37,13 +40,17 @@ div.dot-2 {
 }
 
 div.dot-3 {
-
     background-color: var(--wasdiDanger);
 }
 
 .band-title {
+    cursor: pointer;
     font-size: 14px;
     max-width: 65%;
+}
+
+.band-title:hover {
+    color: var(--wasdiGreen);
 }
 
 p.band-info {
@@ -61,5 +68,5 @@ p.band-info {
 }
 
 div.slider-container {
-    padding-left: 2px; 
+    padding-left: 2px;
 }

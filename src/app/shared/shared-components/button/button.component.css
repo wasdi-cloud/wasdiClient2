@@ -1,33 +1,32 @@
 /* Default Buttons */
 .wasdi-btn {
     align-items: center;
-    background: var(--Colors-Neutrals-50---Brand, #43526B);
-    border-radius: var(--Radius-or-Spacings-XS, 4px);
+    background: var(--neutral50Brand);
+    border-radius: 4px;
     color: #FFFFFF;
     display: inline-flex;
     gap: 6px;
     flex-shrink: 0;
     font-size: 16px;
     height: 32px;
-    padding: var(--Radius-or-Spacings-S, 8px);
+    padding: 8px;
     width: 100%;
 }
 
 .btn-outline {
-    color: #141920;
     background-color: transparent;
-    border: 1px solid var(--Colors-Neutrals-85, #141920);
+    border: 1px solid var(--neutral85);
+    color: var(--neutral85);
 }
 
 .btn-link {
     background: transparent;
-    color: #141920;
+    color: var(--neutral85);
     text-decoration: none;
 }
 
 .btn-round {
-    border-radius: var(--Radius-or-Spacings-FULL, 100px);
-    /* background: var(--Colors-Primary-10, #009036); */
+    border-radius: 100px;
 }
 
 
@@ -46,7 +45,7 @@
 
 /* Muted BUtton */
 .muted {
-    color: #141920;
+    color: var(--neutral85);
     border: 1px solid transparent;
     background: transparent;
 }
@@ -55,41 +54,41 @@
 /* Disabled Button */
 .wasdi-btn:disabled {
     cursor: not-allowed;
-    background-color: var(--Colors-Neutrals-25, #8E97A6);
+    background-color: var(--neutral25);
 }
 
 .btn-outline:disabled {
-    border: 1px solid var(--Colors-Neutrals-25, #8E97A6);
-    background: var(--Colors-Neutrals-5, #ECEEF0);
-    color: #8E97A6;
+    border: 1px solid var(--neutral25);
+    background: var(--neutral5);
+    color: var(--neutral25);
 }
 
 .btn-link:disabled {
     background: transparent;
-    color: #8E97A6;
+    color: var(--neutral25);
 }
 
 /* WASDI Button Hover States */
 
 .wasdi-btn:hover:not([disabled]) {
-    background: var(--Colors-Primary-10, #009036);
+    background: var(--wasdiGreen);
     transition: ease-out 300ms;
 }
 
 .btn-outline:hover:not([disabled]) {
     color: #009036;
-    border: 1px solid var(--Colors-Primary-10, #009036);
-    background: var(--Colors-Shades-30---Light, #EBF7EF);
+    border: 1px solid var(--wasdiGreen);
+    background: var(--wasdiGreenLight);
 }
 
 .btn-link:hover:not([disabled]) {
     background: transparent;
-    color: #006526;
+    color: var(--darkAccessible);
 }
 
 .btn-round:hover:not([disabled]) {
-    border-radius: var(--Radius-or-Spacings-FULL, 100px);
-    background: var(--Colors-Shades-30---Dark-Accessible, #006526);
+    border-radius: 100px;
+    background: var(--darkAccessible);
     transition: ease-out 300ms;
 }
 
@@ -97,7 +96,7 @@
 .muted:hover {
     background-color: var(--wasdiGreen) !important;
     color: #FFFFFF !important;
-    border: 1px solid var(--Colors-Primary-10, #009036) !important;
+    border: 1px solid var(--wasdiGreen) !important;
 
 }
 
@@ -124,4 +123,9 @@
 
 .border-white {
     border: 1px solid #FFFFFF;
+}
+
+.solid {
+    background-color: var(--wasdiGreen);
+    color: #FFFFFF;
 }

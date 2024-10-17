@@ -45,10 +45,18 @@ li.active {
     color: #FFFFFF;
 }
 
+.run-app-container,
+.notification-container {
+    padding: 0px 20px;
+}
+
 .run-app-container {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 0px 20px;
+}
 
+.help-icon {
+    color: var(--wasdiGreen);
+    cursor: pointer;
 }

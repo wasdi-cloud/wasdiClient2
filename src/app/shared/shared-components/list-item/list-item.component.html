@@ -1,17 +1,19 @@
-<div class="list-item-container d-flex flex-row gap-2" [class.parent-item]="m_bParentItem"
-    [class.product-item]="m_bProductItem" [class.highlighted]="m_oProductListItem.hovering"
+<div class="list-item-container d-flex flex-row gap-2" id="{{m_oProductListItem.id}}"
+    [class.parent-item]="m_bParentItem"
     [class.hover]="m_bProcessorItem || m_bProcessorItem || m_bProductItem"
-    [class.selected]="m_bIsSelected && !m_bParentItem">
+    [class.selected]="m_bIsSelected && !m_bParentItem" [class.disabled]="m_bIsDisabled && !m_bParentItem">
     <!-- Contents if List Item is of Parent Type: -->
     <div class="d-flex flex-row justify-content-between align-items-center w-100" *ngIf="m_bParentItem">
         <div>
             {{"Provider: " + m_sLabel}} | {{(m_sDescription === 0 || m_sDescription === -1)? 0 : m_sDescription + "
             Results"}}
         </div>
-        <span class="material-symbols-outlined" *ngIf="m_bParentIsOpen === false">
+        <span class="material-symbols-outlined" *ngIf="m_bParentIsOpen === false"
+            (click)="!m_bIsDisabled ? emitToolbarClick('expand-btn'): ''">
             expand_more
         </span>
-        <span class="material-symbols-outlined" *ngIf="m_bParentIsOpen === true">
+        <span class="material-symbols-outlined" *ngIf="m_bParentIsOpen === true"
+            (click)="!m_bIsDisabled ? emitToolbarClick('expand-btn') : ''">
             expand_less
         </span>
     </div>
@@ -51,6 +53,10 @@
                     </div>
                 </div>
                 {{m_oProductListItem.title}}
+                <div>
+                    <span class="label">Date: </span>
+                    {{getFormatDateString(m_oProductListItem) | date: 'dd/MM/yyyy HH:mm:ss' }}
+                </div>
             </div>
             <div class="row">
                 <div class="col-6"

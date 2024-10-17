@@ -129,9 +129,9 @@ export class EditComponent implements OnInit, OnDestroy {
   m_bShowProductDownload: boolean = false;
 
   /**
-   * Length of filtered products recieved from products list
+   * Length of filtered products received from products list
    */
-  m_iFilteredProducts: number = this.m_aoProducts.length
+  m_iFilteredProducts: number = 0;
 
   ngOnInit(): void {
     //What to do if workspace undefined: 
@@ -205,12 +205,17 @@ export class EditComponent implements OnInit, OnDestroy {
         oController.receivedNewProductMessage(oMessage);
         break;
       case "DELETE":
-        // oController.getProductListByWorkspace();
+        oController.getProductList();
         break;
     }
-    if (oMessage.payload.includes("DONE")) {
-      oController.m_oNotificationsQueueService.setNotifications(oMessage);
-    }
+
+    // Set the notification
+    // if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload)) {
+    //   //Ensure the payload is a string (can be a product object) 
+    //   if (typeof oMessage.payload === 'string' && oMessage.payload.includes("DONE")) {
+    //     oController.m_oNotificationsQueueService.setNotifications(oMessage);
+    //   }
+    // }
 
     WasdiUtils.utilsProjectShowRabbitMessageUserFeedBack(oMessage, oController.m_oTranslate, oController);
   }
@@ -270,7 +275,8 @@ export class EditComponent implements OnInit, OnDestroy {
   getProductList() {
     this.m_oProductService.getProductListByWorkspace(this.m_sWorkspaceId).subscribe({
       next: oResponse => {
-        this.m_aoProducts = oResponse
+        this.m_aoProducts = oResponse;
+        this.m_iFilteredProducts = this.m_aoProducts.length
         this.m_bIsLoadingProducts = false;
       },
       error: oError => {

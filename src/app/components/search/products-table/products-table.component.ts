@@ -1,22 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { WorkspacesListDialogComponent } from '../workspaces-list-dialog/workspaces-list-dialog.component';
 import { ProductInfoComponent } from '../product-info/product-info.component';
 import { MapService } from 'src/app/services/map.service';
 import { PagesService } from 'src/app/services/pages.service';
 
+import * as $ from 'jquery';
+
 @Component({
   selector: 'app-products-table',
   templateUrl: './products-table.component.html',
   styleUrls: ['./products-table.component.css']
 })
-export class ProductsTableComponent implements OnInit {
+export class ProductsTableComponent implements OnInit, OnDestroy {
   @Input() m_bIsVisibleListOfLayers: boolean = false;
   @Input() m_bIsPaginatedList: boolean;
-  @Input() m_aoProducts: Observable<any>;
-  @Input() m_aoSelectedProviders: Observable<any>;
+  @Input() m_aoProducts: any;
+  @Input() m_aoSelectedProviders: any;
   @Output() m_oActiveProviderChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oSelectedProducts: EventEmitter<any> = new EventEmitter<any>();
   @Output() m_oNavigateBackOutput: EventEmitter<any> = new EventEmitter<boolean>();
@@ -34,6 +36,9 @@ export class ProductsTableComponent implements OnInit {
 
   m_bAllSelected: boolean = false;
 
+  m_iItemsPerPage: number = 10;
+
+  m_oClickSubscription: Subscription;
   constructor(
     public m_oDialog: MatDialog,
     private m_oMapService: MapService,
@@ -59,19 +64,42 @@ export class ProductsTableComponent implements OnInit {
     //Set the products array value
     this.m_aoProducts.subscribe(oResponse => {
       if (oResponse.length > 0) {
-        this.m_aoProductsList = oResponse;
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProvider) === false) {
-          if (this.m_oActiveProvider.name) {
-            this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
-          }
+          this.m_aoProductsList = [];
+          oResponse.forEach(oProduct => {
+            if (oProduct.provider === this.m_oActiveProvider.name) {
+              this.m_aoProductsList.push(oProduct);
+            }
+            if (this.m_oActiveProvider.name) {
+              this.updateLayerListForActiveTab(this.m_oActiveProvider.name)
+            }
+          })
         }
       }
     });
 
+    this.m_oClickSubscription = this.m_oMapService.m_oSelectedRectangle.subscribe(oResponse => {
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+        if (oResponse.action === 'click') {
+          let container = $('#results-table')
+          let scrollTo = $('#' + oResponse.product.id);
+
+          //http://stackoverflow.com/questions/2905867/how-to-scroll-to-specific-item-using-jquery
+          container.animate({
+            scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
+          });
+        }
+      }
+    })
     //Get Products Per Page Options:
     this.m_aiProductsPerPageOptions = this.getProductsPerPageOptions();
   }
 
+  ngOnDestroy(): void {
+    // this.m_aoProducts.unsubscribe();
+    this.m_oClickSubscription.unsubscribe();
+    this.m_oSelectedProducts.unsubscribe();
+  }
   /**
    * Sets the Active Provider and emits the Provider to the Parent for Switching Layers List
    * @param oProvider 
@@ -83,11 +111,17 @@ export class ProductsTableComponent implements OnInit {
       return false;
     }
 
-    this.m_oActiveProvider = oProvider;
-    this.getNumberOfProductsByProdvider(oProvider);
-    this.updateLayerListForActiveTab(oProvider)
-    this.m_oActiveProviderChange.emit(this.m_oActiveProvider);
-    return true;
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveProvider) && (oProvider.name === this.m_oActiveProvider.name)) {
+      return true;
+    } else {
+      this.m_oActiveProvider = oProvider;
+      this.m_oActiveProvider.isOpen = true;
+      this.getNumberOfProductsByProvider(oProvider);
+      this.updateLayerListForActiveTab(oProvider)
+      this.m_oActiveProviderChange.emit(this.m_oActiveProvider);
+      return true;
+    }
+
   }
 
   /**
@@ -111,11 +145,10 @@ export class ProductsTableComponent implements OnInit {
    */
   isProviderLayerListEmpty(sProviderName: string) {
     if (!sProviderName) {
-      console.log("no provider")
       return false;
     }
-    var iNumberOfProduct = this.m_aoProductsList.length;
-    var bIsEmpty = true;
+    let iNumberOfProduct = this.m_aoProductsList.length;
+    let bIsEmpty = true;
 
     for (let iIndexProduct = 0; iIndexProduct < iNumberOfProduct; iIndexProduct++) {
       if (this.m_aoProductsList[iIndexProduct].provider === sProviderName) {
@@ -132,15 +165,14 @@ export class ProductsTableComponent implements OnInit {
    * @param sProviderName
    */
   updateLayerListForActiveTab(sProvider: string) {
-
     let aaoAllBounds = [];
 
     this.deleteLayers();
 
     for (let iIndexData = 0; iIndexData < this.m_aoProductsList.length; iIndexData++) {
       if (this.m_aoProductsList[iIndexData].provider !== sProvider) continue;
-
-      let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(this.m_aoProductsList[iIndexData].bounds, null, iIndexData);
+      let oProduct = this.m_aoProductsList[iIndexData]
+      let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(oProduct, null, iIndexData);
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
         this.m_aoProductsList[iIndexData].rectangle = oRectangle
       }
@@ -177,15 +209,14 @@ export class ProductsTableComponent implements OnInit {
         }
       }
     }
-
     return null;
   }
 
-  getNumberOfProductsByProdvider(sProviderName) {
+  getNumberOfProductsByProvider(sProviderName) {
     return this.m_oPageService.getNumberOfProductsByProvider(sProviderName)
   }
 
-  deleteLayers() {
+  deleteLayers(): boolean {
     if (this.isProductListEmpty() === true) {
       return false;
     }
@@ -206,9 +237,9 @@ export class ProductsTableComponent implements OnInit {
 
   /********** Button Handler Functions **********/
   /**
-   * 
+   * Navigate the user back to the filters list
    */
-  navigateBackToFilters() {
+  navigateBackToFilters(): void {
     this.m_aoProvidersList = [];
     this.m_oNavigateBackOutput.emit(false);
   }
@@ -216,7 +247,7 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Add checked product to selected products array
    */
-  addProductSelectedProducts(oInputProduct) {
+  addProductSelectedProducts(oInputProduct): void {
     oInputProduct.selected = !oInputProduct.selected
 
     if (oInputProduct.selected === true) {
@@ -238,7 +269,7 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Open dialog to add single product to a workspace
    */
-  sendSingleProductToWorkspace(oProduct) {
+  sendSingleProductToWorkspace(oProduct): void {
     let oDialog = this.m_oDialog.open(WorkspacesListDialogComponent, {
       height: "70vh",
       width: '50vw',
@@ -251,7 +282,7 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Move map to selected Product
    */
-  zoomToProduct(oRectangle) {
+  zoomToProduct(oRectangle): void {
     let oBounds = oRectangle.getBounds();
     let oNorthEast = oBounds.getNorthEast();
     let oSouthWest = oBounds.getSouthWest();
@@ -269,8 +300,9 @@ export class ProductsTableComponent implements OnInit {
 
   /**
    * Open the information dialog for product
+   * @returns void
    */
-  openProductInfoDialog(oProduct) {
+  openProductInfoDialog(oProduct): void {
     let oDialog = this.m_oDialog.open(ProductInfoComponent, {
       data: {
         product: oProduct
@@ -283,8 +315,9 @@ export class ProductsTableComponent implements OnInit {
   /**
    * Handle mouseover on product card
    * @param oRectangle
+   * @returns boolean
    */
-  changeRectangleStyleMouseOver(oRectangle) {
+  changeRectangleStyleMouseOver(oRectangle): boolean {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
       console.log("Error: rectangle is undefined ");
       return false;
@@ -317,7 +350,12 @@ export class ProductsTableComponent implements OnInit {
   }
 
   /********** OPEN DIALOG HANDLERS **********/
-  openAddToWorkspaceDialog() {
+
+  /**
+   * Open the add to Workspace Dialog
+   * @returns boolean
+   */
+  openAddToWorkspaceDialog(): boolean {
     let aoListOfSelectedProducts = this.m_aoSelectedProducts;
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoListOfSelectedProducts) === true) {
@@ -334,19 +372,52 @@ export class ProductsTableComponent implements OnInit {
     return true;
   }
 
-  /********** Pagination Handler Functions **********/
-
-  changeNumberOfProductsPerPage(event) {
-    this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event;
-    this.m_oPageService.changeNumberOfProductsPerPage(this.m_oActiveProvider.name);
+  /**
+   * Toggle the expand more/less chevron in the list item component
+   * @param oEvent 
+   * @param oProvider 
+   */
+  toggleActiveProviderOpen(oEvent, oProvider: any): void {
+    if (oProvider.name === this.m_oActiveProvider.name) {
+      this.m_oActiveProvider.isOpen = !this.m_oActiveProvider.isOpen;
+    } else {
+      this.setActiveProvider(oProvider);
+    }
   }
 
+  /********** Pagination Handler Functions **********/
+
+  /**
+   * Handle change in number of products per page from paginator
+   * @param event 
+   */
+  changeNumberOfProductsPerPage(event): void {
+    this.m_iItemsPerPage = event;
+    if (this.m_aoProvidersList.length > 1) {
+      this.m_aoProvidersList.forEach(oProvider => {
+        this.m_oPageService.getProviderObject(oProvider.name).productsPerPageSelected = event;
+        this.m_oPageService.changeNumberOfProductsPerPage(oProvider.name);
+      })
+    } else {
+      this.m_oPageService.getProviderObject(this.m_oActiveProvider.name).productsPerPageSelected = event;
+      this.m_oPageService.changeNumberOfProductsPerPage(this.m_oActiveProvider.name);
+    }
+  }
+
+  /**
+   * Read pagination object + change page from paginator
+   * @param oEvent 
+   * @param sProviderName 
+   */
   handlePagination(oEvent, sProviderName: string) {
-    console.log(oEvent)
     this.m_oPageService.changePage(oEvent.pageIndex, sProviderName)
   }
 
-  getProductsPerPageOptions() {
+  /**
+   * Get the page number options for paginator
+   * @returns number[]
+   */
+  getProductsPerPageOptions(): number[] {
     return this.m_oPageService.getProvidersPerPageOptions();
   }
 }

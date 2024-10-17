@@ -11,6 +11,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-workspace-info-dialog',
@@ -36,6 +37,7 @@ export class WorkspaceInfoDialogComponent implements OnInit {
     private m_oDialogRef: MatDialogRef<WorkspaceInfoDialogComponent>,
     private m_oNodeService: NodeService,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oRouter: Router,
     private m_oTranslate: TranslateService,
     private m_oWorkspaceService: WorkspaceService,
   ) { }
@@ -161,9 +163,32 @@ export class WorkspaceInfoDialogComponent implements OnInit {
         this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("DIALOG_ADD_NEW_WORKSPACE_UPDATE_ERROR"), '', 'alert');
       }
     })
-
   }
 
+  deleteWorkspace() {
+    let sRemoveHeader = this.m_oTranslate.instant("KEY_PHRASES.CONFIRM_REMOVAL");
+    let sRemoved = this.m_oTranslate.instant("KEY_PHRASES.REMOVED")
+    this.m_oNotificationDisplayService.openConfirmationDialog(`<li>${this.m_oWorkspace.name}</li>`, sRemoveHeader, 'alert').subscribe(oResult => {
+      if (oResult === true) {
+        this.m_oWorkspaceService.deleteWorkspace(this.m_oWorkspace, true, true).subscribe({
+          next: oResponse => {
+            if (oResponse === null) {
+              this.m_oNotificationDisplayService.openSnackBar(this.m_oWorkspace.name, sRemoved, 'success-snackbar');
+
+              // Only clear the workspace in the constants service if it is the one removed:
+              if (this.m_oWorkspace.workspaceId === this.m_oConstantsService.getActiveWorkspace().workspaceId) {
+                this.m_oConstantsService.setActiveWorkspace(null);
+              }
+
+              //Return user to workspaces view
+              this.m_oRouter.navigateByUrl('/workspaces');
+              this.onDismiss();
+            }
+          }
+        })
+      }
+    })
+  }
   saveChanges() {
     this.saveNodeCode();
     if (this.m_sInputWorkspaceName !== this.m_oWorkspace.name) {

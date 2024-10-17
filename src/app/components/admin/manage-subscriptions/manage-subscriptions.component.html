@@ -6,27 +6,120 @@
     </div>
     <div class="d-flex flex-row align-items-end justify-content-end">
         <div class="d-flex flex-row gap-2">
+            <div class="d-flex flex-row align-items-center gap-1">Search By:
+                <app-dropdown class="input-field" [m_aoDropdownItems]="m_asSortOptions"
+                    [m_aoSelectedItems]="m_sSubscriptionSortBy"
+                    (m_oSelectionChange)="setSortType($event)"></app-dropdown>
+            </div>
             <app-input-field [m_sPlaceholder]="'ADMIN_SUBSCRIPTIONS_SEARCH' | translate"
                 (m_oInputChange)="setSubscriptionSearch($event)" [m_sInputValue]="m_sSearch"
-                [m_bClearField]="true"></app-input-field>
-            <app-button [m_sIconLeft]="'search'" (click)="getSubscriptions()"></app-button>
+                (m_oClearInput)="clearSearchInputs()" [m_bClearField]="true"></app-input-field>
+            <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
         </div>
     </div>
-    <div class="flex-fill d-flex flex-column gap-2">
+    <div *ngIf="m_bMultiTables === true && m_aoSubscriptions.length > 0">
+        <div class="user-card" *ngFor="let oUser of m_aoSubscriptions">
+            <div class="user-name d-flex flex-row justify-content-between" (click)="oUser.isOpen = !oUser.isOpen"
+                style="cursor:pointer;">
+                <div>{{oUser.userId}}</div>
+                <span class="material-symbols-outlined">
+                    {{oUser.isOpen? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+                </span>
+            </div>
+            <div class="table-wrapper">
+                <div
+                    *ngIf="((!oUser.foundSubscriptions) || oUser.foundSubscriptions.length === 0) && oUser.isOpen === true">
+                    No subscriptions Found
+                </div>
+                <table
+                    *ngIf="(oUser.foundSubscriptions && oUser.foundSubscriptions.length > 0) && (m_aoSubscriptions.length === 1 || oUser.isOpen === true)">
+                    <thead class="table-heading-container">
+                        <tr>
+                            <td>{{"ADMIN_SUBSCRIPTIONS_SUBID" | translate}}</td>
+                            <td>{{"KEY_PHRASES.NAME" | translate}}</td>
+                            <td>{{"KEY_PHRASES.OWNER" | translate}}</td>
+                            <td>{{"KEY_PHRASES.STATUS" | translate}}</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="!oUser.foundSubscriptions">
+                            No more subscriptions to show.
+                        </tr>
+                        <tr *ngFor="let oSubscription of oUser.foundSubscriptions">
+                            <td class="copy-to-clipboard" (click)="copyToClipboard(oSubscription.subscriptionId)">
+                                {{oSubscription.subscriptionId}}</td>
+                            <td>{{oSubscription.name}}</td>
+                            <td>{{oSubscription.ownerUserId}}</td>
+                            <td>{{subscriptionActive(oSubscription)}}</td>
+                            <td class="d-flex flex-row justify-content-end">
+                                <span (click)="setSelectedSubscription(oSubscription)" data-bs-toggle="offcanvas"
+                                    href="#subscriptionEditor" role="button" aria-controls="subscriptionEditor"
+                                    class="material-symbols-outlined">
+                                    edit
+                                </span>
+                                <span class="material-symbols-outlined" (click)="deleteSubscription(oSubscription)">
+                                    delete
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="m_bMultiTables === false" class="flex-fill d-flex flex-column gap-2">
         <div class="table-wrapper">
             <table>
                 <thead class="table-heading-container">
                     <tr>
                         <td>{{"ADMIN_SUBSCRIPTIONS_SUBID" | translate}}</td>
-                        <td>{{"KEY_PHRASES.NAME" | translate}}</td>
-                        <td>{{"KEY_PHRASES.OWNER" | translate}}</td>
-                        <td>{{"KEY_PHRASES.STATUS" | translate}}</td>
+                        <td class="sorting-header" (click)="getSortedOrder('name')">
+                            <div class="d-flex flex-row align-items-center">
+                                {{"KEY_PHRASES.NAME" | translate}} <span
+                                    *ngIf="m_sSortOrder==='asc' && m_sSortBy === 'name'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_down
+                                </span> <span *ngIf="m_sSortOrder==='desc' && m_sSortBy === 'name'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_up
+                                </span>
+                            </div>
+                        </td>
+                        <td class="sorting-header" (click)="getSortedOrder('userId')">
+                            <div class="d-flex flex-row align-items-center">
+                                {{"KEY_PHRASES.OWNER" | translate}} <span
+                                    *ngIf="m_sSortOrder==='asc' && m_sSortBy === 'userId'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_down
+                                </span> <span *ngIf="m_sSortOrder==='desc' && m_sSortBy === 'userId'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_up
+                                </span>
+                            </div>
+                        </td>
+                        <td class="sorting-header" (click)="getSortedOrder('endDate')">
+                            <div class="d-flex flex-row align-items-center">
+                                {{"KEY_PHRASES.STATUS" | translate}} <span
+                                    *ngIf="m_sSortOrder==='asc' && m_sSortBy === 'endDate'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_down
+                                </span> <span *ngIf="m_sSortOrder==='desc' && m_sSortBy === 'endDate'"
+                                    class="material-symbols-outlined">
+                                    keyboard_arrow_up
+                                </span>
+                            </div>
+                        </td>
                         <td></td>
                     </tr>
                 </thead>
                 <tbody>
+                    <tr *ngIf="m_aoSubscriptions.length === 0">
+                        No more subscriptions to show.
+                    </tr>
                     <tr *ngFor="let oSubscription of m_aoSubscriptions">
-                        <td>{{oSubscription.subscriptionId}}</td>
+                        <td class="copy-to-clipboard" (click)="copyToClipboard(oSubscription.subscriptionId)">
+                            {{oSubscription.subscriptionId}}</td>
                         <td>{{oSubscription.name}}</td>
                         <td>{{oSubscription.ownerUserId}}</td>
                         <td>{{subscriptionActive(oSubscription)}}</td>
@@ -44,22 +137,9 @@
                 </tbody>
             </table>
         </div>
-        <nav class="align-self-end" aria-label="Users table navigation">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" aria-label="Previous" (click)="!m_bMinusPageDisabled? minusOnePage() : ''"
-                        [class.disabled]="m_bMinusPageDisabled">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" aria-label="Next" (click)="!m_bStepPageDisabled? stepOnePage() : ''"
-                        [class.disabled]="m_bStepPageDisabled">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <app-paginator [m_bMaxPaginator]="false" [m_bFullPaginator]="false"
+            (m_iItemsPerPageChange)="handleItemsPerPageChange($event)" (m_oClickEmitter)="handlePagination($event)"
+            [m_bShowTotalPages]="false"></app-paginator>
     </div>
 </div>
 <div class="offcanvas offcanvas-end org-create-container d-flex flex-column justify-content-between"

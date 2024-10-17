@@ -40,7 +40,7 @@ export class ProductListItemComponent {
   /**
    * Flag to know if the user is hovering with the mouse on this specific element
    */
-  m_bIsHovering: boolean = false;
+  m_bIsHovering?: boolean = false;
 
   /**
    * Flag to track whether or not the product is selected
@@ -115,9 +115,9 @@ export class ProductListItemComponent {
   }
 
   /**
- * Open the send to ftp dialog
- * @param oNode 
- */
+   * Open the send to ftp dialog
+   * @param oNode 
+   */
   openSendToFTP() {
     this.m_oDialog.open(WorkspacesListDialogComponent, {
       height: "65vh",

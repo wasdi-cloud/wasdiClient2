@@ -25,6 +25,7 @@
                     [m_bIsSelected]="oProcessor.processorName === m_oSelectedProcessor.processorName"
                     [m_bSimpleItem]="true" [m_bProcessorItem]="true" [m_sLabel]="oProcessor.processorName"
                     [m_sDescription]="oProcessor.processorDescription" [m_sIcon]="oProcessor.imgLink"
+                    [m_bIsDisabled]="oProcessor.deploymentOngoing"
                     [m_bHasToolbar]="oProcessor.sharedWithMe === true || m_sActiveUserId === oProcessor.publisher"
                     (m_oEmitClickEvent)="handleToolbarClick($event, oProcessor)"
                     (click)="selectProcessor(oProcessor)"></app-list-item>
@@ -47,9 +48,17 @@
                         [m_sIconLeft]="'help'" (click)="showHelpMessage(true)"></app-button>
                 </div>
                 <div class="d-flex flex-row gap-3">
+                    <div *ngIf="m_oSelectedProcessor.processorName" class="d-flex flex-row align-items-center gap-2">
+                        <input type="checkbox" class="wasdi-checkbox" name="bNotify" id="" [(ngModel)]="m_bNotification">
+                        <label for="bNotify">Notification </label>
+                        <span (click)="openNotificationHelp()" class="help-icon material-symbols-outlined">
+                            help
+                        </span>
+                    </div>
                     <app-button [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate" [m_bOutline]="true"
                         (click)="formatJSON()"></app-button>
-                    <app-button [m_sLabel]="(m_bIsPurchased ? 'WAP_RUN' : 'APP_UI_PURCHASE') | translate"
+                    <app-button [m_bDisabled]="m_oSelectedProcessor.deploymentOngoing ? true : false"
+                        [m_sLabel]="(m_bIsPurchased ? 'WAP_RUN' : 'APP_UI_PURCHASE') | translate"
                         [m_sIconLeft]="'play_circle'" [m_bDisabled]="!m_oSelectedProcessor.processorName"
                         (click)="m_bIsPurchased ? runProcessor() : getExecutePurchase()"></app-button>
                 </div>

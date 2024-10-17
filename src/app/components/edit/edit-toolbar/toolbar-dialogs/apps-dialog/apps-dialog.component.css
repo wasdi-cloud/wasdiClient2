@@ -19,3 +19,8 @@
 .msg-container {
     overflow: scroll;
 }
+
+.help-icon {
+    color: var(--wasdiGreen);
+    cursor: pointer;
+}

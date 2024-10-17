@@ -12,7 +12,8 @@
             </div>
             <div class="info-container">
                 <div class="font-bold">{{"DIALOG_PRODUCT_EDITOR_SIZE"| translate}}</div>
-                <div>{{"DIALOG_PRODUCT_EDITOR_UNAVAILABLE"| translate}}</div>
+                <div *ngIf="m_oProduct?.productSize==null">{{"DIALOG_PRODUCT_EDITOR_UNAVAILABLE"| translate}}</div>
+                <div *ngIf="m_oProduct?.productSize!=null">{{m_oProduct.productSize}}</div>
             </div>
         </div>
         <app-input-field [m_sLabel]="'DIALOG_PRODUCT_EDITOR_INFO_DIALOG_FRIENDLY_NAME_LABEL' | translate"

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 //Import Services:
@@ -12,6 +12,9 @@ import { Band } from 'src/app/shared/models/band.model';
 
 //Import Utilities:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 //Declare Leaflet:
 declare const L: any;
@@ -55,17 +58,20 @@ export class NavLayersComponent implements OnInit, OnChanges {
 
   @Input() public set b2DMapModeOn(bValue: boolean) {
     this.m_b2DMapModeOn = bValue;
-  } 
+  }
 
   constructor(
+    private m_oClipboard: Clipboard,
     private m_oConstantsService: ConstantsService,
+    private m_oDialog: MatDialog,
     private m_oGlobeService: GlobeService,
     private m_oMapService: MapService,
-    private m_oDialog: MatDialog
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oTranslate: TranslateService
   ) { }
 
   ngOnInit(): void {
-    
+
   }
 
   ngOnChanges(): void {
@@ -260,7 +266,13 @@ export class NavLayersComponent implements OnInit, OnChanges {
       height: '90vh',
       width: '90vw',
       maxWidth: '1500px',
-      
+
     })
+  }
+
+  copyLayerId(sLayerId: string) {
+    this.m_oClipboard.copy(sLayerId);
+    let sMsg = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD")
+    this.m_oNotificationDisplayService.openSnackBar(sMsg);
   }
 }

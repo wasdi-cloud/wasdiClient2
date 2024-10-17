@@ -240,6 +240,7 @@
     "IMPORT_PRODUCT_LIST_VARIABLES": "Các biến số",
     "IMPORT_PRODUCT_LIST_PROTOCOL": "Giao thức",
     "IMPORT_ERROR_SEARCH_REQUEST": "Lỗi khi mở yêu cầu tìm kiếm",
+    "IMPORT_INVALID_DATE_RANGE": "Vui lòng nhập phạm vi ngày hợp lệ.",
     
     "IMPORT_CRONTAB_YEAR": "Năm",
     "IMPORT_CRONTAB_SEASON": "Mùa",

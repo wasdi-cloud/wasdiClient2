@@ -10,6 +10,10 @@ import { ViewElementFactory } from 'src/app/shared/wap-components/view-element.f
   styleUrls: ['./wap-display.component.css']
 })
 export class WapDisplayComponent implements OnInit {
+  /**
+   * Is this tab active?
+   */
+  @Input() m_bActiveTab: boolean = false;
 
   /**
    * List of controls to show in this tab
@@ -33,7 +37,7 @@ export class WapDisplayComponent implements OnInit {
   m_aoViewElements: any[];
 
   /**
-   * Array of the product View Models in the selected workpsace
+   * Array of the product View Models in the selected workspace
    */
   m_aoProductsArray: any[] = [];
 
@@ -115,14 +119,13 @@ export class WapDisplayComponent implements OnInit {
   /**
    * Get products for workspace and pass to ProductsCombo child
    */
-  getWorkspaceProducts(): any {
+  getWorkspaceProducts(): void{
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.workspaceId)) {
-      return [];
+      this.m_aoProductsArray = [];
     } else {
       this.m_oProductService.getProductListByWorkspace(this.workspaceId).subscribe(oResponse => {
         this.m_aoProductsArray = oResponse
-
-        return this.m_asProductNames = this.m_aoProductsArray.map(element => {
+        this.m_asProductNames = this.m_aoProductsArray.map(element => {
           return element.name
         });
       })

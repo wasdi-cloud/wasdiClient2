@@ -5,8 +5,9 @@
         <div>{{'WORKSPACES_THEAD_WORKSPACES' | translate}}</div>
         <app-autocomplete *ngIf="!m_bExpandedMenu" [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate"
             [m_aoInputs]="m_aoWorkspacesList" (m_oSelectionChange)="setActiveWorkspace($event)" [m_oController]="this"
-            [m_oDeleteFn]="deleteWorkspace"></app-autocomplete>
-        <app-input-field *ngIf="m_bExpandedMenu" [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate" (m_oInputChange)="m_sSearchString = $event.event.target.value"></app-input-field>
+            [m_oDeleteFn]="deleteWorkspace" [m_bEmitOutput]="true" (m_oTextChange)="setNewWorkspaceName($event)"></app-autocomplete>
+        <app-input-field *ngIf="m_bExpandedMenu" [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate"
+            (m_oInputChange)="m_sSearchString = $event.event.target.value"></app-input-field>
     </div>
     <div *ngIf="m_bExpandedMenu" class="expanded-workspace-menu flex-fill">
         <div *ngFor="let oWorkspace of m_aoWorkspacesList | filter: m_sSearchString"
@@ -60,7 +61,7 @@
             </div>
         </div>
     </div>
-    <app-button class="expand-btn" [m_sSize]="'small'" [m_bRounded]="true" [m_bMuted]="true"
-        [m_sIconLeft]="!m_bExpandedMenu ? 'expand_content' : 'collapse_content'"
+    <app-button class="expand-btn" [m_sSize]="'small'" [m_bRounded]="true" [m_bBackgroundColor]="m_bExpandedMenu"
+        [m_bMuted]="true" [m_sIconLeft]="!m_bExpandedMenu ? 'expand_content' : 'collapse_content'"
         (click)="toggleExpandMenu()"></app-button>
 </div>

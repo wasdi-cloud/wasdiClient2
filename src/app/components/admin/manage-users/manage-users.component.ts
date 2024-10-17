@@ -82,7 +82,10 @@ export class ManageUsersComponent implements OnInit {
     this.getNodesList();
   }
 
-  getPaginatedList() {
+  getPaginatedList(oEvent?: any) {
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent)) {
+      this.m_sUserSearch = "";
+    }
     this.m_oAdminDashboardService.getUsersPaginatedList("", this.m_iOffset, this.m_iLimit, this.m_sSortBy, this.m_sSortOrder).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
@@ -192,26 +195,28 @@ export class ManageUsersComponent implements OnInit {
   }
 
   /********** Pagination Handlers **********/
+  handlePagination(oEvent) {
+    // previousPageIndex: 1, pageIndex: 2, pageSize: 10, length: 0
+    if (oEvent.previousPageIndex > oEvent.pageIndex) {
+      this.minusOnePage()
+    } else {
+      this.stepOnePage()
+    }
+  }
   stepOnePage() {
     this.m_iOffset += this.m_iLimit;
-    if (this.m_iOffset >= this.m_iTotalUsers) {
-      this.m_bStepPageDisabled = true;
-    } else {
-      this.m_bStepPageDisabled = false
-      this.getPaginatedList();
-      this.m_bMinusPageDisabled = false;
-    }
+    this.getPaginatedList();
   }
 
   minusOnePage() {
     this.m_iOffset -= this.m_iLimit;
-    this.m_bStepPageDisabled = false;
     this.getPaginatedList();
-    if (this.m_iOffset <= 0) {
-      this.m_bMinusPageDisabled = true;
-    }
   }
 
+  handleItemsPerPageChange(oEvent) {
+    this.m_iLimit = oEvent;
+    this.getPaginatedList();
+  }
   setInputSelections(oEvent: any, sLabel: string) {
     switch (sLabel) {
       case 'isActive':
@@ -287,7 +292,7 @@ export class ManageUsersComponent implements OnInit {
     this.m_sTotalUsers = oEvent.value
   }
 
-  getSortedUsers(sSortBy) {
+  getSortedUsers(sSortBy: string) {
     this.m_sSortBy = sSortBy
     if (this.m_sSortBy !== sSortBy) {
       this.m_sSortOrder = 'asc'

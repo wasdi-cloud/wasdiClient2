@@ -16,6 +16,7 @@ import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/wor
 import { Product } from 'src/app/shared/models/product.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
+import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
 
 
 
@@ -50,7 +51,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-    //RabbitStomp service call 
+    //RabbitStomp service call
     this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("LAUNCHJUPYTERNOTEBOOK",
       this,
       this.rabbitMessageHook, true)
@@ -87,7 +88,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   openImportDialog(): void {
     this.m_oDialog.open(ImportDialogComponent, {
       height: '425px',
-      width: '660px'
+      width: '660px',
     })
   }
 
@@ -131,12 +132,20 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     });
   }
 
+  openStylesDialog(): void {
+    this.m_oDialog.open(StylesDialogComponent, {
+      height: '90vh',
+      width: '90vw',
+      maxWidth: '1500px',
+    })
+  }
+
   rabbitMessageHook(oRabbitMessage, oController): void {
     if (oRabbitMessage.messageResult === "OK") {
       // Set timeout to allow for jupyter status to update
       setTimeout(() => {
         oController.m_bJupyterIsReady = true;
-      }, 1000)
+      }, 2000)
     }
   }
 

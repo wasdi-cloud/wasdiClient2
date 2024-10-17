@@ -1,17 +1,17 @@
 {
     "KEY_PHRASES" : {
-        "APP_NAME": "App Name", 
+        "APP_NAME": "App Name",
         "APPLY": "Apply",
-        "BACK": "Back", 
+        "BACK": "Back",
         "CANCEL": "Cancel",
         "CLOSE": "Close",
         "CLIPBOARD": "Copied to Clipboard!",
         "CLIPBOARD_BTN": "Copy to Clipboard",
-        "CONFIRM_REMOVAL": "Confirm Removal", 
+        "CONFIRM_REMOVAL": "Confirm Removal",
         "COPIED": "Copied!",
         "DESCRIPTION": "Description",
         "ERROR": "Error",
-        "GURU_MEDITATION": "Guru Meditation", 
+        "GURU_MEDITATION": "Guru Meditation",
         "HELP": "Help",
         "LOAD_MORE": "Load More",
         "NAME": "Name",
@@ -41,7 +41,7 @@
     "APP_UI_NEW_EXISTING_WS_CHECK_2":"Existing Workspace",
     "APP_UI_RUN_APP_LABEL":"Run App in",
     "APP_UI_AUTOMATIC_NAME_PLACEHOLDER":"[Automatic Name]",
-    "APP_UI_SELECT_WS": "Select workspace", 
+    "APP_UI_SELECT_WS": "Select workspace",
     "APP_UI_SEARCH_WS": "Search Workspaces",
     "APP_UI_OPEN_WS": "Run App",
     "APP_UI_AUTO_WS": "Auto Workspace",
@@ -53,9 +53,9 @@
     "ACTIVE_SUBSCRIPTION_ERROR_2": "You do not have an active subscription at the moment.",
 
     "DIALOG_PARAMS_CREATE": "Create parameters template",
-    "DIALOG_PARAMS_TEMPLATE_NAME": "Template name", 
+    "DIALOG_PARAMS_TEMPLATE_NAME": "Template name",
     "DIALOG_PARAMS_SAVE": "Save parameters",
-    
+
     "LOGIN_PLACEHOLDER_EMAIL": "Email Address",
     "LOGIN_PLACEHOLDER_PASSWORD": "Password",
     "LOGIN_CHECK_BOX_LABEL": "Remember me",
@@ -67,10 +67,10 @@
     "LOGIN_LINK_WEBSITE": "INFO",
     "LOGIN_LINK_NEW_USER": "New User? Register here!",
     "LOGIN_LINK_BACK": "Back",
-    
+
     "RECOVERY_EMAIL_BUTTON": "Send request",
     "RECOVERY_EMAIL_TITLE": "Please, insert your email and confirm.\n A message will be sent with further instructions to recover your account",
-    
+
     "SIGN_IN_PLACEHOLDER_EMAIL": "Email Address",
     "SIGN_IN_PLACEHOLDER_PASSWORD": "Password",
     "SIGN_IN_PLACEHOLDER_REPEAT_PASSWORD": "Repeat Password",
@@ -89,7 +89,7 @@
     "SIGN_IN_TERMS_AGREE_2": "Terms of Service",
     "SIGN_IN_TERMS_AGREE_3": "And",
     "SIGN_IN_TERMS_AGREE_4": "Privacy Statement",
-    
+
     "ROOT_VIEW_NAV_BAR_LINK_IMPORT": "Search",
     "ROOT_VIEW_NAV_BAR_LINK_PROCESS": "Edit",
     "ROOT_VIEW_NAV_BAR_LINK_APPSTORE": "Marketplace",
@@ -131,7 +131,7 @@
     "PROCESSING_BAR_ERROR": "Error",
     "PROCESSING_BAR_LOGS": "Logs",
     "PROCESSING_BAR_PAYLOAD": "Payload",
-    
+
     "WORKSPACES_PLACEHOLDER_SEARCH": "Search WorkSpace...",
     "WORKSPACES_BUTTON_NEW_WORKSPACE": "New Workspace",
     "WORKSPACES_THEAD_WORKSPACES": "Workspace",
@@ -151,10 +151,10 @@
     "WORKSPACES_SHARED_WITH": "Shared with",
     "WORKSPACES_SHOW_SATS": "Show Satellites",
 
-    "DIALOG_ADD_NEW_WORKSPACE_HEADER": "Create new Workspace", 
+    "DIALOG_ADD_NEW_WORKSPACE_HEADER": "Create new Workspace",
     "DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Update Workspace Name",
     "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Enter Workspace Name",
-    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" : "Enter New Workspace Name", 
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" : "Enter New Workspace Name",
     "DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON": "Create Workspace",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON": "Update Workspace",
     "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Cancel",
@@ -162,13 +162,13 @@
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS": "Workspace Name Updated",
     "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "For best practices, give a meaningful name to your workspace so it will be easy to remember. (Optional)",
     "DIALOG_ADD_NEW_WORKSPACE_CREATING": "WASDI is creating your workspace...",
-    
-    "DIALOG_APPS_PROCESSORS_ERROR": "An error occurred while fetching the processors", 
-    "DIALOG_APPS_DELETE_OWNER": "Are you sure you want to delete the following processor?", 
+
+    "DIALOG_APPS_PROCESSORS_ERROR": "An error occurred while fetching the processors",
+    "DIALOG_APPS_DELETE_OWNER": "Are you sure you want to delete the following processor?",
     "DIALOG_APPS_DELETE_SHARED": "Are you sure you want to remove your permissions from the following processor?",
     "DIALOG_APPS_ERROR_DELETE": "An error occurred while attempting to delete your processor",
     "DIALOG_APPS_CANNOT_EDIT": "You do not have permission to edit this workspace",
-    "DIALOG_APPS_INVALID_JSON": "Invalid JSON input", 
+    "DIALOG_APPS_INVALID_JSON": "Invalid JSON input",
 
     "EDITOR_TOOLTIP_2D": "Switch to 2D Map",
     "EDITOR_TOOLTIP_3D": "Switch to Globe",
@@ -194,7 +194,7 @@
     "EDITOR_PRODUCTS_FILTER_CLEAN": "Clean Filter",
     "EDITOR_PRODUCTS_FILTER_SELECT": "Select",
     "EDITOR_PRODUCTS_WS_INFO": "Workspace Info",
-    "EDITOR_PRODUCT_REMOVE": "Confirm product removal", 
+    "EDITOR_PRODUCT_REMOVE": "Confirm product removal",
     "EDITOR_PRODUCTS_REMOVE": "Confirm products removal",
     "EDITOR_NOTEBOOK_PREPARE": "WASDI is preparing your notebook",
     "EDITOR_NAVIGATION": "Navigation",
@@ -204,7 +204,7 @@
     "EDITOR_NODE_UPDATE": "Node Updated",
     "EDITOR_NODE_UPDATE_ERROR": "Error updating node",
     "EDITOR_WORKSPACE_REFRESH_ERROR": "Error in refreshing workspace information",
-    
+
     "IMPORT_SEARCH_RESULTS": "Search Results",
     "IMPORT_BACK_TO_SEARCH": "Back to Search",
     "IMPORT_PAGE_LABEL": "Page",
@@ -243,14 +243,15 @@
     "IMPORT_PRODUCT_LIST_VARIABLES": "Variables",
     "IMPORT_PRODUCT_LIST_PROTOCOL": "Protocol",
     "IMPORT_ERROR_SEARCH_REQUEST": "Error in opening search request",
+    "IMPORT_INVALID_DATE_RANGE": "Please enter a valid date range.",
 
     "IMPORT_CRONTAB_YEAR": "Year",
     "IMPORT_CRONTAB_SEASON": "Season",
     "IMPORT_CRONTAB_MONTH": "Month",
     "IMPORT_CRONTAB_DATE": "Date",
-    
+
     "SEARCH_TITLE_PANEL_HEADING_FILTERS": "Filters",
-    
+
     "PLAN_SEARCH": "Search",
     "PLAN_FROM": "From",
     "PLAN_FROM_TOOLTIP": "Select acquisition start time",
@@ -272,10 +273,10 @@
     "DIALOG_GET_CAPABILITIES_EXIT": "Exit",
     "DIALOG_GET_CAPABILITIES_SEARCH": "Search",
     "DIALOG_GET_CAPABILITIES_LOADING": "Loading...",
-   
+
     "DIALOG_FORMAT_JSON_ERROR": "Could not format your JSON input. Please ensure it is a valid JSON",
-    "DIALOG_PARSE_JSON_ERROR": "There was an error in parsing the JSON payload", 
-    
+    "DIALOG_PARSE_JSON_ERROR": "There was an error in parsing the JSON payload",
+
     "DIALOG_PRODUCT_EDITOR_TITLE": "Product details",
     "DIALOG_PRODUCT_EDITOR_INFO_DIALOG_ORIGINAL_NAME_LABEL": "Original name",
     "DIALOG_PRODUCT_EDITOR_INFO_DIALOG_FRIENDLY_NAME_LABEL": "Friendly Name",
@@ -285,13 +286,13 @@
     "DIALOG_PRODUCT_EDITOR_STYLE_ERROR": "Could not get styles",
     "DIALOG_PRODUCT_EDITOR_UPDATE_ERROR": "Could not update product",
     "DIALOG_PRODUCT_EDITOR_UPDATE_SUCCESS": "Product updated",
-    
+
     "DIALOG_WAPPS_ITEMS_FILTER": "Search by App Name...",
     "DIALOG_WAPPS_JSON_PARAMS": " Parameters (JSON)",
     "DIALOG_WAPPS_JSON_EDITOR": "JSON Editor",
     "DIALOG_WAPPS_JSON_RUN": "Run",
     "DIALOG_WAPPS_JSON_HELP": "Help",
-    
+
     "DIALOG_SFTP_UPLOAD_TITLE": "SFTP",
     "DIALOG_SFTP_UPLOAD_EMAIL_LABEL": "Email",
     "DIALOG_SFTP_UPLOAD_EMAIL_PLACEHOLDER": "Email...",
@@ -303,13 +304,14 @@
     "DIALOG_SFTP_UPLOAD_DELETE_ACCOUNT_BUTTON": "Delete",
     "DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "List of files",
     "DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Add to workspace",
-    
+
     "DIALOG_IMPORT_HEADER": "Import inside workspace",
     "DIALOG_IMPORT_LOCATION": "Import files to",
     "DIALOG_IMPORT_FILE_TYPES": "You can import inside this workspace file types such as .tiff and .zip",
+    "DIALOG_IMPORT_FILE_UPLOADING": "Please wait, your file is being uploaded",
     "DIALOG_IMPORT_APPLY_STYLE": "Do you wish to apply a style?",
-    "DIALOG_IMPORT_SELECT_STYLE": "Select a style", 
-    
+    "DIALOG_IMPORT_SELECT_STYLE": "Select a style",
+
     "DIALOG_IMPORT_UPLOAD_STYLE": "Style",
     "DIALOG_IMPORT_UPLOAD_UPLOAD": "Upload File",
     "DIALOG_IMPORT_IMPORT": "Import",
@@ -317,7 +319,7 @@
     "DIALOG_IMPORT_SFTP": "SFTP",
     "DIALOG_IMPORT_READONLY": "You do not have permission to import products to this workspace",
     "DIALOG_IMPORT_UPLOAD_ERROR": "Error in uploading file",
-    
+
     "DIALOG_PROCESSES_LOGS_TITLE": "Workspace Processes List",
     "DIALOG_PROCESSES_LOGS_NO_WS": "No workspace selected, cannot loading data. If you refreshed the page please go to Workspace section and select one.",
     "DIALOG_PROCESSES_LOGS_NONE": "ANY",
@@ -351,7 +353,7 @@
     "DIALOG_PROCESSES_LOGS_STOP_PROCESSES": "Stop processes",
     "DIALOG_PROCESSES_LOGS_PAYLOAD": "Payload",
     "DIALOG_PROCESSES_LOGS_LOAD_MORE": "Load more...",
-    
+
     "DIALOG_WORKFLOW_DROP_OR_CLICK": "Drag and drop SNAP workflow XML here or click to upload",
     "DIALOG_WORKFLOW_DRAG_DROP_NOT_SUPPORTED": "File Drag/Drop is not supported for this browser",
     "DIALOG_WORKFLOW_MANAGER_TITLE": "Snap Workflows",
@@ -376,16 +378,16 @@
     "DIALOG_WORKFLOW_DISCARD": "Discard Workflow",
     "DIALOG_WORKFLOW_SHARE": "Share your workflow with another user",
     "DIALOG_WORKFLOW_EDIT": "Edit Workflow",
-    
+
     "DIALOG_STYLE_DROP_OR_CLICK": "Drag and drop style XML here or click to upload",
     "DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "File Drag/Drop is not supported for this browser",
     "DIALOG_STYLE_MANAGER_TAB_LIST": "Style List",
     "DIALOG_STYLE_UPLOAD_STYLE": "Upload Style",
-    "DIALOG_STYLE_MANAGER_TAB_NEW": "New Style", 
-    "DIALOG_STYLE_MANAGER_EDIT": "Edit Style", 
-    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",   
-    "DIALOG_STYLE_SEARCH": "Search style",   
-    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for", 
+    "DIALOG_STYLE_MANAGER_TAB_NEW": "New Style",
+    "DIALOG_STYLE_MANAGER_EDIT": "Edit Style",
+    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",
+    "DIALOG_STYLE_SEARCH": "Search style",
+    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for",
     "DIALOG_CRONOTAB_FILTERS_BOX": "Filters",
     "DIALOG_CRONOTAB_CRONOTAB_BOX": "Crontab",
     "DIALOG_CRONOTAB_OK_BUTTON": "Ok",
@@ -393,7 +395,7 @@
     "DIALOG_CRONOTAB_ADD_BUTTON": "Add",
     "DIALOG_CRONOTAB_CLEAR_BUTTON": "Clear",
     "DIALOG_CRONOTAB_TITLE": "TIME SERIES SELECTOR",
-    
+
     "DIALOG_TITLE_WAPPS": "WASDI Apps",
     "DIALOG_TITLE_STYLES": "Wasdi Styles",
     "DIALOG_TITLE_PAYLOAD": "View Payload",
@@ -419,7 +421,7 @@
 
     "USER_ACCOUNT_CHANGE_SUCCESS": "Your information has been updated",
     "USER_ACCOUNT_CHANGE_ERROR": "Your information could not be updated",
-    
+
     "DIALOG_FTP_TITLE": "Transfer to FTP",
     "DIALOG_FTP_INPUT_SERVER": "FTP Server address",
     "DIALOG_FTP_INPUT_PORT": "Port",
@@ -430,7 +432,7 @@
     "DIALOG_FTP_INPUT_SFTPFLAG": "Is SFPT",
     "DIALOG_FTP_REMOTE_PATH": "Remote Path",
     "DIALOG_FTP_FILE_TO_UPLOAD": "File to upload",
-    
+
     "DIALOG_MANUAL_INSERT_BBOX_TITLE": "Insert Coordinates",
     "DIALOG_MANUAL_INSERT_BBOX_DRAW": "Draw area",
     "DIALOG_MANUAL_INSERT_BBOX_NORTH": "North",
@@ -442,7 +444,7 @@
     "DIALOG_PROCESSOR_FETCH_ERROR": "Could not get processor information",
     "DIALOG_PROCESSOR_APP_DETAILS_ERROR": "Could not get application detail",
     "DIALOG_PROCESSOR_APP_UI_ERROR": "Error getting the processor's UI",
-    
+
     "DIALOG_PROCESSOR_TAB_BASE": "Processor",
     "DIALOG_PROCESSOR_TAB_PACKAGE_MANAGER": "Package Manager",
     "DIALOG_PROCESSOR_TAB_DETAILS": "Details",
@@ -452,7 +454,7 @@
     "DIALOG_PROCESSOR_TAB_UI": "User Interface",
     "DIALOG_PROCESSOR_APP": "WASDI APP",
     "DIALOG_PROCESSOR_SAVE_APP": "Publish App",
-    
+
     "DIALOG_PROCESSOR_BASE_NAME": "Name",
     "DIALOG_PROCESSOR_BASE_TYPE": "Type",
     "DIALOG_PROCESSOR_BASE_SELECT_LANG": "Select Your Programming Language",
@@ -483,13 +485,13 @@
     "DIALOG_PROCESSOR_MEDIA_GALLERY_REMOVE": "Remove Image",
     "DIALOG_PROCESSOR_MEDIA_LOGO_SAVED": "Logo Updated",
     "DIALOG_PROCESSOR_MEDIA_LOGO_ERROR": "Could not save processor logo",
-    
+
     "DIALOG_PROCESSOR_SHARE_TITLE": "Share Application",
     "DIALOG_PROCESSOR_SHARE_MAIL": "Insert WASDI User email",
     "DIALOG_PROCESSOR_SHARE_SHARE": "Share",
     "DIALOG_PROCESSOR_SHARE_ACTIVE": "Active sharings",
     "DIALOG_PROCESSOR_SHARE_REMOVE": "Remove",
-    
+
     "DIALOG_PROCESSOR_STORE_SUB_TITLE": "App Details",
     "DIALOG_PROCESSOR_STORE_FRIEND_NAME": "Application name in the store",
     "DIALOG_PROCESSOR_STORE_LINK": "Your company link",
@@ -512,7 +514,7 @@
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_LINE2": "We suggest to use an image that shoes the final result of your application, but you can also use your company logo",
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL": "Additional Images",
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL_LINE1": "You can upload up to 6 images. Maximum file size per image is 5Mb",
-   
+
     "DIALOG_PROCESSOR_UI_APP_FORMAT_JSON": "Format Json",
     "DIALOG_PROCESSOR_UI_ADD_ELEMENTS": "- Add elements (take care of commas!)",
     "DIALOG_PROCESSOR_UI_TAB": "Tab",
@@ -529,7 +531,7 @@
     "DIALOG_PROCESSOR_UI_LISTBOX": "List Box",
     "DIALOG_PROCESSOR_UI_HIDDEN_FIELD": "Hidden Field",
     "DIALOG_PROCESSOR_UI_HIDDEN_TABLE": "Table",
-  
+
     "DIALOG_LOGS_TITLE": "WASDI Processor Logs ID",
     "DIALOG_LOGS_SEARCH_TEXT": "Search by text",
     "DIALOG_LOGS_OPERATION": "Operation",
@@ -539,7 +541,7 @@
     "DIALOG_LOGS_DATE": "Date",
     "DIALOG_LOGS_ROW": "Row",
     "DIALOG_LOGS_REFRESH": "Refresh",
-    "DIALOG_LOGS_STARTED": "Started", 
+    "DIALOG_LOGS_STARTED": "Started",
     "DIALOG_LOGS_PROGRESS": "Progress",
     "DIALOG_LOGS_DURATION": "Duration",
     "DIALOG_LOGS_STATUS_PLACEHOLDER": "Select Status",
@@ -548,30 +550,30 @@
     "DIALOG_LOGS_SEARCH_NAME": "Search by name",
     "DIALOG_LOGS_ACTION": "Action",
     "DIALOG_LOGS_REFRESH_ERROR": "Error refreshing processor status",
-  
+
     "DIALOG_PRODUCT_INFO_TITLE": "Product info",
     "DIALOG_PRODUCT_INFO_PROP": "Property",
     "DIALOG_PRODUCT_INFO_VALUE": "Value",
-   
+
     "DIALOG_FEEDBACK_SEND": "Send Feedback",
-    "DIALOG_FEEDBACK_SEND_AS": "Send as", 
+    "DIALOG_FEEDBACK_SEND_AS": "Send as",
     "DIALOG_FEEDBACK_TRY": "Would you like to try our ",
     "DIALOG_FEEDBACK_LIVE_SUPPORT": "Join our live support on Discord",
     "DIALOG_FEEDBACK_DISCORD": "Get real time support on our Discord channel, join our always growing community, accelerate your problem solving!",
-    "DIALOG_FEEDBACK_JOIN": "Join Today", 
+    "DIALOG_FEEDBACK_JOIN": "Join Today",
     "DIALOG_FEEDBACK_LIVE_HUSTON": "Houston, we have a problem!",
     "DIALOG_FEEDBACK_LIVE_PREFER": "Do you prefer to ",
     "DIALOG_FEEDBACK_LIVE_WRITE": "write us",
     "DIALOG_FEEDBACK_LIVE_TITLE": "Title",
     "DIALOG_FEEDBACK_LIVE_MESSAGE": "Message",
-  
+
     "DIALOG_SHARE_WS_WORKSPACE": "Workspace",
     "DIALOG_SHARE_WS_SHARE_WS": "Share Workspace",
     "DIALOG_SHARE_WS_MAIL": "Insert WASDI User email",
     "DIALOG_SHARE_WS_ACTIVE": "Active sharings",
     "DIALOG_SHARE_WS_REMOVE": "Remove",
     "DIALOG_SHARE_WS_SHARE": "Share",
-  
+
     "DIALOG_MANAGE_RESOURCE_PERMISSION_TITLE": "Manage Resource Permissions",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_ADD_REMOVE_TITLE": "Add/Remove Resource Permissions",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_SEARCH_TITLE": "Search Resource Permissions",
@@ -581,7 +583,7 @@
     "DIALOG_MANAGE_RESOURCE_PERMISSION_ADD": "Add",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_REMOVE": "Remove",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_SEARCH": "Search",
- 
+
     "DIALOG_MANAGE_USERS_TITLE": "Manage Users",
     "DIALOG_MANAGE_WORKSPACES_TITLE": "Manage Workspaces",
     "DIALOG_MANAGE_PROCESSORS_TITLE": "Manage Processors",
@@ -589,7 +591,7 @@
     "DIALOG_MANAGE_WORKSPACES_WORKSPACE_PARTIAL_NAME": "Workspace name or ID",
     "DIALOG_MANAGE_PROCESSORS_PROCESSOR_PARTIAL_NAME": "Processor name or ID",
     "DIALOG_MANAGE_USERS_SEARCH": "Search",
- 
+
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TIME_TITLE": "Total Running Time of Process Workspace",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_USER_ID": "User Id",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_DATE_FROM": "Date from",
@@ -597,20 +599,20 @@
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_IN_MILLIS": "Total running time in millis",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_FORMATTED": "Total running time formatted",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_RETRIEVE": "Retrieve",
- 
+
     "DIALOG_MANAGE_METRICS_ENTRIES_TITLE": "Manage Metrics Entries",
     "DIALOG_MANAGE_METRICS_ENTRIES_NODE_CODE": "Node Code",
     "DIALOG_MANAGE_METRICS_ENTRIES_LATEST_ENTRY": "Latest Entry",
     "DIALOG_MANAGE_METRICS_ENTRIES_RETRIEVE": "Retrieve",
- 
+
     "DIALOG_MANAGE_QUEUES_STATUS_TITLE": "Manage Queues Status",
     "DIALOG_MANAGE_QUEUES_STATUS_NODE_CODE": "Node Code",
     "DIALOG_MANAGE_QUEUES_STATUS_STATUSES": "Statuses",
     "DIALOG_MANAGE_QUEUES_STATUS_RETRIEVE": "Retrieve",
- 
+
     "DIALOG_FETCH_NODES_TITLE": "Fetch Nodes Sorted by Score",
     "DIALOG_FETCH_NODES_FETCH": "Fetch",
- 
+
     "DIALOG_WS_INFO_TITLE": "Workspace details",
     "DIALOG_WS_INFO_NAME": "Workspace name",
     "DIALOG_WS_INFO_OWNER": "Owner ",
@@ -625,7 +627,7 @@
     "DIALOG_WS_INFO_NO_SHARES": "There's no one here, but you can add collaborators!",
     "DIALOG_WS_INFO_PUBLIC": "Make Workspace Public",
     "DIALOG_WS_INFO_MANAGE_SHARE": "Manage Collaborators",
- 
+
     "DIALOG_PARAMS_TITLE": "Parameters list",
     "DIALOG_PARAMS_SELECTED_APP": "Selected App",
     "DIALOG_PARAMS_FILTER_HELP": "Search by parameters name",
@@ -635,7 +637,7 @@
     "DIALOG_PARAMS_PUBLISHER": "Publisher",
     "DIALOG_PARAMS_NAME": "Parameter Name",
     "DIALOG_PARAMS_PARAMS": "Parameters",
-    "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Are you sure you want to delete the following parameters template?", 
+    "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Are you sure you want to delete the following parameters template?",
     "DIALOG_PARAMS_CONFIRM_DELETE_SHARE": "Are you sure you want to remove your permissions from the following parameters template?",
     "DIALOG_PARAMS_DELETE_ERROR": "Could not delete your parameters template",
     "DIALOG_PARAMS_SAVE_ERROR": "Could not save your parameters template",
@@ -650,7 +652,7 @@
     "DIALOG_PARAMS_SHARE_ADD_ERROR2": "IT IS NOT POSSIBLE TO SHARE A RESOURCE WITH YOURSELF.",
     "DIALOG_PARAMS_SHARE_REMOVE_CONFIRM": "REMOVE PERMISSIONS FROM ",
     "DIALOG_PARAMS_SEARCH_PARAM": "Search parameters",
-   
+
     "DIALOG_STYLE_TAB_BASE": "Style",
     "DIALOG_STYLE_EDIT_XML": "Edit XML",
     "DIALOG_STYLE_SET_PUBLIC": "Set Style public",
@@ -664,17 +666,17 @@
     "DIALOG_STYLE_UPLOAD_XML_ERROR": "Could not update Style XML",
     "DIALOG_STYLE_UPLOAD_SUCCESS":"STYLE UPLOADED",
     "DIALOG_STYLE_FILE_ERROR": "Error in updating Style File",
-  
+
     "DIALOG_PAYLOAD_COPY": "Copy payload",
     "DIALOG_PAYLOAD_DASHBOARD": "Dashboard",
     "DIALOG_PAYLOAD_NO_INFO": "No payload information is available for the selected process",
     "DIALOG_PAYLOAD_FETCH_ERROR": "Problem getting Payload String",
- 
+
     "WAP_SELECT_AREA_BASE": "The selected area exceeds the limits imposed for the application",
     "WAP_SELECT_AREA_OVER_AREA": "<br> - The area is too big",
     "WAP_SELECT_AREA_OVER_SIDE": "<br> - The larger side selected is too big",
     "WAP_SELECT_AREA_OVER_RATIO": "<br> - One side is too large, compared to the other",
-  
+
     "WAP_BACK": "Back to the Future",
     "WAP_REVIEWS": " reviews",
     "WAP_PUBLISHED": "Published by ",
@@ -742,19 +744,19 @@
     "WAP_HISTORY_STATUS": "Status",
     "WAP_HISTORY_WS": "Workspace",
     "WAP_SELECT_PROCESSOR": "Select A Processor",
-   
+
     "METADATA_TITLE": "Metadata Attributes",
     "METADATA_ATTRIBUTE_LIST": "Attributes list",
     "METADATA_NAME": "Name",
     "METADATA_DESCRIPTION": "Description",
     "METADATA_GENERATING": "Generating metadata",
     "METADATA_NONE": "No Metadata found",
- 
+
     "DELETE_PROCESS_QUESTION": "Are you sure to kill this running process?",
     "DELETE_PROCESS_YES": "Yeah, Kill it",
     "DELETE_PROCESS_NO": "Uhm, no, not really",
     "DELETE_PROCESS_ERROR": "An error occurred while killing the process",
- 
+
     "PROCESSES_BAR_RUNNING_PROCESSES_ERROR": "Could not get running processes",
 
     "DOWNLOAD_IN_WS_TITLE": "Workspaces List",
@@ -762,7 +764,7 @@
     "DOWNLOAD_IN_WS_OWNER": "Owner",
     "DOWNLOAD_IN_WS_LIST": "Workspaces List",
     "DOWNLOAD_IN_WS_CREATE": "Create new workspace",
-  
+
     "ORBIT_INFO_SAT": "Satellite",
     "ORBIT_INFO_TITLE": "Orbit info",
     "ORBIT_INFO_PROPERTY": "Property",
@@ -788,12 +790,12 @@
     "ORBIT_INFO_RESULTS": "Results",
     "ORBIT_INFO_RESULTS_HEADER": "Plan results",
     "ORBIT_SELECT_RESOURCE": "Please select at least one Satellite Resource",
-    
+
     "DIRECTIVE_DD_SEARCH": "Search...",
     "DIRECTIVE_DD_BACK": "Back",
     "DIRECTIVE_DD_SAVE_SELECTION": "Save Selection",
 
-    "MAP_FEATURE_ERROR": "Cannot read feature info", 
+    "MAP_FEATURE_ERROR": "Cannot read feature info",
 
     "MSG_EDIT_PRODUCT_ADDED": "PRODUCT ADDED TO THE WS<br>READY",
     "MSG_DOWNLOAD": "PRODUCT ADDED TO THE WORKSPACE<br>READY",
@@ -856,7 +858,7 @@
     "MSG_MKT_STATS_ERROR": "ERROR GETTING APPLICATION STATISTICS",
     "MSG_MKT_REVIEWS_ERROR": "ERROR GETTING APP REVIEWS",
     "MSG_MKT_COMMENTS_ERROR": "ERROR GETTING REVIEW COMMENTS",
-  
+
     "MSG_MKT_REVIEW_SAVED": "Review saved",
     "MSG_MKT_REVIEW_SAVE_ERROR": "Error saving your review",
     "MSG_MKT_REVIEW_UPDATED": "Review updated",
@@ -871,10 +873,10 @@
     "MSG_MKT_COMMENT_UPDATED_ERROR": "Error updating your comment",
     "MSG_MKT_COMMENT_DELETED": "Comment removed",
     "MSG_MKT_COMMENT_REMOVE_ERROR": "Error removing your comment",
-   
+
     "MSG_MKT_REVIEW_DELETE_CONFIRM": "Are you sure you want to delete your review?",
     "MSG_MKT_COMMENT_DELETE_CONFIRM": "Are you sure you want to delete your comment?",
-  
+
     "MSG_MKT_APP_UI_ERROR": "ERROR: READING APP UI",
     "MSG_MKT_APP_UI_INVALID": "The following inputs are required or have an invalid input",
     "MSG_MKT_APP_UI_WORKSPACE": "Either select a workspace or create a new one",
@@ -892,19 +894,19 @@
     "MSG_MKT_HISTORY": "ERROR READING HISTORY",
     "MSG_MKT_WS_ERROR": "ERROR READING USER WORKSPACES",
     "MSG_MKT_PRODUCT_LIST_ERROR": "ERROR READING PRODUCT LIST",
- 
+
     "MSG_DELETE_WS_1": "DELETING WORKSPACE ",
     "MSG_DELETE_WS_2": " <br>ARE YOU SURE?",
- 
+
     "MSG_ADD_LIB_PM_1": "ADDING LIBRARY ",
     "MSG_ADD_LIB_PM_2": "<br>ARE YOU SURE?",
- 
+
     "MSG_REMOVE_LIB_PM_1": "REMOVING LIBRARY ",
     "MSG_REMOVE_LIB_PM_2": "<br>ARE YOU SURE?",
- 
+
     "MSG_UPGRADE_LIB_PM_1": "UPGRADING LIBRARY ",
     "MSG_UPGRADE_LIB_PM_2": "<br>ARE YOU SURE?",
-  
+
     "MSG_ERROR_SHARING_WITH_ONESELF": "IT IS NOT POSSIBLE TO SHARE WITH ONESELF",
     "MSG_ERROR_SHARING_WITH_OWNER": "IT IS NOT POSSIBLE TO SHARE WITH THE OWNER",
     "MSG_ERROR_SHARING_WITH_NON_EXISTENT_USER": "RECIPIENT USER DOES NOT EXISTS",
@@ -926,10 +928,10 @@
     "MSG_ERROR_NO_ACCESS_RIGHTS_APPLICATION_RESOURCE_SUBSCRIPTION": "YOU DO NOT HAVE PERMISSION TO PERFORM THIS ACTION",
     "MSG_ERROR_NO_ACCESS_RIGHTS_OBJECT_SUBSCRIPTION": "YOU DO NOT HAVE PERMISSION TO PERFORM THIS ACTION",
     "MSG_ERROR_INVALID_SUBSCRIPTION": "INVALID SUBSCRIPTION",
- 
+
     "MSG_SUCCESS_RESOURCE_PERMISSION_ADDED": "RESOURCE PERMISSION SUCCESSFULLY ADDED",
     "MSG_SUCCESS_RESOURCE_PERMISSION_REMOVED": "RESOURCE PERMISSION SUCCESSFULLY REMOVED",
-  
+
     "MENU_ZOOM_2D": "Zoom Band 2D Map",
     "MENU_ZOOM_3D": "Zoom Band 3D Map",
     "MENU_DOWNLOAD": "Download",
@@ -941,14 +943,14 @@
     "MENU_BANDS": "Bands",
     "MENU_SHARE_PRODUCT": "Share Product Options",
     "MENU_EDIT_STYLES": "Edit Styles",
-    "MENU_EDIT_PRODUCT_PROPERTIES": "Product Properties", 
+    "MENU_EDIT_PRODUCT_PROPERTIES": "Product Properties",
 
     "SHARE_SEND_PRODUCT": "Send Product to Workspace",
     "SHARE_SEND_PRODUCT_WORKSPACES": "Send product to Workspaces",
     "SHARE_SEND_PRODUCTS": "Send Products to Workspace",
     "SHARE_SEND_PRODUCTS_WORKSPACES": "Send product to Workspaces",
     "SHARE_SEND_MULTIPLE": "Send to Workspaces",
-   
+
     "MENU_DELETE_MANY_1": "Delete ",
     "MENU_DELETE_MANY_2": " products",
     "MENU_DELETE_SINGLE": "Delete product",
@@ -972,9 +974,9 @@
     "MARKET_FREE": "Free",
     "MARKET_START_PRICE": "from € ",
     "MARKET_LOAD_MORE": "LOAD MORE SPACE APPS",
-    "MARKET_SUCCESS": "Success Rate", 
-    "MARKET_MOST_USED": "Most Used", 
-    "MARKET_LEAST_USED": "Least Used", 
+    "MARKET_SUCCESS": "Success Rate",
+    "MARKET_MOST_USED": "Most Used",
+    "MARKET_LEAST_USED": "Least Used",
     "MARKET_MAX_PRICE": "Max. Price",
     "MARKET_CLEAR_FILTERS": "Clear filters",
 
@@ -994,7 +996,7 @@
     "DIALOG_SHARE_SUBSCRIPTION_ERROR": "Could not share Subscription",
     "DIALOG_SHARE_PERMISSION_ERROR": "You do not have the permissions to remove this user",
     "DIALOG_SHARE_USER_ERROR": "Could not remove user",
-    
+
     "DIALOG_PACKAGE_MANAGER_VIEWING": "Viewing Packages For",
     "DIALOG_PACKAGE_MANAGER_HEADER": "Package Manager",
     "DIALOG_PACKAGE_MANAGER_NAME": "Package Name",
@@ -1009,7 +1011,7 @@
     "PACKAGE_MANAGER_ROLLBACK": "Rollback",
     "PACKAGE_MANAGER_SEARCH": "Search package",
     "PACKAGE_MANAGER_NAME": "Package Name",
-    "PACKAGE_MANAGER_CURRENT_VERSION": "Current Version", 
+    "PACKAGE_MANAGER_CURRENT_VERSION": "Current Version",
     "PACKAGE_MANAGER_LATEST_VERSION": "Latest Version",
     "PACKAGE_MANAGER_ADD": "Add new package",
 
@@ -1020,7 +1022,7 @@
     "USER_ORGANIZATIONS_HIDE_USERS": "Hide Users",
     "USER_ORGANIZATIONS_ERROR_FETCHING": "Could not fetch your organisations",
     "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Could not fetch organisation information",
-    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirm Organisation Removal", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirm Organisation Removal",
     "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Are you sure you want to remove this organisation?",
     "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Confirm permissions removal",
     "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Are you sure you want to remove your permissions with this organization?",
@@ -1029,7 +1031,7 @@
     "USER_ORGANIZATION_INVALID_INPUT": "The organization input is not valid",
     "USER_ORGANIZATION_SAVE_ERROR": "Could not save your organisation",
     "USER_ORGANIZATION_DELETE_ERROR": "Could not delete your organisation",
-      
+
     "DIALOG_ADD_ORGANIZATION": "Add Organization",
     "DIALOG_EDIT_ORGANIZATION": "Edit Organization",
     "DIALOG_VIEW_ORGANIZATION": "View Organization",
@@ -1052,21 +1054,21 @@
     "DIALOG_EDIT_ORGANIZATION_UNSHARE": "Unshare",
     "DIALOG_SHARE_ORGANIZATION_SEARCH_USER": "Search User",
     "DIALOG_SHARE_ORGANIZATION_ADD_USER": "Add User",
-  
+
     "USER_SUBSCRIPTIONS_SHOW_USERS": "Show Users",
     "USER_SUBSCRIPTIONS_HIDE_USERS": "Hide Users",
     "USER_SUBSCRIPTIONS_SHOW_PROJECTS": "Show Projects",
     "USER_SUBSCRIPTIONS_HIDE_PROJECTS": "Hide Projects",
     "USER_SUBSCRIPTIONS_SHOW_ORGANIZATION": "Show Organizations",
     "USER_SUBSCRIPTIONS_HIDE_ORGANIZATION": "Hide Organizations",
-    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Confirm Subscription Removal", 
-    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Are you sure you want to remove this subscription?", 
+    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Confirm Subscription Removal",
+    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Are you sure you want to remove this subscription?",
     "USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG": "Error in deleting subscription",
     "USER_SUBSCRIPTION_REMOVE_MSG": "Subscription Removed",
     "USER_SUBSCRIPTION_UPDATED": "Subscription Updated",
     "USER_SUBSCRIPTION_URL": "Payment URL Received",
     "USER_SUBSCRIPTION_URL_ERROR": "Error in fetching payment URL",
-    "USER_SUBSCRIPTION_STRIPE_TITLE": "Re-directing to STRIPE", 
+    "USER_SUBSCRIPTION_STRIPE_TITLE": "Re-directing to STRIPE",
     "USER_SUBSCRIPTION_STRIPE_MSG": "You will be re-directed to our payment partner, Stripe. Click 'Yes' to continue or 'CANCEL' to end the payment process.",
     "USER_SUBSCRIPTION_STRIPE_FAIL": "There was an error in recording your payment",
     "USER_SUBSCRIPTION_ID_ERROR": "Could not find subscription by ID",
@@ -1097,12 +1099,12 @@
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Order Summary",
     "SUBSCRIPTION_BUY_TOTAL": "Total",
-  
+
     "DIALOG_ADD_SUBSCRIPTION": "Add Subscription",
     "DIALOG_EDIT_SUBSCRIPTION": "Edit Subscription",
     "DIALOG_VIEW_SUBSCRIPTION": "View Subscription",
     "DIALOG_SHARE_SUBSCRIPTION": "Share Subscription",
-  
+
     "DIALOG_BUY_SUBSCRIPTION": "Buy",
     "DIALOG_EDIT_SUBSCRIPTION_OWNER": "Owner",
     "DIALOG_EDIT_SUBSCRIPTION_NAME": "Name",
@@ -1137,13 +1139,13 @@
 
     "USER_PROJECTS_SHOW_ORGANIZATION": "Show Organizations",
     "USER_PROJECTS_HIDE_ORGANIZATION": "Hide Organizations",
-  
+
     "DIALOG_ADD_PROJECT": "Add Project",
     "DIALOG_EDIT_PROJECT": "Edit Project",
     "DIALOG_VIEW_PROJECT": "View Project",
- 
+
     "DIALOG_VIEW_SUBSCRIPTION_PROJECTS": "Projects of Subscription",
-   
+
     "DIALOG_SHARE_PROJECT": "Share Project",
     "DIALOG_EDIT_PROJECT_NAME": "Name",
     "DIALOG_EDIT_PROJECT_DESCRIPTION": "Description",
@@ -1158,7 +1160,7 @@
     "DIALOG_EDIT_PROJECT_SEARCH": "Search",
     "DIALOG_EDIT_PROJECT_CHANGE_ACTIVE": "Change Active",
     "DIALOG_EDIT_PROJECT_SELECT_ACTIVE_PROJECT": "Select the Active Project",
-   
+
     "MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "A valid subscription and an active project are required. Please see the User Dashboard.",
 
     "DASHBOARD_CONFIRM_NODE_TITLE": "Confirm Node Update",

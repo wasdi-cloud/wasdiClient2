@@ -240,6 +240,7 @@
 	"IMPORT_PRODUCT_LIST_VARIABLES": "Variabel",
 	"IMPORT_PRODUCT_LIST_PROTOCOL": "Protokol",
 	"IMPORT_ERROR_SEARCH_REQUEST": "Kesalahan saat membuka permintaan pencarian",
+	"IMPORT_INVALID_DATE_RANGE": "Silakan masukkan rentang tanggal yang valid.",
 
 	"IMPORT_CRONTAB_YEAR": "Tahun",
     "IMPORT_CRONTAB_SEASON": "Musim",

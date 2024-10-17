@@ -1,5 +1,6 @@
 <main class="d-flex flex-row flex-fill">
     <!-- Side Bar Container -->
+     <!--  appResizable [position]="'right'" [minResizeWidth]="475" -->
     <div class="editor-sidebar d-flex flex-column">
         <div class="workspace-location d-flex flex-column">
             <div class="d-flex flex-row gap-3 align-items-center">
@@ -25,8 +26,10 @@
             (m_oProductInfoChange)="getProductsChange($event)" (m_oProductArrayOutput)="getProductsChange($event)"
             (m_iFilteredProducts)="getFilteredProductsLength($event)"
             (m_oDownloadProgress)="getProductDownloadStatus($event)"></app-products-list>
-        <app-nav-layers class="justify-self-end" style="height: 40%;" [m_aoVisibleBands]="m_aoVisibleBands"
-            (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
+            <div class="nav-layer-container">
+                <app-nav-layers  [m_aoVisibleBands]="m_aoVisibleBands"
+                    (m_aoVisibleBandsChange)="getVisibleBands($event)"></app-nav-layers>
+            </div>
     </div>
     <!-- Map Container with Floating Nav-->
     <div class="map map-container flex-grow-1">

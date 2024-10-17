@@ -22,7 +22,8 @@
     line-height: 21px;
 }
 
-.expanded-menu, .expanded-menu.active{
+.expanded-menu,
+.expanded-menu.active {
     width: 50vw !important;
     height: 80vh !important;
 }
@@ -30,6 +31,7 @@
 .expanded-workspace-menu {
     overflow: scroll;
 }
+
 .expand-btn {
     position: absolute;
     bottom: 5px;

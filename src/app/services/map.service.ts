@@ -114,14 +114,23 @@ export class MapService {
   m_oGeocoderControl = new Geocoder();
 
   /**
-   * Manual Boundig Box Event Listener
+   * Manual Bounding Box Event Listener
    */
   m_oManualBoundingBoxSubscription: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   /**
-   * Manual Boundig Box Observable
+   * Manual Bounding Box Observable
    */
   _m_oManualBoundingBoxSubscription$ = this.m_oManualBoundingBoxSubscription.asObservable();
+
+  /**
+   * Manual Bounding Box Input
+   */
+  m_oManualBboxInput: any = null;
+
+  m_oSelectedRectangle: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  _m_oSelectedRectangle$ = this.m_oSelectedRectangle.asObservable();
 
   /**
    * Init options for leaflet-draw
@@ -337,7 +346,6 @@ export class MapService {
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
-
     return oMap;
   }
 
@@ -376,7 +384,6 @@ export class MapService {
     * @references https://github.com/perliedman/leaflet-control-geocoder
     */
   initGeoSearchPluginForOpenStreetMap(oMap) {
-
     if (oMap == null) {
       oMap = this.m_oWasdiMap;
     }
@@ -394,11 +401,11 @@ export class MapService {
    * Clear Map 
    */
   clearMap() {
-
     if (this.m_oWasdiMap) {
       this.m_oDrawnItems.clearLayers();
       this.m_oWasdiMap.remove();
       this.m_oWasdiMap = null;
+      this.clearManualResult();
     }
   }
 
@@ -532,48 +539,59 @@ export class MapService {
   }
   /**
     * Add a rectangle shape on the map
-    * @param aaBounds
+    * @param oProduct
     * @param sColor
     * @param iIndexLayers
     * @returns {null}
     */
-  addRectangleByBoundsArrayOnMap(aaBounds, sColor, iIndexLayers) {
-    if (!aaBounds) {
+  addRectangleByBoundsArrayOnMap(oProduct, sColor, iIndexLayers) {
+    let oController = this;
+    if (!oProduct) {
       return null;
     }
-    for (let iIndex = 0; iIndex < aaBounds.length; iIndex++) {
-      if (!aaBounds[iIndex]) {
-        return null;
+
+    //Catch to ensure we're only attempting to draw if the product has bounds
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.bounds)) {
+      return null
+    } else {
+      for (let iIndex = 0; iIndex < oProduct.bounds.length; iIndex++) {
+        if (!oProduct.bounds[iIndex]) {
+          return null;
+        }
       }
-    }
-    //default color
-    if (!sColor) { sColor = "#ff7800"; }
 
-    // create an colored rectangle
-    // weight = line thickness
-    let oRectangle = L.polygon(aaBounds, { color: sColor, weight: 1 }).addTo(this.m_oWasdiMap);
+      //default color
+      if (!sColor) { sColor = "#ff7800"; }
 
-    if (iIndexLayers) {//event on click
-      oRectangle.on("click", function (event) {
-        //->problematic here
-        console.log("on-mouse-click-rectangle")
-        //$rootScope.$broadcast('on-mouse-click-rectangle', { rectangle: oRectangle });//SEND MESSAGE TO IMPORTCONTROLLER
-      });
-      //mouse over event change rectangle style
-      oRectangle.on("mouseover", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
-        oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
-        oRectangle.getBounds();
-      });
-      //mouse out event set default value of style
-      oRectangle.on("mouseout", function (event) {//SEND MESSAGE TO IMPORT CONTROLLER
-        oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
-      });
+      // create an colored rectangle
+      // weight = line thickness
+      oProduct.rectangle = L.polygon(oProduct.bounds, { color: sColor, weight: 1 }).addTo(this.m_oWasdiMap);
+
+      if (iIndexLayers) {//event on click
+        oProduct.rectangle.on("click", function (event) {
+          //->problematic here
+          console.log("on-mouse-click-rectangle")
+          oController.m_oSelectedRectangle.next({ action: 'click', product: oProduct })
+        });
+        //mouse over event change rectangle style
+        oProduct.rectangle.on("mouseover", function (event) {
+          oProduct.rectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
+          oProduct.isHovering = true;
+          oController.m_oSelectedRectangle.next({ action: 'mouse-move', product: oProduct })
+        });
+        //mouse out event set default value of style
+        oProduct.rectangle.on("mouseout", function (event) {
+          oProduct.rectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
+          oProduct.isHovering = false;
+          oController.m_oSelectedRectangle.next({ action: 'mouse-move', product: oProduct })
+        });
+      }
+      return oProduct.rectangle;
     }
-    return oRectangle;
   }
   /**
   * Add a rectangle shape on the map
-  * @param aaBounds
+  * @param oProduct
   * @param sColor
   * @param sReferenceName
   * @returns {null}
@@ -882,15 +900,17 @@ export class MapService {
         // And here we decide what to do with our button
         L.DomEvent.on(oButton, 'click', function () {
 
-          // We open the Manual Boundig Box Dialog
+          // We open the Manual Bounding Box Dialog
           let oDialog = oController.m_oDialog.open(ManualBoundingBoxComponent, {
+            data: { input: oController.m_oManualBboxInput },
             height: '500px',
             width: '600px'
           })
 
           // Once is closed...
           oDialog.afterClosed().subscribe(oResult => {
-
+            //Hold result if user re-opens box
+            oController.setManualResult(oResult)
             // We need a valid result
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
 
@@ -939,7 +959,7 @@ export class MapService {
     this.m_oDrawnItems.addLayer(oLayer);
     this.zoomOnBounds(aoBounds);
 
-    //Emit bounding box to listening componenet:
+    //Emit bounding box to listening component:
     this.m_oManualBoundingBoxSubscription.next(oLayer);
   }
 
@@ -997,4 +1017,15 @@ export class MapService {
     return this.m_oHttp.get(sUrl, { 'headers': aoHeaders });
   }
 
+  /**
+   * Set manual bounding box result to hold
+   */
+  setManualResult(oBboxResult: any): void {
+    this.m_oManualBboxInput = oBboxResult;
+  }
+
+  /**
+   * Clear manual bounding box result
+   */
+  clearManualResult(): void { }
 }

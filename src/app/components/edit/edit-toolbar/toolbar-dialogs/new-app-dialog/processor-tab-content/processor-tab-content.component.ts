@@ -6,6 +6,7 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { TranslateService } from '@ngx-translate/core';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 
 //Angular Material Import: 
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -98,6 +99,8 @@ export class ProcessorTabContentComponent implements OnInit {
 
   @Input() m_sPublisher?: string = "";
 
+  @Input() m_bRedeployOngoing?: boolean = false;
+
 
   /**
    * Selected File
@@ -136,6 +139,7 @@ export class ProcessorTabContentComponent implements OnInit {
     return oProcessorType.name;
   })
 
+  m_iHookIndex = this.m_oRabbitStompService.addMessageHook("INFO", this, this.rabbitMessageHook, true);
 
   constructor(
     private m_oClipboard: Clipboard,
@@ -143,6 +147,7 @@ export class ProcessorTabContentComponent implements OnInit {
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
+    private m_oRabbitStompService: RabbitStompService,
     private m_oTranslate: TranslateService) {
   }
 
@@ -173,9 +178,13 @@ export class ProcessorTabContentComponent implements OnInit {
       this.m_sJSONSample = this.m_oProcessorBasicInfo.get('sJSONSample').value;
     }
 
-    if(this.m_oProcessorBasicInfo.get('sProcessorName')) {
+    if (this.m_oProcessorBasicInfo.get('sProcessorName')) {
       this.m_sProcessorName = this.m_oProcessorBasicInfo.get('sProcessorName').value
     }
+  }
+
+  ngOnDestroy() {
+    this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
   }
 
   /**
@@ -213,7 +222,6 @@ export class ProcessorTabContentComponent implements OnInit {
         this.m_oProcessorBasicInfo.patchValue({
           oType: oType
         })
-        console.log(oType)
       }
     });
   }
@@ -279,6 +287,7 @@ export class ProcessorTabContentComponent implements OnInit {
         this.m_oProcessorService.redeployProcessor(sProcessorId).subscribe({
           next: oResponse => {
             this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, '', 'success-snackbar');
+            this.m_bRedeployOngoing = true;
           },
           error: oError => {
             this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger')
@@ -372,5 +381,12 @@ export class ProcessorTabContentComponent implements OnInit {
 
   downloadProcessor(sProcessorId: string) {
     this.m_oProcessorService.downloadProcessor(sProcessorId)
+  }
+
+  rabbitMessageHook(oRabbitMessage, oController): void {
+    if (oRabbitMessage.messageResult === 'OK' && oRabbitMessage.payload.includes('Re Deploy Done')) {
+      oController.m_bRedeployOngoing = false;
+      console.log(oController.m_bRedeployOngoing)
+    }
   }
 }

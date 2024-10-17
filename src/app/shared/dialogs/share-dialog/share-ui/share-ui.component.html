@@ -10,7 +10,7 @@
         (click)="openSharedUsers()"></app-button>
 </div>
 <div [class.pannel]="resourceType === 'workflow' || resourceType === 'style' "
-    class="dialog-content users-table d-flex flex-column" *ngIf="m_bShowUsers">
+    class="dialog-content users-table d-flex flex-column" *ngIf="m_bShowUsers && !m_bLoadingUsers">
     <div class="table-wrapper">
         <table>
             <thead class="table-heading-container">

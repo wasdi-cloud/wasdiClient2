@@ -66,9 +66,12 @@
             </div>
         </div>
     </div>
-    <div class="dialog-footer d-flex flex-row gap-2 justify-content-end">
-        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true"
-            (click)="onDismiss()"></app-button>
-        <app-button [m_sLabel]="'KEY_PHRASES.SAVE_CHANGES' | translate" (click)="saveChanges()"></app-button>
+    <div class="dialog-footer d-flex flex-row gap-2 justify-content-between">
+        <app-button [m_sLabel]="'WORKSPACES_TOOLTIP_DELETE' | translate" [m_bIsDelete]="true" (click)="deleteWorkspace()"></app-button>
+        <div class="d-flex flex-row gap-2">
+            <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true"
+                (click)="onDismiss()"></app-button>
+            <app-button [m_sLabel]="'KEY_PHRASES.SAVE_CHANGES' | translate" (click)="saveChanges()"></app-button>
+        </div>
     </div>
 </div>

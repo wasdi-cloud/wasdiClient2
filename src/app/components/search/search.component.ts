@@ -1,19 +1,26 @@
 import { Component, OnInit, OnDestroy, AfterContentChecked } from '@angular/core';
 
-import { SearchService } from 'src/app/search.service';
+//RXJS Imports:
+import { Subject } from 'rxjs'
+
+//Services Imports:
+import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
 import { ConfigurationService } from 'src/app/services/configuration.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { MapService } from 'src/app/services/map.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { PagesService } from 'src/app/services/pages.service';
+import { SearchService } from 'src/app/search.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
-import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { Subject } from 'rxjs'
-import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
 import { ResultOfSearchService } from 'src/app/services/result-of-search.service';
 import { TranslateService } from '@ngx-translate/core';
+
+//Component/Dialog Imports:
 import { MatDialog } from '@angular/material/dialog';
 import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspaces-list-dialog.component';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+
+//Utilities Imports:
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
   selector: 'app-search',
@@ -22,10 +29,20 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
   host: { 'class': 'flex-fill' }
 })
 export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
-  m_oConfiguration: any;
-  m_aoMissions: Array<any> = [];
 
-  m_bClearFiltersEnabled: boolean;
+  /**
+   * Missions - will be taken from the configuration file
+   */
+  public m_aoMissions: Array<any> = [];
+
+  /**
+   * When the clear filters button should be enabled in the HTML 
+   */
+  public m_bClearFiltersEnabled: boolean;
+
+  /**
+   * 
+   */
   m_bIsVisibleListOfLayers: boolean = false;
   m_bIsPaginatedList: boolean = true;
   m_bIsVisibleLocalStorageInputs: boolean;
@@ -210,7 +227,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     this.m_oSearchService.setOffset(iOffset);//default 0 (index page)
     this.m_oSearchService.setLimit(oProvider.productsPerPageSelected);// default 10 (total of element per page)
     oProvider.isLoaded = false;
-    oProvider.totalOfProductss = 0;
+    oProvider.totalOfProducts = 0;
 
     this.m_oSearchService.getProductsCount().subscribe({
       next: oResponse => {

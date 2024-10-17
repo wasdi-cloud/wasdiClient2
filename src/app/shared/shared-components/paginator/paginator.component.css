@@ -13,3 +13,15 @@ span.step-btn {
 .disabled {
     color: var(--neutral15);
 }
+
+ /*Remove the spinner (up/down arrows) in Chrome/Safari *!*/
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Also for Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

@@ -15,7 +15,9 @@
                 [m_sIconRight]="'laptop_mac'" [m_bMuted]="true" (click)="openJupyterNotebookPage()" [m_sSize]="'small'"
                 [m_bDisabled]="!m_bJupyterIsReady" [m_bRounded]="true"></app-button>
         </li>
-
+        <li class="nav-item">
+            <app-button [m_sIconRight]="'imagesearch_roller'" [m_bMuted]="true" [m_bRounded]="true" [m_sSize]="'small'" (click)="openStylesDialog()" [matTooltip]="'EDITOR_OPERATION_TITLE_STYLE' | translate"></app-button>
+        </li>
         <li class="nav-item">
             <app-button [m_sIconRight]="'upload'" [m_bMuted]="true" (click)="openImportDialog()" [m_sSize]="'small'"
                 [m_bRounded]="true" [matTooltip]="'BTN_IMPORT' | translate"></app-button>

@@ -155,6 +155,10 @@ export class AppUiComponent implements OnInit {
    */
   m_bRunInNewWorkspace: boolean = true;
 
+  /**
+   * Flag to know if the user wants an email notification
+   */
+  m_bNotification: boolean = false;
 
   ngOnInit(): void {
     // Take our user id
@@ -368,7 +372,7 @@ export class AppUiComponent implements OnInit {
   executeProcessorInWorkspace(oController, sApplicationName: string, oProcessorInput, oWorkspace) {
     if (this.m_oConstantsService.checkProjectSubscriptionsValid() === true) {
       oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
-      oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput)).subscribe(oResponse => {
+      oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput), this.m_bNotification).subscribe(oResponse => {
         if (oResponse) {
           this.m_oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
         }
@@ -391,21 +395,26 @@ export class AppUiComponent implements OnInit {
   /**
    * Called to set the workspace where the user wants to run the app
    * @param oEvent Notification of the selection of a Workspace
-   * @returns 
    */
-  getSelectedWorkspaceId(oEvent) {
+  getSelectedWorkspaceId(oEvent): void {
     if (oEvent.isCreating) {
       this.m_oWorkspaceForm.sNewWorkspaceName = oEvent.workspace;
+      this.m_oSelectedWorkspace = {} as Workspace;
       this.m_bRunInNewWorkspace = true;
     } else {
       this.m_oSelectedWorkspace = oEvent.workspace;
       this.m_bRunInNewWorkspace = false;
     }
+
+    this.m_bNotification = oEvent.notification
   }
 
-  checkParams() {
+  /**
+   * Check if the inputted parameters in the WAPPS component were valid
+   * @returns boolean
+   */
+  checkParams(): boolean {
     let bIsValid: boolean = true;
-
     let asMessages: string[] = [];
 
     this.m_sMessage = this.m_oTranslate.instant("MSG_MKT_APP_UI_INVALID") + ":";
@@ -421,9 +430,7 @@ export class AppUiComponent implements OnInit {
       for (let iMessages = 0; iMessages < asMessages.length; iMessages++) {
         this.m_sMessage += `<li>${asMessages[iMessages]}</li>`;
       }
-
     }
-
     return bIsValid;
   }
 
@@ -443,10 +450,6 @@ export class AppUiComponent implements OnInit {
 
   setSelectedWorkspace(oEvent: any) {
     this.m_oWorkspaceForm.sExistingWorkspace = oEvent.value;
-  }
-
-  toggleCollapse() {
-    this.m_bIsCollapsed = !this.m_bIsCollapsed;
   }
 
   marketplaceReturn() {
@@ -525,7 +528,6 @@ export class AppUiComponent implements OnInit {
     } else {
       sTagContent = 'green';
     }
-
     return sTagColor;
   }
 
