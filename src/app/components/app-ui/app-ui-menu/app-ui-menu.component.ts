@@ -39,7 +39,7 @@ export class AppUiMenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.m_oActiveWorkspace) {
+    if (this.m_oActiveWorkspace.workspaceId) {
       this.m_bRunInNewWorkspace = false;
     }
   }
