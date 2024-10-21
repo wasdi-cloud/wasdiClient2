@@ -115,7 +115,6 @@ export class HeaderComponent implements OnInit {
 
             this.m_oSelectedProject = oProject;
             this.m_oConstantsService.setActiveProject(oProject);
-            this.initializeProjectsInfo();
           }
         },
         error: oError => {
