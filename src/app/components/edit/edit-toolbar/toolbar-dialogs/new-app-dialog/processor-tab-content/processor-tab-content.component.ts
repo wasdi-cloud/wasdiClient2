@@ -131,7 +131,8 @@ export class ProcessorTabContentComponent implements OnInit {
     { name: "Ubuntu 20.04 + Python 3.8", id: "python_pip_2_ubuntu_20" },
     { name: "Python 3.x Conda", id: "conda" },
     { name: "C# .NET Core", id: "csharp" },
-    { name: "JAVA 17", id: "java_17_Ubuntu_22" }//,
+    { name: "JAVA 17", id: "java_17_Ubuntu_22" },
+    { name: "Personalized Dockerfile", id: "personalized_docker" }
     //{ name: "Ubuntu 20.04 + Python 3.8 - Deprecated", id: "ubuntu_python37_snap" }
   ];
 
