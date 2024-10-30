@@ -1,7 +1,14 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { trigger, transition, animate, style } from '@angular/animations'
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { trigger, transition, animate, style } from '@angular/animations';
 
-//Angular Materials Modules: 
+//Angular Materials Modules:
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 //Service Imports:
@@ -15,12 +22,11 @@ import { ImageService } from 'src/app/services/api/image.service';
 import { NewAppDialogComponent } from '../new-app-dialog/new-app-dialog.component';
 import { ParamsLibraryDialogComponent } from './params-library-dialog/params-library-dialog.component';
 
-//Fadeout Utilities Import: 
+//Fadeout Utilities Import:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Application } from 'src/app/components/app-ui/app-ui.component';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
 import { TranslateService } from '@ngx-translate/core';
-
 
 @Component({
   selector: 'app-apps-dialog',
@@ -30,28 +36,28 @@ import { TranslateService } from '@ngx-translate/core';
     trigger('slideInUp', [
       transition(':enter', [
         style({ transform: 'translateY(100%)' }),
-        animate('500ms ease-in', style({ transform: 'translateY(0%)' }))
+        animate('500ms ease-in', style({ transform: 'translateY(0%)' })),
       ]),
       transition(':leave', [
-        animate('500ms ease-in', style({ transform: 'translateY(100%)' }))
-      ])
-    ])
-  ]
+        animate('500ms ease-in', style({ transform: 'translateY(100%)' })),
+      ]),
+    ]),
+  ],
 })
 export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('editor') m_oEditorRef!: ElementRef;
 
-  m_sActiveUserId: string = "";
+  m_sActiveUserId: string = '';
   m_aoWorkspaceList: any[] = [];
   m_aWorkspacesName: any[] = [];
   m_aoSelectedWorkspaces: any[] = [];
-  m_sFileName: string = "";
+  m_sFileName: string = '';
   m_aoProcessorList: any[] = [];
   m_bIsLoadingProcessorList: boolean = true;
   m_bIsJsonEditModeActive: boolean = false;
   m_sJson: any = {};
-  m_sMyJsonString: string = "";
-  m_sSearchString = ""
+  m_sMyJsonString: string = '';
+  m_sSearchString = '';
   m_oSelectedProcessor: any = {} as Application;
   m_bIsReadonly: boolean = true;
   m_iHookIndex: Number = -1;
@@ -67,7 +73,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   m_bIsPurchased: boolean = true;
 
- m_oAppPaymentVM: any = null;
+  m_oAppPaymentVM: any = null;
   constructor(
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
@@ -78,14 +84,14 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     private m_oRabbitStompService: RabbitStompService,
     private m_oImageService: ImageService,
     private m_oTranslate: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
-      "DELETEPROCESSOR",
+      'DELETEPROCESSOR',
       this,
       this.rabbitMessageHook
-    )
+    );
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.m_bIsReadonly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getProcessorsList();
@@ -97,7 +103,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
-    this.m_oJsonEditorService.initEditor()
+    this.m_oJsonEditorService.initEditor();
     this.m_oJsonEditorService.setText(this.m_sMyJsonString);
   }
 
@@ -105,62 +111,82 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    * Get the list of processors from the server
    */
   getProcessorsList() {
-    let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_APPS_PROCESSORS_ERROR");
+    let sErrorMsg: string = this.m_oTranslate.instant(
+      'DIALOG_APPS_PROCESSORS_ERROR'
+    );
     this.m_oProcessorService.getProcessorsList().subscribe({
-      next: oResponse => {
+      next: (oResponse) => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoProcessorList = this.setDefaultImages(oResponse);
           this.m_bIsLoadingProcessorList = false;
         } else {
-          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
+          this.m_oNotificationDisplayService.openAlertDialog(
+            sErrorMsg,
+            '',
+            'danger'
+          );
         }
       },
-      error: oError => {
-        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
-      }
+      error: (oError) => {
+        this.m_oNotificationDisplayService.openAlertDialog(
+          sErrorMsg,
+          '',
+          'danger'
+        );
+      },
     });
   }
 
   /**
    * If the processor has a default image, set as image - otherwise use default image
-   * @param aoProcessorList 
-   * @returns 
+   * @param aoProcessorList
+   * @returns
    */
   setDefaultImages(aoProcessorList) {
     if (!aoProcessorList) {
       return aoProcessorList;
     }
 
-    let sDefaultImage = "assets/wasdi/miniLogoWasdi.png";
+    let sDefaultImage = 'assets/wasdi/miniLogoWasdi.png';
     let iNumberOfProcessors = aoProcessorList.length;
 
-    for (let iIndexProcessor = 0; iIndexProcessor < iNumberOfProcessors; iIndexProcessor++) {
+    for (
+      let iIndexProcessor = 0;
+      iIndexProcessor < iNumberOfProcessors;
+      iIndexProcessor++
+    ) {
       if (!aoProcessorList[iIndexProcessor].imgLink) {
-        aoProcessorList[iIndexProcessor].imgLink = sDefaultImage
+        aoProcessorList[iIndexProcessor].imgLink = sDefaultImage;
       }
-      this.m_oImageService.updateProcessorLogoImageUrl(aoProcessorList[iIndexProcessor]);
+      this.m_oImageService.updateProcessorLogoImageUrl(
+        aoProcessorList[iIndexProcessor]
+      );
     }
     return aoProcessorList;
   }
 
   /**
    * Set selected processor as active processor
-   * @param oProcessor 
+   * @param oProcessor
    */
   selectProcessor(oProcessor) {
     this.m_oSelectedProcessor = oProcessor;
-    this.m_oProcessorService.getHelpFromProcessor(oProcessor.processorName).subscribe({
-      next: oResponse => {
-        this.m_sHelpMsg = oResponse.stringValue;
-      }
-    })
+    this.m_oProcessorService
+      .getHelpFromProcessor(oProcessor.processorName)
+      .subscribe({
+        next: (oResponse) => {
+          this.m_sHelpMsg = oResponse.stringValue;
+        },
+      });
 
-    this.m_oProcessorService.getIsAppPurchased(this.m_oSelectedProcessor.processorId).subscribe({
-      next: oResponse => {
-        this.m_bIsPurchased = oResponse;
-      },
-      error: oError => { }
-    })
+    this.m_oProcessorService
+      .getIsAppPurchased(this.m_oSelectedProcessor.processorId)
+      .subscribe({
+        next: (oResponse) => {
+          this.m_bIsPurchased = oResponse;
+        },
+        error: (oError) => {},
+      });
     if (oProcessor.paramsSample) {
       this.m_sMyJsonString = decodeURIComponent(oProcessor.paramsSample);
       this.m_oJsonEditorService.setText(this.m_sMyJsonString);
@@ -170,38 +196,36 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
         let sPrettyPrint = JSON.stringify(oParsed, null, 2);
 
         this.m_sMyJsonString = sPrettyPrint;
-      } catch (oError) {
-
-      }
+      } catch (oError) {}
     } else {
-      this.m_sMyJsonString = "";
+      this.m_sMyJsonString = '';
     }
   }
 
   /**
    * Open the Processor Parameters Dialog
-   * @param oEvent 
-   * @param oProcessor 
+   * @param oEvent
+   * @param oProcessor
    */
   openParametersDialog(oProcessor) {
     let oDialog = this.m_oDialog.open(ParamsLibraryDialogComponent, {
       height: '80vh',
       width: '80vw',
-      data: oProcessor
-    })
+      data: oProcessor,
+    });
 
-    oDialog.afterClosed().subscribe(oResult => {
+    oDialog.afterClosed().subscribe((oResult) => {
       if (oResult) {
-        this.m_sMyJsonString = decodeURIComponent(oResult.jsonParameters)
+        this.m_sMyJsonString = decodeURIComponent(oResult.jsonParameters);
       }
-    })
+    });
   }
 
   /**
    * Download the Processor file
-   * @param oEvent 
-   * @param oProcessor 
-   * @returns 
+   * @param oEvent
+   * @param oProcessor
+   * @returns
    */
   downloadProcessor(oProcessor: any) {
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oProcessor)) {
@@ -213,69 +237,111 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Open Processor Editing Dialog
-   * @param oEvent 
-   * @param oProcessor 
+   * @param oEvent
+   * @param oProcessor
    */
   openEditProcessorDialog(oProcessor: any) {
-    this.m_oDialog.open(NewAppDialogComponent, {
-      height: '95vh',
-      width: '95vw',
-      minWidth: '95vw',
-      data: {
-        editMode: true,
-        inputProcessor: oProcessor
-      }
-    })
+    this.m_oDialog
+      .open(NewAppDialogComponent, {
+        height: '95vh',
+        width: '95vw',
+        minWidth: '95vw',
+        data: {
+          editMode: true,
+          inputProcessor: oProcessor,
+        },
+      })
+      .afterClosed()
+      .subscribe((oChanged) => {
+        if (oChanged.changed) {
+          this.getProcessorsList();
+          if (
+            this.m_oSelectedProcessor.processorId === oProcessor.processorId
+          ) {
+            this.m_oJsonEditorService.setText(decodeURI(oChanged.json));
+          }
+        }
+      });
   }
 
   openNewAppDialog(): void {
-    this.m_oDialog.open(NewAppDialogComponent, {
-      height: '95vh',
-      width: '95vw',
-      maxWidth: '95vw',
-      data: { editMode: false }
-    })
+    this.m_oDialog
+      .open(NewAppDialogComponent, {
+        height: '95vh',
+        width: '95vw',
+        maxWidth: '95vw',
+        data: { editMode: false },
+      })
+      .afterClosed()
+      .subscribe((oChanged) => {
+        if (oChanged.changed) {
+          this.getProcessorsList();
+        }
+      });
   }
 
   /**
    * Either Delete the processor or remove user permissions
-   * @param oEvent 
-   * @param oProcessor 
-   * @returns 
+   * @param oEvent
+   * @param oProcessor
+   * @returns
    */
   removeProcessor(oProcessor: any) {
     if (!oProcessor) {
       return false;
     }
-    let sConfirmHeader: string = this.m_oTranslate.instant("KEY_PHRASES.CONFIRM_REMOVAL");
+    let sConfirmHeader: string = this.m_oTranslate.instant(
+      'KEY_PHRASES.CONFIRM_REMOVAL'
+    );
 
-    let sConfirmOwner = `${this.m_oTranslate.instant("DIALOG_APPS_DELETE_OWNER")}<li> ${oProcessor.processorName}</li>`;
-    let sConfirmShared = `${this.m_oTranslate.instant("DIALOG_APPS_DELETE_SHARED")}<li> ${oProcessor.processorName}</li>`;
+    let sConfirmOwner = `${this.m_oTranslate.instant(
+      'DIALOG_APPS_DELETE_OWNER'
+    )}<li> ${oProcessor.processorName}</li>`;
+    let sConfirmShared = `${this.m_oTranslate.instant(
+      'DIALOG_APPS_DELETE_SHARED'
+    )}<li> ${oProcessor.processorName}</li>`;
 
-    let sDeleteErrorMsg: string = this.m_oTranslate.instant("DIALOG_APPS_ERROR_DELETE");
+    let sDeleteErrorMsg: string = this.m_oTranslate.instant(
+      'DIALOG_APPS_ERROR_DELETE'
+    );
 
     let bConfirmResult: any;
 
     if (oProcessor.sharedWithMe) {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmShared, sConfirmHeader, 'alert');
+      bConfirmResult =
+        this.m_oNotificationDisplayService.openConfirmationDialog(
+          sConfirmShared,
+          sConfirmHeader,
+          'alert'
+        );
     } else {
-      bConfirmResult = this.m_oNotificationDisplayService.openConfirmationDialog(sConfirmOwner, sConfirmHeader, 'alert');
+      bConfirmResult =
+        this.m_oNotificationDisplayService.openConfirmationDialog(
+          sConfirmOwner,
+          sConfirmHeader,
+          'alert'
+        );
     }
 
-    bConfirmResult.subscribe(bDialogResult => {
+    bConfirmResult.subscribe((bDialogResult) => {
       if (bDialogResult === true) {
         this.m_bIsLoadingProcessorList = true;
-        this.m_oProcessorService.deleteProcessor(oProcessor.processorId).subscribe({
-          next: oResponse => {
-            //Next actions are handled on RabbitMessageHook function
-          },
-          error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog(sDeleteErrorMsg, '', 'danger');
-          }
-        }
-        );
+        this.m_oProcessorService
+          .deleteProcessor(oProcessor.processorId)
+          .subscribe({
+            next: (oResponse) => {
+              //Next actions are handled on RabbitMessageHook function
+            },
+            error: (oError) => {
+              this.m_oNotificationDisplayService.openAlertDialog(
+                sDeleteErrorMsg,
+                '',
+                'danger'
+              );
+            },
+          });
       }
-    })
+    });
     return true;
   }
 
@@ -283,13 +349,21 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    * Format the JSON textbox
    */
   formatJSON() {
-    let sJsonError = this.m_oTranslate.instant("DIALOG_FORMAT_JSON_ERROR")
+    let sJsonError = this.m_oTranslate.instant('DIALOG_FORMAT_JSON_ERROR');
     try {
-      console.log("JSON")
-      this.m_sMyJsonString = JSON.stringify(JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')), null, 3);
+      console.log('JSON');
+      this.m_sMyJsonString = JSON.stringify(
+        JSON.parse(this.m_sMyJsonString.replaceAll("'", '"')),
+        null,
+        3
+      );
       this.m_oJsonEditorService.setText(this.m_sMyJsonString);
     } catch (oError) {
-      this.m_oNotificationDisplayService.openAlertDialog(sJsonError, '', 'alert');
+      this.m_oNotificationDisplayService.openAlertDialog(
+        sJsonError,
+        '',
+        'alert'
+      );
     }
   }
 
@@ -302,25 +376,30 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (this.m_bIsReadonly === true) {
-      let sCannotEditMsg: string = this.m_oTranslate.instant("DIALOG_APPS_CANNOT_EDIT")
-      this.m_oNotificationDisplayService.openAlertDialog(sCannotEditMsg, '', 'alert');
+      let sCannotEditMsg: string = this.m_oTranslate.instant(
+        'DIALOG_APPS_CANNOT_EDIT'
+      );
+      this.m_oNotificationDisplayService.openAlertDialog(
+        sCannotEditMsg,
+        '',
+        'alert'
+      );
       return false;
     }
 
     if (!this.m_bIsPurchased) {
-
       return false;
     }
     console.log(`RUN - ${this.m_oSelectedProcessor.processorName}`);
 
     let sJSON = this.m_sMyJsonString;
-    let sStringJSON = "";
+    let sStringJSON = '';
 
     // Ensure that the JSON has been transformed into a STRING type
-    if (typeof sJSON !== "string") {
+    if (typeof sJSON !== 'string') {
       sStringJSON = JSON.stringify(sJSON);
     } else if (sJSON === '') {
-      sStringJSON = '{}'
+      sStringJSON = '{}';
     } else {
       sStringJSON = sJSON;
     }
@@ -328,18 +407,37 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       JSON.parse(sStringJSON);
     } catch (oError) {
-      let sErrorMessage = this.m_oTranslate.instant("DIALOG_APPS_INVALID_JSON") + "<br>" + oError.toString();
+      let sErrorMessage =
+        this.m_oTranslate.instant('DIALOG_APPS_INVALID_JSON') +
+        '<br>' +
+        oError.toString();
 
-      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage, '', 'alert');
+      this.m_oNotificationDisplayService.openAlertDialog(
+        sErrorMessage,
+        '',
+        'alert'
+      );
     }
 
-    this.m_oProcessorService.runProcessor(this.m_oSelectedProcessor.processorName, sStringJSON, this.m_bNotification).subscribe(oResponse => {
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-        let sNotificationMsg = this.m_oTranslate.instant("MSG_MKT_PROC_SCHEDULED");
-        this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg, '', 'success-snackbar')
-      }
-      this.m_oDialogRef.close();
-    })
+    this.m_oProcessorService
+      .runProcessor(
+        this.m_oSelectedProcessor.processorName,
+        sStringJSON,
+        this.m_bNotification
+      )
+      .subscribe((oResponse) => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          let sNotificationMsg = this.m_oTranslate.instant(
+            'MSG_MKT_PROC_SCHEDULED'
+          );
+          this.m_oNotificationDisplayService.openSnackBar(
+            sNotificationMsg,
+            '',
+            'success-snackbar'
+          );
+        }
+        this.m_oDialogRef.close();
+      });
     return true;
   }
 
@@ -347,21 +445,23 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    * Open the help dialog
    */
   openHelp() {
-    let sHelpMessage = ""
-    this.m_oProcessorService.getHelpFromProcessor(this.m_oSelectedProcessor.processorName).subscribe(oResponse => {
-      if (oResponse.stringValue) {
-        sHelpMessage = oResponse.stringValue;
-        if (sHelpMessage) {
-          try {
-            let oHelp = JSON.parse(sHelpMessage);
+    let sHelpMessage = '';
+    this.m_oProcessorService
+      .getHelpFromProcessor(this.m_oSelectedProcessor.processorName)
+      .subscribe((oResponse) => {
+        if (oResponse.stringValue) {
+          sHelpMessage = oResponse.stringValue;
+          if (sHelpMessage) {
+            try {
+              let oHelp = JSON.parse(sHelpMessage);
 
-            sHelpMessage = oHelp
-          } catch (oError) {
-            sHelpMessage = oResponse.stringValue;
+              sHelpMessage = oHelp;
+            } catch (oError) {
+              sHelpMessage = oResponse.stringValue;
+            }
           }
         }
-      }
-    })
+      });
   }
 
   handleToolbarClick(oEvent, oProcessor) {
@@ -377,7 +477,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
         this.openEditProcessorDialog(oProcessor);
         break;
       default:
-        this.removeProcessor(oProcessor)
+        this.removeProcessor(oProcessor);
     }
   }
 
@@ -390,7 +490,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   rabbitMessageHook(oRabbitMessage: any, oController: any) {
-    console.log("RECEIVED " + oRabbitMessage)
+    console.log('RECEIVED ' + oRabbitMessage);
     oController.getProcessorsList();
   }
 
@@ -405,59 +505,92 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   getParamsTemplate(oEvent) {
     this.m_bShowParamsLibrary = false;
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oEvent) === false) {
-      this.m_sMyJsonString = decodeURIComponent(oEvent.jsonParameters)
+      this.m_sMyJsonString = decodeURIComponent(oEvent.jsonParameters);
     }
 
     //Re-init the JSON editor with time to re-set the DOM
     setTimeout(() => {
       this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
-      this.m_oJsonEditorService.initEditor()
+      this.m_oJsonEditorService.initEditor();
       this.m_oJsonEditorService.setText(this.m_sMyJsonString);
-    }, 500)
+    }, 500);
   }
 
   getExecutePurchase() {
     this.createAppPaymentObject();
-    this.m_oNotificationDisplayService.openConfirmationDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_MSG"), this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_TITLE"), 'info').subscribe(bDialogResult => {
-      if (bDialogResult) {
-        this.saveAndGetStripePaymentUrl()
-      }
-    })
+    this.m_oNotificationDisplayService
+      .openConfirmationDialog(
+        this.m_oTranslate.instant('USER_SUBSCRIPTION_STRIPE_MSG'),
+        this.m_oTranslate.instant('USER_SUBSCRIPTION_STRIPE_TITLE'),
+        'info'
+      )
+      .subscribe((bDialogResult) => {
+        if (bDialogResult) {
+          this.saveAndGetStripePaymentUrl();
+        }
+      });
   }
 
   createAppPaymentObject() {
     this.m_oAppPaymentVM = {
-      paymentName: `${this.m_oSelectedProcessor.processorName}_${new Date().toISOString()}`,
+      paymentName: `${
+        this.m_oSelectedProcessor.processorName
+      }_${new Date().toISOString()}`,
       processorId: this.m_oSelectedProcessor.processorId,
-      buyDate: new Date().toISOString()
-    }
+      buyDate: new Date().toISOString(),
+    };
   }
 
   saveAndGetStripePaymentUrl() {
-    this.m_oProcessorService.addAppPayment(this.m_oAppPaymentVM).subscribe(oResponse => {
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-        this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_FAIL"), '', 'danger');
-      } else {
-        this.m_oProcessorService.getStripeOnDemandPaymentUrl(this.m_oAppPaymentVM.processorId, oResponse.message).subscribe({
-          next: oResponse => {
-            if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
-              this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("USER_SUBSCRIPTION_URL"), '', 'success-snackbar');
+    this.m_oProcessorService
+      .addAppPayment(this.m_oAppPaymentVM)
+      .subscribe((oResponse) => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          this.m_oNotificationDisplayService.openAlertDialog(
+            this.m_oTranslate.instant('USER_SUBSCRIPTION_STRIPE_FAIL'),
+            '',
+            'danger'
+          );
+        } else {
+          this.m_oProcessorService
+            .getStripeOnDemandPaymentUrl(
+              this.m_oAppPaymentVM.processorId,
+              oResponse.message
+            )
+            .subscribe({
+              next: (oResponse) => {
+                if (
+                  !FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)
+                ) {
+                  this.m_oNotificationDisplayService.openSnackBar(
+                    this.m_oTranslate.instant('USER_SUBSCRIPTION_URL'),
+                    '',
+                    'success-snackbar'
+                  );
 
-              let sUrl = oResponse.message;
+                  let sUrl = oResponse.message;
 
-              window.open(sUrl, '_blank');
-            }
-          },
-          error: oError => {
-            this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("USER_SUBSCRIPTION_URL_ERROR"), '', 'danger');
-          }
-        })
-      }
-    })
+                  window.open(sUrl, '_blank');
+                }
+              },
+              error: (oError) => {
+                this.m_oNotificationDisplayService.openAlertDialog(
+                  this.m_oTranslate.instant('USER_SUBSCRIPTION_URL_ERROR'),
+                  '',
+                  'danger'
+                );
+              },
+            });
+        }
+      });
   }
 
   openNotificationHelp() {
-    this.m_oNotificationDisplayService.openAlertDialog("WASDI will send you an email notification upon completion of this processor", "Info", "info")
+    this.m_oNotificationDisplayService.openAlertDialog(
+      'WASDI will send you an email notification upon completion of this processor',
+      'Info',
+      'info'
+    );
   }
 
   /**
