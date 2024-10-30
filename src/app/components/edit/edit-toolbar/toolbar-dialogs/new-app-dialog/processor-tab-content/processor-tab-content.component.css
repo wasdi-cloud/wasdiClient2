@@ -1,69 +1,80 @@
 div.dialog-content {
-    height: 100%;
+  height: 100%;
 }
 
 div.dialog-column {
-    width: 50%;
-    height: 100%;
-    border-radius: 8px;
+  width: 50%;
+  height: 100%;
+  border-radius: 8px;
 }
 
 div.button-container {
-    padding: 8px;
-    border-radius: 8px;
+  padding: 8px;
+  border-radius: 8px;
 }
 
 div.button-container,
 div.json-sample-container {
-    background: var(--neutral5);
+  background: var(--neutral5);
 }
 
 div.textarea-container {
-    height: 25%;
+  height: 25%;
 }
 
 div.file-container {
-    border: 1px solid #000000;
-    padding: 12px;
-    border-radius: 6px;
+  border: 1px solid #000000;
+  padding: 12px;
+  border-radius: 6px;
 }
 
 div.re-deploy {
-    color: var(--wasdiGreen);
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 24px;
+  color: var(--wasdiGreen);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 div.re-deploy.disabled {
-    color: var(--neutral15) !important;
-    cursor: not-allowed;
+  color: var(--neutral15) !important;
+  cursor: not-allowed;
 }
 
 div.json-editor-wrapper {
-    padding: 0px 32px 32px 32px;
+  padding: 0px 32px 32px 32px;
 }
 
 table {
-    border-radius: 8px !important;
-    border-collapse: separate !important;
+  border-radius: 8px !important;
+  border-collapse: separate !important;
 }
 
-thead>tr {
-    color: #FFFFFF;
-    cursor: pointer;
+thead > tr {
+  color: #ffffff;
+  cursor: pointer;
 }
 
-thead>tr>td {
-    background-color: var(--neutral50Brand) !important;
-    border-radius: 8px !important;
-    padding: 12px !important;
+thead > tr > td {
+  background-color: var(--neutral50Brand) !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
 }
 
-thead>tr>td.isOpen {
-    background-color: var(--neutral70) !important;
+thead > tr > td.isOpen {
+  background-color: var(--neutral70) !important;
 }
 
-tbody>tr>td {
-    border-bottom: none !important;
+tbody > tr > td {
+  border-bottom: none !important;
+}
+
+.json-container {
+  position: relative;
+  width: 100%;
+}
+
+.json-button {
+  position: absolute;
+  bottom: 2.5rem;
+  right: 2.5rem;
 }
