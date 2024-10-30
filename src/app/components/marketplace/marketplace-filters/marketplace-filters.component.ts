@@ -9,11 +9,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { AuthService } from 'src/app/auth/service/auth.service';
 
-
 @Component({
   selector: 'app-marketplace-filters',
   templateUrl: './marketplace-filters.component.html',
-  styleUrls: ['./marketplace-filters.component.css']
+  styleUrls: ['./marketplace-filters.component.css'],
 })
 export class MarketplaceFiltersComponent implements OnInit {
   m_asCategoryOptions: Array<any> = [];
@@ -24,20 +23,20 @@ export class MarketplaceFiltersComponent implements OnInit {
 
   m_aiRatingsFilter: Array<number> = [5, 4, 3, 2, 1];
 
-  m_sSearchInput: string = "";
+  m_sSearchInput: string = '';
 
   m_oAppFilter = {
     categories: [],
     publishers: [],
-    name: "",
+    name: '',
     score: 0,
     minPrice: -1,
     maxPrice: 1000,
     itemsPerPage: 12,
     page: 0,
-    orderBy: "name",
-    orderDirection: 1
-  }
+    orderBy: 'name',
+    orderDirection: 1,
+  };
 
   @Output() m_oAppFilterOutput = new EventEmitter();
 
@@ -47,39 +46,39 @@ export class MarketplaceFiltersComponent implements OnInit {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oProcessorService: ProcessorService,
-    private m_oTranslate: TranslateService,) {
-
-  }
+    private m_oTranslate: TranslateService,) { }
 
   ngOnInit(): void {
-    if (this.m_oAuthService.getTokenObject().access_token) {
-      setTimeout(() => {
+    setTimeout(() => {
+      if (
+        this.m_oAuthService.getTokenObject().access_token &&
+        this.m_oConstantsService.getUser().userId
+      ) {
         this.getPublishers();
         this.getCategories();
-
-      }, 500)
-
-    }
+      }
+    }, 500);
   }
 
   getCategories(): void {
-    let sCategoriesError = this.m_oTranslate.instant('MSG_WAPPS_CATEGORY_ERROR')
-    this.m_oProcessorMediaService.getCategories().subscribe(
-      {
-        next: oResponse => {
-          if (oResponse.length === 0) {
-            this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
-          }
-          this.m_asCategoryOptions = oResponse;
-        },
-        error: oError => {
+    let sCategoriesError = this.m_oTranslate.instant(
+      'MSG_WAPPS_CATEGORY_ERROR'
+    );
+    this.m_oProcessorMediaService.getCategories().subscribe({
+      next: (oResponse) => {
+        if (oResponse.length === 0) {
           this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
         }
-      })
+        this.m_asCategoryOptions = oResponse;
+      },
+      error: (oError) => {
+        this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
+      },
+    });
   }
 
   categoriesChanged(oEvent): void {
-    let iCategoryIndex = this.m_aoSelectedCategories.indexOf(oEvent.id)
+    let iCategoryIndex = this.m_aoSelectedCategories.indexOf(oEvent.id);
 
     if (iCategoryIndex === -1) {
       this.m_aoSelectedCategories.push(oEvent.id);
@@ -93,7 +92,7 @@ export class MarketplaceFiltersComponent implements OnInit {
   }
 
   developerChanged(oEvent) {
-    let iDeveloperIndex = this.m_aoSelectedPublishers.indexOf(oEvent.publisher)
+    let iDeveloperIndex = this.m_aoSelectedPublishers.indexOf(oEvent.publisher);
     if (iDeveloperIndex === -1) {
       this.m_aoSelectedPublishers.push(oEvent.publisher);
     } else {
@@ -101,29 +100,30 @@ export class MarketplaceFiltersComponent implements OnInit {
     }
     //Add Selected Developers to the App Filter publishers and then get applicatinons
 
-
     this.m_oAppFilter.publishers = this.m_aoSelectedPublishers;
     this.m_oAppFilter.page = 0;
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
 
   /**
- * Get list of Publishers from the server
- * @returns {void}
- */
+   * Get list of Publishers from the server
+   * @returns {void}
+   */
   getPublishers(): void {
-    let sErrorMsg: string = this.m_oTranslate.instant("MSG_WAPPS_PUBLISHERS_ERROR")
+    let sErrorMsg: string = this.m_oTranslate.instant(
+      'MSG_WAPPS_PUBLISHERS_ERROR'
+    );
     this.m_oProcessorMediaService.getPublishersFilterList().subscribe({
-      next: oResponse => {
+      next: (oResponse) => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoPublishers = oResponse;
         } else {
           this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
         }
       },
-      error: oError => {
+      error: (oError) => {
         this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg);
-      }
+      },
     });
   }
 
@@ -131,14 +131,13 @@ export class MarketplaceFiltersComponent implements OnInit {
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
 
-
   /**
    * Handle Changes to the Search Input field on Enter or if Search Button clicked
-   * @param oEvent 
+   * @param oEvent
    * @returns {void}
    */
   onSearchInput(oEvent): void {
-    this.m_oAppFilter.name = this.m_sSearchInput
+    this.m_oAppFilter.name = this.m_sSearchInput;
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
 
@@ -147,7 +146,7 @@ export class MarketplaceFiltersComponent implements OnInit {
 
     // Handle user hitting enter to execute the search
     if (oEvent.event.key === 'Enter') {
-      this.onSearchInput(oEvent)
+      this.onSearchInput(oEvent);
     }
   }
 
@@ -159,18 +158,18 @@ export class MarketplaceFiltersComponent implements OnInit {
     this.m_oAppFilter = {
       categories: [],
       publishers: [],
-      name: "",
+      name: '',
       score: 0,
       minPrice: -1,
       maxPrice: 1000,
       itemsPerPage: 12,
       page: 0,
-      orderBy: "name",
-      orderDirection: 1
-    }
-    this.m_aoSelectedCategories = []
+      orderBy: 'name',
+      orderDirection: 1,
+    };
+    this.m_aoSelectedCategories = [];
     this.m_aoSelectedPublishers = [];
-    this.m_sSearchInput = "";
+    this.m_sSearchInput = '';
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
 }

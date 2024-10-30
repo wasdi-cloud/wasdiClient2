@@ -25,6 +25,10 @@ export class SessionInjectorInterceptor implements HttpInterceptor {
     // Session Token taken from ConstantsService
     const oCookie = this.m_oConstantsService.getCookie('oUser');
     const sToken = this.m_oConstantsService.getSessionId();
+    const oUser = this.m_oConstantsService.getUser();
+    if (!oUser.userId) {
+      this.m_oRouter.navigateByUrl('login');
+    }
 
     // If token doesn't exist - go to login page
     if (!sToken && !oCookie) {
