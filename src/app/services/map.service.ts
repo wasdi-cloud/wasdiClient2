@@ -278,9 +278,9 @@ export class MapService {
     this.m_oOSMBasic.addTo(oMap)
 
     this.initGeoSearchPluginForOpenStreetMap(oMap);
-    this.addMousePositionAndScale(oMap);
-    L.control.zoom({ position: 'bottomright' }).addTo(oMap);
-    this.m_oLayersControl.addTo(oMap);
+    //this.addMousePositionAndScale(oMap);
+    //L.control.zoom({ position: 'bottomright' }).addTo(oMap);
+    //this.m_oLayersControl.addTo(oMap);
 
 
     // center map
@@ -289,15 +289,15 @@ export class MapService {
 
     let oBoundaries = L.latLngBounds(southWest, northEast);
 
-    oMap.fitBounds(oBoundaries);
+    //oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
     let oActiveBaseLayer = this.m_oActiveBaseLayer;
 
     //add event on base change
-    oMap.on('baselayerchange', function (e) {
+    /*oMap.on('baselayerchange', function (e) {
       oActiveBaseLayer = e;
-    });
+    });*/
 
     return oMap;
   }
@@ -322,7 +322,7 @@ export class MapService {
 
     this.initGeoSearchPluginForOpenStreetMap(oMap);
 
-    this.addMousePositionAndScale(oMap);
+    //this.addMousePositionAndScale(oMap);
     //layers control
     var oLayersControl = L.control.layers(
       {
@@ -343,7 +343,7 @@ export class MapService {
       oNorthEast = L.latLng(0, 0),
       oBoundaries = L.latLngBounds(oSouthWest, oNorthEast);
 
-    oMap.fitBounds(oBoundaries);
+    //oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
     return oMap;
@@ -662,7 +662,10 @@ export class MapService {
         if (oProduct != null) {
           if (!FadeoutUtils.utilsIsStrNullOrEmpty(oProduct.bbox)) {
             let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
-            aoBounds = aoBounds.concat(aoProductBounds);
+            // Before adding the bounds checks whether the coordinate system use values in the range 
+            //-90 +90 +180 -180 (ProductViewmodel does not brings the CRS so its filtered out)
+            // In publish band the problem does not persist
+            if (Math.abs(aoProductBounds[0][1]) < 180) aoBounds = aoBounds.concat(aoProductBounds);
           }
         }
       }
@@ -679,6 +682,8 @@ export class MapService {
     return true;
   };
 
+
+  
   /**
    * flyOnRectangle
    * @param oRectangle
@@ -691,7 +696,7 @@ export class MapService {
     if (!this.m_oWasdiMap) {
       return false;
     }
-    this.m_oWasdiMap.flyToBounds(oRectangle.getBounds());
+    //this.m_oWasdiMap.flyToBounds(oRectangle.getBounds());
     return true;
   };
 
@@ -708,7 +713,7 @@ export class MapService {
 
       if (oMap == null) oMap = this.m_oWasdiMap;
 
-      oMap.flyToBounds([aBounds]);
+      //oMap.flyToBounds([aBounds]);
 
       return true;
     }
@@ -737,7 +742,7 @@ export class MapService {
         }
       }
 
-      this.m_oWasdiMap.flyToBounds(aoBounds);
+     // this.m_oWasdiMap.flyToBounds(aoBounds);
     }
     catch (e) {
       console.log(e);
@@ -763,7 +768,7 @@ export class MapService {
         corner2 = L.latLng(oBounds.miny, oBounds.minx),
         bounds = L.latLngBounds(corner1, corner2);
 
-      this.m_oWasdiMap.flyToBounds(bounds, { maxZoom: 8 });
+      //this.m_oWasdiMap.flyToBounds(bounds, { maxZoom: 8 });
     }
     catch (e) {
       console.log(e);
@@ -790,7 +795,7 @@ export class MapService {
         corner2 = L.latLng(oBoundingBox[3], oBoundingBox[0]),
         bounds = L.latLngBounds(corner1, corner2);
 
-      this.getMap().flyToBounds(bounds);
+      //this.getMap().flyToBounds(bounds);
     }
     catch (e) {
       console.log(e);
