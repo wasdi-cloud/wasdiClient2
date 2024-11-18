@@ -35,7 +35,8 @@
                             translate }}"></app-button>
                     </div>
                 </div>
-                <div class=" font-bold d-flex flex-row align-items-center gap-2 pe-2">
+                <!-- Opacity slider should only be shown in 2D -->
+                <div *ngIf="m_b2DMapMode" class=" font-bold d-flex flex-row align-items-center gap-2 pe-2">
                     Opacity:
                     <div class="slider-container flex-fill">
                         <app-slider [m_bHasThumbLabel]="true" [m_iValue]="m_iOpacityVal"
