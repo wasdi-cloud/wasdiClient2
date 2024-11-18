@@ -299,6 +299,7 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
    */
   setActiveMission(oMission) {
     this.m_oActiveMission = oMission;
+    console.log(this.m_oActiveMission)
 
     this.setMissionFilter(this.m_oActiveMission);
     if (this.m_oActiveMission && this.m_oActiveMission.filters) {
