@@ -522,6 +522,7 @@ export class NewAppDialogComponent implements OnInit {
               next: (oResponse) => {
                 this.m_oNotificationDisplayService.openSnackBar(sMessage);
                 this.m_bIsUpdated = true;
+                this.onDismiss();
               },
               error: (oError) => {
                 this.m_oNotificationDisplayService.openAlertDialog(
