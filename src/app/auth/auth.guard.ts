@@ -9,8 +9,7 @@ import {
 import { KeycloakService } from 'keycloak-angular';
 import { ConstantsService } from '../services/constants.service';
 import { AuthService } from './service/auth.service';
-import { Observable, map } from 'rxjs';
-import { User } from '../shared/models/user.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

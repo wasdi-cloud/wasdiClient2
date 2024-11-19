@@ -44,6 +44,14 @@ div.json-editor-wrapper {
   padding: 0px 32px 32px 32px;
 }
 
+div.table-wrapper {
+  max-height: 67vh;
+  overflow: auto;
+  display: inline-block;
+  width: 100%;
+  margin: auto;
+}
+
 table {
   border-radius: 8px !important;
   border-collapse: separate !important;
