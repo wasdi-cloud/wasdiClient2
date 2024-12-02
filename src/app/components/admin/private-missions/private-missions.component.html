@@ -1,0 +1,49 @@
+<div class="d-flex flex-fill flex-column gap-5">
+  <div class="header font-bold d-flex flex-row justify-content-between">
+    Private Missions
+    <app-button
+      [m_sLabel]="'Add new Mission'"
+      (click)="openContactForm()"
+    ></app-button>
+  </div>
+  <div class="d-flex flex-column-gap-2">
+    <app-invader *ngIf="!m_bMissionsLoaded"></app-invader>
+    <div
+      *ngIf="m_bMissionsLoaded && m_aoMissions.length > 0"
+      class="table-wrapper flex-fill"
+    >
+      <table>
+        <thead class="table-heading-container">
+          <tr>
+            <td>Mission Name</td>
+            <td>Owner</td>
+            <td>Permissions</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let oMission of m_aoMissions">
+            <td>{{ oMission.missionName }}</td>
+            <td>{{ oMission.missionOwner }}</td>
+            <td>
+              {{ oMission.permissionType ? oMission.permissionType : "Owner" }}
+            </td>
+            <td>
+              <span
+                *ngIf="oMission.permissionType !== 'readOnly'"
+                (click)="openShareUI(oMission)"
+                data-bs-toggle="offcanvas"
+                href="#orgEditor"
+                role="button"
+                aria-controls="orgEditor"
+                class="material-symbols-outlined"
+              >
+                edit
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

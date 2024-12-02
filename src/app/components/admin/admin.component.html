@@ -1,18 +1,32 @@
 <main class="d-flex">
-    <app-admin-menu (m_sSelectedTab)="getActiveTab($event)"></app-admin-menu>
-    <div class="dashboard-content flex-fill">
-        <div class="dashboard-content-wrapper">
-
-            <app-user-account *ngIf="m_sActiveTab === 'account'"></app-user-account>
-            <app-email-preferences-display *ngIf="m_sActiveTab === 'preferences'"></app-email-preferences-display>
-            <app-organizations-display *ngIf="m_sActiveTab === 'organisations'"></app-organizations-display>
-            <app-subscriptions-purchase *ngIf="m_sActiveTab ==='subscriptions'"></app-subscriptions-purchase>
-            <app-subscriptions-display *ngIf="m_sActiveTab ==='billings'"
-                [m_aoOrganizations]="m_aoOrganizations"></app-subscriptions-display>
-            <app-manage-users *ngIf="m_sActiveTab ==='users'"></app-manage-users>
-            <app-manage-sharing *ngIf="m_sActiveTab==='sharing'"></app-manage-sharing>
-            <app-manage-subscriptions *ngIf="m_sActiveTab === 'resources'"></app-manage-subscriptions>
-            <app-manage-nodes *ngIf="m_sActiveTab === 'nodes'"></app-manage-nodes>
-        </div>
+  <app-admin-menu (m_sSelectedTab)="getActiveTab($event)"></app-admin-menu>
+  <div class="dashboard-content flex-fill">
+    <div class="dashboard-content-wrapper">
+      <app-user-account *ngIf="m_sActiveTab === 'account'"></app-user-account>
+      <app-email-preferences-display
+        *ngIf="m_sActiveTab === 'preferences'"
+      ></app-email-preferences-display>
+      <app-organizations-display
+        *ngIf="m_sActiveTab === 'organisations'"
+      ></app-organizations-display>
+      <app-subscriptions-purchase
+        *ngIf="m_sActiveTab === 'subscriptions'"
+      ></app-subscriptions-purchase>
+      <app-subscriptions-display
+        *ngIf="m_sActiveTab === 'billings'"
+        [m_aoOrganizations]="m_aoOrganizations"
+      ></app-subscriptions-display>
+      <app-manage-users *ngIf="m_sActiveTab === 'users'"></app-manage-users>
+      <app-manage-sharing
+        *ngIf="m_sActiveTab === 'sharing'"
+      ></app-manage-sharing>
+      <app-manage-subscriptions
+        *ngIf="m_sActiveTab === 'resources'"
+      ></app-manage-subscriptions>
+      <app-manage-nodes *ngIf="m_sActiveTab === 'nodes'"></app-manage-nodes>
+      <app-private-missions
+        *ngIf="m_sActiveTab === 'missions'"
+      ></app-private-missions>
     </div>
+  </div>
 </main>

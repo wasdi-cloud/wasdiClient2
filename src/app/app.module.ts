@@ -176,6 +176,7 @@ import { PaginatorComponent } from './shared/shared-components/paginator/paginat
 import { SaveParamsDialogComponent } from './dialogs/save-params-dialog/save-params-dialog.component';
 import { MetadataAttributesDialogComponent } from './components/edit/products-list/metadata-attributes-dialog/metadata-attributes-dialog.component';
 import { ResizableDirective } from './directives/resizable.directive';
+import { PrivateMissionsComponent } from './components/admin/private-missions/private-missions.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -294,7 +295,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     PaginatorComponent,
     SaveParamsDialogComponent,
     MetadataAttributesDialogComponent,
-    ResizableDirective
+    ResizableDirective,
+    PrivateMissionsComponent
 
   ],
   imports: [

@@ -1,0 +1,41 @@
+div.header {
+  background: var(--neutral5);
+  border-radius: 8px;
+  font-size: 20px;
+  height: 48px;
+  padding: 8px;
+}
+div.table-wrapper {
+  height: 100%;
+  overflow: auto;
+  display: inline-block;
+  width: 100%;
+  margin: auto;
+}
+
+table {
+  width: 98%;
+  margin: auto;
+  /* height: 100%; */
+}
+
+.table-heading-container {
+  background-color: #ffffff;
+  box-shadow: inset 0px -1px #d1d5db;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-weight: 700;
+}
+
+td > span.material-symbols-outlined {
+  color: var(--wasdiGreen);
+  cursor: pointer;
+}
+
+td,
+th {
+  font-size: 14px;
+  padding: 6px 12px 6px 8px;
+  height: 44px;
+}

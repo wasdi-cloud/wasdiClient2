@@ -1171,6 +1171,7 @@
     "ADMIN_MENU_USERS": "Users",
     "ADMIN_MENU_SHARINGS": "Sharings",
     "ADMIN_MENU_NODES": "Nodes",
+	"ADMIN_MENU_MISSIONS": "Private Missions",
 
     "EMAIL_PREF_TITLE": "Email preferences",
     "EMAIL_PREF_NEW_CONTENT": "New Content Annoucements",
