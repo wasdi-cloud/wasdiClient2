@@ -253,7 +253,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
       })
       .afterClosed()
       .subscribe((oChanged) => {
-        if (oChanged.changed) {
+        if (oChanged.changed || oChanged === true) {
           this.getProcessorsList();
           if (
             this.m_oSelectedProcessor.processorId === oProcessor.processorId

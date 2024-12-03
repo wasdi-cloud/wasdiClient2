@@ -151,6 +151,30 @@ export class HeaderComponent implements OnInit {
     this.m_oRouter.navigateByUrl('subscriptions');
   }
 
+  formatNotification(oNotification) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oNotification)) {
+      return '';
+    }
+    let sReturn: string = '';
+
+    if (oNotification.messageCode === 'DOWNLOAD') {
+      sReturn =
+        oNotification.displayMessage + '<br>' + oNotification.payload.fileName;
+    } else {
+      sReturn = oNotification.displayMessage;
+    }
+
+    return sReturn;
+  }
+
+  showNotificationOption(oNotification, bIsShown) {
+    oNotification.showOptions = bIsShown;
+  }
+
+  clearNotifications() {
+    this.m_oNotificationsQueueService.clearNotifications();
+  }
+
   logout() {
     this.m_oAuthService.logout();
     this.m_oConstantsService.logOut();

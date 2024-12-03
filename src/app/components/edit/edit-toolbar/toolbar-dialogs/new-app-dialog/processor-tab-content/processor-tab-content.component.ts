@@ -17,7 +17,7 @@ import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 
 //Angular Material Import:
 import { Clipboard } from '@angular/cdk/clipboard';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 //Model Imports:
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
@@ -27,6 +27,7 @@ import { PackageManagerComponent } from 'src/app/dialogs/package-manager/package
 //Fadeout Utilities Import:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
+import { NewAppDialogComponent } from '../new-app-dialog.component';
 
 @Component({
   selector: 'app-processor-tab-content',
@@ -159,6 +160,7 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
     private m_oClipboard: Clipboard,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
+    private m_oDialogRef: MatDialogRef<NewAppDialogComponent>,
     private m_oJsonEditorService: JsonEditorService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
@@ -336,6 +338,7 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
                 'success-snackbar'
               );
               this.m_bRedeployOngoing = true;
+              this.onDismiss();
             },
             error: (oError) => {
               this.m_oNotificationDisplayService.openAlertDialog(
@@ -472,5 +475,9 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
 
   getJsonText(oEvent) {
     this.m_sJSONSample = this.m_oJsonEditorService.getValue();
+  }
+
+  onDismiss() {
+    this.m_oDialogRef.close(true);
   }
 }

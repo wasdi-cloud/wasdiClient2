@@ -1,89 +1,124 @@
 <header class="d-flex flex-row justify-content-between ps-4 pe-3">
-    <div class="header-logo-container d-flex flex-row align-items-center gap-1">
-        <img src="/assets/icons/logo-only.svg" alt="">
-        <img src="/assets/icons/logo-name.svg" alt="">
+  <div class="header-logo-container d-flex flex-row align-items-center gap-1">
+    <img src="/assets/icons/logo-only.svg" alt="" />
+    <img src="/assets/icons/logo-name.svg" alt="" />
+  </div>
+  <div class="d-flex flex-row align-items-center gap-3">
+    <div class="project-selection-container">
+      <div class="dropdown">
+        <button
+          class="btn"
+          type="button"
+          id="projectSelectButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          {{ m_oSelectedProject ? m_oSelectedProject.name : "Select Project" }}
+          <div class="dropdown-icon material-symbols-outlined">expand_more</div>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="projectSelectButton">
+          <li>
+            <a
+              class="dropdown-item"
+              (click)="setActiveProject(oProject)"
+              *ngFor="let oProject of m_aoUserProjectsMap"
+              >{{ oProject.name }}</a
+            >
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="d-flex flex-row align-items-center gap-3">
-        <div class="project-selection-container">
-            <div class="dropdown">
-                <button class="btn" type="button" id="projectSelectButton" data-bs-toggle="dropdown"
-                    aria-expanded="false" aria-haspopup="true">
-                    {{m_oSelectedProject ? m_oSelectedProject.name : "Select Project"}}
-                    <div class="dropdown-icon material-symbols-outlined">
-                        expand_more
-                    </div>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="projectSelectButton">
-                    <li><a class="dropdown-item" (click)="setActiveProject(oProject)"
-                            *ngFor="let oProject of m_aoUserProjectsMap">{{oProject.name}}</a></li>
-                </ul>
-            </div>
+    <div class="card-divider"></div>
+    <div class="d-flex flex-row align-items-center gap-2">
+      <div
+        class="user-greeting-container d-flex flex-row align-items-center gap-2"
+      >
+        <div class="d-flex flex-column align-items-end">
+          <span class="greeting">{{ "ROOT_HEADER_WELCOME" | translate }}</span>
+          <span class="username">{{ m_oUser.name }}</span>
         </div>
-        <div class="card-divider"></div>
-        <div class="d-flex flex-row align-items-center gap-2">
-            <div class="user-greeting-container d-flex flex-row align-items-center gap-2">
-                <div class="d-flex flex-column align-items-end">
-                    <span class="greeting">{{"ROOT_HEADER_WELCOME" | translate}}</span>
-                    <span class="username">{{m_oUser.name}}</span>
-                </div>
-            </div>
-            <!-- <div class="dropdown">
-                <div class="mail-icon" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-                    <span class="material-symbols-outlined">
-                        notifications
-                    </span>
-                </div>
-                <div *ngIf="m_bHasNotifications" class="notification-dot"></div>
-                <div class="dropdown-menu notifications-menu">
-                    <div class="p-2" *ngIf="m_aoNotifications.length === 0">
-                        No notifications to show!
-                    </div>
-                    <div *ngIf="m_aoNotifications.length > 0">
-                        <div class="notification p-2 d-flex flex-column gap-1" *ngFor="let oNotification of m_aoNotifications">
-                            <div>
-                                {{oNotification.messageCode}}
-                            </div>
-                            <div class="workspace-id">
-                                {{oNotification.workspaceId}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <div class="dropdown">
-                <div class="user-icon" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-                    <span class="material-symbols-outlined">
-                        account_circle
-                    </span>
-                </div>
-                <ul class="dropdown-menu">
-                    <li class=""><a class="dropdown-item" routerLink="/settings"><span
-                                class="material-symbols-outlined">
-                                settings
-                            </span>{{"ROOT_MENU_USER_DASHBOARD" | translate }}</a></li>
-                    <li class=""><a class="dropdown-item" (click)="goToSubscriptions()"><span
-                                class="material-symbols-outlined">
-                                rocket_launch
-                            </span>{{"ROOT_MENU_SUBSCRIPTION" | translate }}</a></li>
-                    <!-- Open Off Canvas Feedback Form -->
-                    <li class=""><a class="dropdown-item" (click)="openFeedbackDialog()"><span
-                                class="material-symbols-outlined">
-                                chat
-                            </span>{{"DIALOG_FEEDBACK_SEND" | translate}}</a></li>
-                    <li class=""><a class="dropdown-item" (click)="openDocs()"><span class="material-symbols-outlined">
-                                support
-                            </span>
-                            <div class="help-btn">{{"KEY_PHRASES.HELP" | translate}}</div> <span
-                                class="material-symbols-outlined align-self-end">
-                                open_in_new
-                            </span>
-                        </a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" (click)="logout()">{{"ROOT_MENU_LOGOUT"| translate}}</a></li>
-                </ul>
-            </div>
+      </div>
+      <div class="dropdown">
+        <div
+          class="mail-icon"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          <span class="material-symbols-outlined"> notifications </span>
         </div>
+        <div *ngIf="m_bHasNotifications" class="notification-dot"></div>
+        <div class="dropdown-menu notifications-menu">
+          <div class="p-2" *ngIf="m_aoNotifications.length === 0">
+            No notifications to show!
+          </div>
+          <div *ngIf="m_aoNotifications.length > 0">
+            <div
+              class="notification p-2 d-flex flex-column gap-1"
+              *ngFor="let oNotification of m_aoNotifications"
+            >
+              <div class="d-flex flex-row">
+                <div class="flex-fill d-flex flex-column">
+                  <div [innerHTML]="formatNotification(oNotification)"></div>
+                  <div class="workspace-id">
+                    {{ oNotification.workspaceId }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center clear-btn" (click)="clearNotifications()">Clear Notifications</div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown">
+        <div
+          class="user-icon"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          <span class="material-symbols-outlined"> account_circle </span>
+        </div>
+        <ul class="dropdown-menu">
+          <li class="">
+            <a class="dropdown-item" routerLink="/settings"
+              ><span class="material-symbols-outlined"> settings </span
+              >{{ "ROOT_MENU_USER_DASHBOARD" | translate }}</a
+            >
+          </li>
+          <li class="">
+            <a class="dropdown-item" (click)="goToSubscriptions()"
+              ><span class="material-symbols-outlined"> rocket_launch </span
+              >{{ "ROOT_MENU_SUBSCRIPTION" | translate }}</a
+            >
+          </li>
+          <!-- Open Off Canvas Feedback Form -->
+          <li class="">
+            <a class="dropdown-item" (click)="openFeedbackDialog()"
+              ><span class="material-symbols-outlined"> chat </span
+              >{{ "DIALOG_FEEDBACK_SEND" | translate }}</a
+            >
+          </li>
+          <li class="">
+            <a class="dropdown-item" (click)="openDocs()"
+              ><span class="material-symbols-outlined"> support </span>
+              <div class="help-btn">{{ "KEY_PHRASES.HELP" | translate }}</div>
+              <span class="material-symbols-outlined align-self-end">
+                open_in_new
+              </span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li>
+            <a class="dropdown-item" (click)="logout()">{{
+              "ROOT_MENU_LOGOUT" | translate
+            }}</a>
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
 </header>
