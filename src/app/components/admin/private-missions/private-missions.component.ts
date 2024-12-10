@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { MissionsService } from 'src/app/services/api/missions.service';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import {
   ShareDialogComponent,
   ShareDialogModel,
@@ -19,7 +20,8 @@ export class PrivateMissionsComponent implements OnInit {
 
   constructor(
     private m_oDialog: MatDialog,
-    private m_oMissionsService: MissionsService
+    private m_oMissionsService: MissionsService,
+    private m_oNotificationDisplayService: NotificationDisplayService
   ) {}
 
   ngOnInit(): void {
@@ -33,10 +35,15 @@ export class PrivateMissionsComponent implements OnInit {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
           this.m_aoMissions = oResponse;
         }
-
-        console.log(oResponse);
       },
-      error: (oError) => {},
+      error: (oError) => {
+        this.m_bMissionsLoaded = true;
+        this.m_oNotificationDisplayService.openAlertDialog(
+          "Could not get user's missions",
+          'Error',
+          'danger'
+        );
+      },
     });
   }
 
@@ -49,5 +56,8 @@ export class PrivateMissionsComponent implements OnInit {
     });
   }
 
-  openContactForm() {}
+  openContactForm() {
+    window.location.href =
+      'mailto:info@wasdi.cloud?subject=New%20Private%20Mission';
+  }
 }
