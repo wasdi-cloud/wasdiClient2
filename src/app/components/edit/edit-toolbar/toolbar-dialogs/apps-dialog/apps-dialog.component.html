@@ -1,76 +1,164 @@
 <div class="apps-dialog d-flex flex-column h-100">
-    <div class="dialog-header d-flex flex-row justify-content-between font-bold">{{"DIALOG_TITLE_WAPPS" | translate}}
-        <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
-    </div>
-    <!--  -->
-    <div *ngIf="m_bShowParamsLibrary === false"
-        class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between"
-        style="height: 100%; overflow: hidden;">
-        <div class="apps-container d-flex flex-column">
-            <div class="search-header font-bold d-flex flex-column gap-2 mb-3">
-                <div class="d-flex flex-row justify-content-between align-items-center">{{"MARKET_SEARCH_APP" |
-                    translate}}
-                    <app-button [m_sLabel]="'EDITOR_OPERATION_TITLE_NEW_PROCESSOR' | translate"
-                        [m_sIconLeft]="'add_box'" (click)="openNewAppDialog()"></app-button>
-                </div>
-                <app-input-field [m_sPlaceholder]="'MARKET_SEARCH_APP' | translate" [m_sIconLeft]="'search'"
-                    (m_oInputChange)="handleSearchChange($event)"></app-input-field>
-            </div>
-            <div *ngIf="m_bIsLoadingProcessorList === true">
-                <app-invader></app-invader>
-            </div>
-            <div *ngIf="m_bIsLoadingProcessorList === false"
-                class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1" style="overflow-y:scroll">
-                <app-list-item *ngFor="let oProcessor of m_aoProcessorList | filter: m_sSearchString"
-                    [m_bIsSelected]="oProcessor.processorName === m_oSelectedProcessor.processorName"
-                    [m_bSimpleItem]="true" [m_bProcessorItem]="true" [m_sLabel]="oProcessor.processorName"
-                    [m_sDescription]="oProcessor.processorDescription" [m_sIcon]="oProcessor.imgLink"
-                    [m_bIsDisabled]="oProcessor.deploymentOngoing"
-                    [m_bHasToolbar]="oProcessor.sharedWithMe === true || m_sActiveUserId === oProcessor.publisher"
-                    (m_oEmitClickEvent)="handleToolbarClick($event, oProcessor)"
-                    (click)="selectProcessor(oProcessor)"></app-list-item>
-            </div>
+  <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+    {{ "DIALOG_TITLE_WAPPS" | translate }}
+    <span class="close-btn material-symbols-outlined" (click)="onDismiss()"
+      >close</span
+    >
+  </div>
+  <!--  -->
+  <div
+    *ngIf="m_bShowParamsLibrary === false"
+    class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between"
+    style="height: 100%; overflow: hidden"
+  >
+    <div class="apps-container d-flex flex-column">
+      <div class="search-header font-bold d-flex flex-column gap-2 mb-3">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          {{ "MARKET_SEARCH_APP" | translate }}
+          <div class="d-flex flex-row gap-2">
+            <app-button
+              [m_sLabel]="'DIALOG_LOGS_REFRESH' | translate"
+              [m_bOutline]="true"
+              [m_sIconLeft]="'refresh'"
+              (click)="getProcessorsList()"
+            ></app-button>
+            <app-button
+              [m_sLabel]="'EDITOR_OPERATION_TITLE_NEW_PROCESSOR' | translate"
+              [m_sIconLeft]="'add_box'"
+              (click)="openNewAppDialog()"
+            ></app-button>
+          </div>
         </div>
-        <div class="json-container d-flex flex-column justify-content-between">
-            <div class="json-header d-flex flex-column">
-                <div class="processor-name font-bold">{{m_oSelectedProcessor.processorName ?
-                    m_oSelectedProcessor.processorName: 'WAP_SELECT_PROCESSOR' | translate}}</div>
-                <p *ngIf="m_oSelectedProcessor.publisher">{{"WAP_PUBLISHER" | translate}}:
-                    {{m_oSelectedProcessor.publisher}}</p>
-            </div>
-            <div class="json-body flex-fill">
-                <div #editor class="json-editor" style="height: 100%;" (keyup)="getJSONInput($event)"></div>
-            </div>
+        <app-input-field
+          [m_sPlaceholder]="'MARKET_SEARCH_APP' | translate"
+          [m_sIconLeft]="'search'"
+          (m_oInputChange)="handleSearchChange($event)"
+        ></app-input-field>
+      </div>
+      <div *ngIf="m_bIsLoadingProcessorList === true">
+        <app-invader></app-invader>
+      </div>
+      <div
+        *ngIf="m_bIsLoadingProcessorList === false"
+        class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1"
+        style="overflow-y: scroll"
+      >
+        <app-list-item
+          *ngFor="
+            let oProcessor of m_aoProcessorList | filter : m_sSearchString
+          "
+          [m_bIsSelected]="
+            oProcessor.processorName === m_oSelectedProcessor.processorName
+          "
+          [m_bSimpleItem]="true"
+          [m_bProcessorItem]="true"
+          [m_sLabel]="oProcessor.processorName"
+          [m_sDescription]="oProcessor.processorDescription"
+          [m_sIcon]="oProcessor.imgLink"
+          [m_bIsDisabled]="oProcessor.deploymentOngoing"
+          [m_bHasToolbar]="
+            oProcessor.sharedWithMe === true ||
+            m_sActiveUserId === oProcessor.publisher
+          "
+          (m_oEmitClickEvent)="handleToolbarClick($event, oProcessor)"
+          (click)="selectProcessor(oProcessor)"
+        ></app-list-item>
+      </div>
+    </div>
+    <div class="json-container d-flex flex-column justify-content-between">
+      <div class="json-header d-flex flex-column">
+        <div class="processor-name font-bold">
+          {{
+            m_oSelectedProcessor.processorName
+              ? m_oSelectedProcessor.processorName
+              : ("WAP_SELECT_PROCESSOR" | translate)
+          }}
+        </div>
+        <p *ngIf="m_oSelectedProcessor.publisher">
+          {{ "WAP_PUBLISHER" | translate }}:
+          {{ m_oSelectedProcessor.publisher }}
+        </p>
+      </div>
+      <div class="json-body flex-fill">
+        <div
+          #editor
+          class="json-editor"
+          style="height: 100%"
+          (keyup)="getJSONInput($event)"
+        ></div>
+      </div>
 
-            <div class="footer d-flex flex-row justify-content-between">
-                <div>
-                    <app-button *ngIf="m_sHelpMsg" [m_bMuted]="true" [m_sLabel]="'WAP_HELP' | translate"
-                        [m_sIconLeft]="'help'" (click)="showHelpMessage(true)"></app-button>
-                </div>
-                <div class="d-flex flex-row gap-3">
-                    <div *ngIf="m_oSelectedProcessor.processorName" class="d-flex flex-row align-items-center gap-2">
-                        <input type="checkbox" class="wasdi-checkbox" name="bNotify" id="" [(ngModel)]="m_bNotification">
-                        <label for="bNotify">Notification </label>
-                        <span (click)="openNotificationHelp()" class="help-icon material-symbols-outlined">
-                            help
-                        </span>
-                    </div>
-                    <app-button [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate" [m_bOutline]="true"
-                        (click)="formatJSON()"></app-button>
-                    <app-button [m_bDisabled]="m_oSelectedProcessor.deploymentOngoing ? true : false"
-                        [m_sLabel]="(m_bIsPurchased ? 'WAP_RUN' : 'APP_UI_PURCHASE') | translate"
-                        [m_sIconLeft]="'play_circle'" [m_bDisabled]="!m_oSelectedProcessor.processorName"
-                        (click)="m_bIsPurchased ? runProcessor() : getExecutePurchase()"></app-button>
-                </div>
-            </div>
-            <div class="help-container d-flex flex-column gap-1" *ngIf="m_bShowHelpMessage === true" [@slideInUp]>
-                <app-button [m_sLabel]="'KEY_PHRASES.CLOSE' | translate" class="align-self-start" [m_bMuted]="true"
-                    [m_sIconLeft]="'close'" (click)="showHelpMessage(false)"></app-button>
-                <div class="msg-container flex-fill" [innerHTML]="m_sHelpMsg | markdown"></div>
-            </div>
+      <div class="footer d-flex flex-row justify-content-between">
+        <div>
+          <app-button
+            *ngIf="m_sHelpMsg"
+            [m_bMuted]="true"
+            [m_sLabel]="'WAP_HELP' | translate"
+            [m_sIconLeft]="'help'"
+            (click)="showHelpMessage(true)"
+          ></app-button>
         </div>
+        <div class="d-flex flex-row gap-3">
+          <div
+            *ngIf="m_oSelectedProcessor.processorName"
+            class="d-flex flex-row align-items-center gap-2"
+          >
+            <input
+              type="checkbox"
+              class="wasdi-checkbox"
+              name="bNotify"
+              id=""
+              [(ngModel)]="m_bNotification"
+            />
+            <label for="bNotify">Notification </label>
+            <span
+              (click)="openNotificationHelp()"
+              class="help-icon material-symbols-outlined"
+            >
+              help
+            </span>
+          </div>
+          <app-button
+            [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate"
+            [m_bOutline]="true"
+            (click)="formatJSON()"
+          ></app-button>
+          <app-button
+            [m_bDisabled]="
+              m_oSelectedProcessor.deploymentOngoing ? true : false
+            "
+            [m_sLabel]="
+              (m_bIsPurchased ? 'WAP_RUN' : 'APP_UI_PURCHASE') | translate
+            "
+            [m_sIconLeft]="'play_circle'"
+            [m_bDisabled]="!m_oSelectedProcessor.processorName"
+            (click)="m_bIsPurchased ? runProcessor() : getExecutePurchase()"
+          ></app-button>
+        </div>
+      </div>
+      <div
+        class="help-container d-flex flex-column gap-1"
+        *ngIf="m_bShowHelpMessage === true"
+        [@slideInUp]
+      >
+        <app-button
+          [m_sLabel]="'KEY_PHRASES.CLOSE' | translate"
+          class="align-self-start"
+          [m_bMuted]="true"
+          [m_sIconLeft]="'close'"
+          (click)="showHelpMessage(false)"
+        ></app-button>
+        <div
+          class="msg-container flex-fill"
+          [innerHTML]="m_sHelpMsg | markdown"
+        ></div>
+      </div>
     </div>
-    <app-params-library-dialog class="flex-fill" *ngIf="m_bShowParamsLibrary === true"
-        [m_oSelectedProcessor]="m_oSelectedProcessor"
-        (m_oSelectedTemplateEmit)="getParamsTemplate($event)"></app-params-library-dialog>
+  </div>
+  <app-params-library-dialog
+    class="flex-fill"
+    *ngIf="m_bShowParamsLibrary === true"
+    [m_oSelectedProcessor]="m_oSelectedProcessor"
+    (m_oSelectedTemplateEmit)="getParamsTemplate($event)"
+  ></app-params-library-dialog>
 </div>

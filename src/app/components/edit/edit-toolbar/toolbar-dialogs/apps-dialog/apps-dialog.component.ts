@@ -258,7 +258,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
           if (
             this.m_oSelectedProcessor.processorId === oProcessor.processorId
           ) {
-            this.m_oJsonEditorService.setText(decodeURI(oChanged.json));
+            this.m_oSelectedProcessor = {} as Application;
           }
         }
       });
