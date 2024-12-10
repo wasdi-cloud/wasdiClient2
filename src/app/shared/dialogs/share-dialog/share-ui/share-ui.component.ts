@@ -178,9 +178,12 @@ export class ShareUiComponent implements OnInit {
                 : (this.m_bShowUsers = false);
             },
             error: (oError) => {
-              console.log(oError);
               this.m_bLoadingUsers = false;
-              // this.m_oNotificationDisplayService.openAlertDialog()
+              this.m_oNotificationDisplayService.openAlertDialog(
+                'Could not retrieve users',
+                'Error',
+                'danger'
+              );
             },
           });
       }
@@ -191,7 +194,6 @@ export class ShareUiComponent implements OnInit {
         .findResourcePermissions('mission', this.resource.missionIndexValue, '')
         .subscribe({
           next: (oResponse) => {
-            console.log(oResponse);
             this.m_aoSharedUsers = oResponse;
             this.m_bLoadingUsers = false;
             this.m_bShowUsers = true;
