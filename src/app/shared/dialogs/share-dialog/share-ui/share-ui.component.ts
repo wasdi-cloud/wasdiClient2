@@ -177,7 +177,11 @@ export class ShareUiComponent implements OnInit {
                 ? (this.m_bShowUsers = true)
                 : (this.m_bShowUsers = false);
             },
-            error: (oError) => {},
+            error: (oError) => {
+              console.log(oError);
+              this.m_bLoadingUsers = false;
+              // this.m_oNotificationDisplayService.openAlertDialog()
+            },
           });
       }
     }
@@ -193,7 +197,17 @@ export class ShareUiComponent implements OnInit {
             this.m_bShowUsers = true;
           },
           error: (oError) => {
-            console.log(oError);
+            this.m_bLoadingUsers = false;
+            this.m_bShowUsers = false;
+            let sError = oError.error.message
+              ? this.m_oTranslate.instant(oError.error.message)
+              : 'Could not get users';
+
+            this.m_oNotificationDisplayService.openAlertDialog(
+              sError,
+              'Error',
+              'danger'
+            );
           },
         });
     }
