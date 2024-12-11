@@ -28,17 +28,22 @@
             <td>
               {{ oMission.permissionType ? oMission.permissionType : "Owner" }}
             </td>
-            <td>
+            <td class="d-flex flex-row gap-2">
+              <span
+                *ngIf="oMission.permissionType === 'write'"
+                (click)="openShareUI(oMission)"
+                class="material-symbols-outlined"
+                matTooltip="Manage Collaborators"
+              >
+                group_add
+              </span>
               <span
                 *ngIf="oMission.permissionType !== 'readOnly'"
-                (click)="openShareUI(oMission)"
-                data-bs-toggle="offcanvas"
-                href="#orgEditor"
-                role="button"
-                aria-controls="orgEditor"
+                (click)="removeMission(oMission)"
                 class="material-symbols-outlined"
+                matTooltip="Delete Mission"
               >
-                edit
+                delete
               </span>
             </td>
           </tr>
