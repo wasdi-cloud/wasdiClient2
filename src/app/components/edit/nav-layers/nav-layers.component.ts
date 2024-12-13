@@ -7,6 +7,13 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import {
+  CdkDragDrop,
+  CdkDropList,
+  CdkDropListGroup,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 
 //Import Services:
 import { ConstantsService } from 'src/app/services/constants.service';
@@ -43,7 +50,6 @@ export class NavLayersComponent implements OnInit, OnChanges {
    * List of the products in the workspace
    */
   @Input() m_aoProducts: Array<any> = [];
-
 
   @Input() m_b2DMapMode: boolean = true;
   /**
@@ -314,5 +320,35 @@ export class NavLayersComponent implements OnInit, OnChanges {
     this.m_oClipboard.copy(sLayerId);
     let sMsg = this.m_oTranslate.instant('KEY_PHRASES.CLIPBOARD');
     this.m_oNotificationDisplayService.openSnackBar(sMsg);
+  }
+
+  drop(event: any) {
+    moveItemInArray(
+      this.m_aoVisibleBands,
+      event.previousIndex,
+      event.currentIndex
+    );
+    this.handleLayerOrder();
+  }
+
+  /**
+   * When the layer order changes, manually remove and then re-add the layers
+   */
+  handleLayerOrder(): void {
+    this.m_aoVisibleBands.forEach((oLayer) => {
+      let oMap = this.m_oMapService.getMap();
+      oMap.eachLayer((oMapLayer) => {
+        if (oLayer.layerId === oMapLayer.options.layers) {
+          oMap.removeLayer(oMapLayer);
+        }
+      });
+    });
+
+    this.m_aoVisibleBands.forEach((oLayer) => {
+      this.m_oMapService.addLayerMap2DByServer(
+        oLayer.layerId,
+        oLayer.geoserverUrl
+      );
+    });
   }
 }

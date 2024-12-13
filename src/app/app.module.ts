@@ -104,6 +104,7 @@ import { WorkflowsDialogComponent } from './components/edit/edit-toolbar/toolbar
 
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProcessLogsDialogComponent } from './components/edit/process-logs-dialog/process-logs-dialog.component';
 import { ImportDialogComponent } from './components/edit/edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
 import { RabbitStompService } from './services/rabbit-stomp.service';
@@ -342,7 +343,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     CdkContextMenuTrigger,
     CdkMenu,
     CdkMenuItem,
-    CdkMenuTrigger
+    CdkMenuTrigger,
+    DragDropModule
   ],
   providers: [
     AuthService,

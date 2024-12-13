@@ -1,52 +1,102 @@
 <div class="parent d-flex flex-column pt-1">
-    <div class="d-flex flex-row">
-        <app-tab [m_sLabel]="'EDITOR_NAVIGATION'| translate" [m_bIsDisabled]="false"
-            [m_bIsActive]="m_sActiveTab === 'nav'" (click)="setActiveTab('nav')"></app-tab>
-        <app-tab [m_sLabel]="'DIALOG_GET_CAPABILITIES_LAYERS'| translate" [m_bIsDisabled]="false"
-            [m_bIsActive]="m_sActiveTab === 'layers'" (click)="setActiveTab('layers')"></app-tab>
-    </div>
-    <!-- Navigation and Layers content -->
-    <div class="map-container-panel flex-fill" [hidden]="m_sActiveTab !== 'nav'">
-        <div class="" id="smallMapContainer" [class.cesium-map]="b2DMapModeOn === true"></div>
-    </div>
-    <div class="layers-tab h-100" *ngIf="m_sActiveTab === 'layers'">
-        <ul class="list-group pe-1">
-            <li *ngFor="let oBand of m_aoVisibleBands" class="list-group-item d-flex flex-column mt-2">
-                <div class="layer-title d-flex flex-row  justify-content-between gap-2">
-                    <div class="legend-container justify-self-start align-self-start d-flex flex-row"
-                        matTooltip="{{'EDITOR_LAYERS_OPTIONS' | translate}}" (click)="showLayerLegend(oBand)">
-                        <div class="legend-dot"></div>
-                        <div class="legend-dot dot-2"></div>
-                        <div class="legend-dot dot-3"></div>
-                    </div>
-                    <div class="band-title d-flex flex-column flex-fill gap-1"  matTooltip="{{oBand.layerId}}" (click)="copyLayerId(oBand.layerId)">
-                        <p class="band-info">{{oBand.productName}}</p>
-                        <p class="band-info">{{oBand.name}}</p>
-                    </div>
-                    <div class="button-options d-flex flex-row gap-1">
-                        <app-button [m_bMuted]="true" [m_sIconLeft]="'imagesearch_roller'" [m_sSize]="'small'"
-                            (click)="openStylesDialog()" matTooltip="{{'DIALOG_IMPORT_UPLOAD_STYLE' |
-                            translate }}"></app-button>
-                        <app-button [m_bMuted]="true" [m_sIconLeft]="'fullscreen'" [m_sSize]="'small'"
-                            (click)="zoomOnBandImage(oBand.geoserverBoundingBox)" matTooltip="{{'IMPORT_TOOLTIP_ZOOM_ON_PRODUCT' |
-                            translate }}"></app-button>
-                        <app-button [m_bMuted]="true" [m_sIconLeft]="'close'" [m_sSize]="'small'"
-                            (click)="removeBandImage(oBand)" matTooltip="{{'KEY_PHRASES.CLOSE' |
-                            translate }}"></app-button>
-                    </div>
-                </div>
-                <!-- Opacity slider should only be shown in 2D -->
-                <div *ngIf="m_b2DMapMode" class=" font-bold d-flex flex-row align-items-center gap-2 pe-2">
-                    Opacity:
-                    <div class="slider-container flex-fill">
-                        <app-slider [m_bHasThumbLabel]="true" [m_iValue]="m_iOpacityVal"
-                            (m_oSelectionChange)="setOpacity($event, oBand.layerId)"></app-slider>
-                    </div>
-                </div>
-                <div *ngIf="oBand.showLegend">
-                    <img src="{{oBand.legendUrl}}" />
-                </div>
-            </li>
-        </ul>
-    </div>
+  <div class="d-flex flex-row">
+    <app-tab
+      [m_sLabel]="'EDITOR_NAVIGATION' | translate"
+      [m_bIsDisabled]="false"
+      [m_bIsActive]="m_sActiveTab === 'nav'"
+      (click)="setActiveTab('nav')"
+    ></app-tab>
+    <app-tab
+      [m_sLabel]="'DIALOG_GET_CAPABILITIES_LAYERS' | translate"
+      [m_bIsDisabled]="false"
+      [m_bIsActive]="m_sActiveTab === 'layers'"
+      (click)="setActiveTab('layers')"
+    ></app-tab>
+  </div>
+  <!-- Navigation and Layers content -->
+  <div class="map-container-panel flex-fill" [hidden]="m_sActiveTab !== 'nav'">
+    <div
+      class=""
+      id="smallMapContainer"
+      [class.cesium-map]="b2DMapModeOn === true"
+    ></div>
+  </div>
+  <div
+    cdkDropListGroup
+    class="layers-tab h-100"
+    *ngIf="m_sActiveTab === 'layers'"
+  >
+    <ul
+      cdkDropList
+      [cdkDropListData]="m_aoVisibleBands.reverse()"
+      (cdkDropListDropped)="drop($event)"
+      class="list-group pe-1"
+    >
+      <li
+        cdkDrag
+        *ngFor="let oBand of m_aoVisibleBands.reverse()"
+        class="list-group-item d-flex flex-column mt-2"
+      >
+        <div class="layer-title d-flex flex-row justify-content-between gap-2">
+          <div
+            class="legend-container justify-self-start align-self-start d-flex flex-row"
+            matTooltip="{{ 'EDITOR_LAYERS_OPTIONS' | translate }}"
+            (click)="showLayerLegend(oBand)"
+          >
+            <div class="legend-dot"></div>
+            <div class="legend-dot dot-2"></div>
+            <div class="legend-dot dot-3"></div>
+          </div>
+          <div
+            class="band-title d-flex flex-column flex-fill gap-1"
+            matTooltip="{{ oBand.layerId }}"
+            (click)="copyLayerId(oBand.layerId)"
+          >
+            <p class="band-info">{{ oBand.productName }}</p>
+            <p class="band-info">{{ oBand.name }}</p>
+          </div>
+          <div class="button-options d-flex flex-row gap-1">
+            <app-button
+              [m_bMuted]="true"
+              [m_sIconLeft]="'imagesearch_roller'"
+              [m_sSize]="'small'"
+              (click)="openStylesDialog()"
+              matTooltip="{{ 'DIALOG_IMPORT_UPLOAD_STYLE' | translate }}"
+            ></app-button>
+            <app-button
+              [m_bMuted]="true"
+              [m_sIconLeft]="'fullscreen'"
+              [m_sSize]="'small'"
+              (click)="zoomOnBandImage(oBand.geoserverBoundingBox)"
+              matTooltip="{{ 'IMPORT_TOOLTIP_ZOOM_ON_PRODUCT' | translate }}"
+            ></app-button>
+            <app-button
+              [m_bMuted]="true"
+              [m_sIconLeft]="'close'"
+              [m_sSize]="'small'"
+              (click)="removeBandImage(oBand)"
+              matTooltip="{{ 'KEY_PHRASES.CLOSE' | translate }}"
+            ></app-button>
+          </div>
+        </div>
+        <!-- Opacity slider should only be shown in 2D -->
+        <div
+          *ngIf="m_b2DMapMode"
+          class="font-bold d-flex flex-row align-items-center gap-2 pe-2"
+        >
+          Opacity:
+          <div class="slider-container flex-fill">
+            <app-slider
+              [m_bHasThumbLabel]="true"
+              [m_iValue]="m_iOpacityVal"
+              (m_oSelectionChange)="setOpacity($event, oBand.layerId)"
+            ></app-slider>
+          </div>
+        </div>
+        <div *ngIf="oBand.showLegend">
+          <img src="{{ oBand.legendUrl }}" />
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
