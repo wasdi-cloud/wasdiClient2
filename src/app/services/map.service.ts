@@ -662,7 +662,11 @@ export class MapService {
         if (oProduct != null) {
           if (!FadeoutUtils.utilsIsStrNullOrEmpty(oProduct.bbox)) {
             let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
-            aoBounds = aoBounds.concat(aoProductBounds);
+            // Before adding the bounds checks whether the coordinate system use values in the range 
+            //-90 +90 +180 -180 (ProductViewmodel does not brings the CRS so its filtered out)
+            // In publish band the problem does not persist
+            if (Math.abs(aoProductBounds[0][1]) < 180) aoBounds = aoBounds.concat(aoProductBounds);
+
           }
         }
       }
