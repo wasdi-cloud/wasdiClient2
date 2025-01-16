@@ -320,7 +320,6 @@ export class ProductsListComponent implements OnChanges, OnInit {
             sDownloadedFilename = sHeaderContentDisposition.split(';')[1].split('=')[1].replace(/\"/g, '');
           }
 
-
           const a = document.createElement('a');
           const objectUrl = URL.createObjectURL(oResponse.body);
           a.href = objectUrl;
@@ -332,6 +331,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
       },
       error: oError => {
         this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("EDITOR_DOWNLOAD_ERROR"), '', 'alert');
+        this.m_oDownloadProgress.emit({ downloadStatus: "complete", productName: sFileName })
       }
     });
 
