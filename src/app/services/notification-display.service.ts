@@ -17,13 +17,19 @@ export class NotificationDisplayService {
 
   /**
    * Handler to open the snackbar in the bottom right corner
-   * @param sMessage 
+   * @param sMessage
    * @param sTitle
-   * @param className 
+   * @param className
+   * @param permanent
    */
-  openSnackBar(sMessage: string, sTitle?: string, className?: string) {
+  openSnackBar(sMessage: string, sTitle?: string, className?: string,permanent?:boolean) {
+    let duration=4000;
+    if(permanent){
+      //if it is null then its permanent
+        duration=null;
+    }
     this.m_oMatSnackBar.openFromComponent(NotificationSnackbarComponent, {
-      duration: 4000,
+      duration: duration,
       horizontalPosition: 'right',
       verticalPosition: 'bottom',
       panelClass: [className ? className : 'info-snackbar'],
@@ -33,8 +39,8 @@ export class NotificationDisplayService {
 
   /**
    * Handler to open the alert dialog component
-   * @param sMessage 
-   * @param iTimeoutInput 
+   * @param sMessage
+   * @param iTimeoutInput
    * @param sClassName
    */
   openAlertDialog(sMessage: string, sTitle?: string, sClassName?: string): void {
@@ -64,7 +70,7 @@ export class NotificationDisplayService {
 
   /**
    * Handle open of confirmation dialog
-   * @param sMessage 
+   * @param sMessage
    * @param sTitle?
    * @param sClassName
    * @returns result of the dialog (boolean)

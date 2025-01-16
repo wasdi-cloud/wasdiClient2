@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
-//Service Imports: 
+//Service Imports:
 import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { GlobeService } from 'src/app/services/globe.service';
@@ -15,10 +15,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { WorkspaceInfoDialogComponent } from './workspace-info-dialog/workspace-info-dialog.component';
 
-//Model Imports: 
+//Model Imports:
 import { Product } from 'src/app/shared/models/product.model';
 
-//Utilities Imports: 
+//Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -50,17 +50,17 @@ export class EditComponent implements OnInit, OnDestroy {
     private m_oMapService: MapService) { }
 
   /**
-   * Map Status: 2D (true) or 3D (false): 
+   * Map Status: 2D (true) or 3D (false):
    */
   m_b2DMapModeOn: boolean = true;
 
   /**
-   * Has first zoom on band been done? 
+   * Has first zoom on band been done?
    */
   m_bFirstZoomOnBandDone: boolean = false;
 
   /**
-   * Query Search filter text (product tree): 
+   * Query Search filter text (product tree):
    */
   m_sTextQueryFilter: string = '';
   /**
@@ -134,7 +134,7 @@ export class EditComponent implements OnInit, OnDestroy {
   m_iFilteredProducts: number = 0;
 
   ngOnInit(): void {
-    //What to do if workspace undefined: 
+    //What to do if workspace undefined:
     if (!this.m_oActiveWorkspace) {
 
       //Check route for workspace id
@@ -211,7 +211,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
     // Set the notification
     // if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oMessage.payload)) {
-    //   //Ensure the payload is a string (can be a product object) 
+    //   //Ensure the payload is a string (can be a product object)
     //   if (typeof oMessage.payload === 'string' && oMessage.payload.includes("DONE")) {
     //     oController.m_oNotificationsQueueService.setNotifications(oMessage);
     //   }
@@ -241,7 +241,7 @@ export class EditComponent implements OnInit, OnDestroy {
   /**
    * Open a Workspace. Call the get Workspace Editor View Model
    * If all is ok, it set the Active Workspace, subscribe to rabbit and get the full product list
-   * @param sWorkspaceId 
+   * @param sWorkspaceId
    */
   openWorkspace(sWorkspaceId: string) {
     this.m_oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe({
@@ -337,6 +337,8 @@ export class EditComponent implements OnInit, OnDestroy {
       if (oEvent.downloadStatus === 'incomplete') {
         this.m_bShowProductDownload = true;
         this.m_sDownloadProductName = oEvent.productName;
+        // this.m_oNotificationDisplayService.openSnackBar("Downloading ..", 'Downloading ..', 'success-snackbar');
+
       } else {
         this.m_bShowProductDownload = false;
       }

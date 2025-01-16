@@ -15,7 +15,7 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 import { ProductService } from 'src/app/services/api/product.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 
-//Component Imports: 
+//Component Imports:
 import { ImportDialogComponent } from '../edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
 import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
 
@@ -120,7 +120,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
    */
   m_iSortClick: number = 0;
 
-  /** 
+  /**
    * Flag to see if all products are selected
   */
   m_bSelectAllProduct: boolean = false
@@ -272,7 +272,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Called from the Product list tree and executes a download of the product
-   * @param node 
+   * @param node
    */
   downloadProduct(node: any) {
     if (node.fileName) {
@@ -292,10 +292,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Takes a file name and creates download file for the product
-   * @param sFileName 
+   * @param sFileName
    * @returns boolean
    */
   downloadProductByName(sFileName: string) {
+    let bDownloadIncomplete=false;
     if (!sFileName) {
       return false;
     }
@@ -309,6 +310,10 @@ export class ProductsListComponent implements OnChanges, OnInit {
       next: oResponse => {
         if (oResponse.type === HttpEventType.DownloadProgress) {
           this.m_oDownloadProgress.emit({ downloadStatus: "incomplete", productName: sFileName })
+          if (!bDownloadIncomplete) { // Show snackbar only once
+            this.m_oNotificationDisplayService.openSnackBar("Downloading ...", '', 'success-snackbar',true);
+            bDownloadIncomplete = true;
+          }
         }
         if (oResponse.type === HttpEventType.Response) {
           this.m_oDownloadProgress.emit({ downloadStatus: "complete", productName: sFileName })
@@ -327,6 +332,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
           a.click();
           URL.revokeObjectURL(objectUrl);
           this.m_oNotificationDisplayService.openSnackBar(this.m_oTranslate.instant("EDITOR_DOWNLOAD_COMPLETE"), '', 'success-snackbar');
+          bDownloadIncomplete = false; // Reset the flag after the download is complete
+
         }
       },
       error: oError => {
@@ -340,8 +347,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Open the Product Properties Dialog
-   * @param event 
-   * @param node 
+   * @param event
+   * @param node
    */
   openProductProperties(event: MouseEvent, node: any) {
     const oDialogRef = this.m_oDialog.open(ProductPropertiesDialogComponent, {
@@ -359,7 +366,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Open the send to ftp dialog
-   * @param oNode 
+   * @param oNode
    */
   openSendToFTP(oNode: any) {
     const oDialogRef = this.m_oDialog.open(FTPDialogComponent, {
@@ -373,7 +380,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Delete Product command: ask for confirmation and, in case, calls the API to delete a product
-   * @param node 
+   * @param node
    */
   deleteProduct(node: any) {
     let bDeleteLayer = true;
@@ -463,8 +470,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Handle the click on a band to add or remove it from the layer list
-   * @param oBand 
-   * @param iIndex 
+   * @param oBand
+   * @param iIndex
    */
   handleBandSelection(oBand: any, iIndex) {
     if (this.m_aoVisibleBands.indexOf(oBand) !== -1) {
@@ -485,7 +492,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
 
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
-        //If the Band is already published: 
+        //If the Band is already published:
         if (oResponse.messageCode === "PUBLISHBAND") {
           this.receivedPublishBandMessage(oResponse, oBand);
         }
@@ -507,7 +514,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
   /**
    * Removes the band from the internal list of m_aoVisibleBandsOutput that is used to draw the
    * layers panel
-   * @param oBand 
+   * @param oBand
    */
   removeBandImageFromVisibleList(oBand) {
     let iVisibleBandCount = 0;
@@ -528,8 +535,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Removes a Band from the map
-   * @param oBand 
-   * @returns 
+   * @param oBand
+   * @returns
    */
   removeBandImage(oBand) {
     if (!oBand) {
@@ -558,13 +565,13 @@ export class ProductsListComponent implements OnChanges, OnInit {
   }
 
   /**
-   * Called when a band can be visualized on the map. 
+   * Called when a band can be visualized on the map.
    * If a band has already been published, the API directly return this view model.
    * If not WASDI triggers the publish band operation that will send this rabbit message when received.
-   * 
-   * @param oMessage 
-   * @param oActiveBand 
-   * @returns 
+   *
+   * @param oMessage
+   * @param oActiveBand
+   * @returns
    */
   receivedPublishBandMessage(oMessage: any, oActiveBand: any) {
     let oPublishedBand = oMessage.payload;
@@ -607,8 +614,8 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Get Product Metadata calling the API
-   * 
-   * @param sFileName 
+   *
+   * @param sFileName
    */
   readMetadata(sFileName: string) {
     this.m_oProductService.getProductMetadata(sFileName, this.m_oActiveWorkspace.workspaceId);
@@ -692,7 +699,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
   /**
    * Manage the selected products array
-   * @param oEvent 
+   * @param oEvent
    */
   getProductSelection(oEvent): void {
     //If the product is checked (to be added to the array)
@@ -730,7 +737,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
         return oActualProd;
       }
     }
-    
+
     return null;
   }
 
