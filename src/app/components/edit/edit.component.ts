@@ -184,6 +184,20 @@ export class EditComponent implements OnInit, OnDestroy {
 
       oController.m_oNotificationDisplayService.openAlertDialog(oController.m_oTranslate.instant("MSG_ERROR_IN_OPERATION_1") + `<li>${sOperation}</li>` + sErrorDescription, 10000);
 
+        if (!FadeoutUtils.utilsIsStrNullOrEmpty(sErrorDescription)) {
+            // let oAudio = new Audio('assets/audio/message.wav');
+            // oAudio.play();            
+            let oUserMessage = {
+                ...oMessage,
+                displayMessage: sErrorDescription,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+                seen: false
+            }
+            oController.m_oNotificationsQueueService.setNotifications(oUserMessage);
+        }
+
+
       return;
     }
 
