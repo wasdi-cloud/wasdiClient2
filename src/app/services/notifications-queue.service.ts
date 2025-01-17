@@ -5,14 +5,9 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class NotificationsQueueService {
   m_aoNotifications: Array<any> = [];
-  m_aoNotificationsSubscription: BehaviorSubject<any[]> = new BehaviorSubject<
-    any[]
-  >(this.m_aoNotifications);
-  m_aoNotificationSubscription$ =
-    this.m_aoNotificationsSubscription.asObservable();
-  m_bHasNotifications: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
+  m_aoNotificationsSubscription: BehaviorSubject<any[]> = new BehaviorSubject<any[]>(this.m_aoNotifications);
+  m_aoNotificationSubscription$ =this.m_aoNotificationsSubscription.asObservable();
+  m_bHasNotifications: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor() {}
 

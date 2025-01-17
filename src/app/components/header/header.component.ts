@@ -157,11 +157,13 @@ export class HeaderComponent implements OnInit {
     }
     let sReturn: string = '';
 
+    sReturn = "<i>" + oNotification.date + " " + oNotification.time +"</i> - <strong>" + oNotification.messageCode + "</strong><br>"
+
     if (oNotification.messageCode === 'DOWNLOAD') {
-      sReturn =
+      sReturn +=
         oNotification.displayMessage + '<br>' + oNotification.payload.fileName;
     } else {
-      sReturn = oNotification.displayMessage;
+      sReturn += oNotification.displayMessage;
     }
 
     return sReturn;
