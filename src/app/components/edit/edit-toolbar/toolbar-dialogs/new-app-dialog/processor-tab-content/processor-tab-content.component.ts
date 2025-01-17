@@ -450,7 +450,6 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
       oRabbitMessage.payload.includes('Re Deploy Done')
     ) {
       oController.m_bRedeployOngoing = false;
-      console.log(oController.m_bRedeployOngoing);
     }
   }
 
