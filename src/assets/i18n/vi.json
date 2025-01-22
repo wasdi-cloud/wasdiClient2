@@ -456,6 +456,7 @@
     "DIALOG_PROCESSOR_BASE_SELECT_LANG": "Lựa chọn nguôn ngữ lập trình của bạn",
     "DIALOG_PROCESSOR_BASE_UPDATE_LIB": "Cập nhật thư viện",
     "DIALOG_PROCESSOR_BASE_REDEPLOY": "Triển khai lại",
+    "DIALOG_PROCESSOR_BASE_REDEPLOY_ONGOING": "App Re-deploy Ongoing",
     "DIALOG_PROCESSOR_BASE_DRAG_ZIP": "Kéo và thả vào đây tệp .zip Ứng dụng WASDI của bạn hoặc nhấp để chọn tệp",
     "DIALOG_PROCESSOR_BASE_FILE": "Tệp",
     "DIALOG_PROCESSOR_BASE_DRAG_FILES": "Kéo và thả vào đây tệp .zip hoặc tệp đơn để cập nhật ứng dụng WASDI của bạn hoặc nhấp để chọn tệp.",

@@ -456,6 +456,7 @@
 	"DIALOG_PROCESSOR_BASE_SELECT_LANG": "Seleziona il linguaggio di programmazione",
 	"DIALOG_PROCESSOR_BASE_UPDATE_LIB": "Aggiorna libreria",
 	"DIALOG_PROCESSOR_BASE_REDEPLOY": "Re-Installa",
+	"DIALOG_PROCESSOR_BASE_REDEPLOY_ONGOING": "App Re-deploy In Corso",
 	"DIALOG_PROCESSOR_BASE_DRAG_ZIP": "Drag and Drop qui il file .zip con la tua WASDI App or clicca per selzionarlo.",
 	"DIALOG_PROCESSOR_BASE_FILE": "File",
 	"DIALOG_PROCESSOR_BASE_DRAG_FILES": "Drag and Drop qui il file .zip con la tua WASDI App or clicca per selzionarlo.",

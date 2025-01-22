@@ -109,11 +109,15 @@
           </div>
         </div>
       </div>
-      <div class="flex-fill">
+      <div class="flex-fill" *ngIf="!m_bRedeployOngoing">
         <app-drag-and-drop
           (m_oSelectedFileOutput)="getSelectedFile($event)"
         ></app-drag-and-drop>
       </div>
+      <div class="flex-fill" *ngIf="m_bRedeployOngoing">
+        {{ "DIALOG_PROCESSOR_BASE_REDEPLOY_ONGOING" | translate }}
+      </div>
+
     </div>
   </div>
   <div

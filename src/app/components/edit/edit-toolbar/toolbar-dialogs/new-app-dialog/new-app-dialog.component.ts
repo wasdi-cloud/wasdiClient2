@@ -560,6 +560,7 @@ export class NewAppDialogComponent implements OnInit {
         .subscribe({
           next: (oResponse) => {
             //this.m_oNotificationDisplayService.openSnackBar("Processor Files Updated<br>Rebuild ongoing");
+            this.m_bDeploymentOngoing = true;
           },
           error: (oError) => {
             this.m_oNotificationDisplayService.openAlertDialog(
