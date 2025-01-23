@@ -56,7 +56,7 @@
           <div *ngIf="m_aoNotifications.length > 0">
             <div
               class="notification p-2 d-flex flex-column gap-1"
-              *ngFor="let oNotification of m_aoNotifications"
+              *ngFor="let oNotification of m_aoNotifications.slice().reverse()"
             >
               <div class="d-flex flex-row">
                 <div class="flex-fill d-flex flex-column">
