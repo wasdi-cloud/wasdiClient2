@@ -241,11 +241,8 @@ export class NewAppDialogComponent implements OnInit {
                   this.m_oProcessorDetails = oResponse;
 
                   this.m_sName = this.m_oInputProcessor.processorName;
-                  this.m_sDescription =
-                    this.m_oInputProcessor.processorDescription;
-                  this.m_sJSONSample = decodeURIComponent(
-                    this.m_oInputProcessor.paramsSample
-                  );
+                  this.m_sDescription = this.m_oInputProcessor.processorDescription;
+                  this.m_sJSONSample = decodeURIComponent(this.m_oInputProcessor.paramsSample);
                   this.m_sProcessorId = this.m_oInputProcessor.processorId;
                   this.m_iMinuteTimeout = this.m_oInputProcessor.minuteTimeout;
                   this.m_sTypeIdOnly = this.m_oInputProcessor.type;
@@ -407,65 +404,53 @@ export class NewAppDialogComponent implements OnInit {
     //Is processor public?
     if (!this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value) {
       this.m_oInputProcessor.isPublic = 0;
-    } else {
-      if (
-        this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value ===
-        false
-      ) {
+    } 
+    else {
+      if (this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value === false) {
         this.m_oInputProcessor.isPublic = 0;
-      } else {
+      } 
+      else {
         this.m_oInputProcessor.isPublic = 1;
       }
     }
 
     //Set processor name:
-    this.m_oInputProcessor.processorName = this.m_oProcessorForm.get(
-      'processorBasicInfo.sProcessorName'
-    ).value;
+    this.m_oInputProcessor.processorName = this.m_oProcessorForm.get('processorBasicInfo.sProcessorName').value;
 
     //Set processor description:
-    this.m_oInputProcessor.processorDescription = this.m_oProcessorForm.get(
-      'processorBasicInfo.sShortDescription'
-    ).value;
+    this.m_oInputProcessor.processorDescription = this.m_oProcessorForm.get('processorBasicInfo.sShortDescription').value;
 
     //Set JSON Parameters:
     if (this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value) {
-      this.m_oInputProcessor.paramsSample = encodeURI(
-        this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value
-      );
+      let sUpdatedText = this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value;
+      this.m_oInputProcessor.paramsSample = encodeURI(sUpdatedText);
     }
 
     //Set time out (in minutes):
-    this.m_oInputProcessor.minuteTimeout = this.m_oProcessorForm.get(
-      'processorBasicInfo.iMinuteTimeout'
-    ).value;
+    this.m_oInputProcessor.minuteTimeout = this.m_oProcessorForm.get('processorBasicInfo.iMinuteTimeout').value;
 
     //Copy the brief description also in the detail view:
-    this.m_oProcessorDetails.processorDescription = this.m_oProcessorForm.get(
-      'processorBasicInfo.sShortDescription'
-    ).value;
+    this.m_oProcessorDetails.processorDescription = this.m_oProcessorForm.get('processorBasicInfo.sShortDescription').value;
 
     //Version is fixed at 1 and hidden from the form - do not set
 
     //Set processor details:
-    this.m_oProcessorDetails.friendlyName = this.m_oProcessorForm.get(
-      'processorStoreInfo.sFriendlyName'
-    ).value;
-    this.m_oProcessorDetails.link = this.m_oProcessorForm.get(
-      'processorStoreInfo.sLink'
-    ).value;
-    this.m_oProcessorDetails.email = this.m_oProcessorForm.get(
-      'processorStoreInfo.sEmail'
-    ).value;
-    this.m_oProcessorDetails.ondemandPrice = this.m_oProcessorForm.get(
-      'processorStoreInfo.iOnDemandPrice'
-    ).value;
-    this.m_oProcessorDetails.showInStore = this.m_oProcessorForm.get(
-      'processorStoreInfo.bShowInStore'
-    ).value;
-    this.m_oProcessorDetails.longDescription = this.m_oProcessorForm.get(
-      'processorStoreInfo.sLongDescription'
-    ).value;
+    this.m_oProcessorDetails.friendlyName = this.m_oProcessorForm.get('processorStoreInfo.sFriendlyName').value;
+
+    // Read the link
+    this.m_oProcessorDetails.link = this.m_oProcessorForm.get('processorStoreInfo.sLink').value;
+
+    // Read the email
+    this.m_oProcessorDetails.email = this.m_oProcessorForm.get('processorStoreInfo.sEmail').value;
+
+    // On demand price
+    this.m_oProcessorDetails.ondemandPrice = this.m_oProcessorForm.get('processorStoreInfo.iOnDemandPrice').value;
+
+    // Show in store flag
+    this.m_oProcessorDetails.showInStore = this.m_oProcessorForm.get('processorStoreInfo.bShowInStore').value;
+
+    // Long description
+    this.m_oProcessorDetails.longDescription = this.m_oProcessorForm.get('processorStoreInfo.sLongDescription').value;
   }
 
   /**

@@ -205,6 +205,7 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.m_oJsonEditorService.setEditor(this.editorRef);
+    this.m_oJsonEditorService.setReadOnly(false);
     this.m_oJsonEditorService.initEditor();
     this.m_oJsonEditorService.setText(this.m_sJSONSample);
   }
