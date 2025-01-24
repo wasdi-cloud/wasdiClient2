@@ -5,6 +5,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+import { JsonEditorService } from 'src/app/services/json-editor.service';
 
 //Angular Materials Imports:
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -190,6 +191,7 @@ export class NewAppDialogComponent implements OnInit {
     private m_oImageService: ImageService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
+    private m_oJsonEditorService: JsonEditorService,
     private m_oTranslate: TranslateService
   ) {}
 
@@ -423,6 +425,8 @@ export class NewAppDialogComponent implements OnInit {
     //Set JSON Parameters:
     if (this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value) {
       let sUpdatedText = this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value;
+      sUpdatedText = this.m_oJsonEditorService.getValue();
+      
       this.m_oInputProcessor.paramsSample = encodeURI(sUpdatedText);
     }
 
