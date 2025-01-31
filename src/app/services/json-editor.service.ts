@@ -67,6 +67,7 @@ export class JsonEditorService {
   }
 
   setText(sInputText: string): void {
+    this.m_sText = sInputText;
     this.m_oEditor.setValue(sInputText, -1);
   }
 

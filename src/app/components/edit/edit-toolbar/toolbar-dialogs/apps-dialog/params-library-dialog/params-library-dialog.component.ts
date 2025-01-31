@@ -99,6 +99,7 @@ export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
+    this.m_oJsonEditorService.setText("");
     this.m_oJsonEditorService.initEditor();
   }
   /**

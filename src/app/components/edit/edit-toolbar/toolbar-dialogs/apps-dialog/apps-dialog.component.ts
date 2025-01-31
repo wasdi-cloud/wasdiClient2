@@ -102,6 +102,10 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.initJsonEditor();
+  }
+
+  initJsonEditor(): void {
     this.m_oJsonEditorService.setEditor(this.m_oEditorRef);
     this.m_oJsonEditorService.initEditor();
     this.m_oJsonEditorService.setText(this.m_sMyJsonString);
@@ -114,11 +118,14 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     let sErrorMsg: string = this.m_oTranslate.instant(
       'DIALOG_APPS_PROCESSORS_ERROR'
     );
+
+    this.m_bIsLoadingProcessorList = true;
+
     this.m_oProcessorService.getProcessorsList().subscribe({
       next: (oResponse) => {
+        
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoProcessorList = this.setDefaultImages(oResponse);
-          this.m_bIsLoadingProcessorList = false;
         } else {
           this.m_oNotificationDisplayService.openAlertDialog(
             sErrorMsg,
@@ -126,8 +133,10 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
             'danger'
           );
         }
+        this.m_bIsLoadingProcessorList = false;
       },
       error: (oError) => {
+        this.m_bIsLoadingProcessorList = false
         this.m_oNotificationDisplayService.openAlertDialog(
           sErrorMsg,
           '',
@@ -189,17 +198,22 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     if (oProcessor.paramsSample) {
       this.m_sMyJsonString = decodeURIComponent(oProcessor.paramsSample);
-      this.m_oJsonEditorService.setText(this.m_sMyJsonString);
+
       try {
         let oParsed = JSON.parse(this.m_sMyJsonString);
 
         let sPrettyPrint = JSON.stringify(oParsed, null, 2);
 
         this.m_sMyJsonString = sPrettyPrint;
-      } catch (oError) {}
-    } else {
+      } 
+      catch (oError) {
+
+      }
+    } 
+    else {
       this.m_sMyJsonString = '';
     }
+    this.m_oJsonEditorService.setText(this.m_sMyJsonString);    
   }
 
   /**
@@ -253,14 +267,18 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
       })
       .afterClosed()
       .subscribe((oChanged) => {
-        if (oChanged.changed || oChanged === true) {
-          this.getProcessorsList();
-          if (
-            this.m_oSelectedProcessor.processorId === oProcessor.processorId
-          ) {
-            this.m_oSelectedProcessor = {} as Application;
-          }
+        if (oChanged) {
+          if (oChanged.changed || oChanged === true) {
+            this.getProcessorsList();
+            if (
+              this.m_oSelectedProcessor.processorId === oProcessor.processorId
+            ) {
+              this.m_oSelectedProcessor = {} as Application;
+            }
+          }  
         }
+
+        this.initJsonEditor();
       });
   }
 
@@ -274,9 +292,12 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
       })
       .afterClosed()
       .subscribe((oChanged) => {
-        if (oChanged.changed) {
-          this.getProcessorsList();
+        if (oChanged) {
+          if (oChanged.changed) {
+            this.getProcessorsList();
+          }
         }
+        this.initJsonEditor();
       });
   }
 
