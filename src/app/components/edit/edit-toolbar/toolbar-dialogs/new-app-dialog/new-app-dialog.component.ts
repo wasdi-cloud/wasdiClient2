@@ -191,7 +191,6 @@ export class NewAppDialogComponent implements OnInit {
     private m_oImageService: ImageService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
-    private m_oJsonEditorService: JsonEditorService,
     private m_oTranslate: TranslateService
   ) {}
 
@@ -406,11 +405,11 @@ export class NewAppDialogComponent implements OnInit {
     //Is processor public?
     if (!this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value) {
       this.m_oInputProcessor.isPublic = 0;
-    } 
+    }
     else {
       if (this.m_oProcessorForm.get('processorBasicInfo.bIsPublic').value === false) {
         this.m_oInputProcessor.isPublic = 0;
-      } 
+      }
       else {
         this.m_oInputProcessor.isPublic = 1;
       }
@@ -424,10 +423,14 @@ export class NewAppDialogComponent implements OnInit {
 
     //Set JSON Parameters:
     if (this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value) {
+      console.log("are we here professor?");
+
       let sUpdatedText = this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value;
-      sUpdatedText = this.m_oJsonEditorService.getValue();
-      
+
+      // sUpdatedText = this.m_oJsonEditorService.getValue();
+      console.log(sUpdatedText)
       this.m_oInputProcessor.paramsSample = encodeURI(sUpdatedText);
+
     }
 
     //Set time out (in minutes):

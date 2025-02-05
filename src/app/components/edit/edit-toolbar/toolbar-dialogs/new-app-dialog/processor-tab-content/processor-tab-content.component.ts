@@ -475,6 +475,9 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
 
   getJsonText(oEvent) {
     this.m_sJSONSample = this.m_oJsonEditorService.getValue();
+    this.m_oProcessorBasicInfo.patchValue({
+      sJSONSample: this.m_sJSONSample?this.m_sJSONSample:null,
+    });
   }
 
   onDismiss() {
