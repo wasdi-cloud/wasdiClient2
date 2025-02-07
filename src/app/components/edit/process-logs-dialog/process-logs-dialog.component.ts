@@ -191,11 +191,11 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
         clearInterval(oController.m_oTick)
       }
 
-      oController.m_oProcessWorkspaceService.getProcessWorkspaceStatusId(oController.m_oProcess.processObjId).subscribe(
+      oController.m_oProcessWorkspaceService.getProcessWorkspaceById(oController.m_oProcess.processObjId).subscribe(
         {
           next: oResponse => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-              oController.m_oProcess.status=oResponse
+              oController.m_oProcess.status=oResponse.status
             }
           },
           error: oError => {

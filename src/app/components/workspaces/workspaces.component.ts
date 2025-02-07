@@ -164,7 +164,6 @@ export class WorkspacesComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log("WorkspaceComponent.ngOnInit")
     this.m_bDestroyCalled = false;
     this.m_oGlobeService.initRotateGlobe('CesiumContainer3');
     this.getTrackSatellite();
@@ -176,8 +175,6 @@ export class WorkspacesComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-
-    console.log("WorkspaceComponent.ngOnDestroy")
     this.m_bDestroyCalled = true;
 
     //Destroy Interval after closing: 

@@ -74,7 +74,6 @@ export class ManageSubscriptionsComponent implements OnInit {
   }
 
   getSubscriptions() {
-    console.log(this.m_sIdSearch)
     this.m_oSubscriptionService.getPaginatedSubscriptions(this.m_sUserSearch, this.m_sIdSearch, this.m_sNameSearch, this.m_iOffset, this.m_iLimit, this.m_sSortBy, this.m_sSortOrder).subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
@@ -221,7 +220,6 @@ export class ManageSubscriptionsComponent implements OnInit {
 
   createNewSubscription(oSubscription) {
     this.createSubscriptionObject();
-    console.log(this.m_oSelectedSubscription)
     if (this.checkIsSubscriptionValid() === true) {
       this.m_oSubscriptionService.createSubscription(this.m_oSelectedSubscription).subscribe({
         next: oResponse => {

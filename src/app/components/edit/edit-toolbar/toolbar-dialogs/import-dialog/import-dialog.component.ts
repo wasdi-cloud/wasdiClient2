@@ -75,7 +75,6 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
         this.m_bIsUploading = status;
       }
     );
-    console.log('her i am open again')
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getStyles();
     this.isCreatedAccountUpload();
@@ -145,10 +144,9 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
 
           let sHeader: string = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION")
           if (oResponse.status !== 200) {
-            console.log(this.m_sFileName + "here is !=200")
             this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sHeader, 'danger');
-          } else {
-            console.log(this.m_sFileName + "here is ==200")
+          } 
+          else {
             let sMessage: string = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS");
             this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
             this.onDismiss();
@@ -300,8 +298,6 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
       next: oResponse => {
         if (oResponse) {
           console.log("SftpUploadController error during ingest file");
-          //TODO: ADD ALERT DIALOG
-          console.log("GURU MEDITATION<br>INGESTION ERROR FILE:<br>" + oSelectedFile);
         }
       },
       error: oError => {

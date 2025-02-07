@@ -16,7 +16,6 @@ export class MetadataAttributesDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.m_oData)
     this.m_oElement = this.m_oData.element.name;
     this.m_aoAttributes = this.m_oData.element.attributes
   }

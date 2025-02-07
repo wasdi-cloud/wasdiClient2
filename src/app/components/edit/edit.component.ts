@@ -362,7 +362,6 @@ export class EditComponent implements OnInit, OnDestroy {
   setPublishedSetting(oInputBand) {
     this.m_aoProducts.forEach(oProduct => {
       if (oProduct.name === oInputBand.productName) {
-        console.log(oProduct.bandsGroups.bands)
         oProduct.bandsGroups.bands.forEach(oBand => {
           if (oBand.name === oInputBand.name) {
             oBand.published = false;

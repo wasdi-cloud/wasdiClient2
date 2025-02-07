@@ -312,7 +312,7 @@ export class ProcessWorkspaceService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.m_oHttp.get(sUrl + '/process/byid?procws=' + sProcessId);
+    return this.m_oHttp.get<any>(sUrl + '/process/byid?procws=' + sProcessId);
   };
 
   /**
@@ -328,7 +328,7 @@ export class ProcessWorkspaceService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.m_oHttp.get(sUrl + '/process/getstatusbyid?procws=' + sProcessId);
+    return this.m_oHttp.get<string>(sUrl + '/process/getstatusbyid?procws=' + sProcessId);
   };
 
   /**

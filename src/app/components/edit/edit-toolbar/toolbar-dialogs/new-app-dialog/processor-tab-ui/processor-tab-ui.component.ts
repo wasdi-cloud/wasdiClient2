@@ -27,7 +27,6 @@ export class ProcessorTabUiComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.m_sProcessorUI = this.m_oProcessorUIInfo.get('sProcessorUI').value;
-    console.log(this.m_oProcessorUIInfo)
   }
 
   ngAfterViewInit(): void {

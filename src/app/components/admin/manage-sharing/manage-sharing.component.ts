@@ -189,7 +189,6 @@ export class ManageSharingComponent implements OnInit {
   }
 
   handlePagination(oEvent, sTable) {
-    console.log(oEvent)
     if (oEvent.previousPageIndex < oEvent.pageIndex) {
       this.m_iOffset += this.m_iLimit
     } else {

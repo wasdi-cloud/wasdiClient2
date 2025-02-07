@@ -59,7 +59,6 @@ export class NavbarComponent implements OnInit {
   }
 
   translateLanguageTo(lang: string) {
-    console.log("TRANSLATE")
     this.m_oTranslate.use(lang)
   }
 

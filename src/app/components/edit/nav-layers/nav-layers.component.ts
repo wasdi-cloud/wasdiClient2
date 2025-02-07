@@ -94,7 +94,6 @@ export class NavLayersComponent implements OnInit, OnChanges {
       this.m_aoVisibleBands !== undefined &&
       this.m_aoVisibleBands.length === 1
     ) {
-      console.log('NavLayersComponent.ngOnChanges: switch to layers tab');
       this.setActiveTab('layers');
     }
   }
