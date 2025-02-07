@@ -3,16 +3,18 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConstantsService } from '../constants.service';
 
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CatalogService {
-  APIURL: string = this.oConstantsService.getAPIURL();
+  APIURL: string = this.m_oConstantsService.getAPIURL();
 
-  constructor(private oConstantsService: ConstantsService, private oHttp: HttpClient) { }
+  constructor(private m_oConstantsService: ConstantsService, private oHttp: HttpClient) { }
 
   downloadByName(sFileName: string, sWorkspace: string, sUrl: string) {
-    let urlParams = "?" + "token=" + this.oConstantsService.getSessionId();
+    let urlParams = "?" + "token=" + this.m_oConstantsService.getSessionId();
     urlParams = urlParams + "&" + "filename=" + sFileName + "&workspace=" + sWorkspace;
 
     let sAPIUrl = this.APIURL;
@@ -29,7 +31,7 @@ export class CatalogService {
   };
 
   newDownloadByName(sFileName: string, sWorkspace: string, sUrl: string): Observable<HttpEvent<any>> {
-    var urlParams = "?" + "token=" + this.oConstantsService.getSessionId();
+    var urlParams = "?" + "token=" + this.m_oConstantsService.getSessionId();
     urlParams = urlParams + "&" + "filename=" + sFileName + "&workspace=" + sWorkspace;
 
     var sAPIUrl = this.APIURL;
@@ -43,6 +45,19 @@ export class CatalogService {
     }
 
     return this.oHttp.get(sAPIUrl + "/catalog/downloadbyname" + urlParams, { responseType: 'blob', reportProgress: true, observe: "events" });
+  };
+
+  getProductProperties(sFileName: string, sWorkspace: string) {
+    var sUrlParams = "?" + "file=" + sFileName + "&workspace=" + sWorkspace + "&getchecksum=false"
+
+    let oWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl)) {
+      sUrl = oWorkspace.apiUrl;
+    }
+
+    return this.oHttp.get<any>(sUrl + "/catalog/properties" + sUrlParams);
   };
 
   ingestFile(sSelectedFile: string, sWorkspace: string) {

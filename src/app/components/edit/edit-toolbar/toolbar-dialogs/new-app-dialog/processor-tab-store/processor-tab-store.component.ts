@@ -144,4 +144,8 @@ export class ProcessorTabStoreComponent implements OnInit {
     this.m_sApplicationImageName = oEvent.name;
     this.m_oApplicationImage = oEvent.file;
   }
+
+  getImageLink(sLink) {
+    return this.m_oImageService.getImageLink(sLink);
+  }
 }

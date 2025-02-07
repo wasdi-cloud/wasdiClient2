@@ -97,11 +97,11 @@ export class ProcessWorkspaceService {
 
   /**
    * Set Processes Running
-   * @param aoPrcoesses 
+   * @param aoProcesses 
    * @returns 
    */
-  setProcessesRunning(aoPrcoesses: Process[]) {
-    return this.m_aoProcessesRunning.next(aoPrcoesses);
+  setProcessesRunning(aoProcesses: Process[]) {
+    return this.m_aoProcessesRunning.next(aoProcesses);
   }
 
   /**
@@ -313,6 +313,22 @@ export class ProcessWorkspaceService {
     }
 
     return this.m_oHttp.get(sUrl + '/process/byid?procws=' + sProcessId);
+  };
+
+  /**
+   * Get the status of a process by ID
+   * @param sProcessId  Id of the process workspace
+   * @returns Name of the Status: CREATED, RUNNING, WAITING, READY, DONE, ERROR, STOPPED
+   */
+  getProcessWorkspaceStatusId(sProcessId: string) {
+    let oWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
+      sUrl = oWorkspace.apiUrl;
+    }
+
+    return this.m_oHttp.get(sUrl + '/process/getstatusbyid?procws=' + sProcessId);
   };
 
   /**

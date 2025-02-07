@@ -141,7 +141,8 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
     { name: 'OCTAVE 6.x', id: 'octave' },
     { name: 'Ubuntu 20.04 + Python 3.8', id: 'python_pip_2_ubuntu_20' },
     { name: 'Python 3.x Conda', id: 'conda' },
-    { name: 'C# .NET Core', id: 'csharp' }, //,
+    { name: 'C# .NET Core', id: 'csharp' },
+    { name: 'Custom Dockerfile',  id: 'personalized_docker'} //,
     //{ name: "Ubuntu 20.04 + Python 3.8 - Deprecated", id: "ubuntu_python37_snap" }
   ];
 
@@ -475,6 +476,9 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
 
   getJsonText(oEvent) {
     this.m_sJSONSample = this.m_oJsonEditorService.getValue();
+    this.m_oProcessorBasicInfo.patchValue({
+      sJSONSample: this.m_sJSONSample?this.m_sJSONSample:null,
+    });
   }
 
   onDismiss() {
