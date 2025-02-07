@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ProductService } from 'src/app/services/api/product.service';
+import { CatalogService } from 'src/app/services/api/catalog.service';
 import { StyleService } from 'src/app/services/api/style.service';
 import { Product } from 'src/app/shared/models/product.model';
 
@@ -54,6 +55,7 @@ export class ProductPropertiesDialogComponent implements OnInit {
     private m_oProductService: ProductService,
     private m_oStyleService: StyleService,
     private m_oTranslate: TranslateService,
+    private m_oCatalogService: CatalogService
   ) { }
 
   ngOnInit(): void {
@@ -63,8 +65,24 @@ export class ProductPropertiesDialogComponent implements OnInit {
     this.m_oProduct = this.m_oData.product
     this.m_oEditProduct.friendlyName = this.m_oData.product.productFriendlyName;
     this.m_oEditProduct.description = this.m_oData.product.description;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProduct.description)) {
+      this.m_oProduct.description="";
+    }
     this.m_oEditProduct.style.name = this.m_oData.product.style;
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
+    
+    this.m_oCatalogService.getProductProperties(this.m_oProduct.fileName, this.m_oConstantsService.getActiveWorkspace().workspaceId).subscribe(
+      {
+        next: oResponse => {
+          if (oResponse) {
+            this.m_oProduct.productSize = oResponse.size;
+            this.m_oProduct.productFriendlyName = oResponse.friendlyName;
+          } 
+        },
+        error: oError => {
+        }
+      }
+    );
   }
 
   /**

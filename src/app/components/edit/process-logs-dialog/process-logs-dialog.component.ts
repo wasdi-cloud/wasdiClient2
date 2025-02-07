@@ -37,7 +37,8 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
     private m_oDialogRef: MatDialogRef<ProcessLogsDialogComponent>,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oProcessWorkspaceService: ProcessWorkspaceService
   ) { }
 
   ngOnInit(): void {
@@ -177,7 +178,7 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
   }
 
   startTick(sStatus: string) {
-    if ((FadeoutUtils.utilsIsStrNullOrEmpty(sStatus) === true) || (sStatus !== "RUNNING")) {
+    if ((FadeoutUtils.utilsIsStrNullOrEmpty(sStatus) === true) || (sStatus === "STOPPED " || sStatus === "ERROR" || sStatus === "DONE")) {
       return undefined;
     }
     let oController = this;
@@ -189,7 +190,20 @@ export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
       if (sStatus === "STOPPED " || sStatus === "ERROR" || sStatus === "DONE") {
         clearInterval(oController.m_oTick)
       }
-    }, 5000);
+
+      oController.m_oProcessWorkspaceService.getProcessWorkspaceStatusId(oController.m_oProcess.processObjId).subscribe(
+        {
+          next: oResponse => {
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+              oController.m_oProcess.status=oResponse
+            }
+          },
+          error: oError => {
+            //this.m_oNotificationDisplayService.openAlertDialog(sErrorRefreshMsg, sErrorHeader, 'danger');
+          }          
+        }
+      )
+    }, 3000);
 
     return oTick;
   }

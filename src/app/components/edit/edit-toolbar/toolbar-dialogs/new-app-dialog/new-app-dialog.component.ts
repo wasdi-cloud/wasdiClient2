@@ -423,14 +423,8 @@ export class NewAppDialogComponent implements OnInit {
 
     //Set JSON Parameters:
     if (this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value) {
-      console.log("are we here professor?");
-
       let sUpdatedText = this.m_oProcessorForm.get('processorBasicInfo.sJSONSample').value;
-
-      // sUpdatedText = this.m_oJsonEditorService.getValue();
-      console.log(sUpdatedText)
       this.m_oInputProcessor.paramsSample = encodeURI(sUpdatedText);
-
     }
 
     //Set time out (in minutes):

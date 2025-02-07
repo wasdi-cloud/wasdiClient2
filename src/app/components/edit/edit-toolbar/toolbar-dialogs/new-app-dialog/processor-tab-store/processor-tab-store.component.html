@@ -34,7 +34,7 @@
                 <p>{{"DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_LINE2" | translate}}</p>
                 <!-- Uploaded image and Save button container -->
                 <div class="save-example-container d-flex flex-row justify-content-between">
-                    <img src="{{m_oProcessor.imgLink}}" class="img-fluid img-thumbnail"
+                    <img src="{{getImageLink(m_oProcessor.logo)}}" class="img-fluid img-thumbnail"
                         style="max-height: 100px; max-width: 100px" alt="...">
                     <app-button class="align-self-end" [m_sLabel]="'KEY_PHRASES.SAVE' | translate" (click)="updateProcessorLogo()"></app-button>
                 </div>
