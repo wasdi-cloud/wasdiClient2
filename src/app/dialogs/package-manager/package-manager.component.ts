@@ -70,6 +70,9 @@ export class PackageManagerComponent implements OnInit, OnDestroy {
           this.m_sPackageManagerName = oResponse.name;
           this.m_sPackageManagerVersion = oResponse.version;
         }
+        else {
+          this.m_sPackageManagerName = "Packages List not available. Try to refresh to get the packages for this application"
+        }
       },
       error: oError => { }
     });
