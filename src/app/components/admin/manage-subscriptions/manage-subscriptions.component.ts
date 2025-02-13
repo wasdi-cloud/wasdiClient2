@@ -65,12 +65,28 @@ export class ManageSubscriptionsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getSubscriptionsCount();
     this.getSubscriptions();
     this.getSubscriptionTypes();
 
     if (!this.m_oSelectedSubscription.subscriptionId) {
       this.initDates();
     }
+  }
+
+  getSubscriptionsCount() {
+    this.m_oSubscriptionService.getSubscriptionCount().subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscriptions")
+        } else {
+          this.m_iTotalSubscriptions = oResponse.intValue;
+        }
+      },
+      error: oError => {
+        this.m_oNotificationDisplayService.openAlertDialog("Could not get subscriptions")
+      }
+    })
   }
 
   getSubscriptions() {

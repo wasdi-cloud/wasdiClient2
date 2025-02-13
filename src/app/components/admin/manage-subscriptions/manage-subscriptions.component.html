@@ -137,9 +137,9 @@
                 </tbody>
             </table>
         </div>
-        <app-paginator [m_bMaxPaginator]="false" [m_bFullPaginator]="false"
+        <app-paginator [m_bMaxPaginator]="false" [m_bFullPaginator]="false" 
             (m_iItemsPerPageChange)="handleItemsPerPageChange($event)" (m_oClickEmitter)="handlePagination($event)"
-            [m_bShowTotalPages]="false"></app-paginator>
+            [m_bShowTotalPages]="false" [m_iTotalItems]="m_iTotalSubscriptions"></app-paginator>
     </div>
 </div>
 <div class="offcanvas offcanvas-end org-create-container d-flex flex-column justify-content-between"
