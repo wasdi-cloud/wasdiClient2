@@ -121,8 +121,8 @@ export class ProcessesBarComponent implements OnInit {
             this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
           } else {
             this.m_oSummary = oResponse;
-            this.m_iNumberOfProcesses = oResponse.userProcessRunning;
-            this.m_iWaitingProcesses = oResponse.userProcessWaiting;
+            this.m_iNumberOfProcesses = oResponse.allProcessRunning;
+            this.m_iWaitingProcesses = oResponse.allProcessWaiting;
           }
         },
         error: oError => {

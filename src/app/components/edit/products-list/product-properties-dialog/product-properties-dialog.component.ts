@@ -75,7 +75,7 @@ export class ProductPropertiesDialogComponent implements OnInit {
       {
         next: oResponse => {
           if (oResponse) {
-            this.m_oProduct.productSize = oResponse.size;
+            this.m_oProduct.productSize = this.getNormalizedSize(oResponse.size);
             this.m_oProduct.productFriendlyName = oResponse.friendlyName;
           } 
         },
@@ -84,7 +84,29 @@ export class ProductPropertiesDialogComponent implements OnInit {
       }
     );
   }
+	
+	getNormalizedSize(dSize) {
+		return this.getNormalizedSizeRecursive(dSize, 0);
+	}
+	
+	getNormalizedSizeRecursive(dSize, iStartingIndex) {
+    let sUnits = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB", "BB"]
+		let sChosenUnit = sUnits[iStartingIndex];
+		let sSize = "" + (Math.round(dSize)) + " " + sChosenUnit;
+		 
+		let iUnitIndex = Math.max(0, iStartingIndex);
+		let iLim = sUnits.length -1;
+		while(iUnitIndex < iLim && dSize >= 900.0) {
+			dSize = dSize / 1024.0;
+			iUnitIndex++;
 
+			//now, round it to two decimal digits
+			dSize = Math.round(dSize*100.0)/100.0; 
+			sChosenUnit = sUnits[iUnitIndex];
+			sSize = "" + dSize + " " + sChosenUnit;
+		}
+		return sSize;
+	}
   /**
    * Get the list of styles:
    */
