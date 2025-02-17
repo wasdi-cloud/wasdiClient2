@@ -198,7 +198,7 @@ export class WorkspacesListDialogComponent implements OnInit {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedProduct.bounds) == false) {
         sBound = this.m_oSelectedProduct.bounds.toString();
       }
-      this.downloadProduct(sUrl, this.m_oSelectedProduct.title, this.m_aoSelectedWorkspaces[iWorkspaceIndex].workspaceId, sBound, this.m_oSelectedProduct.provider, null, oError);
+      this.downloadProduct(sUrl, this.m_oSelectedProduct.title, this.m_aoSelectedWorkspaces[iWorkspaceIndex].workspaceId, sBound, this.m_oSelectedProduct.provider, null, oError, this.m_oSelectedProduct.platform);
     }
     this.onDismiss();
   }
@@ -235,7 +235,7 @@ export class WorkspacesListDialogComponent implements OnInit {
 
           let sBounds = this.getBounds(this);
 
-          this.downloadProduct(sUrl, oProduct.title, this.m_aoSelectedWorkspaces[iWorkspaceIndex].workspaceId, sBounds, oProduct.provider, null, oError);
+          this.downloadProduct(sUrl, oProduct.title, this.m_aoSelectedWorkspaces[iWorkspaceIndex].workspaceId, sBounds, oProduct.provider, null, oError, oProduct.platform);
         }
       }
     }
@@ -253,7 +253,7 @@ export class WorkspacesListDialogComponent implements OnInit {
    * @param oCallback 
    * @param oError 
    */
-  downloadProduct(sUrl: string, sFileName: string, sWorkspaceId: string, sBounds: string, oProvider: any, oCallback: any, oError: any) {
+  downloadProduct(sUrl: string, sFileName: string, sWorkspaceId: string, sBounds: string, oProvider: any, oCallback: any, oError: any, sPlatformType: string) {
     let sMessage: string;
     let oController = this;
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oCallback) === true) {
@@ -272,7 +272,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         oController.m_oNotificationDisplayService.openAlertDialog(sMessage, oController.m_oTranslate.instant("KEY_PHRASES.ERROR"), 'danger');
       };
     }
-    this.m_oFileBufferService.download(sUrl, sFileName, sWorkspaceId, sBounds, oProvider).subscribe({
+    this.m_oFileBufferService.downloadPost(sUrl, sFileName, sWorkspaceId, sBounds, oProvider, sPlatformType).subscribe({
       next: oCallback,
       error: oError
     });
