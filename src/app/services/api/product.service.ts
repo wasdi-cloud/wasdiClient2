@@ -75,7 +75,7 @@ export class ProductService {
   };
 
 
-  uploadFile(sWorkspaceInput: string, oBody: object, sName: string, sStyle: string) {
+  uploadFile(sWorkspaceInput: string, oBody: object, sName: string, sStyle: string, sPlatformType: string) {
 
     let oWorkspace = this.oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
@@ -87,6 +87,10 @@ export class ProductService {
     sUrl = sUrl + '/product/uploadfile?workspace=' + sWorkspaceInput + '&name=' + sName;
     if (sStyle) {
       sUrl = sUrl + '&style=' + sStyle;
+    }
+
+    if (sPlatformType) {
+      sUrl = sUrl + "&platform="+sPlatformType
     }
 
     return this.oHttp.post<any>(sUrl, oBody, { observe: 'response' });

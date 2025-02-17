@@ -311,6 +311,8 @@
     "DIALOG_IMPORT_FILE_UPLOADING": "Please wait, your file is being uploaded",
     "DIALOG_IMPORT_APPLY_STYLE": "Do you wish to apply a style?",
     "DIALOG_IMPORT_SELECT_STYLE": "Select a style",
+    "DIALOG_IMPORT_SET_MISSION": "Do you wish to specify the platfrom type of the uploaded file?",
+    "DIALOG_IMPORT_SELECT_MISSION": "Select a Platform Type",
 
     "DIALOG_IMPORT_UPLOAD_STYLE": "Style",
     "DIALOG_IMPORT_UPLOAD_UPLOAD": "Upload File",

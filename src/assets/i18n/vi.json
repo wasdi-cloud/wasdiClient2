@@ -307,7 +307,9 @@
     "DIALOG_IMPORT_FILE_TYPES": "Bạn có thể nhập các loại tệp bên trong không gian làm việc này như .tiff và .zip",
     "DIALOG_IMPORT_APPLY_STYLE": "Bạn có muốn áp dụng một kiểu không?",
     "DIALOG_IMPORT_SELECT_STYLE": "Chọn kiểu",
-   
+    "DIALOG_IMPORT_SET_MISSION": "Bạn có muốn chỉ định loại nền tảng của tệp được tải lên không?",
+    "DIALOG_IMPORT_SELECT_MISSION": "Chọn loại nền tảng",
+
     "DIALOG_IMPORT_UPLOAD_STYLE": "Phong cách",
     "DIALOG_IMPORT_UPLOAD_UPLOAD": "Tải file lên",
     "DIALOG_IMPORT_IMPORT": "Nhập vào",

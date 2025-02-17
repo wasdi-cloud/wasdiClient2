@@ -307,6 +307,8 @@
 	"DIALOG_IMPORT_FILE_TYPES": "Puteți importa în interiorul acestui spațiu de lucru tipuri de fișiere, cum ar fi .tiff și .zip",
 	"DIALOG_IMPORT_APPLY_STYLE": "Doriți să aplicați un stil?",
 	"DIALOG_IMPORT_SELECT_STYLE": "Selectați un stil",
+    "DIALOG_IMPORT_SET_MISSION": "Doriți să specificați tipul de platformă al fișierului încărcat?",
+    "DIALOG_IMPORT_SELECT_MISSION": "Selectați un tip de platformă",
 
 	"DIALOG_IMPORT_UPLOAD_STYLE": "Stil",
 	"DIALOG_IMPORT_UPLOAD_UPLOAD": "Incarcă fișier",

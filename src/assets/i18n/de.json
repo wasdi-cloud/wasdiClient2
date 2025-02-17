@@ -307,7 +307,9 @@
 	"DIALOG_IMPORT_FILE_TYPES": "Sie können in diesen Arbeitsbereich Dateitypen wie .tiff und .zip importieren",
 	"DIALOG_IMPORT_APPLY_STYLE": "Möchten Sie einen Stil anwenden?",
 	"DIALOG_IMPORT_SELECT_STYLE": "Wählen Sie einen Stil aus",
-	
+    "DIALOG_IMPORT_SET_MISSION": "Möchten Sie den Plattformtyp der hochgeladenen Datei angeben?",
+    "DIALOG_IMPORT_SELECT_MISSION": "Wählen Sie einen Plattformtyp aus",
+
 	"DIALOG_IMPORT_UPLOAD_STYLE": "Style",
 	"DIALOG_IMPORT_UPLOAD_UPLOAD": "Upload Datei",
 	"DIALOG_IMPORT_IMPORT": "Importieren",

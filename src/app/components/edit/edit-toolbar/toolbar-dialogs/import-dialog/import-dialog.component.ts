@@ -40,6 +40,7 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
   m_sWorkspaceId: string = this.m_oConstantsService.getActiveWorkspace().workspaceId;
 
   m_aoStyles: Array<any> = [];
+  m_aoPlatforms: Array<any> = [];
   m_oFile: any;
   m_sFileName: string = "";
 
@@ -55,6 +56,8 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
   m_bIsReadOnly: boolean = true;
 
   m_oSelectedStyle: any = null;
+
+  m_oSelectedPlatform: any = null;
 
 
   constructor(
@@ -77,6 +80,7 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
     );
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getStyles();
+    this.getPlatforms();
     this.isCreatedAccountUpload();
   }
 
@@ -94,6 +98,15 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
     })
   }
 
+  getPlatforms() {
+    this.m_oAuthService.getClientConfig().subscribe(oResponse => {
+      if (oResponse) {
+        let oClientConfig = oResponse as any;
+        this.m_aoPlatforms = oClientConfig.missions;
+      }
+    })
+  }
+
   /*************** UPLOAD ***************/
   getSelectedFile(oEvent) {
     this.m_sFileName = oEvent.name;
@@ -102,6 +115,10 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
 
   getSelectedStyle(oEvent) {
     this.m_oSelectedStyle = oEvent.value;
+  }
+
+  getSelectedPlatform(oEvent) {
+    this.m_oSelectedPlatform = oEvent.value;
   }
 
   onUploadFile() {
@@ -137,8 +154,13 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
       sStyle = this.m_oSelectedStyle.name;
     }
 
+    let sPlatform= null;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedPlatform) === false) {
+      sPlatform = this.m_oSelectedPlatform.indexvalue;
+    }
+
     let sErrorMsg: string = this.m_oTranslate.instant("DIALOG_IMPORT_UPLOAD_ERROR")
-    this.m_oProductService.uploadFile(this.m_sWorkspaceId, this.m_oFile, this.m_sFileName, sStyle).subscribe(
+    this.m_oProductService.uploadFile(this.m_sWorkspaceId, this.m_oFile, this.m_sFileName, sStyle, sPlatform).subscribe(
       {
         next: (oResponse) => {
 

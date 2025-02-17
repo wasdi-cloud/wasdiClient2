@@ -307,6 +307,9 @@
 	"DIALOG_IMPORT_FILE_TYPES": "Anda dapat mengimpor jenis file ke dalam ruang kerja ini seperti .tiff dan .zip",
 	"DIALOG_IMPORT_APPLY_STYLE": "Apakah Anda ingin menerapkan gaya?",
 	"DIALOG_IMPORT_SELECT_STYLE": "Pilih gaya",
+    "DIALOG_IMPORT_SET_MISSION": "Apakah Anda ingin menentukan jenis platfrom file yang diunggah?",
+    "DIALOG_IMPORT_SELECT_MISSION": "Pilih Jenis Platform",
+
 
 	"DIALOG_IMPORT_UPLOAD_STYLE": "Style",
 	"DIALOG_IMPORT_UPLOAD_UPLOAD": "Unggah File",
