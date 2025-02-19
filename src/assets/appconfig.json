@@ -1003,7 +1003,21 @@
                     "indexvalue": "MOD11A2"
                 }
             ]
-        }
+        },
+        {
+            "name": "Return Rasters",
+            "indexname": "platformname",
+            "indexvalue": "ReturnRaster",
+            "selected": false,
+            "filters": [
+                {
+                    "indexname": "producttype",
+                    "indexlabel": "Product Type",
+                    "indexvalues": "CIMA_AIR_TEMP_AVG|CIMA_AIR_TEMP_MIN|CIMA_AIR_TEMP_MAX",
+                    "indexvalue": "CIMA_AIR_TEMP_AVG"
+                }
+            ]
+        }        
     ],
     "orbitsearch":{
         "sensortypes":["SAR","Optical"],

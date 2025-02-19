@@ -301,6 +301,7 @@ export class NewAppDialogComponent implements OnInit {
         bIsPublic: this.m_oInputProcessor.isPublic,
         oSelectedFile: this.m_oSelectedFile,
         sSelectedFileName: '',
+        sProcessorVersion: this.m_oInputProcessor.processorVersion
       }),
 
       //Nested Form Builder for STORE tab:
@@ -493,11 +494,7 @@ export class NewAppDialogComponent implements OnInit {
 
     // Update the processor and the processor details
     this.m_oProcessorService
-      .updateProcessor(
-        this.m_oInputProcessor.processorId,
-        this.m_oInputProcessor
-      )
-      .subscribe({
+      .updateProcessor(this.m_oInputProcessor.processorId,this.m_oInputProcessor).subscribe({
         next: (oResponse) => {
           this.m_oProcessorService
             .updateProcessorDetails(
@@ -525,33 +522,24 @@ export class NewAppDialogComponent implements OnInit {
       });
 
     //Check if there was also a file uploaded:
-    if (
-      FadeoutUtils.utilsIsObjectNullOrUndefined(
-        this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value
-      ) === false
-    ) {
-      let oSelectedFile = this.m_oProcessorForm.get(
-        'processorBasicInfo.oSelectedFile'
-      ).value;
-      let sFileName = this.m_oProcessorForm.get(
-        'processorBasicInfo.sSelectedFileName'
-      ).value;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === false) {
+      let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value;
 
-      this.m_oProcessorService
-        .updateProcessorFiles(
+      let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value;
+
+      this.m_oProcessorService.updateProcessorFiles(
           sFileName,
           this.m_oInputProcessor.processorId,
           oSelectedFile
-        )
-        .subscribe({
+        ).subscribe({
           next: (oResponse) => {
-            //this.m_oNotificationDisplayService.openSnackBar("Processor Files Updated<br>Rebuild ongoing");
             this.m_bDeploymentOngoing = true;
           },
           error: (oError) => {
             this.m_oNotificationDisplayService.openAlertDialog(
-              `Error in updating ${this.m_oInputProcessor.processorName} files!!!`
+              `Error in updating ${this.m_oInputProcessor.processorName} files !!!`
             );
+            this.m_bDeploymentOngoing = false;
           },
         });
     }
