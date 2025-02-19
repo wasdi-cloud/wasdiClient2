@@ -406,9 +406,6 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
     if (this.m_bShowBuildLogs === true) {
       this.getProcessorBuildLogs(this.m_sProcessorId);
     }
-    else {
-      this.ngAfterViewInit();
-    }
   }
 
   getProcessorBuildLogs(sProcessoId: string) {
