@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-//Service Imports:
-import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { ImageService } from 'src/app/services/api/image.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
@@ -40,7 +38,7 @@ export class MarketplaceComponent implements OnInit {
     name: "",
     score: 0,
     minPrice: -1,
-    maxPrice: 1000,
+    maxPrice: -1,
     itemsPerPage: 12,
     page: 0,
     orderBy: "name",
