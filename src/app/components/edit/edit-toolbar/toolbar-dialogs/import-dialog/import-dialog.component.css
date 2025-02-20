@@ -1,30 +1,51 @@
-div.dialog {
-    padding: 24px;
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
 }
 
-a.nav-link {
-    cursor: pointer;
+.upload-info {
+  font-size: 14px;
+  color: #666;
 }
 
-.drag-drop-container {
-    height: 5rem;
+.file-input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #009036;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 20px auto;
+.file-input-container:hover {
+  border-color: #007bff;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.upload-path {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+mat-progress-bar {
+  margin-top: 10px;
+}
+
+.upload-status {
+  text-align: center;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.error-message {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+button[mat-raised-button] {
+  align-self: center;
+  padding: 8px 24px;
 }

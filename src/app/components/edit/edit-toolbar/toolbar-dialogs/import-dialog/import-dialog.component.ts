@@ -1,4 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { HttpClient } from '@angular/common/http';
 
 //Angular Material Import:
 import {MatDialogRef} from '@angular/material/dialog';
@@ -57,6 +59,15 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
   m_oSelectedStyle: any = null;
 
 
+  uploadSubscription: any;
+  uploadProgress: number = 0;
+  uploadError: string = '';
+
+  uploadDestination: string = '';
+
+
+
+
   constructor(
     private m_oAuthService: AuthService,
     private m_oCatalogService: CatalogService,
@@ -66,7 +77,9 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
     private m_oProductService: ProductService,
     private m_oStyleService: StyleService,
     private m_oTranslate: TranslateService,
-    private m_fileUploadService: FileUploadService) {
+    private m_fileUploadService: FileUploadService,
+    private http: HttpClient
+  ) {
   }
 
   ngOnInit(): void {
@@ -78,6 +91,12 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getStyles();
     this.isCreatedAccountUpload();
+    this.updateUploadDestination();
+  }
+
+  updateUploadDestination() {
+    const workspace = this.m_oConstantsService.getActiveWorkspace();
+    this.uploadDestination = `Workspace: ${workspace.name} (${workspace.workspaceId})`;
   }
 
   changeActiveTab(sTabName: string) {
@@ -95,9 +114,41 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
   }
 
   /*************** UPLOAD ***************/
-  getSelectedFile(oEvent) {
-    this.m_sFileName = oEvent.name;
-    this.m_oFile = oEvent.file
+  getSelectedFile(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files[0];
+    this.m_sFileName = file.name;
+    this.m_oFile = file;
+    const formData = new FormData();
+    formData.append('file', file);
+
+
+    this.uploadSubscription = this.http.post('http://localhost:3000/api/upload', formData, {
+
+      reportProgress: true,
+      observe: 'events'
+    }).subscribe({
+      next: (event: any) => {
+        if (event.type === 1) { // HttpEventType.UploadProgress
+          this.uploadProgress = Math.round(100 * event.loaded / event.total);
+        } else if (event.type === 4) { // HttpEventType.Response
+          console.log('File uploaded successfully');
+          this.m_bIsUploading = false;
+          this.uploadProgress = 0;
+          this.m_oNotificationDisplayService.openSnackBar('File uploaded successfully', '', 'success');
+        }
+      },
+      error: (err) => {
+        console.error('Upload failed:', err);
+        this.uploadError = 'Upload failed. Please try again.';
+        if (err.status === 404) {
+          this.uploadError = 'Server endpoint not found. Please check the API URL.';
+        }
+        this.m_bIsUploading = false;
+        this.uploadProgress = 0;
+        this.m_oNotificationDisplayService.openSnackBar(this.uploadError, '', 'error');
+      }
+    });
   }
 
   getSelectedStyle(oEvent) {
@@ -145,7 +196,7 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
           let sHeader: string = this.m_oTranslate.instant("KEY_PHRASES.GURU_MEDITATION")
           if (oResponse.status !== 200) {
             this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, sHeader, 'danger');
-          } 
+          }
           else {
             let sMessage: string = this.m_oTranslate.instant("KEY_PHRASES.SUCCESS");
             this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
