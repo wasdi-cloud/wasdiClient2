@@ -74,9 +74,9 @@ export class MapService {
    */
   m_oEsriWorldImagery: any = null;
   /**
-   * Dark Stadia Map
+   * Dark ArcGIS Map
    */
-  m_oStadiMapDark: any = null;
+  m_oDarkGrayArcGIS: any = null;
 
   /**
    * Is the component toggle-albe to 3D map? 
@@ -200,13 +200,17 @@ export class MapService {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
 
-    // Stadi Dark
-    this.m_oStadiMapDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
-      minZoom: 0,
-      maxZoom: 20,
-      attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      ext: 'png'
-    });
+    // Arc GIS Dark
+    this.m_oDarkGrayArcGIS = L.tileLayer(
+      'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+      {
+        minZoom: 3,
+        maxZoom: 13,
+        attribution:
+          '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        // ext: 'png'
+      }
+    );
 
     // Add all to the layers control
     this.m_oLayersControl = L.control.layers(
@@ -215,7 +219,7 @@ export class MapService {
         "OpenTopoMap": this.m_oOpenTopoMap,
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
-        "Stadi Map Dark": this.m_oStadiMapDark
+        "Arc Gis Dark": this.m_oDarkGrayArcGIS
       }, null,
       { position: 'bottomright' }
     )
@@ -330,7 +334,7 @@ export class MapService {
         "OpenTopoMap": this.m_oOpenTopoMap,
         "EsriWorldStreetMap": this.m_oEsriWorldStreetMap,
         "EsriWorldImagery": this.m_oEsriWorldImagery,
-        "Stadi Map Dark": this.m_oStadiMapDark
+        "Stadi Map Dark": this.m_oDarkGrayArcGIS
       }, null,
       { position: 'bottomright' }
     );

@@ -224,6 +224,15 @@ export class ProcessorService {
   };
 
   /**
+   * Force the clean of the build on going flag
+   * @param sProcessorId Id of the processor
+   * @returns {*}
+   */
+  cleanBuildFlag(sProcessorId: string) {
+    return this.m_oHttp.get(this.APIURL + '/processors/cleadbuildflag?processorId=' + encodeURI(sProcessorId));
+  };
+
+  /**
      * Update Processor files
      * @param sWorkspaceId
      * @param sProcessorId

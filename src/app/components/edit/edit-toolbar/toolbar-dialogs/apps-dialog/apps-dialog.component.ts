@@ -60,7 +60,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   m_sSearchString = '';
   m_oSelectedProcessor: any = {} as Application;
   m_bIsReadonly: boolean = true;
-  m_iHookIndex: Number = -1;
+  m_iDeleteHookIndex: Number = -1;
+  m_iRedeployHookIndex: Number = -1;
 
   m_bShowHelpMessage: boolean = false;
   m_sHelpMsg: string = '';
@@ -87,18 +88,25 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook(
+    this.m_iDeleteHookIndex = this.m_oRabbitStompService.addMessageHook(
       'DELETEPROCESSOR',
       this,
       this.rabbitMessageHook
     );
+
+    this.m_iRedeployHookIndex = this.m_oRabbitStompService.addMessageHook(
+      'INFO',
+      this,
+      this.rabbitMessageHook
+    )
     this.m_sActiveUserId = this.m_oConstantsService.getUserId();
     this.m_bIsReadonly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getProcessorsList();
   }
 
   ngOnDestroy(): void {
-    this.m_oRabbitStompService.removeMessageHook(this.m_iHookIndex);
+    this.m_oRabbitStompService.removeMessageHook(this.m_iDeleteHookIndex);
+    this.m_oRabbitStompService.removeMessageHook(this.m_iRedeployHookIndex);
   }
 
   ngAfterViewInit(): void {
@@ -510,8 +518,22 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   rabbitMessageHook(oRabbitMessage: any, oController: any) {
-    console.log('RECEIVED ' + oRabbitMessage);
-    oController.getProcessorsList();
+    var bRefresh = false
+    try  {
+      if (oRabbitMessage.messageCode == 'DELETEPROCESSOR') {
+        bRefresh = true
+      }
+      else if (oRabbitMessage.messageCode == 'INFO') {
+        if (oRabbitMessage.payload.includes("Re Deploy")) {
+          bRefresh = true
+        }
+      }  
+    }
+    catch(e) {}
+    
+    if (bRefresh) {
+      oController.getProcessorsList();
+    }
   }
 
   showHelpMessage(bShowMessage: boolean) {

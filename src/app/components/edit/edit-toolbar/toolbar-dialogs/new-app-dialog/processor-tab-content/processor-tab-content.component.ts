@@ -131,7 +131,6 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
   @Input() m_oProcessorBasicInfo: FormGroup;
 
   m_asBuildLogs: Array<any> = [];
-  m_sBuildLogs: string = '';
 
   m_aoProcessorTypes = [
     { name: 'Ubuntu 22.04 + Python 3.10', id: 'python_pip_2' },
@@ -174,13 +173,6 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
 
     this.displayProcessorType();
-    // let sType = this.m_oProcessorBasicInfo.get('oType').value;
-    // this.m_aoProcessorTypes.forEach(type => {
-    //   if (type.id === sType) {
-    //     sType = type.name
-    //     this.m_oProcessorBasicInfo.controls['oType'].setValue(sType)
-    //   }
-    // })
 
     //Set ui for isPublic flag
     if (this.m_oProcessorBasicInfo.get('bIsPublic').value === 0) {
@@ -202,6 +194,12 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
       this.m_sProcessorName =
         this.m_oProcessorBasicInfo.get('sProcessorName').value;
     }
+
+    if (this.m_oProcessorBasicInfo.get('sProcessorVersion')) {
+      this.m_sVersion =
+        this.m_oProcessorBasicInfo.get('sProcessorVersion').value;
+    }
+    
   }
 
   ngAfterViewInit(): void {
@@ -414,13 +412,27 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
     this.m_oProcessorService.getProcessorLogsBuild(sProcessoId).subscribe({
       next: (oResponse) => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          this.m_sBuildLogs = oResponse;
+          oResponse = oResponse.reverse();
           this.m_asBuildLogs = oResponse.map((sBuildLog, iIndex) => {
+
+            var sBuildDate = "N.A.";
+            var sToken = "|START_BUILD_LOG|";
+            if (sBuildLog.includes(sToken)) {
+              var iStartIndex = sBuildLog.indexOf(sToken);
+              var iStartIndex2 = iStartIndex+sToken.length;
+              if (sBuildLog.length>iStartIndex) sBuildDate = sBuildLog.substring(0, iStartIndex);
+              if (sBuildLog.length>iStartIndex2) sBuildLog = sBuildLog.substring(iStartIndex2);
+            }
+
+            var bIsOpen = false;
+            if (iIndex==0) bIsOpen = true;
+
             return {
               logNumber: iIndex,
               logs: sBuildLog.split('Step'),
-              isOpen: false,
-            };
+              isOpen: bIsOpen,
+              dateTime: sBuildDate
+            };            
           });
         }
       },
@@ -428,6 +440,53 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
     });
   }
 
+  forceCleanRefreshFlag(sProcessorId: string) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(sProcessorId)) {
+      return false;
+    }
+
+    let sConfirmMsg: string = this.m_oTranslate.instant(
+      'DIALOG_PROCESSOR_BASE_FORCE_CLEAN_REDEPLOY_CONFIRM'
+    );
+    let sSuccessMsg: string = this.m_oTranslate.instant(
+      'DIALOG_PROCESSOR_BASE_FORCE_CLEAN_REDEPLOY_SUCCESS'
+    );
+    let sErrorMsg: string = this.m_oTranslate.instant(
+      'DIALOG_PROCESSOR_BASE_REFRESH_ERROR'
+    );
+
+
+    this.m_oNotificationDisplayService
+      .openConfirmationDialog(sConfirmMsg)
+      .subscribe((oDialogResult) => {
+        if (oDialogResult === true) {
+          this.m_oProcessorService.cleanBuildFlag(sProcessorId).subscribe({
+            next: (oResponse) => {
+              this.m_oNotificationDisplayService.openSnackBar(
+                sSuccessMsg,
+                '',
+                'success-snackbar'
+              );
+              this.m_bRedeployOngoing = true;
+              this.onDismiss();
+            },
+            error: (oError) => {
+              this.m_oNotificationDisplayService.openAlertDialog(
+                sErrorMsg,
+                '',
+                'danger'
+              );
+            },
+          });
+        }
+      });
+    return true;
+  }  
+
+  getBuildLogHeader(oBuildLog) {
+    var sHeader = "Date: " + oBuildLog.dateTime;
+    return sHeader
+  }
   openBuildLog(oBuildLog) {
     oBuildLog.isOpen = !oBuildLog.isOpen;
   }
