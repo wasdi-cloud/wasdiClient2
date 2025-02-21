@@ -12,7 +12,7 @@ export class SliderComponent {
   @Input() m_bIsDisabled: boolean = false;
 
   /**
-   * Is the slider labeled? 
+   * Is the slider labeled?
    */
   @Input() m_bHasLabels: boolean = false;
 
@@ -32,7 +32,7 @@ export class SliderComponent {
   @Input() m_bHasHandles: boolean = true;
 
   /**
-   * Does the slider have a value indicator? 
+   * Does the slider have a value indicator?
    */
   @Input() m_bHasThumbLabel: boolean = false;
 
@@ -47,12 +47,14 @@ export class SliderComponent {
 
   @Input() m_iStep?: number;
 
-  @Input() m_iValue: number; 
+  @Input() m_iValue: number;
 
 
   @Output() m_oSelectionChange: EventEmitter<any> = new EventEmitter<any>();
 
+
   emitSelectionChange() {
     this.m_oSelectionChange.emit(this.m_iValue)
   }
+
 }

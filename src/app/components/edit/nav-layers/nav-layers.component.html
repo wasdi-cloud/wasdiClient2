@@ -37,7 +37,7 @@
         *ngFor="let oBand of m_aoVisibleBands.reverse()"
         class="list-group-item d-flex flex-column mt-2"
       >
-        <div class="layer-title d-flex flex-row justify-content-between gap-2">
+        <div class="layer-title d-flex flex-row justify-content-between gap-2" cdkDragHandle>
           <div
             class="legend-container justify-self-start align-self-start d-flex flex-row"
             matTooltip="{{ 'EDITOR_LAYERS_OPTIONS' | translate }}"
@@ -85,7 +85,7 @@
           class="font-bold d-flex flex-row align-items-center gap-2 pe-2"
         >
           Opacity:
-          <div class="slider-container flex-fill">
+          <div class="slider-container flex-fill" >
             <app-slider
               [m_bHasThumbLabel]="true"
               [m_iValue]="m_iOpacityVal"
