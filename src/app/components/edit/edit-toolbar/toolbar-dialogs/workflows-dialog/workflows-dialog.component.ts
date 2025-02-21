@@ -138,7 +138,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   /**
    * Check if the current user is the owner of the workflow
-   * @param oWorkflow 
+   * @param oWorkflow
    * @returns boolean
    */
   isWorkflowOwner(oWorkflow): boolean {
@@ -152,12 +152,14 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   /**
-   * Set the selected workflow 
-   * @param oWorkflow 
-   * @param bIsListItemClick 
+   * Set the selected workflow
+   * @param oWorkflow
+   * @param bIsListItemClick
    * @returns void
    */
   setSelectedWorkflow(oWorkflow: Workflow, bIsListItemClick?: boolean): void {
+    //copy workflow name
+    console.log(oWorkflow.name)
     if (bIsListItemClick === true) {
       this.clearShownItems();
     }
@@ -183,8 +185,8 @@ export class WorkflowsDialogComponent implements OnInit {
 
   /**
    * Set the visibility for new workflow creation inputs
-   * @param bShowInputs 
-   * @param bIsEditing 
+   * @param bShowInputs
+   * @param bIsEditing
    */
   toggleShowInputs(bShowInputs: boolean, bIsEditing: boolean): void {
     this.clearShownItems();
@@ -193,7 +195,7 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    */
   initWorkflowInfo(): void {
     this.m_sWorkflowDescription = this.m_oSelectedWorkflow.description;
@@ -203,11 +205,11 @@ export class WorkflowsDialogComponent implements OnInit {
 
   /**
    * Upload a new workflow to the server
-   * @param sWorkspaceId 
-   * @param sName 
-   * @param sDescription 
-   * @param bIsPublic 
-   * @param oBody 
+   * @param sWorkspaceId
+   * @param sName
+   * @param sDescription
+   * @param bIsPublic
+   * @param oBody
    */
   uploadWorkflow(sWorkspaceId: string, sName: string, sDescription: string, bIsPublic: boolean, oBody: any): void {
     if (!sName) {
@@ -261,8 +263,8 @@ export class WorkflowsDialogComponent implements OnInit {
 
   /**
    * Delete existing workflow
-   * @param oWorkflow 
-   * @returns 
+   * @param oWorkflow
+   * @returns
    */
   removeWorkflow(oWorkflow: Workflow) {
     if (!oWorkflow) {
@@ -307,7 +309,7 @@ export class WorkflowsDialogComponent implements OnInit {
       this.m_oNotificationDisplayService.openAlertDialog("You do not have permission to execute a workflow in this workspace");
       return false;
     }
-    // this.addProductInputInNode();  
+    // this.addProductInputInNode();
     for (var sNodeName in this.m_aoMultiInputSelectedProducts) {
       // check if the property/key is defined in the object itself, not in parent
       if (this.m_aoMultiInputSelectedProducts.hasOwnProperty(sNodeName)) {
@@ -401,11 +403,11 @@ export class WorkflowsDialogComponent implements OnInit {
 
   /**
    * Set the value of the inputFileNames in the SelectedWorkflow based on SINGLE selection prodcut input
-   * @param oEvent 
+   * @param oEvent
    */
   getSingleSelection(oEvent: any, oNode: any) {
     if (!oEvent.value.length) {
-      //Set the inputFileName value to reflect SINGLE input: 
+      //Set the inputFileName value to reflect SINGLE input:
       this.m_oSelectedWorkflow.inputFileNames = [oEvent.value.fileName];
     } else {
       this.m_oSelectedWorkflow.inputFileNames = oEvent.value.map(oProduct => {
@@ -416,7 +418,7 @@ export class WorkflowsDialogComponent implements OnInit {
 
   /**
    * Set the value of the inputFileNames in the SelectedWorkflow based on MULTIPLE selection product input
-   * @param oEvent 
+   * @param oEvent
    */
   getMultiSelection(oEvent: any, oNode: any) {
     let asProductNames = [];
@@ -451,12 +453,12 @@ export class WorkflowsDialogComponent implements OnInit {
         if (oResponse.boolValue === true) {
           this.onDismiss();
         } else {
-          //ADD ALERT DIALOG: 
+          //ADD ALERT DIALOG:
           this.m_oNotificationDisplayService.openAlertDialog("ERROR IN EXECUTING WORKFLOW");
         }
       },
       error: oError => {
-        //ALERT DIALOG: 
+        //ALERT DIALOG:
         this.m_oNotificationDisplayService.openAlertDialog("ERROR IN EXECUTING WORKFLOW");
       }
     });

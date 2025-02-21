@@ -6,6 +6,7 @@
   [class.selected]="m_bIsSelected && !m_bParentItem"
   [class.disabled]="m_bIsDisabled && !m_bParentItem"
 >
+
   <!-- Contents if List Item is of Parent Type: -->
   <div
     class="d-flex flex-row justify-content-between align-items-center w-100"
@@ -213,11 +214,12 @@
       class="preview-img d-flex flex-column align-items-center"
       style="background-size: contain; background-position: center; background-image: url('{{ m_sIcon }}')"
     ></div>
+    <!-- Copy Button - conditionally visible based on m_bHasCopyButton -->
     <div class="d-flex flex-column flex-fill" style="width: 85%">
       <div class="d-flex flex-row w-100 justify-content-between">
         <div class="font-bold">{{ m_sLabel }}</div>
         <div class="processor-toolbar d-flex flex-row align-items-center gap-2">
-          <span 
+          <span
             *ngIf="!m_oProcessorItem.styleId && !m_oProcessorItem.workflowId"
             class="material-symbols-outlined"
             matTooltip="Parameters Library"
@@ -265,6 +267,14 @@
             </span>
           </div>
         </div>
+        <button
+          *ngIf="m_bHasCopyButton"
+          class="copy-button material-symbols-outlined copy-icon"
+          (click)="copyToClipboard()"
+
+        >
+          content_copy
+        </button>
       </div>
       <div class="">
         <p class="processor-description">

@@ -118,3 +118,13 @@ div.processor-toolbar>span.material-symbols-outlined {
 .parent-disabled {
     background-color: var(--neutral25) !important;
 }
+
+.copy-icon {
+  font-size: 20px;  /* Adjust the size as needed */
+  transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for scaling and color change */
+}
+
+.copy-icon:hover {
+  transform: scale(1.2);  /* Scales the icon */
+  color: var(--wasdiGreen);  /* Changes the color when hovered (you can customize this color) */
+}

@@ -6,6 +6,7 @@ import { MapService } from 'src/app/services/map.service';
 import * as $ from 'jquery';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Subscription } from 'rxjs';
+import {NotificationDisplayService} from "../../../services/notification-display.service";
 
 @Component({
   selector: 'app-list-item',
@@ -39,7 +40,7 @@ export class ListItemComponent implements OnInit, OnDestroy {
   @Input() m_bHasToolbar?: boolean = false;
 
   /**
-   * If the list item is a parent, is it "open"? 
+   * If the list item is a parent, is it "open"?
    */
   @Input() m_bParentIsOpen?: boolean = false;
 
@@ -47,6 +48,10 @@ export class ListItemComponent implements OnInit, OnDestroy {
    * If the list item is selected
    */
   @Input() m_bIsSelected?: boolean = true;
+  /**
+   * If the list item name can be copies
+   */
+  @Input() m_bHasCopyButton?: boolean = false;
 
   /**
    * Label that appears in bold for "simple list item"
@@ -84,7 +89,7 @@ export class ListItemComponent implements OnInit, OnDestroy {
   @Input() m_bIsLightProduct?: boolean = false;
 
   /**
-   * Is the List item disabled? 
+   * Is the List item disabled?
    */
   @Input() m_bIsDisabled?: boolean = false;
 
@@ -96,7 +101,7 @@ export class ListItemComponent implements OnInit, OnDestroy {
   @Input() m_oInfoCallbackFn?: (args: any) => void;
 
   /**
-   * Callback function for zoom to bounds of a product 
+   * Callback function for zoom to bounds of a product
    */
   @Input() m_oZoomCallbackFn?: (args: any) => void;
 
@@ -116,7 +121,8 @@ export class ListItemComponent implements OnInit, OnDestroy {
     private m_oChangeDetector: ChangeDetectorRef,
     private m_oDialog: MatDialog,
     private m_oMapService: MapService,
-    private m_oProcessorService: ProcessorService
+    private m_oProcessorService: ProcessorService,
+    private m_oNotificationDialog:NotificationDisplayService
   ) { }
   ngOnInit(): void {
     this.m_oRectangleSubscription = this.m_oMapService.m_oSelectedRectangle.subscribe(oResponse => {
@@ -135,7 +141,7 @@ export class ListItemComponent implements OnInit, OnDestroy {
   }
   /**
    * Emitter function to emit the location of the button clicked to the apps dialog
-   * @param sLocation 
+   * @param sLocation
    */
   emitToolbarClick(sLocation: string): void {
     this.m_oEmitClickEvent.emit(sLocation);
@@ -143,7 +149,7 @@ export class ListItemComponent implements OnInit, OnDestroy {
 
   /**
    * Extracts date from the product list tiem and removes 'z'
-   * @param oProductListItem 
+   * @param oProductListItem
    * @returns sDate
    */
   getFormatDateString(oProductListItem): string {
@@ -166,4 +172,25 @@ export class ListItemComponent implements OnInit, OnDestroy {
     }
     return sDate;
   }
+
+  copyToClipboard(): void {
+    if(this.m_oProcessorItem?.name){
+      const sTextToCopy = this.m_oProcessorItem?.name;  // Example: you can copy any text you want here.
+      navigator.clipboard.writeText(sTextToCopy).then(
+        () => {
+          this.m_oNotificationDialog.openSnackBar(
+            "Copied name successfully",
+            "Update",
+            "success-snackbar"
+          )
+          console.log('Text copied to clipboard');
+        },
+        (err) => {
+          console.error('Failed to copy text: ', err);
+        }
+      );
+    }
+
+  }
+
 }
