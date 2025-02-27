@@ -88,9 +88,15 @@
                 </tbody>
             </table>
         </div>
-        <app-paginator [m_bMaxPaginator]="false" [m_bFullPaginator]="false"
-            (m_iItemsPerPageChange)="handleItemsPerPageChange($event)" (m_oClickEmitter)="handlePagination($event)"
-            [m_bShowTotalPages]="false"></app-paginator>
+      <app-paginator
+        [m_bMaxPaginator]="false"
+        [m_bFullPaginator]="false"
+        (m_iItemsPerPageChange)="handleItemsPerPageChange($event)"
+        (m_oClickEmitter)="handlePagination($event)"
+        [m_bShowTotalPages]="false"
+        [m_iTotalItems]="m_iTotalUsers"
+      >
+      </app-paginator>
     </div>
 </div>
 
