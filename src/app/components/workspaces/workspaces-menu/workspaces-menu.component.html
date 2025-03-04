@@ -9,27 +9,68 @@
         <app-input-field *ngIf="m_bExpandedMenu" [m_sPlaceholder]="'APP_UI_SELECT_WS' | translate"
             (m_oInputChange)="m_sSearchString = $event.event.target.value"></app-input-field>
     </div>
-    <div *ngIf="m_bExpandedMenu" class="expanded-workspace-menu flex-fill">
-        <div *ngFor="let oWorkspace of m_aoWorkspacesList | filter: m_sSearchString"
-            class="expanded-workspace-card d-flex flex-row align-items-center justify-content-between my-1"
-            [class.selected]="oWorkspace.selected" (click)="setActiveWorkspace(oWorkspace)">
-            <div class="d-flex flex-column gap-1">
-                {{oWorkspace.workspaceName}}
-                <span class="user-id">{{oWorkspace.ownerUserId}}</span>
-            </div>
-            <div class="d-flex flex-row gap-2">
-                <app-button [m_sLabel]="'Open'" [m_bMuted]="true" [m_sSize]="'small'"
-                    (click)="openWorkspace(oWorkspace)"></app-button>
-                <app-button [m_sIconLeft]="'delete'" [m_bMuted]="true" [m_sSize]="'small'"
-                    (click)="deleteWorkspace(oWorkspace, this)"></app-button>
-            </div>
+  <div *ngIf="m_bExpandedMenu" class="expanded-workspace-menu flex-fill">
+    <div *ngFor="let oWorkspace of m_aoWorkspacesList | filter: m_sSearchString"
+         class="expanded-workspace-card d-flex flex-column my-1"
+         [class.selected]="oWorkspace.selected"
+         (click)="setActiveWorkspace(oWorkspace)">
+
+      <!-- Workspace Name and Owner -->
+      <div class="d-flex flex-row align-items-center justify-content-between">
+        <div class="d-flex flex-column gap-1">
+          {{oWorkspace.workspaceName}}
+          <span class="user-id">{{oWorkspace.ownerUserId}}</span>
         </div>
+        <div class="d-flex flex-row gap-2">
+          <app-button [m_sLabel]="'Open'" [m_bMuted]="true" [m_sSize]="'small'"
+                      (click)="openWorkspace(oWorkspace)"></app-button>
+          <app-button [m_sIconLeft]="'delete'" [m_bMuted]="true" [m_sSize]="'small'"
+                      (click)="deleteWorkspace(oWorkspace, this)"></app-button>
+        </div>
+      </div>
+
+      <!-- Properties Below the Selected Workspace -->
+      <div *ngIf="m_oActiveWorkspace !== null && oWorkspace.selected" class="workspace-details mt-2 p-2">
+        <div class="font-bold menu-header pb-3">{{"WORKSPACE_DETAILS_BOX" | translate}}</div>
+        <div class="property-tag font-bold">{{"WORKSPACES_CLOUD" | translate}}:
+          <span class="font-light">{{m_oActiveWorkspace.cloudProvider}}</span>
+        </div>
+        <div class="property-tag font-bold">{{"KEY_PHRASES.OWNER" | translate}}:
+          <span class="font-light green-text">{{m_oActiveWorkspace.userId}}</span>
+        </div>
+        <div class="property-tag font-bold">{{"WORKSPACES_NODE_CODE" | translate}}:
+          <span class="font-light">{{m_oActiveWorkspace.nodeCode}}</span>
+        </div>
+        <div class="property-tag font-bold">{{"WORKSPACES_PRODUCTS" | translate}}:
+          <span class="font-light">{{m_aoProducts.length}}</span>
+        </div>
+        <div class="property-tag font-bold">{{"WORKSPACES_PROC_COUNT" | translate}}:
+          <span class="font-light">{{m_oActiveWorkspace.processesCount}}</span>
+        </div>
+        <div>
+          <label for="workspace-id" class="property-tag font-bold">{{"WORKSPACES_ID" | translate}}:</label>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="" name="workspace-id"
+                   aria-label="Workspace ID Copy Field" value="{{m_oActiveWorkspace.workspaceId}}" readonly disabled
+                   aria-describedby="copy-workspace-id">
+            <span *ngIf="m_bShowCopied"
+                  class="d-flex flex-row align-items-center copied-indicator font-bold">
+                        {{"KEY_PHRASES.COPIED" | translate}}
+                    </span>
+            <span class="input-group-text icon-left" id="copy-workspace-id" (click)="copyWorkspaceId()">
+                        <span class="material-symbols-outlined green-text">content_copy</span>
+                    </span>
+          </div>
+        </div>
+      </div>
     </div>
-    <app-button *ngIf="!m_bExpandedMenu" [m_sLabel]="'WORKSPACES_TOOLTIP_EDIT' | translate" [m_sSize]="'large'"
+  </div>
+
+  <app-button *ngIf="!m_bExpandedMenu" [m_sLabel]="'WORKSPACES_TOOLTIP_EDIT' | translate" [m_sSize]="'large'"
         [m_bDisabled]="m_oActiveWorkspace === null" (click)="openWorkspace(m_oActiveWorkspace)"></app-button>
     <app-button *ngIf="!m_bExpandedMenu" [m_sLabel]="'WORKSPACES_BUTTON_NEW_WORKSPACE' | translate" [m_sSize]="'large'"
         [m_bMuted]="true" (click)="openNewWorkspaceDialog()"></app-button>
-    <div *ngIf="m_oActiveWorkspace !== null">
+    <div *ngIf="m_oActiveWorkspace !== null && !m_bExpandedMenu">
         <div class="font-bold menu-header pb-3">{{"WORKSPACE_DETAILS_BOX" | translate}}</div>
         <div class="property-tag font-bold">{{"WORKSPACES_CLOUD" | translate}}: <span class="font-light">
                 {{m_oActiveWorkspace.cloudProvider}}</span></div>

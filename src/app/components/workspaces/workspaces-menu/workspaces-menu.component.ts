@@ -117,7 +117,7 @@ export class WorkspacesMenuComponent implements OnInit {
 
   /**
    * Open the Workspace and re-direct user to the open editor
-   * @param oWorkspace 
+   * @param oWorkspace
    */
   openWorkspace(oWorkspace): void {
     let sError = this.m_oTranslate.instant("MSG_MKT_WS_OPEN_ERROR");
