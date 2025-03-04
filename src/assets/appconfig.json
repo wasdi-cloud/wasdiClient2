@@ -1017,7 +1017,42 @@
                     "indexvalue": "CIMA_AIR_TEMP_AVG"
                 }
             ]
-        }        
+        },
+        {
+            "name": "GFS",
+            "indexname": "platformname",
+            "indexvalue": "GFS",
+            "filters": [
+                {
+                    "indexname": "producttype",
+                    "indexlabel": "Variable",
+                    "indexvalues": "PRATE|APCP|ACPCP|CSNOW|CRAIN|TMP|GUST",
+					"indexvalue": "PRATE",
+                    "regex": ".*"
+                },			
+                {
+                    "indexname": "productlevel",
+                    "indexlabel": "Level",
+					"indexvalue": "surface",
+                    "indexvalues": "surface|planetary_boundary_layer",
+                    "regex": ".*"
+                },
+                {
+                    "indexname": "modelRun",
+                    "indexlabel": "Run",
+                    "indexvalues": "LAST|00|06|12|18|ALL",
+					"indexvalue": "LAST",
+                    "regex": ".*"
+                },
+                {
+                    "indexname": "forecastTime",
+                    "indexlabel": "Forecast Time",
+                    "indexvalues": "anl|f000|f001|f002|f003|f004",
+					"indexvalue": "f000",
+                    "regex": ".*"
+                }
+            ]
+        }             
     ],
     "orbitsearch":{
         "sensortypes":["SAR","Optical"],

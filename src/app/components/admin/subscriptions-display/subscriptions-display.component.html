@@ -11,6 +11,7 @@
                         <td>Name</td>
                         <td>Owner</td>
                         <td>Organisation</td>
+                        <td>Org Id</td>
                         <td>Start date</td>
                         <td>End date</td>
                         <td></td>
@@ -22,6 +23,7 @@
                         <td>{{oSubscription.name}}</td>
                         <td>{{oSubscription.ownerUserId}}</td>
                         <td>{{oSubscription.organizationName ? oSubscription.organizationName : 'N/A'}}</td>
+                        <td>{{oSubscription.organizationId ? oSubscription.organizationId : 'N/A'}}</td>
                         <td>{{oSubscription.startDate | date:'dd/MM/yyyy'}}</td>
                         <td>{{oSubscription.endDate | date:'dd/MM/yyyy'}}</td>
                         <td class="d-flex flex-row justify-content-end gap-1">
