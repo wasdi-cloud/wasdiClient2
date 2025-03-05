@@ -176,6 +176,8 @@ export class NewAppDialogComponent implements OnInit {
     showInStore: false,
     maxImages: 6,
     reviewsCount: 0,
+    squareKilometerPrice: 0,
+    areaParameterName: "",
     purchased: 0, // NOTE: at the moment here is the count of run on the main server
     totalRuns: 0, // NOTE: not set at the moment
     userRuns: 0, // NOTE: not set at the moment
@@ -313,6 +315,8 @@ export class NewAppDialogComponent implements OnInit {
         iSubscriptionPrice: this.m_oProcessorDetails.subscriptionPrice,
         bShowInStore: this.m_oProcessorDetails.showInStore,
         sLongDescription: this.m_oProcessorDetails.longDescription,
+        sAreaParameterName: this.m_oProcessorDetails.areaParameterName,
+        iPricePerSquareKm: this.m_oProcessorDetails.squareKilometerPrice,
         aoCategories: [this.m_oProcessorDetails.categories],
       }),
 
