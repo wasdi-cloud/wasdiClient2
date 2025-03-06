@@ -452,6 +452,12 @@ export class NewAppDialogComponent implements OnInit {
     // On demand price
     this.m_oProcessorDetails.ondemandPrice = this.m_oProcessorForm.get('processorStoreInfo.iOnDemandPrice').value;
 
+    // price for square km
+    this.m_oProcessorDetails.squareKilometerPrice = this.m_oProcessorForm.get('processorStoreInfo.iPricePerSquareKm').value;
+
+    // Area parameter name
+    this.m_oProcessorDetails.areaParameterName = this.m_oProcessorForm.get('processorStoreInfo.sAreaParameterName').value;
+
     // Show in store flag
     this.m_oProcessorDetails.showInStore = this.m_oProcessorForm.get('processorStoreInfo.bShowInStore').value;
 

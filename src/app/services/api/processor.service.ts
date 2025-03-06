@@ -94,7 +94,7 @@ export class ProcessorService {
     else {
       sWorkspaceId = "-";
     }
-    return this.m_oHttp.post(this.APIURL + '/processors/run?name=' + sProcessorName + '&workspace=' + sWorkspaceId + '&notify=' + bNotify, sEncodedJSON);
+    return this.m_oHttp.post<any>(this.APIURL + '/processors/run?name=' + sProcessorName + '&workspace=' + sWorkspaceId + '&notify=' + bNotify, sEncodedJSON);
   };
 
   /**

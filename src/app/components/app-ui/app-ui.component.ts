@@ -373,7 +373,19 @@ export class AppUiComponent implements OnInit {
       oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
       oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput), this.m_bNotification).subscribe(oResponse => {
         if (oResponse) {
-          this.m_oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
+          if (oResponse.status==="ERROR") {
+            if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
+            let sNotificationMsg = oResponse.message;
+            this.m_oNotificationDisplayService.openSnackBar(
+              sNotificationMsg,
+              '',
+              'danger-snackbar'
+            );
+            }
+          }
+          else {
+            this.m_oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
+          }          
         }
       })
     }
