@@ -452,11 +452,17 @@ export class NewAppDialogComponent implements OnInit {
     // On demand price
     this.m_oProcessorDetails.ondemandPrice = this.m_oProcessorForm.get('processorStoreInfo.iOnDemandPrice').value;
 
+    if (!this.m_oProcessorDetails.ondemandPrice) this.m_oProcessorDetails.ondemandPrice = 0;
+
     // price for square km
     this.m_oProcessorDetails.squareKilometerPrice = this.m_oProcessorForm.get('processorStoreInfo.iPricePerSquareKm').value;
 
+    if (!this.m_oProcessorDetails.squareKilometerPrice) this.m_oProcessorDetails.squareKilometerPrice = 0;
+
     // Area parameter name
     this.m_oProcessorDetails.areaParameterName = this.m_oProcessorForm.get('processorStoreInfo.sAreaParameterName').value;
+
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oProcessorDetails.areaParameterName)) this.m_oProcessorDetails.areaParameterName = "";
 
     // Show in store flag
     this.m_oProcessorDetails.showInStore = this.m_oProcessorForm.get('processorStoreInfo.bShowInStore').value;
@@ -489,6 +495,31 @@ export class NewAppDialogComponent implements OnInit {
   public updateProcessor(): void {
     this.setInputProcessorValues();
 
+    if (this.m_oProcessorDetails.ondemandPrice<0) {
+      let sErrorMessage = "On Demand Price cannot be < 0"  
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+      return;
+    }
+
+    if (this.m_oProcessorDetails.squareKilometerPrice<0) {
+      let sErrorMessage = "Square Km Price cannot be < 0"  
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+      return;
+    }    
+
+    if (this.m_oProcessorDetails.ondemandPrice>0 && this.m_oProcessorDetails.squareKilometerPrice>0 ) {
+      let sErrorMessage = "Both on demand and square km price are >0: please select only one payment model"  
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+      return;
+    }        
+
+    if (this.m_oProcessorDetails.squareKilometerPrice>0 && this.m_oProcessorDetails.areaParameterName == "") {
+      let sErrorMessage = "Please fill the name of the parameter to read to get the area requesed by the user"  
+      this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
+      return;
+    }        
+
+
     let sMessage = 'Processor Data Updated';
 
     if (
@@ -503,15 +534,13 @@ export class NewAppDialogComponent implements OnInit {
     }
 
     // Update the processor and the processor details
-    this.m_oProcessorService
-      .updateProcessor(this.m_oInputProcessor.processorId,this.m_oInputProcessor).subscribe({
+    this.m_oProcessorService.updateProcessor(this.m_oInputProcessor.processorId,this.m_oInputProcessor).subscribe({
         next: (oResponse) => {
-          this.m_oProcessorService
-            .updateProcessorDetails(
+          // If the update of the base info are ok, we update the details
+          this.m_oProcessorService.updateProcessorDetails(
               this.m_oInputProcessor.processorId,
               this.m_oProcessorDetails
-            )
-            .subscribe({
+            ).subscribe({
               next: (oResponse) => {
                 this.m_oNotificationDisplayService.openSnackBar(sMessage);
                 this.m_bIsUpdated = true;
@@ -519,22 +548,22 @@ export class NewAppDialogComponent implements OnInit {
               },
               error: (oError) => {
                 this.m_oNotificationDisplayService.openAlertDialog(
-                  `Error in updating ${this.m_oInputProcessor.processorName}`
+                  `Error updating ${this.m_oInputProcessor.processorName}`
                 );
               },
             });
         },
         error: (oError) => {
           this.m_oNotificationDisplayService.openAlertDialog(
-            `Error in updating ${this.m_oInputProcessor.processorName}`
+            `Error updating ${this.m_oInputProcessor.processorName}`
           );
         },
       });
 
     //Check if there was also a file uploaded:
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === false) {
-      let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value;
 
+      let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value;
       let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value;
 
       this.m_oProcessorService.updateProcessorFiles(

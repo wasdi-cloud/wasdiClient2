@@ -35,7 +35,7 @@ export class ProcessorTabPricingComponent implements OnInit {
   ngOnInit(): void {
     if (this.m_oProcessorStoreInfo) {
       if (this.m_oProcessorStoreInfo.value) {
-        if (this.m_oProcessorStoreInfo.value.iOnDemandPrice == 0) {
+        if (this.m_oProcessorStoreInfo.value.iOnDemandPrice <= 0 && this.m_oProcessorStoreInfo.value.iPricePerSquareKm<=0) {
           this.m_bIsFree = true;
         } else {
           this.m_bIsFree = false;
