@@ -10,6 +10,7 @@
                 <thead class="table-heading-container">
                     <tr>
                         <td>Organisation name</td>
+                        <td>Id</td>
                         <td>Owner</td>
                         <td></td>
                     </tr>
@@ -17,6 +18,7 @@
                 <tbody>
                     <tr *ngFor="let oOrganization of m_aoOrganizations">
                         <td>{{oOrganization.name}}</td>
+                        <td>{{oOrganization.organizationId}}</td>
                         <td>{{oOrganization.ownerUserId}}</td>
                         <td class="d-flex gap-1 justify-content-end">
                             <span *ngIf="oOrganization.readOnly === false"

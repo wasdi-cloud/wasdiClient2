@@ -133,16 +133,17 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
   m_asBuildLogs: Array<any> = [];
 
   m_aoProcessorTypes = [
-    { name: 'Ubuntu 22.04 + Python 3.10', id: 'python_pip_2' },
-    { name: 'Python 3.x Pip One Shot', id: 'pip_oneshot' },
-    { name: 'OGC Application Package', id: 'eoepca' },
-    { name: 'IDL 3.7.2', id: 'ubuntu_idl372' },
+    { name: 'Python 3.12 (Ubuntu 24.10)', id: 'python312' },
+    { name: 'Python 3.10 (Ubuntu 22.04)', id: 'python_pip_2' },
+    { name: 'Python 3.10 PipOne Shot (Ubuntu 22.04)', id: 'pip_oneshot' },        
     { name: 'OCTAVE 6.x', id: 'octave' },
-    { name: 'Ubuntu 20.04 + Python 3.8', id: 'python_pip_2_ubuntu_20' },
-    { name: 'Python 3.x Conda', id: 'conda' },
     { name: 'C# .NET Core', id: 'csharp' },
-    { name: 'Custom Dockerfile',  id: 'personalized_docker'} //,
-    //{ name: "Ubuntu 20.04 + Python 3.8 - Deprecated", id: "ubuntu_python37_snap" }
+    { name: 'Java 17', id: 'java_17_Ubuntu_22' },
+    { name: 'IDL 3.7.2', id: 'ubuntu_idl372' },
+    { name: 'Python 3.8 (Ubuntu 20.04)', id: 'python_pip_2_ubuntu_20' },
+    { name: 'Python 3.8 Conda', id: 'conda' },
+    { name: 'OGC Application Package', id: 'eoepca' },
+    { name: 'Custom Dockerfile',  id: 'personalized_docker'}
   ];
 
   m_aoProcessorTypesMap = this.m_aoProcessorTypes.map((oProcessorType) => {
