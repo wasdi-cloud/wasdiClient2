@@ -178,6 +178,7 @@ import { SaveParamsDialogComponent } from './dialogs/save-params-dialog/save-par
 import { MetadataAttributesDialogComponent } from './components/edit/products-list/metadata-attributes-dialog/metadata-attributes-dialog.component';
 import { ResizableDirective } from './directives/resizable.directive';
 import { PrivateMissionsComponent } from './components/admin/private-missions/private-missions.component';
+import { CreditsBuyDialogComponent } from './components/subscriptions-purchase/credits-buy-dialog/credits-buy-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -297,7 +298,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SaveParamsDialogComponent,
     MetadataAttributesDialogComponent,
     ResizableDirective,
-    PrivateMissionsComponent
+    PrivateMissionsComponent,
+    CreditsBuyDialogComponent
 
   ],
   imports: [

@@ -1078,7 +1078,7 @@
     "USER_SUBSCRIPTION_SAVE_ERROR": "Abonnement konnte nicht gespeichert werden",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Konnte Benutzerorganisationen nicht abrufen",
 	
-    "SUBSCRIPTIONS_HEADER": "Choose your <strong>space-y</strong> plan",
+    "SUBSCRIPTIONS_HEADER": "Choose your <strong>subscription</strong> plan",
     "SUBSCRIPTIONS_UP_TO": "Up to",
     "SUBSCRIPTIONS_STARTER": "Starter",
     "SUBSCRIPTIONS_STANDARD": "Standard",

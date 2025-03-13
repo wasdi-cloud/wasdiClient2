@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { ConstantsService } from 'src/app/services/constants.service';
-import { OrganizationsService } from 'src/app/services/api/organizations.service';
-import { ProjectService } from 'src/app/services/api/project.service';
 import { SubscriptionService } from 'src/app/services/api/subscription.service';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -13,6 +11,8 @@ import { SubscriptionProjectsDialogComponent } from 'src/app/dialogs/subscriptio
 import { TranslateService } from '@ngx-translate/core';
 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+
+import { CreditsService } from 'src/app/services/api/credits.service';
 
 @Component({
   selector: 'app-subscriptions-display',
@@ -27,6 +27,9 @@ export class SubscriptionsDisplayComponent implements OnInit {
 
   m_aoSubscriptions: Array<any> = [];
   m_aoSubscriptionsProjects: Array<any> = [];
+
+  m_aoCreditPackages: Array<any> = [];
+  m_iTotalUserCredits: number = 0;
 
   m_oUser = this.m_oConstantsService.getUser();
 
@@ -62,12 +65,14 @@ export class SubscriptionsDisplayComponent implements OnInit {
     private m_oDialog: MatDialog,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oSubscriptionService: SubscriptionService,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oCreditsService: CreditsService
   ) { }
 
   ngOnInit(): void {
     this.initializeSubscriptionsInfo();
-
+    this.initializeCreditPackagesInfo();
+    this.getUsersTotalCredits();
   }
 
   initializeSubscriptionsInfo() {
@@ -296,6 +301,34 @@ export class SubscriptionsDisplayComponent implements OnInit {
     }
   }
 
+  getCreditPackageBuyDate(dTimestamp: number) {
+
+    if (dTimestamp>0) {
+      var oDate = new Date(dTimestamp);
+      return oDate.toLocaleDateString();  
+    }
+    else {
+      return "N/A";
+    }
+
+  }
+
+  isCreditPackageValid(dTimestamp: number) {
+    if (dTimestamp>0) return "YES";
+    else return "NO";
+  }
+
+  getUsersTotalCredits() {
+    this.m_oCreditsService.getCreditsByUser().subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          this.m_iTotalUserCredits = oResponse;
+        }
+      },
+      error: oError => { }
+    })
+  }
+
   checkout() {
     this.createSubscriptionObject();
     let sMessage = this.m_oTranslate.instant("USER_SUBSCRIPTION_STRIPE_MSG");
@@ -351,4 +384,15 @@ export class SubscriptionsDisplayComponent implements OnInit {
     }
 
   }
+
+  initializeCreditPackagesInfo() {
+    this.m_oCreditsService.getListByUser(true) .subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+          this.m_aoCreditPackages = oResponse;
+        }
+      },
+      error: oError => { }
+    })
+  }  
 }

@@ -1082,7 +1082,7 @@
     "USER_SUBSCRIPTION_SAVE_ERROR": "Could not save subscription",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Could not get user organisations",
 
-    "SUBSCRIPTIONS_HEADER": "Choose your <strong>space-y</strong> plan",
+    "SUBSCRIPTIONS_HEADER": "Choose your <strong>subscription</strong> plan",
     "SUBSCRIPTIONS_UP_TO": "Up to",
     "SUBSCRIPTIONS_STARTER": "Starter",
     "SUBSCRIPTIONS_STANDARD": "Standard",
@@ -1101,11 +1101,26 @@
     "SUBSCRIPTIONS_STND_DESC": "For those looking to process medium amounts of data.",
     "SUBSCRIPTIONS_PRO_DESC": "For individuals and organizations that may require large amounts of processing space.",
 
+    "CREDITS_HEADER": "Want to work with <strong>credits</strong>?",
+    "CREDITS_BOX": "Get Credits",
+    "CREDITS_BOX_DESC": "Credits can be used to run paid applications in WASDI",
+    "CREDITS_ROW_1": "Recharge your wallet with credits when needed",
+    "CREDITS_ROW_2": "Paid application declares a credit-price per square kilometer",
+    "CREDITS_ROW_3": "Draw your area, evaluate the price and run your applications",
+    "CREDITS_50": "50 Credits",
+    "CREDITS_100": "100 Credits",
+
     "SUBSCRIPTION_BUY_NAME": "Give your subscription a name so you can keep track of your projects (optional)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Select the organisation for which you are buying this plan (optional)",
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Order Summary",
     "SUBSCRIPTION_BUY_TOTAL": "Total",
+
+    "CREDITS_BUY_NAME": "Give your credits package a name so you can keep track of your projects (optional)",
+    "CREDITS_BUY_ORGANIZATION": "Select the organisation for which you are buying this credits package (optional)",
+    "CREDITS_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
+    "CREDITS_BUY_ORDER_SUMMARY": "Order Summary",
+    "CREDITS_BUY_TOTAL": "Total",
 
     "DIALOG_ADD_SUBSCRIPTION": "Add Subscription",
     "DIALOG_EDIT_SUBSCRIPTION": "Edit Subscription",
@@ -1248,3 +1263,4 @@
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription"
 }
+

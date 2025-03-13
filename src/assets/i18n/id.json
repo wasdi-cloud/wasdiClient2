@@ -1080,7 +1080,7 @@
     "USER_SUBSCRIPTION_SAVE_ERROR": "Tidak dapat menyimpan langganan",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Tidak dapat memperoleh organisasi pengguna",
 
-	"SUBSCRIPTIONS_HEADER": "Pilih paket <strong>space-y</strong> Anda",
+	"SUBSCRIPTIONS_HEADER": "Pilih paket <strong>berlangganan</strong> Anda",
     "SUBSCRIPTIONS_UP_TO": "Hingga",
     "SUBSCRIPTIONS_STARTER": "Pemula",
     "SUBSCRIPTIONS_STANDARD": "Standar",
@@ -1096,11 +1096,26 @@
     "SUBSCRIPTIONS_DAY": "Hari",
     "SUBSCRIPTIONS_WEEK": "Minggu",
 
+    "CREDITS_HEADER": "Want to work with <strong>credits</strong>?",
+    "CREDITS_BOX": "Get Credits",
+    "CREDITS_BOX_DESC": "Credits can be used to run paid applications in WASDI",
+    "CREDITS_ROW_1": "Recharge your wallet with credits when needed",
+    "CREDITS_ROW_2": "Paid application declares a credit-price per square kilometer",
+    "CREDITS_ROW_3": "Draw your area, evaluate the price and run your applications",
+    "CREDITS_50": "50 Credits",
+    "CREDITS_100": "100 Credits",	
+
 	"SUBSCRIPTION_BUY_NAME": "Beri nama pada langganan Anda sehingga Anda dapat terus memantau proyek Anda (opsional)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Pilih organisasi tempat Anda membeli paket ini (opsional)",
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Pembayaran di Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Ringkasan Pesanan",
     "SUBSCRIPTION_BUY_TOTAL": "Jumlah",
+
+    "CREDITS_BUY_NAME": "Give your credits package a name so you can keep track of your projects (optional)",
+    "CREDITS_BUY_ORGANIZATION": "Select the organisation for which you are buying this credits package (optional)",
+    "CREDITS_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
+    "CREDITS_BUY_ORDER_SUMMARY": "Order Summary",
+    "CREDITS_BUY_TOTAL": "Total",	
   
     "DIALOG_ADD_SUBSCRIPTION": "Tambahkan Langganan",
     "DIALOG_EDIT_SUBSCRIPTION": "Edit Langganan",

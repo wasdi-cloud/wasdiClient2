@@ -25,7 +25,7 @@ export class CreditsService {
    * @param oCreditPackage 
    * @returns 
    */
-    createSubscription(oCreditPackage) {
+    createCreditsPackage(oCreditPackage) {
       return this.m_oHttp.post<any>(this.APIURL + '/credits/add', oCreditPackage, { observe: "response" });
     };
   

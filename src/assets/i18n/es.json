@@ -1079,7 +1079,7 @@
     "USER_SUBSCRIPTION_SAVE_ERROR": "No se pudo guardar la suscripción",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "No se pudieron obtener organizaciones de usuarios",
 	
-	"SUBSCRIPTIONS_HEADER": "Elige tu plan <strong>espacio</strong>",
+	"SUBSCRIPTIONS_HEADER": "Elige tu plan <strong>suscripción</strong>",
     "SUBSCRIPTIONS_UP_TO": "Hasta",
     "SUBSCRIPTIONS_STARTER": "Iniciador",
     "SUBSCRIPTIONS_STANDARD": "Estándar",
@@ -1094,12 +1094,27 @@
     "SUBSCRIPTIONS_ONE_YEAR": "(1 año solamente)",
     "SUBSCRIPTIONS_DAY": "Día",
     "SUBSCRIPTIONS_WEEK": "Semana",
+
+    "CREDITS_HEADER": "Want to work with <strong>credits</strong>?",
+    "CREDITS_BOX": "Get Credits",
+    "CREDITS_BOX_DESC": "Credits can be used to run paid applications in WASDI",
+    "CREDITS_ROW_1": "Recharge your wallet with credits when needed",
+    "CREDITS_ROW_2": "Paid application declares a credit-price per square kilometer",
+    "CREDITS_ROW_3": "Draw your area, evaluate the price and run your applications",
+    "CREDITS_50": "50 Credits",
+    "CREDITS_100": "100 Credits",    
   
 	"SUBSCRIPTION_BUY_NAME": "Dale un nombre a tu suscripción para que puedas realizar un seguimiento de tus proyectos (opcional)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Selecciona la organización para la cual estás comprando este plan (opcional)",
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Pagar en Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Resumen del pedido",
     "SUBSCRIPTION_BUY_TOTAL": "Total",
+
+    "CREDITS_BUY_NAME": "Give your credits package a name so you can keep track of your projects (optional)",
+    "CREDITS_BUY_ORGANIZATION": "Select the organisation for which you are buying this credits package (optional)",
+    "CREDITS_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
+    "CREDITS_BUY_ORDER_SUMMARY": "Order Summary",
+    "CREDITS_BUY_TOTAL": "Total",    
   
     "DIALOG_ADD_SUBSCRIPTION": "Agregar suscripción",
     "DIALOG_EDIT_SUBSCRIPTION": "Editar suscripción",

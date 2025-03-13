@@ -1080,7 +1080,7 @@
     "USER_SUBSCRIPTION_SAVE_ERROR": "Impossible d'enregistrer l'abonnement",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Impossible d'obtenir les organisations d'utilisateurs",
 
-	"SUBSCRIPTIONS_HEADER": "Choisissez votre forfait <strong>space-y</strong>",
+	"SUBSCRIPTIONS_HEADER": "Choisissez votre forfait <strong>abonnement</strong>",
     "SUBSCRIPTIONS_UP_TO": "Jusqu'à",
     "SUBSCRIPTIONS_STARTER": "Démarreur",
     "SUBSCRIPTIONS_STANDARD": "Standard",
@@ -1096,11 +1096,26 @@
     "SUBSCRIPTIONS_DAY": "Jour",
     "SUBSCRIPTIONS_WEEK": "Semaine",
 
+    "CREDITS_HEADER": "Want to work with <strong>credits</strong>?",
+    "CREDITS_BOX": "Get Credits",
+    "CREDITS_BOX_DESC": "Credits can be used to run paid applications in WASDI",
+    "CREDITS_ROW_1": "Recharge your wallet with credits when needed",
+    "CREDITS_ROW_2": "Paid application declares a credit-price per square kilometer",
+    "CREDITS_ROW_3": "Draw your area, evaluate the price and run your applications",
+    "CREDITS_50": "50 Credits",
+    "CREDITS_100": "100 Credits",	
+
 	"SUBSCRIPTION_BUY_NAME": "Donnez un nom à votre abonnement pour pouvoir suivre vos projets (facultatif)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Sélectionnez l'organisation pour laquelle vous achetez ce plan (facultatif)",
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Paiement sur Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Récapitulatif de la commande",
     "SUBSCRIPTION_BUY_TOTAL": "Total",
+
+    "CREDITS_BUY_NAME": "Give your credits package a name so you can keep track of your projects (optional)",
+    "CREDITS_BUY_ORGANIZATION": "Select the organisation for which you are buying this credits package (optional)",
+    "CREDITS_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
+    "CREDITS_BUY_ORDER_SUMMARY": "Order Summary",
+    "CREDITS_BUY_TOTAL": "Total",	
   
     "DIALOG_ADD_SUBSCRIPTION": "Ajouter un abonnement",
     "DIALOG_EDIT_SUBSCRIPTION": "Modifier l'abonnement",

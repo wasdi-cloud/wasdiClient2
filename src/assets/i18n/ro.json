@@ -1079,7 +1079,7 @@
     "USER_SUBSCRIPTION_SAVE_ERROR": "Nu s-a putut salva abonamentul",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Nu s-au putut obține organizații de utilizatori",
 
-	"SUBSCRIPTIONS_HEADER": "Alege-ți planul <strong>space-y</strong>",
+	"SUBSCRIPTIONS_HEADER": "Alege-ți planul <strong>abonament</strong>",
     "SUBSCRIPTIONS_UP_TO": "Până la",
     "SUBSCRIPTIONS_STARTER": "Începător",
     "SUBSCRIPTIONS_STANDARD": "Standard",
@@ -1095,11 +1095,26 @@
     "SUBSCRIPTIONS_DAY": "Ziu",
     "SUBSCRIPTIONS_WEEK": "Săptămâna",
 
+    "CREDITS_HEADER": "Want to work with <strong>credits</strong>?",
+    "CREDITS_BOX": "Get Credits",
+    "CREDITS_BOX_DESC": "Credits can be used to run paid applications in WASDI",
+    "CREDITS_ROW_1": "Recharge your wallet with credits when needed",
+    "CREDITS_ROW_2": "Paid application declares a credit-price per square kilometer",
+    "CREDITS_ROW_3": "Draw your area, evaluate the price and run your applications",
+    "CREDITS_50": "50 Credits",
+    "CREDITS_100": "100 Credits",    
+
     "SUBSCRIPTION_BUY_NAME": "Dați un nume abonamentului, astfel încât să vă puteți urmări proiectele (opțional)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Selectați organizația pentru care cumpărați acest plan (opțional)",
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Încheierea pe Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Rezumatul comenzii",
     "SUBSCRIPTION_BUY_TOTAL": "Total",
+
+    "CREDITS_BUY_NAME": "Give your credits package a name so you can keep track of your projects (optional)",
+    "CREDITS_BUY_ORGANIZATION": "Select the organisation for which you are buying this credits package (optional)",
+    "CREDITS_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
+    "CREDITS_BUY_ORDER_SUMMARY": "Order Summary",
+    "CREDITS_BUY_TOTAL": "Total",    
 	
 	"DIALOG_ADD_SUBSCRIPTION": "Adăugați abonament",
     "DIALOG_EDIT_SUBSCRIPTION": "Editați abonamentul",
