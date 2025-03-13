@@ -126,6 +126,11 @@
     <!-- Mission Input -->
     <div class="">{{ "IMPORT_PRODUCT_SELECT_MISSION" | translate }}</div>
     <label for="">{{ "IMPORT_PRODUCT_MISSION_TYPE" | translate }}</label>
+
+    <!-- FIRST TEST TO CHANGE IT IN AUTOCOMPLETE. ALMOST done, but to be refined :)-->
+    <!--app-autocomplete [m_aoInputs]="m_aoMissions" (m_oSelectionChange)="setActiveMission($event.value)" [m_oController]="this"
+    [m_bEmitOutput]="true" (m_oTextChange)="setActiveMission($event)"></app-autocomplete-->
+
     <app-dropdown
       [m_aoDropdownItems]="m_aoMissions"
       [m_aoSelectedItems]="m_oActiveMission"

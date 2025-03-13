@@ -137,7 +137,9 @@ export class MarketplaceFiltersComponent implements OnInit {
    * @returns {void}
    */
   onSearchInput(oEvent): void {
+
     this.m_oAppFilter.name = this.m_sSearchInput;
+    this.m_oAppFilter.page = 0;
     this.m_oAppFilterOutput.emit(this.m_oAppFilter);
   }
 

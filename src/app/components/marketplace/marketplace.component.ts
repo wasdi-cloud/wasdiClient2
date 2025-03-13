@@ -123,7 +123,7 @@ export class MarketplaceComponent implements OnInit {
 
   /**
    * Initialize applications with default logos and return array of processors with new image links
-   * @param aoProcessorList 
+   * @param aoProcessorList
    * @returns {Array<any>}
    */
   setDefaultImagesAndVotes(aoProcessorList: any): Array<any> {
@@ -165,11 +165,11 @@ export class MarketplaceComponent implements OnInit {
 
     if (this.m_sNameFilter == undefined) this.m_sNameFilter = "";
     if (this.m_oAppFilter.name == undefined) this.m_oAppFilter.name = "";
-
     if (this.m_sNameFilter !== this.m_oAppFilter.name) {
       this.m_oAppFilter.page = 0;
       this.m_oAppFilter.name = this.m_sNameFilter;
     }
+
 
     this.m_bWaiting = false;
 
@@ -211,7 +211,7 @@ export class MarketplaceComponent implements OnInit {
 
   /**
    * Clear the Search Input Field
-   * @param oEvent 
+   * @param oEvent
    * @returns {void}
    */
   clearSearchInput(oEvent): void {
@@ -221,7 +221,7 @@ export class MarketplaceComponent implements OnInit {
 
   /**
    * Handle changes to developer selection dropdown
-   * @param oEvent 
+   * @param oEvent
    * @returns {void}
    */
   developerChanged(oEvent): void {
@@ -252,7 +252,7 @@ export class MarketplaceComponent implements OnInit {
   }
 
   /**
-   * Handler for Sorting Apps: 
+   * Handler for Sorting Apps:
    */
 
   //TODO: Sort apps based on Success Rate
@@ -281,6 +281,7 @@ export class MarketplaceComponent implements OnInit {
 
   getAppFilter(oEvent) {
     this.m_oAppFilter = oEvent;
+    this.m_sNameFilter=this.m_oAppFilter.name;
     this.getApplications();
   }
 

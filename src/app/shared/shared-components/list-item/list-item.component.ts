@@ -173,24 +173,6 @@ export class ListItemComponent implements OnInit, OnDestroy {
     return sDate;
   }
 
-  copyToClipboard(): void {
-    if(this.m_oProcessorItem?.name){
-      const sTextToCopy = this.m_oProcessorItem?.name;  // Example: you can copy any text you want here.
-      navigator.clipboard.writeText(sTextToCopy).then(
-        () => {
-          this.m_oNotificationDialog.openSnackBar(
-            "Copied name successfully",
-            "Update",
-            "success-snackbar"
-          )
-          console.log('Text copied to clipboard');
-        },
-        (err) => {
-          console.error('Failed to copy text: ', err);
-        }
-      );
-    }
 
-  }
 
 }
