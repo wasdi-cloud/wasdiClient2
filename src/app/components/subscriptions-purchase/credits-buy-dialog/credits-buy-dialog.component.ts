@@ -102,7 +102,7 @@ export class CreditsBuyDialogComponent implements OnInit {
   }
 
   saveCreditPackage() {
-    if (!this.m_oDialogInput.name) {
+    if (!this.m_oCreditPackageViewModel.name) {
       this.m_oCreditPackageViewModel.name = this.m_oDialogInput.typeName;
     }
 
@@ -162,7 +162,7 @@ export class CreditsBuyDialogComponent implements OnInit {
 
   checkout() {
 
-    if (!this.m_oDialogInput.name) {
+    if (!this.m_oCreditPackageViewModel.name) {
       this.m_oCreditPackageViewModel.name = this.m_oDialogInput.typeName;
     }
 

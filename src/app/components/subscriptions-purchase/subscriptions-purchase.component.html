@@ -134,17 +134,7 @@
             <app-button class="align-self-center" [m_sLabel]="'DIALOG_BUY_SUBSCRIPTION' | translate" [m_sSize]="'large'"
                 (click)="showSubscriptionAddForm(m_oProType, m_iProPrice)"></app-button>
         </div>
-    </div>
-</div>
 
-
-
-<div class="flex-fill d-flex flex-column align-items-center h-100 parent">
-    <div class="img-wrapper">
-        <img src="/assets/images/credits.png" alt="Image by vectorjuice on Freepik">
-    </div>
-    <div class="header" [innerHTML]="('CREDITS_HEADER' | translate)"></div>
-    <div class="d-flex flex-row gap-2">
         <div class="price-container d-flex flex-column gap-2" [class.selected]="m_sSelectedPriceContainer ==='stnd'">
             <div>
                 <div class="price-header">{{"CREDITS_BOX" | translate}}</div>
@@ -183,6 +173,7 @@
             </div>
             <app-button class="align-self-center" [m_sLabel]="'DIALOG_BUY_SUBSCRIPTION' | translate" [m_sSize]="'large'"
                 (click)="showBuyCreditPackageForm()"></app-button>
-        </div>
+        </div>        
+
     </div>
 </div>
