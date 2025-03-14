@@ -23,11 +23,8 @@
             <div>
                 <div class="title-price-container d-flex flex-row justify-content-between">
                     <h1>{{m_oApplicationInfo.friendlyName}}</h1>
-                    <div class="price-flag align-self-start"
-                        [ngClass]="m_oApplicationInfo.ondemandPrice === 0 ? 'free' : 'paid'">
-                        {{m_oApplicationInfo.ondemandPrice
-                        === 0 ?("WAP_FREE"| translate).toUpperCase():
-                        '€ ' + m_oApplicationInfo.ondemandPrice }}</div>
+                    <div class="price-flag align-self-start" [ngClass]="getStyle()">
+                        {{getPrice() }}</div>
                 </div>
                 <div class=" basic-info-container d-flex flex-column gap-2">
                     <div>

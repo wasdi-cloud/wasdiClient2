@@ -197,4 +197,32 @@ export class AppDetailsComponent implements OnInit {
       this.m_sViewImage = sImage;
     }
   }
+
+  getStyle() {
+    if (this.m_oApplicationInfo.ondemandPrice>0 || this.m_oApplicationInfo.squareKilometerPrice>0) {
+      return 'paid';
+    }
+    else {
+      return 'free';
+    }
+  }
+
+  getPrice() {
+    let sMessage = "Free";
+
+    this.m_oTranslate.get("WAP_FREE").subscribe(sResponse => {
+      sMessage = sResponse;
+    });
+
+        
+    if (this.m_oApplicationInfo.ondemandPrice>0) {
+      return "€" + this.m_oApplicationInfo.ondemandPrice;
+    }
+    else if (this.m_oApplicationInfo.squareKilometerPrice>0) {
+      return "€" + this.m_oApplicationInfo.squareKilometerPrice+" / Km2";
+    }
+    else {
+      return sMessage;
+    }
+  }
 }

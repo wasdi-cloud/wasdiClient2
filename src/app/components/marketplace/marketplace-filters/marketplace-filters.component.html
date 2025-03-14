@@ -1,14 +1,10 @@
 <div class="secondary-nav d-flex flex-column">
     <div class="location-header">{{"ROOT_VIEW_NAV_BAR_LINK_APPSTORE" | translate}}</div>
-    <div class="filters-header d-flex flex-row justify-content-between">{{"MARKET_FILTERS" | translate }}
-        <app-button class="close-btn" [m_bOutline]="true" [m_sLabel]="('KEY_PHRASES.CLOSE' | translate).toUpperCase()"
-            [m_sSize]="'small'" data-bs-dismiss="offcanvas" aria-label="Close"></app-button>
-    </div>
     <div class="filters-container flex-fill d-flex flex-column">
         <div class="input-container">
             <app-input-field [m_sIconLeft]="'search'" [m_sPlaceholder]="'MARKET_SEARCH_APP' | translate"
                 [m_sInputValue]="m_sSearchInput" (m_oInputChange)="getSearchInput($event)"
-                [m_sLabel]="'MARKET_SEARCH_APP' | translate"></app-input-field>
+                ></app-input-field>
         </div>
         <div class=" input-container">
             <div class="search-header">{{ "MARKET_CATEGORY" | translate}}</div>
@@ -22,8 +18,7 @@
         <div class="input-container developers-wrapper">
             <div class="search-header">{{"MARKET_DEVELOPER" | translate}}</div>
             <app-input-field [m_sIconLeft]="'search'" [m_sPlaceholder]="'MARKET_SEARCH_DEVELOPERS' | translate"
-                (m_oInputChange)="getDeveloperInput($event)"
-                [m_sLabel]="'MARKET_DEVELOPER_SEARCH' | translate"></app-input-field>
+                (m_oInputChange)="getDeveloperInput($event)"></app-input-field>
             <div class="developers-container">
                 <div class="wasdi-checkbox-container" *ngFor=" let oPublisher of m_aoPublishers | filter:
                     m_sDeveloperSearch">
@@ -33,7 +28,7 @@
                 </div>
             </div>
         </div>
-        <div class="input-container">
+        <!--div class="input-container">
             <div class="search-header">{{"MARKET_RATING" | translate}}</div>
             <div class="review-options">
                 <div class="review-option-container d-flex flex-row align-items-center gap-1"
@@ -65,7 +60,7 @@
                 </div>
             </div>
 
-        </div>
+        </div-->
         <div class="floating-buttons d-flex flex-row gap-2 justify-content-between">
             <app-button [m_bMuted]="true" [m_sLabel]="'MARKET_CLEAR_FILTERS' | translate"
                 (click)="clearFilters()"></app-button>
