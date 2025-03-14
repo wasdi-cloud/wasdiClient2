@@ -7,4 +7,5 @@ export interface User {
     sessionId: string;
     surname: string;
     userId: string;
+    publicNickName: string;
 }
