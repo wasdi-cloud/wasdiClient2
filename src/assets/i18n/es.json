@@ -1,17 +1,17 @@
 {
 	"KEY_PHRASES" : {
-        "APP_NAME": "App Name", 
+        "APP_NAME": "App Name",
         "APPLY": "Aplicar",
-        "BACK": "Atrás", 
+        "BACK": "Atrás",
         "CANCEL": "Cancelar",
         "CLOSE": "Cerrar",
         "CLIPBOARD": "¡Copiado al portapapeles!",
         "CLIPBOARD_BTN": "Copiado al Portapapeles",
-        "CONFIRM_REMOVAL": "Confirmar eliminación", 
+        "CONFIRM_REMOVAL": "Confirmar eliminación",
         "COPIED": "¡Copiado!",
         "DESCRIPTION": "Descripción",
         "ERROR": "Error",
-        "GURU_MEDITATION": "Meditación del gurú", 
+        "GURU_MEDITATION": "Meditación del gurú",
         "HELP": "Ayuda",
         "LOAD_MORE": "Cargar más",
         "NAME": "Nombre",
@@ -38,7 +38,7 @@
     "APP_UI_NEW_EXISTING_WS_CHECK_2":"Espacio de trabajo existente",
     "APP_UI_RUN_APP_LABEL":"Ejecutar aplicación en",
     "APP_UI_AUTOMATIC_NAME_PLACEHOLDER":"[Nombre automático]",
-    "APP_UI_SELECT_WS": "Seleccionar espacio de trabajo", 
+    "APP_UI_SELECT_WS": "Seleccionar espacio de trabajo",
     "APP_UI_SEARCH_WS": "Buscar espacios de trabajo",
     "APP_UI_OPEN_WS": "Ejecutar aplicación",
     "APP_UI_AUTO_WS": "Espacio de trabajo automático",
@@ -50,7 +50,7 @@
     "ACTIVE_SUBSCRIPTION_ERROR_2": "No tienes una suscripción activa en este momento.",
 
     "DIALOG_PARAMS_CREATE": "Crear plantilla de parámetros",
-    "DIALOG_PARAMS_TEMPLATE_NAME": "Nombre de la plantilla", 
+    "DIALOG_PARAMS_TEMPLATE_NAME": "Nombre de la plantilla",
     "DIALOG_PARAMS_SAVE": "Guardar parámetros",
 
 	"LOGIN_PLACEHOLDER_EMAIL": "Email",
@@ -67,7 +67,7 @@
 
 	"RECOVERY_EMAIL_BUTTON": "Enviar",
 	"RECOVERY_EMAIL_TITLE": "Por favor, indica tu email y confirma.\n Recibirás un email con más instrucciones para recuperar tu cuenta",
-	
+
 	"SIGN_IN_PLACEHOLDER_EMAIL": "Email",
 	"SIGN_IN_PLACEHOLDER_PASSWORD": "Password",
 	"SIGN_IN_PLACEHOLDER_REPEAT_PASSWORD": "Repite Password",
@@ -86,7 +86,7 @@
 	"SIGN_IN_TERMS_AGREE_2": "Términos y Servicios",
 	"SIGN_IN_TERMS_AGREE_3": "Y",
 	"SIGN_IN_TERMS_AGREE_4": "Declaración de Privacidad",
-	
+
 	"ROOT_VIEW_NAV_BAR_LINK_IMPORT": "Buscar",
     "ROOT_VIEW_NAV_BAR_LINK_PROCESS": "Editar",
     "ROOT_VIEW_NAV_BAR_LINK_APPSTORE": "Mercado",
@@ -128,7 +128,7 @@
 	"PROCESSING_BAR_ERROR": "Error",
 	"PROCESSING_BAR_LOGS": "Logs",
 	"PROCESSING_BAR_PAYLOAD": "Carga",
-    
+
 	"WORKSPACES_PLACEHOLDER_SEARCH": "Buscar Espacio de trabajo...",
 	"WORKSPACES_BUTTON_NEW_WORKSPACE": "Nuevo Espacio de trabajo",
 	"WORKSPACES_THEAD_WORKSPACES": "Espacio de trabajo",
@@ -148,10 +148,10 @@
 	"WORKSPACES_SHARED_WITH": "Compartido con",
 	"WORKSPACES_SHOW_SATS": "Muestra satélites",
 
-	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Crear nuevo espacio de trabajo", 
+	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Crear nuevo espacio de trabajo",
     "DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Actualizar nombre del espacio de trabajo",
     "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Ingrese el nombre del espacio de trabajo",
-    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Ingrese el nuevo nombre del espacio de trabajo", 
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Ingrese el nuevo nombre del espacio de trabajo",
     "DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON": "Crear espacio de trabajo",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON": "Actualizar espacio de trabajo",
     "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Cancelar",
@@ -159,14 +159,14 @@
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS": "Nombre del espacio de trabajo actualizado",
     "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "Para conocer las mejores prácticas, asigne un nombre significativo a su espacio de trabajo para que sea fácil de recordar. (Opcional)",
     "DIALOG_ADD_NEW_WORKSPACE_CREATING": "WASDI está creando tu espacio de trabajo...",
-	
-	"DIALOG_APPS_PROCESSORS_ERROR": "Ocurrió un error al recuperar los procesadores", 
-    "DIALOG_APPS_DELETE_OWNER": "¿Está seguro de que desea eliminar el siguiente procesador?", 
+
+	"DIALOG_APPS_PROCESSORS_ERROR": "Ocurrió un error al recuperar los procesadores",
+    "DIALOG_APPS_DELETE_OWNER": "¿Está seguro de que desea eliminar el siguiente procesador?",
     "DIALOG_APPS_DELETE_SHARED": "¿Estás seguro de que deseas eliminar tus permisos del siguiente procesador?",
     "DIALOG_APPS_ERROR_DELETE": "Se produjo un error al intentar eliminar su procesador",
     "DIALOG_APPS_CANNOT_EDIT": "No tienes permiso para editar este espacio de trabajo",
     "DIALOG_APPS_INVALID_JSON": "Entrada JSON no válida",
-    
+
     "EDITOR_TOOLTIP_2D": "Cambiar a mapa 2D",
     "EDITOR_TOOLTIP_3D": "Cambiar a Globo",
     "EDITOR_TOOLTIP_SHOW_FEATURE": "Alternar información de función",
@@ -191,7 +191,7 @@
     "EDITOR_PRODUCTS_FILTER_CLEAN": "Limpiar filtro",
     "EDITOR_PRODUCTS_FILTER_SELECT": "Seleccionar",
     "EDITOR_PRODUCTS_WS_INFO": "Información del espacio de trabajo",
-    "EDITOR_PRODUCT_REMOVE": "Confirmar eliminación del producto", 
+    "EDITOR_PRODUCT_REMOVE": "Confirmar eliminación del producto",
     "EDITOR_PRODUCTS_REMOVE": "Confirmar eliminación de productos",
     "EDITOR_NOTEBOOK_PREPARE": "WASDI está preparando tu libreta",
     "EDITOR_NAVIGATION": "Navegación",
@@ -245,7 +245,7 @@
 	"IMPORT_CRONTAB_YEAR": "Año",
 	"IMPORT_CRONTAB_SEASON": "Temporada",
 	"IMPORT_CRONTAB_MONTH": "Mes",
-	"IMPORT_CRONTAB_DATE": "Fecha",	
+	"IMPORT_CRONTAB_DATE": "Fecha",
 
 	"SEARCH_TITLE_PANEL_HEADING_FILTERS": "Filtros",
 
@@ -301,7 +301,7 @@
 	"DIALOG_SFTP_UPLOAD_DELETE_ACCOUNT_BUTTON": "Eliminar",
 	"DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "Lista de archivos",
 	"DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Agregar al espacio de trabajo",
-    
+
 	"DIALOG_IMPORT_HEADER": "Importar dentro del espacio de trabajo",
     "DIALOG_IMPORT_LOCATION": "Importar archivos a",
     "DIALOG_IMPORT_FILE_TYPES": "Puedes importar dentro de este espacio de trabajo tipos de archivos como .tiff y .zip",
@@ -382,10 +382,10 @@
 	"DIALOG_STYLE_MANAGER_TAB_LIST": "Lista de estilos",
     "DIALOG_STYLE_UPLOAD_STYLE": "Upload Style",
 	"DIALOG_STYLE_MANAGER_TAB_NEW": "Nuevo estilo",
-    "DIALOG_STYLE_MANAGER_EDIT": "Edit Style", 
-    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",   
-    "DIALOG_STYLE_SEARCH": "Search style",   
-    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for", 
+    "DIALOG_STYLE_MANAGER_EDIT": "Edit Style",
+    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",
+    "DIALOG_STYLE_SEARCH": "Search style",
+    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for",
 
 	"DIALOG_CRONOTAB_FILTERS_BOX": "Filtros",
     "DIALOG_CRONOTAB_CRONOTAB_BOX": "Crontab",
@@ -394,7 +394,7 @@
     "DIALOG_CRONOTAB_ADD_BUTTON": "Agregar",
     "DIALOG_CRONOTAB_CLEAR_BUTTON": "Borrar",
     "DIALOG_CRONOTAB_TITLE": "SELECTOR DE SERIE TIEMPO",
-    
+
     "DIALOG_TITLE_WAPPS": "Aplicaciones WASDI",
     "DIALOG_TITLE_STYLES": "Estilos WASDI",
     "DIALOG_TITLE_PAYLOAD": "Ver carga útil",
@@ -517,7 +517,7 @@
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_LINE2": "Le sugerimos utilizar una imagen que muestre el resultado final de su aplicación, pero también puede utilizar el logotipo de su empresa",
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL": "Imágenes adicionales",
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL_LINE1": "Puedes cargar hasta 6 imágenes. El tamaño máximo de archivo por imagen es 5Mb",
-	
+
 	"DIALOG_PROCESSOR_UI_APP_FORMAT_JSON": "Formatear Json",
 	"DIALOG_PROCESSOR_UI_ADD_ELEMENTS": "- Agregar elementos (¡cuidado con las comas!)",
 	"DIALOG_PROCESSOR_UI_TAB": "Tab",
@@ -544,7 +544,7 @@
 	"DIALOG_LOGS_DATE": "Fecha: ",
 	"DIALOG_LOGS_ROW": "Fila",
 	"DIALOG_LOGS_REFRESH": "Refrescar",
-	"DIALOG_LOGS_STARTED": "Iniciado", 
+	"DIALOG_LOGS_STARTED": "Iniciado",
     "DIALOG_LOGS_PROGRESS": "Progreso",
     "DIALOG_LOGS_DURATION": "Duración",
     "DIALOG_LOGS_STATUS_PLACEHOLDER": "Seleccionar estado",
@@ -559,11 +559,11 @@
 	"DIALOG_PRODUCT_INFO_VALUE": "Valor",
 
 	"DIALOG_FEEDBACK_SEND": "Enviar comentarios",
-    "DIALOG_FEEDBACK_SEND_AS": "Enviar como", 
+    "DIALOG_FEEDBACK_SEND_AS": "Enviar como",
     "DIALOG_FEEDBACK_TRY": "¿Te gustaría probar nuestro",
     "DIALOG_FEEDBACK_LIVE_SUPPORT": "Únase a nuestro soporte en vivo en Discord",
     "DIALOG_FEEDBACK_DISCORD": "Obtén soporte en tiempo real en nuestro canal Discord, únete a nuestra comunidad en constante crecimiento, ¡acelera la resolución de tus problemas!",
-    "DIALOG_FEEDBACK_JOIN": "Únete hoy", 
+    "DIALOG_FEEDBACK_JOIN": "Únete hoy",
     "DIALOG_FEEDBACK_LIVE_HUSTON": "¡Houston, tenemos un problema!",
     "DIALOG_FEEDBACK_LIVE_PREFER": "¿Prefieres?",
     "DIALOG_FEEDBACK_LIVE_WRITE": "escríbenos",
@@ -607,12 +607,12 @@
     "DIALOG_MANAGE_METRICS_ENTRIES_NODE_CODE": "Código de nodo",
     "DIALOG_MANAGE_METRICS_ENTRIES_LATEST_ENTRY": "Última entrada",
     "DIALOG_MANAGE_METRICS_ENTRIES_RETRIEVE": "Recuperar",
- 
+
     "DIALOG_MANAGE_QUEUES_STATUS_TITLE": "Administrar estado de colas",
     "DIALOG_MANAGE_QUEUES_STATUS_NODE_CODE": "Código de nodo",
     "DIALOG_MANAGE_QUEUES_STATUS_STATUSES": "Estados",
     "DIALOG_MANAGE_QUEUES_STATUS_RETRIEVE": "Recuperar",
- 
+
     "DIALOG_FETCH_NODES_TITLE": "Obtener nodos ordenados por puntuación",
     "DIALOG_FETCH_NODES_FETCH": "Buscar",
 
@@ -640,7 +640,7 @@
 	"DIALOG_PARAMS_PUBLISHER": "Publicar",
 	"DIALOG_PARAMS_NAME": "Nombre",
 	"DIALOG_PARAMS_PARAMS": "Parámetros",
-	"DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "¿Está seguro de que desea eliminar la siguiente plantilla de parámetros?", 
+	"DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "¿Está seguro de que desea eliminar la siguiente plantilla de parámetros?",
     "DIALOG_PARAMS_CONFIRM_DELETE_SHARE": "¿Está seguro de que desea eliminar sus permisos de la siguiente plantilla de parámetros?",
 	"DIALOG_PARAMS_DELETE_ERROR": "No se pudo eliminar la plantilla de parámetros",
     "DIALOG_PARAMS_SAVE_ERROR": "No se pudo guardar la plantilla de parámetros",
@@ -655,7 +655,7 @@
     "DIALOG_PARAMS_SHARE_ADD_ERROR2": "NO ES POSIBLE COMPARTIR UN RECURSO CONTIGO.",
     "DIALOG_PARAMS_SHARE_REMOVE_CONFIRM": "ELIMINAR PERMISOS DE",
     "DIALOG_PARAMS_SEARCH_PARAM": "Search parameters",
-	
+
 	"DIALOG_STYLE_TAB_BASE": "Estilo",
     "DIALOG_STYLE_EDIT_XML": "Editar XML",
     "DIALOG_STYLE_SET_PUBLIC": "Establecer estilo público",
@@ -679,7 +679,7 @@
 	"WAP_SELECT_AREA_OVER_AREA": "<br> - El área es muy grande",
 	"WAP_SELECT_AREA_OVER_SIDE": "<br> - El lado más grande seleccionado es demasiado grande",
 	"WAP_SELECT_AREA_OVER_RATIO": "<br> - Un lado es demasiado grande comparado con el otro",
-	
+
 	"WAP_BACK": "Regreso al futuro",
     "WAP_VIEWS": "reseñas",
     "WAP_PUBLISHED": "Publicado por",
@@ -747,27 +747,27 @@
     "WAP_HISTORY_STATUS": "Estado",
     "WAP_HISTORY_WS": "Espacio de trabajo",
     "WAP_SELECT_PROCESSOR": "Select A Processor",
-	
+
 	"METADATA_TITLE": "Atributos de metadatos",
     "METADATA_ATTRIBUTE_LIST": "Lista de atributos",
     "METADATA_NAME": "Nombre",
     "METADATA_DESCRIPTION": "Descripción",
     "METADATA_GENERATING": "Generando metadatos",
     "METADATA_NONE": "No se encontraron metadatos",
-	
+
 	"DELETE_PROCESS_QUESTION": "¿Estás seguro de finalizar este proceso en ejecución?",
     "DELETE_PROCESS_YES": "Sí, mátalo",
     "DELETE_PROCESS_NO": "Uhm, no, en realidad no",
     "DELETE_PROCESS_ERROR": "Se produjo un error al finalizar el proceso",
 
 	"PROCESSES_BAR_RUNNING_PROCESSES_ERROR": "No se pudieron ejecutar los procesos",
-	
+
 	"DOWNLOAD_IN_WS_TITLE": "Lista de Espacios de trabajo",
 	"DOWNLOAD_IN_WS_NAME": "Nombre del Espacio de trabajo",
 	"DOWNLOAD_IN_WS_OWNER": "Propietario",
 	"DOWNLOAD_IN_WS_LIST": "Lista de Espacios de trabajo",
 	"DOWNLOAD_IN_WS_CREATE": "Crear nuevo Espacio de trabajo",
-	
+
 	"ORBIT_INFO_SAT": "Satélite",
 	"ORBIT_INFO_TITLE": "Info de la órbita",
 	"ORBIT_INFO_PROPERTY": "Propiedad",
@@ -793,13 +793,13 @@
 	"ORBIT_INFO_RESULTS": "Resultados",
     "ORBIT_INFO_RESULTS_HEADER": "Planificar resultados",
     "ORBIT_SELECT_RESOURCE": "Por favor seleccione al menos un recurso satelital",
-	
+
 	"DIRECTIVE_DD_SEARCH": "Buscar...",
 	"DIRECTIVE_DD_BACK": "Atrás",
 	"DIRECTIVE_DD_SAVE_SELECTION": "Guardar selección",
-	
+
 	"MAP_FEATURE_ERROR": "No se puede leer la información de la función",
-	
+
 	"MSG_EDIT_PRODUCT_ADDED": "PRODUCTO AÑADIDO AL ESPACIO DE TRABAJO<br>LISTO",
 	"MSG_DOWNLOAD": "PRODUCTO AÑADIDO AL ESPACIO DE TRABAJO<br>LISTO",
 	"MSG_PUBLISHBAND_1": "BANDA PUBLICADA: ",
@@ -823,7 +823,7 @@
 	"MSG_READMETADATA": "METADATA LEÍDA<br>LISTO",
 	"MSG_EMPTY_MSG": "ERROR: MENSAJE VACÍO<br>LISTO",
 	"MSG_ERROR_IN_OPERATION_1": "Hubo un error en el siguiente proceso:",
-	
+
 	"MSG_PUBLISH_ERROR": " HUBO UN PROBLEM PUBLICANDO EL PRODUCTO",
 	"MSG_PRODUCT_LIST_ERROR": "ERROR LEYENDO LA LISTA DE PRODUCTO",
 	"MSG_FORBIDDEN": "PROHIBIDO <br> TRATANDO DE ACCEDER A RECURSOS PRIVADOS A LOS QUE NO TIENES ACCESO",
@@ -861,7 +861,7 @@
 	"MSG_MKT_STATS_ERROR": "ERROR AL OBTENER LAS ESTADÍSTICAS DE LA APLICACIÓN",
 	"MSG_MKT_REVIEWS_ERROR": "ERROR AL OBTENER LAS OPINIONES DE LA APLICACIÓN",
 	"MSG_MKT_COMMENTS_ERROR": "ERROR AL OBTENER LOS COMENTARIOS DE LAS OPINIONES",
-	
+
 	"MSG_MKT_REVIEW_SAVED": "Revisión guardada",
     "MSG_MKT_REVIEW_SAVE_ERROR": "Error al guardar tu reseña",
     "MSG_MKT_REVIEW_UPDATED": "Revisión actualizada",
@@ -869,7 +869,7 @@
     "MSG_MKT_REVIEW_REMOVED": "Reseña eliminada",
     "MSG_MKT_REVIEW_REMOVE_ERROR": "Error al eliminar tu reseña",
     "MSG_MKT_REVIEW_COMPLETE": "Por favor completa tu revisión",
-	
+
 	"MSG_MKT_COMMENT_SAVED": "Comentario guardado",
     "MSG_MKT_COMMENT_SAVE_ERROR": "Error al guardar tu comentario",
     "MSG_MKT_COMMENT_UPDATED": "Comentario actualizado",
@@ -898,16 +898,16 @@
 	"MSG_MKT_HISTORY": "ERROR LEYENDO EL HISTORIAL",
 	"MSG_MKT_WS_ERROR": "ERROR LEYENDO LOS ESPACIOS DE TRABAJO DEL USUARIO",
 	"MSG_MKT_PRODUCT_LIST_ERROR": "ERROR LEYENDO LA LISTA DE PRODUCTOS",
-	
+
 	"MSG_DELETE_WS_1": "BORRANDO EL ESPACIO DE TRABAJO",
 	"MSG_DELETE_WS_2": " <br>ESTÁS SEGURO?",
 
 	"MSG_ADD_LIB_PM_1": "AÑADIR BIBLIOTECA ",
     "MSG_ADD_LIB_PM_2": "<br>¿ESTÁS SEGURO?",
- 
+
     "MSG_REMOVE_LIB_PM_1": "ELIMINANDO BIBLIOTECA ",
     "MSG_REMOVE_LIB_PM_2": "<br>¿ESTÁS SEGURO?",
- 
+
     "MSG_UPGRADE_LIB_PM_1": "ACTUALIZANDO BIBLIOTECA",
     "MSG_UPGRADE_LIB_PM_2": "<br>¿ESTÁS SEGURO?",
 
@@ -947,7 +947,7 @@
 
 	"MENU_SHARE_PRODUCT": "Compartir opciones de producto",
     "MENU_EDIT_STYLES": "Editar estilos",
-    "MENU_EDIT_PRODUCT_PROPERTIES": "Propiedades del producto", 
+    "MENU_EDIT_PRODUCT_PROPERTIES": "Propiedades del producto",
 
     "SHARE_SEND_PRODUCT": "Enviar producto al espacio de trabajo",
     "SHARE_SEND_PRODUCT_WORKSPACES": "Enviar producto a Workspaces",
@@ -983,7 +983,7 @@
 	"MARKET_LEAST_USED": "Menos usado",
 	"MARKET_MAX_PRICE": "Precio máx.",
 	"MARKET_CLEAR_FILTERS": "Borrar filtros",
-	
+
 	"MARKET_CARD_PUBLISHER": "Editor",
 	"MARKET_CARD_PRICE": "Gratis",
 
@@ -1015,7 +1015,7 @@
     "PACKAGE_MANAGER_ROLLBACK": "Revertir",
     "PACKAGE_MANAGER_SEARCH": "Buscar paquete",
     "PACKAGE_MANAGER_NAME": "Nombre del paquete",
-    "PACKAGE_MANAGER_CURRENT_VERSION": "Versión actual", 
+    "PACKAGE_MANAGER_CURRENT_VERSION": "Versión actual",
     "PACKAGE_MANAGER_LATEST_VERSION": "Última versión",
     "PACKAGE_MANAGER_ADD": "Agregar nuevo paquete",
 
@@ -1026,7 +1026,7 @@
     "USER_ORGANIZATIONS_HIDE_USERS": "Ocultar usuarios",
    	"USER_ORGANIZATIONS_ERROR_FETCHING":  "No se pudieron recuperar sus organizaciones",
     "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "No se pudo recuperar la información de la organización",
-	"USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirmar eliminación de organización", 
+	"USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirmar eliminación de organización",
     "USER_ORGANIZATIONS_REMOVE_OWNER_MSG":"¿Está seguro de que desea eliminar esta organización?",
     "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Confirmar eliminación de permisos",
     "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "¿Estás seguro de que deseas eliminar tus permisos con esta organización?",
@@ -1065,20 +1065,20 @@
     "USER_SUBSCRIPTIONS_HIDE_PROJECTS": "Ocultar Proyectos",
     "USER_SUBSCRIPTIONS_SHOW_ORGANIZATION": "Mostrar Organizaciones",
     "USER_SUBSCRIPTIONS_HIDE_ORGANIZATION": "Ocultar Organizaciones",
-    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Confirmar eliminación de suscripción", 
-    "USER_SUBSCRIPTIONS_REMOVE_MSG": "¿Está seguro de que desea eliminar esta suscripción?", 
+    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Confirmar eliminación de suscripción",
+    "USER_SUBSCRIPTIONS_REMOVE_MSG": "¿Está seguro de que desea eliminar esta suscripción?",
     "USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG": "Error al eliminar la suscripción",
     "USER_SUBSCRIPTION_REMOVE_MSG": "Suscripción eliminada",
     "USER_SUBSCRIPTION_UPDATED": "Suscripción actualizada",
     "USER_SUBSCRIPTION_URL": "URL de pago recibida",
     "USER_SUBSCRIPTION_URL_ERROR": "Error al obtener la URL de pago",
-    "USER_SUBSCRIPTION_STRIPE_TITLE": "Redireccionando a STRIPE", 
+    "USER_SUBSCRIPTION_STRIPE_TITLE": "Redireccionando a STRIPE",
     "USER_SUBSCRIPTION_STRIPE_MSG": "Será redirigido a nuestro socio de pago, Stripe. Haga clic en 'Sí' para continuar o en 'CANCELAR' para finalizar el proceso de pago.",
     "USER_SUBSCRIPTION_STRIPE_FAIL": "Hubo un error al registrar tu pago",
     "USER_SUBSCRIPTION_ID_ERROR": "No se pudo encontrar la suscripción por ID",
     "USER_SUBSCRIPTION_SAVE_ERROR": "No se pudo guardar la suscripción",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "No se pudieron obtener organizaciones de usuarios",
-	
+
 	"SUBSCRIPTIONS_HEADER": "Elige tu plan <strong>espacio</strong>",
     "SUBSCRIPTIONS_UP_TO": "Hasta",
     "SUBSCRIPTIONS_STARTER": "Iniciador",
@@ -1094,13 +1094,13 @@
     "SUBSCRIPTIONS_ONE_YEAR": "(1 año solamente)",
     "SUBSCRIPTIONS_DAY": "Día",
     "SUBSCRIPTIONS_WEEK": "Semana",
-  
+
 	"SUBSCRIPTION_BUY_NAME": "Dale un nombre a tu suscripción para que puedas realizar un seguimiento de tus proyectos (opcional)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Selecciona la organización para la cual estás comprando este plan (opcional)",
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Pagar en Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Resumen del pedido",
     "SUBSCRIPTION_BUY_TOTAL": "Total",
-  
+
     "DIALOG_ADD_SUBSCRIPTION": "Agregar suscripción",
     "DIALOG_EDIT_SUBSCRIPTION": "Editar suscripción",
     "DIALOG_VIEW_SUBSCRIPTION": "Ver suscripción",
@@ -1130,7 +1130,7 @@
     "DIALOG_SHARE_SUBSCRIPTION_ADD_USER": "Agregar usuario",
     "DIALOG_SHARE_SUBSCRIPTION_SEARCH_ORGANIZATION": "Buscar organización",
     "DIALOG_SHARE_SUBSCRIPTION_ADD_ORGANIZATION": "Agregar organización",
-		
+
 	"USER_PROJECTS_SHOW_USERS": "Mostrar usuarios",
 	"USER_PROJECTS_HIDE_USERS": "Ocultar usuarios",
 	"DIALOG_USER_PROJECTS": "Proyectos",
@@ -1161,7 +1161,7 @@
     "DIALOG_EDIT_PROJECT_SEARCH": "Buscar",
     "DIALOG_EDIT_PROJECT_CHANGE_ACTIVE": "Cambiar Activo",
     "DIALOG_EDIT_PROJECT_SELECT_ACTIVE_PROJECT": "Seleccione el proyecto activo",
-   
+
     "MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Se requiere una suscripción válida y un proyecto activo. Consulte el Panel de usuario.",
 
     "DASHBOARD_CONFIRM_NODE_TITLE": "Confirmar actualización de nodo",
@@ -1240,5 +1240,6 @@
     "ADMIN_SUBSCRIPTIONS_END": "End Date",
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
-    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription"    
+    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
+    "PAYMENT_SUCCESS": "¡Gracias por tu pago! Tu transacción fue exitosa y todo está listo. ¡Disfrútalo!"
 }

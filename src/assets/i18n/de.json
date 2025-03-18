@@ -1,17 +1,17 @@
 {
 	"KEY_PHRASES" : {
-		"APP_NAME": "Name der Anwendung", 
+		"APP_NAME": "Name der Anwendung",
         "APPLY": "Anwenden",
-        "BACK": "Zurück", 
+        "BACK": "Zurück",
         "CANCEL": "Abbrechen",
         "CLOSE": "Schließen",
         "CLIPBOARD": "In die Zwischenablage kopiert!",
         "CLIPBOARD_BTN": "In die Zwischenablage kopieren",
-        "CONFIRM_REMOVAL": "Entfernung bestätigen", 
+        "CONFIRM_REMOVAL": "Entfernung bestätigen",
         "COPIED": "Kopiert!",
         "DESCRIPTION": "Beschreibung",
         "ERROR": "Fehler",
-        "GURU_MEDITATION": "Guru-Meditation", 
+        "GURU_MEDITATION": "Guru-Meditation",
         "HELP": "Hilfe",
         "LOAD_MORE": "Mehr laden",
         "NAME": "Name",
@@ -38,7 +38,7 @@
     "APP_UI_NEW_EXISTING_WS_CHECK_2": "Vorhandener Arbeitsbereich",
     "APP_UI_RUN_APP_LABEL": "App ausführen in",
     "APP_UI_AUTOMATIC_NAME_PLACEHOLDER": "[Automatischer Name]",
-    "APP_UI_SELECT_WS": "Arbeitsbereich auswählen", 
+    "APP_UI_SELECT_WS": "Arbeitsbereich auswählen",
     "APP_UI_SEARCH_WS": "Arbeitsbereiche durchsuchen",
     "APP_UI_OPEN_WS": "Arbeitsbereich öffnen",
     "APP_UI_AUTO_WS": "Automatischer Arbeitsbereich",
@@ -50,7 +50,7 @@
 	"ACTIVE_SUBSCRIPTION_ERROR_2": "Sie haben derzeit kein aktives Abonnement.",
 
     "DIALOG_PARAMS_CREATE": "Parametervorlage erstellen",
-    "DIALOG_PARAMS_TEMPLATE_NAME": "Vorlagenname", 
+    "DIALOG_PARAMS_TEMPLATE_NAME": "Vorlagenname",
     "DIALOG_PARAMS_SAVE": "Parameter speichern",
 
 	"LOGIN_PLACEHOLDER_EMAIL": "E-Mail Addresse",
@@ -64,10 +64,10 @@
 	"LOGIN_LINK_WEBSITE": "INFO",
 	"LOGIN_LINK_NEW_USER": "Neuer Benutzer? Erstellen Sie!",
 	"LOGIN_LINK_BACK": "Zurück",
-	
+
 	"RECOVERY_EMAIL_BUTTON": "Anfrage senden",
 	"RECOVERY_EMAIL_TITLE": "Bitte geben Sie Ihre E-Mail-Adresse ein und bestätigen Sie.\n Es wird eine Nachricht mit weiteren Anweisungen zur Wiederherstellung Ihres Kontos gesendet.",
-	
+
 	"SIGN_IN_PLACEHOLDER_EMAIL": "E-Mail Addresse",
 	"SIGN_IN_PLACEHOLDER_PASSWORD": "Passwort",
 	"SIGN_IN_PLACEHOLDER_REPEAT_PASSWORD": "Passwort nochmals eingeben",
@@ -121,14 +121,14 @@
     "ROOT_MENU_LOGOUT": "Abmeldung",
     "ROOT_HEADER_WELCOME": "Willkommen zurück",
     "ROOT_HEADER_NO_NOTIFICATIONS": "Keine Benachrichtigungen zum Anzeigen!",
-	
+
 	"PROCESSING_BAR_WAITING": "Warten",
 	"PROCESSING_BAR_LOG": "Log",
 	"PROCESSING_BAR_STOPPED": "Gestoppt",
 	"PROCESSING_BAR_ERROR": "Fehler",
 	"PROCESSING_BAR_LOGS": "Logs",
 	"PROCESSING_BAR_PAYLOAD": "Payload",
-	
+
 	"WORKSPACES_PLACEHOLDER_SEARCH": "Arbeitsbereich suchen...",
 	"WORKSPACES_BUTTON_NEW_WORKSPACE": "Neuer Arbeitsbereich",
 	"WORKSPACES_THEAD_WORKSPACES": "Arbeitsbereich",
@@ -148,10 +148,10 @@
 	"WORKSPACES_SHARED_WITH": "Getailt mit ",
 	"WORKSPACES_SHOW_SATS": "Satelliten anzeigen",
 
-	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Neuer Arbeitsbereich", 
+	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Neuer Arbeitsbereich",
     "DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Arbeitsbereichsnamen aktualisieren",
     "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Arbeitsbereichsnamen eingeben",
-    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Neuen Arbeitsbereichsnamen eingeben", 
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Neuen Arbeitsbereichsnamen eingeben",
     "DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON": "Arbeitsbereich erstellen",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON": "Arbeitsbereich aktualisieren",
     "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Abbrechen",
@@ -159,14 +159,14 @@
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS": "Arbeitsbereichsname aktualisiert",
 	"DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "Als Best Practices geben Sie Ihrem Arbeitsbereich einen aussagekräftigen Namen, damit er leicht zu merken ist. (Optional)",
 	"DIALOG_ADD_NEW_WORKSPACE_CREATING": "WASDI erstellt Ihren Arbeitsbereich...",
-	
-	"DIALOG_APPS_PROCESSORS_ERROR": "Beim Abrufen der Prozessoren ist ein Fehler aufgetreten", 
-    "DIALOG_APPS_DELETE_OWNER": "Sind Sie sicher, dass Sie den folgenden Prozessor löschen möchten?", 
+
+	"DIALOG_APPS_PROCESSORS_ERROR": "Beim Abrufen der Prozessoren ist ein Fehler aufgetreten",
+    "DIALOG_APPS_DELETE_OWNER": "Sind Sie sicher, dass Sie den folgenden Prozessor löschen möchten?",
     "DIALOG_APPS_DELETE_SHARED": "Sind Sie sicher, dass Sie Ihre Berechtigungen vom folgenden Prozessor entfernen möchten?",
     "DIALOG_APPS_ERROR_DELETE": "Beim Versuch, Ihren Prozessor zu löschen, ist ein Fehler aufgetreten",
     "DIALOG_APPS_CANNOT_EDIT": "Sie haben keine Berechtigung, diesen Arbeitsbereich zu bearbeiten",
     "DIALOG_APPS_INVALID_JSON": "Ungültige JSON-Eingabe",
-	
+
     "EDITOR_TOOLTIP_2D": "Zur 2D-Karte wechseln",
     "EDITOR_TOOLTIP_3D": "Zum Globus wechseln",
     "EDITOR_TOOLTIP_SHOW_FEATURE": "Funktionsinfo umschalten",
@@ -191,7 +191,7 @@
 	"EDITOR_PRODUCTS_FILTER_CLEAN": "Filter reinigen",
 	"EDITOR_PRODUCTS_FILTER_SELECT": "Wählen",
 	"EDITOR_PRODUCTS_WS_INFO": "Arbeitsbereich-Infos",
-	"EDITOR_PRODUCT_REMOVE": "Produktentfernung bestätigen", 
+	"EDITOR_PRODUCT_REMOVE": "Produktentfernung bestätigen",
     "EDITOR_PRODUCTS_REMOVE": "Entfernung der Produkte bestätigen",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI bereitet Ihr Notizbuch vor",
     "EDITOR_NAVIGATION": "Navigation",
@@ -246,9 +246,9 @@
     "IMPORT_CRONTAB_SEASON": "Saison",
     "IMPORT_CRONTAB_MONTH": "Monat",
     "IMPORT_CRONTAB_DATE": "Datum",
-	
+
 	"SEARCH_TITLE_PANEL_HEADING_FILTERS": "Filters",
-	
+
 	"PLAN_SEARCH": "Suchen",
 	"PLAN_FROM": "VON",
 	"PLAN_FROM_TOOLTIP": "Startzeit der Erfassung auswählen",
@@ -263,7 +263,7 @@
 	"PLAN_SELECT": "Auswählen",
 	"PLAN_FILTERS": "Filter",
 	"PLAN_DATE_RANGE": "Datumsbereich",
-		
+
 	"DIALOG_GET_CAPABILITIES_TITLE": "Fähigkeiten erhalten",
 	"DIALOG_GET_CAPABILITIES_LAYERS": "Layers",
 	"DIALOG_GET_CAPABILITIES_SERVER": "http://example:8080/geoserver/ows?",
@@ -272,8 +272,8 @@
 	"DIALOG_GET_CAPABILITIES_LOADING": "Laden...",
 
 	"DIALOG_FORMAT_JSON_ERROR": "Ihre JSON-Eingabe konnte nicht formatiert werden. Bitte stellen Sie sicher, dass es sich um ein gültiges JSON handelt",
-    "DIALOG_PARSE_JSON_ERROR": "Es gab einen Fehler beim Parsen der JSON-Nutzdaten", 
-	
+    "DIALOG_PARSE_JSON_ERROR": "Es gab einen Fehler beim Parsen der JSON-Nutzdaten",
+
 	"DIALOG_PRODUCT_EDITOR_TITLE": "Produkt-Details",
 	"DIALOG_PRODUCT_EDITOR_INFO_DIALOG_ORIGINAL_NAME_LABEL": "Origineller Name",
 	"DIALOG_PRODUCT_EDITOR_INFO_DIALOG_FRIENDLY_NAME_LABEL": "Friendly Name",
@@ -283,13 +283,13 @@
     "DIALOG_PRODUCT_EDITOR_STYLE_ERROR": "Konnte keine Stile abrufen",
     "DIALOG_PRODUCT_EDITOR_UPDATE_ERROR": "Konnte Produkt nicht aktualisieren",
     "DIALOG_PRODUCT_EDITOR_UPDATE_SUCCESS": "Produkt aktualisiert",
-	
+
 	"DIALOG_WAPPS_ITEMS_FILTER": "Nach App-Namen suchen...",
 	"DIALOG_WAPPS_JSON_PARAMS": "Parameters (JSON)",
 	"DIALOG_WAPPS_JSON_EDITOR": "JSON Editor",
 	"DIALOG_WAPPS_JSON_RUN": "Laufen",
 	"DIALOG_WAPPS_JSON_HELP": "Hilfe",
-	
+
 	"DIALOG_SFTP_UPLOAD_TITLE": "SFTP",
 	"DIALOG_SFTP_UPLOAD_EMAIL_LABEL": "E-Mail",
 	"DIALOG_SFTP_UPLOAD_EMAIL_PLACEHOLDER": "E-Mail...",
@@ -301,7 +301,7 @@
 	"DIALOG_SFTP_UPLOAD_DELETE_ACCOUNT_BUTTON": "Löschen",
 	"DIALOG_SFTP_UPLOAD_LIST_OF_FILES": "Liste der Dateien",
 	"DIALOG_SFTP_UPLOAD_ADD_TO_WORKSPACE_BUTTON": "Zum Arbeitsbereich hinzufügen",
-	
+
 	"DIALOG_IMPORT_HEADER": "Im Arbeitsbereich importieren",
 	"DIALOG_IMPORT_LOCATION": "Dateien importieren nach",
 	"DIALOG_IMPORT_FILE_TYPES": "Sie können in diesen Arbeitsbereich Dateitypen wie .tiff und .zip importieren",
@@ -317,7 +317,7 @@
 	"DIALOG_IMPORT_SFTP": "SFTP",
 	"DIALOG_IMPORT_READONLY": "Sie haben keine Berechtigung, Produkte in diesen Arbeitsbereich zu importieren",
     "DIALOG_IMPORT_UPLOAD_ERROR": "Fehler beim Hochladen der Datei",
-	
+
 	"DIALOG_PROCESSES_LOGS_TITLE": "Liste der Arbeitsbereichsprozesse",
 	"DIALOG_PROCESSES_LOGS_NO_WS": "Kein Arbeitsbereich ausgewählt, Daten können nicht geladen werden. Wenn Sie die Seite aktualisiert haben, gehen Sie bitte zum Abschnitt Arbeitsbereich und wählen Sie einen aus.",
 	"DIALOG_PROCESSES_LOGS_NONE": "BELIEBIG",
@@ -382,10 +382,10 @@
 	"DIALOG_STYLE_MANAGER_TAB_LIST": "Stil-Liste",
 	"DIALOG_STYLE_UPLOAD_STYLE": "Upload Style",
 	"DIALOG_STYLE_MANAGER_TAB_NEW": "Neuer Stil",
-	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style", 
-    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",   
-    "DIALOG_STYLE_SEARCH": "Search style",   
-    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for", 
+	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style",
+    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",
+    "DIALOG_STYLE_SEARCH": "Search style",
+    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for",
 
 	"DIALOG_CRONOTAB_FILTERS_BOX": "Filtern",
 	"DIALOG_CRONOTAB_CRONOTAB_BOX": "Crontab",
@@ -398,7 +398,7 @@
 	"DIALOG_TITLE_WAPPS": "WASDI Apps",
 	"DIALOG_TITLE_STYLES": "WASDI Stile",
 	"DIALOG_TITLE_PAYLOAD": "Payload sehen",
-	
+
 	"DIALOG_EDIT_USER": "Benutzerinformationen aktualisieren",
 	"DIALOG_EDIT_USER_OLD_PASSWORD": "Altes Passwort",
 	"DIALOG_EDIT_USER_NEW_PASSWORD": "Neues Passwort",
@@ -533,7 +533,7 @@
     "DIALOG_PROCESSOR_UI_PRODUCT_COMBO": "Produkt-Kombinationsfeld",
     "DIALOG_PROCESSOR_UI_SEARCH_EO_IMAGE": "EO-Bild suchen",
     "DIALOG_PROCESSOR_UI_LISTBOX": "Listenfeld",
-    "DIALOG_PROCESSOR_UI_HIDDEN_FIELD": "Verborgenes Feld", 
+    "DIALOG_PROCESSOR_UI_HIDDEN_FIELD": "Verborgenes Feld",
 	"DIALOG_PROCESSOR_UI_HIDDEN_TABLE": "Table",
 
 	"DIALOG_LOGS_TITLE": "WASDI Prozessor Logs ID: ",
@@ -545,7 +545,7 @@
 	"DIALOG_LOGS_DATE": "Datum: ",
 	"DIALOG_LOGS_ROW": "Reihe",
 	"DIALOG_LOGS_REFRESH": "Aktualisieren",
-	"DIALOG_LOGS_STARTED": "Gestartet", 
+	"DIALOG_LOGS_STARTED": "Gestartet",
     "DIALOG_LOGS_PROGRESS": "Fortschritt",
     "DIALOG_LOGS_DURATION": "Dauer",
     "DIALOG_LOGS_STATUS_PLACEHOLDER": "Status auswählen",
@@ -554,17 +554,17 @@
     "DIALOG_LOGS_SEARCH_NAME": "Suche nach Name",
     "DIALOG_LOGS_ACTION": "Aktion",
     "DIALOG_LOGS_REFRESH_ERROR": "Fehler beim Aktualisieren des Prozessorstatus",
-	
+
 	"DIALOG_PRODUCT_INFO_TITLE": "Produkt-Infos",
 	"DIALOG_PRODUCT_INFO_PROP": "Eigentum",
 	"DIALOG_PRODUCT_INFO_VALUE": "Wert",
-	
+
 	"DIALOG_FEEDBACK_SEND": "Feedback senden",
-    "DIALOG_FEEDBACK_SEND_AS": "Senden als", 
+    "DIALOG_FEEDBACK_SEND_AS": "Senden als",
     "DIALOG_FEEDBACK_TRY": "Möchten Sie unser ausprobieren",
     "DIALOG_FEEDBACK_LIVE_SUPPORT": "Schließen Sie sich unserem Live-Support auf Discord an",
     "DIALOG_FEEDBACK_DISCORD": "Erhalten Sie Echtzeit-Support in unserem Discord-Kanal, schließen Sie sich unserer ständig wachsenden Community an und beschleunigen Sie Ihre Problemlösung!",
-    "DIALOG_FEEDBACK_JOIN": "Join Today", 
+    "DIALOG_FEEDBACK_JOIN": "Join Today",
     "DIALOG_FEEDBACK_LIVE_HUSTON": "Houston, wir haben ein Problem!",
     "DIALOG_FEEDBACK_LIVE_PREFER": "Möchten Sie lieber ",
     "DIALOG_FEEDBACK_LIVE_WRITE": "Schreiben Sie uns",
@@ -587,7 +587,7 @@
     "DIALOG_MANAGE_RESOURCE_PERMISSION_ADD": "Hinzufügen",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_REMOVE": "Entfernen",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_SEARCH": "Suchen",
-	
+
 	"DIALOG_MANAGE_USERS_TITLE": "Benutzer verwalten",
     "DIALOG_MANAGE_WORKSPACES_TITLE": "Arbeitsbereiche verwalten",
     "DIALOG_MANAGE_PROCESSORS_TITLE": "Prozessoren verwalten",
@@ -603,17 +603,17 @@
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_IN_MILLIS": "Gesamtlaufzeit in Millis",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_FORMATTED": "Gesamtlaufzeit formatiert",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_RETRIEVE": "Abrufen",
- 
+
     "DIALOG_MANAGE_METRICS_ENTRIES_TITLE": "Metrik-Einträge verwalten",
     "DIALOG_MANAGE_METRICS_ENTRIES_NODE_CODE": "Knotencode",
     "DIALOG_MANAGE_METRICS_ENTRIES_LATEST_ENTRY": "Letzter Eintrag",
     "DIALOG_MANAGE_METRICS_ENTRIES_RETRIEVE": "Abrufen",
- 
+
     "DIALOG_MANAGE_QUEUES_STATUS_TITLE": "Status der Warteschlangen verwalten",
     "DIALOG_MANAGE_QUEUES_STATUS_NODE_CODE": "Knotencode",
     "DIALOG_MANAGE_QUEUES_STATUS_STATUS": "Status",
     "DIALOG_MANAGE_QUEUES_STATUS_RETRIEVE": "Abrufen",
- 
+
     "DIALOG_FETCH_NODES_TITLE": "Knoten abrufen, sortiert nach Punktzahl",
     "DIALOG_FETCH_NODES_FETCH": "Abrufen",
 
@@ -640,7 +640,7 @@
     "DIALOG_PARAMS_PUBLISHER": "Herausgeber",
     "DIALOG_PARAMS_NAME": "Parameter-Name",
     "DIALOG_PARAMS_PARAMS": "Parameter",
-    "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Sind Sie sicher, dass Sie die folgende Parametervorlage löschen möchten?", 
+    "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Sind Sie sicher, dass Sie die folgende Parametervorlage löschen möchten?",
     "DIALOG_PARAMS_CONFIRM_DELETE_SHARE": "Sind Sie sicher, dass Sie Ihre Berechtigungen für die folgende Parametervorlage löschen wollen?",
     "DIALOG_PARAMS_DELETE_ERROR": "Ihre Parametervorlage konnte nicht gelöscht werden",
     "DIALOG_PARAMS_SAVE_ERROR": "Ihre Parametervorlage konnte nicht gespeichert werden",
@@ -669,7 +669,7 @@
     "DIALOG_STYLE_UPLOAD_XML_ERROR": "Style XML konnte nicht aktualisiert werden",
     "DIALOG_STYLE_UPLOAD_SUCCESS": "STIL HOCHGELADEN",
     "DIALOG_STYLE_FILE_ERROR": "Fehler beim Aktualisieren der Stildatei",
-	
+
 	"DIALOG_PAYLOAD_COPY": "Payload kopieren",
 	"DIALOG_PAYLOAD_DASHBOARD": "Dashboard",
     "DIALOG_PAYLOAD_NO_INFO": "Für den ausgewählten Prozess sind keine Nutzlastinformationen verfügbar",
@@ -679,7 +679,7 @@
 	"WAP_SELECT_AREA_OVER_AREA": "<br> - Der Bereich ist zu groß",
 	"WAP_SELECT_AREA_OVER_SIDE": "<br> - Die größere Seite ist zu groß",
 	"WAP_SELECT_AREA_OVER_RATIO": "<br> - Eine Seite ist im Vergleich zur anderen zu groß",
-	
+
 	"WAP_BACK": "Zurück in die Zukunft",
 	"WAP_REVIEWS": " Rezensionen",
 	"WAP_PUBLISHED": "Herausgegeben von ",
@@ -747,7 +747,7 @@
 	"WAP_HISTORY_STATUS": "Status",
 	"WAP_HISTORY_WS": "Arbeitsbereich",
 	"WAP_SELECT_PROCESSOR": "Select A Processor",
-	
+
 	"METADATA_TITLE": "Metadaten-Attribute",
     "METADATA_ATTRIBUTE_LIST": "Liste der Attribute",
     "METADATA_NAME": "Name",
@@ -798,7 +798,7 @@
 	"DIRECTIVE_DD_BACK": "Zurück",
 	"DIRECTIVE_DD_SAVE_SELECTION": "Auswahl speichern",
 
-	"MAP_FEATURE_ERROR": "Kann Feature-Info nicht lesen", 
+	"MAP_FEATURE_ERROR": "Kann Feature-Info nicht lesen",
 
 	"MSG_EDIT_PRODUCT_ADDED": "PRODUCT ADDED TO THE WS<br>READY",
     "MSG_DOWNLOAD": "PRODUCT ADDED TO THE WORKSPACE<br>READY",
@@ -861,7 +861,7 @@
     "MSG_MKT_STATS_ERROR": "FEHLER BEIM ABRUFEN VON ANWENDUNGSSTATISTIKEN",
     "MSG_MKT_REVIEWS_ERROR": "FEHLER BEIM ABRUFEN VON ANWENDUNGSBEWERTUNGEN",
     "MSG_MKT_COMMENTS_ERROR": "FEHLER BEIM ABRUFEN VON BEWERTUNGSKOMMENTAREN",
-	
+
 	"MSG_MKT_REVIEW_SAVED": "Überprüfung gespeichert",
     "MSG_MKT_REVIEW_SAVE_ERROR": "Fehler beim Speichern Ihrer Bewertung",
     "MSG_MKT_REVIEW_UPDATED": "Überprüfung aktualisiert",
@@ -876,7 +876,7 @@
     "MSG_MKT_COMMENT_UPDATED_ERROR": "Fehler beim Aktualisieren Ihres Kommentars",
     "MSG_MKT_COMMENT_DELETED": "Kommentar entfernt",
     "MSG_MKT_COMMENT_REMOVE_ERROR": "Fehler beim Entfernen Ihres Kommentars",
-   
+
     "MSG_MKT_REVIEW_DELETE_CONFIRM": "Sind Sie sicher, dass Sie Ihre Bewertung löschen wollen?",
 	"MSG_MKT_COMMENT_DELETE_CONFIRM": "Sind Sie sicher, dass Sie Ihren Kommentar löschen wollen?",
 
@@ -900,16 +900,16 @@
 
   	"MSG_DELETE_WS_1": "DELETING WORKSPACE ",
     "MSG_DELETE_WS_2": " <br>ARE YOU SURE?",
- 
+
     "MSG_ADD_LIB_PM_1": "ADDING LIBRARY ",
     "MSG_ADD_LIB_PM_2": "<br>ARE YOU SURE?",
- 
+
     "MSG_REMOVE_LIB_PM_1": "REMOVING LIBRARY ",
     "MSG_REMOVE_LIB_PM_2": "<br>ARE YOU SURE?",
- 
+
     "MSG_UPGRADE_LIB_PM_1": "UPGRADING LIBRARY ",
     "MSG_UPGRADE_LIB_PM_2": "<br>ARE YOU SURE?",
-	
+
 	"MSG_ERROR_SHARING_WITH_ONESELF": "ES IST NICHT MÖGLICH, MIT SICH SELBST ZU TEILEN",
     "MSG_ERROR_SHARING_WITH_OWNER": "ES IST NICHT MÖGLICH, MIT DEM BESITZER ZU TEILEN",
     "MSG_ERROR_SHARING_WITH_NON_EXISTENT_USER": "EMPFÄNGER-BENUTZER EXISTIERT NICHT",
@@ -931,7 +931,7 @@
 	"MSG_ERROR_NO_ACCESS_RIGHTS_APPLICATION_RESOURCE_SUBSCRIPTION": "SIE HABEN KEINE BERECHTIGUNG, DIESE AKTION DURCHZUFÜHREN",
     "MSG_ERROR_NO_ACCESS_RIGHTS_OBJECT_SUBSCRIPTION": "SIE HABEN NICHT DIE ERLAUBNIS, DIESE AKTION DURCHZUFÜHREN",
     "MSG_ERROR_INVALID_SUBSCRIPTION": "UNGÜLTIGES ABONNEMENT",
- 
+
     "MSG_SUCCESS_RESOURCE_PERMISSION_ADDED": "RESSOURCENERLAUBNIS ERFOLGREICH HINZUGEFÜGT",
     "MSG_SUCCESS_RESOURCE_PERMISSION_REMOVED": "RESSOURCENERLAUBNIS ERFOLGREICH ENTFERNT",
 
@@ -946,7 +946,7 @@
     "MENU_BANDS": "Bands",
     "MENU_SHARE_PRODUCT": "Produktoptionen teilen",
     "MENU_EDIT_STYLES": "Stile bearbeiten",
-    "MENU_EDIT_PRODUCT_PROPERTIES": "Produkteigenschaften", 
+    "MENU_EDIT_PRODUCT_PROPERTIES": "Produkteigenschaften",
 
     "SHARE_SEND_PRODUCT": "Produkt an Arbeitsbereich senden",
     "SHARE_SEND_PRODUCT_WORKSPACES": "Produkt an Arbeitsbereiche senden",
@@ -1014,7 +1014,7 @@
     "PACKAGE_MANAGER_ROLLBACK": "Rollback",
     "PACKAGE_MANAGER_SEARCH": "Paket suchen",
     "PACKAGE_MANAGER_NAME": "Paketname",
-    "PACKAGE_MANAGER_CURRENT_VERSION": "Aktuelle Version", 
+    "PACKAGE_MANAGER_CURRENT_VERSION": "Aktuelle Version",
     "PACKAGE_MANAGER_LATEST_VERSION": "Neueste Version",
     "PACKAGE_MANAGER_ADD": "Neues Paket hinzufügen",
 
@@ -1025,7 +1025,7 @@
     "USER_ORGANISATIONS_HIDE_USERS": "Benutzer ausblenden",
     "USER_ORGANIZATIONS_ERROR_FETCHING": "Konnte Ihre Organisationen nicht abrufen",
     "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Konnte keine Organisationsinformationen abrufen",
-    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Bestätigen Sie die Entfernung der Organisation", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Bestätigen Sie die Entfernung der Organisation",
     "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Sind Sie sicher, dass Sie diese Organisation entfernen wollen?",
     "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Bestätigen Sie die Entfernung der Berechtigungen",
     "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Sind Sie sicher, dass Sie Ihre Berechtigungen bei dieser Organisation entfernen möchten?",
@@ -1034,7 +1034,7 @@
     "USER_ORGANIZATION_INVALID_INPUT": "Die eingegebene Organisation ist nicht gültig",
     "USER_ORGANIZATION_SAVE_ERROR": "Ihre Organisation konnte nicht gespeichert werden",
     "USER_ORGANIZATION_DELETE_ERROR": "Ihre Organisation konnte nicht gelöscht werden",
-	
+
 	"DIALOG_ADD_ORGANIZATION": "Organisation hinzufügen",
     "DIALOG_EDIT_ORGANIZATION": "Organisation bearbeiten",
     "DIALOG_VIEW_ORGANIZATION": "Organisation anzeigen",
@@ -1064,20 +1064,20 @@
     "USER_SUBSCRIPTIONS_HIDE_PROJECTS": "Projekte ausblenden",
     "USER_SUBSCRIPTIONS_SHOW_ORGANIZATION": "Organisationen anzeigen",
     "USER_SUBSCRIPTIONS_HIDE_ORGANIZATION": "Organisationen ausblenden",
-    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Entfernen von Abonnements bestätigen", 
-    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Sind Sie sicher, dass Sie dieses Abonnement entfernen möchten?", 
+    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Entfernen von Abonnements bestätigen",
+    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Sind Sie sicher, dass Sie dieses Abonnement entfernen möchten?",
     "USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG": "Fehler beim Löschen des Abonnements",
     "USER_SUBSCRIPTION_REMOVE_MSG": "Abonnement wurde entfernt",
     "USER_SUBSCRIPTION_UPDATED": "Abonnement aktualisiert",
     "USER_SUBSCRIPTION_URL": "Zahlungs-URL erhalten",
     "USER_SUBSCRIPTION_URL_ERROR": "Fehler beim Abrufen der Zahlungs-URL",
-    "USER_SUBSCRIPTION_STRIPE_TITLE": "Neuanmeldung bei STRIPE", 
+    "USER_SUBSCRIPTION_STRIPE_TITLE": "Neuanmeldung bei STRIPE",
     "USER_SUBSCRIPTION_STRIPE_MSG": "Sie werden zu unserem Zahlungspartner, Stripe, weitergeleitet. Klicken Sie auf 'Ja', um fortzufahren, oder auf 'ABBRUCH', um den Zahlungsvorgang zu beenden.",
     "USER_SUBSCRIPTION_STRIPE_FAIL": "Es ist ein Fehler bei der Erfassung Ihrer Zahlung aufgetreten",
     "USER_SUBSCRIPTION_ID_ERROR": "Konnte kein Abonnement nach ID finden",
     "USER_SUBSCRIPTION_SAVE_ERROR": "Abonnement konnte nicht gespeichert werden",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Konnte Benutzerorganisationen nicht abrufen",
-	
+
     "SUBSCRIPTIONS_HEADER": "Choose your <strong>space-y</strong> plan",
     "SUBSCRIPTIONS_UP_TO": "Up to",
     "SUBSCRIPTIONS_STARTER": "Starter",
@@ -1139,13 +1139,13 @@
 
 	"USER_PROJECTS_SHOW_ORGANIZATION": "Organisationen anzeigen",
     "USER_PROJECTS_HIDE_ORGANIZATION": "Organisationen ausblenden",
-  
+
     "DIALOG_ADD_PROJECT": "Projekt hinzufügen",
     "DIALOG_EDIT_PROJECT": "Projekt bearbeiten",
     "DIALOG_VIEW_PROJECT": "Projekt anzeigen",
- 
+
     "DIALOG_VIEW_SUBSCRIPTION_PROJECTS": "Projekte des Abonnements",
-   
+
     "DIALOG_SHARE_PROJECT": "Projekt freigeben",
     "DIALOG_EDIT_PROJECT_NAME": "Name",
     "DIALOG_EDIT_PROJECT_DESCRIPTION": "Beschreibung",
@@ -1239,5 +1239,8 @@
     "ADMIN_SUBSCRIPTIONS_END": "End Date",
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
-    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription"	
+    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
+    "PAYMENT_SUCCESS": "Vielen Dank für Ihre Zahlung! Ihre Transaktion war erfolgreich und alles ist bereit. Viel Spaß!"
+
+
 }

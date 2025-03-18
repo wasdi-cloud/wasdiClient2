@@ -1246,5 +1246,6 @@
     "ADMIN_SUBSCRIPTIONS_END": "End Date",
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
-    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription"
+    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
+    "PAYMENT_SUCCESS": "Thank you for your payment! Your transaction was successful, and everything is set. Enjoy!"
 }

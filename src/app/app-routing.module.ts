@@ -17,6 +17,7 @@ import { WorkspacesComponent } from './components/workspaces/workspaces.componen
 //import auth guard
 import { AuthGuard } from './auth/auth.guard';
 import { IsSignedInGuard } from './auth/is-signed-in.guard';
+import {PaymentSuccessComponent} from "./components/subscriptions-purchase/payment-success/payment-success.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'subscriptions', component: SubscriptionsPurchaseComponent, canActivate: [AuthGuard] },
   { path: 'workspaces', component: WorkspacesComponent, canActivate: [AuthGuard] },
+  { path: 'payment-success', component: PaymentSuccessComponent, canActivate: [AuthGuard] },
   { path: ':processorName/appDetails', component: AppDetailsComponent, canActivate: [AuthGuard] },
   { path: ':processorName/appui', component: AppUiComponent, canActivate: [AuthGuard] },
 

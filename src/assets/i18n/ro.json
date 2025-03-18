@@ -1,17 +1,17 @@
 {
 	"KEY_PHRASES": {
-		"APP_NAME": "Numele aplicației", 
+		"APP_NAME": "Numele aplicației",
         "APPLY": "Aplica",
-        "BACK": "Inapoi", 
+        "BACK": "Inapoi",
         "CANCEL": "Anulare",
         "CLOSE": "Închide",
         "CLIPBOARD": "Copiat în Clipboard!",
         "CLIPBOARD_BTN": "Copiați în clipboard",
-        "CONFIRM_REMOVAL": "Confirmați eliminarea", 
+        "CONFIRM_REMOVAL": "Confirmați eliminarea",
         "COPIED": "Copiat!",
         "DESCRIPTION": "Descriere",
         "ERROR": "Eroare",
-        "GURU_MEDITATION": "Meditația Guru", 
+        "GURU_MEDITATION": "Meditația Guru",
         "HELP": "Ajutor",
         "LOAD_MORE": "Încărcați mai multe",
         "NAME": "Nume",
@@ -27,7 +27,7 @@
 	},
 	"PAGINATOR_PER_PAGE": "Articole pe pagină",
     "PAGINATOR_ITEMS": "Articole",
-	
+
 	"BTN_SEARCH": "Căutare",
 	"BTN_IMPORT": "Importare",
 	"SORT_BY": "Ordonați după",
@@ -38,7 +38,7 @@
     "APP_UI_NEW_EXISTING_WS_CHECK_2":"Existing Workspace",
     "APP_UI_RUN_APP_LABEL":"Run App in",
     "APP_UI_AUTOMATIC_NAME_PLACEHOLDER":"[Automatic Name]",
-    "APP_UI_SELECT_WS": "Select workspace", 
+    "APP_UI_SELECT_WS": "Select workspace",
     "APP_UI_SEARCH_WS": "Search Workspaces",
     "APP_UI_OPEN_WS": "Run App",
     "APP_UI_AUTO_WS": "Auto Workspace",
@@ -50,7 +50,7 @@
 	"ACTIVE_SUBSCRIPTION_ERROR_2": "Nu aveți un abonament activ momentan.",
 
 	"DIALOG_PARAMS_CREATE": "Creați șablonul de parametri",
-    "DIALOG_PARAMS_TEMPLATE_NAME": "Numele șablonului", 
+    "DIALOG_PARAMS_TEMPLATE_NAME": "Numele șablonului",
     "DIALOG_PARAMS_SAVE": "Salvați parametrii",
 
 	"LOGIN_PLACEHOLDER_EMAIL": "Adresă de e-mail",
@@ -67,7 +67,7 @@
 
 	"RECOVERY_EMAIL_BUTTON": "Trimite cererea",
 	"RECOVERY_EMAIL_TITLE": "Vă rugăm să introduceți adresa de e-mail și să confirmați.\n Va fi trimis un mesaj cu instrucțiuni suplimentare pentru a vă recupera contul",
-	
+
 	"SIGN_IN_PLACEHOLDER_EMAIL": "Adresă de e-mail",
 	"SIGN_IN_PLACEHOLDER_PASSWORD": "Introduceți o parolă",
 	"SIGN_IN_PLACEHOLDER_REPEAT_PASSWORD": "Introduceți parola din nou",
@@ -86,7 +86,7 @@
 	"SIGN_IN_TERMS_AGREE_2": "Termenii serviciului",
 	"SIGN_IN_TERMS_AGREE_3": "Și",
 	"SIGN_IN_TERMS_AGREE_4": "Declarație de confidențialitate",
-	
+
 	"ROOT_VIEW_NAV_BAR_LINK_IMPORT": "Căutare",
 	"ROOT_VIEW_NAV_BAR_LINK_PROCESS": "Editare",
 	"ROOT_VIEW_NAV_BAR_LINK_APPSTORE": "Piata de desfacere",
@@ -121,7 +121,7 @@
     "ROOT_MENU_LOGOUT": "Deconectare",
     "ROOT_HEADER_WELCOME": "Bine ați revenit",
     "ROOT_HEADER_NO_NOTIFICATIONS": "Fără notificări de afișat!",
-	
+
 	"PROCESSING_BAR_WAITING": "În aşteptare",
 	"PROCESSING_BAR_LOG": "Jurnal",
 	"PROCESSING_BAR_STOPPED": "Oprit",
@@ -148,10 +148,10 @@
 	"WORKSPACES_SHARED_WITH": "Partajat cu ",
 	"WORKSPACES_SHOW_SATS": "Afișați sateliți",
 
-	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Creează un spațiu de lucru nou", 
+	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Creează un spațiu de lucru nou",
 	"DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Actualizați numele spațiului de lucru",
     "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Introduceți numele spațiului de lucru",
-    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Introduceți un nou nume de spațiu de lucru", 
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Introduceți un nou nume de spațiu de lucru",
     "DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON": "Creați spațiu de lucru",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON": "Actualizați spațiul de lucru",
     "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Anulați",
@@ -159,14 +159,14 @@
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS": "Numele spațiului de lucru a fost actualizat",
     "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "Pentru cele mai bune practici, dați un nume semnificativ spațiului dvs. de lucru, astfel încât să fie ușor de reținut. (Opțional)",
     "DIALOG_ADD_NEW_WORKSPACE_CREATING": "WASDI vă creează spațiul de lucru...",
-	
-	"DIALOG_APPS_PROCESSORS_ERROR": "A apărut o eroare la preluarea procesoarelor", 
-    "DIALOG_APPS_DELETE_OWNER": "Sunteți sigur că doriți să ștergeți următorul procesor?", 
+
+	"DIALOG_APPS_PROCESSORS_ERROR": "A apărut o eroare la preluarea procesoarelor",
+    "DIALOG_APPS_DELETE_OWNER": "Sunteți sigur că doriți să ștergeți următorul procesor?",
     "DIALOG_APPS_DELETE_SHARED": "Sunteți sigur că doriți să vă eliminați permisiunile de la următorul procesor?",
     "DIALOG_APPS_ERROR_DELETE": "A apărut o eroare la încercarea de a șterge procesorul",
     "DIALOG_APPS_CANNOT_EDIT": "Nu aveți permisiunea de a edita acest spațiu de lucru",
     "DIALOG_APPS_INVALID_JSON": "Intrare JSON nevalidă",
-        
+
     "EDITOR_TOOLTIP_2D": "Comutați la harta 2D",
     "EDITOR_TOOLTIP_3D": "Comută la Glob",
     "EDITOR_TOOLTIP_SHOW_FEATURE": "Comută informațiile despre funcții",
@@ -191,7 +191,7 @@
 	"EDITOR_PRODUCTS_FILTER_CLEAN": "Elimină filtrul",
 	"EDITOR_PRODUCTS_FILTER_SELECT": "Selectează",
 	"EDITOR_PRODUCTS_WS_INFO": "Informații despre spațiul de lucru",
-	"EDITOR_PRODUCT_REMOVE": "Confirmați eliminarea produsului", 
+	"EDITOR_PRODUCT_REMOVE": "Confirmați eliminarea produsului",
     "EDITOR_PRODUCTS_REMOVE": "Confirmați eliminarea produselor",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI vă pregătește caietul",
     "EDITOR_NAVIGATION": "Navigație",
@@ -382,10 +382,10 @@
 	"DIALOG_STYLE_MANAGER_TAB_LIST": "Lista de stiluri",
 	"DIALOG_STYLE_UPLOAD_STYLE": "Upload Style",
 	"DIALOG_STYLE_MANAGER_TAB_NEW": "Nou stil",
-	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style", 
-    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",   
-    "DIALOG_STYLE_SEARCH": "Search style",   
-    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for", 
+	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style",
+    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",
+    "DIALOG_STYLE_SEARCH": "Search style",
+    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for",
 
 	"DIALOG_CRONOTAB_FILTERS_BOX": "Filtre",
 	"DIALOG_CRONOTAB_CRONOTAB_BOX": "Crontab",
@@ -545,7 +545,7 @@
 	"DIALOG_LOGS_DATE": "Dată: ",
 	"DIALOG_LOGS_ROW": "Rând",
 	"DIALOG_LOGS_REFRESH": "Reactualizează",
-	"DIALOG_LOGS_STARTED": "Început", 
+	"DIALOG_LOGS_STARTED": "Început",
     "DIALOG_LOGS_PROGRESS": "Progres",
     "DIALOG_LOGS_DURATION": "Durata",
     "DIALOG_LOGS_STATUS_PLACEHOLDER": "Selectați starea",
@@ -560,11 +560,11 @@
 	"DIALOG_PRODUCT_INFO_VALUE": "Valoare",
 
 	"DIALOG_FEEDBACK_SEND": "Trimiteți feedback",
-    "DIALOG_FEEDBACK_SEND_AS": "Trimite ca", 
+    "DIALOG_FEEDBACK_SEND_AS": "Trimite ca",
     "DIALOG_FEEDBACK_TRY": "Doriți să încercați noastre",
     "DIALOG_FEEDBACK_LIVE_SUPPORT": "Alăturați-vă asistenței noastre live pe Discord",
     "DIALOG_FEEDBACK_DISCORD": "Obțineți asistență în timp real pe canalul nostru Discord, alăturați-vă comunității noastre în continuă creștere, accelerați-vă rezolvarea problemelor!",
-    "DIALOG_FEEDBACK_JOIN": "Înscrieți-vă astăzi", 
+    "DIALOG_FEEDBACK_JOIN": "Înscrieți-vă astăzi",
     "DIALOG_FEEDBACK_LIVE_HUSTON": "Houston, avem o problemă!",
     "DIALOG_FEEDBACK_LIVE_PREFER": "Preferiți",
     "DIALOG_FEEDBACK_LIVE_WRITE": "scrie-ne",
@@ -587,7 +587,7 @@
     "DIALOG_MANAGE_RESOURCE_PERMISSION_ADD": "Adăugați",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_REMOVE": "Eliminați",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_SEARCH": "Căutare",
- 
+
     "DIALOG_MANAGE_USERS_TITLE": "Gestionați utilizatorii",
     "DIALOG_MANAGE_WORKSPACES_TITLE": "Gestionați spațiile de lucru",
     "DIALOG_MANAGE_PROCESSORS_TITLE": "Gestionați procesoarele",
@@ -603,17 +603,17 @@
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_IN_MILLIS": "Timp total de funcționare în milii",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_FORMATTED": "Timp total de rulare formatat",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_RETRIEVE": "Preluare",
- 
+
     "DIALOG_MANAGE_METRICS_ENTRIES_TITLE": "Gestionați intrările de valori",
     "DIALOG_MANAGE_METRICS_ENTRIES_NODE_CODE": "Codul nodului",
     "DIALOG_MANAGE_METRICS_ENTRIES_LATEST_ENTRY": "Cel mai recentă intrare",
     "DIALOG_MANAGE_METRICS_ENTRIES_RETRIEVE": "Preluare",
- 
+
     "DIALOG_MANAGE_QUEUES_STATUS_TITLE": "Gestionați starea cozilor",
     "DIALOG_MANAGE_QUEUES_STATUS_NODE_CODE": "Codul nodului",
     "DIALOG_MANAGE_QUEUES_STATUS_STATUSES": "Stari",
     "DIALOG_MANAGE_QUEUES_STATUS_RETRIEVE": "Preluare",
- 
+
     "DIALOG_FETCH_NODES_TITLE": "Preluați nodurile sortate după scor",
     "DIALOG_FETCH_NODES_FETCH": "Preluare",
 
@@ -641,7 +641,7 @@
     "DIALOG_PARAMS_PUBLISHER": "Editor",
     "DIALOG_PARAMS_NAME": "Numele parametrului",
     "DIALOG_PARAMS_PARAMS": "Parametri",
-    "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Sunteți sigur că doriți să ștergeți următorul șablon de parametri?", 
+    "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Sunteți sigur că doriți să ștergeți următorul șablon de parametri?",
     "DIALOG_PARAMS_CONFIRM_DELETE_SHARE": "Sunteți sigur că doriți să vă eliminați permisiunile din următorul șablon de parametri?",
     "DIALOG_PARAMS_DELETE_ERROR": "Nu s-a putut șterge șablonul de parametri",
     "DIALOG_PARAMS_SAVE_ERROR": "Nu s-a putut salva șablonul de parametri",
@@ -760,7 +760,7 @@
     "DELETE_PROCESS_YES": "Da, omorâți-l",
     "DELETE_PROCESS_NO": "Uhm, nu, nu chiar",
     "DELETE_PROCESS_ERROR": "A apărut o eroare la oprirea procesului",
- 
+
     "PROCESSES_BAR_RUNNING_PROCESSES_ERROR": "Nu s-au putut obține procesele care rulează",
 
     "DOWNLOAD_IN_WS_TITLE": "Lista spațiilor de lucru",
@@ -877,7 +877,7 @@
     "MSG_MKT_COMMENT_UPDATED_ERROR": "Eroare la actualizarea comentariului",
     "MSG_MKT_COMMENT_DELETED": "Comentariul a fost eliminat",
     "MSG_MKT_COMMENT_REMOVE_ERROR": "Eroare la eliminarea comentariului dvs.",
-   
+
     "MSG_MKT_REVIEW_DELETE_CONFIRM": "Sunteți sigur că doriți să vă ștergeți recenzia?",
     "MSG_MKT_COMMENT_DELETE_CONFIRM": "Sunteți sigur că doriți să vă ștergeți comentariul?",
 
@@ -932,7 +932,7 @@
     "MSG_ERROR_NO_ACCESS_RIGHTS_APPLICATION_RESOURCE_SUBSCRIPTION": "NU AVEȚI PERMISIUNEA DE A EFECTUA ACEASTA ACȚIUNE",
     "MSG_ERROR_NO_ACCESS_RIGHTS_OBJECT_SUBSCRIPTION": "NU AVEȚI PERMISIUNEA DE A EFECTUA ACEASTA ACȚIUNE",
     "MSG_ERROR_INVALID_SUBSCRIPTION": "ABONAMENT INVALID",
- 
+
     "MSG_SUCCESS_RESOURCE_PERMISSION_ADDED": "PERMISIUNEA DE RESURSE ADĂUGATĂ CU SUCCES",
     "MSG_SUCCESS_RESOURCE_PERMISSION_REMOVED": "PERMISIUNEA DE RESURSE S-A Șters cu SUCCES",
 
@@ -947,7 +947,7 @@
 	"MENU_BANDS": "Bande",
 	"MENU_SHARE_PRODUCT": "Partajați opțiunile produsului",
     "MENU_EDIT_STYLES": "Editați stiluri",
-    "MENU_EDIT_PRODUCT_PROPERTIES": "Proprietățile produsului", 
+    "MENU_EDIT_PRODUCT_PROPERTIES": "Proprietățile produsului",
 
     "SHARE_SEND_PRODUCT": "Trimiteți produsul în spațiul de lucru",
     "SHARE_SEND_PRODUCT_WORKSPACES": "Trimiteți produsul la Workspaces",
@@ -1015,7 +1015,7 @@
     "PACKAGE_MANAGER_ROLLBACK": "Revenire",
     "PACKAGE_MANAGER_SEARCH": "Căutați pachet",
     "PACKAGE_MANAGER_NAME": "Numele pachetului",
-    "PACKAGE_MANAGER_CURRENT_VERSION": "Versiunea curentă", 
+    "PACKAGE_MANAGER_CURRENT_VERSION": "Versiunea curentă",
     "PACKAGE_MANAGER_LATEST_VERSION": "Ultima versiune",
     "PACKAGE_MANAGER_ADD": "Adăugați pachet nou",
 
@@ -1026,7 +1026,7 @@
     "USER_ORGANIZATIONS_HIDE_USERS": "Ascundeți utilizatorii",
     "USER_ORGANIZATIONS_ERROR_FETCHING": "Nu s-au putut prelua organizațiile dvs.",
     "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Nu s-au putut prelua informațiile despre organizație",
-    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirmați eliminarea organizației", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirmați eliminarea organizației",
     "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Sunteți sigur că doriți să eliminați această organizație?",
     "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Confirmați eliminarea permisiunilor",
     "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Sunteți sigur că doriți să vă eliminați permisiunile cu această organizație?",
@@ -1065,14 +1065,14 @@
     "USER_SUBSCRIPTIONS_HIDE_PROJECTS": "Ascunde proiectele",
     "USER_SUBSCRIPTIONS_SHOW_ORGANIZATION": "Afișați organizațiile",
     "USER_SUBSCRIPTIONS_HIDE_ORGANIZATION": "Ascundeți organizațiile",
-    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Confirmați eliminarea abonamentului", 
-    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Sunteți sigur că doriți să eliminați acest abonament?", 
+    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Confirmați eliminarea abonamentului",
+    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Sunteți sigur că doriți să eliminați acest abonament?",
     "USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG": "Eroare la ștergerea abonamentului",
     "USER_SUBSCRIPTION_REMOVE_MSG": "Abonament eliminat",
     "USER_SUBSCRIPTION_UPDATED": "Abonament actualizat",
     "USER_SUBSCRIPTION_URL": "Adresa URL de plată primită",
     "USER_SUBSCRIPTION_URL_ERROR": "Eroare la preluarea adresei URL de plată",
-    "USER_SUBSCRIPTION_STRIPE_TITLE": "Se redirecționează către STRIPE", 
+    "USER_SUBSCRIPTION_STRIPE_TITLE": "Se redirecționează către STRIPE",
     "USER_SUBSCRIPTION_STRIPE_MSG": "Veți fi redirecționat către partenerul nostru de plată, Stripe. Faceți clic pe 'Da' pentru a continua sau 'Anulați' pentru a încheia procesul de plată.",
     "USER_SUBSCRIPTION_STRIPE_FAIL": "A apărut o eroare la înregistrarea plății dvs.",
     "USER_SUBSCRIPTION_ID_ERROR": "Nu s-a putut găsi abonamentul după ID",
@@ -1100,7 +1100,7 @@
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Încheierea pe Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Rezumatul comenzii",
     "SUBSCRIPTION_BUY_TOTAL": "Total",
-	
+
 	"DIALOG_ADD_SUBSCRIPTION": "Adăugați abonament",
     "DIALOG_EDIT_SUBSCRIPTION": "Editați abonamentul",
     "DIALOG_VIEW_SUBSCRIPTION": "Vedeți abonamentul",
@@ -1141,13 +1141,13 @@
 
 	"USER_PROJECTS_SHOW_ORGANIZATION": "Afișați organizațiile",
     "USER_PROJECTS_HIDE_ORGANIZATION": "Ascundeți organizațiile",
-  
+
     "DIALOG_ADD_PROJECT": "Adăugați proiect",
     "DIALOG_EDIT_PROJECT": "Editați proiectul",
     "DIALOG_VIEW_PROJECT": "Vedeți proiectul",
- 
+
     "DIALOG_VIEW_SUBSCRIPTION_PROJECTS": "Proiecte de abonament",
-   
+
     "DIALOG_SHARE_PROJECT": "Partajați proiectul",
     "DIALOG_EDIT_PROJECT_NAME": "Nume",
     "DIALOG_EDIT_PROJECT_DESCRIPTION": "Descriere",
@@ -1162,7 +1162,7 @@
     "DIALOG_EDIT_PROJECT_SEARCH": "Căutare",
     "DIALOG_EDIT_PROJECT_CHANGE_ACTIVE": "Modificare activă",
     "DIALOG_EDIT_PROJECT_SELECT_ACTIVE_PROJECT": "Selectați proiectul activ",
-   
+
     "MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Este necesar un abonament valid și un proiect activ. Consultați Tabloul de bord pentru utilizatori.",
 
     "DASHBOARD_CONFIRM_NODE_TITLE": "Confirmați actualizarea nodului",
@@ -1241,5 +1241,6 @@
     "ADMIN_SUBSCRIPTIONS_END": "End Date",
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
-    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription"	
+    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
+    "PAYMENT_SUCCESS": "Mulțumim pentru plata efectuată! Tranzacția a fost realizată cu succes, iar totul este pregătit. Bucură-te!"
 }

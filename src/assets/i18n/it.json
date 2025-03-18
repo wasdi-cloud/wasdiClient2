@@ -1,17 +1,17 @@
 {
 	"KEY_PHRASES": {
-		"APP_NAME": "Nome dell'app", 
+		"APP_NAME": "Nome dell'app",
         "APPLY": "Applica",
-        "BACK": "Indietro", 
+        "BACK": "Indietro",
         "CANCEL": "Annulla",
         "CLOSE": "Chiudi",
         "CLIPBOARD": "Copiato negli appunti!",
         "CLIPBOARD_BTN": "Copia negli appunti",
-        "CONFIRM_REMOVAL": "Conferma rimozione", 
+        "CONFIRM_REMOVAL": "Conferma rimozione",
         "COPIED": "Copiato!",
         "DESCRIPTION": "Descrizione",
         "ERROR": "Errore",
-        "GURU_MEDITATION": "Meditazione del Guru", 
+        "GURU_MEDITATION": "Meditazione del Guru",
         "HELP": "Aiuto",
         "LOAD_MORE": "Carica altro",
         "NAME": "Nome",
@@ -38,7 +38,7 @@
     "APP_UI_NEW_EXISTING_WS_CHECK_2":"Area di lavoro esistente",
     "APP_UI_RUN_APP_LABEL":"Esegui l'app",
     "APP_UI_AUTOMATIC_NAME_PLACEHOLDER":"[Nome automatico]",
-    "APP_UI_SELECT_WS": "Seleziona area di lavoro", 
+    "APP_UI_SELECT_WS": "Seleziona area di lavoro",
     "APP_UI_SEARCH_WS": "Cerca aree di lavoro",
     "APP_UI_OPEN_WS": "Esegui l'app",
     "APP_UI_AUTO_WS": "Area di lavoro automatica",
@@ -50,7 +50,7 @@
     "ACTIVE_SUBSCRIPTION_ERROR_2": "Non hai un abbonamento attivo al momento.",
 
 	"DIALOG_PARAMS_CREATE": "Crea modello di parametri",
-    "DIALOG_PARAMS_TEMPLATE_NAME": "Nome modello", 
+    "DIALOG_PARAMS_TEMPLATE_NAME": "Nome modello",
     "DIALOG_PARAMS_SAVE": "Salva parametri",
 
 	"LOGIN_PLACEHOLDER_EMAIL": "Indirizzo E-mail",
@@ -128,7 +128,7 @@
 	"PROCESSING_BAR_ERROR": "Errore",
 	"PROCESSING_BAR_LOGS": "Logs",
 	"PROCESSING_BAR_PAYLOAD": "Payload",
-	
+
 	"WORKSPACES_PLACEHOLDER_SEARCH": "Ricerca WorkSpace...",
 	"WORKSPACES_BUTTON_NEW_WORKSPACE": "Nuovo Workspace",
 	"WORKSPACES_THEAD_WORKSPACES": "Workspace",
@@ -147,11 +147,11 @@
 	"WORKSPACES_PROC_COUNT": "Processi eseguiti ",
 	"WORKSPACES_SHARED_WITH": "Condiviso con ",
 	"WORKSPACES_SHOW_SATS": "Mostra satelliti",
-	
-	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Crea nuovo spazio di lavoro", 
+
+	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Crea nuovo spazio di lavoro",
     "DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Aggiorna nome spazio di lavoro",
     "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Inserisci il nome dell'area di lavoro",
-    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Inserisci il nuovo nome dell'area di lavoro", 
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Inserisci il nuovo nome dell'area di lavoro",
     "DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON": "Crea spazio di lavoro",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON": "Aggiorna spazio di lavoro",
     "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Annulla",
@@ -160,13 +160,13 @@
     "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "Per le migliori pratiche, dai un nome significativo al tuo spazio di lavoro in modo che sia facile da ricordare. (Facoltativo)",
     "DIALOG_ADD_NEW_WORKSPACE_CREATING": "WASDI sta creando il tuo spazio di lavoro...",
 
-	"DIALOG_APPS_PROCESSORS_ERROR": "Si è verificato un errore durante il recupero dei processori", 
-    "DIALOG_APPS_DELETE_OWNER": "Sei sicuro di voler eliminare il seguente processore?", 
+	"DIALOG_APPS_PROCESSORS_ERROR": "Si è verificato un errore durante il recupero dei processori",
+    "DIALOG_APPS_DELETE_OWNER": "Sei sicuro di voler eliminare il seguente processore?",
     "DIALOG_APPS_DELETE_SHARED": "Sei sicuro di voler rimuovere i tuoi permessi dal seguente processore?",
     "DIALOG_APPS_ERROR_DELETE": "Si è verificato un errore durante il tentativo di eliminare il processore",
     "DIALOG_APPS_CANNOT_EDIT": "Non hai il permesso per modificare questo spazio di lavoro",
     "DIALOG_APPS_INVALID_JSON": "Input JSON non valido",
-	
+
 	"EDITOR_TOOLTIP_2D": "Passa alla mappa 2D",
 	"EDITOR_TOOLTIP_3D": "Passa a Globo",
 	"EDITOR_TOOLTIP_SHOW_FEATURE": "Attiva/disattiva informazioni sulle funzionalità",
@@ -191,7 +191,7 @@
 	"EDITOR_PRODUCTS_FILTER_CLEAN": "Pulisci Filtro",
 	"EDITOR_PRODUCTS_FILTER_SELECT": "Seleziona",
 	"EDITOR_PRODUCTS_WS_INFO": "Informazioni Workspace",
-	"EDITOR_PRODUCT_REMOVE": "Conferma la rimozione del prodotto", 
+	"EDITOR_PRODUCT_REMOVE": "Conferma la rimozione del prodotto",
     "EDITOR_PRODUCTS_REMOVE": "Conferma la rimozione dei prodotti",
     "EDITOR_NOTEBOOK_PREPARE": "WASDI sta preparando il tuo taccuino",
     "EDITOR_NAVIGATION": "Navigazione",
@@ -201,7 +201,7 @@
     "EDITOR_NODE_UPDATE": "Nodo aggiornato",
     "EDITOR_NODE_UPDATE_ERROR": "Errore durante l'aggiornamento del nodo",
     "EDITOR_WORKSPACE_REFRESH_ERROR": "Errore nell'aggiornamento delle informazioni sullo spazio di lavoro",
-	
+
 	"IMPORT_SEARCH_RESULTS": "Risultati della ricerca",
 	"IMPORT_BACK_TO_SEARCH": "Torna alla ricerca",
 	"IMPORT_PAGE_LABEL": "Pagina",
@@ -382,10 +382,10 @@
 	"DIALOG_STYLE_MANAGER_TAB_LIST": "Lista degli stili",
 	"DIALOG_STYLE_UPLOAD_STYLE": "Upload Style",
 	"DIALOG_STYLE_MANAGER_TAB_NEW": "Nuovo stile",
-	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style", 
-    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",   
-    "DIALOG_STYLE_SEARCH": "Search style",   
-    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for", 
+	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style",
+    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",
+    "DIALOG_STYLE_SEARCH": "Search style",
+    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for",
 
 	"DIALOG_CRONOTAB_FILTERS_BOX": "Filtri",
 	"DIALOG_CRONOTAB_CRONOTAB_BOX": "Crontab",
@@ -438,7 +438,7 @@
 	"DIALOG_MANUAL_INSERT_BBOX_SOUTH": "Sud",
 	"DIALOG_MANUAL_INSERT_BBOX_EAST": "Est",
 	"DIALOG_MANUAL_INSERT_BBOX_WEST": "Ovest",
-	
+
 	"DIALOG_PROCESSOR_FETCH_ERROR": "Impossibile ottenere informazioni sul processore",
     "DIALOG_PROCESSOR_APP_DETAILS_ERROR": "Impossibile ottenere i dettagli dell'applicazione",
     "DIALOG_PROCESSOR_APP_UI_ERROR": "Errore durante il recupero dell'interfaccia utente del processore",
@@ -545,7 +545,7 @@
 	"DIALOG_LOGS_DATE": "Data: ",
 	"DIALOG_LOGS_ROW": "Riga",
 	"DIALOG_LOGS_REFRESH": "Aggiorna",
-	"DIALOG_LOGS_STARTED": "Avviato", 
+	"DIALOG_LOGS_STARTED": "Avviato",
     "DIALOG_LOGS_PROGRESS": "Avanzamento",
     "DIALOG_LOGS_DURATION": "Durata",
     "DIALOG_LOGS_STATUS_PLACEHOLDER": "Seleziona stato",
@@ -564,13 +564,13 @@
 	"DIALOG_FEEDBACK_TRY": "Vuoi provare il nostro ",
     "DIALOG_FEEDBACK_LIVE_SUPPORT": "Unisciti al nostro supporto live su Discord",
     "DIALOG_FEEDBACK_DISCORD": "Ottieni supporto in tempo reale sul nostro canale Discord, unisciti alla nostra comunità in continua crescita, accelera la risoluzione dei tuoi problemi!",
-    "DIALOG_FEEDBACK_JOIN": "Iscriviti oggi", 
+    "DIALOG_FEEDBACK_JOIN": "Iscriviti oggi",
     "DIALOG_FEEDBACK_LIVE_HUSTON": "Houston, abbiamo un problema!",
     "DIALOG_FEEDBACK_LIVE_PREFER": "Preferisci ",
     "DIALOG_FEEDBACK_LIVE_WRITE": "scrivici",
     "DIALOG_FEEDBACK_LIVE_TITLE": "Titolo",
     "DIALOG_FEEDBACK_LIVE_MESSAGE": "Messaggio",
-	
+
 	"DIALOG_SHARE_WS_WORKSPACE": "Workspace",
 	"DIALOG_SHARE_WS_SHARE_WS": "Condividi Workspace",
 	"DIALOG_SHARE_WS_MAIL": "Inserire WASDI User email",
@@ -587,7 +587,7 @@
     "DIALOG_MANAGE_RESOURCE_PERMISSION_ADD": "Aggiungi",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_REMOVE": "Rimuovi",
     "DIALOG_MANAGE_RESOURCE_PERMISSION_SEARCH": "Cerca",
-	
+
 	"DIALOG_MANAGE_USERS_TITLE": "Gestisci utenti",
 	"DIALOG_MANAGE_WORKSPACES_TITLE": "Gestisci spazi di lavoro",
 	"DIALOG_MANAGE_PROCESSORS_TITLE": "Gestisci processori",
@@ -608,12 +608,12 @@
     "DIALOG_MANAGE_METRICS_ENTRIES_NODE_CODE": "Codice nodo",
     "DIALOG_MANAGE_METRICS_ENTRIES_LATEST_ENTRY": "Ultima voce",
     "DIALOG_MANAGE_METRICS_ENTRIES_RETRIEVE": "Recupera",
- 
+
     "DIALOG_MANAGE_QUEUES_STATUS_TITLE": "Gestisci stato code",
     "DIALOG_MANAGE_QUEUES_STATUS_NODE_CODE": "Codice nodo",
     "DIALOG_MANAGE_QUEUES_STATUS_STATUSES": "Stati",
     "DIALOG_MANAGE_QUEUES_STATUS_RETRIEVE": "Recupera",
- 
+
     "DIALOG_FETCH_NODES_TITLE": "Recupera nodi ordinati per punteggio",
     "DIALOG_FETCH_NODES_FETCH": "Recupera",
 
@@ -641,7 +641,7 @@
     "DIALOG_PARAMS_PUBLISHER": "Editore",
     "DIALOG_PARAMS_NAME": "Nome parametro",
     "DIALOG_PARAMS_PARAMS": "Parametri",
-    "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Sei sicuro di voler eliminare il seguente modello di parametri?", 
+    "DIALOG_PARAMS_CONFIRM_DELETE_OWNER": "Sei sicuro di voler eliminare il seguente modello di parametri?",
     "DIALOG_PARAMS_CONFIRM_DELETE_SHARE": "Sei sicuro di voler rimuovere le tue autorizzazioni dal seguente modello di parametri?",
     "DIALOG_PARAMS_DELETE_ERROR": "Impossibile eliminare il modello dei parametri",
     "DIALOG_PARAMS_SAVE_ERROR": "Impossibile salvare il modello dei parametri",
@@ -935,7 +935,7 @@
 
 	"MSG_SUCCESS_RESOURCE_PERMISSION_ADDED": "AUTORIZZAZIONE RISORSA AGGIUNTA CON SUCCESSO",
     "MSG_SUCCESS_RESOURCE_PERMISSION_REMOVED": "AUTORIZZAZIONE RISORSA RIMOSSA CON SUCCESSO",
-	
+
 	"MENU_ZOOM_2D": "Zoom Banda su Mappa 2D",
 	"MENU_ZOOM_3D": "Zoom Banda su Mappa 3D",
 	"MENU_DOWNLOAD": "Scarica",
@@ -947,7 +947,7 @@
 	"MENU_BANDS": "Bande",
 	"MENU_SHARE_PRODUCT": "Condividi opzioni prodotto",
     "MENU_EDIT_STYLES": "Modifica stili",
-    "MENU_EDIT_PRODUCT_PROPERTIES": "Proprietà del prodotto", 
+    "MENU_EDIT_PRODUCT_PROPERTIES": "Proprietà del prodotto",
 
     "SHARE_SEND_PRODUCT": "Invia prodotto allo spazio di lavoro",
     "SHARE_SEND_PRODUCT_WORKSPACES": "Invia prodotto a Workspaces",
@@ -1015,7 +1015,7 @@
     "PACKAGE_MANAGER_ROLLBACK": "Ripristina",
     "PACKAGE_MANAGER_SEARCH": "Cerca pacchetto",
     "PACKAGE_MANAGER_NAME": "Nome pacchetto",
-    "PACKAGE_MANAGER_CURRENT_VERSION": "Versione corrente", 
+    "PACKAGE_MANAGER_CURRENT_VERSION": "Versione corrente",
     "PACKAGE_MANAGER_LATEST_VERSION": "Ultima versione",
     "PACKAGE_MANAGER_ADD": "Aggiungi nuovo pacchetto",
 
@@ -1026,7 +1026,7 @@
     "USER_ORGANIZATIONS_HIDE_USERS": "Nascondi utenti",
     "USER_ORGANIZATIONS_ERROR_FETCHING": "Impossibile recuperare le tue organizzazioni",
     "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Impossibile recuperare le informazioni sull'organizzazione",
-    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Conferma rimozione organizzazione", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Conferma rimozione organizzazione",
     "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Sei sicuro di voler rimuovere questa organizzazione?",
     "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Conferma rimozione permessi",
     "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Sei sicuro di voler rimuovere le tue autorizzazioni con questa organizzazione?",
@@ -1065,14 +1065,14 @@
     "USER_SUBSCRIPTIONS_HIDE_PROJECTS": "Nascondi progetti",
     "USER_SUBSCRIPTIONS_SHOW_ORGANIZATION": "Mostra organizzazioni",
     "USER_SUBSCRIPTIONS_HIDE_ORGANIZATION": "Nascondi organizzazioni",
-    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Conferma rimozione abbonamento", 
-    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Sei sicuro di voler rimuovere questo abbonamento?", 
+    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Conferma rimozione abbonamento",
+    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Sei sicuro di voler rimuovere questo abbonamento?",
     "USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG": "Errore nell'eliminazione dell'abbonamento",
     "USER_SUBSCRIPTION_REMOVE_MSG": "Abbonamento rimosso",
     "USER_SUBSCRIPTION_UPDATED": "Abbonamento aggiornato",
     "USER_SUBSCRIPTION_URL": "URL di pagamento ricevuto",
     "USER_SUBSCRIPTION_URL_ERROR": "Errore nel recupero dell'URL di pagamento",
-    "USER_SUBSCRIPTION_STRIPE_TITLE": "Reindirizzamento a STRIPE", 
+    "USER_SUBSCRIPTION_STRIPE_TITLE": "Reindirizzamento a STRIPE",
     "USER_SUBSCRIPTION_STRIPE_MSG": "Verrai reindirizzato al nostro partner per i pagamenti, Stripe. Fai clic su 'Sì' per continuare o su 'ANNULLA' per terminare il processo di pagamento.",
     "USER_SUBSCRIPTION_STRIPE_FAIL": "Si è verificato un errore durante la registrazione del pagamento",
     "USER_SUBSCRIPTION_ID_ERROR": "Impossibile trovare l'abbonamento per ID",
@@ -1094,13 +1094,13 @@
     "SUBSCRIPTIONS_ONE_YEAR": "(Solo 1 anno)",
     "SUBSCRIPTIONS_DAY": "Giorno",
     "SUBSCRIPTIONS_WEEK": "Settimana",
-	
+
 	"SUBSCRIPTION_BUY_NAME": "Dai un nome al tuo abbonamento in modo da poter tenere traccia dei tuoi progetti (opzionale)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Seleziona l'organizzazione per la quale stai acquistando questo piano (facoltativo)",
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Paga su Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Riepilogo ordine",
     "SUBSCRIPTION_BUY_TOTAL": "Totale",
-  
+
     "DIALOG_ADD_SUBSCRIPTION": "Aggiungi abbonamento",
     "DIALOG_EDIT_SUBSCRIPTION": "Modifica abbonamento",
     "DIALOG_VIEW_SUBSCRIPTION": "Visualizza abbonamento",
@@ -1140,11 +1140,11 @@
 
     "USER_PROJECTS_SHOW_ORGANIZATION": "Mostra organizzazioni",
     "USER_PROJECTS_HIDE_ORGANIZATION": "Nascondi organizzazioni",
-  
+
     "DIALOG_ADD_PROJECT": "Aggiungi progetto",
     "DIALOG_EDIT_PROJECT": "Modifica progetto",
     "DIALOG_VIEW_PROJECT": "Visualizza progetto",
- 
+
     "DIALOG_VIEW_SUBSCRIPTION_PROJECTS": "Progetti di abbonamento",
 
 	"DIALOG_SHARE_PROJECT": "Condividi progetto",
@@ -1240,5 +1240,8 @@
     "ADMIN_SUBSCRIPTIONS_END": "End Date",
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
-    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription"	
+    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
+    "PAYMENT_SUCCESS": "Grazie per il tuo pagamento! La tua transazione è andata a buon fine e tutto è pronto. Buon divertimento!"
+
+
 }
