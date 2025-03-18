@@ -26,15 +26,24 @@
         <app-input-field class="align-self-start" [m_sLabel]="'On demand price'" [m_sInputType]="'number'"
             [m_bIsDisabled]="m_bIsFree" [m_sPlaceholder]='"DIALOG_PROCESSOR_STORE_ONDEMAND_PRICE" | translate'
             [m_sInputValue]="m_iOnDemandPrice.toString()"
-            (m_oInputChange)="patchOnDemandPrice($event)"></app-input-field>
+            (m_oInputChange)="patchOnDemandPrice($event)"></app-input-field>            
     </div>
     <div class="pricing-column pricing-column-2 d-flex flex-column justify-content-center align-items-center">
         <div class="subscriptions-content-wrapper d-flex flex-column justify-content-center  align-items-center">
-            <img src="/assets/images/pricing-ship.svg" alt="">
             <div class="subscriptions-text-wrapper">
                 <div class="font-bold">{{"DIALOG_PROCESSOR_STORE_SUBSCRIPTION" | translate}}</div>
                 <p>{{"DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE1" | translate}}</p>
-                <p>{{"DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE2" | translate}}</p>
+                <br>
+                <app-input-field class="align-self-start" [m_sLabel]="'Price Per Square Km'" [m_sInputType]="'number'"
+                [m_bIsDisabled]="m_bIsFree" 
+                [m_sInputValue]="m_iPricePerSquareKm.toString()"
+                (m_oInputChange)="patchPricePerKm($event)"></app-input-field>
+    
+            <app-input-field class="align-self-start" [m_sLabel]="'Area Parameter Name'" [m_sInputType]="'text'"
+                [m_bIsDisabled]="m_bIsFree" 
+                [m_sInputValue]="m_sAreaParameterName"
+                (m_oInputChange)="patchAreaParamName($event)"></app-input-field>
+    
             </div>
         </div>
     </div>

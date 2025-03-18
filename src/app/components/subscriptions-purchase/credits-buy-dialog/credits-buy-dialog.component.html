@@ -1,0 +1,28 @@
+<div class="dialog d-flex flex-column gap-3">
+    <div class="header d-flex flex-row justify-content-between">
+        {{m_oDialogInput.typeName}}
+        <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
+    </div>
+    <div class="dialog-content d-flex flex-column gap-3">
+        <app-input-field [m_sLabel]="'CREDITS_BUY_NAME' | translate" (m_oInputChange)="setNameInput($event)"
+            [m_sPlaceholder]="'KEY_PHRASES.NAME'| translate"></app-input-field>
+        <!--app-dropdown [m_sLabel]="'CREDITS_BUY_ORGANIZATION' | translate"
+            [m_aoDropdownItems]="m_aoOrganizationsMap"
+            (m_oSelectionChange)="setSelectedOrganization($event)"></app-dropdown-->
+        <div class="order-summary mb-3">
+            <div class="summary-header">{{"CREDITS_BUY_ORDER_SUMMARY" | translate}}</div>
+            <div class="price-total d-flex flex-row justify-content-between">
+                <div>{{"CREDITS_BUY_TOTAL"| translate}}:</div>
+                <div class="price">{{m_oDialogInput.price}}€</div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between">
+        <app-button (click)="onDismiss()" [m_sLabel]="'KEY_PHRASES.CANCEL'| translate" [m_bMuted]="true"></app-button>
+        <app-button [m_sLabel]="'CREDITS_BUY_CHECKOUT_STRIPE'| translate" [m_sIconLeft]="'lock'"
+            (click)="checkout()"></app-button>
+        <!-- <button class="btn btn-success"
+            *ngIf="m_bEditMode === true && m_oEditSubscription.subscriptionId !== null && m_bIsPaid === true"
+            (click)="saveSubscription()">Save</button> -->
+    </div>
+</div>

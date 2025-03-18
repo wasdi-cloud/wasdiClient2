@@ -5,6 +5,7 @@ import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { ConstantsService } from 'src/app/services/constants.service';
+import { CreditsService } from 'src/app/services/api/credits.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent, ErrorDialogModel } from 'src/app/shared/dialogs/error-dialog/error-dialog.component';
@@ -55,7 +56,9 @@ export class AppUiComponent implements OnInit {
     private m_oProcessorWorkspaceService: ProcessWorkspaceService,
     private m_oRouter: Router,
     private m_oTranslate: TranslateService,
-    private oWorkspaceService: WorkspaceService) { }
+    private m_oWorkspaceService: WorkspaceService,
+    private m_CreditsService: CreditsService) 
+    { }
 
   /**
    * Processor Name
@@ -160,12 +163,19 @@ export class AppUiComponent implements OnInit {
    */
   m_bNotification: boolean = false;
 
+  /**
+   * Credits Available for the user
+   */
+  m_iTotalUserCredits: number = 0;
+
   ngOnInit(): void {
     // Take our user id
     this.m_sUserId = this.m_oConstantsService.getUser().userId;
 
     // Get the list of avaiable workspaces
     this.fetchWorkspaces();
+
+    this.getUsersTotalCredits();
 
     // We really should have a processor name
     if (this.m_sProcessorName) {
@@ -322,7 +332,7 @@ export class AppUiComponent implements OnInit {
 
     // If we are opening an existing workspace:
     if (this.m_bRunInNewWorkspace === false && FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedWorkspace.workspaceId) === false) {
-      this.oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
+      this.m_oWorkspaceService.getWorkspaceEditorViewModel(this.m_oSelectedWorkspace.workspaceId).subscribe(oResponse => {
         if (oResponse) {
           this.executeProcessorInWorkspace(this, sApplicationName, oProcessorInput, oResponse);
         }
@@ -343,13 +353,13 @@ export class AppUiComponent implements OnInit {
       let sCreateError = this.m_oTranslate.instant("MSG_MKT_WS_CREATE_ERROR");
 
       //Create a new Workspace
-      this.oWorkspaceService.createWorkspace(sWorkspaceName).subscribe(oResponse => {
+      this.m_oWorkspaceService.createWorkspace(sWorkspaceName).subscribe(oResponse => {
         let sWorkspaceId = oResponse.stringValue;
 
         if (sWorkspaceId === null) {
           this.m_oNotificationDisplayService.openAlertDialog(sCreateError, '', 'danger')
         } else {
-          this.oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(response => {
+          this.m_oWorkspaceService.getWorkspaceEditorViewModel(sWorkspaceId).subscribe(response => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
               this.m_oNotificationDisplayService.openAlertDialog(sOpenError, '', 'danger');
             } else {
@@ -362,21 +372,96 @@ export class AppUiComponent implements OnInit {
   }
 
   /**
-   * Executes the processor in the given workspace
+   * Wrap the execution of the processor in the given workspace
    * @param oController 
    * @param sApplicationName 
    * @param oProcessorInput 
    * @param oWorkspace 
    */
   executeProcessorInWorkspace(oController, sApplicationName: string, oProcessorInput, oWorkspace) {
+
+    // With out subscription, we cannot proceed
     if (this.m_oConstantsService.checkProjectSubscriptionsValid() === true) {
-      oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
-      oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput), this.m_bNotification).subscribe(oResponse => {
-        if (oResponse) {
-          this.m_oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
-        }
-      })
+
+      // Sanitize the price per square km
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorInformation.squareKilometerPrice)) this.m_oProcessorInformation.squareKilometerPrice = 0;
+       
+      // Is a credit-price declared?
+      if (this.m_oProcessorInformation.squareKilometerPrice>0) {
+        // Ask to the server the price
+        oController.m_oProcessorService.getRequiredCredits(this.m_oProcessorInformation.processorId,  JSON.stringify(oProcessorInput)).subscribe(oResponse => {
+
+          // Do we have a price?
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+
+            if (oResponse <= 0.0) {
+              // No price; maybe is mine or shared: we can run it. The server will check again in any case
+              oController.realRunApplication(oController, sApplicationName, oProcessorInput, oWorkspace);          
+            }
+            else {
+
+              // Is the price bigger than the credits we have?
+              if (oResponse>oController.m_iTotalUserCredits) {
+                // Yes, please recharge!
+                let sMessage = "To run the application " + oResponse + " Credits are needed<br>You have "+ oController.m_iTotalUserCredits + " Credits now.<br>Please recharge your credits to proceed!";
+                oController.m_oNotificationDisplayService.openAlertDialog(sMessage);
+              }
+              else { 
+                // Ok the user may want to run the application
+                let sMessage = "To run the application " + oResponse + " Credits are needed<br>You have "+ oController.m_iTotalUserCredits + " Credits now. <br>Do you want to proceed?";
+                let sTitle = "Credit Consumption Confirmation"
+
+                // Ask the confirmation
+                oController.m_oNotificationDisplayService.openConfirmationDialog(sMessage, sTitle, "alert").subscribe((oDialogResult) => {
+                  if (oDialogResult === true) {
+                    // Yes, we run it!
+                    this.realRunApplication(oController, sApplicationName, oProcessorInput, oWorkspace);            
+                  }
+                });  
+              }
+            }
+          }
+        });
+      }
+      else {
+        // The application does not have pricing problems, run it!
+        this.realRunApplication(oController, sApplicationName, oProcessorInput, oWorkspace);
+      }
     }
+  }
+
+  /**
+   * 
+   * @param oController Reference to the original controller
+   * @param sApplicationName Name of the app to run
+   * @param oProcessorInput Parameters input
+   * @param oWorkspace Workspace where to run
+   */
+  realRunApplication(oController, sApplicationName: string, oProcessorInput, oWorkspace) {
+
+    // Change Active Workspace
+    oController.m_oConstantsService.setActiveWorkspace(oWorkspace);
+
+    // Call the API to run the app
+    oController.m_oProcessorService.runProcessor(sApplicationName, JSON.stringify(oProcessorInput), this.m_bNotification).subscribe(oResponse => {
+      if (oResponse) {
+        if (oResponse.status==="ERROR") {
+          // Not good!
+          if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
+          let sNotificationMsg = oResponse.message;
+          this.m_oNotificationDisplayService.openSnackBar(
+            sNotificationMsg,
+            '',
+            'danger-snackbar'
+          );
+          }
+        }
+        else {
+          // Started, lets move on the editor!
+          this.m_oRouter.navigateByUrl(`edit/${oWorkspace.workspaceId}`)
+        }          
+      }
+    })    
   }
 
   /**
@@ -385,7 +470,7 @@ export class AppUiComponent implements OnInit {
   fetchWorkspaces() {
     let oUser: User = this.m_oConstantsService.getUser();
     if (oUser !== {} as User) {
-      this.oWorkspaceService.getWorkspacesInfoListByUser().subscribe(oResponse => {
+      this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe(oResponse => {
         this.m_aoExistingWorkspaces = oResponse;
       })
     }
@@ -540,4 +625,15 @@ export class AppUiComponent implements OnInit {
       }
     })
   }
+
+    getUsersTotalCredits() {
+      this.m_CreditsService.getCreditsByUser().subscribe({
+        next: oResponse => {
+          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
+            this.m_iTotalUserCredits = oResponse;
+          }
+        },
+        error: oError => { }
+      })
+    }
 }

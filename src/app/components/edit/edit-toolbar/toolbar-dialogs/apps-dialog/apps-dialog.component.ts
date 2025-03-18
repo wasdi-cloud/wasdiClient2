@@ -454,18 +454,41 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
         this.m_bNotification
       )
       .subscribe((oResponse) => {
+
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          let sNotificationMsg = this.m_oTranslate.instant(
-            'MSG_MKT_PROC_SCHEDULED'
-          );
-          this.m_oNotificationDisplayService.openSnackBar(
-            sNotificationMsg,
-            '',
-            'success-snackbar'
-          );
-        }
+
+          if (oResponse.status==="ERROR") {
+            if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.message)) {
+            let sNotificationMsg = oResponse.message;
+            this.m_oNotificationDisplayService.openSnackBar(
+              sNotificationMsg,
+              '',
+              'danger-snackbar'
+            );
+            }
+          }
+          else {
+            let sNotificationMsg = this.m_oTranslate.instant(
+              'MSG_MKT_PROC_SCHEDULED'
+            );
+            this.m_oNotificationDisplayService.openSnackBar(
+              sNotificationMsg,
+              '',
+              'success-snackbar'
+            );
+          }
         this.m_oDialogRef.close();
-      });
+      }
+      else {
+        let sNotificationMsg = "There was an error trying to start this application";
+        this.m_oNotificationDisplayService.openSnackBar(
+          sNotificationMsg,
+          '',
+          'danger-snackbar'
+        );        
+      }
+    
+    });
     return true;
   }
 

@@ -130,4 +130,12 @@ export class SubscriptionService {
   getSubscriptionCount() {
     return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/count');
   };  
+
+    /**
+   * Get the credits of the actual user
+   * @returns 
+   */
+    getActiveSubscriptionForUser() {
+      return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/active');
+    };
 }

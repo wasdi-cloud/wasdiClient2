@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { SubscriptionService } from 'src/app/services/api/subscription.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-
 import { OrganizationsService } from 'src/app/services/api/organizations.service';
 import { TranslateService } from '@ngx-translate/core';
+import { CreditsService } from 'src/app/services/api/credits.service';
+
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { MatDialog } from '@angular/material/dialog';
 import { EditSubscriptionDialogComponent } from 'src/app/dialogs/edit-subscription-dialog/edit-subscription-dialog.component';
+import { CreditsBuyDialogComponent } from 'src/app/components/subscriptions-purchase/credits-buy-dialog/credits-buy-dialog.component'
+
 @Component({
   selector: 'app-subscriptions-purchase',
   templateUrl: './subscriptions-purchase.component.html',
@@ -23,6 +26,9 @@ export class SubscriptionsPurchaseComponent implements OnInit {
   m_sActiveProPrice: string = 'month';
   m_iStndPrice: number = 50;
   m_iProPrice: number = 2000;
+  m_iCreditsPrice: number = 50;
+  m_sActiveCreditsPrice: string = "Fifty";
+  m_aoCreditPackages: any = [];
 
 
   constructor(
@@ -30,11 +36,13 @@ export class SubscriptionsPurchaseComponent implements OnInit {
     private m_oDialog: MatDialog,
     private m_oOrganizationsService: OrganizationsService,
     private m_oSubscriptionsService: SubscriptionService,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oCreditsService: CreditsService
   ) { }
 
   ngOnInit(): void {
     this.getSubscriptionTypes();
+    this.getCreditsPackages();
   }
 
   showSubscriptionAddForm(oType: any, price: number) {
@@ -66,6 +74,14 @@ export class SubscriptionsPurchaseComponent implements OnInit {
         }
       },
       error: oError => { }
+    })
+  }
+
+  getCreditsPackages() {
+    this.m_oCreditsService.getCreditPackages().subscribe({
+      next: oResponse => {
+        this.m_aoCreditPackages = oResponse;
+      }
     })
   }
 
@@ -102,4 +118,55 @@ export class SubscriptionsPurchaseComponent implements OnInit {
       this.m_oProType = oType;
     }
   }
+
+
+    /**
+   * 
+   * @param sPackage represents which subscription tier selected (i.e., Standard or Professional)
+   */
+    setActiveCreditsPrice(sPackage: string): void {
+      if (sPackage === 'Fifty') {
+        this.m_iCreditsPrice=50;
+        this.m_sActiveCreditsPrice = sPackage;
+      }
+      else {
+        this.m_iCreditsPrice=100;
+        this.m_sActiveCreditsPrice = "OneHundred";
+      }
+    }
+
+    showBuyCreditPackageForm() {
+
+      let oType: any, price: number
+
+      for (let i=0; i<this.m_aoCreditPackages.length; i++) {
+        if (this.m_aoCreditPackages[i].typeId == this.m_sActiveCreditsPrice) {
+          oType = this.m_aoCreditPackages[i];
+          break;
+        }
+      }
+
+      let oNewCreditPackage = {
+        creditPackageId: null,
+        name: "",
+        description: "",
+        type: oType.typeId,
+        buyDate: null,
+        userId: null,
+        buySuccess: false,
+        creditsRemaining: 0,
+        lastUpdate: 0,
+        price: this.m_iCreditsPrice,
+        typeName: oType.name
+      };
+
+      this.m_oDialog.open(CreditsBuyDialogComponent, {
+        maxHeight: '80vh',
+        width: '50vw',
+        data: {
+          creditPackage: oNewCreditPackage,
+          editMode: true
+        }
+      })
+    }    
 }

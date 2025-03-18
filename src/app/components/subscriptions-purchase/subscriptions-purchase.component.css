@@ -12,9 +12,9 @@ div.img-wrapper {
 }
 
 img {
-    height: 212px;
-    filter: drop-shadow(0px 20px 75px #43526B);
-    transform: rotate(23deg);
+    height: 180px;
+    z-index: -1;
+    
 }
 
 div.price-container {

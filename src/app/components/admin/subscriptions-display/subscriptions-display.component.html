@@ -1,6 +1,6 @@
 <div class="d-flex flex-fill flex-column gap-5">
     <div class="header font-bold d-flex flex-row justify-content-between">
-        Billings
+        Subscriptions Billings
     </div>
     <div class="d-flex flex-column gap-2">
         <div class="table-wrapper flex-fill">
@@ -50,9 +50,39 @@
             </table>
         </div>
     </div>
-</div>
 
-<!-- (click)="openEditSubscriptionDialog(oSubscription, false)" -->
+    <div class="header font-bold d-flex flex-row justify-content-between">
+        Credits Billings - Total User credits: {{ m_iTotalUserCredits }}
+    </div>
+    <div class="d-flex flex-column gap-2">
+        <div class="table-wrapper flex-fill">
+            <table>
+                <thead class="table-heading-container">
+                    <tr>
+                        <td>Package Type</td>
+                        <td>Name</td>
+                        <td>Owner</td>
+                        <td>Description</td>
+                        <td>Buy date</td>
+                        <td>Credits</td>
+                        <td>Valid</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oCreditPackage of m_aoCreditPackages">
+                        <td>{{oCreditPackage.type}}</td>
+                        <td>{{oCreditPackage.name}}</td>
+                        <td>{{oCreditPackage.userId}}</td>
+                        <td>{{oCreditPackage.description ? oCreditPackage.description : 'N/A'}}</td>
+                        <td>{{getCreditPackageBuyDate(oCreditPackage.buyDate)}}</td>
+                        <td>{{oCreditPackage.creditsRemaining}}</td>
+                        <td>{{isCreditPackageValid(oCreditPackage.buyDate)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <div class="offcanvas offcanvas-end subscription-edit-container d-flex flex-column justify-content-between"
     data-bs-backdrop="true" tabindex="-1" id="orgEditor" aria-labelledby="orgEditorLabel">

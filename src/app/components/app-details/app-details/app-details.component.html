@@ -23,11 +23,8 @@
             <div>
                 <div class="title-price-container d-flex flex-row justify-content-between">
                     <h1>{{m_oApplicationInfo.friendlyName}}</h1>
-                    <div class="price-flag align-self-start"
-                        [ngClass]="m_oApplicationInfo.ondemandPrice === 0 ? 'free' : 'paid'">
-                        {{m_oApplicationInfo.ondemandPrice
-                        === 0 ?("WAP_FREE"| translate).toUpperCase():
-                        '€ ' + m_oApplicationInfo.ondemandPrice }}</div>
+                    <div class="price-flag align-self-start" [ngClass]="getStyle()">
+                        {{getPrice() }}</div>
                 </div>
                 <div class=" basic-info-container d-flex flex-column gap-2">
                     <div>
@@ -57,7 +54,7 @@
                     </div>
                     <div class="info-tag d-flex flex-row gap-1">
                         <span class="info-tag">{{"WAP_PUBLISHER" | translate}}:</span>
-                        <span class="info-tag-content">{{m_oApplicationInfo.publisher}}</span>
+                        <span class="info-tag-content">{{ m_oApplicationInfo.publisherNickName ? m_oApplicationInfo.publisherNickName : "N/A"}}</span>
                         <app-button *ngIf="m_oApplicationInfo.isMine" [m_sSize]="'small'" [m_sLabel]="'Edit'"
                             [m_bOutline]="true" (click)="openEditAppDialog(m_oApplicationInfo)"></app-button>
                     </div>
@@ -89,8 +86,8 @@
                 <h2>Application details</h2>
                 <div class="d-flex flex-row gap-3">
                     <div class="app-details-col1">
-                        <p>{{"WAP_PUBLISHER"|translate}}: <span class="wasdi-highlight">{{m_oApplicationInfo.publisher ?
-                                m_oApplicationInfo.publisher : 'N/A'}}</span></p>
+                        <p>{{"WAP_PUBLISHER"|translate}}: <span class="wasdi-highlight">{{m_oApplicationInfo.publisherNickName ?
+                                m_oApplicationInfo.publisherNickName : 'N/A'}}</span></p>
                         <p>{{"WAP_CONTACT"|translate}}: <span class="wasdi-highlight">{{m_oApplicationInfo.email?
                                 m_oApplicationInfo.email : 'N/A'}}</span>
                         </p>

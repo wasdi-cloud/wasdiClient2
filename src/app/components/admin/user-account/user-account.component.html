@@ -12,8 +12,17 @@
             <app-input-field class="flex-fill" [m_sLabel]="'Surname'" [m_sPlaceholder]="''"
                 [m_sInputValue]="m_oUser.surname" (m_oInputChange)="getUserInfoInput($event)"></app-input-field>
         </div>
+        <div class="d-flex flex-row justify-items-stretch gap-1">
+            <app-input-field class="flex-fill" [m_sLabel]="'NickName'" [m_sPlaceholder]="''"
+                [m_sInputValue]="m_oUser.publicNickName" (m_oInputChange)="getUserInfoInput($event)"></app-input-field>
+        </div>        
         <!-- <app-input-field [m_sLabel]="'Username'" [m_sPlaceholder]="''"></app-input-field> -->
     </div>
+    <div class="d-flex flex-column gap-2">
+        <div class="input-header font-bold">Subscription Status</div>
+        <strong>{{getSubscriptionStatus()}}</strong>&nbsp;Credits Balance: <strong>{{m_iCreditsBalance}}</strong>
+        
+    </div>    
     <div>
         <div class="input-header font-bold">Connection email address</div>
         <p><strong>Wasdi</strong> will use this e-mail to connect and send notifications. You can change your

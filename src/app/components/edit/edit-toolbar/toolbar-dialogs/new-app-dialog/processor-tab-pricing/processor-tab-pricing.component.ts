@@ -26,17 +26,23 @@ export class ProcessorTabPricingComponent implements OnInit {
    */
   m_iOriginalPrice: number = 0;
 
+  m_iPricePerSquareKm: number = 0;
+
+  m_sAreaParameterName: string = "";
+
   constructor() { }
 
   ngOnInit(): void {
     if (this.m_oProcessorStoreInfo) {
       if (this.m_oProcessorStoreInfo.value) {
-        if (this.m_oProcessorStoreInfo.value.iOnDemandPrice == 0) {
+        if (this.m_oProcessorStoreInfo.value.iOnDemandPrice <= 0 && this.m_oProcessorStoreInfo.value.iPricePerSquareKm<=0) {
           this.m_bIsFree = true;
         } else {
           this.m_bIsFree = false;
           this.m_iOnDemandPrice = this.m_oProcessorStoreInfo.value.iOnDemandPrice;
           this.m_iOriginalPrice = this.m_oProcessorStoreInfo.value.iOnDemandPrice;
+          this.m_iPricePerSquareKm = this.m_oProcessorStoreInfo.value.iPricePerSquareKm;
+          this.m_sAreaParameterName = this.m_oProcessorStoreInfo.value.sAreaParameterName;
         }
       }
     }
@@ -55,6 +61,26 @@ export class ProcessorTabPricingComponent implements OnInit {
 
     this.m_oProcessorStoreInfo.patchValue({
       iOnDemandPrice: oEvent.event.target.value
+    })
+  }
+
+  patchPricePerKm(oEvent) {
+    //this.m_bIsFree = oEvent.event.target.value === 0;
+
+    this.m_iPricePerSquareKm = oEvent.event.target.value;
+
+    this.m_oProcessorStoreInfo.patchValue({
+      iPricePerSquareKm: oEvent.event.target.value
+    })
+  }
+
+  patchAreaParamName(oEvent) {
+    //this.m_bIsFree = oEvent.event.target.value === 0;
+
+    this.m_sAreaParameterName = oEvent.event.target.value;
+
+    this.m_oProcessorStoreInfo.patchValue({
+      sAreaParameterName: oEvent.event.target.value
     })
   }
 

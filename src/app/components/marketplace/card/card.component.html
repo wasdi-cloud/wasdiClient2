@@ -1,7 +1,6 @@
 <div class="wasdi-card" (click)="openProcessorDetails(m_oProcessor.processorName)">
-    <div class="card-price" [class]="m_oProcessor.price === 0 ? 'price-free': 'price-paid'">
-        {{m_oProcessor.price === 0 ? ("MARKET_CARD_PRICE" |translate) : "€" +
-        m_oProcessor.price}}
+    <div class="card-price" [class]="getStyle()">
+        {{getPrice()}}
     </div>
     <div class="card-img" style="background-image: url({{m_oProcessor.imgLink}})">
         <div class="overlay">
@@ -19,7 +18,7 @@
                 star
             </span>
             <span class="material-symbols-outlined" [class]="m_oProcessor.score> 2 ? 'star-filled' : 'star-grey'">
-                star
+                star 
             </span>
             <span class="material-symbols-outlined" [class]="m_oProcessor.score> 3 ? 'star-filled' : 'star-grey'">
                 star
@@ -37,5 +36,5 @@
     <div class="app-description">{{m_oProcessor.processorDescription ? m_oProcessor.processorDescription : ''}}</div>
     <div class="card-divider"></div>
     <div class="app-publisher">{{ "MARKET_CARD_PUBLISHER" | translate}}: <span
-            class="publisher-name">{{m_oProcessor.publisher}}</span></div>
+            class="publisher-name">{{m_oProcessor.publisherNickName}}</span></div>
 </div>

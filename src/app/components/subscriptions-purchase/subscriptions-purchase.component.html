@@ -134,5 +134,46 @@
             <app-button class="align-self-center" [m_sLabel]="'DIALOG_BUY_SUBSCRIPTION' | translate" [m_sSize]="'large'"
                 (click)="showSubscriptionAddForm(m_oProType, m_iProPrice)"></app-button>
         </div>
+
+        <div class="price-container d-flex flex-column gap-2" [class.selected]="m_sSelectedPriceContainer ==='stnd'">
+            <div>
+                <div class="price-header">{{"CREDITS_BOX" | translate}}</div>
+                <div>{{"CREDITS_BOX_DESC" | translate}}</div>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    {{ "CREDITS_ROW_1" | translate}}
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    {{ "CREDITS_ROW_2" | translate}}
+                </div>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                    <div [innerHTML]="'CREDITS_ROW_3' | translate"></div>
+                </div>
+            </div>
+            <div class="price-slider d-flex flex-row justify-content-between align-items-center">
+                <div [class.active-price]="m_sActiveCreditsPrice === 'Fifty'" (click)="setActiveCreditsPrice('Fifty')">
+                    {{ "CREDITS_50" | translate}}
+                </div>
+                <div [class.active-price]="m_sActiveCreditsPrice === 'OneHundred'" (click)="setActiveCreditsPrice('OneHundred')">
+                    {{"CREDITS_100" | translate}}
+                </div>
+            </div>
+            <div class="price-output">
+                {{m_iCreditsPrice}}€
+            </div>
+            <app-button class="align-self-center" [m_sLabel]="'DIALOG_BUY_SUBSCRIPTION' | translate" [m_sSize]="'large'"
+                (click)="showBuyCreditPackageForm()"></app-button>
+        </div>        
+
     </div>
 </div>

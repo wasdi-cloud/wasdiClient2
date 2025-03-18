@@ -94,7 +94,28 @@ export class ProcessorService {
     else {
       sWorkspaceId = "-";
     }
-    return this.m_oHttp.post(this.APIURL + '/processors/run?name=' + sProcessorName + '&workspace=' + sWorkspaceId + '&notify=' + bNotify, sEncodedJSON);
+    return this.m_oHttp.post<any>(this.APIURL + '/processors/run?name=' + sProcessorName + '&workspace=' + sWorkspaceId + '&notify=' + bNotify, sEncodedJSON);
+  };
+
+   /**
+    * Get credits needed to run a processor
+    * @param sProcessorName
+    * @param sJSON
+    * @returns {*}
+    */
+   getRequiredCredits(sProcessorId: string, sJSON: string) {
+    let sEncodedJSON: string = encodeURI(sJSON);
+    //Get active workspace
+    let oActiveWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
+    let sWorkspaceId: string;
+    //Check that 
+    if (oActiveWorkspace.workspaceId !== null || oActiveWorkspace.workspaceId !== undefined) {
+      sWorkspaceId = oActiveWorkspace.workspaceId;
+    }
+    else {
+      sWorkspaceId = "-";
+    }
+    return this.m_oHttp.post<any>(this.APIURL + '/processors/getcredits?processorId=' + sProcessorId, sEncodedJSON);
   };
 
   /**

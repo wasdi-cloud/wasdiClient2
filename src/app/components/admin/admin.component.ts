@@ -12,7 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class AdminComponent implements OnInit {
   m_sActiveTab: string = 'account';
 
-  m_aoOrganizations
+  m_aoOrganizations;
 
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
