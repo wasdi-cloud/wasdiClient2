@@ -300,7 +300,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     MetadataAttributesDialogComponent,
     ResizableDirective,
     PrivateMissionsComponent,
-    PaymentSuccessComponent
+    PaymentSuccessComponent,
     PrivateMissionsComponent,
     CreditsBuyDialogComponent
 
