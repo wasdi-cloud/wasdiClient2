@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
-import { SubscriptionService } from 'src/app/services/api/subscription.service';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import {Component, OnInit} from '@angular/core';
+import {AdminDashboardService} from 'src/app/services/api/admin-dashboard.service';
+import {SubscriptionService} from 'src/app/services/api/subscription.service';
+import {NotificationDisplayService} from 'src/app/services/notification-display.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { TranslateService } from '@ngx-translate/core';
-import { Clipboard } from '@angular/cdk/clipboard';
+import {TranslateService} from '@ngx-translate/core';
+import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-manage-subscriptions',
@@ -128,6 +128,7 @@ export class ManageSubscriptionsComponent implements OnInit {
             this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscription information", '', 'danger');
           } else {
             this.m_oSelectedSubscription = oResponse;
+            this.m_sEndDate = null;
           }
         },
         error: oError => {
@@ -181,7 +182,7 @@ export class ManageSubscriptionsComponent implements OnInit {
         this.m_oSelectedSubscription.userId = oEvent.event.target.value;
         break;
       case 'orgId':
-        this.m_oOrganization = oEvent.event.target.value;
+        this.m_oOrganization.organizationId = oEvent.event.target.value;
         break;
       case 'startDate':
         this.m_sStartDate = oEvent.event.target.value;
@@ -195,7 +196,9 @@ export class ManageSubscriptionsComponent implements OnInit {
   }
 
   updateSubscription(oSubscription) {
-    this.m_oSubscriptionService.updateSubscription(oSubscription).subscribe({
+    this.prepareSubscriptionObjectToUpdate();
+
+    this.m_oSubscriptionService.updateSubscription(this.m_oSelectedSubscription).subscribe({
       next: oResponse => {
         if (oResponse) {
           this.m_oNotificationDisplayService.openSnackBar("Updated Subscription", '', 'success-snackbar');
@@ -229,17 +232,44 @@ export class ManageSubscriptionsComponent implements OnInit {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.durationDays)) {
       this.m_oSelectedSubscription.durationDays = this.m_iDurationDays;
     }
-
-    //When creating from the Admin Panel - ensure buySuccess = true
+//When creating from the Admin Panel - ensure buySuccess = true
     this.m_oSelectedSubscription.buySuccess = true;
+
+  }
+
+  prepareSubscriptionObjectToUpdate() {
+
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_sEndDate)) {
+      this.m_oSelectedSubscription.endDate = new Date(this.m_sEndDate).toISOString();
+    }
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.startDate) &&
+      !FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_sEndDate)) {
+
+      const startDate = new Date(this.m_oSelectedSubscription.startDate);
+      const endDate = new Date(this.m_sEndDate);
+
+      if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+        // Calculate duration in days
+        const durationMs = endDate.getTime() - startDate.getTime();
+        this.m_oSelectedSubscription.durationDays = Math.ceil(durationMs / (1000 * 60 * 60 * 24));
+      } else {
+        this.m_oSelectedSubscription.durationDays = 0;
+      }
+    }
+
+
   }
 
   createNewSubscription(oSubscription) {
     this.createSubscriptionObject();
+
     if (this.checkIsSubscriptionValid() === true) {
       this.m_oSubscriptionService.createSubscription(this.m_oSelectedSubscription).subscribe({
         next: oResponse => {
           this.m_oNotificationDisplayService.openSnackBar("Subscription Created!", '', 'success-snackbar');
+
         },
         error: oError => {
           this.m_oNotificationDisplayService.openAlertDialog("An error occurred while creating this subscription")
@@ -399,7 +429,7 @@ export class ManageSubscriptionsComponent implements OnInit {
         this.m_sUserNameSearch = this.m_sSearch;
         break;
     }
-    // If searching by partial of user's NAME: 
+    // If searching by partial of user's NAME:
     if (this.m_sSubscriptionSortBy === 'User First Name' || this.m_sSubscriptionSortBy === 'User Last Name') {
       this.m_bMultiTables = true;
       this.m_oAdminDashboardService.findUsersByPartialName(this.m_sUserNameSearch).subscribe({
@@ -435,4 +465,6 @@ export class ManageSubscriptionsComponent implements OnInit {
     let sMsg = this.m_oTranslate.instant("KEY_PHRASES.CLIPBOARD")
     this.m_oNotificationDisplayService.openSnackBar(sMsg);
   }
+
+
 }
