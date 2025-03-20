@@ -1102,7 +1102,7 @@
     "CREDITS_ROW_2": "Paid application declares a credit-price per square kilometer",
     "CREDITS_ROW_3": "Draw your area, evaluate the price and run your applications",
     "CREDITS_50": "50 Credits",
-    "CREDITS_100": "100 Credits",    
+    "CREDITS_100": "100 Credits",
 
     "SUBSCRIPTION_BUY_NAME": "Đặt tên cho đăng ký của bạn để bạn có thể theo dõi các dự án của mình (tùy chọn)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Chọn tổ chức mà bạn mua gói này (tùy chọn)",
@@ -1114,7 +1114,7 @@
     "CREDITS_BUY_ORGANIZATION": "Select the organisation for which you are buying this credits package (optional)",
     "CREDITS_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
     "CREDITS_BUY_ORDER_SUMMARY": "Order Summary",
-    "CREDITS_BUY_TOTAL": "Total",    
+    "CREDITS_BUY_TOTAL": "Total",
 
     "DIALOG_ADD_SUBSCRIPTION": "Thêm đăng ký",
     "DIALOG_EDIT_SUBSCRIPTION": "Chỉnh sửa đăng ký",
@@ -1256,5 +1256,7 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-    "PAYMENT_SUCCESS": "Cảm ơn bạn đã thanh toán! Giao dịch của bạn đã thành công và mọi thứ đã sẵn sàng. Hãy tận hưởng!"
+    "PAYMENT_SUCCESS": "Cảm ơn bạn đã thanh toán! Giao dịch của bạn đã <strong>thành công</strong> và mọi thứ đã sẵn sàng. Chúc bạn vui vẻ!",
+    "PAYMENT_CONFIRM_LOADING": "Vui lòng chờ trong khi chúng tôi xác nhận thanh toán của bạn!"
+
 }

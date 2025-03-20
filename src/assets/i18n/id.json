@@ -1242,5 +1242,7 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-    "PAYMENT_SUCCESS": "Terima kasih atas pembayaran Anda! Transaksi Anda berhasil dan semuanya sudah siap. Nikmati!"
+  "PAYMENT_SUCCESS": "Terima kasih atas pembayaran Anda! Transaksi Anda <strong>berhasil</strong> dan semuanya siap. Selamat menikmati!",
+  "PAYMENT_CONFIRM_LOADING": "Harap tunggu sementara kami mengonfirmasi pembayaran Anda!"
+
 }

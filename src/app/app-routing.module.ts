@@ -30,7 +30,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'subscriptions', component: SubscriptionsPurchaseComponent, canActivate: [AuthGuard] },
   { path: 'workspaces', component: WorkspacesComponent, canActivate: [AuthGuard] },
-  { path: 'payment-success', component: PaymentSuccessComponent, canActivate: [AuthGuard] },
+  {  path: 'subscription/success/:CHECKOUT_SESSION_ID', component: PaymentSuccessComponent},
   { path: ':processorName/appDetails', component: AppDetailsComponent, canActivate: [AuthGuard] },
   { path: ':processorName/appui', component: AppUiComponent, canActivate: [AuthGuard] },
 

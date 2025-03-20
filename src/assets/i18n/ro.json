@@ -1242,5 +1242,7 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-    "PAYMENT_SUCCESS": "Mulțumim pentru plata efectuată! Tranzacția a fost realizată cu succes, iar totul este pregătit. Bucură-te!"
+  "PAYMENT_SUCCESS": "Mulțumim pentru plată! Tranzacția dvs. a fost <strong>reușită</strong> și totul este pregătit. Bucurați-vă!",
+  "PAYMENT_CONFIRM_LOADING": "Vă rugăm să așteptați în timp ce confirmăm plata dvs.!"
+
 }

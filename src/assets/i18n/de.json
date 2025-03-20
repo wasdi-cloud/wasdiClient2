@@ -1240,7 +1240,9 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-    "PAYMENT_SUCCESS": "Vielen Dank für Ihre Zahlung! Ihre Transaktion war erfolgreich und alles ist bereit. Viel Spaß!"
+  "PAYMENT_SUCCESS": "Danke für Ihre Zahlung! Ihre Transaktion war <strong>erfolgreich</strong> und alles ist bereit. Viel Spaß!",
+  "PAYMENT_CONFIRM_LOADING": "Bitte warten Sie, während wir Ihre Zahlung bestätigen!"
+
 
 
 }

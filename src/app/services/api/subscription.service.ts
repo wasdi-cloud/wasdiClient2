@@ -14,7 +14,7 @@ export class SubscriptionService {
 
   /**
    * Get the list of subscriptions of a user
-   * @returns 
+   * @returns
    */
   getSubscriptionsListByUser() {
     return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/byuser');
@@ -22,8 +22,8 @@ export class SubscriptionService {
 
   /**
    * Get Subscription Details
-   * @param sSubscriptionId 
-   * @returns 
+   * @param sSubscriptionId
+   * @returns
    */
   getSubscriptionById(sSubscriptionId: string) {
     return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/byId?subscription=' + sSubscriptionId);
@@ -31,8 +31,8 @@ export class SubscriptionService {
 
   /**
    * Creates or updates a subscription
-   * @param oSubscription 
-   * @returns 
+   * @param oSubscription
+   * @returns
    */
   saveSubscription(oSubscription) {
     if (!oSubscription.subscriptionId) {
@@ -44,8 +44,8 @@ export class SubscriptionService {
 
   /**
    * Create Subscription
-   * @param oSubscription 
-   * @returns 
+   * @param oSubscription
+   * @returns
    */
   createSubscription(oSubscription) {
     return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/add', oSubscription, { observe: "response" });
@@ -53,8 +53,8 @@ export class SubscriptionService {
 
   /**
    * Update Subscription
-   * @param oSubscription 
-   * @returns 
+   * @param oSubscription
+   * @returns
    */
   updateSubscription(oSubscription) {
     return this.m_oHttp.put<any>(this.APIURL + '/subscriptions/update', oSubscription, { observe: "response" });
@@ -62,8 +62,8 @@ export class SubscriptionService {
 
   /**
    * Delete Subscription
-   * @param sSubscriptionId 
-   * @returns 
+   * @param sSubscriptionId
+   * @returns
    */
   deleteSubscription(sSubscriptionId: string) {
     return this.m_oHttp.delete<any>(this.APIURL + '/subscriptions/delete?subscription=' + sSubscriptionId, { observe: "response" });
@@ -71,8 +71,8 @@ export class SubscriptionService {
 
   /**
    * Get list of shared users by subscription id
-   * @param sSubscriptionId 
-   * @returns 
+   * @param sSubscriptionId
+   * @returns
    */
   getUsersBySharedSubscription(sSubscriptionId: string) {
     return this.m_oHttp.get(this.APIURL + '/subscriptions/share/bysubscription?subscription=' + sSubscriptionId);
@@ -80,10 +80,10 @@ export class SubscriptionService {
 
   /**
    * Add sharing
-   * @param sSubscriptionId 
-   * @param sUserId 
-   * @param sRights 
-   * @returns 
+   * @param sSubscriptionId
+   * @param sUserId
+   * @param sRights
+   * @returns
    */
   addSubscriptionSharing(sSubscriptionId: string, sUserId: string, sRights) {
     return this.m_oHttp.post<any>(this.APIURL + '/subscriptions/share/add?subscription=' + sSubscriptionId + '&userId=' + sUserId + "&rights=" + sRights, {});
@@ -91,9 +91,9 @@ export class SubscriptionService {
 
   /**
    * Remove sharing
-   * @param sSubscriptionId 
-   * @param sUserId 
-   * @returns 
+   * @param sSubscriptionId
+   * @param sUserId
+   * @returns
    */
   removeSubscriptionSharing(sSubscriptionId: string, sUserId: string) {
     return this.m_oHttp.delete(this.APIURL + '/subscriptions/share/delete?subscription=' + sSubscriptionId + '&userId=' + sUserId);
@@ -101,7 +101,7 @@ export class SubscriptionService {
 
   /**
    * Get Subscription Types list
-   * @returns 
+   * @returns
    */
   getSubscriptionTypes() {
     return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/types', { observe: 'response' });
@@ -109,9 +109,9 @@ export class SubscriptionService {
 
   /**
    * Get Stripe payment url by subscription id
-   * @param sSubscriptionId 
-   * @param sWorkspaceId 
-   * @returns 
+   * @param sSubscriptionId
+   * @param sWorkspaceId
+   * @returns
    */
   getStripePaymentUrl(sSubscriptionId: string, sWorkspaceId: string) {
     return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/stripe/paymentUrl?subscription=' + sSubscriptionId + '&workspace=' + sWorkspaceId);
@@ -125,17 +125,21 @@ export class SubscriptionService {
 
   /**
    * Get Subscriptions Count
-   * @returns 
+   * @returns
    */
   getSubscriptionCount() {
     return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/count');
-  };  
+  };
 
     /**
    * Get the credits of the actual user
-   * @returns 
+   * @returns
    */
     getActiveSubscriptionForUser() {
       return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/active');
     };
+
+  confirmSubscription(m_sCheckoutCode: string) {
+    return this.m_oHttp.get<any>(this.APIURL + '/subscriptions/stripe/confirmation/'+m_sCheckoutCode);
+  }
 }

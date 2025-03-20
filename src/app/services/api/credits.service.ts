@@ -13,7 +13,7 @@ export class CreditsService {
 
   /**
    * Get the list of credit packages
-   * @returns 
+   * @returns
    */
   getCreditPackages() {
     return this.m_oHttp.get<any>(this.APIURL + '/credits/types');
@@ -22,18 +22,18 @@ export class CreditsService {
 
   /**
    * Create the buy request for a credit package
-   * @param oCreditPackage 
-   * @returns 
+   * @param oCreditPackage
+   * @returns
    */
     createCreditsPackage(oCreditPackage) {
       return this.m_oHttp.post<any>(this.APIURL + '/credits/add', oCreditPackage, { observe: "response" });
     };
-  
+
   /**
    * Get Stripe payment url by credit package id
-   * @param sCreditPackageId 
-   * @param sWorkspaceId 
-   * @returns 
+   * @param sCreditPackageId
+   * @param sWorkspaceId
+   * @returns
    */
   getStripePaymentUrl(sCreditPackageId: string, sWorkspaceId: string) {
     return this.m_oHttp.get<any>(this.APIURL + '/credits/stripe/paymentUrl?creditPackageId=' + sCreditPackageId);
@@ -41,7 +41,7 @@ export class CreditsService {
 
   /**
    * Get the list of credit packages
-   * @returns 
+   * @returns
    */
   getListByUser(bAscendingOrder: boolean) {
     let sBool = "true";
@@ -52,9 +52,13 @@ export class CreditsService {
 
   /**
    * Get the credits of the actual user
-   * @returns 
+   * @returns
    */
   getCreditsByUser() {
     return this.m_oHttp.get<any>(this.APIURL + '/credits/totalbyuser');
   };
+
+  confirmCreditPayment(m_sCheckoutCode: string) {
+    return this.m_oHttp.get<any>(this.APIURL + '/credits/stripe/confirmation/'+m_sCheckoutCode);
+  }
 }

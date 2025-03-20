@@ -1,8 +1,13 @@
 <main class="flex-fill d-flex flex-row align-items-center justify-content-center gap-4">
   <div class="d-flex flex-column align-items-center gap-4">
-    <h3>{{"PAYMENT_SUCCESS" | translate}}</h3>
-    <app-button [m_sLabel]="'PAGE_NOT_FOUND_MARKETPLACE' |
+    <h3 *ngIf="m_bCanProceed" [innerHTML]="'PAYMENT_SUCCESS' | translate"></h3>
+
+    <h3 *ngIf="!m_bCanProceed">{{"PAYMENT_CONFIRM_LOADING" | translate}}</h3>
+    <app-button
+      *ngIf="m_bCanProceed"
+      [m_sLabel]="'PAGE_NOT_FOUND_MARKETPLACE' |
             translate" (click)="marketplaceRedirect()" [m_sSize]="'large'"></app-button>
+    <app-invader *ngIf="!m_bCanProceed"></app-invader>
   </div>
   <img src="assets/images/payment/pay-astro.png" style="width: 20%;" alt="">
 
