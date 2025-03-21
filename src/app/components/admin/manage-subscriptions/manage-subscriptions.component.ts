@@ -42,7 +42,7 @@ export class ManageSubscriptionsComponent implements OnInit {
   m_iDurationDays: number = 0;
   m_iDaysRemaining: number | string;
 
-  m_oOrganization: any = "";
+  m_sOrganizationId: string ;
 
   m_sSubscriptionSortBy: string = "Subscription Name";
 
@@ -129,10 +129,12 @@ export class ManageSubscriptionsComponent implements OnInit {
           } else {
             this.m_oSelectedSubscription = oResponse;
             this.m_sEndDate = null;
+            this.m_sOrganizationId = null;
           }
         },
         error: oError => {
           this.m_oNotificationDisplayService.openAlertDialog("Error while getting subscription information", '', 'danger');
+          this.m_oSelectedSubscription = {};
         }
       })
     } else {
@@ -182,7 +184,7 @@ export class ManageSubscriptionsComponent implements OnInit {
         this.m_oSelectedSubscription.userId = oEvent.event.target.value;
         break;
       case 'orgId':
-        this.m_oOrganization.organizationId = oEvent.event.target.value;
+        this.m_sOrganizationId = oEvent.event.target.value;
         break;
       case 'startDate':
         this.m_sStartDate = oEvent.event.target.value;
@@ -215,10 +217,8 @@ export class ManageSubscriptionsComponent implements OnInit {
     if (!this.m_oSelectedSubscription.name) {
       this.m_oSelectedSubscription.name = this.m_oSelectedSubscription.typeName;
     }
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oOrganization)) {
-      this.m_oSelectedSubscription.organizationId = "";
-    } else {
-      this.m_oSelectedSubscription.organizationId = this.m_oOrganization.organizationId;
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_sOrganizationId)) {
+      this.m_oSelectedSubscription.organizationId = this.m_sOrganizationId;
     }
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.startDate)) {
@@ -242,6 +242,9 @@ export class ManageSubscriptionsComponent implements OnInit {
 
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_sEndDate)) {
       this.m_oSelectedSubscription.endDate = new Date(this.m_sEndDate).toISOString();
+    }
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_sOrganizationId)) {
+      this.m_oSelectedSubscription.organizationId = this.m_sOrganizationId;
     }
 
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oSelectedSubscription.startDate) &&
