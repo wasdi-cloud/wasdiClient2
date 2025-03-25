@@ -30,7 +30,7 @@
             </td>
             <td class="d-flex flex-row gap-2">
               <span
-                *ngIf="oMission.permissionType === 'write'"
+                *ngIf="oMission.permissionType !== 'readOnly'"
                 (click)="openShareUI(oMission)"
                 class="material-symbols-outlined"
                 matTooltip="Manage Collaborators"
