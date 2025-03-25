@@ -41,7 +41,6 @@
                     [m_bHasToolbar]="oWorkflow .sharedWithMe === true || m_sUserId === oWorkflow .userId"
                     (m_oEmitClickEvent)="handleListItemClick($event, oWorkflow)"
                     (click)="setSelectedWorkflow(oWorkflow, true)"
-                    [m_bHasCopyButton]="true"
                 >
 
                 </app-list-item>

@@ -160,10 +160,6 @@ export class WorkflowsDialogComponent implements OnInit {
    */
   setSelectedWorkflow(oWorkflow: Workflow, bIsListItemClick?: boolean): void {
     //copy workflow name
-    console.log(oWorkflow.name)
-    if(bIsListItemClick===true){
-      this.copyToClipboard(oWorkflow.name)
-    }
     if (bIsListItemClick === true) {
       this.clearShownItems();
     }
@@ -186,22 +182,7 @@ export class WorkflowsDialogComponent implements OnInit {
       this.selectedMultiInputWorkflow(oWorkflow);
     }
   }
-  copyToClipboard(sTextToCopy:string): void {
-    navigator.clipboard.writeText(sTextToCopy).then(
-      () => {
-        this.m_oNotificationDisplayService.openSnackBar(
-          "Copied name successfully",
-          "Update",
-          "success-snackbar"
-        )
-        console.log('Text copied to clipboard');
-      },
-      (err) => {
-        console.error('Failed to copy text: ', err);
-      }
-    );
 
-  }
   /**
    * Set the visibility for new workflow creation inputs
    * @param bShowInputs
