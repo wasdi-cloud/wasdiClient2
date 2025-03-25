@@ -423,17 +423,36 @@ export class WorkflowsDialogComponent implements OnInit {
   /**
    * Set the value of the inputFileNames in the SelectedWorkflow based on SINGLE selection prodcut input
    * @param oEvent
+   * @param oNode
    */
   getSingleSelection(oEvent: any, oNode: any) {
     if (!oEvent.value.length) {
-      //Set the inputFileName value to reflect SINGLE input:
-      this.m_oSelectedWorkflow.inputFileNames = [oEvent.value.fileName];
+      // Single selection case
+      const fileName = oEvent.value.fileName;
+
+      if (this.m_oSelectedWorkflow.inputNodeNames.length < 2) {
+        // Only one input field → Replace the value
+        this.m_oSelectedWorkflow.inputFileNames = [fileName];
+      } else {
+        // Multiple inputs → Track values per node
+        const nodeIndex = this.m_oSelectedWorkflow.inputNodeNames.indexOf(oNode);
+        if (nodeIndex !== -1) {
+          this.m_oSelectedWorkflow.inputFileNames[nodeIndex] = fileName;
+        }
+      }
     } else {
-      this.m_oSelectedWorkflow.inputFileNames = oEvent.value.map(oProduct => {
-        return oProduct.name;
-      })
+      // Multiple selection case
+      const newFiles = oEvent.value.map(oProduct => oProduct.name);
+      const nodeIndex = this.m_oSelectedWorkflow.inputNodeNames.indexOf(oNode);
+
+      if (nodeIndex !== -1) {
+        this.m_oSelectedWorkflow.inputFileNames[nodeIndex] = newFiles[0]; // Assuming single selection per dropdown
+      }
     }
+
+
   }
+
 
   /**
    * Set the value of the inputFileNames in the SelectedWorkflow based on MULTIPLE selection product input
