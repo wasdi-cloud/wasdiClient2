@@ -48,10 +48,7 @@ export class ListItemComponent implements OnInit, OnDestroy {
    * If the list item is selected
    */
   @Input() m_bIsSelected?: boolean = true;
-  /**
-   * If the list item name can be copies
-   */
-  @Input() m_bHasCopyButton?: boolean = false;
+
 
   /**
    * Label that appears in bold for "simple list item"
@@ -174,5 +171,20 @@ export class ListItemComponent implements OnInit, OnDestroy {
   }
 
 
+  copyToClipboard(sTextToCopy:string): void {
+    navigator.clipboard.writeText(sTextToCopy).then(
+      () => {
+        this.m_oNotificationDialog.openSnackBar(
+          "Copied name successfully",
+          "Update",
+          "success-snackbar"
+        )
+        console.log('Text copied to clipboard');
+      },
+      (err) => {
+        console.error('Failed to copy text: ', err);
+      }
+    );
 
+  }
 }

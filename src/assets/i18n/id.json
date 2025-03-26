@@ -1,17 +1,17 @@
 {
 	"KEY_PHRASES": {
-		"APP_NAME": "Nama Aplikasi", 
+		"APP_NAME": "Nama Aplikasi",
         "APPLY": "Terapkan",
-        "BACK": "Kembali", 
+        "BACK": "Kembali",
         "CANCEL": "Batal",
         "CLOSE": "Tutup",
         "CLIPBOARD": "Disalin ke Clipboard!",
         "CLIPBOARD_BTN": "Salin ke Papan Klip",
-        "CONFIRM_REMOVAL": "Konfirmasi Penghapusan", 
+        "CONFIRM_REMOVAL": "Konfirmasi Penghapusan",
         "COPIED": "disalin!",
         "DESCRIPTION": "Deskripsi",
         "ERROR": "Kesalahan",
-        "GURU_MEDITATION": "Guru Meditasi", 
+        "GURU_MEDITATION": "Guru Meditasi",
         "HELP": "tolong",
         "LOAD_MORE": "Muat Lebih Banyak",
         "NAME": "Nama",
@@ -38,19 +38,19 @@
     "APP_UI_NEW_EXISTING_WS_CHECK_2":"Ruang Kerja yang Ada",
     "APP_UI_RUN_APP_LABEL":"Jalankan Aplikasi di",
     "APP_UI_AUTOMATIC_NAME_PLACEHOLDER":"[Nama Otomatis]",
-    "APP_UI_SELECT_WS": "Pilih ruang kerja", 
+    "APP_UI_SELECT_WS": "Pilih ruang kerja",
     "APP_UI_SEARCH_WS": "Cari Ruang Kerja",
     "APP_UI_OPEN_WS": "Jalankan Aplikasi",
     "APP_UI_AUTO_WS": "Ruang Kerja Otomatis",
     "APP_UI_PURCHASE": "Beli Aplikasi",
     "APP_UI_SAVE_PARAMS": "Simpan sebagai Templat Parameter",
     "APP_UI_INTERFACE": "Antarmuka Aplikasi",
-	
+
 	"ACTIVE_SUBSCRIPTION_ERROR": "Anda tidak memiliki proyek yang aktif saat ini <br> Pilih proyek atau beli langganan",
     "ACTIVE_SUBSCRIPTION_ERROR_2": "Anda tidak memiliki langganan aktif saat ini.",
-	
+
 	"DIALOG_PARAMS_CREATE": "Buat templat parameter",
-	"DIALOG_PARAMS_TEMPLATE_NAME": "Nama templat", 
+	"DIALOG_PARAMS_TEMPLATE_NAME": "Nama templat",
 	"DIALOG_PARAMS_SAVE": "Simpan parameter",
 
 	"LOGIN_PLACEHOLDER_EMAIL": "Alamat Email",
@@ -67,7 +67,7 @@
 
 	"RECOVERY_EMAIL_BUTTON": "Kirim permintaan",
 	"RECOVERY_EMAIL_TITLE": "Silahkan masukkan alamat email anda dan lakukan konfirmasi. \n Instruksi lebih lanjut akan dikirimkan melalui email anda untuk memulihkan akun anda",
-	
+
 	"SIGN_IN_PLACEHOLDER_EMAIL": "Alamat Email",
 	"SIGN_IN_PLACEHOLDER_PASSWORD": "Kata Sandi",
 	"SIGN_IN_PLACEHOLDER_REPEAT_PASSWORD": "Ulangi Kata Sandi",
@@ -148,10 +148,10 @@
 	"WORKSPACES_SHARED_WITH": "Bagikan Kepada",
 	"WORKSPACES_SHOW_SATS": "Tampilkan Satelit",
 
-	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Buat Ruang Kerja baru", 
+	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Buat Ruang Kerja baru",
     "DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Perbarui Nama Ruang Kerja",
     "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Masukkan Nama Ruang Kerja",
-    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" : "Masukkan Nama Ruang Kerja Baru", 
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" : "Masukkan Nama Ruang Kerja Baru",
     "DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON": "Buat Ruang Kerja",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON": "Perbarui Ruang Kerja",
     "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Batal",
@@ -160,13 +160,13 @@
     "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "Untuk praktik terbaik, berikan nama yang bermakna pada ruang kerja Anda agar mudah diingat. (Opsional)",
     "DIALOG_ADD_NEW_WORKSPACE_CREATING": "WASDI sedang membuat ruang kerja Anda...",
 
-	"DIALOG_APPS_PROCESSORS_ERROR": "Terjadi kesalahan saat mengambil prosesor", 
-    "DIALOG_APPS_DELETE_OWNER": "Apakah Anda yakin ingin menghapus prosesor berikut?", 
+	"DIALOG_APPS_PROCESSORS_ERROR": "Terjadi kesalahan saat mengambil prosesor",
+    "DIALOG_APPS_DELETE_OWNER": "Apakah Anda yakin ingin menghapus prosesor berikut?",
     "DIALOG_APPS_DELETE_SHARED": "Apakah Anda yakin ingin menghapus izin Anda dari prosesor berikut?",
     "DIALOG_APPS_ERROR_DELETE": "Terjadi kesalahan saat mencoba menghapus prosesor Anda",
     "DIALOG_APPS_CANNOT_EDIT": "Anda tidak memiliki izin untuk mengedit ruang kerja ini",
     "DIALOG_APPS_INVALID_JSON": "Masukan JSON tidak valid",
-	
+
 	"EDITOR_TOOLTIP_2D": "Beralih ke Peta 2D",
 	"EDITOR_TOOLTIP_3D": "Beralih ke Globe",
 	"EDITOR_TOOLTIP_SHOW_FEATURE": "Alihkan Info Fitur",
@@ -270,7 +270,7 @@
 	"DIALOG_GET_CAPABILITIES_EXIT": "Keluar",
 	"DIALOG_GET_CAPABILITIES_SEARCH": "Cari",
 	"DIALOG_GET_CAPABILITIES_LOADING": "Memuat...",
-	
+
 	"DIALOG_FORMAT_JSON_ERROR": "Tidak dapat memformat masukan JSON Anda. Harap pastikan itu adalah JSON yang valid",
     "DIALOG_PARSE_JSON_ERROR": "Terjadi kesalahan saat mengurai payload JSON",
 
@@ -383,10 +383,10 @@
 	"DIALOG_STYLE_MANAGER_TAB_LIST": "Daftar Style",
 	"DIALOG_STYLE_UPLOAD_STYLE": "Upload Style",
 	"DIALOG_STYLE_MANAGER_TAB_NEW": "Style Baru",
-	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style", 
-    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",   
-    "DIALOG_STYLE_SEARCH": "Search style",   
-    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for", 
+	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style",
+    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",
+    "DIALOG_STYLE_SEARCH": "Search style",
+    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for",
 
 
 	"DIALOG_CRONOTAB_FILTERS_BOX": "Filter",
@@ -445,7 +445,7 @@
     "DIALOG_PROCESSOR_APP_DETAILS_ERROR": "Tidak dapat memperoleh detail aplikasi",
     "DIALOG_PROCESSOR_APP_UI_ERROR": "Kesalahan saat mendapatkan UI prosesor",
 
-	"DIALOG_PROCESSOR_TAB_BASE": "Prosesor",	
+	"DIALOG_PROCESSOR_TAB_BASE": "Prosesor",
 	"DIALOG_PROCESSOR_TAB_PACKAGE_MANAGER": "Manajer Paket",
 	"DIALOG_PROCESSOR_TAB_STORE": "Simpan",
 	"DIALOG_PROCESSOR_TAB_DETAILS": "Detail",
@@ -503,8 +503,8 @@
 	"DIALOG_PROCESSOR_STORE_MAIL": "E-Mail",
 	"DIALOG_PROCESSOR_STORE_ONDEMAND": "Harga Sesuai Permintaan",
 	"DIALOG_PROCESSOR_STORE_ONDEMAND_PRICE": "Harga Sesuai Permintaan",
-    "DIALOG_PROCESSOR_STORE_SUBSCRIPTION": "Square kilometer Price Model",
-    "DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE1": "The square-km pricing model allow the user to pay based on the dimension of the area of interest. Please specify the price per square km and the name of the parameter of your app used to read the area of interest from the app inputs.",
+	"DIALOG_PROCESSOR_STORE_SUBSCRIPTION": "Harga Berlangganan",
+	"DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE1": "Kami sedang bekerja keras dengan peningkatan baru di toko.",
     "DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE2": "Kami akan merilis model berbasis langganan agar Anda mendapatkan penghasilan berulang dari aplikasi yang Anda kembangkan untuk WASDI!",
 	"DIALOG_PROCESSOR_STORE_SHOW": "Tamplikan Aplikasi di Store",
 	"DIALOG_PROCESSOR_STORE_LONG_DESCRIPTION": "Penjelasan Panjang",
@@ -546,7 +546,7 @@
     "DIALOG_LOGS_DATE": "Tanggal",
     "DIALOG_LOGS_ROW": "Baris",
     "DIALOG_LOGS_REFRESH": "Segarkan",
-    "DIALOG_LOGS_STARTED": "Dimulai", 
+    "DIALOG_LOGS_STARTED": "Dimulai",
     "DIALOG_LOGS_PROGRESS": "Kemajuan",
     "DIALOG_LOGS_DURATION": "Durasi",
     "DIALOG_LOGS_STATUS_PLACEHOLDER": "Pilih Status",
@@ -561,11 +561,11 @@
 	"DIALOG_PRODUCT_INFO_VALUE": "Nilai",
 
 	"DIALOG_FEEDBACK_SEND": "Kirim Masukan",
-    "DIALOG_FEEDBACK_SEND_AS": "Kirim sebagai", 
+    "DIALOG_FEEDBACK_SEND_AS": "Kirim sebagai",
     "DIALOG_FEEDBACK_TRY": "Apakah Anda ingin mencoba kami",
     "DIALOG_FEEDBACK_LIVE_SUPPORT": "Bergabunglah dengan dukungan langsung kami di Discord",
     "DIALOG_FEEDBACK_DISCORD": "Dapatkan dukungan real-time di saluran Discord kami, bergabunglah dengan komunitas kami yang selalu berkembang, percepat penyelesaian masalah Anda!",
-    "DIALOG_FEEDBACK_JOIN": "Bergabung Sekarang", 
+    "DIALOG_FEEDBACK_JOIN": "Bergabung Sekarang",
     "DIALOG_FEEDBACK_LIVE_HUSTON": "Houston, kita punya masalah!",
     "DIALOG_FEEDBACK_LIVE_PREFER": "Apakah Anda lebih suka ",
     "DIALOG_FEEDBACK_LIVE_WRITE": "tulis kami",
@@ -609,12 +609,12 @@
     "DIALOG_MANAGE_METRICS_ENTRIES_NODE_CODE": "Kode Node",
     "DIALOG_MANAGE_METRICS_ENTRIES_LATEST_ENTRY": "Entri Terbaru",
     "DIALOG_MANAGE_METRICS_ENTRIES_RETRIEVE": "Ambil",
- 
+
     "DIALOG_MANAGE_QUEUES_STATUS_TITLE": "Kelola Status Antrian",
     "DIALOG_MANAGE_QUEUES_STATUS_NODE_CODE": "Kode Node",
     "DIALOG_MANAGE_QUEUES_STATUS_STATUSES": "Status",
     "DIALOG_MANAGE_QUEUES_STATUS_RETRIEVE": "Ambil",
- 
+
     "DIALOG_FETCH_NODES_TITLE": "Pengambilan Node Diurutkan berdasarkan Skor",
     "DIALOG_FETCH_NODES_FETCH": "Ambil",
 
@@ -761,7 +761,7 @@
     "DELETE_PROCESS_YES": "Ya, Bunuh",
     "DELETE_PROCESS_NO": "Uhm, tidak, tidak juga",
     "DELETE_PROCESS_ERROR": "Terjadi kesalahan saat menghentikan proses",
- 
+
     "PROCESSES_BAR_RUNNING_PROCESSES_ERROR": "Proses tidak dapat berjalan",
 
 	"DOWNLOAD_IN_WS_TITLE": "Daftar Area Kerja",
@@ -878,7 +878,7 @@
     "MSG_MKT_COMMENT_UPDATED_ERROR": "Kesalahan memperbarui komentar Anda",
     "MSG_MKT_COMMENT_DELETED": "Komentar dihapus",
     "MSG_MKT_COMMENT_REMOVE_ERROR": "Kesalahan saat menghapus komentar Anda",
-   
+
     "MSG_MKT_REVIEW_DELETE_CONFIRM": "Apakah Anda yakin ingin menghapus ulasan Anda?",
     "MSG_MKT_COMMENT_DELETE_CONFIRM": "Apakah Anda yakin ingin menghapus komentar Anda?",
 
@@ -933,7 +933,7 @@
     "MSG_ERROR_NO_ACCESS_RIGHTS_APPLICATION_RESOURCE_SUBSCRIPTION": "ANDA TIDAK MEMILIKI IZIN UNTUK MELAKUKAN TINDAKAN INI",
     "MSG_ERROR_NO_ACCESS_RIGHTS_OBJECT_SUBSCRIPTION": "ANDA TIDAK MEMILIKI IZIN UNTUK MELAKUKAN TINDAKAN INI",
     "MSG_ERROR_INVALID_SUBSCRIPTION": "BERLANGGANAN TIDAK VALID",
- 
+
     "MSG_SUCCESS_RESOURCE_PERMISSION_ADDED": "IZIN SUMBER DAYA BERHASIL DITAMBAHKAN",
     "MSG_SUCCESS_RESOURCE_PERMISSION_REMOVED": "IZIN SUMBER DAYA BERHASIL DIHAPUS",
 
@@ -1016,7 +1016,7 @@
     "PACKAGE_MANAGER_ROLLBACK": "Kembalikan",
     "PACKAGE_MANAGER_SEARCH": "Paket pencarian",
     "PACKAGE_MANAGER_NAME": "Nama Paket",
-    "PACKAGE_MANAGER_CURRENT_VERSION": "Versi Saat Ini", 
+    "PACKAGE_MANAGER_CURRENT_VERSION": "Versi Saat Ini",
     "PACKAGE_MANAGER_LATEST_VERSION": "Versi Terbaru",
     "PACKAGE_MANAGER_ADD": "Tambahkan paket baru",
 
@@ -1036,7 +1036,7 @@
 	"USER_ORGANIZATION_INVALID_INPUT": "Masukan organisasi tidak valid",
 	"USER_ORGANIZATION_SAVE_ERROR": "Tidak dapat menyelamatkan organisasi Anda",
 	"USER_ORGANIZATION_DELETE_ERROR": "Tidak dapat menghapus organisasi Anda",
-	
+
 	"DIALOG_ADD_ORGANIZATION": "Tambahkan Organisasi",
     "DIALOG_EDIT_ORGANIZATION": "Edit Organisasi",
     "DIALOG_VIEW_ORGANIZATION": "Lihat Organisasi",
@@ -1066,21 +1066,21 @@
     "USER_SUBSCRIPTIONS_HIDE_PROJECTS": "Sembunyikan Proyek",
     "USER_SUBSCRIPTIONS_SHOW_ORGANIZATION": "Tampilkan Organisasi",
     "USER_SUBSCRIPTIONS_HIDE_ORGANIZATION": "Sembunyikan Organisasi",
-    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Konfirmasi Penghapusan Langganan", 
-    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Apakah Anda yakin ingin menghapus langganan ini?", 
+    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Konfirmasi Penghapusan Langganan",
+    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Apakah Anda yakin ingin menghapus langganan ini?",
     "USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG": "Kesalahan saat menghapus langganan",
     "USER_SUBSCRIPTION_REMOVE_MSG": "Langganan Dihapus",
     "USER_SUBSCRIPTION_UPDATED": "Langganan Diperbarui",
     "USER_SUBSCRIPTION_URL": "URL Pembayaran Diterima",
     "USER_SUBSCRIPTION_URL_ERROR": "Kesalahan dalam mengambil URL pembayaran",
-    "USER_SUBSCRIPTION_STRIPE_TITLE": "Mengarahkan ulang ke STRIPE", 
+    "USER_SUBSCRIPTION_STRIPE_TITLE": "Mengarahkan ulang ke STRIPE",
     "USER_SUBSCRIPTION_STRIPE_MSG": "Anda akan diarahkan kembali ke mitra pembayaran kami, Stripe. Klik 'Ya' untuk melanjutkan atau 'BATAL' untuk mengakhiri proses pembayaran.",
     "USER_SUBSCRIPTION_STRIPE_FAIL": "Terjadi kesalahan dalam mencatat pembayaran Anda",
     "USER_SUBSCRIPTION_ID_ERROR": "Tidak dapat menemukan langganan berdasarkan ID",
     "USER_SUBSCRIPTION_SAVE_ERROR": "Tidak dapat menyimpan langganan",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Tidak dapat memperoleh organisasi pengguna",
 
-	"SUBSCRIPTIONS_HEADER": "Pilih paket <strong>berlangganan</strong> Anda",
+	"SUBSCRIPTIONS_HEADER": "Pilih paket <strong>space-y</strong> Anda",
     "SUBSCRIPTIONS_UP_TO": "Hingga",
     "SUBSCRIPTIONS_STARTER": "Pemula",
     "SUBSCRIPTIONS_STANDARD": "Standar",
@@ -1096,27 +1096,12 @@
     "SUBSCRIPTIONS_DAY": "Hari",
     "SUBSCRIPTIONS_WEEK": "Minggu",
 
-    "CREDITS_HEADER": "Want to work with <strong>credits</strong>?",
-    "CREDITS_BOX": "Get Credits",
-    "CREDITS_BOX_DESC": "Credits can be used to run paid applications in WASDI",
-    "CREDITS_ROW_1": "Recharge your wallet with credits when needed",
-    "CREDITS_ROW_2": "Paid application declares a credit-price per square kilometer",
-    "CREDITS_ROW_3": "Draw your area, evaluate the price and run your applications",
-    "CREDITS_50": "50 Credits",
-    "CREDITS_100": "100 Credits",	
-
 	"SUBSCRIPTION_BUY_NAME": "Beri nama pada langganan Anda sehingga Anda dapat terus memantau proyek Anda (opsional)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Pilih organisasi tempat Anda membeli paket ini (opsional)",
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Pembayaran di Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Ringkasan Pesanan",
     "SUBSCRIPTION_BUY_TOTAL": "Jumlah",
 
-    "CREDITS_BUY_NAME": "Give your credits package a name so you can keep track of your projects (optional)",
-    "CREDITS_BUY_ORGANIZATION": "Select the organisation for which you are buying this credits package (optional)",
-    "CREDITS_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
-    "CREDITS_BUY_ORDER_SUMMARY": "Order Summary",
-    "CREDITS_BUY_TOTAL": "Total",	
-  
     "DIALOG_ADD_SUBSCRIPTION": "Tambahkan Langganan",
     "DIALOG_EDIT_SUBSCRIPTION": "Edit Langganan",
     "DIALOG_VIEW_SUBSCRIPTION": "Lihat Langganan",
@@ -1156,11 +1141,11 @@
 
     "USER_PROJECTS_SHOW_ORGANIZATION": "Tampilkan Organisasi",
     "USER_PROJECTS_HIDE_ORGANIZATION": "Sembunyikan Organisasi",
-  
+
     "DIALOG_ADD_PROJECT": "Tambahkan Proyek",
     "DIALOG_EDIT_PROJECT": "Edit Proyek",
     "DIALOG_VIEW_PROJECT": "Lihat Proyek",
- 
+
     "DIALOG_VIEW_SUBSCRIPTION_PROJECTS": "Proyek Langganan",
 
 	"DIALOG_SHARE_PROJECT": "Bagikan Proyek",
@@ -1177,7 +1162,7 @@
     "DIALOG_EDIT_PROJECT_SEARCH": "Pencarian",
     "DIALOG_EDIT_PROJECT_CHANGE_ACTIVE": "Ganti Aktif",
     "DIALOG_EDIT_PROJECT_SELECT_ACTIVE_PROJECT": "Pilih Proyek Aktif",
-   
+
     "MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Diperlukan langganan yang valid dan proyek aktif. Silakan lihat Dasbor Pengguna.",
 
     "DASHBOARD_CONFIRM_NODE_TITLE": "Konfirmasi Pembaruan Node",
@@ -1256,5 +1241,8 @@
     "ADMIN_SUBSCRIPTIONS_END": "End Date",
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
-    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription"	
+    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
+  "PAYMENT_SUCCESS": "Terima kasih atas pembayaran Anda! Transaksi Anda <strong>berhasil</strong> dan semuanya siap. Selamat menikmati!",
+  "PAYMENT_CONFIRM_LOADING": "Harap tunggu sementara kami mengonfirmasi pembayaran Anda!"
+
 }

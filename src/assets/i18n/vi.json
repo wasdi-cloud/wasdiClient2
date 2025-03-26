@@ -1,17 +1,17 @@
 {
     "KEY_PHRASES": {
-        "APP_NAME": "Tên ứng dụng", 
+        "APP_NAME": "Tên ứng dụng",
         "APPLY": "Áp dụng",
-        "BACK": "Quay lại", 
+        "BACK": "Quay lại",
         "CANCEL": "Hủy bỏ",
         "CLOSE": "Đóng",
         "CLIPBOARD": "Đã sao chép vào Clipboard!",
         "CLIPBOARD_BTN": "Sao chép vào bảng nhớ tạm",
-        "CONFIRM_REMOVAL": "Xác nhận xóa", 
+        "CONFIRM_REMOVAL": "Xác nhận xóa",
         "COPIED": "Đã sao chép!",
         "DESCRIPTION": "Mô tả",
         "ERROR": "Lỗi",
-        "GURU_MEDITATION": "Thiền đạo sư", 
+        "GURU_MEDITATION": "Thiền đạo sư",
         "HELP": "Cứu",
         "LOAD_MORE": "Tải thêm",
         "NAME": "Tên",
@@ -27,7 +27,7 @@
     },
     "PAGINATOR_PER_PAGE": "Mục trên mỗi trang",
     "PAGINATOR_ITEMS": "Vật phẩm",
-    
+
     "BTN_SEARCH": "Tìm kiếm",
     "BTN_IMPORT": "Nhập",
     "SORT_BY": "Sắp xếp theo",
@@ -38,7 +38,7 @@
     "APP_UI_NEW_EXISTING_WS_CHECK_2": "Không gian làm việc hiện có",
     "APP_UI_RUN_APP_LABEL": "Chạy ứng dụng trong",
     "APP_UI_AUTOMATIC_NAME_PLACEHOLDER": "[Tên tự động]",
-    "APP_UI_SELECT_WS": "Chọn không gian làm việc", 
+    "APP_UI_SELECT_WS": "Chọn không gian làm việc",
     "APP_UI_SEARCH_WS": "Tìm kiếm không gian làm việc",
     "APP_UI_OPEN_WS": "Chạy ứng dụng",
     "APP_UI_AUTO_WS": "Không gian làm việc tự động",
@@ -50,7 +50,7 @@
     "ACTIVE_SUBSCRIPTION_ERROR_2": "Hiện tại, bạn không có đăng ký nào đang hoạt động.",
 
     "DIALOG_PARAMS_CREATE": "Tạo mẫu tham số",
-    "DIALOG_PARAMS_TEMPLATE_NAME": "Tên mẫu", 
+    "DIALOG_PARAMS_TEMPLATE_NAME": "Tên mẫu",
     "DIALOG_PARAMS_SAVE": "Lưu tham số",
 
     "LOGIN_PLACEHOLDER_EMAIL": "Địa chỉ Email",
@@ -67,7 +67,7 @@
 
     "RECOVERY_EMAIL_BUTTON": "Gửi yêu cầu",
     "RECOVERY_EMAIL_TITLE": "Vui lòng, nhập email của bạn và xác nhận.\n Tin nhắn sẽ được gửi kèm hướng dẫn để phục hồi tài khoản của bạn",
-    
+
     "SIGN_IN_PLACEHOLDER_EMAIL": "Địa chỉ Email",
     "SIGN_IN_PLACEHOLDER_PASSWORD": "Mật khẩu",
     "SIGN_IN_PLACEHOLDER_REPEAT_PASSWORD": "Nhập lại mật khẩu",
@@ -148,10 +148,10 @@
     "WORKSPACES_SHARED_WITH": "Chia sẻ với",
     "WORKSPACES_SHOW_SATS": "Hiển thị các vệ tinh",
 
-    "DIALOG_ADD_NEW_WORKSPACE_HEADER": "Tạo không gian làm việc mới", 
+    "DIALOG_ADD_NEW_WORKSPACE_HEADER": "Tạo không gian làm việc mới",
     "DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Cập nhật tên không gian làm việc",
     "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Nhập tên không gian làm việc",
-    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" : "Nhập tên không gian làm việc mới", 
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME" : "Nhập tên không gian làm việc mới",
     "DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON": "Tạo không gian làm việc",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON": "Cập nhật không gian làm việc",
     "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Hủy",
@@ -160,13 +160,13 @@
     "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "Để thực hiện tốt nhất, hãy đặt tên có ý nghĩa cho không gian làm việc của bạn để dễ nhớ. (Tùy chọn)",
     "DIALOG_ADD_NEW_WORKSPACE_CREATING": "WASDI đang tạo không gian làm việc của bạn...",
 
-    "DIALOG_APPS_PROCESSORS_ERROR": "Đã xảy ra lỗi khi tìm nạp bộ xử lý", 
-    "DIALOG_APPS_DELETE_OWNER": "Bạn có chắc chắn muốn xóa bộ xử lý sau không?", 
+    "DIALOG_APPS_PROCESSORS_ERROR": "Đã xảy ra lỗi khi tìm nạp bộ xử lý",
+    "DIALOG_APPS_DELETE_OWNER": "Bạn có chắc chắn muốn xóa bộ xử lý sau không?",
     "DIALOG_APPS_DELETE_SHARED": "Bạn có chắc chắn muốn xóa quyền của mình khỏi bộ xử lý sau không?",
     "DIALOG_APPS_ERROR_DELETE": "Đã xảy ra lỗi khi cố gắng xóa bộ xử lý của bạn",
     "DIALOG_APPS_CANNOT_EDIT": "Bạn không có quyền chỉnh sửa không gian làm việc này",
     "DIALOG_APPS_INVALID_JSON": "Đầu vào JSON không hợp lệ",
-  
+
     "EDITOR_TOOLTIP_2D": "Chuyển sang Bản đồ 2D",
     "EDITOR_TOOLTIP_3D": "Chuyển sang hình cầu",
     "EDITOR_TOOLTIP_SHOW_FEATURE": "Chuyển đổi thông tin tính năng",
@@ -191,7 +191,7 @@
     "EDITOR_PRODUCTS_FILTER_CLEAN": "Làm sạch bộ lọc",
     "EDITOR_PRODUCTS_FILTER_SELECT": "Lựa chọn",
     "EDITOR_PRODUCTS_WS_INFO": "Thông tin không gian làm việc",
-    "EDITOR_PRODUCT_REMOVE": "Xác nhận xóa sản phẩm", 
+    "EDITOR_PRODUCT_REMOVE": "Xác nhận xóa sản phẩm",
     "EDITOR_PRODUCTS_REMOVE":"Xác nhận xóa sản phẩm",
     "EDITOR_NOTEBOOK_PREPARE": "WASDI đang chuẩn bị sổ ghi chép của bạn",
     "EDITOR_NAVIGATION": "Điều hướng",
@@ -241,7 +241,7 @@
     "IMPORT_PRODUCT_LIST_PROTOCOL": "Giao thức",
     "IMPORT_ERROR_SEARCH_REQUEST": "Lỗi khi mở yêu cầu tìm kiếm",
     "IMPORT_INVALID_DATE_RANGE": "Vui lòng nhập phạm vi ngày hợp lệ.",
-    
+
     "IMPORT_CRONTAB_YEAR": "Năm",
     "IMPORT_CRONTAB_SEASON": "Mùa",
     "IMPORT_CRONTAB_MONTH": "Tháng",
@@ -317,7 +317,7 @@
     "DIALOG_IMPORT_SFTP": "SFTP",
     "DIALOG_IMPORT_READONLY": "Bạn không có quyền nhập sản phẩm vào không gian làm việc này",
     "DIALOG_IMPORT_UPLOAD_ERROR": "Lỗi khi tải tệp lên",
-    
+
     "DIALOG_PROCESSES_LOGS_TITLE": "Danh sách Quy trình không gian làm việc",
     "DIALOG_PROCESSES_LOGS_NO_WS": "Không có không gian làm việc nào được chọn, không thể tải dữ liệu. Nếu bạn đã làm mới trang, vui lòng chuyển đến phần Không gian làm việc và chọn.",
     "DIALOG_PROCESSES_LOGS_NONE": "BẤT KỲ",
@@ -376,16 +376,16 @@
     "DIALOG_WORKFLOW_DISCARD": "Hủy quy trình làm việc",
     "DIALOG_WORKFLOW_SHARE": "Chia sẻ quy trình làm việc của bạn với người dùng khác",
     "DIALOG_WORKFLOW_EDIT": "Chỉnh sửa quy trình làm việc",
-    
+
     "DIALOG_STYLE_DROP_OR_CLICK": "Kéo và thả kiểu XML ở đây hoặc nhấp để tải lên",
     "DIALOG_STYLE_DRAG_DROP_NOT_SUPPORTED": "Trình duyệt này không hỗ trợ Kéo/Thả tệp",
     "DIALOG_STYLE_MANAGER_TAB_LIST": "Danh sách phong cách",
     "DIALOG_STYLE_UPLOAD_STYLE": "Upload Style",
     "DIALOG_STYLE_MANAGER_TAB_NEW": "Phong cách Mới",
-    "DIALOG_STYLE_MANAGER_EDIT": "Edit Style", 
-    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",   
-    "DIALOG_STYLE_SEARCH": "Search style",   
-    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for", 
+    "DIALOG_STYLE_MANAGER_EDIT": "Edit Style",
+    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",
+    "DIALOG_STYLE_SEARCH": "Search style",
+    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for",
 
     "DIALOG_CRONOTAB_FILTERS_BOX": "Bộ lọc",
     "DIALOG_CRONOTAB_CRONOTAB_BOX": "Crontab",
@@ -394,7 +394,7 @@
     "DIALOG_CRONOTAB_ADD_BUTTON": "Thêm",
     "DIALOG_CRONOTAB_CLEAR_BUTTON": "Xóa",
     "DIALOG_CRONOTAB_TITLE": "LỰA CHỌN SERI THỜI GIAN",
-  
+
     "DIALOG_TITLE_WAPPS": "Ứng dụng WASDI",
     "DIALOG_TITLE_STYLES": "Các phong cách WASDI",
     "DIALOG_TITLE_PAYLOAD": "Hiển thị tải trọng",
@@ -452,7 +452,7 @@
     "DIALOG_PROCESSOR_TAB_UI": "Giao diện người dùng",
     "DIALOG_PROCESSOR_APP": "ỨNG DỤNG WASDI",
     "DIALOG_PROCESSOR_SAVE_APP": "Xuất bản ứng dụng",
-    
+
     "DIALOG_PROCESSOR_BASE_NAME": "Tên",
     "DIALOG_PROCESSOR_BASE_TYPE": "Loại",
     "DIALOG_PROCESSOR_BASE_VERSION": "Version",
@@ -518,7 +518,7 @@
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_LINE2": "Chúng tôi khuyên bạn nên sử dụng hình ảnh đại diện cho kết quả cuối cùng của đơn đăng ký nhưng bạn cũng có thể sử dụng biểu tượng công ty của mình",
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL": "Hình ảnh bổ sung",
     "DIALOG_PROCESSOR_STORE_MEDIA_DESCRIPTION_ADDITIONAL_LINE1": "Bạn có thể tải lên tối đa 6 hình ảnh. Kích thước tệp tối đa cho mỗi hình ảnh là 5Mb",
-    
+
     "DIALOG_PROCESSOR_UI_APP_FORMAT_JSON": "Định dạng Json",
     "DIALOG_PROCESSOR_UI_ADD_ELEMENTS": "- Thêm thành phần (quan tâm đến dấu phẩy!)",
     "DIALOG_PROCESSOR_UI_TAB": "Tab",
@@ -545,7 +545,7 @@
     "DIALOG_LOGS_DATE": "Ngày: ",
     "DIALOG_LOGS_ROW": "Hàng",
     "DIALOG_LOGS_REFRESH": "Làm mới",
-    "DIALOG_LOGS_STARTED": "Đã bắt đầu", 
+    "DIALOG_LOGS_STARTED": "Đã bắt đầu",
     "DIALOG_LOGS_PROGRESS": "Tiến trình",
     "DIALOG_LOGS_DUration": "Thời lượng",
     "DIALOG_LOGS_STATUS_PLACEHOLDER": "Chọn trạng thái",
@@ -560,11 +560,11 @@
     "DIALOG_PRODUCT_INFO_VALUE": "Giá trị",
 
     "DIALOG_FEEDBACK_SEND": "Gửi phản hồi",
-    "DIALOG_FEEDBACK_SEND_AS": "Gửi dưới dạng", 
+    "DIALOG_FEEDBACK_SEND_AS": "Gửi dưới dạng",
     "DIALOG_FEEDBACK_TRY": "Bạn có muốn dùng thử ",
     "DIALOG_FEEDBACK_LIVE_SUPPORT": "Tham gia hỗ trợ trực tiếp của chúng tôi trên Discord",
     "DIALOG_FEEDBACK_DISCORD": "Nhận hỗ trợ theo thời gian thực trên kênh Discord của chúng tôi, tham gia cộng đồng luôn phát triển của chúng tôi, đẩy nhanh quá trình giải quyết vấn đề của bạn!",
-    "DIALOG_FEEDBACK_JOIN": "Tham gia ngay hôm nay", 
+    "DIALOG_FEEDBACK_JOIN": "Tham gia ngay hôm nay",
     "DIALOG_FEEDBACK_LIVE_HUSTON": "Houston, chúng tôi gặp sự cố!",
     "DIALOG_FEEDBACK_LIVE_PREFER": "Bạn có thích ",
     "DIALOG_FEEDBACK_LIVE_WRITE": "viết thư cho chúng tôi",
@@ -603,17 +603,17 @@
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_IN_MILLIS": "Tổng thời gian chạy tính bằng mili giây",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_FORMATTED": "Tổng thời gian chạy được định dạng",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_RETRIEVE": "Truy xuất",
- 
+
     "DIALOG_MANAGE_METRICS_ENTRIES_TITLE": "Quản lý mục nhập số liệu",
     "DIALOG_MANAGE_METRICS_ENTRIES_NODE_CODE": "Mã nút",
     "DIALOG_MANAGE_METRICS_ENTRIES_LATEST_ENTRY": "Mục nhập mới nhất",
     "DIALOG_MANAGE_METRICS_ENTRIES_RETRIEVE": "Truy xuất",
- 
+
     "DIALOG_MANAGE_QUEUES_STATUS_TITLE": "Quản lý trạng thái hàng đợi",
     "DIALOG_MANAGE_QUEUES_STATUS_NODE_CODE": "Mã nút",
     "DIALOG_MANAGE_QUEUES_STATUS_STATUSES": "Trạng thái",
     "DIALOG_MANAGE_QUEUES_STATUS_RETRIEVE": "Truy xuất",
- 
+
     "DIALOG_FETCH_NODES_TITLE": "Tìm nạp các nút được sắp xếp theo điểm",
     "DIALOG_FETCH_NODES_FETCH": "Tìm nạp",
 
@@ -670,7 +670,7 @@
     "DIALOG_STYLE_UPLOAD_XML_ERROR": "Không thể cập nhật XML Kiểu",
     "DIALOG_STYLE_UPLOAD_SUCCESS": "PHONG CÁCH ĐÃ TẢI LÊN",
     "DIALOG_STYLE_FILE_ERROR": "Lỗi khi cập nhật Tệp Kiểu",
-    
+
     "DIALOG_PAYLOAD_COPY": "Sao chép tải trọng",
     "DIALOG_PAYLOAD_DASHBOARD": "Trang tổng quan",
     "DIALOG_PAYLOAD_NO_INFO": "Không có thông tin tải trọng nào cho quy trình đã chọn",
@@ -755,12 +755,12 @@
     "METADATA_DESCRIPTION": "Mô tả",
     "METADATA_GENERATING": "Đang tạo siêu dữ liệu",
     "METADATA_NONE": "Không tìm thấy siêu dữ liệu",
- 
+
     "DELETE_PROCESS_QUESTION": "Bạn có chắc chắn tắt tiến trình đang chạy này không?",
     "DELETE_PROCESS_YES": "Ừ, giết nó đi",
     "DELETE_PROCESS_NO": "Ừm, không, không hẳn",
     "DELETE_PROCESS_ERROR": "Đã xảy ra lỗi khi hủy quá trình",
- 
+
     "PROCESSES_BAR_RUNNING_PROCESSES_ERROR": "Không thể tải các tiến trình đang chạy",
 
     "DOWNLOAD_IN_WS_TITLE": "Danh sách không gian làm việc",
@@ -932,7 +932,7 @@
     "MSG_ERROR_NO_ACCESS_RIGHTS_APPLICATION_RESOURCE_SUBSCRIPTION": "BẠN KHÔNG CÓ QUYỀN THỰC HIỆN HÀNH ĐỘNG NÀY",
     "MSG_ERROR_NO_ACCESS_RIGHTS_OBJECT_SUBSCRIPTION": "BẠN KHÔNG CÓ QUYỀN THỰC HIỆN HÀNH ĐỘNG NÀY",
     "MSG_ERROR_INVALID_SUBSCRIPTION": "ĐĂNG KÝ KHÔNG HỢP LỆ",
- 
+
     "MSG_SUCCESS_RESOURCE_PERMISSION_ADDED": "GIẤY PHÉP TÀI NGUYÊN THÀNH CÔNG",
     "MSG_SUCCESS_RESOURCE_PERMISSION_REMOVED": "XÓA GIẤY PHÉP TÀI NGUYÊN THÀNH CÔNG",
 
@@ -947,7 +947,7 @@
     "MENU_BANDS": "Các dải",
     "MENU_SHARE_PRODVEL": "Chia sẻ tùy chọn sản phẩm",
     "MENU_EDIT_STYLES": "Chỉnh sửa Kiểu",
-    "MENU_EDIT_product_PROPERTIES": "Thuộc tính sản phẩm", 
+    "MENU_EDIT_product_PROPERTIES": "Thuộc tính sản phẩm",
 
     "SHARE_SEND_PRODVEL": "Gửi sản phẩm tới không gian làm việc",
     "SHARE_SEND_product_WORKSPACES": "Gửi sản phẩm tới Workspaces",
@@ -958,7 +958,7 @@
     "MENU_DELETE_MANY_1": "Xóa ",
     "MENU_DELETE_MANY_2": "Các sản phẩm",
     "MENU_DELETE_SINGLE": "Xóa sản phẩm",
-    
+
     "MARKET_SEARCH_APP": "Tìm kiếm ứng dụng",
     "MARKET_ABOVE": "Trên",
     "MARKET_NAME": "Tên",
@@ -1015,7 +1015,7 @@
     "PACKAGE_MANAGER_ROLLBACK": "Khôi phục",
     "PACKAGE_MANAGER_SEARCH": "Tìm kiếm gói",
     "PACKAGE_MANAGER_NAME": "Tên gói",
-    "PACKAGE_MANAGER_CURRENT_VERSION": "Phiên bản hiện tại", 
+    "PACKAGE_MANAGER_CURRENT_VERSION": "Phiên bản hiện tại",
     "PACKAGE_MANAGER_LATEST_VERSION": "Phiên bản mới nhất",
     "PACKAGE_MANAGER_ADD": "Thêm gói mới",
 
@@ -1026,7 +1026,7 @@
     "USER_ORGANIZATIONS_HIDE_USERS": "Ẩn người dùng",
     "USER_ORGANIZATIONS_ERROR_FETCHING": "Không thể tìm nạp tổ chức của bạn",
     "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Không thể tìm nạp thông tin tổ chức",
-    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Xác nhận xóa tổ chức", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Xác nhận xóa tổ chức",
     "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Bạn có chắc chắn muốn xóa tổ chức này không?",
     "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Xác nhận xóa quyền",
     "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Bạn có chắc chắn muốn xóa quyền của mình với tổ chức này không?",
@@ -1065,14 +1065,14 @@
     "USER_SUBSCRIPTIONS_HIDE_PROJECTS": "Ẩn dự án",
     "USER_SUBSCRIPTIONS_SHOW_ORGANIZATION": "Hiển thị tổ chức",
     "USER_SUBSCRIPTIONS_HIDE_ORGANIZATION": "Ẩn tổ chức",
-    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Xác nhận xóa đăng ký", 
-    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Bạn có chắc chắn muốn xóa đăng ký này không?", 
+    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Xác nhận xóa đăng ký",
+    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Bạn có chắc chắn muốn xóa đăng ký này không?",
     "USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG": "Lỗi khi xóa đăng ký",
     "USER_SUBSCRIPTION_REMOVE_MSG": "Đã xóa đăng ký",
     "USER_SUBSCRIPTION_UPDATED": "Đã cập nhật đăng ký",
     "USER_SUBSCRIPTION_URL": "URL thanh toán đã nhận được",
     "USER_SUBSCRIPTION_URL_ERROR": "Lỗi khi tìm nạp URL thanh toán",
-    "USER_SUBSCRIPTION_STRIPE_TITLE": "Đang chuyển hướng tới STRIPE", 
+    "USER_SUBSCRIPTION_STRIPE_TITLE": "Đang chuyển hướng tới STRIPE",
     "USER_SUBSCRIPTION_STRIPE_MSG": "Bạn sẽ được chuyển hướng tới đối tác thanh toán của chúng tôi, Stripe. Nhấp vào 'Có' để tiếp tục hoặc 'HỦY' để kết thúc quá trình thanh toán.",
     "USER_SUBSCRIPTION_STRIPE_FAIL": "Đã xảy ra lỗi khi ghi lại khoản thanh toán của bạn",
     "USER_SUBSCRIPTION_ID_ERROR": "Không thể tìm thấy đăng ký theo ID",
@@ -1102,7 +1102,7 @@
     "CREDITS_ROW_2": "Paid application declares a credit-price per square kilometer",
     "CREDITS_ROW_3": "Draw your area, evaluate the price and run your applications",
     "CREDITS_50": "50 Credits",
-    "CREDITS_100": "100 Credits",    
+    "CREDITS_100": "100 Credits",
 
     "SUBSCRIPTION_BUY_NAME": "Đặt tên cho đăng ký của bạn để bạn có thể theo dõi các dự án của mình (tùy chọn)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Chọn tổ chức mà bạn mua gói này (tùy chọn)",
@@ -1114,13 +1114,13 @@
     "CREDITS_BUY_ORGANIZATION": "Select the organisation for which you are buying this credits package (optional)",
     "CREDITS_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
     "CREDITS_BUY_ORDER_SUMMARY": "Order Summary",
-    "CREDITS_BUY_TOTAL": "Total",    
+    "CREDITS_BUY_TOTAL": "Total",
 
     "DIALOG_ADD_SUBSCRIPTION": "Thêm đăng ký",
     "DIALOG_EDIT_SUBSCRIPTION": "Chỉnh sửa đăng ký",
     "DIALOG_VIEW_SUBSCRIPTION": "Xem đăng ký",
     "DIALOG_SHARE_SUBSCRIPTION": "Chia sẻ đăng ký",
-  
+
     "DIALOG_BUY_SUBSCRIPTION": "Mua",
     "DIALOG_EDIT_SUBSCRIPTION_OWNER": "Chủ sở hữu",
     "DIALOG_EDIT_SUBSCRIPTION_NAME": "Tên",
@@ -1155,13 +1155,13 @@
 
     "USER_PROJECTS_SHOW_ORGANIZATION": "Hiển thị tổ chức",
     "USER_PROJECTS_HIDE_ORGANIZATION": "Ẩn tổ chức",
-  
+
     "DIALOG_ADD_PROJECT": "Thêm dự án",
     "DIALOG_EDIT_PROJECT": "Chỉnh sửa dự án",
     "DIALOG_VIEW_PROJECT": "Xem dự án",
- 
+
     "DIALOG_VIEW_SUBSCRIPTION_PROJECTS": "Dự án đăng ký",
-   
+
     "DIALOG_SHARE_PROJECT": "Chia sẻ dự án",
     "DIALOG_EDIT_PROJECT_NAME": "Tên",
     "DIALOG_EDIT_PROJECT_DESCRIPTION": "Mô tả",
@@ -1255,5 +1255,8 @@
     "ADMIN_SUBSCRIPTIONS_END": "End Date",
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
-    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription"    
+    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
+    "PAYMENT_SUCCESS": "Cảm ơn bạn đã thanh toán! Giao dịch của bạn đã <strong>thành công</strong> và mọi thứ đã sẵn sàng. Chúc bạn vui vẻ!",
+    "PAYMENT_CONFIRM_LOADING": "Vui lòng chờ trong khi chúng tôi xác nhận thanh toán của bạn!"
+
 }

@@ -36,7 +36,7 @@ import { ShareDialogComponent } from './shared/dialogs/share-dialog/share-dialog
 //Components
 import { CardComponent } from './components/marketplace/card/card.component';
 
-//Angular Materials Imports 
+//Angular Materials Imports
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTreeModule } from '@angular/material/tree';
@@ -179,6 +179,7 @@ import { MetadataAttributesDialogComponent } from './components/edit/products-li
 import { ResizableDirective } from './directives/resizable.directive';
 import { PrivateMissionsComponent } from './components/admin/private-missions/private-missions.component';
 import { CreditsBuyDialogComponent } from './components/subscriptions-purchase/credits-buy-dialog/credits-buy-dialog.component';
+import { PaymentSuccessComponent } from './components/subscriptions-purchase/payment-success/payment-success.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -298,6 +299,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SaveParamsDialogComponent,
     MetadataAttributesDialogComponent,
     ResizableDirective,
+    PrivateMissionsComponent,
+    PaymentSuccessComponent,
     PrivateMissionsComponent,
     CreditsBuyDialogComponent
 

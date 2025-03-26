@@ -163,8 +163,8 @@
         <app-input-field [m_sLabel]="'ADMIN_SUBSCRIPTIONS_OWNER_UID' | translate"
             [m_sInputValue]="m_oSelectedSubscription.userId? m_oSelectedSubscription.userId : ''"
             (m_oInputChange)="setInputSelections($event, 'userId')"></app-input-field>
-        <app-input-field [m_sLabel]="'ADMIN_SUBSCRIPTIONS_ORG_ID' | translate" [m_sInputValue]="m_oSelectedSubscription.organizationName? m_oSelectedSubscription.
-            organizationName: ''" (m_oInputChange)="setInputSelections($event, 'orgId')"></app-input-field>
+        <app-input-field  [m_sLabel]="'ADMIN_SUBSCRIPTIONS_ORG_ID' | translate" [m_sInputValue]="m_oSelectedSubscription.organizationId? m_oSelectedSubscription.
+            organizationId: ''" (m_oInputChange)="setInputSelections($event, 'orgId')"></app-input-field>
         <app-dropdown [m_sLabel]="'ADMIN_SUBSCRIPTIONS_TYPE' | translate" [m_aoDropdownItems]="m_asTypesMap"
             [m_aoSelectedItems]="m_oSelectedSubscription.typeName"
             (m_oSelectionChange)="getTypeSelection($event)"></app-dropdown>

@@ -1,17 +1,17 @@
 {
 	"KEY_PHRASES": {
-		"APP_NAME": "Nom de l'application", 
+		"APP_NAME": "Nom de l'application",
 		"APPLY": "Appliquer",
-        "BACK": "Retou", 
+        "BACK": "Retou",
         "CANCEL": "Annuler",
         "CLOSE": "Fermer",
         "CLIPBOARD": "Copié dans le Presse-papiers !",
         "CLIPBOARD_BTN": "Copier dans le Presse-papiers",
-        "CONFIRM_REMOVAL": "Confirmer la suppression", 
+        "CONFIRM_REMOVAL": "Confirmer la suppression",
         "COPIED": "Copié !",
         "DESCRIPTION": "Description",
         "ERROR": "Erreur",
-        "GURU_MEDITATION": "Méditation du Gourou", 
+        "GURU_MEDITATION": "Méditation du Gourou",
         "HELP": "À l'aide",
         "LOAD_MORE": "Charger plus",
         "NAME": "Nom",
@@ -38,7 +38,7 @@
     "APP_UI_NEW_EXISTING_WS_CHECK_2": "Espace de travail existant",
     "APP_UI_RUN_APP_LABEL": "Exécuter l'application dans",
     "APP_UI_AUTOMATIC_NAME_PLACEHOLDER": "[Nom automatique]",
-    "APP_UI_SELECT_WS": "Sélectionner l'espace de travail", 
+    "APP_UI_SELECT_WS": "Sélectionner l'espace de travail",
     "APP_UI_SEARCH_WS": "Rechercher des espaces de travail",
     "APP_UI_OPEN_WS": "Exécuter l'application",
     "APP_UI_AUTO_WS": "Espace de travail automatique",
@@ -50,7 +50,7 @@
     "ACTIVE_SUBSCRIPTION_ERROR_2": "Vous n'avez pas d'abonnement actif pour le moment.",
 
 	"DIALOG_PARAMS_CREATE": "Créer un modèle de paramètres",
-    "DIALOG_PARAMS_TEMPLATE_NAME": "Nom du modèle", 
+    "DIALOG_PARAMS_TEMPLATE_NAME": "Nom du modèle",
     "DIALOG_PARAMS_SAVE": "Enregistrer les paramètres",
 
 	"LOGIN_PLACEHOLDER_EMAIL": "Adresse e-mail",
@@ -148,10 +148,10 @@
 	"WORKSPACES_SHARED_WITH": "Partagé avec ",
 	"WORKSPACES_SHOW_SATS": "Afficher les satellites",
 
-	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Créer un nouvel espace de travail", 
+	"DIALOG_ADD_NEW_WORKSPACE_HEADER": "Créer un nouvel espace de travail",
     "DIALOG_ADD_NEW_WORKSPACE_EDIT_HEADER": "Mettre à jour le nom de l'espace de travail",
     "DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE": "Entrez le nom de l'espace de travail",
-    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Entrez le nouveau nom de l'espace de travail", 
+    "DIALOG_ADD_NEW_WORKSPACE_EDIT_WORKSPACE_NAME": "Entrez le nouveau nom de l'espace de travail",
     "DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON": "Créer un espace de travail",
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_BUTTON": "Mettre à jour l'espace de travail",
     "DIALOG_ADD_NEW_WORKSPACE_CANCEL_BUTTON": "Annuler",
@@ -159,9 +159,9 @@
     "DIALOG_ADD_NEW_WORKSPACE_UPDATE_SUCCESS": "Nom de l'espace de travail mis à jour",
     "DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO": "Pour les meilleures pratiques, donnez un nom significatif à votre espace de travail afin qu'il soit facile à retenir. (Facultatif)",
     "DIALOG_ADD_NEW_WORKSPACE_CREATING": "WASDI crée votre espace de travail...",
-    
-    "DIALOG_APPS_PROCESSORS_ERROR": "Une erreur s'est produite lors de la récupération des processeurs", 
-    "DIALOG_APPS_DELETE_OWNER": "Etes-vous sûr de vouloir supprimer le processeur suivant ?", 
+
+    "DIALOG_APPS_PROCESSORS_ERROR": "Une erreur s'est produite lors de la récupération des processeurs",
+    "DIALOG_APPS_DELETE_OWNER": "Etes-vous sûr de vouloir supprimer le processeur suivant ?",
     "DIALOG_APPS_DELETE_SHARED": "Êtes-vous sûr de vouloir supprimer vos autorisations du processeur suivant ?",
     "DIALOG_APPS_ERROR_DELETE": "Une erreur s'est produite lors de la tentative de suppression de votre processeur",
     "DIALOG_APPS_CANNOT_EDIT": "Vous n'avez pas la permission de modifier cet espace de travail",
@@ -191,7 +191,7 @@
 	"EDITOR_PRODUCTS_FILTER_CLEAN": "Annuler le filtre",
 	"EDITOR_PRODUCTS_FILTER_SELECT": "Sélectionner",
 	"EDITOR_PRODUCTS_WS_INFO": "Information de l'espace de travail",
-	"EDITOR_PRODUCT_REMOVE": "Confirmer la suppression du produit", 
+	"EDITOR_PRODUCT_REMOVE": "Confirmer la suppression du produit",
     "EDITOR_PRODUCTS_REMOVE": "Confirmer la suppression des produits",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI está preparando tu libreta",
     "EDITOR_NAVIGATION": "Navegación",
@@ -241,14 +241,14 @@
     "IMPORT_PRODUCT_LIST_PROTOCOL": "Protocole",
     "IMPORT_ERROR_SEARCH_REQUEST": "Erreur lors de l'ouverture de la demande de recherche",
 	"IMPORT_INVALID_DATE_RANGE": "Veuillez saisir une plage de dates valide.",
-	
+
 	"IMPORT_CRONTAB_YEAR": "Année",
     "IMPORT_CRONTAB_SEASON": "Saison",
     "IMPORT_CRONTAB_MONTH": "Mois",
     "IMPORT_CRONTAB_DATE": "Date",
 
 	"SEARCH_TITLE_PANEL_HEADING_FILTERS": "Filtres",
-	
+
 	"PLAN_SEARCH": "Chercher",
 	"PLAN_FROM": "Date de début ",
 	"PLAN_FROM_TOOLTIP": "Sélectionnez l'heure de début de l'acquisition",
@@ -310,7 +310,7 @@
     "DIALOG_IMPORT_SET_MISSION": "Souhaitez-vous spécifier le type de plate-forme du fichier téléchargé ?",
     "DIALOG_IMPORT_SELECT_MISSION": "Sélectionnez un type de plate-forme",
 
-	
+
 	"DIALOG_IMPORT_UPLOAD_STYLE": "Style",
 	"DIALOG_IMPORT_UPLOAD_UPLOAD": "Envoyer un fichier",
 	"DIALOG_IMPORT_IMPORT": "Importer",
@@ -383,10 +383,10 @@
 	"DIALOG_STYLE_MANAGER_TAB_LIST": "Liste de styles",
 	"DIALOG_STYLE_UPLOAD_STYLE": "Upload Style",
 	"DIALOG_STYLE_MANAGER_TAB_NEW": "Nouveau style",
-	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style", 
-    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",   
-    "DIALOG_STYLE_SEARCH": "Search style",   
-    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for", 
+	"DIALOG_STYLE_MANAGER_EDIT": "Edit Style",
+    "DIALOG_STYLE_MANAGER_SET_PUBLIC": "Set as public",
+    "DIALOG_STYLE_SEARCH": "Search style",
+    "DIALOG_STYLE_EDIT_XML_FOR": "Edit XML for",
 
 
 	"DIALOG_CRONOTAB_FILTERS_BOX": "Filtres",
@@ -396,7 +396,7 @@
 	"DIALOG_CRONOTAB_ADD_BUTTON": "Ajouter",
 	"DIALOG_CRONOTAB_CLEAR_BUTTON": "Nettoyer",
 	"DIALOG_CRONOTAB_TITLE": "SÉLECTEUR DE SÉRIE TEMPORELLE",
-	
+
 	"DIALOG_TITLE_WAPPS": "Applications WASDI",
 	"DIALOG_TITLE_STYLES": "Styles WASDI",
 	"DIALOG_TITLE_PAYLOAD": "Afficher la charge utile",
@@ -496,15 +496,15 @@
 	"DIALOG_PROCESSOR_SHARE_SHARE": "Partager",
 	"DIALOG_PROCESSOR_SHARE_ACTIVE": "Partages actifs",
 	"DIALOG_PROCESSOR_SHARE_REMOVE": "Retirer",
-	
+
 	"DIALOG_PROCESSOR_STORE_SUB_TITLE": "Détails de l'application",
 	"DIALOG_PROCESSOR_STORE_FRIEND_NAME": "Nom familier",
 	"DIALOG_PROCESSOR_STORE_LINK": "Lien",
 	"DIALOG_PROCESSOR_STORE_MAIL": "E-mail",
 	"DIALOG_PROCESSOR_STORE_ONDEMAND": "Prix à la demande",
 	"DIALOG_PROCESSOR_STORE_ONDEMAND_PRICE": "Prix à la demande",
-    "DIALOG_PROCESSOR_STORE_SUBSCRIPTION": "Square kilometer Price Model",
-    "DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE1": "The square-km pricing model allow the user to pay based on the dimension of the area of interest. Please specify the price per square km and the name of the parameter of your app used to read the area of interest from the app inputs.",
+	"DIALOG_PROCESSOR_STORE_SUBSCRIPTION": "Les abonnements... bientôt disponibles !",
+    "DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE1": "Nous travaillons dur sur de nouvelles améliorations dans la boutique.",
     "DIALOG_PROCESSOR_STORE_SUBSCRIPTION_LINE2": "Nous allons publier un modèle basé sur un abonnement pour vous permettre de bénéficier de revenus récurrents grâce aux applications que vous développez pour WASDI !",
 	"DIALOG_PROCESSOR_STORE_SHOW": "Afficher l'application dans le magasin",
 	"DIALOG_PROCESSOR_STORE_LONG_DESCRIPTION": "Description longue",
@@ -546,7 +546,7 @@
 	"DIALOG_LOGS_DATE": "Date: ",
 	"DIALOG_LOGS_ROW": "Ligne",
 	"DIALOG_LOGS_REFRESH": "Rafraîchir",
-	"DIALOG_LOGS_STARTED": "Démarré", 
+	"DIALOG_LOGS_STARTED": "Démarré",
     "DIALOG_LOGS_PROGRESS": "Progression",
     "DIALOG_LOGS_DURATION": "Durée",
     "DIALOG_LOGS_STATUS_PLACEHOLDER": "Sélectionner le statut",
@@ -604,17 +604,17 @@
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_IN_MILLIS": "Durée totale d'exécution en millis",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_TOTAL_RUNNING_TIME_FORMATTED": "Durée totale d'exécution formatée",
     "DIALOG_MANAGE_PROCESS_WORKSPACE_RETRIEVE": "Récupérer",
- 
+
     "DIALOG_MANAGE_METRICS_ENTRIES_TITLE": "Gérer les entrées de métriques",
     "DIALOG_MANAGE_METRICS_ENTRIES_NODE_CODE": "Code du nœud",
     "DIALOG_MANAGE_METRICS_ENTRIES_LATEST_ENTRY": "Dernière entrée",
     "DIALOG_MANAGE_METRICS_ENTRIES_RETRIEVE": "Récupérer",
- 
+
     "DIALOG_MANAGE_QUEUES_STATUS_TITLE": "Gérer l'état des files d'attente",
     "DIALOG_MANAGE_QUEUES_STATUS_NODE_CODE": "Code du nœud",
     "DIALOG_MANAGE_QUEUES_STATUS_STATUSES": "Statuts",
     "DIALOG_MANAGE_QUEUES_STATUS_RETRIEVE": "Récupérer",
- 
+
     "DIALOG_FETCH_NODES_TITLE": "Récupérer les nœuds triés par score",
     "DIALOG_FETCH_NODES_FETCH": "Récupérer",
 
@@ -671,7 +671,7 @@
     "DIALOG_STYLE_UPLOAD_XML_ERROR": "Impossible de mettre à jour le style XML",
     "DIALOG_STYLE_UPLOAD_SUCCESS": "STYLE TÉLÉCHARGÉ",
     "DIALOG_STYLE_FILE_ERROR": "Erreur lors de la mise à jour du fichier de style",
-	
+
 	"DIALOG_PAYLOAD_COPY": "Copier la charge utile",
 	"DIALOG_PAYLOAD_DASHBOARD": "Tableau de bord",
     "DIALOG_PAYLOAD_NO_INFO": "Aucune information de charge utile n'est disponible pour le processus sélectionné",
@@ -681,7 +681,7 @@
 	"WAP_SELECT_AREA_OVER_AREA": "<br> - la zone est trop grande",
 	"WAP_SELECT_AREA_OVER_SIDE": "<br> - le plus grand côté sélectionné est trop grand",
 	"WAP_SELECT_AREA_OVER_RATIO": "<br> - un côté est trop grand par rapport à l'autre",
-	
+
 	"WAP_BACK": "Retour vers le futur",
 	"WAP_REVIEWS": " commentaire(s)",
 	"WAP_PUBLISHED": "Publié par ",
@@ -749,7 +749,7 @@
 	"WAP_HISTORY_STATUS": "Statut",
 	"WAP_HISTORY_WS": "Espace de travail",
 	"WAP_SELECT_PROCESSOR": "Select A Processor",
-	
+
 	"METADATA_TITLE": "Attributs de métadonnées",
 	"METADATA_ATTRIBUTE_LIST": "Liste des attributs",
 	"METADATA_NAME": "Nom",
@@ -933,7 +933,7 @@
     "MSG_ERROR_NO_ACCESS_RIGHTS_APPLICATION_RESOURCE_SUBSCRIPTION": "VOUS N'AVEZ PAS LA PERMISSION D'EFFECTUER CETTE ACTION",
     "MSG_ERROR_NO_ACCESS_RIGHTS_OBJECT_SUBSCRIPTION": "VOUS N'AVEZ PAS LA PERMISSION D'EFFECTUER CETTE ACTION",
     "MSG_ERROR_INVALID_SUBSCRIPTION": "ABONNEMENT INVALIDE",
- 
+
     "MSG_SUCCESS_RESOURCE_PERMISSION_ADDED": "AUTORISATION DE RESSOURCE AJOUTÉE AVEC SUCCÈS",
     "MSG_SUCCESS_RESOURCE_PERMISSION_REMOVED": "AUTORISATION DE RESSOURCE SUPPRIMÉE AVEC SUCCÈS",
 
@@ -948,7 +948,7 @@
     "MENU_BANDS": "Bandes",
     "MENU_SHARE_PRODUCT": "Partager les options du produit",
     "MENU_EDIT_STYLES": "Modifier les styles",
-    "MENU_EDIT_PRODUCT_PROPERTIES": "Propriétés du produit", 
+    "MENU_EDIT_PRODUCT_PROPERTIES": "Propriétés du produit",
 
     "SHARE_SEND_PRODUCT": "Envoyer le produit vers l'espace de travail",
     "SHARE_SEND_PRODUCT_WORKSPACES": "Envoyer le produit vers les espaces de travail",
@@ -1016,7 +1016,7 @@
     "PACKAGE_MANAGER_ROLLBACK": "Restauration",
     "PACKAGE_MANAGER_SEARCH": "Rechercher un package",
     "PACKAGE_MANAGER_NAME": "Nom du package",
-    "PACKAGE_MANAGER_CURRENT_VERSION": "Version actuelle", 
+    "PACKAGE_MANAGER_CURRENT_VERSION": "Version actuelle",
     "PACKAGE_MANAGER_LATEST_VERSION": "Dernière version",
     "PACKAGE_MANAGER_ADD": "Ajouter un nouveau package",
 
@@ -1027,7 +1027,7 @@
     "USER_ORGANIZATIONS_HIDE_USERS": "Masquer les utilisateurs",
     "USER_ORGANIZATIONS_ERROR_FETCHING": "Impossible de récupérer vos organisations",
     "USER_ORGANIZATIONS_ERROR_FETCHING_INFO": "Impossible de récupérer les informations sur l'organisation",
-    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirmer la suppression de l'organisation", 
+    "USER_ORGANIZATIONS_REMOVE_OWNER_TITLE": "Confirmer la suppression de l'organisation",
     "USER_ORGANIZATIONS_REMOVE_OWNER_MSG": "Êtes-vous sûr de vouloir supprimer cette organisation ?",
     "USER_ORGANIZATIONS_REMOVE_SHARED_TITLE": "Confirmer la suppression des autorisations",
     "USER_ORGANIZATIONS_REMOVE_SHARED_MSG": "Êtes-vous sûr de vouloir supprimer vos autorisations auprès de cette organisation ?",
@@ -1036,7 +1036,7 @@
     "USER_ORGANIZATION_INVALID_INPUT": "La saisie de l'organisation n'est pas valide",
     "USER_ORGANIZATION_SAVE_ERROR": "Impossible de sauvegarder votre organisation",
     "USER_ORGANIZATION_DELETE_ERROR": "Impossible de supprimer votre organisation",
-	
+
 	"DIALOG_ADD_ORGANIZATION": "Ajouter une organisation",
     "DIALOG_EDIT_ORGANIZATION": "Modifier l'organisation",
     "DIALOG_VIEW_ORGANIZATION": "Afficher l'organisation",
@@ -1066,21 +1066,21 @@
     "USER_SUBSCRIPTIONS_HIDE_PROJECTS": "Masquer les projets",
     "USER_SUBSCRIPTIONS_SHOW_ORGANIZATION": "Afficher les organisations",
     "USER_SUBSCRIPTIONS_HIDE_ORGANIZATION": "Masquer les organisations",
-    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Confirmer la suppression de l'abonnement", 
-    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Êtes-vous sûr de vouloir supprimer cet abonnement ?", 
+    "USER_SUBSCRIPTIONS_REMOVE_TITLE": "Confirmer la suppression de l'abonnement",
+    "USER_SUBSCRIPTIONS_REMOVE_MSG": "Êtes-vous sûr de vouloir supprimer cet abonnement ?",
     "USER_SUBSCRIPTIONS_REMOVE_ERROR_MSG": "Erreur lors de la suppression de l'abonnement",
     "USER_SUBSCRIPTION_REMOVE_MSG": "Abonnement supprimé",
     "USER_SUBSCRIPTION_UPDATED": "Abonnement mis à jour",
     "USER_SUBSCRIPTION_URL": "URL de paiement reçue",
     "USER_SUBSCRIPTION_URL_ERROR": "Erreur lors de la récupération de l'URL de paiement",
-    "USER_SUBSCRIPTION_STRIPE_TITLE": "Redirection vers STRIPE", 
+    "USER_SUBSCRIPTION_STRIPE_TITLE": "Redirection vers STRIPE",
     "USER_SUBSCRIPTION_STRIPE_MSG": "Vous serez redirigé vers notre partenaire de paiement, Stripe. Cliquez sur 'Oui' pour continuer ou sur 'ANNULER' pour mettre fin au processus de paiement.",
     "USER_SUBSCRIPTION_STRIPE_FAIL": "Une erreur s'est produite lors de l'enregistrement de votre paiement",
     "USER_SUBSCRIPTION_ID_ERROR": "Impossible de trouver l'abonnement par ID",
     "USER_SUBSCRIPTION_SAVE_ERROR": "Impossible d'enregistrer l'abonnement",
     "USER_SUBSCRIPTION_ORGANIZATION_ERROR": "Impossible d'obtenir les organisations d'utilisateurs",
 
-	"SUBSCRIPTIONS_HEADER": "Choisissez votre forfait <strong>abonnement</strong>",
+	"SUBSCRIPTIONS_HEADER": "Choisissez votre forfait <strong>space-y</strong>",
     "SUBSCRIPTIONS_UP_TO": "Jusqu'à",
     "SUBSCRIPTIONS_STARTER": "Démarreur",
     "SUBSCRIPTIONS_STANDARD": "Standard",
@@ -1096,27 +1096,12 @@
     "SUBSCRIPTIONS_DAY": "Jour",
     "SUBSCRIPTIONS_WEEK": "Semaine",
 
-    "CREDITS_HEADER": "Want to work with <strong>credits</strong>?",
-    "CREDITS_BOX": "Get Credits",
-    "CREDITS_BOX_DESC": "Credits can be used to run paid applications in WASDI",
-    "CREDITS_ROW_1": "Recharge your wallet with credits when needed",
-    "CREDITS_ROW_2": "Paid application declares a credit-price per square kilometer",
-    "CREDITS_ROW_3": "Draw your area, evaluate the price and run your applications",
-    "CREDITS_50": "50 Credits",
-    "CREDITS_100": "100 Credits",	
-
 	"SUBSCRIPTION_BUY_NAME": "Donnez un nom à votre abonnement pour pouvoir suivre vos projets (facultatif)",
     "SUBSCRIPTION_BUY_ORGANIZATION": "Sélectionnez l'organisation pour laquelle vous achetez ce plan (facultatif)",
     "SUBSCRIPTION_BUY_CHECKOUT_STRIPE": "Paiement sur Stripe",
     "SUBSCRIPTION_BUY_ORDER_SUMMARY": "Récapitulatif de la commande",
     "SUBSCRIPTION_BUY_TOTAL": "Total",
 
-    "CREDITS_BUY_NAME": "Give your credits package a name so you can keep track of your projects (optional)",
-    "CREDITS_BUY_ORGANIZATION": "Select the organisation for which you are buying this credits package (optional)",
-    "CREDITS_BUY_CHECKOUT_STRIPE": "Checkout on Stripe",
-    "CREDITS_BUY_ORDER_SUMMARY": "Order Summary",
-    "CREDITS_BUY_TOTAL": "Total",	
-  
     "DIALOG_ADD_SUBSCRIPTION": "Ajouter un abonnement",
     "DIALOG_EDIT_SUBSCRIPTION": "Modifier l'abonnement",
     "DIALOG_VIEW_SUBSCRIPTION": "Afficher l'abonnement",
@@ -1156,13 +1141,13 @@
 
 	"USER_PROJECTS_SHOW_ORGANIZATION": "Afficher les organisations",
     "USER_PROJECTS_HIDE_ORGANIZATION": "Masquer les organisations",
-  
+
     "DIALOG_ADD_PROJECT": "Ajouter un projet",
     "DIALOG_EDIT_PROJECT": "Modifier le projet",
     "DIALOG_VIEW_PROJECT": "Afficher le projet",
- 
+
     "DIALOG_VIEW_SUBSCRIPTION_PROJECTS": "Projets d'abonnement",
-   
+
     "DIALOG_SHARE_PROJECT": "Partager le projet",
     "DIALOG_EDIT_PROJECT_NAME": "Nom",
     "DIALOG_EDIT_PROJECT_DESCRIPTION": "Description",
@@ -1177,7 +1162,7 @@
     "DIALOG_EDIT_PROJECT_SEARCH": "Rechercher",
     "DIALOG_EDIT_PROJECT_CHANGE_ACTIVE": "Changement actif",
     "DIALOG_EDIT_PROJECT_SELECT_ACTIVE_PROJECT": "Sélectionnez le projet actif",
-	
+
 	"MSG_ERROR_ACTIVE_PROJECT_REQUIRED": "Un abonnement valide et un projet actif sont requis. Veuillez consulter le tableau de bord utilisateur.",
 
 	"DASHBOARD_CONFIRM_NODE_TITLE": "Confirmer la mise à jour du nœud",
@@ -1256,5 +1241,8 @@
     "ADMIN_SUBSCRIPTIONS_END": "End Date",
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
-    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription"
+    "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
+  "PAYMENT_SUCCESS": "Merci pour votre paiement ! Votre transaction a été <strong>réussie</strong> et tout est prêt. Profitez-en !",
+  "PAYMENT_CONFIRM_LOADING": "Veuillez patienter pendant que nous confirmons votre paiement !"
+
 }
