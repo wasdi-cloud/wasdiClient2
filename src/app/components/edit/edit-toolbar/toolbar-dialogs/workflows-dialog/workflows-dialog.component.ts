@@ -618,7 +618,7 @@ export class WorkflowsDialogComponent implements OnInit {
     navigator.clipboard.writeText(sTextToCopy).then(
       () => {
         this.m_oNotificationDisplayService.openSnackBar(
-          "Copied name successfully",
+          "Copied text successfully",
           "Update",
           "success-snackbar"
         )
