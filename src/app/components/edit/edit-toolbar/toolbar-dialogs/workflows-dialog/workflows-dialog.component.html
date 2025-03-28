@@ -119,9 +119,17 @@
         <div *ngIf="!m_bShowInputs && !m_bShowEditInputs && !m_bShowXML && !m_bShowShare"
             class="json-container d-flex flex-column justify-content-between">
             <div class="json-header d-flex flex-column">
-                <div class="processor-name font-bold">{{m_oSelectedWorkflow.name ?
-                    m_oSelectedWorkflow.name: 'Select A Workflow'}}</div>
-                <p *ngIf="m_oSelectedWorkflow.userId">{{'WAP_PUBLISHER' | translate}}: {{m_oSelectedWorkflow.userId}}
+              <div class="d-inline font-bold">
+                  <span class="workflow-name" (click)="copyToClipboard(m_oSelectedWorkflow.name)">
+                    {{ m_oSelectedWorkflow.name || 'Select A Workflow' }}
+                  </span>
+                  <span *ngIf="m_oSelectedWorkflow.name" class="font-bold"> - </span>
+                  <span class="workflow-id" (click)="copyToClipboard(m_oSelectedWorkflow.workflowId)">
+                    {{ m_oSelectedWorkflow.workflowId || '' }}
+                  </span>
+              </div>
+
+              <p *ngIf="m_oSelectedWorkflow.userId">{{ 'WAP_PUBLISHER' | translate }}: {{ m_oSelectedWorkflow.userId }}
                 </p>
             </div>
             <div *ngIf="!m_bIsBatchProcessing" class="flex-fill workflows-product-container">

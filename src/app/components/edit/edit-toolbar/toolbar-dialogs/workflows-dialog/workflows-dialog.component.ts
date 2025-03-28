@@ -613,4 +613,21 @@ export class WorkflowsDialogComponent implements OnInit {
 
     }
   }
+
+  copyToClipboard(sTextToCopy:string): void {
+    navigator.clipboard.writeText(sTextToCopy).then(
+      () => {
+        this.m_oNotificationDisplayService.openSnackBar(
+          "Copied name successfully",
+          "Update",
+          "success-snackbar"
+        )
+        console.log('Text copied to clipboard');
+      },
+      (err) => {
+        console.error('Failed to copy text: ', err);
+      }
+    );
+
+  }
 }
