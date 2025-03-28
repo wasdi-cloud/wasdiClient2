@@ -3,7 +3,7 @@
 }
 
 .json-container {
-    position:relative; 
+    position:relative;
 
 }
 .help-container {
@@ -23,4 +23,13 @@
 .help-icon {
     color: var(--wasdiGreen);
     cursor: pointer;
+}
+
+.processor-name, .processor-id {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.processor-name:hover, .processor-id:hover {
+  color: var(--wasdiGreen);
 }

@@ -131,7 +131,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.m_oProcessorService.getProcessorsList().subscribe({
       next: (oResponse) => {
-        
+
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_aoProcessorList = this.setDefaultImages(oResponse);
         } else {
@@ -213,15 +213,15 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
         let sPrettyPrint = JSON.stringify(oParsed, null, 2);
 
         this.m_sMyJsonString = sPrettyPrint;
-      } 
+      }
       catch (oError) {
 
       }
-    } 
+    }
     else {
       this.m_sMyJsonString = '';
     }
-    this.m_oJsonEditorService.setText(this.m_sMyJsonString);    
+    this.m_oJsonEditorService.setText(this.m_sMyJsonString);
   }
 
   /**
@@ -283,7 +283,7 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
             ) {
               this.m_oSelectedProcessor = {} as Application;
             }
-          }  
+          }
         }
 
         this.initJsonEditor();
@@ -485,9 +485,9 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
           sNotificationMsg,
           '',
           'danger-snackbar'
-        );        
+        );
       }
-    
+
     });
     return true;
   }
@@ -550,10 +550,10 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
         if (oRabbitMessage.payload.includes("Re Deploy")) {
           bRefresh = true
         }
-      }  
+      }
     }
     catch(e) {}
-    
+
     if (bRefresh) {
       oController.getProcessorsList();
     }
@@ -663,5 +663,22 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   onDismiss() {
     this.m_oDialogRef.close();
+  }
+
+  copyToClipboard(sTextToCopy:string): void {
+    navigator.clipboard.writeText(sTextToCopy).then(
+      () => {
+        this.m_oNotificationDisplayService.openSnackBar(
+          "Copied text successfully",
+          "Update",
+          "success-snackbar"
+        )
+        console.log('Text copied to clipboard');
+      },
+      (err) => {
+        console.error('Failed to copy text: ', err);
+      }
+    );
+
   }
 }

@@ -42,3 +42,12 @@
     padding: 12px;
     border-radius: 6px;
 }
+
+.workflow-name, .workflow-id {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.workflow-name:hover, .workflow-id:hover {
+  color: var(--wasdiGreen);
+}

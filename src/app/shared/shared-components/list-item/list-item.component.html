@@ -217,7 +217,7 @@
     <!-- Copy Button - conditionally visible based on m_bHasCopyButton -->
     <div class="d-flex flex-column flex-fill" style="width: 85%">
       <div class="d-flex flex-row w-100 justify-content-between">
-        <div class="label" (click)="copyToClipboard(m_sLabel)">{{ m_sLabel }}</div>
+        <div class="label" >{{ m_sLabel }}</div>
         <div class="processor-toolbar d-flex flex-row align-items-center gap-2">
           <span
             *ngIf="!m_oProcessorItem.styleId && !m_oProcessorItem.workflowId"

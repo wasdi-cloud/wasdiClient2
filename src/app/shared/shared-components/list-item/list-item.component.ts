@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ProcessorService } from 'src/app/services/api/processor.service';
-import { MapService } from 'src/app/services/map.service';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {ProcessorService} from 'src/app/services/api/processor.service';
+import {MapService} from 'src/app/services/map.service';
 
 import * as $ from 'jquery';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs';
 import {NotificationDisplayService} from "../../../services/notification-display.service";
 
 @Component({
@@ -171,20 +171,5 @@ export class ListItemComponent implements OnInit, OnDestroy {
   }
 
 
-  copyToClipboard(sTextToCopy:string): void {
-    navigator.clipboard.writeText(sTextToCopy).then(
-      () => {
-        this.m_oNotificationDialog.openSnackBar(
-          "Copied name successfully",
-          "Update",
-          "success-snackbar"
-        )
-        console.log('Text copied to clipboard');
-      },
-      (err) => {
-        console.error('Failed to copy text: ', err);
-      }
-    );
 
-  }
 }

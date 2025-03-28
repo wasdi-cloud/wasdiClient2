@@ -67,12 +67,14 @@
     </div>
     <div class="json-container d-flex flex-column justify-content-between">
       <div class="json-header d-flex flex-column">
-        <div class="processor-name font-bold">
-          {{
-            m_oSelectedProcessor.processorName
-              ? m_oSelectedProcessor.processorName
-              : ("WAP_SELECT_PROCESSOR" | translate)
-          }}
+        <div class="d-inline font-bold">
+                  <span class="processor-name" (click)="copyToClipboard(m_oSelectedProcessor.processorName)">
+                    {{ m_oSelectedProcessor.processorName || ("WAP_SELECT_PROCESSOR" | translate) }}
+                  </span>
+          <span *ngIf="m_oSelectedProcessor.processorName" class="font-bold"> - </span>
+          <span class="processor-id" (click)="copyToClipboard(m_oSelectedProcessor.processorId)">
+                    {{ m_oSelectedProcessor.processorId || '' }}
+                  </span>
         </div>
         <p *ngIf="m_oSelectedProcessor.publisherNickName">
           {{ "WAP_PUBLISHER" | translate }}:
