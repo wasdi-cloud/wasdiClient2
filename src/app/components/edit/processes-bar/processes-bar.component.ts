@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
 //Angular Material Imports: 
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ProcessesBarTableComponent } from './processes-bar-table/processes-bar-table.component';
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { Subscription } from 'rxjs';
 
 export interface SearchFilter {
   sStatus: string,
@@ -27,7 +28,7 @@ export interface SearchFilter {
   templateUrl: './processes-bar.component.html',
   styleUrls: ['./processes-bar.component.css'],
 })
-export class ProcessesBarComponent implements OnInit {
+export class ProcessesBarComponent implements OnInit, OnDestroy {
   @Input() m_oActiveWorkspace?: any = {};
   @Input() m_sDownloadProductName?: string = "";
   @Input() m_bShowDownloadProgress: boolean = false;
@@ -43,56 +44,44 @@ export class ProcessesBarComponent implements OnInit {
   m_iWaitingProcesses: number = 0;
 
   m_oLastProcesses: any = null;
-  m_oProcessesBarSubscription: any;
   m_oSummary: any;
 
-  m_sWorkspaceId: string = ""
+  m_sWorkspaceId: string = "";
+  m_oUpdateInterval: any;
+
+  m_bSuspendTimer: boolean;
 
   constructor(
-    private _bottomSheet: MatBottomSheet,
+    private m_oBottomSheet: MatBottomSheet,
     private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarTableComponent>,
     private m_oConstantsService: ConstantsService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oTranslate: TranslateService) {
-    setTimeout(() => {
-      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProcessesRunning) && this.m_aoProcessesRunning.length != 0) {
-        let iNumberOfProcesses = this.m_aoProcessesRunning.length;
-
-
-        for (let iIndexProcess = 0; iIndexProcess < iNumberOfProcesses; iIndexProcess++) {
-          if (this.m_aoProcessesRunning[iIndexProcess].status === "RUNNING" ||
-            this.m_aoProcessesRunning[iIndexProcess].status === "WAITING" ||
-            this.m_aoProcessesRunning[iIndexProcess].status === "READY") {
-            this.m_aoProcessesRunning[iIndexProcess].timeRunning.setSeconds(this.m_aoProcessesRunning[iIndexProcess].timeRunning.getSeconds() + 1);
-          }
+      
+      this.m_oUpdateInterval = setInterval(() => {
+        if (!this.m_bSuspendTimer) {
+          this.getSummary();
         }
-      }
-
-    }, 1000)
+        
+      }, 5000)
   }
 
   ngOnInit() {
-    this.m_sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
-    this.getSummary();
 
-    this.m_oProcessesBarSubscription = this.m_oProcessWorkspaceService.updateProcessBarMsg.subscribe(oResponse => {
-      if (oResponse.message === "m_aoProcessesRunning:updated" && oResponse.data === true) {
-        let aoProcessesRunning = this.m_oProcessWorkspaceService.getProcesses().value;
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(aoProcessesRunning)) {
-          this.getSummary();
-          this.m_oLastProcesses = this.findLastProcess(aoProcessesRunning)
-        }
-      }
-    })
+    this.getSummary();
 
     this.m_oRabbitStompService.getConnectionState().subscribe(oResponse => {
       this.m_iIsWebsocketConnected = oResponse;
     });
   }
 
-
+  ngOnDestroy(): void {
+    if (this.m_oUpdateInterval) {
+      clearInterval(this.m_oUpdateInterval);
+    }
+  }
 
   /**
    * Handler for messages that add a new product to the Workspace
@@ -101,9 +90,6 @@ export class ProcessesBarComponent implements OnInit {
   receivedNewProductMessage(oMessage: any) {
     let sMessage: string = this.m_oTranslate.instant("MSG_EDIT_PRODUCT_ADDED")
     this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'generic');
-
-    //Emit the message payload and file name to parent: 
-
   }
 
   /**
@@ -112,34 +98,44 @@ export class ProcessesBarComponent implements OnInit {
   getSummary() {
     let sMessage: string;
 
-    //ASYNC Translation in case of refresh (reloading translations):
-    this.m_oTranslate.get("MSG_SUMMARY_ERROR").subscribe(sTranslation => {
-      sMessage = sTranslation;
-      this.m_oProcessWorkspaceService.getSummary().subscribe({
-        next: oResponse => {
-          if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
-          } else {
-            this.m_oSummary = oResponse;
-            this.m_iNumberOfProcesses = oResponse.allProcessRunning;
-            this.m_iWaitingProcesses = oResponse.allProcessWaiting;
+    if (this.m_oConstantsService.getActiveWorkspace().workspaceId) {
+      //ASYNC Translation in case of refresh (reloading translations):
+      this.m_oTranslate.get("MSG_SUMMARY_ERROR").subscribe(sTranslation => {
+        sMessage = sTranslation;
+        this.m_oProcessWorkspaceService.getSummary().subscribe({
+          next: oResponse => {
+            if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+              this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
+            } 
+            else {
+              this.m_oSummary = oResponse;
+              this.m_iNumberOfProcesses = oResponse.allProcessRunning;
+              this.m_iWaitingProcesses = oResponse.allProcessWaiting;
+            }
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert')
           }
-        },
-        error: oError => {
-          this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert')
-        }
+        });
       });
-    });
+    }
   }
 
   openProcessesBar(): void {
     if (this.m_bIsOpen === false) {
-      this._bottomSheet.open(ProcessesBarTableComponent, {
+      this.m_bSuspendTimer = true;
+
+      let oOpenedBarTableRef =this.m_oBottomSheet.open(ProcessesBarTableComponent, {
         data: {
           workspace: this.m_oActiveWorkspace
         }
+      });
+
+      oOpenedBarTableRef.afterDismissed().subscribe(() => {
+        this.m_bSuspendTimer = false;
       })
-    } else {
+    } 
+    else {
       this.m_oBottomSheetRef.dismiss();
     }
   }
