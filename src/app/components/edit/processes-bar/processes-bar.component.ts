@@ -63,6 +63,8 @@ export class ProcessesBarComponent implements OnInit, OnDestroy {
       this.m_oUpdateInterval = setInterval(() => {
         if (!this.m_bSuspendTimer) {
           this.getSummary();
+          let aoProcessesRunning = this.m_oProcessWorkspaceService.getProcesses().value;          
+          this.m_oLastProcesses = this.findLastProcess(aoProcessesRunning)
         }
         
       }, 5000)

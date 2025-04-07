@@ -82,9 +82,7 @@ export class ProcessWorkspaceService {
 
     return this.m_oHttp.get<any>(sUrl + '/process/lastbyws?workspace=' + sWorkspaceId).subscribe(oResponse => {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-        // this.m_aoProcessesRunning = oResponse; 
         this.setProcessesRunning(oResponse.reverse());
-        //this.updateProcessesBar("m_aoProcessesRunning:updated", true);
       }
     });
   };
