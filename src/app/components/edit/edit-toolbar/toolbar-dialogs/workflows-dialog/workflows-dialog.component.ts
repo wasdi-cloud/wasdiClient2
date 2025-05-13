@@ -586,10 +586,13 @@ export class WorkflowsDialogComponent implements OnInit {
   }
 
   updateWorkflowXML() {
+
+    this.m_sWorkflowXML = this.m_oJsonEditorService.getValue();
+
     if (this.m_sWorkflowXML) {
       let oBody = new FormData();
-      oBody.append('graphXML', this.m_sWorkflowXML);
-      this.m_oWorkflowService.postWorkflowXml(this.m_oSelectedWorkflow.workflowId, oBody).subscribe({
+      //oBody.append('graphXML', this.m_sWorkflowXML);
+      this.m_oWorkflowService.postWorkflowXml(this.m_oSelectedWorkflow.workflowId, this.m_sWorkflowXML).subscribe({
         next: oResponse => {
           if (oResponse.status === 200) {
             let sMessage = "WORKFLOW XML UPDATED";

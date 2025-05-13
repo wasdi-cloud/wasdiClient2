@@ -95,9 +95,9 @@ export class WorkflowService {
   // Update workflow xml
   postWorkflowXml(sWorkflowId: string, sWorkflowXml: any) {
     return this.oHttp.post(this.APIURL + '/workflows/updatexml?workflowId=' + sWorkflowId, sWorkflowXml, {
-      // headers: new HttpHeaders({
-      //   'Content-Type': 'form-data'
-      // }),
+      headers: new HttpHeaders({
+        'Content-Type': 'application/xml'
+      }),
       observe: 'response'
     });
   }
