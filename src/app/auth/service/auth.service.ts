@@ -221,4 +221,8 @@ export class AuthService {
   getClientConfig() {
     return this.m_oHttp.get(this.APIURL + "/auth/config");
   }
+
+  getSkin(sSkin: string) {
+    return this.m_oHttp.get(this.APIURL + "/auth/skin?skin=" + sSkin);
+  }
 }

@@ -1,6 +1,8 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { ConstantsService } from 'src/app/services/constants.service';
 
 declare const bootstrap: any;
 
@@ -36,13 +38,29 @@ export class MenuListItemComponent implements OnInit, OnChanges {
 
   m_bIsActive: boolean = false;
 
+  m_sHelpUrl: string = "https://wasdi.readthedocs.io/en/latest/";
+  private m_oSkinSubscription: Subscription;
+  
   constructor(
     private m_oRouter: Router,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oConstantsService: ConstantsService
   ) { }
 
   ngOnInit(): void {
     this.m_sName = this.m_oMenuItemInfo.name;
+
+    this.m_oSkinSubscription = this.m_oConstantsService.m_oSkin$.subscribe(oSkin => {
+      if (oSkin) {
+        this.m_sHelpUrl = oSkin.helpLink || "https://wasdi.readthedocs.io/en/latest/";
+      }
+    });
+
+    const m_oCurrentSkin = this.m_oConstantsService.getSkin();
+    if (m_oCurrentSkin) {
+      this.m_sHelpUrl = m_oCurrentSkin.helpLink || "https://wasdi.readthedocs.io/en/latest/";
+    }
+
     if (this.m_sName === 'edit') {
       this.m_sRouterLink = `${this.m_oMenuItemInfo.routerLink}${this.m_sActiveWorkspaceId}`
     } else {
@@ -64,4 +82,10 @@ export class MenuListItemComponent implements OnInit, OnChanges {
   openDocs(sUrl) {
     window.open(sUrl, "_blank");
   }
+
+  ngOnDestroy(): void {
+    if (this.m_oSkinSubscription) {
+      this.m_oSkinSubscription.unsubscribe();
+    }
+  }    
 }
