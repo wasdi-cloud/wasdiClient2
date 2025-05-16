@@ -116,6 +116,11 @@ export class LoginComponent implements OnInit {
             oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
           } else {
             oController.m_oConstantsService.setSkin(oResponse);
+            const m_oCurrentSkin = this.m_oConstantsService.getSkin();
+            var sBrandMainColor = m_oCurrentSkin.brandMainColor;
+            var sBrandSecondaryColor = m_oCurrentSkin.brandSecondaryColor;
+            document.documentElement.style.setProperty('--neutral50Brand',  sBrandMainColor);
+            document.documentElement.style.setProperty('--wasdiGreen',  sBrandSecondaryColor);
           }
         },
         error: oError => {

@@ -74,7 +74,9 @@ export class ConstantsService {
 	  logoImage: "/assets/icons/logo-only.svg",
 	  logoText: "/assets/icons/logo-name.svg",
 	  helpLink: "",
-	  supportLink: ""    
+	  supportLink: "",  
+    brandMainColor: "",
+    brandSecondaryColor: ""
   };
 
   constructor(
