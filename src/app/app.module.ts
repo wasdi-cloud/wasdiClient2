@@ -180,6 +180,7 @@ import { ResizableDirective } from './directives/resizable.directive';
 import { PrivateMissionsComponent } from './components/admin/private-missions/private-missions.component';
 import { CreditsBuyDialogComponent } from './components/subscriptions-purchase/credits-buy-dialog/credits-buy-dialog.component';
 import { PaymentSuccessComponent } from './components/subscriptions-purchase/payment-success/payment-success.component';
+import { LoginCoplacComponent } from './components/login/login-coplac/login-coplac.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -302,7 +303,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     PrivateMissionsComponent,
     PaymentSuccessComponent,
     PrivateMissionsComponent,
-    CreditsBuyDialogComponent
+    CreditsBuyDialogComponent,
+    LoginCoplacComponent
 
   ],
   imports: [

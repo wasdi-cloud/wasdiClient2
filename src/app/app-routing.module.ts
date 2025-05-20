@@ -7,6 +7,7 @@ import { AppDetailsComponent } from './components/app-details/app-details/app-de
 import { AppUiComponent } from './components/app-ui/app-ui.component';
 import { EditComponent } from './components/edit/edit.component';
 import { LoginComponent } from './components/login/login.component';
+import { LoginCoplacComponent } from './components/login/login-coplac/login-coplac.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SearchOrbit } from './components/plan/search-orbit.component';
@@ -22,6 +23,7 @@ import {PaymentSuccessComponent} from "./components/subscriptions-purchase/payme
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [IsSignedInGuard] },
+  { path: 'login-coplac', component: LoginCoplacComponent, canActivate: [IsSignedInGuard] },
   { path: 'login&iss', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'settings', component: AdminComponent },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
