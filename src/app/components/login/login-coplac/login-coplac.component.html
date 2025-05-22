@@ -2,10 +2,13 @@
     <div class="form-container mx-auto d-flex flex-column gap-5 col-4">
         <div class="header-logo-container font-bold d-flex flex-column gap-2">
             <div class="logos-container d-flex flex-row align-items-center gap-2">
-                <!-- <img class="logo-only" src="/assets/icons/logo-only-coplac.svg" alt=""> -->
                 <img class="logo-name" src="/assets/icons/logo-name-coplac.png" alt="">
             </div>
             Copernicus Centre for Latin America and the Caribbean
+            <br>
+            <div class="header-logo-footer">
+                Specialized Processing Environment
+            </div>
         </div>
         <div class="d-flex flex-column gap-3">
             <div>
@@ -13,8 +16,8 @@
                 <div>Login to CopLAC to start<br></div>
             </div>
             <div class="login-container justify-self-center d-flex flex-column">
-                <app-input-field class="pt-3" [m_sLabel]="'Email Address'" (m_oInputChange)="setUsernameInput($event)" [m_sInputValue]="form.username"
-                    (keyup.enter)="login()"></app-input-field>
+                <app-input-field class="pt-3" [m_sLabel]="'Email Address'" (m_oInputChange)="setUsernameInput($event)"
+                    [m_sInputValue]="form.username" (keyup.enter)="login()"></app-input-field>
                 <div class="password">
                     <app-input-field [m_sLabel]="'Password'" [m_sInputType]="'password'" [m_sIconRight]="'visibility'"
                         (m_oInputChange)="setPasswordInput($event)" (keyup.enter)="login()"></app-input-field>
@@ -34,3 +37,8 @@
     <div class="img-container">
     </div>
 </main>
+<footer class="footer">
+    <div class="powered-by">
+        Powered by <img src="/assets/icons/logo-name.svg" alt="Logo" class="powered-logo">
+    </div>
+</footer>
