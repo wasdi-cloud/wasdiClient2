@@ -1001,6 +1001,7 @@
     "DIALOG_SHARE_SUBSCRIPTION_ERROR": "Impossible de partager l'abonnement",
     "DIALOG_SHARE_PERMISSION_ERROR": "Vous n'avez pas les autorisations pour supprimer cet utilisateur",
     "DIALOG_SHARE_USER_ERROR": "Impossible de supprimer l'utilisateur",
+	"DIALOG_SHARE_ORGANIZATION_ERROR": "Impossible de partager l'organisation, veuillez vérifier si le courrier sélectionné possède un compte valide dans WASDI",
 
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Affichage des forfaits pour ",
 	"DIALOG_PACKAGE_MANAGER_HEADER": "Directeur chargé d'emballage",
