@@ -53,7 +53,7 @@ export class HeaderComponent implements OnInit {
     // Subscribe to skin changes
     this.m_oSkinSubscription = this.m_oConstantsService.m_oSkin$.subscribe(oSkin => {
       if (oSkin) {
-        this.m_sLogoImage = oSkin.logoImage || '/assets/icons/logo-only.svg';
+        this.m_sLogoImage = oSkin.logoImage;
         this.m_sLogoText = oSkin.logoText || '/assets/icons/logo-name.svg';
         this.m_sSupportLink = oSkin.supportLink || 'https://discord.gg/FkRu2GypSg';
       }
