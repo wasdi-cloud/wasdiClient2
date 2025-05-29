@@ -1000,6 +1000,7 @@
     "DIALOG_SHARE_SUBSCRIPTION_ERROR": "No se pudo compartir la suscripción",
     "DIALOG_SHARE_PERMISSION_ERROR": "No tienes permisos para eliminar a este usuario",
     "DIALOG_SHARE_USER_ERROR": "No se pudo eliminar el usuario",
+    "DIALOG_SHARE_ORGANIZATION_ERROR": "No se pudo compartir la Organización, por favor verificar si el correo seleccionado tiene una cuenta válida en WASDI",
 
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Ver paquetes para",
     "DIALOG_PACKAGE_MANAGER_HEADER": "Administrador de paquetes",

@@ -999,6 +999,7 @@
     "DIALOG_SHARE_SUBSCRIPTION_ERROR": "Konnte Abonnement nicht freigeben",
     "DIALOG_SHARE_PERMISSION_ERROR": "Sie haben nicht die Berechtigung, diesen Benutzer zu entfernen",
     "DIALOG_SHARE_USER_ERROR": "Benutzer konnte nicht entfernt werden",
+    "DIALOG_SHARE_ORGANIZATION_ERROR": "Organisation konnte nicht freigegeben werden. Bitte überprüfen Sie, ob die ausgewählte E-Mail über ein gültiges Konto in WASDI verfügt",
 
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Anzeige von Paketen für",
     "DIALOG_PACKAGE_MANAGER_HEADER": "Paketmanager",

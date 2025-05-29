@@ -1000,6 +1000,7 @@
     "DIALOG_SHARE_SUBSCRIPTION_ERROR": "Không thể chia sẻ đăng ký",
     "DIALOG_SHARE_PERMISSION_ERROR": "Bạn không có quyền xóa người dùng này",
     "DIALOG_SHARE_USER_ERROR": "Không thể xóa người dùng",
+    "DIALOG_SHARE_ORGANIZATION_ERROR": "Không thể chia sẻ Tổ chức, vui lòng kiểm tra xem thư đã chọn có tài khoản hợp lệ trong WASDI không",
 
     "DIALOG_PACKAGE_MANAGER_VIEWING": "Xem các gói cho",
     "DIALOG_PACKAGE_MANAGER_HEADER": "Trình quản lý gói",

@@ -1001,6 +1001,7 @@
     "DIALOG_SHARE_SUBSCRIPTION_ERROR": "Tidak dapat membagikan Langganan",
     "DIALOG_SHARE_PERMISSION_ERROR": "Anda tidak memiliki izin untuk menghapus pengguna ini",
     "DIALOG_SHARE_USER_ERROR": "Tidak dapat menghapus pengguna",
+	"DIALOG_SHARE_ORGANIZATION_ERROR": "Tidak dapat membagikan Organisasi, harap periksa apakah email yang dipilih memiliki akun yang valid di WASDI",
 
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Melihat Paket Untuk",
 	"DIALOG_PACKAGE_MANAGER_HEADER": "Manajer Paket",

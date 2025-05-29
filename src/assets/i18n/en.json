@@ -1003,6 +1003,7 @@
     "DIALOG_SHARE_SUBSCRIPTION_ERROR": "Could not share Subscription",
     "DIALOG_SHARE_PERMISSION_ERROR": "You do not have the permissions to remove this user",
     "DIALOG_SHARE_USER_ERROR": "Could not remove user",
+    "DIALOG_SHARE_ORGANIZATION_ERROR": "Could not share Organization, please check if the mail selected has a valid account in WASDI",
 
     "DIALOG_PACKAGE_MANAGER_VIEWING": "Viewing Packages For",
     "DIALOG_PACKAGE_MANAGER_HEADER": "Package Manager",

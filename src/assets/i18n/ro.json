@@ -1000,6 +1000,7 @@
     "DIALOG_SHARE_SUBSCRIPTION_ERROR": "Nu s-a putut partaja abonamentul",
     "DIALOG_SHARE_PERMISSION_ERROR": "Nu aveți permisiunea de a elimina acest utilizator",
     "DIALOG_SHARE_USER_ERROR": "Nu s-a putut elimina utilizatorul",
+    "DIALOG_SHARE_ORGANIZATION_ERROR": "Nu s-a putut partaja organizația, vă rugăm să verificați dacă e-mailul selectat are un cont valid în WASDI",
 
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Vizualizarea pachetelor pentru",
     "DIALOG_PACKAGE_MANAGER_HEADER": "Manager de pachete",

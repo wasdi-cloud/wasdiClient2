@@ -1000,7 +1000,8 @@
     "DIALOG_SHARE_SUBSCRIPTION_ERROR": "Impossibile condividere l'abbonamento",
     "DIALOG_SHARE_PERMISSION_ERROR": "Non hai i permessi per rimuovere questo utente",
     "DIALOG_SHARE_USER_ERROR": "Impossibile rimuovere l'utente",
-
+	"DIALOG_SHARE_ORGANIZATION_ERROR": "Impossibile condividere l'Organizzazione, verificare che la mail specificata abbia un account valido in WASDI",
+	
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Visualizzazione dei pacchetti per",
 	"DIALOG_PACKAGE_MANAGER_HEADER": "Gestore di pacchetti",
 	"DIALOG_PACKAGE_MANAGER_NAME": "Nome del pacchetto",
