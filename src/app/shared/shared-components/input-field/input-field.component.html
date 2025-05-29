@@ -11,7 +11,7 @@
         <input type="{{m_sInputType}}" class="form-control" name="{{m_sInputName}}" placeholder="{{m_sPlaceholder}}"
             [readOnly]="m_bIsReadonly" aria-label="InputField" aria-describedby="basic-addon1" pattern="{{m_sPattern}}"
             [value]="m_sInputValue" (change)="emitInputChange($event)" (keyup)="emitInputChange($event)" [disabled]="m_bIsDisabled"
-             max="{{m_sMaxValue}}" min="{{m_sMinValue}}">
+            (keydown.enter)="onEnterPressed()" max="{{m_sMaxValue}}" min="{{m_sMinValue}}">
         <div class="icon-right input-group-append" *ngIf="m_sIconRight"
             (click)="m_sIconRight === 'visibility'? toggleType() : ''">
             <span class="material-symbols-outlined input-group-text" [class.invalid]="!m_bIsValid">

@@ -13,11 +13,11 @@
             <app-input-field style="padding-bottom: 2px" class="flex-fill" style="width: 33%"
                 [m_sLabel]="'DIALOG_LOGS_NAME' | translate" [m_sInputValue]="m_oFilter.sName"
                 [m_sPlaceholder]="'DIALOG_LOGS_SEARCH_NAME'| translate"
-                (m_oInputChange)="catchFilterChange($event, 'name')"></app-input-field>
+                (m_oInputChange)="catchFilterChange($event, 'name')"
+                 (m_oEnterPressed)="applyFilters()"></app-input-field>
 
         </div>
         <div class="d-flex flex-row gap-2 align-self-end">
-
             <div class="button-container align-self-end d-flex gap-2 flex-row">
                 <app-button [m_sLabel]="'EDITOR_PRODUCTS_FILTER_APPLY' | translate"
                     (click)="applyFilters()"></app-button>
