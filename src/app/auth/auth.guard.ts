@@ -89,9 +89,11 @@ export class AuthGuard implements CanActivate {
 
   redirectToLogin() {
 
-    let sRedirectLink = 'login';
-    if (window.location.origin.includes('coplac')) {
-      sRedirectLink = 'login-coplac';
+    const sHost = window.location.hostname;
+    let sRedirectLink = '/login';
+    
+    if (sHost.startsWith('coplac')) {
+      sRedirectLink = '/login-coplac';
     }
 
     this.oRouter.navigate([sRedirectLink]);
