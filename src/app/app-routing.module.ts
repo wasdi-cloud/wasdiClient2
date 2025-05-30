@@ -25,7 +25,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [IsSignedInGuard] },
   { path: 'login-coplac', component: LoginCoplacComponent, canActivate: [IsSignedInGuard] },
   { path: 'login&iss', component: MarketplaceComponent, canActivate: [AuthGuard] },
-  { path: 'settings', component: AdminComponent },
+  { path: 'settings', component: AdminComponent, canActivate: [AuthGuard]  },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'plan', component: SearchOrbit, canActivate: [AuthGuard] },

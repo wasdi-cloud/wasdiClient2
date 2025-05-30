@@ -76,7 +76,8 @@ export class ConstantsService {
 	  helpLink: "",
 	  supportLink: "",  
     brandMainColor: "",
-    brandSecondaryColor: ""
+    brandSecondaryColor: "",
+    bLoadedFromServer: false
   };
 
   constructor(

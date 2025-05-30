@@ -115,7 +115,9 @@ form: any = {
         next: oResponse => { 
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
             oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
-          } else {
+          } 
+          else {
+            oResponse["bLoadedFromServer"] = true;
             oController.m_oConstantsService.setSkin(oResponse);
             const m_oCurrentSkin = this.m_oConstantsService.getSkin();
             var sBrandMainColor = m_oCurrentSkin.brandMainColor;

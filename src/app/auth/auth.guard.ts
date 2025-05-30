@@ -10,6 +10,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { ConstantsService } from '../services/constants.service';
 import { AuthService } from './service/auth.service';
 import { Observable } from 'rxjs';
+import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 
 @Injectable({
   providedIn: 'root',
@@ -33,8 +34,33 @@ export class AuthGuard implements CanActivate {
     this.oAuthService.checkSession().subscribe({
       next: (oResponse) => {
         if (oResponse.userId) {
+          let oSkin = this.m_oConstantsService.getSkin();
+
+          if (!oSkin.bLoadedFromServer) {
+            this.oAuthService.getSkin(oResponse.skin).subscribe({
+              next: oResponse => { 
+                if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+                  console.error("LoginComponent.callbackLogin: Skin is null or undefined");
+                } 
+                else {
+                  oResponse["bLoadedFromServer"] = true;
+                  this.m_oConstantsService.setSkin(oResponse);
+                  const m_oCurrentSkin = this.m_oConstantsService.getSkin();
+                  var sBrandMainColor = m_oCurrentSkin.brandMainColor;
+                  var sBrandSecondaryColor = m_oCurrentSkin.brandSecondaryColor;
+                  document.documentElement.style.setProperty('--neutral50Brand',  sBrandMainColor);
+                  document.documentElement.style.setProperty('--wasdiGreen',  sBrandSecondaryColor);
+                }
+              },
+              error: oError => {
+                //oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
+              }
+            });            
+          }
+
           return true;
-        } else {
+        } 
+        else {
           this.m_oConstantsService.setUser(oResponse);
           this.oRouter.navigate(['login']);
           return false;

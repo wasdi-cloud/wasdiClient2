@@ -113,8 +113,11 @@ export class LoginComponent implements OnInit {
       this.m_oAuthService.getSkin(oUser.skin).subscribe({
         next: oResponse => { 
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
-          } else {
+            //oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
+            console.error("LoginComponent.callbackLogin: Skin is null or undefined");
+          } 
+          else {
+            oResponse["bLoadedFromServer"] = true;
             oController.m_oConstantsService.setSkin(oResponse);
             const m_oCurrentSkin = this.m_oConstantsService.getSkin();
             var sBrandMainColor = m_oCurrentSkin.brandMainColor;
