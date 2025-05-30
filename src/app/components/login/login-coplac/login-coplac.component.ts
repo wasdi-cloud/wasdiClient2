@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
 import { ConfigurationService } from 'src/app/services/configuration.service';
+import { Title } from '@angular/platform-browser';
 
 import { MatDialog } from '@angular/material/dialog';
 import { KeycloakService } from 'keycloak-angular';
@@ -40,10 +41,12 @@ form: any = {
     private m_oJwtService: JwtHelperService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oRouter: Router,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oTitleService: Title
   ) { }
 
   ngOnInit(): void {
+    this.m_oTitleService.setTitle('Coplac');
     this.m_oKeycloak = this.m_oKeycloakService.getKeycloakInstance();
     this.checkKeycloakAuthStatus(this);
     //Subscribe to Keycloak Events
