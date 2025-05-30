@@ -173,7 +173,24 @@ form: any = {
 
 
   keycloakRegister() {
-    this.m_oKeycloakService.register();
+    let sHost = window.location.hostname;
+    let sTheme = 'wasdi';
+    if (sHost.startsWith('coplac')) {
+      sTheme = 'keycloak'; // Force standard Keycloak theme for coplac
+      // // If your Keycloak service supports passing extra params:
+      // if (typeof this.m_oKeycloakService.register === 'function') {
+      //   this.m_oKeycloakService.register({ kc_theme: sTheme });
+      // } 
+      // else {
+      //   // Fallback: manually build the registration URL
+      // }    
+      const sRegisterUrl = this.m_oKeycloak.createRegisterUrl() + `&kc_theme=${sTheme}`;
+      window.location.href = sRegisterUrl;
+
+    }
+    else {
+      this.m_oKeycloakService.register();
+    }
   }
 
   setUsernameInput(oEvent) {
