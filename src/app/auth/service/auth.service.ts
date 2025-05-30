@@ -104,7 +104,13 @@ export class AuthService {
   logout() {
     //CLEAN COOKIE
     if (this.m_oKeycloakService.isLoggedIn()) {
-      this.m_oKeycloakService.logout();
+      let sSkin = this.m_oConstantsService.getUser().skin;
+
+      let sRedirectLink = "";
+      if (sSkin==="coplac") {
+        sRedirectLink = "/#/login-coplac";
+      }
+      this.m_oKeycloakService.logout(sRedirectLink);
     }
 
     // return this.m_oHttp.get(this.APIURL + '/auth/logout')
