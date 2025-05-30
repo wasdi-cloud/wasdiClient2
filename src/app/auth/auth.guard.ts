@@ -70,20 +70,30 @@ export class AuthGuard implements CanActivate {
         } 
         else {
           this.m_oConstantsService.setUser(oResponse);
-          this.oRouter.navigate(['login']);
+          this.redirectToLogin();
           return false;
         }
       },
     });
     if (!this.oAuthService.getTokenObject()?.access_token) {
-      this.oRouter.navigate(['login']);
+      this.redirectToLogin();
       return false;
     }
     // If the User isn't set in the constants service
     if (!this.m_oConstantsService.getUser().userId) {
-      this.oRouter.navigate(['login']);
+      this.redirectToLogin();
       return false;
     }
     return true;
+  }
+
+  redirectToLogin() {
+
+    let sRedirectLink = 'login';
+    if (window.location.origin.includes('coplac')) {
+      sRedirectLink = 'login-coplac';
+    }
+
+    this.oRouter.navigate([sRedirectLink]);
   }
 }
