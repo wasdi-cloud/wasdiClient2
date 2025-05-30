@@ -208,16 +208,17 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    //let sSkin = this.m_oConstantsService.getUser().skin;
+    let sSkin = this.m_oConstantsService.getUser().skin;
+    console.log("HeaderComponent.logout: Logging out user");
     this.m_oConstantsService.logOut();
     this.m_oAuthService.logout();
     
-    // if (sSkin==="coplac") {
-    //   this.m_oRouter.navigateByUrl("login-coplac");
-    // }
-    // else {
-    //   this.m_oRouter.navigateByUrl("login");
-    // } 
+    if (sSkin==="coplac") {
+      this.m_oRouter.navigateByUrl("login-coplac");
+    }
+    else {
+      this.m_oRouter.navigateByUrl("login");
+    } 
   }
 
   openDocs() {

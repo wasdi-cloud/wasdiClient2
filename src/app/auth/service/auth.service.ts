@@ -102,6 +102,9 @@ export class AuthService {
    */
 
   logout() {
+
+    console.log("AutService.logout: start ");
+
     //CLEAN COOKIE
     if (this.m_oKeycloakService.isLoggedIn()) {
       let sSkin = this.m_oConstantsService.getUser().skin;
