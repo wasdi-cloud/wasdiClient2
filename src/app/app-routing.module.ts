@@ -19,9 +19,11 @@ import { WorkspacesComponent } from './components/workspaces/workspaces.componen
 import { AuthGuard } from './auth/auth.guard';
 import { IsSignedInGuard } from './auth/is-signed-in.guard';
 import {PaymentSuccessComponent} from "./components/subscriptions-purchase/payment-success/payment-success.component";
+import { LoginRedirectComponent } from './components/login-redirect/login-redirect.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  //{ path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', component: LoginRedirectComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [IsSignedInGuard] },
   { path: 'login-coplac', component: LoginCoplacComponent, canActivate: [IsSignedInGuard] },
   { path: 'login&iss', component: MarketplaceComponent, canActivate: [AuthGuard] },
@@ -44,3 +46,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
