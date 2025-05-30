@@ -105,7 +105,8 @@ form: any = {
       oUser.role = m_oData.role;
       oUser.type = m_oData.type;
       oUser.grantedAuthorities = m_oData.grantedAuthorities;
-      oUser.skin = m_oData.skin;
+      // Use a default skin for Coplac login
+      oUser.skin = "coplac"; 
 
       //Set User and Cookie:
       this.m_oConstantsService.setUser(oUser);
@@ -114,7 +115,8 @@ form: any = {
       this.m_oAuthService.getSkin(oUser.skin).subscribe({
         next: oResponse => { 
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-            oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
+            //oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
+            console.log("LoginComponent.callbackLogin: Skin is null or undefined");
           } 
           else {
             oResponse["bLoadedFromServer"] = true;
