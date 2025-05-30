@@ -108,14 +108,11 @@ export class AuthService {
     //CLEAN COOKIE
     if (this.m_oKeycloakService.isLoggedIn()) {
       let sSkin = this.m_oConstantsService.getUser().skin;
-      console.log("AutService.logout: sSkin: " + sSkin);
 
-      let sRedirectLink = "";
-      if (sSkin==="coplac") {
-        sRedirectLink = "/#/login-coplac";
+      let sRedirectLink = window.location.origin + '/#/login';
+      if (sSkin === "coplac") {
+        sRedirectLink = window.location.origin + '/#/login-coplac';
       }
-
-      console.log("AutService.logout: sRedirectLink: " + sRedirectLink);
 
       this.m_oKeycloakService.logout(sRedirectLink);
     }

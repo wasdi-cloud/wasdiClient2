@@ -209,7 +209,7 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     let sSkin = this.m_oConstantsService.getUser().skin;
-    console.log("HeaderComponent.logout: Logging out user");
+    
     this.m_oConstantsService.logOut();
     this.m_oAuthService.logout();
     
