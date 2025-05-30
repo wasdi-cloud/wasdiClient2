@@ -37,7 +37,15 @@ export class AuthGuard implements CanActivate {
           let oSkin = this.m_oConstantsService.getSkin();
 
           if (!oSkin.bLoadedFromServer) {
-            this.oAuthService.getSkin(oResponse.skin).subscribe({
+
+            let sSkin = oResponse.skin;
+
+            const sHost = window.location.hostname;
+            if (sHost.startsWith('coplac')) {
+              sSkin = 'coplac';
+            }            
+
+            this.oAuthService.getSkin(sSkin).subscribe({
               next: oResponse => { 
                 if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
                   console.error("LoginComponent.callbackLogin: Skin is null or undefined");
