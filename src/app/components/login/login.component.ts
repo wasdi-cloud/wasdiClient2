@@ -47,7 +47,12 @@ export class LoginComponent implements OnInit {
     this.m_oKeycloak = this.m_oKeycloakService.getKeycloakInstance();
     this.checkKeycloakAuthStatus(this);
     //Subscribe to Keycloak Events
-
+    const sHost = window.location.hostname;
+    if (sHost.startsWith('coplac')) {
+      this.m_oRouter.navigate(['/login-coplac']);
+    } else {
+      this.m_oRouter.navigate(['/login']);
+    }
   }
 
   login(): void {
