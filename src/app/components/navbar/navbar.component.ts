@@ -75,13 +75,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     this.m_oSkinSubscription = this.m_oConstantsService.m_oSkin$.subscribe(oSkin => {
       if (oSkin) {
-        this.m_sLogoImage = oSkin.logoImage || '/assets/icons/logo-only.svg';
+        this.m_sLogoImage = oSkin.logoImage;
       }
     });
 
     const m_oCurrentSkin = this.m_oConstantsService.getSkin();
     if (m_oCurrentSkin) {
-      this.m_sLogoImage = m_oCurrentSkin.logoImage || '/assets/icons/logo-only.svg';
+      this.m_sLogoImage = m_oCurrentSkin.logoImage;
+    }
+
+    if (this.m_sLogoImage.includes('coplac')) {
+    
     }
 
     this.getAccountType();
