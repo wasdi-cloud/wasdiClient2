@@ -11,6 +11,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -40,7 +41,8 @@ export class LoginComponent implements OnInit {
     private m_oJwtService: JwtHelperService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oRouter: Router,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oTitleService: Title
   ) { }
 
   ngOnInit(): void {
@@ -129,6 +131,17 @@ export class LoginComponent implements OnInit {
             var sBrandSecondaryColor = m_oCurrentSkin.brandSecondaryColor;
             document.documentElement.style.setProperty('--neutral50Brand',  sBrandMainColor);
             document.documentElement.style.setProperty('--wasdiGreen',  sBrandSecondaryColor);
+            if (m_oCurrentSkin.logoText.includes('coplac')) {
+                    let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+                    if (!oLink) {
+                      oLink = document.createElement('link');
+                      oLink.type = 'image/x-icon';
+                      oLink.rel = 'icon';
+                      document.getElementsByTagName('head')[0].appendChild(oLink);
+                    }
+                    oLink.href = 'assets/icons/favicon-coplac.ico';
+                    this.m_oTitleService.setTitle('CopLAC');
+                  }
           }
         },
         error: oError => {
