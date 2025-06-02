@@ -11,6 +11,8 @@ import { ConstantsService } from '../services/constants.service';
 import { AuthService } from './service/auth.service';
 import { Observable } from 'rxjs';
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
+import { Title } from '@angular/platform-browser';  
+
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +22,9 @@ export class AuthGuard implements CanActivate {
     public oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
     private m_oKeycloakService: KeycloakService,
-    private oRouter: Router
-  ) {}
+    private oRouter: Router,
+    private m_oTitleService: Title
+  ) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -43,31 +46,42 @@ export class AuthGuard implements CanActivate {
             const sHost = window.location.hostname;
             if (sHost.startsWith('coplac')) {
               sSkin = 'coplac';
-            }            
+            }
 
             this.oAuthService.getSkin(sSkin).subscribe({
-              next: oResponse => { 
+              next: oResponse => {
                 if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
                   console.error("LoginComponent.callbackLogin: Skin is null or undefined");
-                } 
+                }
                 else {
                   oResponse["bLoadedFromServer"] = true;
                   this.m_oConstantsService.setSkin(oResponse);
                   const m_oCurrentSkin = this.m_oConstantsService.getSkin();
                   var sBrandMainColor = m_oCurrentSkin.brandMainColor;
                   var sBrandSecondaryColor = m_oCurrentSkin.brandSecondaryColor;
-                  document.documentElement.style.setProperty('--neutral50Brand',  sBrandMainColor);
-                  document.documentElement.style.setProperty('--wasdiGreen',  sBrandSecondaryColor);
+                  document.documentElement.style.setProperty('--neutral50Brand', sBrandMainColor);
+                  document.documentElement.style.setProperty('--wasdiGreen', sBrandSecondaryColor);
+                  if (m_oCurrentSkin.logoText.includes('coplac')) {
+                    let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+                    if (!oLink) {
+                      oLink = document.createElement('link');
+                      oLink.type = 'image/x-icon';
+                      oLink.rel = 'icon';
+                      document.getElementsByTagName('head')[0].appendChild(oLink);
+                    }
+                    oLink.href = 'assets/icons/favicon-coplac.ico';
+                    this.m_oTitleService.setTitle('CopLAC');
+                  }
                 }
               },
               error: oError => {
                 //oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
               }
-            });            
+            });
           }
 
           return true;
-        } 
+        }
         else {
           this.m_oConstantsService.setUser(oResponse);
           this.redirectToLogin();
@@ -91,7 +105,7 @@ export class AuthGuard implements CanActivate {
 
     const sHost = window.location.hostname;
     let sRedirectLink = '/login';
-    
+
     if (sHost.startsWith('coplac')) {
       sRedirectLink = '/login-coplac';
     }

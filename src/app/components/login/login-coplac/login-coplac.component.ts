@@ -46,12 +46,22 @@ form: any = {
   ) { }
 
   ngOnInit(): void {
-    this.m_oTitleService.setTitle('Coplac');
+    this.m_oTitleService.setTitle('CopLAC');
+    this.setFavicon('assets/icons/favicon-coplac.ico');
     this.m_oKeycloak = this.m_oKeycloakService.getKeycloakInstance();
     this.checkKeycloakAuthStatus(this);
-    //Subscribe to Keycloak Events
-
   }
+
+  setFavicon(sFaviconUrl: string) {
+  let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+  if (!oLink) {
+    oLink = document.createElement('link');
+    oLink.type = 'image/x-icon';
+    oLink.rel = 'icon';
+    document.getElementsByTagName('head')[0].appendChild(oLink);
+  }
+  oLink.href = sFaviconUrl;
+}
 
   login(): void {
     const { username, password } = this.form;
