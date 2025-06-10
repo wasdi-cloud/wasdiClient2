@@ -9,6 +9,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { AuthService } from 'src/app/auth/service/auth.service';
 
+import { Input } from '@angular/core';
+
 @Component({
   selector: 'app-marketplace-filters',
   templateUrl: './marketplace-filters.component.html',
@@ -38,6 +40,7 @@ export class MarketplaceFiltersComponent implements OnInit {
     orderDirection: 1,
   };
 
+  @Input() m_asDefaultSelectedCategories: string[] = [];
   @Output() m_oAppFilterOutput = new EventEmitter();
 
   constructor(
@@ -70,6 +73,17 @@ export class MarketplaceFiltersComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
         }
         this.m_asCategoryOptions = oResponse;
+
+        if (this.m_asDefaultSelectedCategories && this.m_asDefaultSelectedCategories.length > 0) {
+          // Ensure only valid category IDs are selected
+          this.m_aoSelectedCategories = this.m_asDefaultSelectedCategories.filter(id =>
+            this.m_asCategoryOptions.some(opt => opt.id === id)
+          );
+          // Emit the filter with all default categories selected
+          this.m_oAppFilter.categories = this.m_aoSelectedCategories;
+          this.m_oAppFilter.page = 0;
+          this.m_oAppFilterOutput.emit(this.m_oAppFilter);
+        }
       },
       error: (oError) => {
         this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);

@@ -140,16 +140,20 @@ export class LoginComponent implements OnInit {
                       document.getElementsByTagName('head')[0].appendChild(oLink);
                     }
                     oLink.href = 'assets/icons/favicon-coplac.ico';
-                    this.m_oTitleService.setTitle('CopLAC');
+                    this.m_oTitleService.setTitle('Copernicus LAC');
                   }
           }
+          // Navigate to the marketplace after successful login
+          oController.m_oRouter.navigateByUrl('/marketplace');
         },
         error: oError => {
           oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
+          // even with an error in loading the skin, we still want to navigate to the marketplace
+          oController.m_oRouter.navigateByUrl('/marketplace');
         }
       });
 
-      oController.m_oRouter.navigateByUrl('/marketplace');
+      
     } else {
       window.localStorage["access_token"] = m_oData['access_token'];
       window.localStorage["refresh_token"] = m_oData['refresh_token'];

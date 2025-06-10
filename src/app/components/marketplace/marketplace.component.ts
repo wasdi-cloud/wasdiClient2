@@ -9,6 +9,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { User } from 'src/app/shared/models/user.model';
 
 //Angular Material Imports:
+
+import { MarketplaceFiltersComponent } from './marketplace-filters/marketplace-filters.component';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 interface AppFilter {
@@ -64,6 +66,8 @@ export class MarketplaceComponent implements OnInit {
 
   m_oActiveUser: User = {} as User;
 
+  m_asDefaultCategories: string[] = [];
+
   /**
    * Boolean to flag whether or not the fitlers are shown
    */
@@ -79,19 +83,26 @@ export class MarketplaceComponent implements OnInit {
   ngOnInit(): void {
     this.m_oActiveUser = this.m_oConstantsService.getUser();
 
+    let asDefaultCategories = this.m_oConstantsService.getSkin().defaultCategories;
+    console.log("Sking", this.m_oConstantsService.getSkin());
+    console.log("Default Categories: ", asDefaultCategories);
     this.getApplications();
   }
 
   /**
    * Retrieve the applications list from the server
+   * @param asDefaultTags - Array of default tags to filter applications
    * @returns {void}
    */
-  getApplications(): void {
+  getApplications(asDefaultCategories?: any[]): void {
     let sErrorMsg: string;
     this.m_oTranslate.get("MSG_WAPPS_ERROR").subscribe(sResponse => {
       sErrorMsg = sResponse;
     });
 
+    this.m_oAppFilter.categories = ["..."]; //TODO
+    this.m_asDefaultCategories = ["..."]; //TODO
+    console.log("Marketplace Filter: ", this.m_oAppFilter.categories[0]);
     this.m_oProcessorService.getMarketplaceList(this.m_oAppFilter).subscribe({
       next: oResponse => {
         if (oResponse) {

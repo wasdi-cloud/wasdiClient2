@@ -77,6 +77,7 @@ export class ConstantsService {
 	  supportLink: "",  
     brandMainColor: "",
     brandSecondaryColor: "",
+    defaultCategories: [],
     bLoadedFromServer: false
   };
 

@@ -46,7 +46,7 @@ form: any = {
   ) { }
 
   ngOnInit(): void {
-    this.m_oTitleService.setTitle('CopLAC');
+    this.m_oTitleService.setTitle('Copernicus LAC');
     this.setFavicon('assets/icons/favicon-coplac.ico');
     this.m_oKeycloak = this.m_oKeycloakService.getKeycloakInstance();
     this.checkKeycloakAuthStatus(this);
@@ -140,13 +140,15 @@ form: any = {
             document.documentElement.style.setProperty('--neutral50Brand',  sBrandMainColor);
             document.documentElement.style.setProperty('--wasdiGreen',  sBrandSecondaryColor);
           }
+          // always navigate to marketplace after login
+          oController.m_oRouter.navigateByUrl('/marketplace');
         },
         error: oError => {
           oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
+          // even if skin loading fails, we still want to navigate to marketplace
+          oController.m_oRouter.navigateByUrl('/marketplace');
         }
       });
-
-      oController.m_oRouter.navigateByUrl('/marketplace');
     } else {
       window.localStorage["access_token"] = m_oData['access_token'];
       window.localStorage["refresh_token"] = m_oData['refresh_token'];
