@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import {PayloadDialogComponent} from 'src/app/components/edit/payload-dialog/payload-dialog.component';
 import {ProcessLogsDialogComponent} from 'src/app/components/edit/process-logs-dialog/process-logs-dialog.component';
@@ -10,6 +10,7 @@ import {ProcessStatuses, ProcessTypes} from '../process-status-types';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import {MatDialog} from '@angular/material/dialog';
 import {TranslateService} from '@ngx-translate/core';
+import { ProcessesBarComponent } from '../processes-bar.component';
 
 @Component({
   selector: 'app-processes-bar-table',
@@ -90,6 +91,9 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
    */
   private m_oInterval: any;
 
+  @ViewChild("processBar")
+  private m_oProcessBar: ProcessesBarComponent;
+
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) private m_oData: any,
     private m_oDialog: MatDialog,
@@ -128,7 +132,11 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.m_oInterval)
+    clearInterval(this.m_oInterval);
+
+    if (this.m_oProcessBar) {
+      this.m_oProcessBar.ngOnDestroy();
+    }
   }
 
   setActiveWorkspace(oActiveWorkspace) {

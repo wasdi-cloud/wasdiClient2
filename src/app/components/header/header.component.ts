@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
@@ -15,6 +15,7 @@ import { User } from 'src/app/shared/models/user.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -30,6 +31,13 @@ export class HeaderComponent implements OnInit {
   m_oSelectedProject: any = { name: 'No Active Project', projectId: null };
   m_aoNotifications: any = [];
   m_bHasNotifications: boolean = false;
+
+  m_sLogoImage = '/assets/icons/logo-only.svg';
+  m_sLogoText = '/assets/icons/logo-name.svg';
+  m_sSupportLink = 'https://discord.gg/FkRu2GypSg';
+
+  private m_oSkinSubscription: Subscription;
+
   constructor(
     private m_oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
@@ -42,6 +50,23 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Subscribe to skin changes
+    this.m_oSkinSubscription = this.m_oConstantsService.m_oSkin$.subscribe(oSkin => {
+      if (oSkin) {
+        this.m_sLogoImage = oSkin.logoImage;
+        this.m_sLogoText = oSkin.logoText || '/assets/icons/logo-name.svg';
+        this.m_sSupportLink = oSkin.supportLink || 'https://discord.gg/FkRu2GypSg';
+      }
+    });
+
+        // Initialize with current skin if available
+    const m_oCurrentSkin = this.m_oConstantsService.getSkin();
+    if (m_oCurrentSkin) {
+      this.m_sLogoImage = m_oCurrentSkin.logoImage || '/assets/icons/logo-only.svg';
+      this.m_sLogoText = m_oCurrentSkin.logoText || '/assets/icons/logo-name.svg';
+      this.m_sSupportLink = m_oCurrentSkin.supportLink || 'https://discord.gg/FkRu2GypSg';
+    }
+
     this.m_oUser = this.m_oConstantsService.getUser();
     setTimeout(() => {
       if (
@@ -61,6 +86,11 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.m_oSkinSubscription) {
+      this.m_oSkinSubscription.unsubscribe();
+    }
+  }
   initializeProjectsInfo() {
     let oFirstProjectElement = { name: 'No Active Project', projectId: null };
 
@@ -178,11 +208,20 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.m_oAuthService.logout();
+    let sSkin = this.m_oConstantsService.getUser().skin;
+    
     this.m_oConstantsService.logOut();
+    this.m_oAuthService.logout();
+    
+    if (sSkin==="coplac") {
+      this.m_oRouter.navigateByUrl("login-coplac");
+    }
+    else {
+      this.m_oRouter.navigateByUrl("login");
+    } 
   }
 
   openDocs() {
-    window.open('https://discord.gg/FkRu2GypSg', '_blank');
+    window.open(this.m_sSupportLink, '_blank');
   }
 }

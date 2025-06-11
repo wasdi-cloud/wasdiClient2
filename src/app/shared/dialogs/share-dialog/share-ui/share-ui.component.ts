@@ -445,7 +445,7 @@ export class ShareUiComponent implements OnInit {
             },
             error: (oError) => {
               let sErrorMsg = this.m_oTranslate.instant(
-                'DIALOG_SHARE_WORKFLOW_ERROR'
+                'DIALOG_SHARE_ORGANIZATION_ERROR'
               );
               this.m_oNotificationDisplayService.openAlertDialog(
                 sErrorMsg,

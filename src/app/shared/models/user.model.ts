@@ -8,4 +8,7 @@ export interface User {
     surname: string;
     userId: string;
     publicNickName: string;
+    skin: string;
+    brandMainColor: string;
+    brandSecondaryColor: string;
 }

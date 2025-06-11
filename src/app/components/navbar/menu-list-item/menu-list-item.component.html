@@ -5,7 +5,7 @@
     class="menu-list-item"
     type="button" 
     [routerLink]="m_sRouterLink ? [m_sRouterLink] : []"
-    (click)="m_sName === 'documentation' && openDocs('https://wasdi.readthedocs.io/en/latest/')"
+    (click)="m_sName === 'documentation' && openDocs(m_sHelpUrl)"
     [class.open]="m_bIsNavbarOpen === true"
     [class.active]="m_sSelectedTab === m_sName.toLowerCase()"
     attr.aria-label="{{m_sMenuItemLabel}}"

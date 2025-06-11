@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 //Import Services: 
@@ -21,12 +21,14 @@ import { MenuItems, Documentation } from './menu-list-item/menu-items';
 //Import Utilities: 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   m_bIsNavbarOpen: boolean = false;
 
   sActiveWorkspaceId: string | null = null;
@@ -43,6 +45,9 @@ export class NavbarComponent implements OnInit {
 
   m_aoMenuItems = MenuItems;
   m_oDocumentation = Documentation;
+
+  m_sLogoImage = '/assets/icons/logo-only.svg';
+  private m_oSkinSubscription: Subscription;
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -66,6 +71,23 @@ export class NavbarComponent implements OnInit {
     this.sActiveWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     this.m_oUser = this.m_oConstantsService.getUser();
+    this.m_sLogoImage = this.m_oConstantsService.getSkin().logoImage;
+
+    this.m_oSkinSubscription = this.m_oConstantsService.m_oSkin$.subscribe(oSkin => {
+      if (oSkin) {
+        this.m_sLogoImage = oSkin.logoImage;
+      }
+    });
+
+    const m_oCurrentSkin = this.m_oConstantsService.getSkin();
+    if (m_oCurrentSkin) {
+      this.m_sLogoImage = m_oCurrentSkin.logoImage;
+    }
+
+    if (this.m_sLogoImage.includes('coplac')) {
+    
+    }
+
     this.getAccountType();
 
     this.m_oConstantsService.m_oActiveWorkspaceSubscription.subscribe(oWorkspace => {
@@ -129,4 +151,13 @@ export class NavbarComponent implements OnInit {
   openCloseNavbar() {
     this.m_bIsNavbarOpen = !this.m_bIsNavbarOpen;
   }
+
+  ngOnDestroy(): void {
+    if (this.m_oSkinSubscription) {
+      this.m_oSkinSubscription.unsubscribe();
+    }
+    if (this.m_oRouterEvents) {
+      this.m_oRouterEvents.unsubscribe();
+    }
+  }  
 }

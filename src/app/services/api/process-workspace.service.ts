@@ -35,18 +35,12 @@ export class ProcessWorkspaceService {
    * Behaviour subject for emitting the running processes
    */
   m_aoProcessesRunning: BehaviorSubject<Process[]> = new BehaviorSubject<Process[]>([]);
-  _m_aoProcessesRunning$ = this.m_aoProcessesRunning.asObservable();
+  m_aoProcessesRunning$ = this.m_aoProcessesRunning.asObservable();
 
   /**
    * Stopped processes
    */
   m_aoProcessesStopped: Array<Process> = [];
-
-  /**
-   * Behaviour subject and Observable for emitting the process bar message
-   */
-  updateProcessBarMsg: BehaviorSubject<any> = new BehaviorSubject<any>({ message: "Intial Status" });
-  updateProcessBarMsg$ = this.updateProcessBarMsg.asObservable();
 
   /**
    * Cookie expiration time
@@ -88,9 +82,7 @@ export class ProcessWorkspaceService {
 
     return this.m_oHttp.get<any>(sUrl + '/process/lastbyws?workspace=' + sWorkspaceId).subscribe(oResponse => {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-        // this.m_aoProcessesRunning = oResponse; 
         this.setProcessesRunning(oResponse.reverse());
-        this.updateProcessesBar("m_aoProcessesRunning:updated", true);
       }
     });
   };
@@ -108,7 +100,7 @@ export class ProcessWorkspaceService {
    * Return m_aoProcessesRunning
    */
   getProcessesRunning(): Observable<Process[]> {
-    return this._m_aoProcessesRunning$;
+    return this.m_aoProcessesRunning$;
   }
 
   /**
@@ -231,15 +223,6 @@ export class ProcessWorkspaceService {
   };
 
   /**
-   * Triggers the update of the WASDI process bar
-   */
-  updateProcessesBar(sMessage: string, oData: boolean) {
-    //send a message to RootController for update the bar of processes
-    // $rootScope.$broadcast('m_aoProcessesRunning:updated', true);
-    this.updateProcessBarMsg.next({ message: sMessage, data: true });
-  };
-
-  /**
    * Check if a file is under download in this moment
    * @param oLayer
    * @param sTypeOfProcess
@@ -269,18 +252,7 @@ export class ProcessWorkspaceService {
       return false;
     }
 
-    // var iNumberOfProcesses = aoProcesses.length;
-
-    // for (var iIndex = 0; iIndex < iNumberOfProcesses; iIndex++) {
-      /*check if the processes are equals*/
-      //aoProcesses[iIndex].productName == sProcess.productName
-      // if ((utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.productName) === true || utilsIsSubstring(aoProcesses[iIndex].productName, sProcess.link) === true)
-      //   && aoProcesses[iIndex].operationType == sProcess.operationType && aoProcesses[iIndex].status === "RUNNING") {
-      //   return true;
-      // }
-    // }
     return false;
-
   };
 
   /**

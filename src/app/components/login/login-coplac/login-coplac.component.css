@@ -1,0 +1,94 @@
+@font-face {
+  font-family: 'NotesEsa';
+  src: url('/assets/fonts/NotesEsaReg.otf') format('opentype');
+}
+
+* {
+  font-family: 'NotesEsa', sans-serif;
+}
+
+main {
+    height: 92vh !important;
+    padding: 32px;
+}
+
+.header-logo-container {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.logos-container {
+    height: 6rem;
+}
+
+.logo-name {
+    height: 75%;
+}
+div.login-container {
+    gap: 24px;
+}
+
+div.form-container {
+    color: #0f294f ;
+}
+
+div.login-header {
+    font-size: 24px;
+    line-height: 36px;
+    padding-bottom: 1rem;
+}
+
+div.header-logo-footer{
+    font-size: 20px;
+    line-height: 20px;
+    padding-top: 1.1rem;
+    color: #03968e
+}
+
+div.img-container {
+    background-image: url('src/assets/login-imgs/login-1-coplac.png');
+    border-radius: 32px;
+    height: 100%;
+    width: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+img {
+    height: 100%;
+}
+
+.call-to-action{
+    cursor: pointer;
+    color: #0c64d0;
+    text-decoration: underline;
+}
+
+/**
+ * Button Styles - changes for CopLAC
+ */
+:host ::ng-deep .wasdi-btn {
+    background: #0f294f !important; 
+}
+
+.footer {
+  width: 100%;
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: #f8f9fa; /* optional background */
+  font-size: 0.9rem;
+}
+
+.powered-by {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.powered-logo {
+  height: 10px; /* Adjust as needed */
+  width: auto;
+}

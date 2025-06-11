@@ -10,7 +10,7 @@
             <app-menu-list-item [m_oMenuItemInfo]="m_oDocumentation"
                 [m_bIsNavbarOpen]="m_bIsNavbarOpen"></app-menu-list-item>
         </div>
-        <img class="logo-img" [class.open]="m_bIsNavbarOpen" src="/assets/icons/logo-only.svg" alt="">
+        <img class="logo-img" [class.open]="m_bIsNavbarOpen" *ngIf="m_sLogoImage" [src]="m_sLogoImage" alt="">
     </nav>
     <div class="menu-control d-flex flex-column align-items-center justify-content-center text-center text-white"
         (click)="openCloseNavbar()">

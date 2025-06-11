@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { User } from 'src/app/shared/models/user.model';
 import { ConfigurationService } from 'src/app/services/configuration.service';
+import { Title } from '@angular/platform-browser';
 
 import { MatDialog } from '@angular/material/dialog';
 import { KeycloakService } from 'keycloak-angular';
@@ -11,16 +12,15 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  selector: 'app-login-coplac',
+  templateUrl: './login-coplac.component.html',
+  styleUrls: ['./login-coplac.component.css'],
   host: { 'class': 'flex-fill' }
 })
-export class LoginComponent implements OnInit {
-  form: any = {
+export class LoginCoplacComponent {
+form: any = {
     username: null,
     password: null
   };
@@ -46,24 +46,31 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.m_oTitleService.setTitle('Copernicus LAC');
+    this.setFavicon('assets/icons/favicon-coplac.ico');
     this.m_oKeycloak = this.m_oKeycloakService.getKeycloakInstance();
     this.checkKeycloakAuthStatus(this);
-    //Subscribe to Keycloak Events
-    const sHost = window.location.hostname;
-    if (sHost.startsWith('coplac')) {
-      this.m_oRouter.navigate(['/login-coplac']);
-    } else {
-      this.m_oRouter.navigate(['/login']);
-    }
   }
+
+  setFavicon(sFaviconUrl: string) {
+  let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+  if (!oLink) {
+    oLink = document.createElement('link');
+    oLink.type = 'image/x-icon';
+    oLink.rel = 'icon';
+    document.getElementsByTagName('head')[0].appendChild(oLink);
+  }
+  oLink.href = sFaviconUrl;
+}
 
   login(): void {
     const { username, password } = this.form;
     let oLoginInfo = {
       userId: this.form.username,
-      userPassword: this.form.password
+      userPassword: this.form.password,
+      skin: "coplac"
     }
-    // let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.ERROR")
+    
     this.m_oConstantsService.setUser({} as User);
     this.m_oAuthService.legacyLogin(oLoginInfo).subscribe((oResponse => {
       if (oResponse.sessionId) {
@@ -111,7 +118,8 @@ export class LoginComponent implements OnInit {
       oUser.role = m_oData.role;
       oUser.type = m_oData.type;
       oUser.grantedAuthorities = m_oData.grantedAuthorities;
-      oUser.skin = m_oData.skin;
+      // Use a default skin for Coplac login
+      oUser.skin = "coplac"; 
 
       //Set User and Cookie:
       this.m_oConstantsService.setUser(oUser);
@@ -121,7 +129,7 @@ export class LoginComponent implements OnInit {
         next: oResponse => { 
           if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
             //oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
-            console.error("LoginComponent.callbackLogin: Skin is null or undefined");
+            console.log("LoginComponent.callbackLogin: Skin is null or undefined");
           } 
           else {
             oResponse["bLoadedFromServer"] = true;
@@ -131,29 +139,16 @@ export class LoginComponent implements OnInit {
             var sBrandSecondaryColor = m_oCurrentSkin.brandSecondaryColor;
             document.documentElement.style.setProperty('--neutral50Brand',  sBrandMainColor);
             document.documentElement.style.setProperty('--wasdiGreen',  sBrandSecondaryColor);
-            if (m_oCurrentSkin.logoText.includes('coplac')) {
-                    let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
-                    if (!oLink) {
-                      oLink = document.createElement('link');
-                      oLink.type = 'image/x-icon';
-                      oLink.rel = 'icon';
-                      document.getElementsByTagName('head')[0].appendChild(oLink);
-                    }
-                    oLink.href = 'assets/icons/favicon-coplac.ico';
-                    this.m_oTitleService.setTitle('Copernicus LAC');
-                  }
           }
-          // Navigate to the marketplace after successful login
+          // always navigate to marketplace after login
           oController.m_oRouter.navigateByUrl('/marketplace');
         },
         error: oError => {
           oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
-          // even with an error in loading the skin, we still want to navigate to the marketplace
+          // even if skin loading fails, we still want to navigate to marketplace
           oController.m_oRouter.navigateByUrl('/marketplace');
         }
       });
-
-      
     } else {
       window.localStorage["access_token"] = m_oData['access_token'];
       window.localStorage["refresh_token"] = m_oData['refresh_token'];
@@ -195,8 +190,6 @@ export class LoginComponent implements OnInit {
 
 
   keycloakRegister() {
-    //
-    
     let sHost = window.location.hostname;
     let sTheme = 'wasdi';
     if (sHost.startsWith('coplac')) {
@@ -215,7 +208,6 @@ export class LoginComponent implements OnInit {
     else {
       this.m_oKeycloakService.register();
     }
-
   }
 
   setUsernameInput(oEvent) {

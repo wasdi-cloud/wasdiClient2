@@ -67,6 +67,20 @@ export class ConstantsService {
 
   m_sAccountType: string = "";
 
+  private m_oSkinSubject = new BehaviorSubject<any>(null);
+  m_oSkin$ = this.m_oSkinSubject.asObservable();  
+
+  m_oUserSkin: any = {
+	  logoImage: "/assets/icons/logo-only.svg",
+	  logoText: "/assets/icons/logo-name.svg",
+	  helpLink: "",
+	  supportLink: "",  
+    brandMainColor: "",
+    brandSecondaryColor: "",
+    defaultCategories: [],
+    bLoadedFromServer: false
+  };
+
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTitleService: Title,
@@ -417,4 +431,15 @@ export class ConstantsService {
   }
 
 
+  getSkin() {
+    if (this.m_oSkinSubject.value) {
+      return this.m_oSkinSubject.value;
+    }
+    return this.m_oUserSkin;
+  }
+
+  setSkin(oSkin: any) {
+    this.m_oUserSkin = oSkin;
+    this.m_oSkinSubject.next(oSkin);
+  }
 }

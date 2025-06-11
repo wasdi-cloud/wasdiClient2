@@ -102,9 +102,19 @@ export class AuthService {
    */
 
   logout() {
+
+    console.log("AutService.logout: start ");
+
     //CLEAN COOKIE
     if (this.m_oKeycloakService.isLoggedIn()) {
-      this.m_oKeycloakService.logout();
+      let sSkin = this.m_oConstantsService.getUser().skin;
+
+      let sRedirectLink = window.location.origin + '/#/login';
+      if (sSkin === "coplac") {
+        sRedirectLink = window.location.origin + '/#/login-coplac';
+      }
+
+      this.m_oKeycloakService.logout(sRedirectLink);
     }
 
     // return this.m_oHttp.get(this.APIURL + '/auth/logout')
@@ -220,5 +230,9 @@ export class AuthService {
 
   getClientConfig() {
     return this.m_oHttp.get(this.APIURL + "/auth/config");
+  }
+
+  getSkin(sSkin: string) {
+    return this.m_oHttp.get(this.APIURL + "/auth/skin?skin=" + sSkin);
   }
 }

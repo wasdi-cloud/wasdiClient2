@@ -7,6 +7,7 @@ import { AppDetailsComponent } from './components/app-details/app-details/app-de
 import { AppUiComponent } from './components/app-ui/app-ui.component';
 import { EditComponent } from './components/edit/edit.component';
 import { LoginComponent } from './components/login/login.component';
+import { LoginCoplacComponent } from './components/login/login-coplac/login-coplac.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SearchOrbit } from './components/plan/search-orbit.component';
@@ -18,12 +19,15 @@ import { WorkspacesComponent } from './components/workspaces/workspaces.componen
 import { AuthGuard } from './auth/auth.guard';
 import { IsSignedInGuard } from './auth/is-signed-in.guard';
 import {PaymentSuccessComponent} from "./components/subscriptions-purchase/payment-success/payment-success.component";
+import { LoginRedirectComponent } from './components/login-redirect/login-redirect.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  //{ path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', component: LoginRedirectComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [IsSignedInGuard] },
+  { path: 'login-coplac', component: LoginCoplacComponent, canActivate: [IsSignedInGuard] },
   { path: 'login&iss', component: MarketplaceComponent, canActivate: [AuthGuard] },
-  { path: 'settings', component: AdminComponent },
+  { path: 'settings', component: AdminComponent, canActivate: [AuthGuard]  },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'plan', component: SearchOrbit, canActivate: [AuthGuard] },
@@ -42,3 +46,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+

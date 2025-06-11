@@ -1,7 +1,9 @@
 <main class="d-flex flex-row flex-fill">
     <div class="d-flex flex-row flex-fill">
         <app-marketplace-filters class="collapse-closed"
-            (m_oAppFilterOutput)="getAppFilter($event)"></app-marketplace-filters>
+            [m_asDefaultSelectedCategories]="m_asDefaultCategories"
+            (m_oAppFilterOutput)="getAppFilter($event)">
+        </app-marketplace-filters>
         <!-- Marketplace App Cards -->
         <div class="app-cards-container w-100 ">
             <!-- Sorting Container -->
@@ -56,6 +58,6 @@
 </main>
 
 <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-    <app-marketplace-filters
-            (m_oAppFilterOutput)="getAppFilter($event)"></app-marketplace-filters>
+    <!--app-marketplace-filters
+            (m_oAppFilterOutput)="getAppFilter($event)"></app-marketplace-filters-->
 </div>

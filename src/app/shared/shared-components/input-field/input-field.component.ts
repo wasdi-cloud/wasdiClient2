@@ -84,8 +84,16 @@ export class InputFieldComponent {
    */
   @Output() m_oInputChange: EventEmitter<any> = new EventEmitter();
 
+  /**
+   * Event Emitter to clear the input field
+   */
   @Output() m_oClearInput: EventEmitter<any> = new EventEmitter();
 
+  /**
+   * Event Emitter to notify when the enter key is pressed
+   */
+  @Output() m_oEnterPressed: EventEmitter<void> = new EventEmitter();
+  
   /**
    * Emit the changes to the input to listening parent component
    * @param oEvent
@@ -104,6 +112,11 @@ export class InputFieldComponent {
       this.m_oInputChange.emit(oEvent)
     }
   }
+
+  onEnterPressed() {
+    this.m_oEnterPressed.emit();
+  }
+
 
   emitClearInput(oEvent) {
     this.m_oClearInput.emit(true)
