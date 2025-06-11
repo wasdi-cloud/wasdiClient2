@@ -108,6 +108,7 @@ export class MarketplaceComponent implements OnInit {
     });
 
     if (asDefaultCategories && asDefaultCategories.length > 0) {
+      console.log("MarketplaceComponent.getApplications: Using default categories", asDefaultCategories);
       // if default categories are provided, apply them to the filter 
       this.m_oAppFilter.categories = asDefaultCategories;
       this.m_asDefaultCategories = asDefaultCategories;
