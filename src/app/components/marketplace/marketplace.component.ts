@@ -5,8 +5,8 @@ import { ImageService } from 'src/app/services/api/image.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { TranslateService } from '@ngx-translate/core';
-
 import { User } from 'src/app/shared/models/user.model';
+import { filter, take } from 'rxjs/operators';
 
 //Angular Material Imports:
 
@@ -83,15 +83,22 @@ export class MarketplaceComponent implements OnInit {
   ngOnInit(): void {
     this.m_oActiveUser = this.m_oConstantsService.getUser();
 
-    let asDefaultCategories = this.m_oConstantsService.getSkin().defaultCategories;
-    console.log("Sking", this.m_oConstantsService.getSkin());
-    console.log("Default Categories: ", asDefaultCategories);
-    this.getApplications();
+    this.m_oConstantsService.m_oSkin$
+    .pipe(
+      filter(oSkin => !!oSkin), // Wait for any skin object
+      take(1)
+    )
+    .subscribe(oSkin => {
+      // Use defaultCategories if present, or an empty array
+      const asDefaultCategories = Array.isArray(oSkin.defaultCategories) ? oSkin.defaultCategories : [];
+      this.getApplications(asDefaultCategories);
+    });
+    
   }
 
   /**
    * Retrieve the applications list from the server
-   * @param asDefaultTags - Array of default tags to filter applications
+   * @param asDefaultTags - Array of default categories to filter applications
    * @returns {void}
    */
   getApplications(asDefaultCategories?: any[]): void {
@@ -100,9 +107,12 @@ export class MarketplaceComponent implements OnInit {
       sErrorMsg = sResponse;
     });
 
-    this.m_oAppFilter.categories = ["..."]; //TODO
-    this.m_asDefaultCategories = ["..."]; //TODO
-    console.log("Marketplace Filter: ", this.m_oAppFilter.categories[0]);
+    if (asDefaultCategories && asDefaultCategories.length > 0) {
+      // if default categories are provided, apply them to the filter 
+      this.m_oAppFilter.categories = asDefaultCategories;
+      this.m_asDefaultCategories = asDefaultCategories;
+    }
+
     this.m_oProcessorService.getMarketplaceList(this.m_oAppFilter).subscribe({
       next: oResponse => {
         if (oResponse) {

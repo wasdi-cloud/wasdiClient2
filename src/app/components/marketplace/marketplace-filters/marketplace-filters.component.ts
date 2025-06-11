@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, AfterContentChecked } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnChanges, Output, Input, AfterContentChecked, SimpleChange } from '@angular/core';
 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
@@ -8,8 +8,6 @@ import { TranslateService } from '@ngx-translate/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { AuthService } from 'src/app/auth/service/auth.service';
-
-import { Input } from '@angular/core';
 
 @Component({
   selector: 'app-marketplace-filters',
@@ -62,6 +60,24 @@ export class MarketplaceFiltersComponent implements OnInit {
       }
     }, 500);
   }
+
+  ngOnChanges(oChanges: SimpleChange): void {
+    if (
+      oChanges['m_asDefaultSelectedCategories'] &&
+      this.m_asCategoryOptions.length > 0 &&
+      this.m_asDefaultSelectedCategories &&
+      this.m_asDefaultSelectedCategories.length > 0
+    ) {
+      // Only select categories that exist in the options
+      this.m_aoSelectedCategories = this.m_asDefaultSelectedCategories.filter(id =>
+        this.m_asCategoryOptions.some(opt => opt.id === id)
+      );
+      this.m_oAppFilter.categories = this.m_aoSelectedCategories;
+      this.m_oAppFilter.page = 0;
+      this.m_oAppFilterOutput.emit(this.m_oAppFilter);
+    }
+  }
+
 
   getCategories(): void {
     let sCategoriesError = this.m_oTranslate.instant(
