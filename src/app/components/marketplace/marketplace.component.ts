@@ -113,6 +113,9 @@ export class MarketplaceComponent implements OnInit {
       this.m_oAppFilter.categories = asDefaultCategories;
       this.m_asDefaultCategories = asDefaultCategories;
     }
+    else {
+      console.log("MarketplaceComponent.getApplications: No default categories");
+    }
 
     this.m_oProcessorService.getMarketplaceList(this.m_oAppFilter).subscribe({
       next: oResponse => {
