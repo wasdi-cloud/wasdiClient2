@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, AfterContentChecked } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnChanges, Output, Input, AfterContentChecked, SimpleChange } from '@angular/core';
 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
@@ -38,6 +38,7 @@ export class MarketplaceFiltersComponent implements OnInit {
     orderDirection: 1,
   };
 
+  @Input() m_asDefaultSelectedCategories: string[] = [];
   @Output() m_oAppFilterOutput = new EventEmitter();
 
   constructor(
@@ -60,6 +61,24 @@ export class MarketplaceFiltersComponent implements OnInit {
     }, 500);
   }
 
+  ngOnChanges(oChanges: SimpleChange): void {
+    if (
+      oChanges['m_asDefaultSelectedCategories'] &&
+      this.m_asCategoryOptions.length > 0 &&
+      this.m_asDefaultSelectedCategories &&
+      this.m_asDefaultSelectedCategories.length > 0
+    ) {
+      // Only select categories that exist in the options
+      this.m_aoSelectedCategories = this.m_asDefaultSelectedCategories.filter(id =>
+        this.m_asCategoryOptions.some(opt => opt.id === id)
+      );
+      this.m_oAppFilter.categories = this.m_aoSelectedCategories;
+      this.m_oAppFilter.page = 0;
+      this.m_oAppFilterOutput.emit(this.m_oAppFilter);
+    }
+  }
+
+
   getCategories(): void {
     let sCategoriesError = this.m_oTranslate.instant(
       'MSG_WAPPS_CATEGORY_ERROR'
@@ -70,6 +89,17 @@ export class MarketplaceFiltersComponent implements OnInit {
           this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
         }
         this.m_asCategoryOptions = oResponse;
+
+        if (this.m_asDefaultSelectedCategories && this.m_asDefaultSelectedCategories.length > 0) {
+          // Ensure only valid category IDs are selected
+          this.m_aoSelectedCategories = this.m_asDefaultSelectedCategories.filter(id =>
+            this.m_asCategoryOptions.some(opt => opt.id === id)
+          );
+          // Emit the filter with all default categories selected
+          this.m_oAppFilter.categories = this.m_aoSelectedCategories;
+          this.m_oAppFilter.page = 0;
+          this.m_oAppFilterOutput.emit(this.m_oAppFilter);
+        }
       },
       error: (oError) => {
         this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);

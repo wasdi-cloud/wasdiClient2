@@ -5,10 +5,12 @@ import { ImageService } from 'src/app/services/api/image.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { TranslateService } from '@ngx-translate/core';
-
 import { User } from 'src/app/shared/models/user.model';
+import { filter, take } from 'rxjs/operators';
 
 //Angular Material Imports:
+
+import { MarketplaceFiltersComponent } from './marketplace-filters/marketplace-filters.component';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 interface AppFilter {
@@ -64,6 +66,8 @@ export class MarketplaceComponent implements OnInit {
 
   m_oActiveUser: User = {} as User;
 
+  m_asDefaultCategories: string[] = [];
+
   /**
    * Boolean to flag whether or not the fitlers are shown
    */
@@ -79,18 +83,39 @@ export class MarketplaceComponent implements OnInit {
   ngOnInit(): void {
     this.m_oActiveUser = this.m_oConstantsService.getUser();
 
-    this.getApplications();
+    this.m_oConstantsService.m_oSkin$
+    .pipe(
+      filter(oSkin => !!oSkin), // Wait for any skin object
+      take(1)
+    )
+    .subscribe(oSkin => {
+      // Use defaultCategories if present, or an empty array
+      const asDefaultCategories = Array.isArray(oSkin.defaultCategories) ? oSkin.defaultCategories : [];
+      this.getApplications(asDefaultCategories);
+    });
+    
   }
 
   /**
    * Retrieve the applications list from the server
+   * @param asDefaultTags - Array of default categories to filter applications
    * @returns {void}
    */
-  getApplications(): void {
+  getApplications(asDefaultCategories?: any[]): void {
     let sErrorMsg: string;
     this.m_oTranslate.get("MSG_WAPPS_ERROR").subscribe(sResponse => {
       sErrorMsg = sResponse;
     });
+
+    if (asDefaultCategories && asDefaultCategories.length > 0) {
+      console.log("MarketplaceComponent.getApplications: Using default categories", asDefaultCategories);
+      // if default categories are provided, apply them to the filter 
+      this.m_oAppFilter.categories = asDefaultCategories;
+      this.m_asDefaultCategories = asDefaultCategories;
+    }
+    else {
+      console.log("MarketplaceComponent.getApplications: No default categories");
+    }
 
     this.m_oProcessorService.getMarketplaceList(this.m_oAppFilter).subscribe({
       next: oResponse => {

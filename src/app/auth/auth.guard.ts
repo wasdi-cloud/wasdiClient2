@@ -70,7 +70,7 @@ export class AuthGuard implements CanActivate {
                       document.getElementsByTagName('head')[0].appendChild(oLink);
                     }
                     oLink.href = 'assets/icons/favicon-coplac.ico';
-                    this.m_oTitleService.setTitle('CopLAC');
+                    this.m_oTitleService.setTitle('Copernicus LAC');
                   }
                 }
               },
