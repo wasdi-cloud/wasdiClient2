@@ -5,8 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { NotificationDisplayService } from './notification-display.service';
 
 //Import enviornment information: 
-import { environment } from 'src/environments/environment';
-import { secrets } from 'src/environments/secrets'
+import { EnvService } from "../services/env.service";
 
 //Import Models:
 import { User } from '../shared/models/user.model';
@@ -24,17 +23,17 @@ export class ConstantsService {
 
   COOKIE_EXPIRE_TIME_DAYS: number = 1;
 
-  URL: string = environment.url;
+  URL: string = this.m_oEnvService.url;
 
-  WEBSTOMPURL: string = environment.webstompUrl;
+  WEBSTOMPURL: string = this.m_oEnvService.webstompUrl;
 
   APIURL: string = this.URL + 'rest';
 
-  AUTHURL: string = environment.authUrl;
+  AUTHURL: string = this.m_oEnvService.authUrl;
 
-  BASEURL: string = environment.baseurl;
+  BASEURL: string = this.m_oEnvService.baseurl;
 
-  WMSURL: string = environment.wmsUrl;
+  WMSURL: string = this.m_oEnvService.wmsUrl;
 
   m_bIgnoreWorkspaceApiUrl: boolean = false;
 
@@ -47,9 +46,9 @@ export class ConstantsService {
 
   m_oActiveWorkspace: Workspace = {} as Workspace;
 
-  m_sRabbitUser: string = secrets.RABBIT_USER;
+  m_sRabbitUser: string = this.m_oEnvService.rabbitUser;
 
-  m_sRabbitPassword: string = secrets.RABBIT_PASSWORD;
+  m_sRabbitPassword: string = this.m_oEnvService.rabbitPassword;
 
   m_sSelectedApplication: string = "";
 
@@ -84,7 +83,8 @@ export class ConstantsService {
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTitleService: Title,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oEnvService: EnvService
   ) { }
 
   // isMobile() {

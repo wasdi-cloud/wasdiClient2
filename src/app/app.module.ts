@@ -182,6 +182,7 @@ import { CreditsBuyDialogComponent } from './components/subscriptions-purchase/c
 import { PaymentSuccessComponent } from './components/subscriptions-purchase/payment-success/payment-success.component';
 import { LoginCoplacComponent } from './components/login/login-coplac/login-coplac.component';
 import { LoginRedirectComponent } from './components/login-redirect/login-redirect.component';
+import { EnvService } from './services/env.service';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -367,13 +368,14 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     JwtHelperService,
     MatDatepickerModule,
     MatNativeDateModule,
+    EnvService,
     { provide: RabbitStompService },
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
 
-      deps: [KeycloakService, ConfigurationService],
+      deps: [KeycloakService, EnvService],
     },
     { provide: MatBottomSheetRef, useValue: {} },
   ],

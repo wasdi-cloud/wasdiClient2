@@ -1,10 +1,10 @@
 import { KeycloakOptions, KeycloakService } from "keycloak-angular"
-import { environment } from "src/environments/environment";
+import { EnvService } from "../services/env.service";
 
-export function initializeKeycloak(m_oKeycloak: KeycloakService): () => Promise<boolean> {
+export function initializeKeycloak(m_oKeycloak: KeycloakService, oEnvService: EnvService): () => Promise<boolean> {
     const m_oOptions: KeycloakOptions = {
         config: {
-            url: environment.authUrl.replace('realms/wasdi',''),
+            url: oEnvService.authUrl.replace('realms/wasdi',''),
             realm: 'wasdi',
             clientId: 'wasdi_client',
         },

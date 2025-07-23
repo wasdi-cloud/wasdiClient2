@@ -58,3 +58,4 @@ sonar-project.properties
 
 #mongodb data
 /mongo/data
+src/assets/environment.js

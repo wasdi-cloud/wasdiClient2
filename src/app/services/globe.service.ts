@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 //Import Environment file:
-import { environment } from 'src/environments/environment';
+import { EnvService } from "../services/env.service";
 
 //Import Fadeout Utilities:
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
@@ -52,7 +52,9 @@ export class GlobeService {
    * @param m_oMapService 
    * @param m_oConstantsService 
    */
-  constructor(private m_oMapService: MapService, private m_oConstantsService: ConstantsService) 
+  constructor(private m_oMapService: MapService, private m_oConstantsService: ConstantsService,
+    private m_oEnvService: EnvService
+    ) 
   { 
   }
 
@@ -78,7 +80,7 @@ export class GlobeService {
           homeButton: false,
           scene3DOnly: true
         };
-        Cesium.Ion.defaultAccessToken = environment.cesiumToken;
+        Cesium.Ion.defaultAccessToken = this.m_oEnvService.cesiumToken;
 
         if (this.m_oWasdiGlobe != null) {
           this.clearGlobe();
