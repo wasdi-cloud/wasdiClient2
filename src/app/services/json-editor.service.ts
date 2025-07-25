@@ -1,6 +1,12 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Ace, edit } from 'ace-builds';
 
+// Import the modes you need
+import 'ace-builds/src-noconflict/mode-json';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-text';
+import 'ace-builds/src-noconflict/theme-dracula';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -58,7 +64,7 @@ export class JsonEditorService {
     this.m_oEditor.setReadOnly(this.m_bReadOnly);
     this.setEditorMode();
     this.m_oEditor.setTheme('ace/theme/dracula');
-    this.m_oEditor.session.setUseWorker(false);
+    this.m_oEditor.session.setUseWorker(true);
     this.m_oEditor.on('change', () => this.onEditorTextChange());
   }
 
