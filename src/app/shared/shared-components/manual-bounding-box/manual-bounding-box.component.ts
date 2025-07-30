@@ -53,7 +53,6 @@ export class ManualBoundingBoxComponent implements OnInit {
 
   saveBoundingBox() {
     this.m_oDialogRef.close(this.m_oBBox);
-
   }
 
   toggleShowJSON() {

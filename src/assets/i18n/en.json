@@ -1264,6 +1264,12 @@
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
     "PAYMENT_SUCCESS": "Thank you for your payment! Your transaction was <strong>successful</strong>, and everything is set. Enjoy!",
-    "PAYMENT_CONFIRM_LOADING":"Please wait while we confirm your payment !"
+    "PAYMENT_CONFIRM_LOADING":"Please wait while we confirm your payment !",
+    "EDITOR_TOOLTIP_PRINT": "Print Map",
+    "SELECT_PRINT_FORMAT": "Choose your preferred print format",
+    "PRINT_FORMAT_PDF": "PDF",
+    "PRINT_FORMAT_PNG": "PNG",
+    "PRINT_DIALOG_ACTION": "Print"
+
 }
 

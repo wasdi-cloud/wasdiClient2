@@ -1258,6 +1258,10 @@
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
     "PAYMENT_SUCCESS": "Cảm ơn bạn đã thanh toán! Giao dịch của bạn đã <strong>thành công</strong> và mọi thứ đã sẵn sàng. Chúc bạn vui vẻ!",
-    "PAYMENT_CONFIRM_LOADING": "Vui lòng chờ trong khi chúng tôi xác nhận thanh toán của bạn!"
-
+    "PAYMENT_CONFIRM_LOADING": "Vui lòng chờ trong khi chúng tôi xác nhận thanh toán của bạn!",
+    "EDITOR_TOOLTIP_PRINT": "In bản đồ",
+    "SELECT_PRINT_FORMAT": "Chọn định dạng in bạn muốn",
+    "PRINT_FORMAT_PDF": "PDF",
+    "PRINT_FORMAT_PNG": "PNG",
+    "PRINT_DIALOG_ACTION": "In"
 }

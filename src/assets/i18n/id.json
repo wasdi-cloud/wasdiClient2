@@ -1243,7 +1243,11 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-  "PAYMENT_SUCCESS": "Terima kasih atas pembayaran Anda! Transaksi Anda <strong>berhasil</strong> dan semuanya siap. Selamat menikmati!",
-  "PAYMENT_CONFIRM_LOADING": "Harap tunggu sementara kami mengonfirmasi pembayaran Anda!"
-
+    "PAYMENT_SUCCESS": "Terima kasih atas pembayaran Anda! Transaksi Anda <strong>berhasil</strong> dan semuanya siap. Selamat menikmati!",
+    "PAYMENT_CONFIRM_LOADING": "Harap tunggu sementara kami mengonfirmasi pembayaran Anda!",
+    "EDITOR_TOOLTIP_PRINT": "Cetak Peta",
+    "SELECT_PRINT_FORMAT": "Pilih format cetak pilihan Anda",
+    "PRINT_FORMAT_PDF": "PDF",
+    "PRINT_FORMAT_PNG": "PNG",
+    "PRINT_DIALOG_ACTION": "Cetak"
 }

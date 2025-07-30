@@ -17,6 +17,7 @@ import { Product } from 'src/app/shared/models/product.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
 import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
+import {PrintDialogComponent} from "../../../shared/dialogs/print-dialog/print-dialog.component";
 
 
 
@@ -157,5 +158,35 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   changeFeatureInfoMode(): void {
     this.m_bFeatureInfoMode = !this.m_bFeatureInfoMode;
     this.m_b2DFeatureInfoModeChange.emit(this.m_bFeatureInfoMode);
+  }
+
+  openPrintDialog() {
+    //todo create the payload {
+    //     "baseMap": "https://tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
+    //     "zoomLevel": 10,
+    //     "center": {
+    //         "lat": 45.0642,
+    //         "lng": 7.6956
+    //     },
+    //     "format": "pdf",
+    //     "wmsLayers": [
+    //         {
+    //             "name": "Sample WMS Layer",
+    //             "layerId": "sample:layer",
+    //             "wmsUrl": "https://example.com/wms"
+    //         }
+    //     ],
+    //     "wkts": [
+    //         {
+    //             "name": "Sample Area",
+    //             "geom": "POLYGON((7.6 45.0, 7.7 45.0, 7.7 45.1, 7.6 45.1, 7.6 45.0))"
+    //         }
+    //     ]
+    // }
+    this.m_oDialog.open(PrintDialogComponent, {
+      height: '300px',
+      width: '300px',
+    })
+
   }
 }
