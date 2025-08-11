@@ -1249,5 +1249,6 @@
     "SELECT_PRINT_FORMAT": "Choisissez votre format d'impression préféré",
     "PRINT_FORMAT_PDF": "PDF",
     "PRINT_FORMAT_PNG": "PNG",
-    "PRINT_DIALOG_ACTION": "Imprimer"
+    "PRINT_DIALOG_ACTION": "Imprimer",
+  "PRINT_WAIT": "Wasdi est en train d'imprimer la carte, veuillez patienter."
 }

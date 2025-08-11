@@ -1249,5 +1249,6 @@
     "SELECT_PRINT_FORMAT": "Pilih format cetak pilihan Anda",
     "PRINT_FORMAT_PDF": "PDF",
     "PRINT_FORMAT_PNG": "PNG",
-    "PRINT_DIALOG_ACTION": "Cetak"
+    "PRINT_DIALOG_ACTION": "Cetak",
+    "PRINT_WAIT": "Wasdi sedang mencetak peta, harap tunggu."
 }

@@ -36,9 +36,9 @@ export class MapService {
   /**
    * Service constructor.
    * It initializes the base layers and the draw items.
-   * 
-   * @param m_oConstantsService 
-   * @param m_oDialog 
+   *
+   * @param m_oConstantsService
+   * @param m_oDialog
    */
   constructor(private m_oConstantsService: ConstantsService, private m_oDialog: MatDialog, private m_oHttp: HttpClient) {
     this.initTilelayer()
@@ -79,7 +79,7 @@ export class MapService {
   m_oDarkGrayArcGIS: any = null;
 
   /**
-   * Is the component toggle-albe to 3D map? 
+   * Is the component toggle-albe to 3D map?
    */
   m_bIsToggle: boolean;
 
@@ -154,7 +154,7 @@ export class MapService {
 
   /**
    * Set the map object (when created not by the service)
-   * @param oMap 
+   * @param oMap
    */
   setMap(oMap: any) {
     this.m_oWasdiMap = oMap;
@@ -242,7 +242,7 @@ export class MapService {
 
   /**
    * Adds Mouse Position and Scale to the actual map
-   * @returns 
+   * @returns
    */
   addMousePositionAndScale(oMap) {
 
@@ -266,7 +266,7 @@ export class MapService {
 
   /**
    * Init the Map
-   * @param sMapDiv 
+   * @param sMapDiv
    */
   initMap(sMapDiv: string) {
 
@@ -296,19 +296,29 @@ export class MapService {
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
-    let oActiveBaseLayer = this.m_oActiveBaseLayer;
-
+    this.setActiveLayer(oMap,this.m_oOSMBasic)
     //add event on base change
-    oMap.on('baselayerchange', function (e) {
-      oActiveBaseLayer = e;
+    oMap.on('baselayerchange',  (e:any)=>{
+      this.setActiveLayer(oMap,e.layer);
     });
 
     return oMap;
   }
 
+  getActiveLayer() {
+    return this.m_oActiveBaseLayer;
+  }
+  setActiveLayer(oMap: L.Map, oMapLayer: L.TileLayer) {
+    if (this.m_oActiveBaseLayer !== oMapLayer) {
+      this.m_oActiveBaseLayer = oMapLayer;
+      oMap.addLayer(oMapLayer);
+    }
+  }
+
+
   /**
    * Init the Map Singleton
-   * @param sMapDiv 
+   * @param sMapDiv
    */
   initMapSingleton(sMapDiv) {
 
@@ -370,8 +380,8 @@ export class MapService {
   }
 
   /**
-   * Handler function for drawing rectangles on the SEARCH map 
-   * @param oEvent 
+   * Handler function for drawing rectangles on the SEARCH map
+   * @param oEvent
    */
   onSearchDrawCreated(oEvent: any) {
     const { layerType, layer } = oEvent;
@@ -402,7 +412,7 @@ export class MapService {
   }
 
   /**
-   * Clear Map 
+   * Clear Map
    */
   clearMap() {
     if (this.m_oWasdiMap) {
@@ -414,8 +424,8 @@ export class MapService {
   }
 
   /**
-   * 
-   * @param oRectangle 
+   *
+   * @param oRectangle
    * @returns {boolean}
    */
   changeStyleRectangleMouseOver(oRectangle) {
@@ -666,7 +676,7 @@ export class MapService {
         if (oProduct != null) {
           if (!FadeoutUtils.utilsIsStrNullOrEmpty(oProduct.bbox)) {
             let aoProductBounds = this.convertBboxInBoundariesArray(oProduct.bbox);
-            // Before adding the bounds checks whether the coordinate system use values in the range 
+            // Before adding the bounds checks whether the coordinate system use values in the range
             //-90 +90 +180 -180 (ProductViewmodel does not brings the CRS so its filtered out)
             // In publish band the problem does not persist
             if (Math.abs(aoProductBounds[0][1]) < 180) aoBounds = aoBounds.concat(aoProductBounds);
@@ -861,7 +871,7 @@ export class MapService {
   }
 
   /**
- * Adds a Layer to the 2D Map 
+ * Adds a Layer to the 2D Map
  * @param sLayerId Layer Id
  * @param sServer  Geoserver address. Of null the default one from Constant Service is taken
  * @returns True if all is fine, False in case of error
@@ -973,10 +983,10 @@ export class MapService {
 
   /**
    * Get the URL to request to geoserver (or WMS Server) the feature info of a point
-   * @param sWmsUrl 
-   * @param oPoint 
-   * @param sLayerIdList 
-   * @returns 
+   * @param sWmsUrl
+   * @param oPoint
+   * @param sLayerIdList
+   * @returns
    */
   getWMSLayerInfoUrl(sWmsUrl: string, oPoint: L.LatLng, sLayerIdList: string): string {
     const oLat = oPoint.lat;

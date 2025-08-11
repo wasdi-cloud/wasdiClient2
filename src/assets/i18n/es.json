@@ -1248,5 +1248,6 @@
     "SELECT_PRINT_FORMAT": "Elige tu formato de impresión preferido",
     "PRINT_FORMAT_PDF": "PDF",
     "PRINT_FORMAT_PNG": "PNG",
-    "PRINT_DIALOG_ACTION": "Imprimir"
+    "PRINT_DIALOG_ACTION": "Imprimir",
+    "PRINT_WAIT": "Wasdi está imprimiendo el mapa, por favor, espere."
 }

@@ -1249,5 +1249,6 @@
     "SELECT_PRINT_FORMAT": "Alegeți formatul de imprimare preferat",
     "PRINT_FORMAT_PDF": "PDF",
     "PRINT_FORMAT_PNG": "PNG",
-    "PRINT_DIALOG_ACTION": "Imprimare"
+    "PRINT_DIALOG_ACTION": "Imprimare",
+    "PRINT_WAIT": "Wasdi imprimă harta, vă rugăm să așteptați."
 }

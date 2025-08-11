@@ -30,14 +30,14 @@
     </div>
     <app-button
       (click)="confirmPrinting()"
-      [m_sLabel]="'PRINT_DIALOG_ACTION'"
+      [m_sLabel]="'PRINT_DIALOG_ACTION'| translate "
       class="align-self-end mt-3"
     ></app-button>
   </div>
 
-  <div *ngIf="m_bIsLoading" class="loading-indicator d-flex flex-column align-items-center justify-content-center flex-fill">
-<!--    <img src="assets/rise-assets/space.gif" alt="Loading" width="115" height="112">-->
-<!--    &lt;!&ndash;    <span>{{ "LAYER_ANALYZER.WAIT" | translate }}</span>&ndash;&gt;-->
-<!--    <span>{{ "MONITOR.PRINT_WAIT" | translate }}</span>-->
+  <div *ngIf="m_bIsLoading">
+    <span>{{ "PRINT_WAIT" | translate }}</span>
+    <app-invader></app-invader>
+    <!--    <span>{{ "LAYER_ANALYZER.WAIT" | translate }}</span>-->
   </div>
 </div>

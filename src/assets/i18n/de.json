@@ -1247,5 +1247,6 @@
     "SELECT_PRINT_FORMAT": "Wählen Sie Ihr bevorzugtes Druckformat",
     "PRINT_FORMAT_PDF": "PDF",
     "PRINT_FORMAT_PNG": "PNG",
-    "PRINT_DIALOG_ACTION": "Drucken"
+    "PRINT_DIALOG_ACTION": "Drucken",
+    "PRINT_WAIT": "Wasdi druckt die Karte, bitte warten."
 }

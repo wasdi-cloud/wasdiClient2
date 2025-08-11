@@ -18,6 +18,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
 import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
 import {PrintDialogComponent} from "../../../shared/dialogs/print-dialog/print-dialog.component";
+import {MapService} from "../../../services/map.service";
 
 
 
@@ -30,6 +31,9 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   @Input() m_aoProducts: Product[];
   @Input() m_bJupyterIsReady: boolean = true;
   @Input() m_b2DMapModeOn: boolean = true;
+
+
+  @Input() m_aoVisibleBands: Array<any> = [];
   m_bFeatureInfoMode: boolean = false;
 
   @Output() m_b2DMapModeOnChange: EventEmitter<boolean> = new EventEmitter;
@@ -47,7 +51,8 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oMapService:MapService
   ) { }
 
   ngOnInit() {
@@ -161,6 +166,28 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   openPrintDialog() {
+
+    console.log(this.m_aoVisibleBands)
+    let oPayload={
+      baseMap: "https://tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
+      zoomLevel: 10,
+      center: {
+        lat: 45.0642,
+        lng: 7.6956
+      },
+      format: "pdf",
+      wmsLayers: [],
+      wkts: []
+    }
+    console.log(this.m_oMapService.getActiveLayer()._url)
+    // let oPrintPayload={
+    //   baseMap:this.m_oMapService.m_oActiveBaseLayer,
+    //   zoomLevel:this.m_oMapService.getMap().getZoom(),
+    //   center:this.m_oMapService.calculateCenterFromWkt(sBbox),
+    //   format:"",
+    //   wmsLayers:aoLayersForPrint,
+    //   wkts:[]
+    // }
     //todo create the payload {
     //     "baseMap": "https://tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
     //     "zoomLevel": 10,
@@ -184,6 +211,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     //     ]
     // }
     this.m_oDialog.open(PrintDialogComponent, {
+      data:{payload:oPayload},
       height: '300px',
       width: '300px',
     })
