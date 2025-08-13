@@ -13,11 +13,11 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 //Import Models:;
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
-//Import Utilities: 
+//Import Utilities:
 import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
-//Declare Cesium: 
+//Declare Cesium:
 declare let Cesium: any;
 
 /**
@@ -177,7 +177,7 @@ export class WorkspacesComponent implements OnInit {
   ngOnDestroy(): void {
     this.m_bDestroyCalled = true;
 
-    //Destroy Interval after closing: 
+    //Destroy Interval after closing:
     if (this.m_oSetIntervalReference) {
       clearInterval(this.m_oSetIntervalReference);
     }
@@ -187,7 +187,7 @@ export class WorkspacesComponent implements OnInit {
 
   /**
    * The user clicked on a workspace
-   * @param oWorkspace 
+   * @param oWorkspace
    */
   onShowWorkspace(oWorkspace: Workspace) {
 
@@ -226,7 +226,6 @@ export class WorkspacesComponent implements OnInit {
             this.m_aoProducts.push(oResponse[iIndex]);
           }
         }
-
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts) || this.m_aoProducts.length == 0) {
           FadeoutUtils.verboseLog("WorkspacesComponent.loadProductList No products to show")
         } else {
@@ -301,32 +300,32 @@ export class WorkspacesComponent implements OnInit {
                 break;
               }
             }
-  
+
             let sDescription = oActualSat.description;
             sDescription += "\n";
             sDescription += oResponse.currentTime;
-  
+
             let oActualPosition = this.m_oGlobeService.drawPointWithImage(WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.currentPosition), oActualSat.icon, sDescription, oActualSat.label, 32, 32);
             this.m_aoSatellitePositions.push(oActualPosition);
-  
+
             if (this.m_oFakePosition === null) {
               if (oResponse.lastPositions != null) {
-  
+
                 let iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
-  
+
                 this.m_oFakePosition = oResponse.lastPositions[iFakeIndex];
-  
+
                 let aoUfoPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
                 aoUfoPosition[2] = aoUfoPosition[2] * 4;
                 this.m_oUfoPointer = this.m_oGlobeService.drawPointWithImage(aoUfoPosition, "assets/icons/alien.svg", "U.F.O.", "?");
-  
+
                 iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
                 let aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
                 aoMoonPosition[2] = 384400000;
-  
+
                 this.m_oGlobeService.drawPointWithImage(aoMoonPosition, "assets/icons/sat_death.svg", "Moon", "-");
               }
-            }            
+            }
           }
         }
       })
@@ -391,7 +390,7 @@ export class WorkspacesComponent implements OnInit {
   // setSorting(oSortingOption) {
   //   let bIsDescending: boolean = false;
   //   let propertyName: string = '';
-  //   //Set Active Sorting Option: 
+  //   //Set Active Sorting Option:
   //   if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSortingOption) === false) {
   //     this.m_oActiveSortingOption = oSortingOption;
   //     oSortingOption.direction === 'asc' ? bIsDescending = true : bIsDescending = false;

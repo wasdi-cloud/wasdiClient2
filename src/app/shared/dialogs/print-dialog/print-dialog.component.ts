@@ -52,32 +52,32 @@ export class PrintDialogComponent implements OnInit {
         console.log(sUUID)
         if (!FadeoutUtils.utilsIsStrNullOrEmpty(sUUID)) {
 
-          // this.m_oPrinterService.printMap(sUUID).subscribe({
-          //   next: (blob: Blob) => {
-          //     // Determine file type and extension
-          //     const sContentType = blob.type; // 'application/pdf' or 'image/png'
-          //     const sFileExtension = sContentType === 'application/pdf' ? 'pdf' : 'png';
-          //
-          //     // Create a blob URL and open in new tab
-          //     const blobUrl = URL.createObjectURL(blob);
-          //     // window.open(blobUrl, '_blank');
-          //
-          //     // OR: force download instead
-          //     console.log("are we here?")
-          //     const link = document.createElement('a');
-          //     link.href = blobUrl;
-          //     link.download = `map.${sFileExtension}`;
-          //     link.click();
-          //     this.m_bIsLoading = false;
-          //     this.m_oDialogRef.close();
-          //
-          //   }, error: (err) => {
-          //     console.error('Error fetching map file:', err);
-          //     this.m_bIsLoading = false;
-          //     this.m_oDialogRef.close();
-          //
-          //   }
-          // });
+          this.m_oPrinterService.printMap(sUUID).subscribe({
+            next: (blob: Blob) => {
+              // Determine file type and extension
+              const sContentType = blob.type; // 'application/pdf' or 'image/png'
+              const sFileExtension = sContentType === 'application/pdf' ? 'pdf' : 'png';
+
+              // Create a blob URL and open in new tab
+              const blobUrl = URL.createObjectURL(blob);
+              // window.open(blobUrl, '_blank');
+
+              // OR: force download instead
+              console.log("are we here?")
+              const link = document.createElement('a');
+              link.href = blobUrl;
+              link.download = `map.${sFileExtension}`;
+              link.click();
+              this.m_bIsLoading = false;
+              this.m_oDialogRef.close();
+
+            }, error: (err) => {
+              console.error('Error fetching map file:', err);
+              this.m_bIsLoading = false;
+              this.m_oDialogRef.close();
+
+            }
+          });
         }
       }, error: (err) => {
         console.error('Error fetching map file:', err);

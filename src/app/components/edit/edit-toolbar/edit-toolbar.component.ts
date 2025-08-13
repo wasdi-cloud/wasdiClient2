@@ -166,52 +166,17 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   openPrintDialog() {
-
-    console.log(this.m_aoVisibleBands)
-    let oPayload={
-      baseMap: "https://tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
-      zoomLevel: 10,
-      center: {
-        lat: 45.0642,
-        lng: 7.6956
-      },
-      format: "pdf",
-      wmsLayers: [],
-      wkts: []
+    let oPrintPayload={
+      baseMap:this.m_oMapService.getActiveLayer()._url,
+      zoomLevel:this.m_oMapService.getMap().getZoom(),
+      center:this.m_oMapService.getMap().getCenter(),
+      format:"",
+      wmsLayers:[],
+      wkts:[]
     }
-    console.log(this.m_oMapService.getActiveLayer()._url)
-    // let oPrintPayload={
-    //   baseMap:this.m_oMapService.m_oActiveBaseLayer,
-    //   zoomLevel:this.m_oMapService.getMap().getZoom(),
-    //   center:this.m_oMapService.calculateCenterFromWkt(sBbox),
-    //   format:"",
-    //   wmsLayers:aoLayersForPrint,
-    //   wkts:[]
-    // }
-    //todo create the payload {
-    //     "baseMap": "https://tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
-    //     "zoomLevel": 10,
-    //     "center": {
-    //         "lat": 45.0642,
-    //         "lng": 7.6956
-    //     },
-    //     "format": "pdf",
-    //     "wmsLayers": [
-    //         {
-    //             "name": "Sample WMS Layer",
-    //             "layerId": "sample:layer",
-    //             "wmsUrl": "https://example.com/wms"
-    //         }
-    //     ],
-    //     "wkts": [
-    //         {
-    //             "name": "Sample Area",
-    //             "geom": "POLYGON((7.6 45.0, 7.7 45.0, 7.7 45.1, 7.6 45.1, 7.6 45.0))"
-    //         }
-    //     ]
-    // }
+
     this.m_oDialog.open(PrintDialogComponent, {
-      data:{payload:oPayload},
+      data:{payload:oPrintPayload},
       height: '300px',
       width: '300px',
     })
