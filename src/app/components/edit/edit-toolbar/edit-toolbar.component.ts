@@ -166,12 +166,19 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   }
 
   openPrintDialog() {
+    let aoBandsToPrints=[];
+    console.log(this.m_aoVisibleBands)
+    for (let i = 0; i < this.m_aoVisibleBands.length; i++) {
+          // aoBandsToPrints.push({
+          //   name:""
+          // })
+    }
     let oPrintPayload={
       baseMap:this.m_oMapService.getActiveLayer()._url,
       zoomLevel:this.m_oMapService.getMap().getZoom(),
       center:this.m_oMapService.getMap().getCenter(),
       format:"",
-      wmsLayers:[],
+      wmsLayers:aoBandsToPrints,
       wkts:[]
     }
 
