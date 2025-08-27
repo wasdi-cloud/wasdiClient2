@@ -169,9 +169,12 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     let aoBandsToPrints=[];
     console.log(this.m_aoVisibleBands)
     for (let i = 0; i < this.m_aoVisibleBands.length; i++) {
-          // aoBandsToPrints.push({
-          //   name:""
-          // })
+          console.log(this.m_aoVisibleBands[i].geoserverUrl)
+          aoBandsToPrints.push({
+            name:this.m_aoVisibleBands[i].name,
+            layerId:this.m_aoVisibleBands[i].layerId,
+            wmsUrl:this.m_aoVisibleBands[i].geoserverUrl,
+          })
     }
     let oPrintPayload={
       baseMap:this.m_oMapService.getActiveLayer()._url,
