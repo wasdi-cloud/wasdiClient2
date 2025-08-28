@@ -193,6 +193,7 @@
 	"EDITOR_PRODUCTS_WS_INFO": "Arbeitsbereich-Infos",
 	"EDITOR_PRODUCT_REMOVE": "Produktentfernung bestätigen",
     "EDITOR_PRODUCTS_REMOVE": "Entfernung der Produkte bestätigen",
+    "EDITOR_PRODUCTS_REMOVE_EMPTY": "Keine Produkte ausgewählt",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI bereitet Ihr Notizbuch vor",
     "EDITOR_NAVIGATION": "Navigation",
     "EDITOR_LAYERS_OPTIONS": "Ebenen-Stiloptionen",

@@ -193,6 +193,7 @@
     "EDITOR_PRODUCTS_WS_INFO": "Información del espacio de trabajo",
     "EDITOR_PRODUCT_REMOVE": "Confirmar eliminación del producto",
     "EDITOR_PRODUCTS_REMOVE": "Confirmar eliminación de productos",
+    "EDITOR_PRODUCTS_REMOVE_EMPTY": "No hay productos seleccionados",
     "EDITOR_NOTEBOOK_PREPARE": "WASDI está preparando tu libreta",
     "EDITOR_NAVIGATION": "Navegación",
     "EDITOR_LAYERS_OPTIONS": "Opciones de estilo de capa",

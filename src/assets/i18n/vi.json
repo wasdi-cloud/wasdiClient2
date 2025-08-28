@@ -193,6 +193,7 @@
     "EDITOR_PRODUCTS_WS_INFO": "Thông tin không gian làm việc",
     "EDITOR_PRODUCT_REMOVE": "Xác nhận xóa sản phẩm",
     "EDITOR_PRODUCTS_REMOVE":"Xác nhận xóa sản phẩm",
+    "EDITOR_PRODUCTS_REMOVE_EMPTY": "Không có sản phẩm nào được chọn",
     "EDITOR_NOTEBOOK_PREPARE": "WASDI đang chuẩn bị sổ ghi chép của bạn",
     "EDITOR_NAVIGATION": "Điều hướng",
     "EDITOR_LAYERS_OPTIONS": "Tùy chọn kiểu lớp",

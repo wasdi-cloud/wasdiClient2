@@ -193,6 +193,7 @@
 	"EDITOR_PRODUCTS_WS_INFO": "Info Area Kerja",
 	"EDITOR_PRODUCT_REMOVE": "Konfirmasi penghapusan produk",
 	"EDITOR_PRODUCTS_REMOVE": "Konfirmasi penghapusan produk",
+	"EDITOR_PRODUCTS_REMOVE_EMPTY": "Tidak ada produk yang dipilih",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI sedang menyiapkan buku catatan Anda",
     "EDITOR_NAVIGATION": "Navigasi",
     "EDITOR_LAYERS_OPTIONS": "Opsi gaya lapisan",

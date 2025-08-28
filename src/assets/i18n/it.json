@@ -193,6 +193,7 @@
 	"EDITOR_PRODUCTS_WS_INFO": "Informazioni Workspace",
 	"EDITOR_PRODUCT_REMOVE": "Conferma la rimozione del prodotto",
     "EDITOR_PRODUCTS_REMOVE": "Conferma la rimozione dei prodotti",
+	"EDITOR_PRODUCTS_REMOVE_EMPTY": "Nessun prodotto selezionato",
     "EDITOR_NOTEBOOK_PREPARE": "WASDI sta preparando il tuo taccuino",
     "EDITOR_NAVIGATION": "Navigazione",
     "EDITOR_LAYERS_OPTIONS": "Opzioni stile livello",

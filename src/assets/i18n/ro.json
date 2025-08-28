@@ -193,6 +193,7 @@
 	"EDITOR_PRODUCTS_WS_INFO": "Informații despre spațiul de lucru",
 	"EDITOR_PRODUCT_REMOVE": "Confirmați eliminarea produsului",
     "EDITOR_PRODUCTS_REMOVE": "Confirmați eliminarea produselor",
+    "EDITOR_PRODUCTS_REMOVE_EMPTY": "Nu sunt produse selectate",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI vă pregătește caietul",
     "EDITOR_NAVIGATION": "Navigație",
     "EDITOR_LAYERS_OPTIONS": "Opțiuni pentru stilul stratului",

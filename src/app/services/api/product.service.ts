@@ -43,10 +43,8 @@ export class ProductService {
     return this.oHttp.get<any>(sUrl + '/product/delete?name=' + sProductName + '&workspace=' + sWorkspaceId + '&deletefile=' + bDeleteFile + '&deletelayer=' + bDeleteLayer);
   };
 
-  deleteProductListFromWorkspace(sProductNameList: string, sWorkspaceId: string, bDeleteFile: boolean, bDeleteLayer: boolean) {
-    if (sProductNameList.length == 0) {
-      return 400; // bad parameters
-    }
+  deleteProductListFromWorkspace(asProductNameList: string[], sWorkspaceId: string, bDeleteFile: boolean, bDeleteLayer: boolean) {
+
     let oWorkspace: Workspace = this.oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
@@ -56,7 +54,7 @@ export class ProductService {
     }
 
     // the list is passed in the body request
-    return this.oHttp.post(sUrl + '/product/deletelist?workspace=' + sWorkspaceId + '&deletefile=' + bDeleteFile + '&deletelayer=' + bDeleteLayer, sProductNameList);
+    return this.oHttp.post<any>(sUrl + '/product/deletelist?workspace=' + sWorkspaceId + '&deletefile=' + bDeleteFile + '&deletelayer=' + bDeleteLayer, asProductNameList);
   };
 
   updateProduct(oProductViewModel: any, workspaceId: string) {
