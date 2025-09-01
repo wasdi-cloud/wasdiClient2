@@ -7,8 +7,7 @@ import {ConstantsService} from "../constants.service";
   providedIn: 'root'
 })
 export class PrinterService {
-  // APIURL: string = this.m_oConstantsService.getAPIURL();
-  APIURL: string = "https://test.wasdi.net/wasdiwebserver/rest/";
+  APIURL: string = this.m_oConstantsService.getAPIURL();
   constructor(
     private m_oHttp:HttpClient,
     private m_oConstantsService:ConstantsService,
