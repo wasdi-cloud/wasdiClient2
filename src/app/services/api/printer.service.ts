@@ -15,10 +15,10 @@ export class PrinterService {
   ) { }
 
   storeMap(oPrinterViewModel: any) {
-    return this.m_oHttp.post(this.APIURL + 'print/storemap', oPrinterViewModel,{responseType:'text' as 'text'});
+    return this.m_oHttp.post(this.APIURL + '/print/storemap', oPrinterViewModel,{responseType:'text' as 'text'});
   }
   printMap(sUUID: any):Observable<Blob> {
-    const sUrl=this.APIURL+`print?uuid=${encodeURIComponent(sUUID)}`;
+    const sUrl=this.APIURL+`/print?uuid=${encodeURIComponent(sUUID)}`;
     return this.m_oHttp.get(sUrl,{responseType:'blob' as 'blob'});
   }
 }
