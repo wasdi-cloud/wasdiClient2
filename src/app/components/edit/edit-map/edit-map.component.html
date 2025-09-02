@@ -1,7 +1,7 @@
 <div class="map-frame h-100 w-100">
     <div class="mb-3 edit-toolbar-container" role="toolbar"
         aria-label="Toolbar with button groups to control Map settings">
-        <app-edit-toolbar [m_aoProducts]="aoProducts" [(m_b2DMapModeOn)]="b2DMapModeOn" (m_b2DFeatureInfoModeChange)="setFeatureInfoMode($event)"></app-edit-toolbar>
+        <app-edit-toolbar [m_aoVisibleBands]="m_aoVisibleBands" [m_aoProducts]="aoProducts" [(m_b2DMapModeOn)]="b2DMapModeOn" (m_b2DFeatureInfoModeChange)="setFeatureInfoMode($event)"></app-edit-toolbar>
     </div>
     <div class="map-container h-100 w-100" id="bigMapContainer"></div>
 </div>

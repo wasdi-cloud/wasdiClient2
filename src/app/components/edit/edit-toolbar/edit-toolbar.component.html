@@ -22,6 +22,10 @@
             <app-button [m_sIconRight]="'upload'" [m_bMuted]="true" (click)="openImportDialog()" [m_sSize]="'small'"
                 [m_bRounded]="true" [matTooltip]="'BTN_IMPORT' | translate"></app-button>
         </li>
+      <li class="nav-item" *ngIf="!m_bFeatureInfoMode">
+        <app-button [m_sIconRight]="'print'" [m_bMuted]="true" (click)="openPrintDialog()" [m_sSize]="'small'"
+                    [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_PRINT' | translate"></app-button>
+      </li>
         <li class="nav-item">
             <app-button [m_sIconRight]="'share'" [m_bMuted]="true" (click)="openShareDialog()" [m_sSize]="'small'"
                 [m_bRounded]="true" [matTooltip]="'DIALOG_SHARE_WS_SHARE_WS' | translate"></app-button>
@@ -47,6 +51,7 @@
             <app-button [m_sIconRight]="'pinch'" [m_bMuted]="true" (click)="changeFeatureInfoMode()" [m_sSize]="'small'"
                 [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_SHOW_FEATURE' | translate"></app-button>
         </li>
+
 
     </ul>
 </nav>

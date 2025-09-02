@@ -193,6 +193,7 @@
 	"EDITOR_PRODUCTS_WS_INFO": "Arbeitsbereich-Infos",
 	"EDITOR_PRODUCT_REMOVE": "Produktentfernung bestätigen",
     "EDITOR_PRODUCTS_REMOVE": "Entfernung der Produkte bestätigen",
+    "EDITOR_PRODUCTS_REMOVE_EMPTY": "Keine Produkte ausgewählt",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI bereitet Ihr Notizbuch vor",
     "EDITOR_NAVIGATION": "Navigation",
     "EDITOR_LAYERS_OPTIONS": "Ebenen-Stiloptionen",
@@ -1241,9 +1242,12 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-  "PAYMENT_SUCCESS": "Danke für Ihre Zahlung! Ihre Transaktion war <strong>erfolgreich</strong> und alles ist bereit. Viel Spaß!",
-  "PAYMENT_CONFIRM_LOADING": "Bitte warten Sie, während wir Ihre Zahlung bestätigen!"
-
-
-
+    "PAYMENT_SUCCESS": "Danke für Ihre Zahlung! Ihre Transaktion war <strong>erfolgreich</strong> und alles ist bereit. Viel Spaß!",
+    "PAYMENT_CONFIRM_LOADING": "Bitte warten Sie, während wir Ihre Zahlung bestätigen!",
+    "EDITOR_TOOLTIP_PRINT": "Karte drucken",
+    "SELECT_PRINT_FORMAT": "Wählen Sie Ihr bevorzugtes Druckformat",
+    "PRINT_FORMAT_PDF": "PDF",
+    "PRINT_FORMAT_PNG": "PNG",
+    "PRINT_DIALOG_ACTION": "Drucken",
+    "PRINT_WAIT": "Wasdi druckt die Karte, bitte warten."
 }

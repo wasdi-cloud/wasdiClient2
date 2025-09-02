@@ -17,6 +17,8 @@ import { Product } from 'src/app/shared/models/product.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
 import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
+import {PrintDialogComponent} from "../../../shared/dialogs/print-dialog/print-dialog.component";
+import {MapService} from "../../../services/map.service";
 
 
 
@@ -29,6 +31,9 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   @Input() m_aoProducts: Product[];
   @Input() m_bJupyterIsReady: boolean = true;
   @Input() m_b2DMapModeOn: boolean = true;
+
+
+  @Input() m_aoVisibleBands: Array<any> = [];
   m_bFeatureInfoMode: boolean = false;
 
   @Output() m_b2DMapModeOnChange: EventEmitter<boolean> = new EventEmitter;
@@ -46,7 +51,8 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oMapService:MapService
   ) { }
 
   ngOnInit() {
@@ -157,5 +163,31 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
   changeFeatureInfoMode(): void {
     this.m_bFeatureInfoMode = !this.m_bFeatureInfoMode;
     this.m_b2DFeatureInfoModeChange.emit(this.m_bFeatureInfoMode);
+  }
+
+  openPrintDialog() {
+    let aoBandsToPrints=[];
+    for (let i = 0; i < this.m_aoVisibleBands.length; i++) {
+          aoBandsToPrints.push({
+            name:this.m_aoVisibleBands[i].name,
+            layerId:this.m_aoVisibleBands[i].layerId,
+            wmsUrl:this.m_aoVisibleBands[i].geoserverUrl,
+          })
+    }
+    let oPrintPayload={
+      baseMap:this.m_oMapService.getActiveLayer()._url,
+      zoomLevel:this.m_oMapService.getMap().getZoom(),
+      center:this.m_oMapService.getMap().getCenter(),
+      format:"",
+      wmsLayers:aoBandsToPrints,
+      wkts:[]
+    }
+
+    this.m_oDialog.open(PrintDialogComponent, {
+      data:{payload:oPrintPayload},
+      height: '300px',
+      width: '300px',
+    })
+
   }
 }

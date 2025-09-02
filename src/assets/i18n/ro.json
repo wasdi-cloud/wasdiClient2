@@ -193,6 +193,7 @@
 	"EDITOR_PRODUCTS_WS_INFO": "Informații despre spațiul de lucru",
 	"EDITOR_PRODUCT_REMOVE": "Confirmați eliminarea produsului",
     "EDITOR_PRODUCTS_REMOVE": "Confirmați eliminarea produselor",
+    "EDITOR_PRODUCTS_REMOVE_EMPTY": "Nu sunt produse selectate",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI vă pregătește caietul",
     "EDITOR_NAVIGATION": "Navigație",
     "EDITOR_LAYERS_OPTIONS": "Opțiuni pentru stilul stratului",
@@ -1243,7 +1244,12 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-  "PAYMENT_SUCCESS": "Mulțumim pentru plată! Tranzacția dvs. a fost <strong>reușită</strong> și totul este pregătit. Bucurați-vă!",
-  "PAYMENT_CONFIRM_LOADING": "Vă rugăm să așteptați în timp ce confirmăm plata dvs.!"
-
+    "PAYMENT_SUCCESS": "Mulțumim pentru plată! Tranzacția dvs. a fost <strong>reușită</strong> și totul este pregătit. Bucurați-vă!",
+    "PAYMENT_CONFIRM_LOADING": "Vă rugăm să așteptați în timp ce confirmăm plata dvs.!",
+    "EDITOR_TOOLTIP_PRINT": "Printare hartă",
+    "SELECT_PRINT_FORMAT": "Alegeți formatul de imprimare preferat",
+    "PRINT_FORMAT_PDF": "PDF",
+    "PRINT_FORMAT_PNG": "PNG",
+    "PRINT_DIALOG_ACTION": "Imprimare",
+    "PRINT_WAIT": "Wasdi imprimă harta, vă rugăm să așteptați."
 }

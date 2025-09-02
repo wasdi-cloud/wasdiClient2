@@ -193,6 +193,7 @@
     "EDITOR_PRODUCTS_WS_INFO": "Información del espacio de trabajo",
     "EDITOR_PRODUCT_REMOVE": "Confirmar eliminación del producto",
     "EDITOR_PRODUCTS_REMOVE": "Confirmar eliminación de productos",
+    "EDITOR_PRODUCTS_REMOVE_EMPTY": "No hay productos seleccionados",
     "EDITOR_NOTEBOOK_PREPARE": "WASDI está preparando tu libreta",
     "EDITOR_NAVIGATION": "Navegación",
     "EDITOR_LAYERS_OPTIONS": "Opciones de estilo de capa",
@@ -1242,7 +1243,12 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-  "PAYMENT_SUCCESS": "¡Gracias por tu pago! Tu transacción fue <strong>exitosa</strong> y todo está listo. ¡Disfruta!",
-  "PAYMENT_CONFIRM_LOADING": "¡Por favor, espera mientras confirmamos tu pago!"
-
+    "PAYMENT_SUCCESS": "¡Gracias por tu pago! Tu transacción fue <strong>exitosa</strong> y todo está listo. ¡Disfruta!",
+    "PAYMENT_CONFIRM_LOADING": "¡Por favor, espera mientras confirmamos tu pago!",
+    "EDITOR_TOOLTIP_PRINT": "Imprimir mapa",
+    "SELECT_PRINT_FORMAT": "Elige tu formato de impresión preferido",
+    "PRINT_FORMAT_PDF": "PDF",
+    "PRINT_FORMAT_PNG": "PNG",
+    "PRINT_DIALOG_ACTION": "Imprimir",
+    "PRINT_WAIT": "Wasdi está imprimiendo el mapa, por favor, espere."
 }

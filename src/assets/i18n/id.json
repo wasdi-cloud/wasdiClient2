@@ -193,6 +193,7 @@
 	"EDITOR_PRODUCTS_WS_INFO": "Info Area Kerja",
 	"EDITOR_PRODUCT_REMOVE": "Konfirmasi penghapusan produk",
 	"EDITOR_PRODUCTS_REMOVE": "Konfirmasi penghapusan produk",
+	"EDITOR_PRODUCTS_REMOVE_EMPTY": "Tidak ada produk yang dipilih",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI sedang menyiapkan buku catatan Anda",
     "EDITOR_NAVIGATION": "Navigasi",
     "EDITOR_LAYERS_OPTIONS": "Opsi gaya lapisan",
@@ -1243,7 +1244,12 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-  "PAYMENT_SUCCESS": "Terima kasih atas pembayaran Anda! Transaksi Anda <strong>berhasil</strong> dan semuanya siap. Selamat menikmati!",
-  "PAYMENT_CONFIRM_LOADING": "Harap tunggu sementara kami mengonfirmasi pembayaran Anda!"
-
+    "PAYMENT_SUCCESS": "Terima kasih atas pembayaran Anda! Transaksi Anda <strong>berhasil</strong> dan semuanya siap. Selamat menikmati!",
+    "PAYMENT_CONFIRM_LOADING": "Harap tunggu sementara kami mengonfirmasi pembayaran Anda!",
+    "EDITOR_TOOLTIP_PRINT": "Cetak Peta",
+    "SELECT_PRINT_FORMAT": "Pilih format cetak pilihan Anda",
+    "PRINT_FORMAT_PDF": "PDF",
+    "PRINT_FORMAT_PNG": "PNG",
+    "PRINT_DIALOG_ACTION": "Cetak",
+    "PRINT_WAIT": "Wasdi sedang mencetak peta, harap tunggu."
 }

@@ -193,6 +193,7 @@
 	"EDITOR_PRODUCTS_WS_INFO": "Informazioni Workspace",
 	"EDITOR_PRODUCT_REMOVE": "Conferma la rimozione del prodotto",
     "EDITOR_PRODUCTS_REMOVE": "Conferma la rimozione dei prodotti",
+	"EDITOR_PRODUCTS_REMOVE_EMPTY": "Nessun prodotto selezionato",
     "EDITOR_NOTEBOOK_PREPARE": "WASDI sta preparando il tuo taccuino",
     "EDITOR_NAVIGATION": "Navigazione",
     "EDITOR_LAYERS_OPTIONS": "Opzioni stile livello",
@@ -1001,7 +1002,7 @@
     "DIALOG_SHARE_PERMISSION_ERROR": "Non hai i permessi per rimuovere questo utente",
     "DIALOG_SHARE_USER_ERROR": "Impossibile rimuovere l'utente",
 	"DIALOG_SHARE_ORGANIZATION_ERROR": "Impossibile condividere l'Organizzazione, verificare che la mail specificata abbia un account valido in WASDI",
-	
+
 	"DIALOG_PACKAGE_MANAGER_VIEWING": "Visualizzazione dei pacchetti per",
 	"DIALOG_PACKAGE_MANAGER_HEADER": "Gestore di pacchetti",
 	"DIALOG_PACKAGE_MANAGER_NAME": "Nome del pacchetto",
@@ -1242,9 +1243,12 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-  "PAYMENT_SUCCESS": "Grazie per il tuo pagamento! La tua transazione è stata <strong>avvenuta con successo</strong> e tutto è pronto. Buon divertimento!",
-  "PAYMENT_CONFIRM_LOADING": "Attendere mentre confermiamo il tuo pagamento!"
-
-
-
+    "PAYMENT_SUCCESS": "Grazie per il tuo pagamento! La tua transazione è stata <strong>avvenuta con successo</strong> e tutto è pronto. Buon divertimento!",
+    "PAYMENT_CONFIRM_LOADING": "Attendere mentre confermiamo il tuo pagamento!",
+    "EDITOR_TOOLTIP_PRINT": "Stampa mappa",
+    "SELECT_PRINT_FORMAT": "Scegli il formato di stampa preferito",
+    "PRINT_FORMAT_PDF": "PDF",
+    "PRINT_FORMAT_PNG": "PNG",
+    "PRINT_DIALOG_ACTION": "Stampa",
+    "PRINT_WAIT": "Wasdi sta stampando la mappa, si prega di attendere."
 }

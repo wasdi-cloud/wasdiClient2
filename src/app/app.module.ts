@@ -183,6 +183,7 @@ import { PaymentSuccessComponent } from './components/subscriptions-purchase/pay
 import { LoginCoplacComponent } from './components/login/login-coplac/login-coplac.component';
 import { LoginRedirectComponent } from './components/login-redirect/login-redirect.component';
 import { EnvService } from './services/env.service';
+import { PrintDialogComponent } from './shared/dialogs/print-dialog/print-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -307,7 +308,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     PrivateMissionsComponent,
     CreditsBuyDialogComponent,
     LoginCoplacComponent,
-    LoginRedirectComponent
+    LoginRedirectComponent,
+    PrintDialogComponent
 
   ],
   imports: [

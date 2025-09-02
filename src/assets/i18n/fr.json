@@ -193,6 +193,7 @@
 	"EDITOR_PRODUCTS_WS_INFO": "Information de l'espace de travail",
 	"EDITOR_PRODUCT_REMOVE": "Confirmer la suppression du produit",
     "EDITOR_PRODUCTS_REMOVE": "Confirmer la suppression des produits",
+	"EDITOR_PRODUCTS_REMOVE_EMPTY": "Aucun produit sélectionné",
 	"EDITOR_NOTEBOOK_PREPARE": "WASDI está preparando tu libreta",
     "EDITOR_NAVIGATION": "Navegación",
     "EDITOR_LAYERS_OPTIONS": "Opciones de estilo de capa",
@@ -1243,7 +1244,12 @@
     "ADMIN_SUBSCRIPTIONS_DAYS_REMAINING": "Days Remaining:",
     "ADMIN_SUBSCRIPTIONS_PURCHASED": "Purchased:",
     "ADMIN_SUBSCRIPTIONS_UPDATE": "Update Subscription",
-  "PAYMENT_SUCCESS": "Merci pour votre paiement ! Votre transaction a été <strong>réussie</strong> et tout est prêt. Profitez-en !",
-  "PAYMENT_CONFIRM_LOADING": "Veuillez patienter pendant que nous confirmons votre paiement !"
-
+    "PAYMENT_SUCCESS": "Merci pour votre paiement ! Votre transaction a été <strong>réussie</strong> et tout est prêt. Profitez-en !",
+    "PAYMENT_CONFIRM_LOADING": "Veuillez patienter pendant que nous confirmons votre paiement !",
+    "EDITOR_TOOLTIP_PRINT": "Imprimer la carte",
+    "SELECT_PRINT_FORMAT": "Choisissez votre format d'impression préféré",
+    "PRINT_FORMAT_PDF": "PDF",
+    "PRINT_FORMAT_PNG": "PNG",
+    "PRINT_DIALOG_ACTION": "Imprimer",
+  "PRINT_WAIT": "Wasdi est en train d'imprimer la carte, veuillez patienter."
 }

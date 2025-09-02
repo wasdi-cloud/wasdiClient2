@@ -423,6 +423,15 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     let sTitle: string = this.m_oTranslate.instant("EDITOR_PRODUCTS_REMOVE") + ` (${this.m_aoSelectedProducts.length})`
 
+    if (this.m_aoSelectedProducts.length === 0) {
+      this.m_oNotificationDisplayService.openAlertDialog(this.m_oTranslate.instant("EDITOR_PRODUCTS_REMOVE_EMPTY"));
+      return;
+    }
+
+    let asProductsFileNames = this.m_aoSelectedProducts.map(oProduct => {
+      return oProduct.fileName
+    })
+
     let asProductsMsg = this.m_aoSelectedProducts.map(oProduct => {
       return `<li>${oProduct.fileName}</li>`
     })
@@ -435,24 +444,24 @@ export class ProductsListComponent implements OnChanges, OnInit {
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oDialogResult) || oDialogResult === false) {
         return;
       } else {
-        this.m_aoSelectedProducts.forEach(oProduct => {
-          this.m_oProductService.deleteProductFromWorkspace(oProduct.fileName, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe({
-            next: oResponse => {
-              if (oResponse.boolValue) {
-                this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
-                this.m_aoSelectedProducts = [];
-                return true;
-              } else {
-                this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
-                return false;
-              }
-            },
-            error: oError => {
-              this.m_oNotificationDisplayService.openAlertDialog("Error deleting " + oProduct.fileName);
+        this.m_oProductService.deleteProductListFromWorkspace(asProductsFileNames, this.m_oActiveWorkspace.workspaceId, bDeleteFile, bDeleteLayer).subscribe({
+          next: oResponse => {
+            if (oResponse.boolValue) {
+              this.m_oProductArrayOutput.emit(this.m_aoWorkspaceProductsList);
+              this.m_aoSelectedProducts = [];
+              this.m_bSelectAllProduct = false;
+              return true;
+            } else {
+              this.m_oNotificationDisplayService.openAlertDialog("Error deleting some products");
               return false;
             }
-          })
+          },
+          error: oError => {
+            this.m_oNotificationDisplayService.openAlertDialog("Error deleting some products");
+              return false;
+          }
         })
+
       }
     })
   }
