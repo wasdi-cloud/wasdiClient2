@@ -106,7 +106,7 @@ export class AuthGuard implements CanActivate {
     const sHost = window.location.hostname;
     let sRedirectLink = '/login';
 
-    if (sHost.startsWith('coplac')) {
+    if (sHost.startsWith('coplac') || sHost.startsWith('wasdi.cimh')) {
       sRedirectLink = '/login-coplac';
     }
 

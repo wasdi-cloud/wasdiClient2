@@ -12,7 +12,7 @@ export class LoginRedirectComponent implements OnInit {
   ngOnInit(): void {
 
     const sHost = window.location.hostname;
-    if (sHost.startsWith('coplac')) {
+    if (sHost.startsWith('coplac') || sHost.startsWith('wasdi.cimh')) {
       this.m_oRouter.navigate(['/login-coplac']);
     } else {
       this.m_oRouter.navigate(['/login']);
