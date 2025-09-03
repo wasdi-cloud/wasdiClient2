@@ -10,6 +10,7 @@ export class AdminMenuComponent {
   @Output() m_sSelectedTab: EventEmitter<string> = new EventEmitter<string>();
 
   m_bIsAdmin: boolean = false;
+  m_bActivateSubscriptions: boolean = true;
 
   m_aoMenuButtons = [
     {
@@ -71,6 +72,12 @@ export class AdminMenuComponent {
   constructor(private m_oConstantsService: ConstantsService) {
     if (this.m_oConstantsService.getUser().role === 'ADMIN') {
       this.m_bIsAdmin = true;
+    }
+
+    this.m_bActivateSubscriptions = this.m_oConstantsService.areSubscriptionsActivated();
+
+    if (!this.m_bActivateSubscriptions) {
+      this.m_aoMenuButtons = this.m_aoMenuButtons.filter(button => (button.title !== 'subscriptions' && button.title !== 'billings'));
     }
   }
 

@@ -89,6 +89,18 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  setFavIcon(sText) {
+    let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+    if (!oLink) {
+      oLink = document.createElement('link');
+      oLink.type = 'image/x-icon';
+      oLink.rel = 'icon';
+      document.getElementsByTagName('head')[0].appendChild(oLink);
+    }
+    
+    oLink.href = sText;
+  }
+
   /**
    * Handle the answer of the Login Service
    * @param data 
@@ -131,17 +143,28 @@ export class LoginComponent implements OnInit {
             var sBrandSecondaryColor = m_oCurrentSkin.brandSecondaryColor;
             document.documentElement.style.setProperty('--neutral50Brand',  sBrandMainColor);
             document.documentElement.style.setProperty('--wasdiGreen',  sBrandSecondaryColor);
+
+            if (!FadeoutUtils.utilsIsStrNullOrEmpty(m_oCurrentSkin.tabTitle)) {
+              this.m_oTitleService.setTitle(m_oCurrentSkin.tabTitle);
+            }
+
+            let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+            if (!oLink) {
+              oLink = document.createElement('link');
+              oLink.type = 'image/x-icon';
+              oLink.rel = 'icon';
+              document.getElementsByTagName('head')[0].appendChild(oLink);
+            }
+
+            if (!FadeoutUtils.utilsIsStrNullOrEmpty(m_oCurrentSkin.favIcon)) {
+              this.setFavIcon(m_oCurrentSkin.favIcon);
+            }
+            
+            // P.Campanella 2025-09-03: TODO I leave this for security but now should all be passed using the Skin View Model
             if (m_oCurrentSkin.logoText.includes('coplac')) {
-                    let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
-                    if (!oLink) {
-                      oLink = document.createElement('link');
-                      oLink.type = 'image/x-icon';
-                      oLink.rel = 'icon';
-                      document.getElementsByTagName('head')[0].appendChild(oLink);
-                    }
-                    oLink.href = 'assets/icons/favicon-coplac.ico';
-                    this.m_oTitleService.setTitle('Copernicus LAC');
-                  }
+              this.setFavIcon('assets/icons/favicon-coplac.ico');
+              this.m_oTitleService.setTitle("Copernicus LAC");
+            }
           }
           // Navigate to the marketplace after successful login
           oController.m_oRouter.navigateByUrl('/marketplace');

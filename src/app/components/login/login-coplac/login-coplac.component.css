@@ -38,11 +38,17 @@ div.login-header {
     padding-bottom: 1rem;
 }
 
-div.header-logo-footer{
+div.header-logo-footer-green{
     font-size: 20px;
     line-height: 20px;
     padding-top: 1.1rem;
     color: #03968e
+}
+
+div.header-logo-footer-blue{
+    font-size: 16px;
+    line-height: 20px;
+    color: #0f294f
 }
 
 div.img-container {

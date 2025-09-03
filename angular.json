@@ -26,6 +26,11 @@
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images/",
                 "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/ace-builds/src-noconflict",
+                "output": "./assets/ace-builds/src-noconflict/"
               }
             ],
             "styles": [
@@ -66,8 +71,6 @@
                 "fonts": true,
                 "styles": false
               }
-
-
             },
             "staging": {
               "fileReplacements": [

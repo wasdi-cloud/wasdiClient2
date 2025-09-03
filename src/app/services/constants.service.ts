@@ -341,6 +341,17 @@ export class ConstantsService {
     return true;
   }
 
+  areSubscriptionsActivated() {
+    if (this.m_oUserSkin) {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oUserSkin.activateSubscriptions)) {
+        return true;
+      }
+      return this.m_oUserSkin.activateSubscriptions;
+    }
+
+    return true;
+  }
+
   /**************************************************/
 
   /**
