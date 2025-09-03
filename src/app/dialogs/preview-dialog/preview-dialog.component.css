@@ -1,0 +1,76 @@
+.attachment-preview-dialog {
+  background-color: white;
+  backdrop-filter: blur(20px);
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-wrap: break-word;
+  /* Remove fixed height: 90vh from here */
+  /* Instead, let the content define its height, up to a max */
+  max-height: 90vh; /* Allow content to grow, but no taller than 90% of viewport height */
+  display: flex;
+  flex-direction: column;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1; /* Allow this container to take up remaining vertical space */
+  /* Remove overflow: hidden from here, as we don't want to crop */
+  min-height: 0; /* Important for flex items with content that could overflow */
+  max-width: 100%; /* Ensure the container respects dialog width */
+  max-height: 100%; /* Ensure the container respects dialog height */
+}
+
+.image-preview {
+  max-width: 100%; /* Image will scale down to fit container width */
+  max-height: 100%; /* Image will scale down to fit container height */
+  object-fit: contain; /* ESSENTIAL: Ensures the entire image is visible, maintaining aspect ratio */
+  /* If you want to explicitly set a background for empty space around the image */
+  background-color: lightgrey;
+}
+
+/* For the iframes (PDF/TXT) you want similar behavior */
+iframe {
+  width: 100%; /* Use 100% of parent width */
+  height: 80vh; /* Keep a fixed height for iframes as they are documents */
+  border: none; /* Optional: remove default iframe border */
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+.header-zone {
+  flex: 1; /* Equal width for both zones */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center; /* Aligns text and icon vertically */
+  gap: 10px; /* Adds space between text and icon */
+  margin-bottom: 20px;;
+}
+
+.file-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.file-icon {
+  font-size: 24px; /* Adjust icon size */
+  color: var(--wasdiGreen); /* Example color */
+}
+
+.document-preview {
+  width: 30vw; /* Use a smaller width for documents */
+  height: 30vh; /* Use a smaller height for documents */
+  border: none;
+  display: block; /* Ensures the iframe behaves as a block element */
+  margin: 0 auto; /* Centers the iframe horizontally */
+}

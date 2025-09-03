@@ -1,19 +1,22 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {Component, EventEmitter, Inject, Input, Output, SimpleChanges} from '@angular/core';
 
-import { ConstantsService } from 'src/app/services/constants.service';
-import { CatalogService } from 'src/app/services/api/catalog.service';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import {ConstantsService} from 'src/app/services/constants.service';
+import {NotificationDisplayService} from 'src/app/services/notification-display.service';
 
-import { ProductPropertiesDialogComponent } from '../product-properties-dialog/product-properties-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import {ProductPropertiesDialogComponent} from '../product-properties-dialog/product-properties-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { ProductsListComponent } from '../products-list.component'
-import { StylesDialogComponent } from '../../edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
-import { WorkspacesListDialogComponent } from 'src/app/components/search/workspaces-list-dialog/workspaces-list-dialog.component';
-import { ProductService } from 'src/app/services/api/product.service';
-import { TranslateService } from '@ngx-translate/core';
-import { MetadataAttributesDialogComponent } from '../metadata-attributes-dialog/metadata-attributes-dialog.component';
-
+import {ProductsListComponent} from '../products-list.component'
+import {StylesDialogComponent} from '../../edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
+import {
+  WorkspacesListDialogComponent
+} from 'src/app/components/search/workspaces-list-dialog/workspaces-list-dialog.component';
+import {ProductService} from 'src/app/services/api/product.service';
+import {TranslateService} from '@ngx-translate/core';
+import {MetadataAttributesDialogComponent} from '../metadata-attributes-dialog/metadata-attributes-dialog.component';
+import {AttachmentService} from "../../../../services/api/attachment.service";
+import {CatalogService} from "../../../../services/api/catalog.service";
+import {PreviewDialogComponent} from "../../../../dialogs/preview-dialog/preview-dialog.component";
 
 
 @Component({
@@ -23,15 +26,28 @@ import { MetadataAttributesDialogComponent } from '../metadata-attributes-dialog
 })
 export class ProductListItemComponent {
   @Input() m_oProduct: any = null;
+  @Input() m_oActiveWorkspace: any = null;
   @Output() m_oProductChange: EventEmitter<any> = new EventEmitter();
   @Output() m_oProductInfoChange: EventEmitter<any> = new EventEmitter();
   @Output() m_oProductSelectionChange: EventEmitter<any> = new EventEmitter();
+
+
+  /**
+   * this is a constant list of the possible extensions of the files we can have in wasdi
+   */
+  m_asReadableFileExtensions = ["doc", "docx", "pdf", "txt", "log", "dot", "dotx", "rtf", "odt",
+    "csv", "htm", "html", "md"]
+  m_asImageExtensions = ["jpg", "png", "svg","jpeg"];
 
   /**
    * Flag to know if the actual product is open or closed.
    */
   m_bIsOpen: boolean = false;
 
+  /**
+   * Flag to know if the actual product is for preview or no ( pdf and image or just band).
+   */
+  m_bIsPreviewable: boolean = false;
   /**
    * Flag to know if the bands are shown or not
    */
@@ -60,10 +76,15 @@ export class ProductListItemComponent {
     @Inject(ProductsListComponent) private m_oParentProductList: ProductsListComponent,
     private m_oDialog: MatDialog,
     private m_oConstantsService: ConstantsService,
-    private m_oCatalogService: CatalogService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
-    private m_oTranslate: TranslateService) {
+    private m_oTranslate: TranslateService,
+    private m_oAttachmentService: AttachmentService,
+    private m_oPreviewDialog: MatDialog,
+    private m_oCatalogService: CatalogService,
+  ) {
+
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -73,6 +94,17 @@ export class ProductListItemComponent {
    * Clicked on the expand button
    */
   openProductBands() {
+
+    if (this.m_oProduct?.fileName) {
+      let sFileExtension = this.m_oProduct.fileName.split(".").pop()?.toLowerCase();
+      //checking if the file is either text or image
+      if (sFileExtension && (this.m_asReadableFileExtensions.includes(sFileExtension) || this.m_asImageExtensions.includes(sFileExtension))) {
+        this.m_bIsPreviewable = true;
+
+      } else {
+        this.m_bIsPreviewable = false;
+      }
+    }
     this.m_bIsOpen = !this.m_bIsOpen;
   }
 
@@ -116,7 +148,7 @@ export class ProductListItemComponent {
 
   /**
    * Open the send to ftp dialog
-   * @param oNode 
+   * @param oNode
    */
   openSendToFTP() {
     this.m_oDialog.open(WorkspacesListDialogComponent, {
@@ -222,5 +254,73 @@ export class ProductListItemComponent {
       height: '600px',
       width: '550px'
     })
+  }
+
+  previewPdfOrImage(oProduct: any) {
+    let sFileName = this.m_oProduct?.fileName;
+    if (sFileName) {
+      let sFileExtension = sFileName.split(".").pop()?.toLowerCase();
+      if (this.m_asImageExtensions.includes(sFileExtension)) {
+            this.onPreviewImage(sFileName);
+      } else if (this.m_asReadableFileExtensions.includes(sFileExtension)) {
+        this.onPreviewDoc(sFileName);
+      }
+    }
+  }
+
+
+  onPreviewImage(sFileName: string) {
+    if (sFileName) {
+      let sLink=this.m_oAttachmentService.getAttachmentLink(sFileName,this.m_oActiveWorkspace.workspaceId)
+      let oPayload =
+        {
+          fileName: sFileName,
+          link:sLink,
+          workspace:this.m_oActiveWorkspace,
+          type: "image",
+        }
+
+      // Open the Material Dialog with the image
+      const oPreviewDialogRef = this.m_oPreviewDialog.open(PreviewDialogComponent, {
+        data: {oPayload},
+        width: '90vw'
+      });
+
+      // Handle dialog close event
+      oPreviewDialogRef.afterClosed().subscribe(result => {
+        //nothing to do
+      });
+
+    }
+  }
+
+  onPreviewDoc(sFileName: string) {
+    if (sFileName) {
+
+      let sLink=this.m_oAttachmentService.getAttachmentLink(sFileName,this.m_oActiveWorkspace.workspaceId)
+
+      let sType = "txt";
+
+      if (sFileName.toLowerCase().endsWith('.pdf') || sFileName.toLowerCase().endsWith('.docx') || sFileName.toLowerCase().endsWith('.doc')) {
+        sType = "pdf";
+      }
+
+      let oPayload =
+        {
+          fileName: sFileName,
+          link:sLink,
+          workspace: this.m_oActiveWorkspace,
+          type: sType,
+        }
+
+      // Open the Material Dialog with the image
+      const oPreviewDialogRef = this.m_oPreviewDialog.open(PreviewDialogComponent, {
+        data: {oPayload},
+      });
+
+      // Handle dialog close event
+      oPreviewDialogRef.afterClosed().subscribe(result => {
+      });
+    }
   }
 }

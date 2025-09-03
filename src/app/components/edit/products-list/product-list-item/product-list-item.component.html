@@ -33,7 +33,7 @@
 <!-- Opened dropdown component for Bands and Metadata -->
 <div class="product-bands-container" *ngIf="m_bIsOpen">
     <ul class="container first-list">
-        <li [class.container]="m_bHasMetadata === true && m_bShowMetadata === true">
+        <li *ngIf="!m_bIsPreviewable" [class.container]="m_bHasMetadata === true && m_bShowMetadata === true">
             <p class="d-flex flex-row align-items-center gap-1" (click)="getProductMetaData()">
                 <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowMetadata === false">
                     arrow_right
@@ -96,7 +96,7 @@
                 </li>
             </ul>
         </li>
-        <li [class.container]="m_oProduct.bandsGroups?.bands?.length > 0 && m_bShowBands === true">
+        <li *ngIf="!m_bIsPreviewable" [class.container]="m_oProduct.bandsGroups?.bands?.length > 0 && m_bShowBands === true">
             <p [class.disabled-label]="m_oProduct?.bandsGroups?.bands?.length === 0" (click)="openShowBands()">
                 <span class="arrow-icon material-symbols-outlined" *ngIf="m_bShowBands === false">
                     arrow_right
@@ -120,6 +120,14 @@
                     </p>
                 </li>
             </ul>
+        </li>
+      <li *ngIf="m_bIsPreviewable" [class.container]="m_oProduct.bandsGroups?.bands?.length > 0 && m_bShowBands === true ">
+        <p [class.disabled-label]="m_oProduct?.bandsGroups?.bands?.length === 0" (click)="previewPdfOrImage(m_oProduct)">
+          <span class="bands-icon material-symbols-outlined">
+                    visibility
+                </span>
+          <span style="cursor: default !important;"> Preview</span>
+        </p>
         </li>
     </ul>
 </div>

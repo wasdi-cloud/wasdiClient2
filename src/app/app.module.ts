@@ -184,6 +184,7 @@ import { LoginCoplacComponent } from './components/login/login-coplac/login-copl
 import { LoginRedirectComponent } from './components/login-redirect/login-redirect.component';
 import { EnvService } from './services/env.service';
 import { PrintDialogComponent } from './shared/dialogs/print-dialog/print-dialog.component';
+import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.component';
 
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -309,7 +310,8 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     CreditsBuyDialogComponent,
     LoginCoplacComponent,
     LoginRedirectComponent,
-    PrintDialogComponent
+    PrintDialogComponent,
+    PreviewDialogComponent
 
   ],
   imports: [
