@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     this.checkKeycloakAuthStatus(this);
     //Subscribe to Keycloak Events
     const sHost = window.location.hostname;
-    if (sHost.startsWith('coplac')) {
+    if (sHost.startsWith('coplac') || sHost.startsWith('wasdi.cimh')) {
       this.m_oRouter.navigate(['/login-coplac']);
     } else {
       this.m_oRouter.navigate(['/login']);
@@ -222,7 +222,7 @@ export class LoginComponent implements OnInit {
     
     let sHost = window.location.hostname;
     let sTheme = 'wasdi';
-    if (sHost.startsWith('coplac')) {
+    if (sHost.startsWith('coplac') || sHost.startsWith('wasdi.cimh')) {
       sTheme = 'keycloak'; // Force standard Keycloak theme for coplac
       // // If your Keycloak service supports passing extra params:
       // if (typeof this.m_oKeycloakService.register === 'function') {
