@@ -19,8 +19,8 @@
     </div>
     <div class="d-flex flex-column gap-2">
         <div class="input-header font-bold">Subscription Status</div>
-        <strong>{{getSubscriptionStatus()}}</strong>&nbsp;Credits Balance: <strong>{{m_iCreditsBalance}}</strong>
-        
+        <strong>{{getSubscriptionStatus()}}</strong><div *ngIf="getShowCreditsBalance()">&nbsp;Credits Balance: <strong>{{m_iCreditsBalance}}</strong></div>
+
     </div>    
     <div>
         <div class="input-header font-bold">Connection email address</div>

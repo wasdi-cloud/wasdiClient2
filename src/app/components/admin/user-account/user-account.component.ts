@@ -127,13 +127,24 @@ export class UserAccountComponent implements OnInit {
   }  
 
   getSubscriptionStatus() {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveSubscription)) {
-      return "No Valid Subscription Available";
+    if (this.m_oConstantsService.areSubscriptionsActivated()) {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oActiveSubscription)) {
+        return "No Valid Subscription Available";
+      }
+      else {
+        return this.m_oActiveSubscription.name + " [" +  this.m_oActiveSubscription.typeName + "] - End Date: " + this.m_oActiveSubscription.endDate
+      }
     }
     else {
-      return this.m_oActiveSubscription.name + " [" +  this.m_oActiveSubscription.typeName + "] - End Date: " + this.m_oActiveSubscription.endDate
+      return "This is a free access platform";
     }
-    
+  }
+
+  getShowCreditsBalance() {
+    if (this.m_oConstantsService) {
+      return this.m_oConstantsService.areSubscriptionsActivated();
+    }
+    return true;
   }
 
   getUserAuthProvider() {
