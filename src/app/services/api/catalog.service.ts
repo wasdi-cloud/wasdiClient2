@@ -30,7 +30,7 @@ export class CatalogService {
     window.location.href = sAPIUrl + "/catalog/downloadbyname" + urlParams;
   };
 
-  newDownloadByName(sFileName: string, sWorkspace: string, sUrl: string): Observable<HttpEvent<any>> {
+  newDownloadByName(sFileName: string, sWorkspace: string, sUrl: string, sDisposition?: string): Observable<HttpEvent<any>> {
     var urlParams = "?" + "token=" + this.m_oConstantsService.getSessionId();
     urlParams = urlParams + "&" + "filename=" + sFileName + "&workspace=" + sWorkspace;
 
@@ -42,6 +42,11 @@ export class CatalogService {
           sAPIUrl = sUrl;
         }
       }
+    }
+
+    // Conditionally add the disposition parameter if it's provided
+    if (sDisposition) {
+      urlParams += "&disposition=" + sDisposition;
     }
 
     return this.oHttp.get(sAPIUrl + "/catalog/downloadbyname" + urlParams, { responseType: 'blob', reportProgress: true, observe: "events" });
