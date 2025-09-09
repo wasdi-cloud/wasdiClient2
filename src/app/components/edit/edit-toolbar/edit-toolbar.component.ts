@@ -185,7 +185,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
 
     this.m_oDialog.open(PrintDialogComponent, {
       data:{payload:oPrintPayload},
-      height: '300px',
+      height: '500px',
       width: '300px',
     })
 

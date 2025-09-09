@@ -1265,6 +1265,7 @@
     "PRINT_FORMAT_PDF": "PDF",
     "PRINT_FORMAT_PNG": "PNG",
     "PRINT_DIALOG_ACTION": "In",
-    "PRINT_WAIT": "Wasdi đang in bản đồ, vui lòng chờ."
-
+    "PRINT_WAIT": "Wasdi đang in bản đồ, vui lòng chờ.",
+    "PRINT_PAYLOAD_TITLE": "Tiêu đề",
+    "PRINT_PAYLOAD_DESCRIPTION": "Mô tả"
 }

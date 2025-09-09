@@ -1251,5 +1251,7 @@
     "PRINT_FORMAT_PDF": "PDF",
     "PRINT_FORMAT_PNG": "PNG",
     "PRINT_DIALOG_ACTION": "Imprimare",
-    "PRINT_WAIT": "Wasdi imprimă harta, vă rugăm să așteptați."
+    "PRINT_WAIT": "Wasdi imprimă harta, vă rugăm să așteptați.",
+    "PRINT_PAYLOAD_TITLE": "Titlu",
+    "PRINT_PAYLOAD_DESCRIPTION": "Descriere"
 }

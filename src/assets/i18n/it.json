@@ -1250,5 +1250,7 @@
     "PRINT_FORMAT_PDF": "PDF",
     "PRINT_FORMAT_PNG": "PNG",
     "PRINT_DIALOG_ACTION": "Stampa",
-    "PRINT_WAIT": "Wasdi sta stampando la mappa, si prega di attendere."
+    "PRINT_WAIT": "Wasdi sta stampando la mappa, si prega di attendere.",
+    "PRINT_PAYLOAD_TITLE": "Titolo",
+    "PRINT_PAYLOAD_DESCRIPTION": "Descrizione"
 }

@@ -11,22 +11,21 @@ import {PrinterService} from "../../../services/api/printer.service";
 })
 export class PrintDialogComponent implements OnInit {
 
-  m_bIsLoading:boolean = false;
-  m_oPrintPayload:any
-
+  m_bIsLoading: boolean = false;
+  m_oPrintPayload: any
+  m_sSelectedFormat: 'pdf' | 'png' = 'pdf'; // Default to PDF
+  m_sPrintPayloadTitle: string = "";
+  m_sPrintPayloadDescription: string = "";
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
     private m_oDialogRef: MatDialogRef<PrintDialogComponent>,
-    private m_oHttp:HttpClient, private m_oPrinterService: PrinterService,
+    private m_oHttp: HttpClient, private m_oPrinterService: PrinterService,
   ) {
   }
 
-  m_sSelectedFormat: 'pdf' | 'png' = 'pdf'; // Default to PDF
-
-
   ngOnInit(): void {
-    if(this.m_oData.payload){
+    if (this.m_oData.payload) {
       console.log(this.m_oData.payload);
       this.m_oPrintPayload = this.m_oData.payload;
       this.m_oPrintPayload.format = this.m_sSelectedFormat;
@@ -87,5 +86,13 @@ export class PrintDialogComponent implements OnInit {
       }
     });
 
+  }
+
+  getInput(oEvent: any, sLabel: string) {
+    if (sLabel === 'title') {
+      this.m_oPrintPayload.title = oEvent.event.target.value;
+    } else if (sLabel === 'description') {
+      this.m_oPrintPayload.description = oEvent.event.target.value;
+    }
   }
 }
