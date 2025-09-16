@@ -16,6 +16,7 @@ export class PrintDialogComponent implements OnInit {
   m_sSelectedFormat: 'pdf' | 'png' = 'pdf'; // Default to PDF
   m_sPrintPayloadTitle: string = "";
   m_sPrintPayloadDescription: string = "";
+  m_bShowOptionalInputs: boolean=false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private m_oData: any,
