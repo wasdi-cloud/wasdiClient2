@@ -1273,6 +1273,7 @@
     "PRINT_DIALOG_ACTION": "Print",
     "PRINT_WAIT": "Wasdi is printing the map , please wait",
     "PRINT_PAYLOAD_TITLE": "Title",
-    "PRINT_PAYLOAD_DESCRIPTION": "Description"
+    "PRINT_PAYLOAD_DESCRIPTION": "Description",
+    "ADD_TITLE_AND_DESCRIPTION":"Add Title & Description"
 }
 

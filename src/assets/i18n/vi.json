@@ -1267,5 +1267,6 @@
     "PRINT_DIALOG_ACTION": "In",
     "PRINT_WAIT": "Wasdi đang in bản đồ, vui lòng chờ.",
     "PRINT_PAYLOAD_TITLE": "Tiêu đề",
-    "PRINT_PAYLOAD_DESCRIPTION": "Mô tả"
+    "PRINT_PAYLOAD_DESCRIPTION": "Mô tả",
+    "ADD_TITLE_AND_DESCRIPTION": "Thêm Tiêu đề & Mô tả"
 }

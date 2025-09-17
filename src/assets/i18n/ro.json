@@ -1253,5 +1253,6 @@
     "PRINT_DIALOG_ACTION": "Imprimare",
     "PRINT_WAIT": "Wasdi imprimă harta, vă rugăm să așteptați.",
     "PRINT_PAYLOAD_TITLE": "Titlu",
-    "PRINT_PAYLOAD_DESCRIPTION": "Descriere"
+    "PRINT_PAYLOAD_DESCRIPTION": "Descriere",
+    "ADD_TITLE_AND_DESCRIPTION": "Adaugă Titlu & Descriere"
 }

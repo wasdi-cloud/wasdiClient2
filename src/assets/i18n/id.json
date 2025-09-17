@@ -1253,6 +1253,7 @@
     "PRINT_DIALOG_ACTION": "Cetak",
     "PRINT_WAIT": "Wasdi sedang mencetak peta, harap tunggu.",
     "PRINT_PAYLOAD_TITLE": "Judul",
-    "PRINT_PAYLOAD_DESCRIPTION": "Deskripsi"
+    "PRINT_PAYLOAD_DESCRIPTION": "Deskripsi",
+    "ADD_TITLE_AND_DESCRIPTION": "Tambahkan Judul & Deskripsi"
 
 }

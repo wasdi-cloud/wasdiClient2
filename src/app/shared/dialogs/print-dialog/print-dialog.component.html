@@ -7,7 +7,7 @@
     <p class="mb-3">{{ "SELECT_PRINT_FORMAT" | translate }}</p>
     <!--    <p class="mb-3">Please select the print format</p>-->
     <div class="d-flex align-items-center gap-2 mb-3">
-      <label for="optional-toggle" class="form-label mb-0">Add Title & Description</label>
+      <label for="optional-toggle" class="form-label mb-0">{{"ADD_TITLE_AND_DESCRIPTION" | translate}}</label>
       <span
         (click)="m_bShowOptionalInputs = !m_bShowOptionalInputs"
         [ngClass]="{'active': m_bShowOptionalInputs}"
@@ -17,7 +17,7 @@
 
     <div *ngIf="m_bShowOptionalInputs">
       <app-input-field
-        [m_sLabel]="'PRINT_PAYLOAD_TITLE'"
+        [m_sLabel]="'PRINT_PAYLOAD_TITLE' | translate"
         [m_sInputValue]="m_sPrintPayloadTitle"
         (m_oInputChange)="getInput($event,'title')"
         class="mb-3"
@@ -25,7 +25,7 @@
 
       </app-input-field>
       <app-input-field
-        [m_sLabel]="'PRINT_PAYLOAD_DESCRIPTION'"
+        [m_sLabel]="'PRINT_PAYLOAD_DESCRIPTION' | translate"
         [m_sInputValue]="m_sPrintPayloadDescription"
         (m_oInputChange)="getInput($event,'description')"
         class="mb-3"

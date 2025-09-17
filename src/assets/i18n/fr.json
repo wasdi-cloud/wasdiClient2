@@ -1253,5 +1253,6 @@
     "PRINT_DIALOG_ACTION": "Imprimer",
     "PRINT_WAIT": "Wasdi est en train d'imprimer la carte, veuillez patienter.",
     "PRINT_PAYLOAD_TITLE": "Titre",
-    "PRINT_PAYLOAD_DESCRIPTION": "Description"
+    "PRINT_PAYLOAD_DESCRIPTION": "Description",
+    "ADD_TITLE_AND_DESCRIPTION": "Ajouter un titre et une description"
 }
