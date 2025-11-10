@@ -1251,5 +1251,9 @@
     "PRINT_FORMAT_PDF": "PDF",
     "PRINT_FORMAT_PNG": "PNG",
     "PRINT_DIALOG_ACTION": "Cetak",
-    "PRINT_WAIT": "Wasdi sedang mencetak peta, harap tunggu."
+    "PRINT_WAIT": "Wasdi sedang mencetak peta, harap tunggu.",
+    "PRINT_PAYLOAD_TITLE": "Judul",
+    "PRINT_PAYLOAD_DESCRIPTION": "Deskripsi",
+    "ADD_TITLE_AND_DESCRIPTION": "Tambahkan Judul & Deskripsi"
+
 }
