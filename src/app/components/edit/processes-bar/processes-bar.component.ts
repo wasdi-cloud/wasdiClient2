@@ -51,6 +51,9 @@ export class ProcessesBarComponent implements OnInit, OnDestroy {
 
   m_bSuspendTimer: boolean;
 
+  m_bFilterSummaryOnUser: boolean = false;
+  m_bFilterSummaryOnWorkspace: boolean = false;
+
   constructor(
     private m_oBottomSheet: MatBottomSheet,
     private m_oBottomSheetRef: MatBottomSheetRef<ProcessesBarTableComponent>,
@@ -104,15 +107,25 @@ export class ProcessesBarComponent implements OnInit, OnDestroy {
       //ASYNC Translation in case of refresh (reloading translations):
       this.m_oTranslate.get("MSG_SUMMARY_ERROR").subscribe(sTranslation => {
         sMessage = sTranslation;
-        this.m_oProcessWorkspaceService.getSummary().subscribe({
+        let sWorkspaceId = null;
+        if (this.m_bFilterSummaryOnWorkspace) {
+          sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+        }
+        this.m_oProcessWorkspaceService.getSummary(sWorkspaceId).subscribe({
           next: oResponse => {
             if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
               this.m_oNotificationDisplayService.openAlertDialog(sMessage, '', 'alert');
             } 
             else {
               this.m_oSummary = oResponse;
-              this.m_iNumberOfProcesses = oResponse.allProcessRunning;
-              this.m_iWaitingProcesses = oResponse.allProcessWaiting;
+              if (this.m_bFilterSummaryOnUser) {
+                this.m_iNumberOfProcesses = oResponse.userProcessRunning;
+                this.m_iWaitingProcesses = oResponse.userProcessWaiting;
+              }
+              else {
+                this.m_iNumberOfProcesses = oResponse.allProcessRunning;
+                this.m_iWaitingProcesses = oResponse.allProcessWaiting;
+              }
             }
           },
           error: oError => {
@@ -158,5 +171,15 @@ export class ProcessesBarComponent implements OnInit, OnDestroy {
       }
     }
     return oLastProcessRunning;
+  }
+
+  onFilterUserChange(oEvent: any) {
+    this.m_bFilterSummaryOnUser = oEvent.target.checked;
+    this.getSummary();
+  }
+
+  onFilterWorkspaceChange(oEvent: any) {
+    this.m_bFilterSummaryOnWorkspace = oEvent.target.checked;
+    this.getSummary();
   }
 }

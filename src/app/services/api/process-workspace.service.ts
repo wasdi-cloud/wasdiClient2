@@ -307,7 +307,7 @@ export class ProcessWorkspaceService {
    * Get the summary of created and running processes
    * @returns {*}
    */
-  getSummary() {
+  getSummary(sWorkspaceId?: string) {
     let oWorkspace: Workspace = this.m_oConstantsService.getActiveWorkspace();
     let sUrl = this.APIURL;
 
@@ -315,7 +315,13 @@ export class ProcessWorkspaceService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    return this.m_oHttp.get<any>(sUrl + '/process/summary');
+    sUrl += '/process/summary';
+
+    if (sWorkspaceId) {
+      sUrl += '?workspace=' + sWorkspaceId;
+    }
+
+    return this.m_oHttp.get<any>(sUrl);
   };
 
   /**
