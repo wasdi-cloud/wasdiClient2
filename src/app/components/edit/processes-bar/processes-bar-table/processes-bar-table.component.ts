@@ -288,13 +288,13 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
       let sOperationEndDate = this.m_aoAllProcessesLogs[iIndexProcessLog].operationEndDate;
       // let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType == "DOWNLOAD" ? "FETCH" : this.m_aoAllProcessesLogs[iIndexProcessLog].operationType;
       let sOperationType = this.m_aoAllProcessesLogs[iIndexProcessLog].operationType
-      let sPid = this.m_aoAllProcessesLogs[iIndexProcessLog].pid;
+      let sProcessorObjId = this.m_aoAllProcessesLogs[iIndexProcessLog].processObjId;
       let sProductName = this.m_aoAllProcessesLogs[iIndexProcessLog].productName;
       let sProgressPerc = this.m_aoAllProcessesLogs[iIndexProcessLog].progressPerc;
       let sStatus = this.m_aoAllProcessesLogs[iIndexProcessLog].status;
       let sUserId = this.m_aoAllProcessesLogs[iIndexProcessLog].userId;
 
-      sText += sPid + "," + sProductName + "," + sOperationType +
+      sText += sProcessorObjId + "," + sProductName + "," + sOperationType +
         "," + sUserId + "," + sStatus + "," + sProgressPerc + "%" +
         "," + sOperationDate + "," + sOperationEndDate + "," + sFileSize + "\r\n";
     }
