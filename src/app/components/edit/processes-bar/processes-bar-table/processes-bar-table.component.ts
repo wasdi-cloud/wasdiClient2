@@ -199,11 +199,16 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
 
         this.m_aoAllProcessesLogs = this.m_aoAllProcessesLogs.concat(oResponse);
         this.calculateNextListOfProcesses();
-      } else {
+      } 
+      else {
         this.m_bIsLoadMoreBtnClickable = false;
       }
+
       if (oResponse.length < this.m_iNumberOfProcessForRequest) {
         this.m_bIsLoadMoreBtnClickable = false;
+      }
+      else {
+        this.m_bIsLoadMoreBtnClickable = true;
       }
 
       // this.m_bAreProcessesLoaded = true;
@@ -316,6 +321,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   resetCounters() {
     this.m_iNumberOfProcessForRequest = 40;
     this.m_iFirstProcess = 0;
+    this.m_iLastProcess = this.m_iNumberOfProcessForRequest;
   }
 
   clearFilters() {
