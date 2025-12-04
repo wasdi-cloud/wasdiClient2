@@ -107,7 +107,7 @@
           [m_sInputType]="'date'"
           [m_sLabel]="'IMPORT_DATE_FROM' | translate"
           [m_sInputValue]="m_sDateFrom"
-          (m_oInputChange)="emitModelChanges($event)"
+          (m_oInputChange)="emitModelChanges($event, 'from')"
         ></app-input-field>
       </div>
       <div class="col-6">
@@ -116,7 +116,7 @@
           [m_sInputType]="'date'"
           [m_sLabel]="'IMPORT_DATE_TO' | translate"
           [m_sInputValue]="m_sDateTo"
-          (m_oInputChange)="emitModelChanges($event)"
+          (m_oInputChange)="emitModelChanges($event, 'to')"
         ></app-input-field>
       </div>
     </div>

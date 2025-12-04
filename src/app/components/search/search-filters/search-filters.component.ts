@@ -390,13 +390,15 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
   /**
    * Emit changes to the Mission Object to the Parent - will set m_oModel Variable
    */
-  emitModelChanges(oEvent) {
+  emitModelChanges(oEvent: any, sKey: 'from' | 'to') {
     // Get long form date from User Input: 
-    if (oEvent.label === 'From') {
-      this.m_sDateFrom = oEvent.event.target.value
+    const sValue = oEvent.event.target.value;
+
+    if (sKey === 'from') {
+      this.m_sDateFrom = sValue
       this.m_oMissionObject.sensingPeriodFrom = new Date(this.m_sDateFrom);
-    } else if (oEvent.label === 'To') {
-      this.m_sDateTo = oEvent.event.target.value
+    } else if (sKey === 'to') {
+      this.m_sDateTo = sValue
       this.m_oMissionObject.sensingPeriodTo = new Date(this.m_sDateTo);
     }
     //Ensure value is initalized before executing setAdvancedSearchFilter()
