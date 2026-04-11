@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-  UrlTree,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { ConstantsService } from '../services/constants.service';
 import { AuthService } from './service/auth.service';
@@ -17,7 +11,7 @@ import { Title } from '@angular/platform-browser';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard  {
   constructor(
     public oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
