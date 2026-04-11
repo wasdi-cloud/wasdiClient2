@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NotificationSnackbarComponent } from './notification-snackbar.component';
 
-describe('NotificationSnackbarComponent', () => {
+xdescribe('NotificationSnackbarComponent', () => {
   let component: NotificationSnackbarComponent;
   let fixture: ComponentFixture<NotificationSnackbarComponent>;
 

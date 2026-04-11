@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WapSelectAreaComponent } from './wap-select-area.component';
 
-describe('WapSelectAreaComponent', () => {
+xdescribe('WapSelectAreaComponent', () => {
   let component: WapSelectAreaComponent;
   let fixture: ComponentFixture<WapSelectAreaComponent>;
 

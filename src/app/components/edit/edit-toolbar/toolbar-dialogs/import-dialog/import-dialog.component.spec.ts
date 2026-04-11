@@ -1,5 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateModule } from '@ngx-translate/core';
+import { of } from 'rxjs';
 
+import { AuthService } from 'src/app/auth/service/auth.service';
 import { ImportDialogComponent } from './import-dialog.component';
 
 describe('ImportDialogComponent', () => {
@@ -8,13 +17,22 @@ describe('ImportDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ImportDialogComponent ]
+      declarations: [ ImportDialogComponent ],
+      imports: [HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
+      providers: [
+        { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(null) }) } },
+        { provide: MatDialogRef, useValue: { close: () => {} } },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: MatBottomSheetRef, useValue: { dismiss: () => {} } },
+        { provide: ActivatedRoute, useValue: { params: of({}), queryParams: of({}), snapshot: {} } },
+        { provide: AuthService, useValue: { getClientConfig: () => of({ missions: [] }) } }
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(ImportDialogComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

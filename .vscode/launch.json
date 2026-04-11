@@ -4,10 +4,11 @@
   "configurations": [
     {
       "name": "Chrome debug",
-      "type": "chrome",
-      "request": "launch",      
+      "type": "pwa-chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: start",
       "url": "http://localhost:4200/",
-      "webRoot": "${workspaceRoot}",
+      "webRoot": "${workspaceFolder}",
       "sourceMaps": true
     },    
     {
@@ -19,7 +20,7 @@
     },
     {
       "name": "ng test",
-      "type": "chrome",
+      "type": "pwa-chrome",
       "request": "launch",
       "preLaunchTask": "npm: test",
       "url": "http://localhost:9876/debug.html"

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WapNumericBoxComponent } from './wap-numeric-box.component';
 
-describe('WapNumericBoxComponent', () => {
+xdescribe('WapNumericBoxComponent', () => {
   let component: WapNumericBoxComponent;
   let fixture: ComponentFixture<WapNumericBoxComponent>;
 

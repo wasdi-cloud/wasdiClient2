@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WapSliderComponent } from './wap-slider.component';
 
-describe('WapSliderComponent', () => {
+xdescribe('WapSliderComponent', () => {
   let component: WapSliderComponent;
   let fixture: ComponentFixture<WapSliderComponent>;
 

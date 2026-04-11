@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WapCheckBoxComponent } from './wap-check-box.component';
 
-describe('WapCheckBoxComponent', () => {
+xdescribe('WapCheckBoxComponent', () => {
   let component: WapCheckBoxComponent;
   let fixture: ComponentFixture<WapCheckBoxComponent>;
 

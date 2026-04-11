@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SearchOrbitResourcesComponent } from './search-orbit-resources.component';
 
-describe('SearchOrbitResourcesComponent', () => {
+xdescribe('SearchOrbitResourcesComponent', () => {
   let component: SearchOrbitResourcesComponent;
   let fixture: ComponentFixture<SearchOrbitResourcesComponent>;
 

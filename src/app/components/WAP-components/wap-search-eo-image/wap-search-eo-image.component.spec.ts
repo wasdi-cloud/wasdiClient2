@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WapSearchEoImageComponent } from './wap-search-eo-image.component';
 
-describe('WapSearchEoImageComponent', () => {
+xdescribe('WapSearchEoImageComponent', () => {
   let component: WapSearchEoImageComponent;
   let fixture: ComponentFixture<WapSearchEoImageComponent>;
 

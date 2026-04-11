@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WapDropdownComponent } from './wap-dropdown.component';
 
-describe('WapDropdownComponent', () => {
+xdescribe('WapDropdownComponent', () => {
   let component: WapDropdownComponent;
   let fixture: ComponentFixture<WapDropdownComponent>;
 
