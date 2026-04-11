@@ -143,7 +143,8 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
     { name: 'Python 3.8 (Ubuntu 20.04)', id: 'python_pip_2_ubuntu_20' },
     { name: 'Python 3.8 Conda', id: 'conda' },
     { name: 'OGC Application Package', id: 'eoepca' },
-    { name: 'Custom Dockerfile',  id: 'personalized_docker'}
+    { name: 'Custom Dockerfile',  id: 'personalized_docker'},
+    { name: 'Local Python 3.12', id: 'local_python312' }
   ];
 
   m_aoProcessorTypesMap = this.m_aoProcessorTypes.map((oProcessorType) => {

@@ -325,6 +325,11 @@ export class ConstantsService {
    * Returns boolean representing whether or not the user has a valid subscription AND active Project;
    */
   checkProjectSubscriptionsValid() {
+
+    if (this.areSubscriptionsActivated() === false) {
+      return true;
+    }
+    
     let sMessage: string;
     if (this.m_aoActiveSubscriptions.length === 0) {
       sMessage = this.m_oTranslate.instant("ACTIVE_SUBSCRIPTION_ERROR_2");
