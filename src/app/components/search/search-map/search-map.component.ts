@@ -157,7 +157,7 @@ export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
     let fRatio = Math.max(...oSide) / Math.min(...oSide);
 
     // first element is the array itself to be passed
-    let fArea = L.GeometryUtil.geodesicArea(layer[0]) / 1000000;
+    let fArea = (L as any).GeometryUtil.geodesicArea(layer[0]) / 1000000;
 
     if (fArea > this.oMapInput.maxArea && this.oMapInput.maxArea !== 0) {
       // sErrorMessage = sErrorMessage.concat(this.m_oTranslateService.getTranslation());

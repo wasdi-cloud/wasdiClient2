@@ -3,6 +3,14 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Chrome debug",
+      "type": "chrome",
+      "request": "launch",      
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceRoot}",
+      "sourceMaps": true
+    },    
+    {
       "name": "ng serve",
       "type": "pwa-chrome",
       "request": "launch",

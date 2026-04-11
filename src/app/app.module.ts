@@ -384,7 +384,6 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     { provide: MatBottomSheetRef, useValue: {} },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmationDialogComponent],
 
 })
 export class AppModule { }

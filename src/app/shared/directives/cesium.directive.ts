@@ -1,5 +1,7 @@
 import { Directive, OnInit, ElementRef } from '@angular/core';
 
+declare const Cesium: any;
+
 @Directive({
   selector: '[appCesium]'
 })
