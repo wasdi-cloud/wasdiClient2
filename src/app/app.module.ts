@@ -6,9 +6,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 //Import Main Components
 import { AppComponent } from './app.component';
@@ -186,9 +186,6 @@ import { EnvService } from './services/env.service';
 import { PrintDialogComponent } from './shared/dialogs/print-dialog/print-dialog.component';
 import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.component';
 
-export function httpTranslateLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
-}
 @NgModule({
   declarations: [
     AppComponent,
@@ -323,13 +320,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     FormsModule,
     LeafletModule,
     LeafletDrawModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpTranslateLoaderFactory,
-        deps: [HttpClient]
-      },
-    }),
+    TranslateModule.forRoot(),
     BrowserAnimationsModule,
     MatSlideToggleModule,
     MatDialogModule,
@@ -382,6 +373,10 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       deps: [KeycloakService, EnvService],
     },
     { provide: MatBottomSheetRef, useValue: {} },
+    ...provideTranslateHttpLoader({
+      prefix: './assets/i18n/',
+      suffix: '.json',
+    }),
   ],
   bootstrap: [AppComponent],
 
