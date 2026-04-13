@@ -1,6 +1,12 @@
 <mat-slider class="wasdi-slider" [class.no-handle]="!m_bHasHandles" min="{{m_iMinValue}}" max="{{m_iMaxValue}}"
-    step="{{m_bHasSteps ?  m_iStep : 1}}" [disabled]="m_bIsDisabled" [discrete]="m_bHasThumbLabel">
-    <input disableRipple *ngIf="m_bIsRange === false" matSliderThumb value="{{m_iDefaultValue}}" [(ngModel)]="m_iValue" (input)="emitSelectionChange()">
-    <input *ngIf="m_bIsRange === true" matSliderStartThumb>
-    <input *ngIf="m_bIsRange === true" matSliderEndThumb>
+  step="{{m_bHasSteps ?  m_iStep : 1}}" [disabled]="m_bIsDisabled" [discrete]="m_bHasThumbLabel">
+  @if (m_bIsRange === false) {
+    <input disableRipple matSliderThumb value="{{m_iDefaultValue}}" [(ngModel)]="m_iValue" (input)="emitSelectionChange()">
+  }
+  @if (m_bIsRange === true) {
+    <input matSliderStartThumb>
+  }
+  @if (m_bIsRange === true) {
+    <input matSliderEndThumb>
+  }
 </mat-slider>

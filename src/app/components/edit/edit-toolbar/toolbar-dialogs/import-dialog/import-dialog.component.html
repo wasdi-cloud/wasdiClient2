@@ -8,26 +8,34 @@
       <div class="header font-bold">{{ "DIALOG_IMPORT_LOCATION" | translate }}</div>
       <div>{{ m_oWorkspace.name }}</div>
     </div>
-    <div *ngIf="!m_bIsUploading">{{ "DIALOG_IMPORT_FILE_TYPES" | translate }}</div>
-    <div *ngIf="m_bIsUploading">{{ "DIALOG_IMPORT_FILE_UPLOADING" | translate }}</div>
+    @if (!m_bIsUploading) {
+      <div>{{ "DIALOG_IMPORT_FILE_TYPES" | translate }}</div>
+    }
+    @if (m_bIsUploading) {
+      <div>{{ "DIALOG_IMPORT_FILE_UPLOADING" | translate }}</div>
+    }
     <div class="drag-drop-container">
-      <app-drag-and-drop *ngIf="!m_bIsUploading" (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
-        <app-invader *ngIf="m_bIsUploading"></app-invader>
+      @if (!m_bIsUploading) {
+        <app-drag-and-drop (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
+      }
+      @if (m_bIsUploading) {
+        <app-invader></app-invader>
+      }
     </div>
     <div class="mt-3">
       <div class="font-bold">{{ "DIALOG_IMPORT_APPLY_STYLE" | translate }}</div>
       <app-dropdown [m_sPlaceholder]="'DIALOG_IMPORT_SELECT_STYLE' | translate" [m_aoDropdownItems]="m_aoStyles"
-                    [m_bHasSearch]="true" (m_oSelectionChange)="getSelectedStyle($event)"></app-dropdown>
+      [m_bHasSearch]="true" (m_oSelectionChange)="getSelectedStyle($event)"></app-dropdown>
     </div>
     <div class="mt-3">
       <div class="font-bold">{{ "DIALOG_IMPORT_SET_MISSION" | translate }}</div>
       <app-dropdown [m_sPlaceholder]="'DIALOG_IMPORT_SELECT_MISSION' | translate" [m_aoDropdownItems]="m_aoPlatforms"
-                    [m_bHasSearch]="true" (m_oSelectionChange)="getSelectedPlatform($event)"></app-dropdown>
-    </div>    
+      [m_bHasSearch]="true" (m_oSelectionChange)="getSelectedPlatform($event)"></app-dropdown>
+    </div>
   </div>
   <div class="dialog-footer d-flex flex-row gap-2 justify-content-end mt-3">
     <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bMuted]="true" (click)="onDismiss()"></app-button>
     <app-button [m_sLabel]="'DIALOG_IMPORT_IMPORT' | translate" [m_bDisabled]="!m_oFile || (m_oFile && m_bIsUploading)"
-                (click)="onUploadFile()"></app-button>
+    (click)="onUploadFile()"></app-button>
   </div>
 </div>

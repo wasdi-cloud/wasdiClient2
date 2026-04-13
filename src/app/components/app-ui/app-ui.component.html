@@ -1,76 +1,82 @@
 <main>
-    <div class="hero-image d-flex flex-column justify-content-center align-items-center">
-        <div class="hero-text text-light text-center">
-            <h1 class="font-bold">{{m_oProcessorInformation.friendlyName}}</h1>
-            <div class="d-flex flex-row gap-3 justify-content-center">
-                <p class="font-bold">{{"MARKET_CARD_PUBLISHER" | translate}}: <span
-                        class="font-light">{{m_oProcessorInformation.publisherNickName}}</span>
-                </p>
-                <app-button *ngIf="m_oProcessorInformation.isMine" [m_sSize]="'small'"
-                    [m_sLabel]="'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate"
-                    (click)="openEditAppDialog()"></app-button>
-            </div>
-        </div>
+  <div class="hero-image d-flex flex-column justify-content-center align-items-center">
+    <div class="hero-text text-light text-center">
+      <h1 class="font-bold">{{m_oProcessorInformation.friendlyName}}</h1>
+      <div class="d-flex flex-row gap-3 justify-content-center">
+        <p class="font-bold">{{"MARKET_CARD_PUBLISHER" | translate}}: <span
+        class="font-light">{{m_oProcessorInformation.publisherNickName}}</span>
+      </p>
+      @if (m_oProcessorInformation.isMine) {
+        <app-button [m_sSize]="'small'"
+          [m_sLabel]="'ROOT_VIEW_NAV_BAR_LINK_PROCESS' | translate"
+        (click)="openEditAppDialog()"></app-button>
+      }
     </div>
-    <!-- Breadcrumb navigation -->
-    <nav aria-label="marketplace breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a routerLink="/marketplace">{{"ROOT_VIEW_NAV_BAR_LINK_APPSTORE" |
-                    translate}}</a></li>
-            <li class="breadcrumb-item"><a
-                    routerLink="/{{m_oProcessorInformation.processorName}}/appDetails">{{m_oProcessorInformation.friendlyName}}</a>
-            </li>
-            <li class="breadcrumb-item active" attr.aria-current="{{m_oProcessorInformation.friendlyName + ' page'}}">
-                <a>{{ "APP_UI_INTERFACE" | translate}}</a>
-            </li>
-        </ol>
-    </nav>
-    <div class="app-ui-container d-flex flex-row gap-4">
-        <!-- Menu Component -->
-        <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)"
-            (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)"
-            (m_oExecutePurchaseEmitter)="getExecutePurchase($event)" [m_bIsPurchased]="m_bIsPurchased"
-            [m_oActiveWorkspace]="m_oSelectedWorkspace" [m_sActiveTab]="m_sActiveTab"
-            [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
-        <!-- WAP Component outlet -->
-        <app-wap-display [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " class="flex-fill"
-            [m_bActiveTab]="m_sActiveTab === oTab.name" *ngFor="let oTab of m_aoTabs" [wapData]="oTab"
-            [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
+  </div>
+</div>
+<!-- Breadcrumb navigation -->
+<nav aria-label="marketplace breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/marketplace">{{"ROOT_VIEW_NAV_BAR_LINK_APPSTORE" |
+    translate}}</a></li>
+    <li class="breadcrumb-item"><a
+    routerLink="/{{m_oProcessorInformation.processorName}}/appDetails">{{m_oProcessorInformation.friendlyName}}</a>
+  </li>
+  <li class="breadcrumb-item active" attr.aria-current="{{m_oProcessorInformation.friendlyName + ' page'}}">
+    <a>{{ "APP_UI_INTERFACE" | translate}}</a>
+  </li>
+</ol>
+</nav>
+<div class="app-ui-container d-flex flex-row gap-4">
+  <!-- Menu Component -->
+  <app-app-ui-menu [m_aoTabs]="m_aoTabs" (m_sSelectedTab)="getSelectedTab($event)"
+    (m_oSelectedWorkspace)="getSelectedWorkspaceId($event)" (m_oExecuteAppEmitter)="getExecuteEvent($event)"
+    (m_oExecutePurchaseEmitter)="getExecutePurchase($event)" [m_bIsPurchased]="m_bIsPurchased"
+    [m_oActiveWorkspace]="m_oSelectedWorkspace" [m_sActiveTab]="m_sActiveTab"
+  [m_aoWorkspaces]="m_aoExistingWorkspaces"></app-app-ui-menu>
+  <!-- WAP Component outlet -->
+  @for (oTab of m_aoTabs; track oTab) {
+    <app-wap-display [ngClass]="m_sActiveTab === oTab.name ? '': 'd-none' " class="flex-fill"
+      [m_bActiveTab]="m_sActiveTab === oTab.name" [wapData]="oTab"
+    [renderAsStrings]="m_bRenderAsStrings" [workspaceId]="m_oSelectedWorkspace?.workspaceId"></app-wap-display>
+  }
 
-        <!-- PROCESSOR HELP TAB -->
-        <div class="processor-help flex-fill scroll-bar" [innerHTML]="m_sHelpHtml | markdown"
-            [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
-        </div>
+  <!-- PROCESSOR HELP TAB -->
+  <div class="processor-help flex-fill scroll-bar" [innerHTML]="m_sHelpHtml | markdown"
+    [ngClass]="m_sActiveTab === 'help'? '': 'd-none' ">
+  </div>
 
-        <!-- PROCESSOR HISTORY TABLE TAB -->
-        <div class="history-container flex-fill table-wrapper-scroll scroll-bar"
-            [ngClass]="m_sActiveTab === 'history'? '': 'd-none' ">
-            <div class="table-wrapper">
-                <table class="history-table table">
-                    <thead class="table-heading-container">
-                        <tr>
-                            <th scope="col">{{"KEY_PHRASES.DATE" | translate}}</th>
-                            <th scope="col">{{"KEY_PHRASES.STATUS" | translate}}</th>
-                            <th scope="col">{{"WORKSPACES_THEAD_WORKSPACES" | translate}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let historyLog of m_aoProcessorHistory">
-                            <td>{{historyLog.operationDate}}</td>
-                            <td><span class="category-tag"
-                                    [ngClass]="getTagColour(historyLog.status)">{{historyLog.status}}</span></td>
-                            <td>{{historyLog.workspaceName}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- PROCESSOR JSON TAB -->
-        <div class="d-flex flex-column justify-content-start align-items-start gap-3"
-            [ngClass]="m_sActiveTab === 'json' ? '' : 'd-none'" style="height:100vh; width: 100vw;">
-            <app-button [m_sLabel]="'APP_UI_SAVE_PARAMS' | translate" [m_sIconLeft]="'code'"
-                (click)="openSaveAsParamTemplate()"></app-button>
-            <div #editor class="json-editor" style="height: 80vh; width: 100%;" (keyup)="getJsonText($event)"></div>
-        </div>
+  <!-- PROCESSOR HISTORY TABLE TAB -->
+  <div class="history-container flex-fill table-wrapper-scroll scroll-bar"
+    [ngClass]="m_sActiveTab === 'history'? '': 'd-none' ">
+    <div class="table-wrapper">
+      <table class="history-table table">
+        <thead class="table-heading-container">
+          <tr>
+            <th scope="col">{{"KEY_PHRASES.DATE" | translate}}</th>
+            <th scope="col">{{"KEY_PHRASES.STATUS" | translate}}</th>
+            <th scope="col">{{"WORKSPACES_THEAD_WORKSPACES" | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (historyLog of m_aoProcessorHistory; track historyLog) {
+            <tr>
+              <td>{{historyLog.operationDate}}</td>
+              <td><span class="category-tag"
+              [ngClass]="getTagColour(historyLog.status)">{{historyLog.status}}</span></td>
+              <td>{{historyLog.workspaceName}}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
+  </div>
+  <!-- PROCESSOR JSON TAB -->
+  <div class="d-flex flex-column justify-content-start align-items-start gap-3"
+    [ngClass]="m_sActiveTab === 'json' ? '' : 'd-none'" style="height:100vh; width: 100vw;">
+    <app-button [m_sLabel]="'APP_UI_SAVE_PARAMS' | translate" [m_sIconLeft]="'code'"
+    (click)="openSaveAsParamTemplate()"></app-button>
+    <div #editor class="json-editor" style="height: 80vh; width: 100%;" (keyup)="getJsonText($event)"></div>
+  </div>
+</div>
 </main>

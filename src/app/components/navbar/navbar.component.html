@@ -1,24 +1,28 @@
 <div class="nav-container d-flex flex-row">
-    <!-- Open Navbar -->
-    <nav class="d-flex flex-column justify-content-between" [class.collapsed]="m_bIsNavbarOpen === false">
-        <div class="menu-list-container">
-            <app-menu-list-item *ngFor="let oMenuItem of m_aoMenuItems" [m_oMenuItemInfo]="oMenuItem"
-                [m_bIsNavbarOpen]="m_bIsNavbarOpen" [m_sSelectedTab]="m_sSelectedTab"
-                [m_sActiveWorkspaceId]="sActiveWorkspaceId" [m_bEditIsActive]="m_bEditIsActive"></app-menu-list-item>
-        </div>
-        <div class="menu-list-container">
-            <app-menu-list-item [m_oMenuItemInfo]="m_oDocumentation"
-                [m_bIsNavbarOpen]="m_bIsNavbarOpen"></app-menu-list-item>
-        </div>
-        <img class="logo-img" [class.open]="m_bIsNavbarOpen" *ngIf="m_sLogoImage" [src]="m_sLogoImage" alt="">
-    </nav>
-    <div class="menu-control d-flex flex-column align-items-center justify-content-center text-center text-white"
-        (click)="openCloseNavbar()">
-        <span class="material-symbols-outlined" [hidden]="m_bIsNavbarOpen">
-            chevron_right
-        </span>
-        <span class="material-symbols-outlined" [hidden]="!m_bIsNavbarOpen">
-            chevron_left
-        </span>
+  <!-- Open Navbar -->
+  <nav class="d-flex flex-column justify-content-between" [class.collapsed]="m_bIsNavbarOpen === false">
+    <div class="menu-list-container">
+      @for (oMenuItem of m_aoMenuItems; track oMenuItem) {
+        <app-menu-list-item [m_oMenuItemInfo]="oMenuItem"
+          [m_bIsNavbarOpen]="m_bIsNavbarOpen" [m_sSelectedTab]="m_sSelectedTab"
+        [m_sActiveWorkspaceId]="sActiveWorkspaceId" [m_bEditIsActive]="m_bEditIsActive"></app-menu-list-item>
+      }
     </div>
+    <div class="menu-list-container">
+      <app-menu-list-item [m_oMenuItemInfo]="m_oDocumentation"
+      [m_bIsNavbarOpen]="m_bIsNavbarOpen"></app-menu-list-item>
+    </div>
+    @if (m_sLogoImage) {
+      <img class="logo-img" [class.open]="m_bIsNavbarOpen" [src]="m_sLogoImage" alt="">
+    }
+  </nav>
+  <div class="menu-control d-flex flex-column align-items-center justify-content-center text-center text-white"
+    (click)="openCloseNavbar()">
+    <span class="material-symbols-outlined" [hidden]="m_bIsNavbarOpen">
+      chevron_right
+    </span>
+    <span class="material-symbols-outlined" [hidden]="!m_bIsNavbarOpen">
+      chevron_left
+    </span>
+  </div>
 </div>

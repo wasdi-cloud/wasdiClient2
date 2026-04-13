@@ -1,125 +1,150 @@
 <div class="apps-dialog d-flex flex-column" style="height: 100%; width:100%">
-    <div class="dialog-header d-flex flex-row justify-content-between font-bold w-100">
-        {{"DIALOG_TITLE_STYLES" | translate }}
-        <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
-    </div>
-    <div class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between"
-        style="height: 100%; overflow: hidden;">
-        <div class="apps-container d-flex flex-column">
-            <div class="search-header font-bold d-flex flex-column gap-2 mb-3">
-                <div class="d-flex flex-row justify-content-between align-items-center">
-                    Search styles
-                    <app-button [m_sLabel]="'DIALOG_STYLE_MANAGER_TAB_NEW' | translate" [m_sIconLeft]="'add_box'"
-                        (click)="setVisibleInput('new-style')"></app-button>
-                </div>
-                <app-input-field [m_sPlaceholder]="'DIALOG_STYLE_SEARCH' | translate" [m_sIconLeft]="'search'"
-                    (m_oInputChange)="getInputChanges($event, 'search')"></app-input-field>
-            </div>
-            <div *ngIf="m_bIsLoadingStyleList === true">
-                <app-invader></app-invader>
-            </div>
-            <div *ngIf="m_bIsLoadingStyleList === false"
-                class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1" style="overflow-y:scroll">
-                <app-list-item *ngFor="let oStyle of m_aoStyleList| filter: m_sSearchString" [m_oProcessorItem]="oStyle"
-                    [m_bIsSelected]="oStyle.name === m_oSelectedStyle.name" [m_bSimpleItem]="true"
-                    [m_bProcessorItem]="true" [m_sLabel]="oStyle.name" [m_sDescription]="oStyle.description"
-                    [m_sIcon]="getStyleImgLink(oStyle)" (m_oEmitClickEvent)="handleToolbarClick($event, oStyle)"
-                    [m_bHasToolbar]="oStyle.sharedWithMe === true || m_sActiveUserId === oStyle.userId"
-                    (click)="selectActiveStyle(oStyle); setVisibleInput('default')"></app-list-item>
-            </div>
+  <div class="dialog-header d-flex flex-row justify-content-between font-bold w-100">
+    {{"DIALOG_TITLE_STYLES" | translate }}
+    <span class="close-btn material-symbols-outlined" (click)="onDismiss()">close</span>
+  </div>
+  <div class="dialog-content flex-fill d-flex flex-row w-100 justify-content-between"
+    style="height: 100%; overflow: hidden;">
+    <div class="apps-container d-flex flex-column">
+      <div class="search-header font-bold d-flex flex-column gap-2 mb-3">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          Search styles
+          <app-button [m_sLabel]="'DIALOG_STYLE_MANAGER_TAB_NEW' | translate" [m_sIconLeft]="'add_box'"
+          (click)="setVisibleInput('new-style')"></app-button>
         </div>
-        <div *ngIf="m_sActiveInputs !=='default' && m_sActiveInputs !== 'xml-editor'" [ngSwitch]="m_sActiveInputs"
-            class="json-container">
-            <!-- Inputs to create a new style -->
-            <div *ngSwitchCase="'new-style'" class="h-100 d-flex flex-column justify-content-between">
-                <div class="json-header font-bold">New style</div>
-                <div class="column-body-container mt-3 d-flex flex-column flex-fill gap-3">
-                    <app-input-field [m_sLabel]="'KEY_PHRASES.NAME' | translate"
-                        (m_oInputChange)="getInputChanges($event, 'name')"></app-input-field>
-                    <app-textarea class="textarea" [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate"
-                        (keyup)="getInputChanges($event, 'description')"></app-textarea>
-                    <app-drag-and-drop class="drag-drop" (m_oSelectedFileOutput)="getFile($event)"></app-drag-and-drop>
-                    <div class="d-flex flex-row align-items-center gap-2">
-                        <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox"
-                            [checked]="m_oNewStyle.isPublic" (change)="getInputChanges($event, 'isPublic')">
-                        <label for="isPublic">{{"DIALOG_STYLE_MANAGER_SET_PUBLIC" | translate}}</label>
-                    </div>
+        <app-input-field [m_sPlaceholder]="'DIALOG_STYLE_SEARCH' | translate" [m_sIconLeft]="'search'"
+        (m_oInputChange)="getInputChanges($event, 'search')"></app-input-field>
+      </div>
+      @if (m_bIsLoadingStyleList === true) {
+        <div>
+          <app-invader></app-invader>
+        </div>
+      }
+      @if (m_bIsLoadingStyleList === false) {
+        <div
+          class="apps-cards-container d-flex flex-column gap-2 flex-fill pe-1" style="overflow-y:scroll">
+          @for (oStyle of m_aoStyleList| filter: m_sSearchString; track oStyle) {
+            <app-list-item [m_oProcessorItem]="oStyle"
+              [m_bIsSelected]="oStyle.name === m_oSelectedStyle.name" [m_bSimpleItem]="true"
+              [m_bProcessorItem]="true" [m_sLabel]="oStyle.name" [m_sDescription]="oStyle.description"
+              [m_sIcon]="getStyleImgLink(oStyle)" (m_oEmitClickEvent)="handleToolbarClick($event, oStyle)"
+              [m_bHasToolbar]="oStyle.sharedWithMe === true || m_sActiveUserId === oStyle.userId"
+            (click)="selectActiveStyle(oStyle); setVisibleInput('default')"></app-list-item>
+          }
+        </div>
+      }
+    </div>
+    @if (m_sActiveInputs !=='default' && m_sActiveInputs !== 'xml-editor') {
+      <div
+        class="json-container">
+        @switch (m_sActiveInputs) {
+          <!-- Inputs to create a new style -->
+          @case ('new-style') {
+            <div class="h-100 d-flex flex-column justify-content-between">
+              <div class="json-header font-bold">New style</div>
+              <div class="column-body-container mt-3 d-flex flex-column flex-fill gap-3">
+                <app-input-field [m_sLabel]="'KEY_PHRASES.NAME' | translate"
+                (m_oInputChange)="getInputChanges($event, 'name')"></app-input-field>
+                <app-textarea class="textarea" [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate"
+                (keyup)="getInputChanges($event, 'description')"></app-textarea>
+                <app-drag-and-drop class="drag-drop" (m_oSelectedFileOutput)="getFile($event)"></app-drag-and-drop>
+                <div class="d-flex flex-row align-items-center gap-2">
+                  <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox"
+                    [checked]="m_oNewStyle.isPublic" (change)="getInputChanges($event, 'isPublic')">
+                    <label for="isPublic">{{"DIALOG_STYLE_MANAGER_SET_PUBLIC" | translate}}</label>
+                  </div>
                 </div>
                 <div class="footer d-flex flex-row justify-content-end">
-                    <div class="d-flex flex-row gap-3">
-                        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate " [m_bOutline]="true"></app-button>
-                        <app-button [m_sLabel]="'DIALOG_STYLE_UPLOAD_STYLE' | translate" (click)="uploadStyle(m_oNewStyle)"></app-button>
-                    </div>
+                  <div class="d-flex flex-row gap-3">
+                    <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate " [m_bOutline]="true"></app-button>
+                    <app-button [m_sLabel]="'DIALOG_STYLE_UPLOAD_STYLE' | translate" (click)="uploadStyle(m_oNewStyle)"></app-button>
+                  </div>
                 </div>
-            </div>
+              </div>
+            }
             <!-- Inputs to edit an existing style -->
-            <div *ngSwitchCase="'edit-style'" class="h-100 d-flex flex-column justify-content-between">
+            @case ('edit-style') {
+              <div class="h-100 d-flex flex-column justify-content-between">
                 <div class="json-header font-bold">{{"DIALOG_STYLE_MANAGER_EDIT" | translate}}</div>
                 <div class="column-body-container my-2 d-flex flex-column flex-fill gap-3">
-                    <app-input-field [m_sLabel]="'KEY_PHRASES.NAME' | translate" [m_sInputValue]="m_oNewStyle.styleName"
-                        [m_bIsReadonly]="true" [m_bIsDisabled]="true"></app-input-field>
-                    <app-textarea class="textarea" [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate"
-                        [m_sInputString]="m_oNewStyle.styleDescription"
-                        (keyup)="getInputChanges($event, 'description')"></app-textarea>
-                    <app-drag-and-drop class="drag-drop" (m_oSelectedFileOutput)="getFile($event)"></app-drag-and-drop>
-                    <div class="file-container d-flex flex-row justify-content-between">
-                        <div class="d-flex flex-row align-items-center gap-2">
-                            <span class="material-symbols-outlined">
-                                folder_zip
-                            </span>
-                            {{m_oNewStyle.styleName}}
-                        </div>
-                        <div class="d-flex flex-row gap-3">
-                            <app-button [m_sIconLeft]="'download'" [m_sSize]="'small'" [m_bOutline]="true"
-                                (click)="downloadStyle(m_oSelectedStyle.styleId)"></app-button>
-                        </div>
-                    </div>
+                  <app-input-field [m_sLabel]="'KEY_PHRASES.NAME' | translate" [m_sInputValue]="m_oNewStyle.styleName"
+                  [m_bIsReadonly]="true" [m_bIsDisabled]="true"></app-input-field>
+                  <app-textarea class="textarea" [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate"
+                    [m_sInputString]="m_oNewStyle.styleDescription"
+                  (keyup)="getInputChanges($event, 'description')"></app-textarea>
+                  <app-drag-and-drop class="drag-drop" (m_oSelectedFileOutput)="getFile($event)"></app-drag-and-drop>
+                  <div class="file-container d-flex flex-row justify-content-between">
                     <div class="d-flex flex-row align-items-center gap-2">
-                        <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox"
-                            [checked]="m_oNewStyle.isPublic" (change)="getInputChanges($event, 'isPublic')">
-                        <label for="isPublic">{{"DIALOG_STYLE_MANAGER_SET_PUBLIC" | translate}}</label>
+                      <span class="material-symbols-outlined">
+                        folder_zip
+                      </span>
+                      {{m_oNewStyle.styleName}}
                     </div>
-                </div>
-                <div class="footer d-flex flex-row justify-content-end">
                     <div class="d-flex flex-row gap-3">
-                        <app-button [m_sLabel]="'Discard changes'" [m_bOutline]="true"
-                            (click)="setVisibleInput('default')"></app-button>
-                        <app-button [m_sLabel]="'KEY_PHRASES.SAVE' | translate" (click)="updateStyleParams()"></app-button>
+                      <app-button [m_sIconLeft]="'download'" [m_sSize]="'small'" [m_bOutline]="true"
+                      (click)="downloadStyle(m_oSelectedStyle.styleId)"></app-button>
                     </div>
+                  </div>
+                  <div class="d-flex flex-row align-items-center gap-2">
+                    <input type="checkbox" name="isPublic" id="" class="wasdi-checkbox"
+                      [checked]="m_oNewStyle.isPublic" (change)="getInputChanges($event, 'isPublic')">
+                      <label for="isPublic">{{"DIALOG_STYLE_MANAGER_SET_PUBLIC" | translate}}</label>
+                    </div>
+                  </div>
+                  <div class="footer d-flex flex-row justify-content-end">
+                    <div class="d-flex flex-row gap-3">
+                      <app-button [m_sLabel]="'Discard changes'" [m_bOutline]="true"
+                      (click)="setVisibleInput('default')"></app-button>
+                      <app-button [m_sLabel]="'KEY_PHRASES.SAVE' | translate" (click)="updateStyleParams()"></app-button>
+                    </div>
+                  </div>
                 </div>
-            </div>
-            <!-- Share Container -->
-            <div *ngSwitchCase="'share'">
-                <div class="json-header font-bold">{{"KEY_PHRASES.SHARE" | translate}}</div>
-                <div class="column-body-container share-container">
+              }
+              <!-- Share Container -->
+              @case ('share') {
+                <div>
+                  <div class="json-header font-bold">{{"KEY_PHRASES.SHARE" | translate}}</div>
+                  <div class="column-body-container share-container">
                     <app-share-ui [resource]="m_oSelectedStyle" [resourceType]="'style'"></app-share-ui>
+                  </div>
                 </div>
-            </div>
-
-        </div>
+              }
+            }
+          </div>
+        }
         <div class="json-container h-100 d-flex flex-column"
-            [class.hidden]="m_sActiveInputs !== 'default' && m_sActiveInputs !== 'xml-editor'">
-            <div *ngIf="m_sActiveInputs === 'default'" class="json-header d-flex flex-column">
-                <div class="processor-name font-bold">
-                    {{m_oSelectedStyle.name? m_oSelectedStyle.name : 'Select a Style'}}
-                </div>
-                <p *ngIf="m_oSelectedStyle.userId">{{"WAP_PUBLISHER" | translate}}: {{m_oSelectedStyle.userId}}</p>
+          [class.hidden]="m_sActiveInputs !== 'default' && m_sActiveInputs !== 'xml-editor'">
+          @if (m_sActiveInputs === 'default') {
+            <div class="json-header d-flex flex-column">
+              <div class="processor-name font-bold">
+                {{m_oSelectedStyle.name? m_oSelectedStyle.name : 'Select a Style'}}
+              </div>
+              @if (m_oSelectedStyle.userId) {
+                <p>{{"WAP_PUBLISHER" | translate}}: {{m_oSelectedStyle.userId}}</p>
+              }
             </div>
-            <div *ngIf="m_sActiveInputs === 'xml-editor'" class="json-header d-flex flex-column">
-                {{"DIALOG_STYLE_EDIT_XML_FOR" | translate}} {{m_oSelectedStyle.name}}
+          }
+          @if (m_sActiveInputs === 'xml-editor') {
+            <div class="json-header d-flex flex-column">
+              {{"DIALOG_STYLE_EDIT_XML_FOR" | translate}} {{m_oSelectedStyle.name}}
             </div>
-            <div class="column-body-container flex-fill">
-                <div class="json-wrapper" style="height: 100%; width: 100%">
-                    <div #editor class="json-editor" style="height:100%" (keyup)="getXMLChange($event)"></div>
-                </div>
+          }
+          <div class="column-body-container flex-fill">
+            <div class="json-wrapper" style="height: 100%; width: 100%">
+              <div #editor class="json-editor" style="height:100%" (keyup)="getXMLChange($event)"></div>
             </div>
-            <div class="footer d-flex flex-row justify-content-end">
-                <app-button *ngIf="m_sActiveInputs === 'xml-editor'" [m_sLabel]="'Save modifications'"
-                    [m_bDisabled]="m_oSelectedStyle.name ? false : true" [m_sIconLeft]="'play_circle'"
-                    (click)="updateXml()"></app-button>
-                <app-button *ngIf="m_oProduct" [m_sLabel]="'Apply'" [m_sIconLeft]="'play_circle'"
-                    [m_bDisabled]="!m_oSelectedStyle.name" (click)="applyStyleToProduct()"></app-button>
-            </div>
+          </div>
+          <div class="footer d-flex flex-row justify-content-end">
+            @if (m_sActiveInputs === 'xml-editor') {
+              <app-button [m_sLabel]="'Save modifications'"
+                [m_bDisabled]="m_oSelectedStyle.name ? false : true" [m_sIconLeft]="'play_circle'"
+              (click)="updateXml()"></app-button>
+            }
+            @if (m_oProduct) {
+              <app-button [m_sLabel]="'Apply'" [m_sIconLeft]="'play_circle'"
+              [m_bDisabled]="!m_oSelectedStyle.name" (click)="applyStyleToProduct()"></app-button>
+            }
+          </div>
         </div>
+      </div>
     </div>
-</div>

@@ -1,15 +1,17 @@
 <div class="d-flex flex-row gap-3" style="width: 100%; height: 100%">
-    <div class="ui-btns-container d-flex flex-column">
-        <div class="ui-list-item" *ngFor="let oAppUIItem of m_aoAppUIItems"
-            (click)="addUIElement(oAppUIItem.clickInput)">
-            {{oAppUIItem.label | translate}}
-        </div>
+  <div class="ui-btns-container d-flex flex-column">
+    @for (oAppUIItem of m_aoAppUIItems; track oAppUIItem) {
+      <div class="ui-list-item"
+        (click)="addUIElement(oAppUIItem.clickInput)">
+        {{oAppUIItem.label | translate}}
+      </div>
+    }
+  </div>
+  <div class="JSON-container flex-fill d-flex flex-column gap-1" style="height: 100%; width: 100%;">
+    <div class="json-wrapper" style="height: 100%; width: 100%;">
+      <div #editor class="json-editor" style="height: 100%;" (keyup)="getJsonText($event)"></div>
     </div>
-    <div class="JSON-container flex-fill d-flex flex-column gap-1" style="height: 100%; width: 100%;">
-        <div class="json-wrapper" style="height: 100%; width: 100%;">
-            <div #editor class="json-editor" style="height: 100%;" (keyup)="getJsonText($event)"></div>
-        </div>
-        <app-button class="json-button" [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate" [m_sSize]="'small'"
-            (click)="formatJSON()"></app-button>
-    </div>
+    <app-button class="json-button" [m_sLabel]="'DIALOG_PROCESSOR_UI_APP_FORMAT_JSON' | translate" [m_sSize]="'small'"
+    (click)="formatJSON()"></app-button>
+  </div>
 </div>

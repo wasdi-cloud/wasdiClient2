@@ -1,57 +1,67 @@
 <nav class="navbar navbar-expand-lg d-flex flex-row align-items-center justify-content-between px-3">
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <app-button [m_sLabel]="('EDITOR_OPERATION_TITLE_WAPPS' | translate).toUpperCase()"
-                [m_sIconRight]="'rocket_launch'" [m_bMuted]="true" [m_sSize]="'small'" (click)="openAppsDialog()"
-                [m_bRounded]="true"></app-button>
-        </li>
-        <li class="nav-item">
-            <app-button [m_sLabel]="('EDITOR_OPERATION_TITLE_WORKFLOW' | translate).toUpperCase()"
-                [m_sIconRight]="'account_tree'" [m_bMuted]="true" (click)="openWorkflowsDialog()" [m_sSize]="'small'"
-                [m_bRounded]="true"></app-button>
-        </li>
-        <li class="nav-item">
-            <app-button [m_sLabel]="('EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_OPEN' | translate).toUpperCase()"
-                [m_sIconRight]="'laptop_mac'" [m_bMuted]="true" (click)="openJupyterNotebookPage()" [m_sSize]="'small'"
-                [m_bDisabled]="!m_bJupyterIsReady" [m_bRounded]="true"></app-button>
-        </li>
-        <li class="nav-item">
-            <app-button [m_sIconRight]="'imagesearch_roller'" [m_bMuted]="true" [m_bRounded]="true" [m_sSize]="'small'" (click)="openStylesDialog()" [matTooltip]="'EDITOR_OPERATION_TITLE_STYLE' | translate"></app-button>
-        </li>
-        <li class="nav-item">
-            <app-button [m_sIconRight]="'upload'" [m_bMuted]="true" (click)="openImportDialog()" [m_sSize]="'small'"
-                [m_bRounded]="true" [matTooltip]="'BTN_IMPORT' | translate"></app-button>
-        </li>
-      <li class="nav-item" *ngIf="!m_bFeatureInfoMode">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <app-button [m_sLabel]="('EDITOR_OPERATION_TITLE_WAPPS' | translate).toUpperCase()"
+        [m_sIconRight]="'rocket_launch'" [m_bMuted]="true" [m_sSize]="'small'" (click)="openAppsDialog()"
+      [m_bRounded]="true"></app-button>
+    </li>
+    <li class="nav-item">
+      <app-button [m_sLabel]="('EDITOR_OPERATION_TITLE_WORKFLOW' | translate).toUpperCase()"
+        [m_sIconRight]="'account_tree'" [m_bMuted]="true" (click)="openWorkflowsDialog()" [m_sSize]="'small'"
+      [m_bRounded]="true"></app-button>
+    </li>
+    <li class="nav-item">
+      <app-button [m_sLabel]="('EDITOR_OPERATION_TITLE_JUPYTER_NOTEBOOK_OPEN' | translate).toUpperCase()"
+        [m_sIconRight]="'laptop_mac'" [m_bMuted]="true" (click)="openJupyterNotebookPage()" [m_sSize]="'small'"
+      [m_bDisabled]="!m_bJupyterIsReady" [m_bRounded]="true"></app-button>
+    </li>
+    <li class="nav-item">
+      <app-button [m_sIconRight]="'imagesearch_roller'" [m_bMuted]="true" [m_bRounded]="true" [m_sSize]="'small'" (click)="openStylesDialog()" [matTooltip]="'EDITOR_OPERATION_TITLE_STYLE' | translate"></app-button>
+    </li>
+    <li class="nav-item">
+      <app-button [m_sIconRight]="'upload'" [m_bMuted]="true" (click)="openImportDialog()" [m_sSize]="'small'"
+      [m_bRounded]="true" [matTooltip]="'BTN_IMPORT' | translate"></app-button>
+    </li>
+    @if (!m_bFeatureInfoMode) {
+      <li class="nav-item">
         <app-button [m_sIconRight]="'print'" [m_bMuted]="true" (click)="openPrintDialog()" [m_sSize]="'small'"
-                    [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_PRINT' | translate"></app-button>
+        [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_PRINT' | translate"></app-button>
       </li>
-        <li class="nav-item">
-            <app-button [m_sIconRight]="'share'" [m_bMuted]="true" (click)="openShareDialog()" [m_sSize]="'small'"
-                [m_bRounded]="true" [matTooltip]="'DIALOG_SHARE_WS_SHARE_WS' | translate"></app-button>
-        </li>
+    }
+    <li class="nav-item">
+      <app-button [m_sIconRight]="'share'" [m_bMuted]="true" (click)="openShareDialog()" [m_sSize]="'small'"
+      [m_bRounded]="true" [matTooltip]="'DIALOG_SHARE_WS_SHARE_WS' | translate"></app-button>
+    </li>
 
-        <li class="nav-item" *ngIf="!m_b2DMapModeOn">
-            <app-button [m_sIconRight]="'map'" [m_bMuted]="true" (click)="switch2D3DMode()" [m_sSize]="'small'"
-                [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_2D' | translate"></app-button>
-        </li>
+    @if (!m_b2DMapModeOn) {
+      <li class="nav-item">
+        <app-button [m_sIconRight]="'map'" [m_bMuted]="true" (click)="switch2D3DMode()" [m_sSize]="'small'"
+        [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_2D' | translate"></app-button>
+      </li>
+    }
 
-        <li class="nav-item" *ngIf="m_b2DMapModeOn">
-            <app-button [m_sIconRight]="'globe'" [m_bMuted]="true" (click)="switch2D3DMode()" [m_sSize]="'small'"
-                [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_3D' | translate"></app-button>
-        </li>
+    @if (m_b2DMapModeOn) {
+      <li class="nav-item">
+        <app-button [m_sIconRight]="'globe'" [m_bMuted]="true" (click)="switch2D3DMode()" [m_sSize]="'small'"
+        [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_3D' | translate"></app-button>
+      </li>
+    }
 
-        <li class="nav-item" *ngIf="m_bFeatureInfoMode">
-            <app-button [m_sIconRight]="'chat_info'" [m_bMuted]="true" (click)="changeFeatureInfoMode()"
-                [m_sSize]="'small'" [m_bRounded]="true"
-                [matTooltip]="'EDITOR_TOOLTIP_SHOW_FEATURE' | translate"></app-button>
-        </li>
+    @if (m_bFeatureInfoMode) {
+      <li class="nav-item">
+        <app-button [m_sIconRight]="'chat_info'" [m_bMuted]="true" (click)="changeFeatureInfoMode()"
+          [m_sSize]="'small'" [m_bRounded]="true"
+        [matTooltip]="'EDITOR_TOOLTIP_SHOW_FEATURE' | translate"></app-button>
+      </li>
+    }
 
-        <li class="nav-item" *ngIf="!m_bFeatureInfoMode">
-            <app-button [m_sIconRight]="'pinch'" [m_bMuted]="true" (click)="changeFeatureInfoMode()" [m_sSize]="'small'"
-                [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_SHOW_FEATURE' | translate"></app-button>
-        </li>
+    @if (!m_bFeatureInfoMode) {
+      <li class="nav-item">
+        <app-button [m_sIconRight]="'pinch'" [m_bMuted]="true" (click)="changeFeatureInfoMode()" [m_sSize]="'small'"
+        [m_bRounded]="true" [matTooltip]="'EDITOR_TOOLTIP_SHOW_FEATURE' | translate"></app-button>
+      </li>
+    }
 
 
-    </ul>
+  </ul>
 </nav>

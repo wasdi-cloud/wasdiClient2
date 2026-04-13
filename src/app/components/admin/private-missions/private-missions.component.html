@@ -7,48 +7,55 @@
     ></app-button>
   </div>
   <div class="d-flex flex-column-gap-2">
-    <app-invader *ngIf="!m_bMissionsLoaded"></app-invader>
-    <div
-      *ngIf="m_bMissionsLoaded && m_aoMissions.length > 0"
-      class="table-wrapper flex-fill"
-    >
-      <table>
-        <thead class="table-heading-container">
-          <tr>
-            <td>Mission Name</td>
-            <td>Owner</td>
-            <td>Permissions</td>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let oMission of m_aoMissions">
-            <td>{{ oMission.missionName }}</td>
-            <td>{{ oMission.missionOwner }}</td>
-            <td>
-              {{ oMission.permissionType ? oMission.permissionType : "Owner" }}
-            </td>
-            <td class="d-flex flex-row gap-2">
-              <span
-                *ngIf="oMission.permissionType !== 'readOnly'"
-                (click)="openShareUI(oMission)"
-                class="material-symbols-outlined"
-                matTooltip="Manage Collaborators"
-              >
-                group_add
-              </span>
-              <span
-                *ngIf="oMission.permissionType !== 'readOnly'"
-                (click)="removeMission(oMission)"
-                class="material-symbols-outlined"
-                matTooltip="Delete Mission"
-              >
-                delete
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    @if (!m_bMissionsLoaded) {
+      <app-invader></app-invader>
+    }
+    @if (m_bMissionsLoaded && m_aoMissions.length > 0) {
+      <div
+        class="table-wrapper flex-fill"
+        >
+        <table>
+          <thead class="table-heading-container">
+            <tr>
+              <td>Mission Name</td>
+              <td>Owner</td>
+              <td>Permissions</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            @for (oMission of m_aoMissions; track oMission) {
+              <tr>
+                <td>{{ oMission.missionName }}</td>
+                <td>{{ oMission.missionOwner }}</td>
+                <td>
+                  {{ oMission.permissionType ? oMission.permissionType : "Owner" }}
+                </td>
+                <td class="d-flex flex-row gap-2">
+                  @if (oMission.permissionType !== 'readOnly') {
+                    <span
+                      (click)="openShareUI(oMission)"
+                      class="material-symbols-outlined"
+                      matTooltip="Manage Collaborators"
+                      >
+                      group_add
+                    </span>
+                  }
+                  @if (oMission.permissionType !== 'readOnly') {
+                    <span
+                      (click)="removeMission(oMission)"
+                      class="material-symbols-outlined"
+                      matTooltip="Delete Mission"
+                      >
+                      delete
+                    </span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
   </div>
 </div>

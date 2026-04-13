@@ -1,78 +1,81 @@
 <div class="dialog d-flex flex-column" style="height: 100%; width: 100%;">
-    <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between align-items-center p-1">
-        <h4>Share Product</h4>
-        <button class="btn" (click)="onDismiss()">
-         
-        </button>
-    </div>
-    <ul class="nav nav-tabs mt-2 mx-3">
-        <li class="nav-item" (click)="setActiveTab('sendToWorkspace')">
-            <a class="nav-link" aria-current="page" [ngClass]="m_sActiveTab === 'sendToWorkspace' ? 'active' : ''">Send
-                to Workspace</a>
-        </li>
-        <li class="nav-item" (click)="setActiveTab('sendToFTP')">
-            <a class="nav-link" aria-current="page" [ngClass]="m_sActiveTab === 'sendToFPT' ? 'active' : ''">Send to
-                FTP</a>
-        </li>
-        <!-- <li class="nav-item" (click)="setActiveTab('sendToUsers')">
-            <a class="nav-link" aria-current="page" [ngClass]="m_sActiveTab === 'sendToUsers' ? 'active' : ''">Share
-                with Users</a>
-        </li> -->
-    </ul>
-    <!-- Send to Workspace Content -->
-    <div *ngIf="m_sActiveTab === 'sendToWorkspace'" class="dialog-content flex-fill px-4 mt-3"
-        style="height: 60%;">
-        <app-workspaces-list-dialog></app-workspaces-list-dialog>
-    </div>
+  <div class="dialog-header bg-secondary text-light d-flex flex-row justify-content-between align-items-center p-1">
+    <h4>Share Product</h4>
+    <button class="btn" (click)="onDismiss()">
 
-    <!-- Send to FTP Content -->
-    <div *ngIf="m_sActiveTab === 'sendToFTP'" class="dialog-content d-flex flex-column flex-fill px-4 mt-3">
-        <h6 class="">
-            {{"DIALOG_FTP_FILE_TO_UPLOAD"|translate}}
-            {{getFileName()}}
-        </h6>
+    </button>
+  </div>
+  <ul class="nav nav-tabs mt-2 mx-3">
+    <li class="nav-item" (click)="setActiveTab('sendToWorkspace')">
+      <a class="nav-link" aria-current="page" [ngClass]="m_sActiveTab === 'sendToWorkspace' ? 'active' : ''">Send
+      to Workspace</a>
+    </li>
+    <li class="nav-item" (click)="setActiveTab('sendToFTP')">
+      <a class="nav-link" aria-current="page" [ngClass]="m_sActiveTab === 'sendToFPT' ? 'active' : ''">Send to
+      FTP</a>
+    </li>
+    <!-- <li class="nav-item" (click)="setActiveTab('sendToUsers')">
+    <a class="nav-link" aria-current="page" [ngClass]="m_sActiveTab === 'sendToUsers' ? 'active' : ''">Share
+    with Users</a>
+  </li> -->
+</ul>
+<!-- Send to Workspace Content -->
+@if (m_sActiveTab === 'sendToWorkspace') {
+  <div class="dialog-content flex-fill px-4 mt-3"
+    style="height: 60%;">
+    <app-workspaces-list-dialog></app-workspaces-list-dialog>
+  </div>
+}
 
-        <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="d-flex flex-column gap-2"
-            ng-submit="m_oController.sendFTPUploadRequest()" ng-hide="m_oController.m_bIsVisibleRecoveryPassword">
-            <div class="form-group my-input-text">
-                <input type="text" name="serverIp" placeholder="{{'DIALOG_FTP_INPUT_SERVER'|translate}}"
-                    class="form-control" id="ipServerFTP" [(ngModel)]="m_oFTPRequest.serverIp" required>
+<!-- Send to FTP Content -->
+@if (m_sActiveTab === 'sendToFTP') {
+  <div class="dialog-content d-flex flex-column flex-fill px-4 mt-3">
+    <h6 class="">
+      {{"DIALOG_FTP_FILE_TO_UPLOAD"|translate}}
+      {{getFileName()}}
+    </h6>
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="d-flex flex-column gap-2"
+      ng-submit="m_oController.sendFTPUploadRequest()" ng-hide="m_oController.m_bIsVisibleRecoveryPassword">
+      <div class="form-group my-input-text">
+        <input type="text" name="serverIp" placeholder="{{'DIALOG_FTP_INPUT_SERVER'|translate}}"
+          class="form-control" id="ipServerFTP" [(ngModel)]="m_oFTPRequest.serverIp" required>
+        </div>
+        <div class="form-group my-input-text">
+          <mat-checkbox [checked]="m_oFTPRequest.sftp" [(ngModel)]="m_oFTPRequest.sftp" name="sftp" required>{{
+            "DIALOG_FTP_INPUT_SFTPFLAG" |
+          translate}}</mat-checkbox>
+        </div>
+        <div class="form-group my-input-text">
+          <input type="text" name="port" placeholder="{{'DIALOG_FTP_INPUT_PORT'|translate}}" class="form-control"
+            id="portServerFTP" [(ngModel)]="m_oFTPRequest.port" required>
+          </div>
+          <div class="form-group my-input-text">
+            <input type="text" name="user" placeholder="{{'DIALOG_FTP_INPUT_USER'|translate}}" class="form-control"
+              id="userFTPName" [(ngModel)]="m_oFTPRequest.user" required>
             </div>
             <div class="form-group my-input-text">
-                <mat-checkbox [checked]="m_oFTPRequest.sftp" [(ngModel)]="m_oFTPRequest.sftp" name="sftp" required>{{
-                    "DIALOG_FTP_INPUT_SFTPFLAG" |
-                    translate}}</mat-checkbox>
-            </div>
-            <div class="form-group my-input-text">
-                <input type="text" name="port" placeholder="{{'DIALOG_FTP_INPUT_PORT'|translate}}" class="form-control"
-                    id="portServerFTP" [(ngModel)]="m_oFTPRequest.port" required>
-            </div>
-            <div class="form-group my-input-text">
-                <input type="text" name="user" placeholder="{{'DIALOG_FTP_INPUT_USER'|translate}}" class="form-control"
-                    id="userFTPName" [(ngModel)]="m_oFTPRequest.user" required>
-            </div>
-            <div class="form-group my-input-text">
-                <input type="password" name="password" placeholder="{{'DIALOG_FTP_INPUT_PASSWORD'|translate}}"
-                    class="form-control" id="userFTPPassword" [(ngModel)]="m_oFTPRequest.password" required>
-            </div>
-            <div class="form-group my-input-text">
+              <input type="password" name="password" placeholder="{{'DIALOG_FTP_INPUT_PASSWORD'|translate}}"
+                class="form-control" id="userFTPPassword" [(ngModel)]="m_oFTPRequest.password" required>
+              </div>
+              <div class="form-group my-input-text">
                 <input type="text" name="destinationAbsolutePath" placeholder="{{'DIALOG_FTP_REMOTE_PATH'|translate}}"
-                    class="form-control" id="remoteFTPPath" [(ngModel)]="m_oFTPRequest.destinationAbsolutePath"
-                    required>
-            </div>
-
-            <button class="btn btn-primary align-self-end"
+                  class="form-control" id="remoteFTPPath" [(ngModel)]="m_oFTPRequest.destinationAbsolutePath"
+                  required>
+                </div>
+                <button class="btn btn-primary align-self-end"
                 type="submit">{{"DIALOG_FTP_INPUT_UPLOAD_BUTTON"|translate}}</button>
-        </form>
+              </form>
+            </div>
+          }
 
-    </div>
+          <!-- Send to Users Content -->
+          @if (m_sActiveTab === 'sendToUsers') {
+            <div class="dialog-content d-flex flex-column flex-fill px-4 mt-3"></div>
+          }
 
-    <!-- Send to Users Content -->
-    <div *ngIf="m_sActiveTab === 'sendToUsers'" class="dialog-content d-flex flex-column flex-fill px-4 mt-3"></div>
-
-    <div mat-dialog-actions class="align-self-end">
-        <button class="btn btn-secondary" (click)="onDismiss()">
-            Close
-        </button>
-    </div>
-</div>
+          <div mat-dialog-actions class="align-self-end">
+            <button class="btn btn-secondary" (click)="onDismiss()">
+              Close
+            </button>
+          </div>
+        </div>

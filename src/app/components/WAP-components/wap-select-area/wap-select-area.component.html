@@ -1,5 +1,7 @@
-<div *ngIf="m_oMapInput.label">{{m_oMapInput.label}}</div>
+@if (m_oMapInput.label) {
+  <div>{{m_oMapInput.label}}</div>
+}
 <div class="map-frame" style="height: 500px;" [matTooltip]="m_oMapInput?.tooltip">
-    <div [attr.id]="m_sMapId" class="h-100 w-100" style="border-radius: 16px; z-index: 0;">
-    </div>
+  <div [attr.id]="m_sMapId" class="h-100 w-100" style="border-radius: 16px; z-index: 0;">
+  </div>
 </div>

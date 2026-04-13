@@ -1,18 +1,28 @@
-<label for="" *ngIf="m_sLabel">{{m_sLabel}}</label>
+@if (m_sLabel) {
+  <label for="">{{m_sLabel}}</label>
+}
 <input type="search" name="m_sStyle" [placeholder]="m_sPlaceholder" [matAutocomplete]="auto" class="form-control"
-    [(ngModel)]="m_sSearchString" (ngModelChange)="m_bEmitOutput? emitTextChanges(m_sSearchString): ''">
-<mat-autocomplete #auto="matAutocomplete" [displayWith]="getOptionText" (optionSelected)="emitSelectionChange($event)">
-    <mat-option *ngFor="let oInput of m_aoInputs | filter: m_sSearchString" [value]="oInput">
+  [(ngModel)]="m_sSearchString" (ngModelChange)="m_bEmitOutput? emitTextChanges(m_sSearchString): ''">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="getOptionText" (optionSelected)="emitSelectionChange($event)">
+    @for (oInput of m_aoInputs | filter: m_sSearchString; track oInput) {
+      <mat-option [value]="oInput">
         <div class="w-100 d-flex flex-row justify-content-between align-items-center gap-2">
-            <div *ngIf="oInput.workspaceName" class="flex-fill d-flex flex-column">
-                <div>{{oInput.workspaceName}}</div>
-                <div class="user-id">{{oInput.ownerUserId}}</div>
+          @if (oInput.workspaceName) {
+            <div class="flex-fill d-flex flex-column">
+              <div>{{oInput.workspaceName}}</div>
+              <div class="user-id">{{oInput.ownerUserId}}</div>
             </div>
-            <span *ngIf="oInput.workspaceName" class="material-symbols-outlined"
-                (click)="m_oDeleteFn(oInput, m_oController)">
-                delete
+          }
+          @if (oInput.workspaceName) {
+            <span class="material-symbols-outlined"
+              (click)="m_oDeleteFn(oInput, m_oController)">
+              delete
             </span>
-            <div *ngIf="!oInput.workspaceName && oInput.name">{{oInput.name}}</div>
+          }
+          @if (!oInput.workspaceName && oInput.name) {
+            <div>{{oInput.name}}</div>
+          }
         </div>
-    </mat-option>
-</mat-autocomplete>
+      </mat-option>
+    }
+  </mat-autocomplete>

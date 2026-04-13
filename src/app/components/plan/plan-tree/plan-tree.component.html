@@ -1,47 +1,63 @@
 <div class="product d-flex flex-row align-items-center gap-4">
-    <div class=" d-flex flex-row align-items-center">
-        <span class="arrow-icon material-symbols-outlined" *ngIf="!m_bIsOpen" (click)="openSatelliteSensors()">
-            arrow_right
-        </span>
-        <span class="arrow-icon material-symbols-outlined" *ngIf="m_bIsOpen" (click)="openSatelliteSensors()">
-            arrow_drop_down
-        </span>
-        <input (click)="toggleNodeSelection(m_oSatellite)" [indeterminate]="m_oSatellite.indeterminate"
-            class=" wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_oSatellite.selected">
-        <span class="product-label-icon material-symbols-outlined">
-            satellite_alt
-        </span>
-        <p class="product-label">
-            {{m_oSatellite.satelliteName}}</p>
+  <div class=" d-flex flex-row align-items-center">
+    @if (!m_bIsOpen) {
+      <span class="arrow-icon material-symbols-outlined" (click)="openSatelliteSensors()">
+        arrow_right
+      </span>
+    }
+    @if (m_bIsOpen) {
+      <span class="arrow-icon material-symbols-outlined" (click)="openSatelliteSensors()">
+        arrow_drop_down
+      </span>
+    }
+    <input (click)="toggleNodeSelection(m_oSatellite)" [indeterminate]="m_oSatellite.indeterminate"
+      class=" wasdi-checkbox" type="checkbox" name="" id="" [checked]="m_oSatellite.selected">
+      <span class="product-label-icon material-symbols-outlined">
+        satellite_alt
+      </span>
+      <p class="product-label">
+      {{m_oSatellite.satelliteName}}</p>
     </div>
-</div>
-<div class="product-bands-container" *ngIf="m_bIsOpen">
-    <ul class="container first-list">
-        <li [class.last-child]="m_bIsOpenChild && m_oOpenParent.description === oSensor.description"
-            *ngFor="let oSensor of m_oSatellite.satelliteSensors">
+  </div>
+  @if (m_bIsOpen) {
+    <div class="product-bands-container">
+      <ul class="container first-list">
+        @for (oSensor of m_oSatellite.satelliteSensors; track oSensor) {
+          <li [class.last-child]="m_bIsOpenChild && m_oOpenParent.description === oSensor.description"
+            >
             <p class="product-label">
-                <span class="arrow-icon material-symbols-outlined" *ngIf="!m_bIsOpenChild"
-                    (click)="openSensorModes(oSensor)">
-                    arrow_right
+              @if (!m_bIsOpenChild) {
+                <span class="arrow-icon material-symbols-outlined"
+                  (click)="openSensorModes(oSensor)">
+                  arrow_right
                 </span>
-                <span class="arrow-icon material-symbols-outlined" *ngIf="m_bIsOpenChild" (click)="openSensorModes()">
-                    arrow_drop_down
+              }
+              @if (m_bIsOpenChild) {
+                <span class="arrow-icon material-symbols-outlined" (click)="openSensorModes()">
+                  arrow_drop_down
                 </span>
-                <input (click)="toggleNodeSelection(oSensor)" type="checkbox" [indeterminate]="oSensor.indeterminate"
-                    class=" wasdi-checkbox" name="" id="" [checked]="oSensor.selected">
+              }
+              <input (click)="toggleNodeSelection(oSensor)" type="checkbox" [indeterminate]="oSensor.indeterminate"
+                class=" wasdi-checkbox" name="" id="" [checked]="oSensor.selected">
                 {{oSensor.description}}
-            </p>
-            <div class="" *ngIf="m_bIsOpenChild && m_oOpenParent.description === oSensor.description">
-                <ul class="">
-                    <li class="" *ngFor="let oSensorMode of oSensor.sensorModes">
+              </p>
+              @if (m_bIsOpenChild && m_oOpenParent.description === oSensor.description) {
+                <div class="">
+                  <ul class="">
+                    @for (oSensorMode of oSensor.sensorModes; track oSensorMode) {
+                      <li class="">
                         <p class="product-label ps-2">
-                            <input (click)="toggleNodeSelection(oSensorMode)" type="checkbox"
-                                class="wasdi-checkbox ps-1" name="" id="" [checked]="oSensorMode.selected">
+                          <input (click)="toggleNodeSelection(oSensorMode)" type="checkbox"
+                            class="wasdi-checkbox ps-1" name="" id="" [checked]="oSensorMode.selected">
                             {{oSensorMode.name}}
-                        </p>
-                    </li>
-                </ul>
-            </div>
-        </li>
-    </ul>
-</div>
+                          </p>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      }

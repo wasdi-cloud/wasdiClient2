@@ -1,18 +1,20 @@
 <div class="apps-dialog d-flex flex-column jusitfy-content-between gap-1 h-100">
-    <div class="dialog-header d-flex flex-row justify-content-between font-bold">
-        {{"DIALOG_ADD_NEW_WORKSPACE_HEADER" | translate}}
-        <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
-    </div>
-    <div class="flex-fill">
-        <p>{{"DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO" | translate }}
-        <p>
-            <app-input-field [m_sLabel]="'DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE' | translate"
-                (m_oInputChange)="m_sWorkspaceName = $event.event.target.value"></app-input-field>
-    </div>
-    <div class="dialog-footer d-flex flex-row gap-1 justify-content-between">
+  <div class="dialog-header d-flex flex-row justify-content-between font-bold">
+    {{"DIALOG_ADD_NEW_WORKSPACE_HEADER" | translate}}
+    <span class="close-btn material-symbols-outlined" (click)="onDismiss()"> close</span>
+  </div>
+  <div class="flex-fill">
+    <p>{{"DIALOG_ADD_NEW_WORKSPACE_NAMING_INFO" | translate }}
+      <p>
+        <app-input-field [m_sLabel]="'DIALOG_ADD_NEW_WORKSPACE_NEW_WORKSPACE' | translate"
+        (m_oInputChange)="m_sWorkspaceName = $event.event.target.value"></app-input-field>
+      </div>
+      <div class="dialog-footer d-flex flex-row gap-1 justify-content-between">
         <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' |
         translate" (click)="onDismiss()" [m_bMuted]="true"></app-button>
-        <app-button *ngIf="m_bIsEditingWorkspaceName === false" [m_sLabel]="'DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON' |
+        @if (m_bIsEditingWorkspaceName === false) {
+<app-button [m_sLabel]="'DIALOG_ADD_NEW_WORKSPACE_CREATE_BUTTON' |
         translate" (click)="onCreateWorkspace()"></app-button>
+        }
+      </div>
     </div>
-</div>

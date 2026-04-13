@@ -1,51 +1,53 @@
 <div class="secondary-nav d-flex flex-column justify-content-between">
-    <div class="d-flex flex-fill flex-column filters-container">
-        <div class="location-header">{{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' | translate}}</div>
-        <div class="filters-header">{{'PLAN_FILTERS' | translate}}</div>
-        <div class="filter-instructions d-flex flex-column gap-2">
-            <div class="font-light d-flex flex-row align-items-center gap-1">
-                <span class="material-symbols-outlined check-circle">
-                    {{m_oStartDate && m_oEndDate? 'check_circle' : 'radio_button_unchecked'}}
-                </span>
-                Select <span class="font-bold">a date range</span>
-            </div>
-            <div class="font-light d-flex flex-row align-items-center gap-1">
-                <span class="material-symbols-outlined check-circle">
-                    {{m_aoSelectedNodes.length > 0 ? 'check_circle' : 'radio_button_unchecked'}}
-                </span>
-                Select <span class="font-bold">at least one satellite</span>
-            </div>
-            <div class="font-light d-flex flex-row align-items-center gap-1">
-                <span class="material-symbols-outlined check-circle">
-                    {{m_oSelectedArea ? 'check_circle' : 'radio_button_unchecked'}}
-                </span>
-                Draw an <span class="font-bold">area on the map</span>
-            </div>
-        </div>
-        <div class="input-container my-3">
-            <div class="search-header">{{"PLAN_DATE_RANGE" | translate}}</div>
-            <div class="dates-input-container d-flex flex-row gap-1">
-                <div class="flex-fill">
-                    <app-input-field [m_sInputType]="'date'" [m_sLabel]="'PLAN_FROM'| translate"
-                        [m_sInputValue]="m_oStartDate" (m_oInputChange)="getDateSelection($event)"></app-input-field>
-                </div>
-                <div class="flex-fill">
-                    <app-input-field class="" [m_sInputType]="'date'" [m_sLabel]="'PLAN_TO'| translate"
-                        [m_sInputValue]="m_oEndDate" (m_oInputChange)="getDateSelection($event)"></app-input-field>
-                </div>
-            </div>
-        </div>
-        <div class="satellite-container flex-fill">
-            <div class="search-header">{{"PLAN_TREE_HEADER" | translate}}</div>
-            <div class="plan-tree-container">
-                <app-plan-tree *ngFor="let oSatellite of m_aoSatelliteResources" [m_oSatellite]="oSatellite"
-                    (m_oSatelliteChange)="getSatelliteSelection($event)"></app-plan-tree>
-            </div>
-        </div>
+  <div class="d-flex flex-fill flex-column filters-container">
+    <div class="location-header">{{'ROOT_VIEW_NAV_BAR_LINK_SEARCH' | translate}}</div>
+    <div class="filters-header">{{'PLAN_FILTERS' | translate}}</div>
+    <div class="filter-instructions d-flex flex-column gap-2">
+      <div class="font-light d-flex flex-row align-items-center gap-1">
+        <span class="material-symbols-outlined check-circle">
+          {{m_oStartDate && m_oEndDate? 'check_circle' : 'radio_button_unchecked'}}
+        </span>
+        Select <span class="font-bold">a date range</span>
+      </div>
+      <div class="font-light d-flex flex-row align-items-center gap-1">
+        <span class="material-symbols-outlined check-circle">
+          {{m_aoSelectedNodes.length > 0 ? 'check_circle' : 'radio_button_unchecked'}}
+        </span>
+        Select <span class="font-bold">at least one satellite</span>
+      </div>
+      <div class="font-light d-flex flex-row align-items-center gap-1">
+        <span class="material-symbols-outlined check-circle">
+          {{m_oSelectedArea ? 'check_circle' : 'radio_button_unchecked'}}
+        </span>
+        Draw an <span class="font-bold">area on the map</span>
+      </div>
     </div>
-    <div class="floating-buttons d-flex flex-row gap-2 w-100 justify-content-between">
-        <app-button [m_bMuted]="true" [m_sLabel]="'Clear Filters'" (click)="clearFilters()"></app-button>
-        <app-button class="flex-fill" [m_sLabel]="'Search'" [m_sIconLeft]="'search'"
-            (click)="executeSearch()"></app-button>
+    <div class="input-container my-3">
+      <div class="search-header">{{"PLAN_DATE_RANGE" | translate}}</div>
+      <div class="dates-input-container d-flex flex-row gap-1">
+        <div class="flex-fill">
+          <app-input-field [m_sInputType]="'date'" [m_sLabel]="'PLAN_FROM'| translate"
+          [m_sInputValue]="m_oStartDate" (m_oInputChange)="getDateSelection($event)"></app-input-field>
+        </div>
+        <div class="flex-fill">
+          <app-input-field class="" [m_sInputType]="'date'" [m_sLabel]="'PLAN_TO'| translate"
+          [m_sInputValue]="m_oEndDate" (m_oInputChange)="getDateSelection($event)"></app-input-field>
+        </div>
+      </div>
     </div>
+    <div class="satellite-container flex-fill">
+      <div class="search-header">{{"PLAN_TREE_HEADER" | translate}}</div>
+      <div class="plan-tree-container">
+        @for (oSatellite of m_aoSatelliteResources; track oSatellite) {
+          <app-plan-tree [m_oSatellite]="oSatellite"
+          (m_oSatelliteChange)="getSatelliteSelection($event)"></app-plan-tree>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="floating-buttons d-flex flex-row gap-2 w-100 justify-content-between">
+    <app-button [m_bMuted]="true" [m_sLabel]="'Clear Filters'" (click)="clearFilters()"></app-button>
+    <app-button class="flex-fill" [m_sLabel]="'Search'" [m_sIconLeft]="'search'"
+    (click)="executeSearch()"></app-button>
+  </div>
 </div>

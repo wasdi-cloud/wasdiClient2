@@ -1,43 +1,56 @@
-<div class="d-flex flex-column" style="padding-bottom:20px;" *ngFor="let oControl of getTabControls(); let i=index">
+@for (oControl of getTabControls(); track oControl; let i = $index) {
+  <div class="d-flex flex-column" style="padding-bottom:20px;">
     <!-- <label for="oControl">{{oControl.label}}</label> -->
     <!-- WAP Checkbox -->
-    <app-wap-check-box *ngIf="oControl.type === 'boolean'" [(m_oCheckboxDetails)]="getTabControls()[i]"
-        (getOutput)="logOutput($event)"></app-wap-check-box>
-
+    @if (oControl.type === 'boolean') {
+      <app-wap-check-box [(m_oCheckboxDetails)]="getTabControls()[i]"
+      (getOutput)="logOutput($event)"></app-wap-check-box>
+    }
     <!-- WAP Date Time Picker -->
-    <app-wap-date-time-picker *ngIf="oControl.type === 'date'" [(m_oDateControl)]="getTabControls()[i]"
-        (getDate)="logOutput($event)"></app-wap-date-time-picker>
-
+    @if (oControl.type === 'date') {
+      <app-wap-date-time-picker [(m_oDateControl)]="getTabControls()[i]"
+      (getDate)="logOutput($event)"></app-wap-date-time-picker>
+    }
     <!-- WAP Dropdown -->
-    <app-wap-dropdown *ngIf="oControl.type === 'dropdown'" (inputOptions)="getTabControls()[i].asListValues"
-        [(oControlInfo)]="getTabControls()[i]" (getSelectedOption)="logOutput($event)"></app-wap-dropdown>
-
+    @if (oControl.type === 'dropdown') {
+      <app-wap-dropdown (inputOptions)="getTabControls()[i].asListValues"
+      [(oControlInfo)]="getTabControls()[i]" (getSelectedOption)="logOutput($event)"></app-wap-dropdown>
+    }
     <!-- WAP Listbox -->
-    <app-wap-list-box *ngIf="oControl.type === 'listbox'" [(oListboxInput)]="getTabControls()[i]"
-        (getSelections)="logOutput($event)"></app-wap-list-box>
-
+    @if (oControl.type === 'listbox') {
+      <app-wap-list-box [(oListboxInput)]="getTabControls()[i]"
+      (getSelections)="logOutput($event)"></app-wap-list-box>
+    }
     <!-- WAP Numeric Box -->
-    <app-wap-numeric-box #numericBox *ngIf="oControl.type ==='numeric'" [(m_oNumericInfo)]="getTabControls()[i]"
-        (getUserInput)="logOutput($event)"></app-wap-numeric-box>
-
+    @if (oControl.type ==='numeric') {
+      <app-wap-numeric-box #numericBox [(m_oNumericInfo)]="getTabControls()[i]"
+      (getUserInput)="logOutput($event)"></app-wap-numeric-box>
+    }
     <!-- Wap Combo Products List  -->
-    <app-wap-products-combo *ngIf="oControl.type==='productscombo'" [m_aoProducts]="m_aoProductsArray"
-        [(m_oControlSelection)]="getTabControls()[i]"></app-wap-products-combo>
-
+    @if (oControl.type==='productscombo') {
+      <app-wap-products-combo [m_aoProducts]="m_aoProductsArray"
+      [(m_oControlSelection)]="getTabControls()[i]"></app-wap-products-combo>
+    }
     <!-- WAP Search EO Image -->
-    <app-wap-search-eo-image *ngIf="oControl.type ==='searcheoimage'"
-        [(m_oControlInput)]="getTabControls()[i]"></app-wap-search-eo-image>
-
+    @if (oControl.type ==='searcheoimage') {
+      <app-wap-search-eo-image
+      [(m_oControlInput)]="getTabControls()[i]"></app-wap-search-eo-image>
+    }
     <!-- WAP Select Area -->
-    <app-wap-select-area *ngIf="oControl.type ==='bbox'" [(m_oMapInput)]="getTabControls()[i]" [m_bParentTabActive]="m_bActiveTab"></app-wap-select-area>
-
+    @if (oControl.type ==='bbox') {
+      <app-wap-select-area [(m_oMapInput)]="getTabControls()[i]" [m_bParentTabActive]="m_bActiveTab"></app-wap-select-area>
+    }
     <!-- WAP Slider -->
-    <app-wap-slider *ngIf="oControl.type ==='slider'" [(m_oSliderInput)]="getTabControls()[i]"></app-wap-slider>
-
+    @if (oControl.type ==='slider') {
+      <app-wap-slider [(m_oSliderInput)]="getTabControls()[i]"></app-wap-slider>
+    }
     <!-- WAP Table -->
-    <app-wap-table *ngIf="oControl.type ==='table'" [(m_aoTableInput)]="getTabControls()[i]"></app-wap-table>
-
+    @if (oControl.type ==='table') {
+      <app-wap-table [(m_aoTableInput)]="getTabControls()[i]"></app-wap-table>
+    }
     <!-- WAP Textbox -->
-    <app-wap-textbox *ngIf="oControl.type ==='textbox'" [(m_oTextboxInfo)]="getTabControls()[i]"></app-wap-textbox>
-
-</div>
+    @if (oControl.type ==='textbox') {
+      <app-wap-textbox [(m_oTextboxInfo)]="getTabControls()[i]"></app-wap-textbox>
+    }
+  </div>
+}

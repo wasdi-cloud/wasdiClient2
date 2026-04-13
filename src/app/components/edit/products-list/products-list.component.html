@@ -1,52 +1,62 @@
 <div class="product-tree-container d-flex flex-column justify-content-start h-100" style="min-height: 10rem;">
-    <!-- Product Tree Header -->
-    <div class="products-header">
-        <div class="d-flex flex-column mb-2 gap-1">
-            <div class="d-flex flex-row gap-1">
-                <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlaceholder]="'Search in products list'"
-                    [m_sInputValue]="m_sSearchString" [m_bClearField]="true" (keyup)="getSearchString($event);"
-                    (m_oClearInput)="clearSearch()"></app-input-field>
-                <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
-                <app-button [matTooltip]="'Sort products'" [m_bOutline]="true" [m_sIconLeft]="'sort_by_alpha'"
-                    (click)="productSort()"></app-button>
-                <app-button [matTooltip]="'Select all'" [m_bOutline]="true" [m_sIconLeft]="'check_box'"
-                    (click)="selectAllProducts()"></app-button>
-            </div>
-        </div>
+  <!-- Product Tree Header -->
+  <div class="products-header">
+    <div class="d-flex flex-column mb-2 gap-1">
+      <div class="d-flex flex-row gap-1">
+        <app-input-field class="flex-fill" [m_sIconLeft]="'search'" [m_sPlaceholder]="'Search in products list'"
+          [m_sInputValue]="m_sSearchString" [m_bClearField]="true" (keyup)="getSearchString($event);"
+        (m_oClearInput)="clearSearch()"></app-input-field>
+        <app-button [m_sIconLeft]="'search'" (click)="executeSearch()"></app-button>
+        <app-button [matTooltip]="'Sort products'" [m_bOutline]="true" [m_sIconLeft]="'sort_by_alpha'"
+        (click)="productSort()"></app-button>
+        <app-button [matTooltip]="'Select all'" [m_bOutline]="true" [m_sIconLeft]="'check_box'"
+        (click)="selectAllProducts()"></app-button>
+      </div>
+    </div>
 
+  </div>
+  @if (m_bIsLoadingProducts === true) {
+    <app-invader></app-invader>
+  }
+  <!-- Product Tree -> Scrollable -->
+  @if (m_aoSelectedProducts.length > 0) {
+    <div class="btn-header d-flex flex-row align-items-start gap-2">
+      <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'download'"
+        [m_sLabel]="'DOWNLOAD ' + '[' + m_aoSelectedProducts.length + ']'"
+      (click)="downloadMultipleProducts()"></app-button>
+      <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'delete'"
+        [m_sLabel]="'DELETE ' + '[' + m_aoSelectedProducts.length + ']'"
+      (click)="deleteMultipleProducts()"></app-button>
+      <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'share'"
+        [m_sLabel]="'SHARE ' + '[' + m_aoSelectedProducts.length + ']'"
+      (click)="sendProductsToWorkspace()"></app-button>
     </div>
-    <app-invader *ngIf="m_bIsLoadingProducts === true"></app-invader>
-    <!-- Product Tree -> Scrollable -->
-    <div *ngIf="m_aoSelectedProducts.length > 0" class="btn-header d-flex flex-row align-items-start gap-2">
-        <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'download'"
-            [m_sLabel]="'DOWNLOAD ' + '[' + m_aoSelectedProducts.length + ']'"
-            (click)="downloadMultipleProducts()"></app-button>
-        <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'delete'"
-            [m_sLabel]="'DELETE ' + '[' + m_aoSelectedProducts.length + ']'"
-            (click)="deleteMultipleProducts()"></app-button>
-        <app-button [m_sSize]="'small'" [m_bOutline]="true" [m_sIconLeft]="'share'"
-            [m_sLabel]="'SHARE ' + '[' + m_aoSelectedProducts.length + ']'"
-            (click)="sendProductsToWorkspace()"></app-button>
-    </div>
+  }
+  @if (m_bIsLoadingProducts === false && (m_aoWorkspaceProductsList.length >0 )) {
     <div class="products-container flex-fill"
-        *ngIf="m_bIsLoadingProducts === false && (m_aoWorkspaceProductsList.length >0 )">
+      >
+      @for (oProduct of m_aoFilteredProducts; track oProduct; let iIndex = $index) {
         <app-product-list-item
           [m_oActiveWorkspace]="m_oActiveWorkspace"
-          *ngFor="let oProduct of m_aoFilteredProducts; let iIndex = index" [m_oProduct]="oProduct"
-            [m_bIsSelected]="oProduct.checked" (m_oProductChange)="handleBandSelection($event, iIndex)"
-            (m_oProductInfoChange)="emitProductInfoChange()"
-            (m_oProductSelectionChange)="getProductSelection($event)"></app-product-list-item>
+          [m_oProduct]="oProduct"
+          [m_bIsSelected]="oProduct.checked" (m_oProductChange)="handleBandSelection($event, iIndex)"
+          (m_oProductInfoChange)="emitProductInfoChange()"
+        (m_oProductSelectionChange)="getProductSelection($event)"></app-product-list-item>
+      }
     </div>
+  }
 
-    <!-- Buttons to import/search for products if there is no product -->
+  <!-- Buttons to import/search for products if there is no product -->
+  @if ((!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0) && !m_bIsLoadingProducts) {
     <div class="flex-fill"
-        *ngIf="(!m_aoWorkspaceProductsList || m_aoWorkspaceProductsList.length === 0) && !m_bIsLoadingProducts">
-        <p>{{'EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT' | translate}}</p>
-        <div class="d-flex flex-row gap-2">
-            <app-button [m_sLabel]="'Search'" [m_sIconLeft]="'search'" [m_sSize]="'large'"
-                (click)="navigateToSearchPage()"></app-button>
-            <app-button [m_sLabel]="'Import'" [m_sIconLeft]="'add'" [m_sSize]="'large'"
-                (click)="openImportDialog()"></app-button>
-        </div>
+      >
+      <p>{{'EDITOR_WIZARDS_HOW_TO_ADD_NEW_PRODUCT' | translate}}</p>
+      <div class="d-flex flex-row gap-2">
+        <app-button [m_sLabel]="'Search'" [m_sIconLeft]="'search'" [m_sSize]="'large'"
+        (click)="navigateToSearchPage()"></app-button>
+        <app-button [m_sLabel]="'Import'" [m_sIconLeft]="'add'" [m_sSize]="'large'"
+        (click)="openImportDialog()"></app-button>
+      </div>
     </div>
+  }
 </div>

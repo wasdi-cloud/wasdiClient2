@@ -5,18 +5,24 @@
       <div class="icon-container">
         <span class="file-name">{{ m_oData.oPayload.fileName}}</span>
         <span class="material-icons file-icon" style="cursor: pointer;" (click)="onDownload(this.m_oData.oPayload.fileName)">download</span>
-<!--        <span class="material-icons file-icon" style="cursor: pointer;" (click)="onDeleteAttachment()">delete</span>-->
+        <!--        <span class="material-icons file-icon" style="cursor: pointer;" (click)="onDeleteAttachment()">delete</span>-->
       </div>
     </div>
   </div>
-  <div *ngIf="m_oData.oPayload.type === 'image'" class="image-container">
-    <img [src]="m_oImageUrl" alt="Preview" class="image-preview">
-  </div>
-  <div *ngIf="m_oData.oPayload.type === 'pdf'">
-    <iframe  [src]="m_oPdfUrl" class="document-preview"></iframe>
-  </div>
+  @if (m_oData.oPayload.type === 'image') {
+    <div class="image-container">
+      <img [src]="m_oImageUrl" alt="Preview" class="image-preview">
+    </div>
+  }
+  @if (m_oData.oPayload.type === 'pdf') {
+    <div>
+      <iframe  [src]="m_oPdfUrl" class="document-preview"></iframe>
+    </div>
+  }
 
-  <div *ngIf="m_oData.oPayload.type === 'txt'">
-    <iframe  [src]="m_oPdfUrl" class="document-preview"></iframe>
-  </div>
+  @if (m_oData.oPayload.type === 'txt') {
+    <div>
+      <iframe  [src]="m_oPdfUrl" class="document-preview"></iframe>
+    </div>
+  }
 </div>

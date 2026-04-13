@@ -1,74 +1,100 @@
 <div class="secondary-nav d-flex flex-column gap-2">
-    <div class="d-flex flex-column justify-content-start mb-2 gap-2">
-        <div class="location-header">{{"ORBIT_INFO_RESULTS_HEADER" | translate}}</div>
-        <app-button class="align-self-start" [m_bOutline]="true" [m_sLabel]="'DIRECTIVE_DD_BACK'|translate"
-            [m_sIconLeft]="'arrow_back'" [m_sSize]="'small'" (click)="navigateToFilters()"></app-button>
-    </div>
-    <div class="d-flex flex-row justify-content-between">
-        <div class="search-header">{{'ORBIT_INFO_RESULTS' | translate}}</div>
-    </div>
-    <app-invader *ngIf="!m_bSearchResultsReceived"></app-invader>
-    <div class="satellite-container flex-fill" *ngIf="m_bSearchResultsReceived">
-        <div *ngIf="m_aoSearchOrbits" class="results-tree">
-            <div *ngFor="let oResult of m_aoSearchOrbits">
-                <div class="product d-flex flex-row align-items-center gap-4">
-                    <div class=" d-flex flex-row align-items-center">
-                        <span class="arrow-icon material-symbols-outlined" (click)="openNode(oResult)"
-                            *ngIf="!oResult.isOpen">
-                            arrow_right
-                        </span>
-                        <span class="arrow-icon material-symbols-outlined" (click)="openNode(oResult)"
-                            *ngIf="oResult.isOpen">
-                            arrow_drop_down
-                        </span>
-                        <span class="product-label-icon material-symbols-outlined">
-                            satellite_alt
-                        </span>
+  <div class="d-flex flex-column justify-content-start mb-2 gap-2">
+    <div class="location-header">{{"ORBIT_INFO_RESULTS_HEADER" | translate}}</div>
+    <app-button class="align-self-start" [m_bOutline]="true" [m_sLabel]="'DIRECTIVE_DD_BACK'|translate"
+    [m_sIconLeft]="'arrow_back'" [m_sSize]="'small'" (click)="navigateToFilters()"></app-button>
+  </div>
+  <div class="d-flex flex-row justify-content-between">
+    <div class="search-header">{{'ORBIT_INFO_RESULTS' | translate}}</div>
+  </div>
+  @if (!m_bSearchResultsReceived) {
+    <app-invader></app-invader>
+  }
+  @if (m_bSearchResultsReceived) {
+    <div class="satellite-container flex-fill">
+      @if (m_aoSearchOrbits) {
+        <div class="results-tree">
+          @for (oResult of m_aoSearchOrbits; track oResult) {
+            <div>
+              <div class="product d-flex flex-row align-items-center gap-4">
+                <div class=" d-flex flex-row align-items-center">
+                  @if (!oResult.isOpen) {
+                    <span class="arrow-icon material-symbols-outlined" (click)="openNode(oResult)"
+                      >
+                      arrow_right
+                    </span>
+                  }
+                  @if (oResult.isOpen) {
+                    <span class="arrow-icon material-symbols-outlined" (click)="openNode(oResult)"
+                      >
+                      arrow_drop_down
+                    </span>
+                  }
+                  <span class="product-label-icon material-symbols-outlined">
+                    satellite_alt
+                  </span>
+                  <p class="product-label">
+                  {{oResult.acquisitionStartTime}}</p>
+                </div>
+              </div>
+              @if (oResult.isOpen) {
+                <div class="product-bands-container">
+                  <ul class="container first-list">
+                    @for (oDirection of oResult.directions; track oDirection) {
+                      <li [class.direction-container]="oDirection.isOpen"
+                        >
                         <p class="product-label">
-                            {{oResult.acquisitionStartTime}}</p>
-                    </div>
-                </div>
-                <div class="product-bands-container" *ngIf="oResult.isOpen">
-                    <ul class="container first-list">
-                        <li [class.direction-container]="oDirection.isOpen"
-                            *ngFor="let oDirection of oResult.directions">
-                            <p class="product-label">
-                                <span class="arrow-icon material-symbols-outlined" *ngIf="!oDirection.isOpen"
-                                    (click)="openNode(oDirection)">
-                                    arrow_right
-                                </span>
-                                <span class="arrow-icon material-symbols-outlined" *ngIf="oDirection.isOpen"
-                                    (click)="openNode(oDirection)">
-                                    arrow_drop_down
-                                </span>
-                                {{oDirection.left? 'Left' : 'Right'}}
-                            </p>
-
-                            <div *ngIf="oDirection.isOpen && oDirection.left">
+                          @if (!oDirection.isOpen) {
+                            <span class="arrow-icon material-symbols-outlined"
+                              (click)="openNode(oDirection)">
+                              arrow_right
+                            </span>
+                          }
+                          @if (oDirection.isOpen) {
+                            <span class="arrow-icon material-symbols-outlined"
+                              (click)="openNode(oDirection)">
+                              arrow_drop_down
+                            </span>
+                          }
+                          {{oDirection.left? 'Left' : 'Right'}}
+                        </p>
+                        @if (oDirection.isOpen && oDirection.left) {
+                          <div>
+                            <ul>
+                              @for (oLeft of oDirection.left; track oLeft) {
+                                <li>
+                                  <p class="product-label d-flex flex-row align-items-center gap-1 ps-1">
+                                    <input type="checkbox" class="wasdi-checkbox" name="" id=""
+                                      (change)="toggleSelectedOrbit(oLeft)">
+                                      {{oLeft.swathName}}
+                                      <p>
+                                      </li>
+                                    }
+                                  </ul>
+                                </div>
+                              }
+                              @if (oDirection.isOpen && oDirection.right) {
                                 <ul>
-                                    <li *ngFor="let oLeft of oDirection.left">
-                                        <p class="product-label d-flex flex-row align-items-center gap-1 ps-1">
-                                            <input type="checkbox" class="wasdi-checkbox" name="" id=""
-                                                (change)="toggleSelectedOrbit(oLeft)">
-                                            {{oLeft.swathName}}
-
-                                        <p>
-                                    </li>
-                                </ul>
-                            </div>
-                            <ul *ngIf="oDirection.isOpen && oDirection.right">
-                                <li *ngFor="let oRight of oDirection.right">
-                                    <p class="product-label d-flex flex-row align-items-center gap-1 ps-1">
+                                  @for (oRight of oDirection.right; track oRight) {
+                                    <li>
+                                      <p class="product-label d-flex flex-row align-items-center gap-1 ps-1">
                                         <input type="checkbox" class="wasdi-checkbox" name="" id=""
-                                            (change)="toggleSelectedOrbit(oRight)">
-                                        {{oRight.swathName}}
-                                    </p>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                                          (change)="toggleSelectedOrbit(oRight)">
+                                          {{oRight.swathName}}
+                                        </p>
+                                      </li>
+                                    }
+                                  </ul>
+                                }
+                              </li>
+                            }
+                          </ul>
+                        </div>
+                      }
+                    </div>
+                  }
                 </div>
+              }
             </div>
+          }
         </div>
-    </div>
-</div>

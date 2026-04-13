@@ -1,45 +1,56 @@
 <div class="secondary-nav">
-    <div class="location-header">{{"IMPORT_SEARCH_RESULTS" | translate}}</div>
-    <app-button [m_sLabel]="'IMPORT_BACK_TO_SEARCH' | translate" [m_bOutline]="true" [m_sSize]="'small'"
-        [m_sIconLeft]="'arrow_back'" class="align-self-start" (click)="navigateBackToFilters()"></app-button>
-    <div class="d-flex flex-row justify-content-between">
-        <!-- <app-button class="align-self-start" [m_sLabel]="'Select All'" [m_bOutline]="true"
-            (click)="selectAllProducts()"></app-button> -->
-        <app-button [m_sLabel]="'MSG_ADD_TO_WS' | translate" [m_bOutline]="true" (click)="openAddToWorkspaceDialog()"
-            *ngIf="m_aoSelectedProducts.length > 0"></app-button>
+  <div class="location-header">{{"IMPORT_SEARCH_RESULTS" | translate}}</div>
+  <app-button [m_sLabel]="'IMPORT_BACK_TO_SEARCH' | translate" [m_bOutline]="true" [m_sSize]="'small'"
+  [m_sIconLeft]="'arrow_back'" class="align-self-start" (click)="navigateBackToFilters()"></app-button>
+  <div class="d-flex flex-row justify-content-between">
+    <!-- <app-button class="align-self-start" [m_sLabel]="'Select All'" [m_bOutline]="true"
+  (click)="selectAllProducts()"></app-button> -->
+  @if (m_aoSelectedProducts.length > 0) {
+    <app-button [m_sLabel]="'MSG_ADD_TO_WS' | translate" [m_bOutline]="true" (click)="openAddToWorkspaceDialog()"
+    ></app-button>
+  }
+</div>
+<div id="results-table" class="results-container">
+  <!-- Invader animation -->
+  @if (!m_aoProvidersList.length) {
+    <app-invader></app-invader>
+  }
+  @for (oProvider of m_aoProvidersList; track oProvider) {
+    <div id="{{'results-table' + oProvider.name}}">
+      <div class="mb-1 d-flex flex-column">
+        <app-list-item [m_bParentItem]="true" [m_sLabel]="oProvider.name"
+          [m_sDescription]="oProvider.totalOfProducts"
+          [m_bParentIsOpen]="(m_oActiveProvider.name === oProvider.name) && m_oActiveProvider.isOpen"
+          (m_oEmitClickEvent)="toggleActiveProviderOpen($event, oProvider)"
+          [m_bIsDisabled]="oProvider.totalOfProducts <= 0"
+        (click)="setActiveProvider(oProvider)"></app-list-item>
+        <!-- If there are no products -->
+        @if ((m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts <= 0) && m_oActiveProvider.isOpen) {
+          <div class="ps-1"
+            >
+            Could not find any products.
+          </div>
+        }
+        @if ((m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 0) && m_oActiveProvider.isOpen) {
+          <div class="d-flex flex-column gap-1 px-1"
+            >
+            <app-paginator (m_oClickEmitter)="handlePagination($event, oProvider.name)"
+              [m_bFullPaginator]="false" [m_iTotalItems]="oProvider.totalOfProducts"
+              [m_iItemsPerPage]="m_iItemsPerPage"
+            (m_iItemsPerPageChange)="changeNumberOfProductsPerPage($event)"></app-paginator>
+            @for (oProduct of m_aoProductsList; track oProduct) {
+              <app-list-item [m_bProductItem]="true" class="my-1"
+                [m_oProductListItem]="oProduct" [m_bIsSelected]="oProduct.selected"
+                [m_oInfoCallbackFn]="openProductInfoDialog" [m_oZoomCallbackFn]="zoomToProduct"
+                [m_oAddCallbackFn]="sendSingleProductToWorkspace" [m_bIsHovering]="oProduct.isHovering"
+                (mouseover)="changeRectangleStyleMouseOver(oProduct.rectangle)"
+                (mouseleave)="changeRectangleStyleMouseLeave(oProduct.rectangle)"
+              (click)="addProductSelectedProducts(oProduct)"></app-list-item>
+            }
+          </div>
+        }
+      </div>
     </div>
-    <div id="results-table" class="results-container">
-        <!-- Invader animation -->
-        <app-invader *ngIf="!m_aoProvidersList.length"></app-invader>
-        <div *ngFor="let oProvider of m_aoProvidersList" id="{{'results-table' + oProvider.name}}">
-            <div class="mb-1 d-flex flex-column">
-                <app-list-item [m_bParentItem]="true" [m_sLabel]="oProvider.name"
-                    [m_sDescription]="oProvider.totalOfProducts"
-                    [m_bParentIsOpen]="(m_oActiveProvider.name === oProvider.name) && m_oActiveProvider.isOpen"
-                    (m_oEmitClickEvent)="toggleActiveProviderOpen($event, oProvider)"
-                    [m_bIsDisabled]="oProvider.totalOfProducts <= 0"
-                    (click)="setActiveProvider(oProvider)"></app-list-item>
-                <!-- If there are no products -->
-                <div class="ps-1"
-                    *ngIf="(m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts <= 0) && m_oActiveProvider.isOpen">
-                    Could not find any products.
-                </div>
-
-                <div class="d-flex flex-column gap-1 px-1"
-                    *ngIf="(m_oActiveProvider.name === oProvider.name && oProvider.totalOfProducts > 0) && m_oActiveProvider.isOpen">
-                    <app-paginator (m_oClickEmitter)="handlePagination($event, oProvider.name)"
-                        [m_bFullPaginator]="false" [m_iTotalItems]="oProvider.totalOfProducts"
-                        [m_iItemsPerPage]="m_iItemsPerPage"
-                        (m_iItemsPerPageChange)="changeNumberOfProductsPerPage($event)"></app-paginator>
-                    <app-list-item *ngFor="let oProduct of m_aoProductsList" [m_bProductItem]="true" class="my-1"
-                        [m_oProductListItem]="oProduct" [m_bIsSelected]="oProduct.selected"
-                        [m_oInfoCallbackFn]="openProductInfoDialog" [m_oZoomCallbackFn]="zoomToProduct"
-                        [m_oAddCallbackFn]="sendSingleProductToWorkspace" [m_bIsHovering]="oProduct.isHovering"
-                        (mouseover)="changeRectangleStyleMouseOver(oProduct.rectangle)"
-                        (mouseleave)="changeRectangleStyleMouseLeave(oProduct.rectangle)"
-                        (click)="addProductSelectedProducts(oProduct)"></app-list-item>
-                </div>
-            </div>
-        </div>
-    </div>
+  }
+</div>
 </div>

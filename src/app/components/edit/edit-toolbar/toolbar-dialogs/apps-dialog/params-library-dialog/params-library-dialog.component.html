@@ -1,101 +1,116 @@
 <div class="dialog-content d-flex flex-row w-100 h-100 gap-3">
-    <div class="templates-container flex-fill d-flex flex-column gap-2 h-100">
-        <div class="d-flex flex-row justify-content-between align-items-center">
-            <div class="primary-header font-bold align-items-center d-flex flex-row gap-3">
-                <app-button [m_sLabel]="'Back'" [m_sIconLeft]="'arrow_back'" [m_bOutline]="true" [m_sSize]="'small'"
-                    (click)="onDismiss()"></app-button>
-                {{"DIALOG_PARAMS_TITLE" | translate}}
-            </div>
-            <div>
-                <app-button [m_sLabel]="'New template'" (click)=" addProcessorParams()"></app-button>
-            </div>
-        </div>
-        <div class="">
-            <div class="secondary-header font-bold">{{ "DIALOG_PARAMS_SELECTED_APP" | translate}}</div>
-            {{m_oSelectedProcessor.processorName}}
-        </div>
-        <div class="align-self-stretch">
-            <div>{{"DIALOG_PARAMS_FILTER_HELP"| translate}}</div>
-            <app-input-field [m_sPlaceholder]="'DIALOG_PARAMS_SEARCH_PARAM' | translate" [m_sIconLeft]="'search'"
-                (m_oInputChange)="getInputValues('search', $event)"></app-input-field>
-        </div>
-        <div class="table-wrapper">
-            <table>
-                <thead class="table-heading-container">
-                    <tr>
-                        <td>{{"DIALOG_PARAMS_NAME" | translate}}</td>
-                        <td>{{"DIALOG_PARAMS_PUBLISHER" | translate}}</td>
-                        <td>{{"WAP_LAST_UPDATE"| translate}}</td>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr (click)="viewProcessorParams(oParameter)" class="table-row"
-                        *ngFor="let oParameter of m_aoParametersTemplateList | filter: m_sSearchString"
-                        [class.selected]="oParameter.selected">
-                        <td>{{oParameter.name}}</td>
-                        <td>{{oParameter.userId}}</td>
-                        <td>{{oParameter.updateDate | date: 'dd/MM/yyyy'}}</td>
-                        <td class="d-flex flex-row justify-content-end gap-1">
-                            <span *ngIf="isOwner(oParameter) || oParameter.readOnly === false"
-                                class="material-symbols-outlined" (click)="showShareForm()">
-                                share
-                            </span>
-                            <span (click)="applyProcessorParams(oParameter.templateId)"
-                                class="material-symbols-outlined">
-                                play_circle
-                            </span>
-                            <span (click)="deleteProcessorParams(oParameter)" *ngIf="isOwner(oParameter)"
-                                class="material-symbols-outlined">
-                                delete
-                            </span>
-                            <span (click)="deleteProcessorParams(oParameter)" *ngIf="!isOwner(oParameter)"
-                                class="material-symbols-outlined">
-                                logout
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="templates-container flex-fill d-flex flex-column gap-2 h-100">
+    <div class="d-flex flex-row justify-content-between align-items-center">
+      <div class="primary-header font-bold align-items-center d-flex flex-row gap-3">
+        <app-button [m_sLabel]="'Back'" [m_sIconLeft]="'arrow_back'" [m_bOutline]="true" [m_sSize]="'small'"
+        (click)="onDismiss()"></app-button>
+        {{"DIALOG_PARAMS_TITLE" | translate}}
+      </div>
+      <div>
+        <app-button [m_sLabel]="'New template'" (click)=" addProcessorParams()"></app-button>
+      </div>
     </div>
-    <div [class.hidden]="!m_bShowJsonForm" class="json-container d-flex flex-column h-100 gap-3">
-        <div *ngIf="m_oSelectedTemplate" class="json-header d-flex flex-column gap-3">
-            <app-input-field [m_sLabel]="'DIALOG_PARAMS_TEMPLATE_NAME' | translate"
-                [m_sInputValue]="m_oSelectedTemplate.name" [m_bIsDisabled]="m_oSelectedTemplate.readOnly === true"
-                [m_bIsReadonly]="m_oSelectedTemplate.readOnly === true"
-                (m_oInputChange)="getInputValues('name', $event)"></app-input-field>
-            <div class="textarea-wrapper">
-                <app-textarea [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate"
-                    [m_bIsDisabled]="m_oSelectedTemplate.readOnly === true"
-                    [m_bIsReadonly]="m_oSelectedTemplate.readOnly === true"
-                    [m_sInputString]="m_oSelectedTemplate.description"
-                    (keyup)="getInputValues('description', $event)"></app-textarea>
-            </div>
-        </div>
-        <div class="json-body flex-fill d-flex flex-column">
-            <div class="secondary-header font-bold pb-2">Parameters</div>
-            <div class="flex-fill">
-                <div #editor class="json-editor" style="height: 100%;" (keyup)="getJSONInput($event)"></div>
-            </div>
-        </div>
-        <div class="footer d-flex flex-row justify-content-between gap-2">
-            <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" *ngIf="m_bShowCreateForm" [m_bOutline]="true"
-                (click)="viewProcessorParams(this.m_aoParametersTemplateList[0])"></app-button>
-            <div class="d-flex flex-fill flex-row justify-content-end gap-2">
-                <app-button *ngIf="m_oSelectedTemplate && (m_oSelectedTemplate.readOnly === false || m_bShowCreateForm)"
-                    [m_bDisabled]="(!m_oSelectedTemplate.name || !m_sParametersString)"
-                    [m_sLabel]="'KEY_PHRASES.SAVE' | translate"
-                    (click)="m_oSelectedTemplate.name && m_sParametersString ? saveProcessorParam() :''"></app-button>
-                <app-button [m_sLabel]="'KEY_PHRASES.APPLY' | translate" [m_bDisabled]="m_bEditMode"
-                    (click)="applyProcessorParams(this.m_oSelectedTemplate.templateId)"></app-button>
-            </div>
-        </div>
+    <div class="">
+      <div class="secondary-header font-bold">{{ "DIALOG_PARAMS_SELECTED_APP" | translate}}</div>
+      {{m_oSelectedProcessor.processorName}}
     </div>
-    <div *ngIf="m_bShowShareForm" class="json-container d-flex flex-column flex-fill ms-2">
-        <div class="json-header font-bold mb-2">{{"DIALOG_PARAMS_SHARE_CTA" | translate}}</div>
-        <div class="share-container">
-            <app-share-ui [resource]="m_oSelectedTemplate" [resourceType]="'PROCESSORPARAMETERSTEMPLATE'"></app-share-ui>
-        </div>
+    <div class="align-self-stretch">
+      <div>{{"DIALOG_PARAMS_FILTER_HELP"| translate}}</div>
+      <app-input-field [m_sPlaceholder]="'DIALOG_PARAMS_SEARCH_PARAM' | translate" [m_sIconLeft]="'search'"
+      (m_oInputChange)="getInputValues('search', $event)"></app-input-field>
     </div>
+    <div class="table-wrapper">
+      <table>
+        <thead class="table-heading-container">
+          <tr>
+            <td>{{"DIALOG_PARAMS_NAME" | translate}}</td>
+            <td>{{"DIALOG_PARAMS_PUBLISHER" | translate}}</td>
+            <td>{{"WAP_LAST_UPDATE"| translate}}</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          @for (oParameter of m_aoParametersTemplateList | filter: m_sSearchString; track oParameter) {
+            <tr (click)="viewProcessorParams(oParameter)" class="table-row"
+              [class.selected]="oParameter.selected">
+              <td>{{oParameter.name}}</td>
+              <td>{{oParameter.userId}}</td>
+              <td>{{oParameter.updateDate | date: 'dd/MM/yyyy'}}</td>
+              <td class="d-flex flex-row justify-content-end gap-1">
+                @if (isOwner(oParameter) || oParameter.readOnly === false) {
+                  <span
+                    class="material-symbols-outlined" (click)="showShareForm()">
+                    share
+                  </span>
+                }
+                <span (click)="applyProcessorParams(oParameter.templateId)"
+                  class="material-symbols-outlined">
+                  play_circle
+                </span>
+                @if (isOwner(oParameter)) {
+                  <span (click)="deleteProcessorParams(oParameter)"
+                    class="material-symbols-outlined">
+                    delete
+                  </span>
+                }
+                @if (!isOwner(oParameter)) {
+                  <span (click)="deleteProcessorParams(oParameter)"
+                    class="material-symbols-outlined">
+                    logout
+                  </span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div [class.hidden]="!m_bShowJsonForm" class="json-container d-flex flex-column h-100 gap-3">
+    @if (m_oSelectedTemplate) {
+      <div class="json-header d-flex flex-column gap-3">
+        <app-input-field [m_sLabel]="'DIALOG_PARAMS_TEMPLATE_NAME' | translate"
+          [m_sInputValue]="m_oSelectedTemplate.name" [m_bIsDisabled]="m_oSelectedTemplate.readOnly === true"
+          [m_bIsReadonly]="m_oSelectedTemplate.readOnly === true"
+        (m_oInputChange)="getInputValues('name', $event)"></app-input-field>
+        <div class="textarea-wrapper">
+          <app-textarea [m_sLabel]="'KEY_PHRASES.DESCRIPTION' | translate"
+            [m_bIsDisabled]="m_oSelectedTemplate.readOnly === true"
+            [m_bIsReadonly]="m_oSelectedTemplate.readOnly === true"
+            [m_sInputString]="m_oSelectedTemplate.description"
+          (keyup)="getInputValues('description', $event)"></app-textarea>
+        </div>
+      </div>
+    }
+    <div class="json-body flex-fill d-flex flex-column">
+      <div class="secondary-header font-bold pb-2">Parameters</div>
+      <div class="flex-fill">
+        <div #editor class="json-editor" style="height: 100%;" (keyup)="getJSONInput($event)"></div>
+      </div>
+    </div>
+    <div class="footer d-flex flex-row justify-content-between gap-2">
+      @if (m_bShowCreateForm) {
+        <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bOutline]="true"
+        (click)="viewProcessorParams(this.m_aoParametersTemplateList[0])"></app-button>
+      }
+      <div class="d-flex flex-fill flex-row justify-content-end gap-2">
+        @if (m_oSelectedTemplate && (m_oSelectedTemplate.readOnly === false || m_bShowCreateForm)) {
+          <app-button
+            [m_bDisabled]="(!m_oSelectedTemplate.name || !m_sParametersString)"
+            [m_sLabel]="'KEY_PHRASES.SAVE' | translate"
+          (click)="m_oSelectedTemplate.name && m_sParametersString ? saveProcessorParam() :''"></app-button>
+        }
+        <app-button [m_sLabel]="'KEY_PHRASES.APPLY' | translate" [m_bDisabled]="m_bEditMode"
+        (click)="applyProcessorParams(this.m_oSelectedTemplate.templateId)"></app-button>
+      </div>
+    </div>
+  </div>
+  @if (m_bShowShareForm) {
+    <div class="json-container d-flex flex-column flex-fill ms-2">
+      <div class="json-header font-bold mb-2">{{"DIALOG_PARAMS_SHARE_CTA" | translate}}</div>
+      <div class="share-container">
+        <app-share-ui [resource]="m_oSelectedTemplate" [resourceType]="'PROCESSORPARAMETERSTEMPLATE'"></app-share-ui>
+      </div>
+    </div>
+  }
 </div>

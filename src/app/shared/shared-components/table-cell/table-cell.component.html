@@ -1,3 +1,5 @@
 <td>
-    <div *ngIf="m_sLabel" [class.category-tag]="m_bIsTag" [ngClass]="m_sTagColor">{{m_sLabel | translate}}</div>
+  @if (m_sLabel) {
+    <div [class.category-tag]="m_bIsTag" [ngClass]="m_sTagColor">{{m_sLabel | translate}}</div>
+  }
 </td>

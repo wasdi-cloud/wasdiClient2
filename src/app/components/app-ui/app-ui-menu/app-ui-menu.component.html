@@ -1,41 +1,55 @@
 <div class="menu-container">
-    <div>
-        <div class="menu-header">{{"DIALOG_PROCESSOR_TAB_UI" | translate}}</div>
-        <ul>
-            <li *ngFor="let oTab of m_aoTabs" [class.active]="m_sActiveTab === oTab.name"
-                (click)="setActiveTab(oTab.name)">{{oTab.name}}</li>
-            <li [class.active]="m_sActiveTab === 'help'" (click)="setActiveTab('help')">Help</li>
-            <li [class.active]="m_sActiveTab === 'history'" (click)="setActiveTab('history')">History</li>
-            <li [class.active]="m_sActiveTab === 'json'" (click)="setActiveTab('json')">JSON</li>
-        </ul>
-    </div>
-    <div>
-        <div class="menu-header">{{'APP_UI_RUN_APP_LABEL' | translate}}</div>
-        <div class="run-app-container">
-            <div class="d-flex flex-row align-items-center gap-1">
-                <input type="checkbox" class="wasdi-checkbox" checked="true" name="IsNew"
-                    (change)="newOrExistingWorkspaceChanged()">
-                <label for="IsNew" *ngIf="m_bRunInNewWorkspace">{{'APP_UI_NEW_EXISTING_WS_CHECK_1' | translate}}</label>
-                <label for="IsNew" *ngIf="!m_bRunInNewWorkspace">{{'APP_UI_NEW_EXISTING_WS_CHECK_2' |
-                    translate}}</label>
-            </div>
-            <app-autocomplete [m_aoInputs]="m_aoWorkspaces" *ngIf="!m_bRunInNewWorkspace"
-                (m_oSelectionChange)="getSelectedWorkspace($event)"
-                [m_sPlaceholder]="m_oActiveWorkspace.name ? m_oActiveWorkspace.name : 'APP_UI_SEARCH_WS' | translate"></app-autocomplete>
-            <app-input-field *ngIf="m_bRunInNewWorkspace"
-                [m_sPlaceholder]="'APP_UI_AUTOMATIC_NAME_PLACEHOLDER' | translate"
-                (m_oInputChange)="m_sNewWorkspaceName = $event.event.target.value"></app-input-field>
-            <app-button *ngIf="m_bIsPurchased" [m_sLabel]="'APP_UI_OPEN_WS' | translate" [m_sSize]="'large'"
-                (click)="executeApp()"></app-button>
-            <app-button *ngIf="!m_bIsPurchased" [m_sLabel]="'APP_UI_PURCHASE' | translate"
-                [m_sIconLeft]="'rocket_launch'" [m_sSize]="'large'" (click)="saveAppPurchase()"></app-button>
+  <div>
+    <div class="menu-header">{{"DIALOG_PROCESSOR_TAB_UI" | translate}}</div>
+    <ul>
+      @for (oTab of m_aoTabs; track oTab) {
+        <li [class.active]="m_sActiveTab === oTab.name"
+        (click)="setActiveTab(oTab.name)">{{oTab.name}}</li>
+      }
+      <li [class.active]="m_sActiveTab === 'help'" (click)="setActiveTab('help')">Help</li>
+      <li [class.active]="m_sActiveTab === 'history'" (click)="setActiveTab('history')">History</li>
+      <li [class.active]="m_sActiveTab === 'json'" (click)="setActiveTab('json')">JSON</li>
+    </ul>
+  </div>
+  <div>
+    <div class="menu-header">{{'APP_UI_RUN_APP_LABEL' | translate}}</div>
+    <div class="run-app-container">
+      <div class="d-flex flex-row align-items-center gap-1">
+        <input type="checkbox" class="wasdi-checkbox" checked="true" name="IsNew"
+          (change)="newOrExistingWorkspaceChanged()">
+          @if (m_bRunInNewWorkspace) {
+            <label for="IsNew">{{'APP_UI_NEW_EXISTING_WS_CHECK_1' | translate}}</label>
+          }
+          @if (!m_bRunInNewWorkspace) {
+            <label for="IsNew">{{'APP_UI_NEW_EXISTING_WS_CHECK_2' |
+            translate}}</label>
+          }
         </div>
-        <div class="notification-container d-flex flex-row align-items-center gap-2 pt-2">
-            <input type="checkbox" class="wasdi-checkbox" name="bNotify" id="" [(ngModel)]="m_bNotification">
-            <label for="bNotify">Notification </label>
-            <span (click)="openNotificationHelp()" class="help-icon material-symbols-outlined">
-                help
-            </span>
-        </div>
+        @if (!m_bRunInNewWorkspace) {
+          <app-autocomplete [m_aoInputs]="m_aoWorkspaces"
+            (m_oSelectionChange)="getSelectedWorkspace($event)"
+          [m_sPlaceholder]="m_oActiveWorkspace.name ? m_oActiveWorkspace.name : 'APP_UI_SEARCH_WS' | translate"></app-autocomplete>
+        }
+        @if (m_bRunInNewWorkspace) {
+          <app-input-field
+            [m_sPlaceholder]="'APP_UI_AUTOMATIC_NAME_PLACEHOLDER' | translate"
+          (m_oInputChange)="m_sNewWorkspaceName = $event.event.target.value"></app-input-field>
+        }
+        @if (m_bIsPurchased) {
+          <app-button [m_sLabel]="'APP_UI_OPEN_WS' | translate" [m_sSize]="'large'"
+          (click)="executeApp()"></app-button>
+        }
+        @if (!m_bIsPurchased) {
+          <app-button [m_sLabel]="'APP_UI_PURCHASE' | translate"
+          [m_sIconLeft]="'rocket_launch'" [m_sSize]="'large'" (click)="saveAppPurchase()"></app-button>
+        }
+      </div>
+      <div class="notification-container d-flex flex-row align-items-center gap-2 pt-2">
+        <input type="checkbox" class="wasdi-checkbox" name="bNotify" id="" [(ngModel)]="m_bNotification">
+        <label for="bNotify">Notification </label>
+        <span (click)="openNotificationHelp()" class="help-icon material-symbols-outlined">
+          help
+        </span>
+      </div>
     </div>
-</div>
+  </div>
