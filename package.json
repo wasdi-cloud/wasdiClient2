@@ -24,7 +24,6 @@
     "@auth0/angular-jwt": "^5.1.2",
     "@bluehalo/ngx-leaflet": "^19.0.0",
     "@bluehalo/ngx-leaflet-draw": "^19.0.0",
-    "@nasaworldwind/worldwind": "^0.11.1",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
     "@popperjs/core": "^2.11.6",
