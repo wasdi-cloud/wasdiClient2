@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login-redirect',
-  template: ''
+    selector: 'app-login-redirect',
+    template: '',
+    standalone: false
 })
 export class LoginRedirectComponent implements OnInit {
 

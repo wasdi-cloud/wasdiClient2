@@ -24,9 +24,10 @@ export interface SearchFilter {
 
 //PROCESSES BAR (WHEN BAR IS CLOSED): 
 @Component({
-  selector: 'app-processes-bar',
-  templateUrl: './processes-bar.component.html',
-  styleUrls: ['./processes-bar.component.css'],
+    selector: 'app-processes-bar',
+    templateUrl: './processes-bar.component.html',
+    styleUrls: ['./processes-bar.component.css'],
+    standalone: false
 })
 export class ProcessesBarComponent implements OnInit, OnDestroy {
   @Input() m_oActiveWorkspace?: any = {};

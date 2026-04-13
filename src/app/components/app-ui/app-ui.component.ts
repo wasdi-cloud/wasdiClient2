@@ -36,10 +36,11 @@ export interface Application {
   votes: number,
 }
 @Component({
-  selector: 'app-app-ui',
-  templateUrl: './app-ui.component.html',
-  styleUrls: ['./app-ui.component.css'],
-  host: { "class": "flex-fill" }
+    selector: 'app-app-ui',
+    templateUrl: './app-ui.component.html',
+    styleUrls: ['./app-ui.component.css'],
+    host: { "class": "flex-fill" },
+    standalone: false
 })
 export class AppUiComponent implements OnInit {
   @ViewChild(WapDirective, { static: true }) appWap!: WapDirective;

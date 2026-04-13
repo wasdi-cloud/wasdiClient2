@@ -21,9 +21,10 @@ export class SearchResultNode {
 }
 
 @Component({
-  selector: 'app-search-orbit-results',
-  templateUrl: './search-orbit-results.component.html',
-  styleUrls: ['./search-orbit-results.component.css']
+    selector: 'app-search-orbit-results',
+    templateUrl: './search-orbit-results.component.html',
+    styleUrls: ['./search-orbit-results.component.css'],
+    standalone: false
 })
 
 export class SearchOrbitResultsComponent implements OnChanges {

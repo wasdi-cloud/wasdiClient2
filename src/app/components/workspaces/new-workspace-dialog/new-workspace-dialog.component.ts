@@ -9,9 +9,10 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 @Component({
-  selector: 'app-new-workspace-dialog',
-  templateUrl: './new-workspace-dialog.component.html',
-  styleUrls: ['./new-workspace-dialog.component.css']
+    selector: 'app-new-workspace-dialog',
+    templateUrl: './new-workspace-dialog.component.html',
+    styleUrls: ['./new-workspace-dialog.component.css'],
+    standalone: false
 })
 export class NewWorkspaceDialogComponent implements OnInit {
   m_bIsEditingWorkspaceName: boolean = false;

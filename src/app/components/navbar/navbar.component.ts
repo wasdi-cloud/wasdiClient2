@@ -24,9 +24,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.css'],
+    standalone: false
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   m_bIsNavbarOpen: boolean = false;

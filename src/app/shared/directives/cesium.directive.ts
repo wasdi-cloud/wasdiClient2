@@ -3,7 +3,8 @@ import { Directive, OnInit, ElementRef } from '@angular/core';
 declare const Cesium: any;
 
 @Directive({
-  selector: '[appCesium]'
+    selector: '[appCesium]',
+    standalone: false
 })
 export class CesiumDirective implements OnInit{
 

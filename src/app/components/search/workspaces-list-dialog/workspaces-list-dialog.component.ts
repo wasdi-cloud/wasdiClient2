@@ -12,9 +12,10 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
-  selector: 'app-workspaces-list-dialog',
-  templateUrl: './workspaces-list-dialog.component.html',
-  styleUrls: ['./workspaces-list-dialog.component.css']
+    selector: 'app-workspaces-list-dialog',
+    templateUrl: './workspaces-list-dialog.component.html',
+    styleUrls: ['./workspaces-list-dialog.component.css'],
+    standalone: false
 })
 export class WorkspacesListDialogComponent implements OnInit {
   /**

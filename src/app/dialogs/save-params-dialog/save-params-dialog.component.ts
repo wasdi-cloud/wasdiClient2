@@ -6,9 +6,10 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
-  selector: 'app-save-params-dialog',
-  templateUrl: './save-params-dialog.component.html',
-  styleUrls: ['./save-params-dialog.component.css']
+    selector: 'app-save-params-dialog',
+    templateUrl: './save-params-dialog.component.html',
+    styleUrls: ['./save-params-dialog.component.css'],
+    standalone: false
 })
 export class SaveParamsDialogComponent implements OnInit {
   m_sParametersString: string = "";

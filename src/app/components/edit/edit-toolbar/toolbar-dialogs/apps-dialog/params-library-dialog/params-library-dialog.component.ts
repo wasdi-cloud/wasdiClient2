@@ -16,9 +16,10 @@ import { ProcessorParamsTemplateService } from 'src/app/services/api/processor-p
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
-  selector: 'app-params-library-dialog',
-  templateUrl: './params-library-dialog.component.html',
-  styleUrls: ['./params-library-dialog.component.css']
+    selector: 'app-params-library-dialog',
+    templateUrl: './params-library-dialog.component.html',
+    styleUrls: ['./params-library-dialog.component.css'],
+    standalone: false
 })
 export class ParamsLibraryDialogComponent implements OnChanges, AfterViewInit {
   @ViewChild('editor') m_oEditorRef!: ElementRef;

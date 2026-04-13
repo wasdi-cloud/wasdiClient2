@@ -5,9 +5,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import * as L from 'leaflet';
 
 @Component({
-  selector: 'app-plan-map',
-  templateUrl: './plan-map.component.html',
-  styleUrls: ['./plan-map.component.css']
+    selector: 'app-plan-map',
+    templateUrl: './plan-map.component.html',
+    styleUrls: ['./plan-map.component.css'],
+    standalone: false
 })
 export class PlanMapComponent implements OnInit, AfterViewChecked {
 

@@ -14,9 +14,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 
 @Component({
-  selector: 'app-edit-subscription-dialog',
-  templateUrl: './edit-subscription-dialog.component.html',
-  styleUrls: ['./edit-subscription-dialog.component.css']
+    selector: 'app-edit-subscription-dialog',
+    templateUrl: './edit-subscription-dialog.component.html',
+    styleUrls: ['./edit-subscription-dialog.component.css'],
+    standalone: false
 })
 export class EditSubscriptionDialogComponent implements OnInit {
   m_oUser = this.m_oConstantsService.getUser();

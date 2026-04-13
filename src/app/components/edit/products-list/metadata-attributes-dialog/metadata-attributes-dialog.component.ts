@@ -2,9 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-metadata-attributes-dialog',
-  templateUrl: './metadata-attributes-dialog.component.html',
-  styleUrls: ['./metadata-attributes-dialog.component.css']
+    selector: 'app-metadata-attributes-dialog',
+    templateUrl: './metadata-attributes-dialog.component.html',
+    styleUrls: ['./metadata-attributes-dialog.component.css'],
+    standalone: false
 })
 export class MetadataAttributesDialogComponent implements OnInit {
   m_oElement: any = null

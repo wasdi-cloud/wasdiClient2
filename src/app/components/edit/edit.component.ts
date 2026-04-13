@@ -25,10 +25,11 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-edit',
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-edit',
+    templateUrl: './edit.component.html',
+    styleUrls: ['./edit.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 export class EditComponent implements OnInit, OnDestroy {
 

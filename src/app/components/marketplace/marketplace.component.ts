@@ -27,10 +27,11 @@ interface AppFilter {
 }
 
 @Component({
-  selector: 'app-marketplace',
-  templateUrl: './marketplace.component.html',
-  styleUrls: ['./marketplace.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-marketplace',
+    templateUrl: './marketplace.component.html',
+    styleUrls: ['./marketplace.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 export class MarketplaceComponent implements OnInit {
   m_sPublisher: string;

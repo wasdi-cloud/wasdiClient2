@@ -14,10 +14,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
-  selector: 'app-login-coplac',
-  templateUrl: './login-coplac.component.html',
-  styleUrls: ['./login-coplac.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-login-coplac',
+    templateUrl: './login-coplac.component.html',
+    styleUrls: ['./login-coplac.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 export class LoginCoplacComponent {
 form: any = {

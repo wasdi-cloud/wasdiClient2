@@ -6,10 +6,11 @@ import FadeoutUtils from "../../../lib/utils/FadeoutJSUtils";
 import {CreditsService} from "../../../services/api/credits.service";
 
 @Component({
-  selector: 'app-payment-success',
-  templateUrl: './payment-success.component.html',
-  styleUrls: ['./payment-success.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-payment-success',
+    templateUrl: './payment-success.component.html',
+    styleUrls: ['./payment-success.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 export class PaymentSuccessComponent implements OnInit{
   m_sCheckoutCode:string;

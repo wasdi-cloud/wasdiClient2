@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-wap-table',
-  templateUrl: './wap-table.component.html',
-  styleUrls: ['./wap-table.component.css']
+    selector: 'app-wap-table',
+    templateUrl: './wap-table.component.html',
+    styleUrls: ['./wap-table.component.css'],
+    standalone: false
 })
 export class WapTableComponent {
   @Input() m_aoTableInput: any;

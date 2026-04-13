@@ -23,9 +23,10 @@ import {MapService} from "../../../services/map.service";
 
 
 @Component({
-  selector: 'app-edit-toolbar',
-  templateUrl: './edit-toolbar.component.html',
-  styleUrls: ['./edit-toolbar.component.css']
+    selector: 'app-edit-toolbar',
+    templateUrl: './edit-toolbar.component.html',
+    styleUrls: ['./edit-toolbar.component.css'],
+    standalone: false
 })
 export class EditToolbarComponent implements OnInit, OnDestroy {
   @Input() m_aoProducts: Product[];

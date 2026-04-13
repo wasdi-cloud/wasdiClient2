@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-wap-textbox',
-  templateUrl: './wap-textbox.component.html',
-  styleUrls: ['./wap-textbox.component.css']
+    selector: 'app-wap-textbox',
+    templateUrl: './wap-textbox.component.html',
+    styleUrls: ['./wap-textbox.component.css'],
+    standalone: false
 })
 export class WapTextboxComponent {
   /**

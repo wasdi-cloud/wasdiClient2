@@ -10,9 +10,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 
 @Component({
-  selector: 'app-package-manager',
-  templateUrl: './package-manager.component.html',
-  styleUrls: ['./package-manager.component.css']
+    selector: 'app-package-manager',
+    templateUrl: './package-manager.component.html',
+    styleUrls: ['./package-manager.component.css'],
+    standalone: false
 })
 export class PackageManagerComponent implements OnInit, OnDestroy {
   @Input() m_oProcessorInfo: any = null;

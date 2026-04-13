@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 
 @Component({
-  selector: 'app-wap-slider',
-  templateUrl: './wap-slider.component.html',
-  styleUrls: ['./wap-slider.component.css']
+    selector: 'app-wap-slider',
+    templateUrl: './wap-slider.component.html',
+    styleUrls: ['./wap-slider.component.css'],
+    standalone: false
 })
 export class WapSliderComponent implements OnInit{
   @Input() m_oSliderInput: any;

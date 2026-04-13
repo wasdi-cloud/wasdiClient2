@@ -10,9 +10,10 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { AuthService } from 'src/app/auth/service/auth.service';
 
 @Component({
-  selector: 'app-marketplace-filters',
-  templateUrl: './marketplace-filters.component.html',
-  styleUrls: ['./marketplace-filters.component.css'],
+    selector: 'app-marketplace-filters',
+    templateUrl: './marketplace-filters.component.html',
+    styleUrls: ['./marketplace-filters.component.css'],
+    standalone: false
 })
 export class MarketplaceFiltersComponent implements OnInit {
   m_asCategoryOptions: Array<any> = [];

@@ -4,10 +4,11 @@ import { OrganizationsService } from 'src/app/services/api/organizations.service
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-admin',
+    templateUrl: './admin.component.html',
+    styleUrls: ['./admin.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 export class AdminComponent implements OnInit {
   m_sActiveTab: string = 'account';

@@ -2,9 +2,10 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-share-dialog',
-  templateUrl: './share-dialog.component.html',
-  styleUrls: ['./share-dialog.component.css']
+    selector: 'app-share-dialog',
+    templateUrl: './share-dialog.component.html',
+    styleUrls: ['./share-dialog.component.css'],
+    standalone: false
 })
 export class ShareDialogComponent {
   title: string;

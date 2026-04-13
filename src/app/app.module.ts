@@ -1,4 +1,4 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, inject, provideAppInitializer } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
@@ -359,12 +359,10 @@ import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.
         MatNativeDateModule,
         EnvService,
         { provide: RabbitStompService },
-        {
-            provide: APP_INITIALIZER,
-            useFactory: initializeKeycloak,
-            multi: true,
-            deps: [KeycloakService, EnvService],
-        },
+        provideAppInitializer(() => {
+        const initializerFn = (initializeKeycloak)(inject(KeycloakService), inject(EnvService));
+        return initializerFn();
+      }),
         { provide: MatBottomSheetRef, useValue: {} },
         ...provideTranslateHttpLoader({
             prefix: './assets/i18n/',

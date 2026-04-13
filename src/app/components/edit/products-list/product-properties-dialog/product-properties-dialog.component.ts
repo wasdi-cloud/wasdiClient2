@@ -20,9 +20,10 @@ interface Style {
   userId: string
 }
 @Component({
-  selector: 'app-product-properties-dialog',
-  templateUrl: './product-properties-dialog.component.html',
-  styleUrls: ['./product-properties-dialog.component.css']
+    selector: 'app-product-properties-dialog',
+    templateUrl: './product-properties-dialog.component.html',
+    styleUrls: ['./product-properties-dialog.component.css'],
+    standalone: false
 })
 export class ProductPropertiesDialogComponent implements OnInit {
   m_oEditProduct = {

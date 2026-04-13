@@ -4,9 +4,10 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-card',
-  templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css']
+    selector: 'app-card',
+    templateUrl: './card.component.html',
+    styleUrls: ['./card.component.css'],
+    standalone: false
 })
 export class CardComponent {
   /**

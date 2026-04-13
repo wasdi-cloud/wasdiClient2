@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-wap-date-time-picker',
-  templateUrl: './wap-date-time-picker.component.html',
-  styleUrls: ['./wap-date-time-picker.component.css']
+    selector: 'app-wap-date-time-picker',
+    templateUrl: './wap-date-time-picker.component.html',
+    styleUrls: ['./wap-date-time-picker.component.css'],
+    standalone: false
 })
 export class WapDateTimePickerComponent implements OnInit {
   @Input() m_oDateControl

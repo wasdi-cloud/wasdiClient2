@@ -2,9 +2,10 @@ import { outputAst } from '@angular/compiler';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-input-field',
-  templateUrl: './input-field.component.html',
-  styleUrls: ['./input-field.component.css']
+    selector: 'app-input-field',
+    templateUrl: './input-field.component.html',
+    styleUrls: ['./input-field.component.css'],
+    standalone: false
 })
 export class InputFieldComponent {
   /**

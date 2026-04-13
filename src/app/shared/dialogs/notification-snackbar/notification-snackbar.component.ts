@@ -3,9 +3,10 @@ import { Component, Inject } from '@angular/core';
 import { MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarDismiss, MatSnackBarRef } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-notification-snackbar',
-  templateUrl: './notification-snackbar.component.html',
-  styleUrls: ['./notification-snackbar.component.css']
+    selector: 'app-notification-snackbar',
+    templateUrl: './notification-snackbar.component.html',
+    styleUrls: ['./notification-snackbar.component.css'],
+    standalone: false
 })
 export class NotificationSnackbarComponent {
   constructor(

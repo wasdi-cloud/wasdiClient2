@@ -7,9 +7,10 @@ import { ProcessorMediaService } from 'src/app/services/api/processor-media.serv
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 @Component({
-  selector: 'app-processor-tab-store',
-  templateUrl: './processor-tab-store.component.html',
-  styleUrls: ['./processor-tab-store.component.css']
+    selector: 'app-processor-tab-store',
+    templateUrl: './processor-tab-store.component.html',
+    styleUrls: ['./processor-tab-store.component.css'],
+    standalone: false
 })
 export class ProcessorTabStoreComponent implements OnInit {
   /**

@@ -2,9 +2,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 
 @Component({
-  selector: 'app-admin-menu',
-  templateUrl: './admin-menu.component.html',
-  styleUrls: ['./admin-menu.component.css'],
+    selector: 'app-admin-menu',
+    templateUrl: './admin-menu.component.html',
+    styleUrls: ['./admin-menu.component.css'],
+    standalone: false
 })
 export class AdminMenuComponent {
   @Output() m_sSelectedTab: EventEmitter<string> = new EventEmitter<string>();

@@ -8,9 +8,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 
 @Component({
-  selector: 'app-subscription-projects-dialog',
-  templateUrl: './subscription-projects-dialog.component.html',
-  styleUrls: ['./subscription-projects-dialog.component.css']
+    selector: 'app-subscription-projects-dialog',
+    templateUrl: './subscription-projects-dialog.component.html',
+    styleUrls: ['./subscription-projects-dialog.component.css'],
+    standalone: false
 })
 export class SubscriptionProjectsDialogComponent implements OnInit {
   m_oSubscription: any;

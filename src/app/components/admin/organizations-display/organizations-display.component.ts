@@ -14,9 +14,10 @@ import { MatDialog } from '@angular/material/dialog';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
-  selector: 'app-organizations-display',
-  templateUrl: './organizations-display.component.html',
-  styleUrls: ['./organizations-display.component.css']
+    selector: 'app-organizations-display',
+    templateUrl: './organizations-display.component.html',
+    styleUrls: ['./organizations-display.component.css'],
+    standalone: false
 })
 export class OrganizationsDisplayComponent implements OnInit {
   m_aoOrganizations: Array<any> = [];

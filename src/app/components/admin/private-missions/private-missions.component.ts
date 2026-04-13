@@ -12,9 +12,10 @@ import {
 import { User } from 'src/app/shared/models/user.model';
 
 @Component({
-  selector: 'app-private-missions',
-  templateUrl: './private-missions.component.html',
-  styleUrls: ['./private-missions.component.css'],
+    selector: 'app-private-missions',
+    templateUrl: './private-missions.component.html',
+    styleUrls: ['./private-missions.component.css'],
+    standalone: false
 })
 export class PrivateMissionsComponent implements OnInit {
   m_bMissionsLoaded: boolean = false;

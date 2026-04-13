@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-search-btn-grp',
-  templateUrl: './search-btn-grp.component.html',
-  styleUrls: ['./search-btn-grp.component.css']
+    selector: 'app-search-btn-grp',
+    templateUrl: './search-btn-grp.component.html',
+    styleUrls: ['./search-btn-grp.component.css'],
+    standalone: false
 })
 export class SearchBtnGrpComponent {
   @Input() m_sLocation: string = null;

@@ -11,10 +11,11 @@ import { EditSubscriptionDialogComponent } from 'src/app/dialogs/edit-subscripti
 import { CreditsBuyDialogComponent } from 'src/app/components/subscriptions-purchase/credits-buy-dialog/credits-buy-dialog.component'
 
 @Component({
-  selector: 'app-subscriptions-purchase',
-  templateUrl: './subscriptions-purchase.component.html',
-  styleUrls: ['./subscriptions-purchase.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-subscriptions-purchase',
+    templateUrl: './subscriptions-purchase.component.html',
+    styleUrls: ['./subscriptions-purchase.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 export class SubscriptionsPurchaseComponent implements OnInit {
   m_aoTypes: any = [];

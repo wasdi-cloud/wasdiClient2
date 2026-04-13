@@ -5,9 +5,10 @@ import { ProductService } from 'src/app/services/api/product.service';
 import { ViewElementFactory } from 'src/app/shared/wap-components/view-element.factory';
 
 @Component({
-  selector: 'app-wap-display',
-  templateUrl: './wap-display.component.html',
-  styleUrls: ['./wap-display.component.css']
+    selector: 'app-wap-display',
+    templateUrl: './wap-display.component.html',
+    styleUrls: ['./wap-display.component.css'],
+    standalone: false
 })
 export class WapDisplayComponent implements OnInit {
   /**

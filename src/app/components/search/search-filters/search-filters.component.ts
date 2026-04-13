@@ -18,9 +18,10 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-search-filters',
-  templateUrl: './search-filters.component.html',
-  styleUrls: ['./search-filters.component.css']
+    selector: 'app-search-filters',
+    templateUrl: './search-filters.component.html',
+    styleUrls: ['./search-filters.component.css'],
+    standalone: false
 })
 export class SearchFiltersComponent implements OnInit, OnChanges {
 

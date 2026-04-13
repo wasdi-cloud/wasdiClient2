@@ -1,7 +1,8 @@
 import { Directive, HostListener, HostBinding, EventEmitter, Output} from '@angular/core';
 
 @Directive({
-  selector: '[appDragAndDrop]'
+    selector: '[appDragAndDrop]',
+    standalone: false
 })
 export class DragAndDropDirective {
 

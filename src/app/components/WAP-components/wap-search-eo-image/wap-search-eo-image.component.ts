@@ -8,9 +8,10 @@ import { ConfigurationService } from 'src/app/services/configuration.service';
 import { OpenSearchService } from 'src/app/services/api/open-search.service';
 
 @Component({
-  selector: 'app-wap-search-eo-image',
-  templateUrl: './wap-search-eo-image.component.html',
-  styleUrls: ['./wap-search-eo-image.component.css']
+    selector: 'app-wap-search-eo-image',
+    templateUrl: './wap-search-eo-image.component.html',
+    styleUrls: ['./wap-search-eo-image.component.css'],
+    standalone: false
 })
 export class WapSearchEoImageComponent {
   @Input() m_oControlInput;

@@ -20,9 +20,10 @@ interface Style {
 }
 
 @Component({
-  selector: 'app-styles-dialog',
-  templateUrl: './styles-dialog.component.html',
-  styleUrls: ['./styles-dialog.component.css']
+    selector: 'app-styles-dialog',
+    templateUrl: './styles-dialog.component.html',
+    styleUrls: ['./styles-dialog.component.css'],
+    standalone: false
 })
 export class StylesDialogComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') m_oEditorRef!: ElementRef;

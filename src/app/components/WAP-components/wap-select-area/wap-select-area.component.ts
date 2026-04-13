@@ -10,9 +10,10 @@ import 'leaflet.fullscreen';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
-  selector: 'app-wap-select-area',
-  templateUrl: './wap-select-area.component.html',
-  styleUrls: ['./wap-select-area.component.css']
+    selector: 'app-wap-select-area',
+    templateUrl: './wap-select-area.component.html',
+    styleUrls: ['./wap-select-area.component.css'],
+    standalone: false
 })
 
 /**

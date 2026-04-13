@@ -13,9 +13,10 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-process-logs-dialog',
-  templateUrl: './process-logs-dialog.component.html',
-  styleUrls: ['./process-logs-dialog.component.css']
+    selector: 'app-process-logs-dialog',
+    templateUrl: './process-logs-dialog.component.html',
+    styleUrls: ['./process-logs-dialog.component.css'],
+    standalone: false
 })
 export class ProcessLogsDialogComponent implements OnInit, OnDestroy {
 

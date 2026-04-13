@@ -16,9 +16,10 @@ import { WorkflowService } from 'src/app/services/api/workflow.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
-  selector: 'app-share-ui',
-  templateUrl: './share-ui.component.html',
-  styleUrls: ['./share-ui.component.css'],
+    selector: 'app-share-ui',
+    templateUrl: './share-ui.component.html',
+    styleUrls: ['./share-ui.component.css'],
+    standalone: false
 })
 export class ShareUiComponent implements OnInit {
   m_aoShareOptions = ['read', 'write'];

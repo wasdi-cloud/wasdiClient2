@@ -29,20 +29,21 @@ import { JsonEditorService } from 'src/app/services/json-editor.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-apps-dialog',
-  templateUrl: './apps-dialog.component.html',
-  styleUrls: ['./apps-dialog.component.css'],
-  animations: [
-    trigger('slideInUp', [
-      transition(':enter', [
-        style({ transform: 'translateY(100%)' }),
-        animate('500ms ease-in', style({ transform: 'translateY(0%)' })),
-      ]),
-      transition(':leave', [
-        animate('500ms ease-in', style({ transform: 'translateY(100%)' })),
-      ]),
-    ]),
-  ],
+    selector: 'app-apps-dialog',
+    templateUrl: './apps-dialog.component.html',
+    styleUrls: ['./apps-dialog.component.css'],
+    animations: [
+        trigger('slideInUp', [
+            transition(':enter', [
+                style({ transform: 'translateY(100%)' }),
+                animate('500ms ease-in', style({ transform: 'translateY(0%)' })),
+            ]),
+            transition(':leave', [
+                animate('500ms ease-in', style({ transform: 'translateY(100%)' })),
+            ]),
+        ]),
+    ],
+    standalone: false
 })
 export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('editor') m_oEditorRef!: ElementRef;

@@ -11,9 +11,10 @@ import { Product } from 'src/app/shared/models/product.model';
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
 @Component({
-  selector: 'app-ftp-dialog',
-  templateUrl: './ftp-dialog.component.html',
-  styleUrls: ['./ftp-dialog.component.css']
+    selector: 'app-ftp-dialog',
+    templateUrl: './ftp-dialog.component.html',
+    styleUrls: ['./ftp-dialog.component.css'],
+    standalone: false
 })
 export class FTPDialogComponent implements OnInit {
   m_sActiveTab: string = "sendToWorkspace";

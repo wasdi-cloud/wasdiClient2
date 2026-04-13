@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input,Output } from '@angular/core';
 
 @Component({
-  selector: 'app-wap-dropdown',
-  templateUrl: './wap-dropdown.component.html',
-  styleUrls: ['./wap-dropdown.component.css']
+    selector: 'app-wap-dropdown',
+    templateUrl: './wap-dropdown.component.html',
+    styleUrls: ['./wap-dropdown.component.css'],
+    standalone: false
 })
 export class WapDropdownComponent {
   @Input() oControlInfo: any;

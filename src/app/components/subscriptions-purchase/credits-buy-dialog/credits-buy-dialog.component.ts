@@ -13,9 +13,10 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
-  selector: 'app-credits-buy-dialog',
-  templateUrl: './credits-buy-dialog.component.html',
-  styleUrls: ['./credits-buy-dialog.component.css']
+    selector: 'app-credits-buy-dialog',
+    templateUrl: './credits-buy-dialog.component.html',
+    styleUrls: ['./credits-buy-dialog.component.css'],
+    standalone: false
 })
 export class CreditsBuyDialogComponent implements OnInit {
   m_oUser = this.m_oConstantsService.getUser();

@@ -20,9 +20,10 @@ import {PreviewDialogComponent} from "../../../../dialogs/preview-dialog/preview
 
 
 @Component({
-  selector: 'app-product-list-item',
-  templateUrl: './product-list-item.component.html',
-  styleUrls: ['./product-list-item.component.css'],
+    selector: 'app-product-list-item',
+    templateUrl: './product-list-item.component.html',
+    styleUrls: ['./product-list-item.component.css'],
+    standalone: false
 })
 export class ProductListItemComponent {
   @Input() m_oProduct: any = null;

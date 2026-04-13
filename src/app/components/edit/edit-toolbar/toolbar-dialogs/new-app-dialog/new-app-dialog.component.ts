@@ -19,9 +19,10 @@ import { ImageService } from 'src/app/services/api/image.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-new-app-dialog',
-  templateUrl: './new-app-dialog.component.html',
-  styleUrls: ['./new-app-dialog.component.css'],
+    selector: 'app-new-app-dialog',
+    templateUrl: './new-app-dialog.component.html',
+    styleUrls: ['./new-app-dialog.component.css'],
+    standalone: false
 })
 export class NewAppDialogComponent implements OnInit {
   /**

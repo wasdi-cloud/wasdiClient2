@@ -11,9 +11,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
-  selector: 'app-project-info-dialog',
-  templateUrl: './project-info-dialog.component.html',
-  styleUrls: ['./project-info-dialog.component.css']
+    selector: 'app-project-info-dialog',
+    templateUrl: './project-info-dialog.component.html',
+    styleUrls: ['./project-info-dialog.component.css'],
+    standalone: false
 })
 export class ProjectInfoDialogComponent implements OnInit {
   m_bEditMode: boolean;

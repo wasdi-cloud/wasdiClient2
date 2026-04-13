@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'convertBytesToHigherUnit'
+    name: 'convertBytesToHigherUnit',
+    standalone: false
 })
 export class ConvertBytesToHigherUnitPipe implements PipeTransform {
 

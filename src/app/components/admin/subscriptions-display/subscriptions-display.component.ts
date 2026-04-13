@@ -15,9 +15,10 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { CreditsService } from 'src/app/services/api/credits.service';
 
 @Component({
-  selector: 'app-subscriptions-display',
-  templateUrl: './subscriptions-display.component.html',
-  styleUrls: ['./subscriptions-display.component.css']
+    selector: 'app-subscriptions-display',
+    templateUrl: './subscriptions-display.component.html',
+    styleUrls: ['./subscriptions-display.component.css'],
+    standalone: false
 })
 export class SubscriptionsDisplayComponent implements OnInit {
   m_bLoadingOrganizations: boolean = true;

@@ -8,9 +8,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 
 @Component({
-  selector: 'app-manage-nodes',
-  templateUrl: './manage-nodes.component.html',
-  styleUrls: ['./manage-nodes.component.css']
+    selector: 'app-manage-nodes',
+    templateUrl: './manage-nodes.component.html',
+    styleUrls: ['./manage-nodes.component.css'],
+    standalone: false
 })
 export class ManageNodesComponent implements OnInit {
   m_aoNodes: Array<any> = [];

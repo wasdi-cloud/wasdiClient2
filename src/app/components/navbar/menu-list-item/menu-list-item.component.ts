@@ -7,9 +7,10 @@ import { ConstantsService } from 'src/app/services/constants.service';
 declare const bootstrap: any;
 
 @Component({
-  selector: 'app-menu-list-item',
-  templateUrl: './menu-list-item.component.html',
-  styleUrls: ['./menu-list-item.component.css']
+    selector: 'app-menu-list-item',
+    templateUrl: './menu-list-item.component.html',
+    styleUrls: ['./menu-list-item.component.css'],
+    standalone: false
 })
 export class MenuListItemComponent implements OnInit, OnChanges {
   @Input() m_bIsNavbarOpen: boolean = false;

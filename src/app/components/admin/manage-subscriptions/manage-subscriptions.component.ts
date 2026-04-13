@@ -7,9 +7,10 @@ import {TranslateService} from '@ngx-translate/core';
 import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({
-  selector: 'app-manage-subscriptions',
-  templateUrl: './manage-subscriptions.component.html',
-  styleUrls: ['./manage-subscriptions.component.css']
+    selector: 'app-manage-subscriptions',
+    templateUrl: './manage-subscriptions.component.html',
+    styleUrls: ['./manage-subscriptions.component.css'],
+    standalone: false
 })
 export class ManageSubscriptionsComponent implements OnInit {
   m_aoSubscriptions: Array<any> = [];

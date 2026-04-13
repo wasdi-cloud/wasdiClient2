@@ -32,10 +32,11 @@ export interface application {
   votes: number,
 }
 @Component({
-  selector: 'app-app-details',
-  templateUrl: './app-details.component.html',
-  styleUrls: ['./app-details.component.css'],
-  host: { "class": "flex-fill" }
+    selector: 'app-app-details',
+    templateUrl: './app-details.component.html',
+    styleUrls: ['./app-details.component.css'],
+    host: { "class": "flex-fill" },
+    standalone: false
 })
 export class AppDetailsComponent implements OnInit {
   m_sActiveApplicationName: string = this.m_oConstantsService.getSelectedApplication();

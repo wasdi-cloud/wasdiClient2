@@ -40,10 +40,11 @@ export interface WorkspaceViewModel {
 }
 
 @Component({
-  selector: 'app-workspaces',
-  templateUrl: './workspaces.component.html',
-  styleUrls: ['./workspaces.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-workspaces',
+    templateUrl: './workspaces.component.html',
+    styleUrls: ['./workspaces.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 
 export class WorkspacesComponent implements OnInit {

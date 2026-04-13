@@ -14,9 +14,10 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-edit-map',
-  templateUrl: './edit-map.component.html',
-  styleUrls: ['./edit-map.component.css']
+    selector: 'app-edit-map',
+    templateUrl: './edit-map.component.html',
+    styleUrls: ['./edit-map.component.css'],
+    standalone: false
 })
 
 export class EditMapComponent implements OnInit {

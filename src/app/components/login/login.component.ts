@@ -14,10 +14,11 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 export class LoginComponent implements OnInit {
   form: any = {

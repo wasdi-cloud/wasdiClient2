@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-table-cell',
-  templateUrl: './table-cell.component.html',
-  styleUrls: ['./table-cell.component.css']
+    selector: 'app-table-cell',
+    templateUrl: './table-cell.component.html',
+    styleUrls: ['./table-cell.component.css'],
+    standalone: false
 })
 export class TableCellComponent implements OnInit {
   /**

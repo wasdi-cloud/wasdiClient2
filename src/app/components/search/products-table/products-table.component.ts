@@ -10,9 +10,10 @@ import { PagesService } from 'src/app/services/pages.service';
 import $ from 'jquery';
 
 @Component({
-  selector: 'app-products-table',
-  templateUrl: './products-table.component.html',
-  styleUrls: ['./products-table.component.css']
+    selector: 'app-products-table',
+    templateUrl: './products-table.component.html',
+    styleUrls: ['./products-table.component.css'],
+    standalone: false
 })
 export class ProductsTableComponent implements OnInit, OnDestroy {
   @Input() m_bIsVisibleListOfLayers: boolean = false;

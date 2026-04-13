@@ -34,9 +34,10 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 declare const L: any;
 
 @Component({
-  selector: 'app-nav-layers',
-  templateUrl: './nav-layers.component.html',
-  styleUrls: ['./nav-layers.component.css'],
+    selector: 'app-nav-layers',
+    templateUrl: './nav-layers.component.html',
+    styleUrls: ['./nav-layers.component.css'],
+    standalone: false
 })
 export class NavLayersComponent implements OnInit, OnChanges {
   //Set opacity to 100% by default

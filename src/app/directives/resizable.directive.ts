@@ -1,7 +1,8 @@
 import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
-  selector: '[appResizable]'
+    selector: '[appResizable]',
+    standalone: false
 })
 export class ResizableDirective implements OnInit {
   @Input() m_iResizableGrabWidth = 5;

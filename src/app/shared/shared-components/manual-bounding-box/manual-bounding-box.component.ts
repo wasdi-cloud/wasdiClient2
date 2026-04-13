@@ -7,9 +7,10 @@ import { JsonEditorService } from 'src/app/services/json-editor.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
-  selector: 'app-manual-bounding-box',
-  templateUrl: './manual-bounding-box.component.html',
-  styleUrls: ['./manual-bounding-box.component.css']
+    selector: 'app-manual-bounding-box',
+    templateUrl: './manual-bounding-box.component.html',
+    styleUrls: ['./manual-bounding-box.component.css'],
+    standalone: false
 })
 export class ManualBoundingBoxComponent implements OnInit {
   @ViewChild('editor') m_oEditorRef!: ElementRef;

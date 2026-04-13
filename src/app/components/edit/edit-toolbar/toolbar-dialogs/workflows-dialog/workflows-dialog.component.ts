@@ -8,9 +8,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
 @Component({
-  selector: 'app-workflows-dialog',
-  templateUrl: './workflows-dialog.component.html',
-  styleUrls: ['./workflows-dialog.component.css']
+    selector: 'app-workflows-dialog',
+    templateUrl: './workflows-dialog.component.html',
+    styleUrls: ['./workflows-dialog.component.css'],
+    standalone: false
 })
 export class WorkflowsDialogComponent implements OnInit {
   // Element Reference for the XML editor component (JSON Editor)

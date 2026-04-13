@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-wap-numeric-box',
-  templateUrl: './wap-numeric-box.component.html',
-  styleUrls: ['./wap-numeric-box.component.css']
+    selector: 'app-wap-numeric-box',
+    templateUrl: './wap-numeric-box.component.html',
+    styleUrls: ['./wap-numeric-box.component.css'],
+    standalone: false
 })
 export class WapNumericBoxComponent {
   /**

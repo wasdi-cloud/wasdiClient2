@@ -3,9 +3,10 @@ import { FormGroup } from '@angular/forms';
 import { AppUIItems } from 'src/app/components/navbar/menu-list-item/menu-items';
 import { JsonEditorService } from 'src/app/services/json-editor.service';
 @Component({
-  selector: 'app-processor-tab-ui',
-  templateUrl: './processor-tab-ui.component.html',
-  styleUrls: ['./processor-tab-ui.component.css']
+    selector: 'app-processor-tab-ui',
+    templateUrl: './processor-tab-ui.component.html',
+    styleUrls: ['./processor-tab-ui.component.css'],
+    standalone: false
 })
 export class ProcessorTabUiComponent implements OnInit, AfterViewInit {
   //Declare name for appui id

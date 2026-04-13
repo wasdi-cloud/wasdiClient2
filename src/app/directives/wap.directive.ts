@@ -1,7 +1,8 @@
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[appWap]'
+    selector: '[appWap]',
+    standalone: false
 })
 export class WapDirective {
 

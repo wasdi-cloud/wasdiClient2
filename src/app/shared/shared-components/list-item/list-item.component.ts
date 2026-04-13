@@ -9,9 +9,10 @@ import {Subscription} from 'rxjs';
 import {NotificationDisplayService} from "../../../services/notification-display.service";
 
 @Component({
-  selector: 'app-list-item',
-  templateUrl: './list-item.component.html',
-  styleUrls: ['./list-item.component.css']
+    selector: 'app-list-item',
+    templateUrl: './list-item.component.html',
+    styleUrls: ['./list-item.component.css'],
+    standalone: false
 })
 export class ListItemComponent implements OnInit, OnDestroy {
   /**

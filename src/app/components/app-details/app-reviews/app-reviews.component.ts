@@ -13,9 +13,10 @@ import { TranslateService } from '@ngx-translate/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
-  selector: 'app-app-reviews',
-  templateUrl: './app-reviews.component.html',
-  styleUrls: ['./app-reviews.component.css']
+    selector: 'app-app-reviews',
+    templateUrl: './app-reviews.component.html',
+    styleUrls: ['./app-reviews.component.css'],
+    standalone: false
 })
 export class AppReviewsComponent implements OnChanges, AfterViewChecked {
 

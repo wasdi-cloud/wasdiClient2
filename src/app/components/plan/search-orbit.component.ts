@@ -11,10 +11,11 @@ import { TranslateService } from '@ngx-translate/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
-  selector: 'app-search-orbit',
-  templateUrl: './search-orbit.component.html',
-  styleUrls: ['./search-orbit.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-search-orbit',
+    templateUrl: './search-orbit.component.html',
+    styleUrls: ['./search-orbit.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 export class SearchOrbit implements OnInit, OnDestroy {
 

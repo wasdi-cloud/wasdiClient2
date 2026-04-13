@@ -7,9 +7,10 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-payload-dialog',
-  templateUrl: './payload-dialog.component.html',
-  styleUrls: ['./payload-dialog.component.css']
+    selector: 'app-payload-dialog',
+    templateUrl: './payload-dialog.component.html',
+    styleUrls: ['./payload-dialog.component.css'],
+    standalone: false
 })
 export class PayloadDialogComponent implements OnInit {
   m_oProcess = this.m_oData.process;

@@ -5,9 +5,10 @@ import {CatalogService} from "../../services/api/catalog.service";
 import { HttpEventType } from "@angular/common/http";
 
 @Component({
-  selector: 'app-image-dialog',
-  templateUrl: './preview-dialog.component.html',
-  styleUrls: ['./preview-dialog.component.css']
+    selector: 'app-image-dialog',
+    templateUrl: './preview-dialog.component.html',
+    styleUrls: ['./preview-dialog.component.css'],
+    standalone: false
 })
 export class PreviewDialogComponent {
   m_oPdfUrl!: SafeResourceUrl;

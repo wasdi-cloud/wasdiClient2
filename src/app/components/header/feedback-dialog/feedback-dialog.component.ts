@@ -6,9 +6,10 @@ import { FeedbackService } from 'src/app/services/api/feedback.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
-  selector: 'app-feedback-dialog',
-  templateUrl: './feedback-dialog.component.html',
-  styleUrls: ['./feedback-dialog.component.css']
+    selector: 'app-feedback-dialog',
+    templateUrl: './feedback-dialog.component.html',
+    styleUrls: ['./feedback-dialog.component.css'],
+    standalone: false
 })
 export class FeedbackDialogComponent implements OnInit {
   m_oActiveUser: any = null;

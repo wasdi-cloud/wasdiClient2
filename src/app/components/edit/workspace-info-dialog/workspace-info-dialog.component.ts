@@ -14,9 +14,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-workspace-info-dialog',
-  templateUrl: './workspace-info-dialog.component.html',
-  styleUrls: ['./workspace-info-dialog.component.css']
+    selector: 'app-workspace-info-dialog',
+    templateUrl: './workspace-info-dialog.component.html',
+    styleUrls: ['./workspace-info-dialog.component.css'],
+    standalone: false
 })
 export class WorkspaceInfoDialogComponent implements OnInit {
   m_sWorkspaceId: string;

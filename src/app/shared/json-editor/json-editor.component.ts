@@ -19,9 +19,10 @@ import 'ace-builds/src-noconflict/ext-searchbox'
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
-  selector: 'app-json-editor',
-  templateUrl: './json-editor.component.html',
-  styleUrls: ['./json-editor.component.css']
+    selector: 'app-json-editor',
+    templateUrl: './json-editor.component.html',
+    styleUrls: ['./json-editor.component.css'],
+    standalone: false
 })
 export class JsonEditorComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('editor') editorRef!: ElementRef;

@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-processor-tab-pricing',
-  templateUrl: './processor-tab-pricing.component.html',
-  styleUrls: ['./processor-tab-pricing.component.css']
+    selector: 'app-processor-tab-pricing',
+    templateUrl: './processor-tab-pricing.component.html',
+    styleUrls: ['./processor-tab-pricing.component.css'],
+    standalone: false
 })
 export class ProcessorTabPricingComponent implements OnInit {
   /**

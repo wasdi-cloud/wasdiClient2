@@ -6,9 +6,10 @@ import { Observable } from 'rxjs';
 import * as L from 'leaflet';
 
 @Component({
-  selector: 'app-search-map',
-  templateUrl: './search-map.component.html',
-  styleUrls: ['./search-map.component.css']
+    selector: 'app-search-map',
+    templateUrl: './search-map.component.html',
+    styleUrls: ['./search-map.component.css'],
+    standalone: false
 })
 export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() m_aoProducts: Observable<any>;

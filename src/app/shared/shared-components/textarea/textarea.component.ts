@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-textarea',
-  templateUrl: './textarea.component.html',
-  styleUrls: ['./textarea.component.css']
+    selector: 'app-textarea',
+    templateUrl: './textarea.component.html',
+    styleUrls: ['./textarea.component.css'],
+    standalone: false
 })
 export class TextareaComponent {
   /**

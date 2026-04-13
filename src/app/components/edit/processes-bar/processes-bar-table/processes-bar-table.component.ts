@@ -13,9 +13,10 @@ import {TranslateService} from '@ngx-translate/core';
 import { ProcessesBarComponent } from '../processes-bar.component';
 
 @Component({
-  selector: 'app-processes-bar-table',
-  templateUrl: './processes-bar-table.component.html',
-  styleUrls: ['./processes-bar-table.component.css']
+    selector: 'app-processes-bar-table',
+    templateUrl: './processes-bar-table.component.html',
+    styleUrls: ['./processes-bar-table.component.css'],
+    standalone: false
 })
 export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   /**

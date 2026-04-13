@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-plan-tree',
-  templateUrl: './plan-tree.component.html',
-  styleUrls: ['./plan-tree.component.css']
+    selector: 'app-plan-tree',
+    templateUrl: './plan-tree.component.html',
+    styleUrls: ['./plan-tree.component.css'],
+    standalone: false
 })
 export class PlanTreeComponent {
   @Input() m_oSatellite: any = null;

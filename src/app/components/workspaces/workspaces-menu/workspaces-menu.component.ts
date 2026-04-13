@@ -10,9 +10,10 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
-  selector: 'app-workspaces-menu',
-  templateUrl: './workspaces-menu.component.html',
-  styleUrls: ['./workspaces-menu.component.css']
+    selector: 'app-workspaces-menu',
+    templateUrl: './workspaces-menu.component.html',
+    styleUrls: ['./workspaces-menu.component.css'],
+    standalone: false
 })
 export class WorkspacesMenuComponent implements OnInit {
   /**

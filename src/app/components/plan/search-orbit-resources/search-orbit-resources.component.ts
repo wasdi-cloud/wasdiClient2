@@ -3,9 +3,10 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-search-orbit-resources',
-  templateUrl: './search-orbit-resources.component.html',
-  styleUrls: ['./search-orbit-resources.component.css']
+    selector: 'app-search-orbit-resources',
+    templateUrl: './search-orbit-resources.component.html',
+    styleUrls: ['./search-orbit-resources.component.css'],
+    standalone: false
 })
 export class SearchOrbitResourcesComponent implements OnInit, AfterViewChecked {
   @Input() m_aoSatelliteResources: Array<any>;

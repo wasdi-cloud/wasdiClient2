@@ -23,10 +23,11 @@ import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspac
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css'],
-  host: { 'class': 'flex-fill' }
+    selector: 'app-search',
+    templateUrl: './search.component.html',
+    styleUrls: ['./search.component.css'],
+    host: { 'class': 'flex-fill' },
+    standalone: false
 })
 export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 

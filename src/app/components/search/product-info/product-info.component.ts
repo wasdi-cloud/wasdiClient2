@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Component({
-  selector: 'app-product-info',
-  templateUrl: './product-info.component.html',
-  styleUrls: ['./product-info.component.css']
+    selector: 'app-product-info',
+    templateUrl: './product-info.component.html',
+    styleUrls: ['./product-info.component.css'],
+    standalone: false
 })
 export class ProductInfoComponent implements OnInit {
   m_oProduct: any = null;

@@ -30,9 +30,10 @@ import { JsonEditorService } from 'src/app/services/json-editor.service';
 import { NewAppDialogComponent } from '../new-app-dialog.component';
 
 @Component({
-  selector: 'app-processor-tab-content',
-  templateUrl: './processor-tab-content.component.html',
-  styleUrls: ['./processor-tab-content.component.css'],
+    selector: 'app-processor-tab-content',
+    templateUrl: './processor-tab-content.component.html',
+    styleUrls: ['./processor-tab-content.component.css'],
+    standalone: false
 })
 export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') editorRef!: ElementRef;

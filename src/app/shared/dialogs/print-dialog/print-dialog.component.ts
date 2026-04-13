@@ -5,9 +5,10 @@ import FadeoutUtils from "../../../lib/utils/FadeoutJSUtils";
 import {PrinterService} from "../../../services/api/printer.service";
 
 @Component({
-  selector: 'app-print-dialog',
-  templateUrl: './print-dialog.component.html',
-  styleUrls: ['./print-dialog.component.css']
+    selector: 'app-print-dialog',
+    templateUrl: './print-dialog.component.html',
+    styleUrls: ['./print-dialog.component.css'],
+    standalone: false
 })
 export class PrintDialogComponent implements OnInit {
 

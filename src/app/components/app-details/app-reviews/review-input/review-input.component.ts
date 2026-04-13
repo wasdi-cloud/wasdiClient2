@@ -4,9 +4,10 @@ import { ProcessorMediaService } from 'src/app/services/api/processor-media.serv
 import { TranslateService } from '@ngx-translate/core';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 @Component({
-  selector: 'app-review-input',
-  templateUrl: './review-input.component.html',
-  styleUrls: ['./review-input.component.css']
+    selector: 'app-review-input',
+    templateUrl: './review-input.component.html',
+    styleUrls: ['./review-input.component.css'],
+    standalone: false
 })
 export class ReviewInputComponent implements OnInit {
   /**

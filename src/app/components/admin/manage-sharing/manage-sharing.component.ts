@@ -8,9 +8,10 @@ import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/s
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-manage-sharing',
-  templateUrl: './manage-sharing.component.html',
-  styleUrls: ['./manage-sharing.component.css']
+    selector: 'app-manage-sharing',
+    templateUrl: './manage-sharing.component.html',
+    styleUrls: ['./manage-sharing.component.css'],
+    standalone: false
 })
 export class ManageSharingComponent implements OnInit {
   m_aoResourceTypes: Array<any> = [];

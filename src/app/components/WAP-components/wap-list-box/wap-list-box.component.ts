@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-wap-list-box',
-  templateUrl: './wap-list-box.component.html',
-  styleUrls: ['./wap-list-box.component.css']
+    selector: 'app-wap-list-box',
+    templateUrl: './wap-list-box.component.html',
+    styleUrls: ['./wap-list-box.component.css'],
+    standalone: false
 })
 export class WapListBoxComponent {
   @Input() oListboxInput: any;

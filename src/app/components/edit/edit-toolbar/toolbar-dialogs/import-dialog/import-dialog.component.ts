@@ -21,9 +21,10 @@ import {FileUploadService} from "../../upload-file-service/FileUploadService";
 import {Subscription} from "rxjs";
 
 @Component({
-  selector: 'app-import-dialog',
-  templateUrl: './import-dialog.component.html',
-  styleUrls: ['./import-dialog.component.css']
+    selector: 'app-import-dialog',
+    templateUrl: './import-dialog.component.html',
+    styleUrls: ['./import-dialog.component.css'],
+    standalone: false
 })
 export class  ImportDialogComponent implements OnInit, OnDestroy {
 

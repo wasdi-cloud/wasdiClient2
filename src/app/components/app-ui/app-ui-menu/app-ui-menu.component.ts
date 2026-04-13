@@ -11,9 +11,10 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
-  selector: 'app-app-ui-menu',
-  templateUrl: './app-ui-menu.component.html',
-  styleUrls: ['./app-ui-menu.component.css'],
+    selector: 'app-app-ui-menu',
+    templateUrl: './app-ui-menu.component.html',
+    styleUrls: ['./app-ui-menu.component.css'],
+    standalone: false
 })
 export class AppUiMenuComponent implements OnInit {
   @Input() m_oActiveWorkspace: Workspace = null;

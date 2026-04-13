@@ -4,9 +4,10 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
 @Component({
-  selector: 'app-dropdown',
-  templateUrl: './dropdown.component.html',
-  styleUrls: ['./dropdown.component.css']
+    selector: 'app-dropdown',
+    templateUrl: './dropdown.component.html',
+    styleUrls: ['./dropdown.component.css'],
+    standalone: false
 })
 export class DropdownComponent {
   constructor(

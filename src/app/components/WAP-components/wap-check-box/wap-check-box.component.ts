@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-wap-check-box',
-  templateUrl: './wap-check-box.component.html',
-  styleUrls: ['./wap-check-box.component.css']
+    selector: 'app-wap-check-box',
+    templateUrl: './wap-check-box.component.html',
+    styleUrls: ['./wap-check-box.component.css'],
+    standalone: false
 })
 export class WapCheckBoxComponent {
   @Input() m_oCheckboxDetails: any;
