@@ -469,12 +469,9 @@ export class AppUiComponent implements OnInit {
    * Get user's workspaces
    */
   fetchWorkspaces() {
-    let oUser: User = this.m_oConstantsService.getUser();
-    if (oUser !== {} as User) {
-      this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe(oResponse => {
-        this.m_aoExistingWorkspaces = oResponse;
-      })
-    }
+    this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe(oResponse => {
+      this.m_aoExistingWorkspaces = oResponse;
+    })
   }
 
   /**
