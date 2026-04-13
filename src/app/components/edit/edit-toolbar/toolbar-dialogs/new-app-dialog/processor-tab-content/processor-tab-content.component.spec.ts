@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, ElementRef } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
@@ -16,6 +16,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { ProcessorTabContentComponent } from './processor-tab-content.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ProcessorTabContentComponent', () => {
   let component: ProcessorTabContentComponent;
@@ -23,23 +24,25 @@ describe('ProcessorTabContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProcessorTabContentComponent ],
-      imports: [HttpClientTestingModule, ReactiveFormsModule, RouterTestingModule, TranslateModule.forRoot()],
-      providers: [
+    declarations: [ProcessorTabContentComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [ReactiveFormsModule, RouterTestingModule, TranslateModule.forRoot()],
+    providers: [
         { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(null) }) } },
-        { provide: MatDialogRef, useValue: { close: () => {} } },
+        { provide: MatDialogRef, useValue: { close: () => { } } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: MatBottomSheetRef, useValue: { dismiss: () => {} } },
+        { provide: MatBottomSheetRef, useValue: { dismiss: () => { } } },
         { provide: ActivatedRoute, useValue: { params: of({}), queryParams: of({}), snapshot: {} } },
         { provide: Clipboard, useValue: { copy: () => true } },
         { provide: ConstantsService, useValue: { getActiveWorkspace: () => ({ workspaceId: 'ws-1' }) } },
-        { provide: JsonEditorService, useValue: { setEditor: () => {}, setReadOnly: () => {}, initEditor: () => {}, setText: () => {} } },
-        { provide: NotificationDisplayService, useValue: { openSnackBar: () => {}, openAlertDialog: () => {}, openConfirmationDialog: () => of(false) } },
+        { provide: JsonEditorService, useValue: { setEditor: () => { }, setReadOnly: () => { }, initEditor: () => { }, setText: () => { } } },
+        { provide: NotificationDisplayService, useValue: { openSnackBar: () => { }, openAlertDialog: () => { }, openConfirmationDialog: () => of(false) } },
         { provide: ProcessorService, useValue: { forceLibUpdate: () => of({}), redeployProcessor: () => of({}) } },
-        { provide: RabbitStompService, useValue: { addMessageHook: () => 0, removeMessageHook: () => {} } }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        { provide: RabbitStompService, useValue: { addMessageHook: () => 0, removeMessageHook: () => { } } },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ProcessorTabContentComponent);

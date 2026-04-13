@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -12,6 +12,7 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { LoginComponent } from './login.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -19,20 +20,22 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
-      imports: [HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
-      providers: [
+    declarations: [LoginComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule, TranslateModule.forRoot()],
+    providers: [
         { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(null) }) } },
-        { provide: MatDialogRef, useValue: { close: () => {} } },
+        { provide: MatDialogRef, useValue: { close: () => { } } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: MatBottomSheetRef, useValue: { dismiss: () => {} } },
+        { provide: MatBottomSheetRef, useValue: { dismiss: () => { } } },
         { provide: ActivatedRoute, useValue: { params: of({}), queryParams: of({}), snapshot: {} } },
         { provide: AuthService, useValue: { getTokenObject: () => ({ access_token: null }) } },
         { provide: KeycloakService, useValue: { getKeycloakInstance: () => ({ authenticated: false }) } },
-        { provide: JwtHelperService, useValue: { decodeToken: () => ({}) } }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        { provide: JwtHelperService, useValue: { decodeToken: () => ({}) } },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);

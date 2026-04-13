@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ConstantsService} from "../constants.service";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import FadeoutUtils from "../../lib/utils/FadeoutJSUtils";
 
 @Injectable({

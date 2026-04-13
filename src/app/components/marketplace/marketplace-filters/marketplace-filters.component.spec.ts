@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +15,7 @@ import { ProcessorMediaService } from 'src/app/services/api/processor-media.serv
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { MarketplaceFiltersComponent } from './marketplace-filters.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MarketplaceFiltersComponent', () => {
   let component: MarketplaceFiltersComponent;
@@ -22,22 +23,24 @@ describe('MarketplaceFiltersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MarketplaceFiltersComponent, FilterPipe ],
-      imports: [HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
-      providers: [
+    declarations: [MarketplaceFiltersComponent, FilterPipe],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule, TranslateModule.forRoot()],
+    providers: [
         { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(null) }) } },
-        { provide: MatDialogRef, useValue: { close: () => {} } },
+        { provide: MatDialogRef, useValue: { close: () => { } } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: MatBottomSheetRef, useValue: { dismiss: () => {} } },
+        { provide: MatBottomSheetRef, useValue: { dismiss: () => { } } },
         { provide: ActivatedRoute, useValue: { params: of({}), queryParams: of({}), snapshot: {} } },
         { provide: AuthService, useValue: { getTokenObject: () => ({ access_token: null }) } },
         { provide: ConstantsService, useValue: { getUser: () => ({ userId: null }) } },
-        { provide: NotificationDisplayService, useValue: { openAlertDialog: () => {} } },
+        { provide: NotificationDisplayService, useValue: { openAlertDialog: () => { } } },
         { provide: ProcessorMediaService, useValue: { getCategories: () => of([]), getPublishersFilterList: () => of([]) } },
-        { provide: ProcessorService, useValue: {} }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        { provide: ProcessorService, useValue: {} },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(MarketplaceFiltersComponent);

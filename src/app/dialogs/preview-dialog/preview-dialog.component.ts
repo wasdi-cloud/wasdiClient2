@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {CatalogService} from "../../services/api/catalog.service";
-import {HttpEventType} from "@angular/common/http";
+import { HttpEventType } from "@angular/common/http";
 
 @Component({
   selector: 'app-image-dialog',

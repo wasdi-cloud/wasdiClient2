@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -14,6 +14,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
 import { ProcessorTabStoreComponent } from './processor-tab-store.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ProcessorTabStoreComponent', () => {
   let component: ProcessorTabStoreComponent;
@@ -21,21 +22,23 @@ describe('ProcessorTabStoreComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProcessorTabStoreComponent],
-      imports: [HttpClientTestingModule, ReactiveFormsModule, RouterTestingModule, TranslateModule.forRoot()],
-      providers: [
+    declarations: [ProcessorTabStoreComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [ReactiveFormsModule, RouterTestingModule, TranslateModule.forRoot()],
+    providers: [
         { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(null) }) } },
-        { provide: MatDialogRef, useValue: { close: () => {} } },
+        { provide: MatDialogRef, useValue: { close: () => { } } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: MatBottomSheetRef, useValue: { dismiss: () => {} } },
+        { provide: MatBottomSheetRef, useValue: { dismiss: () => { } } },
         { provide: ActivatedRoute, useValue: { params: of({}), queryParams: of({}), snapshot: {} } },
         { provide: ImageService, useValue: { getImageLink: () => '' } },
-        { provide: NotificationDisplayService, useValue: { openAlertDialog: () => {}, openSnackBar: () => {} } },
+        { provide: NotificationDisplayService, useValue: { openAlertDialog: () => { }, openSnackBar: () => { } } },
         { provide: ProcessorMediaService, useValue: { getCategories: () => of([]) } },
-        { provide: ProcessorService, useValue: {} }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    });
+        { provide: ProcessorService, useValue: {} },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
     fixture = TestBed.createComponent(ProcessorTabStoreComponent);
     component = fixture.componentInstance;
     component.m_oProcessorStoreInfo = new FormGroup({

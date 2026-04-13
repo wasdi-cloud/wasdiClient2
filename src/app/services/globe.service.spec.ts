@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -8,21 +8,24 @@ import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { GlobeService } from './globe.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('GlobeService', () => {
   let service: GlobeService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
-      providers: [
+    imports: [RouterTestingModule, TranslateModule.forRoot()],
+    providers: [
         { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(null) }) } },
-        { provide: MatDialogRef, useValue: { close: () => {} } },
+        { provide: MatDialogRef, useValue: { close: () => { } } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: MatBottomSheetRef, useValue: { dismiss: () => {} } },
-        { provide: ActivatedRoute, useValue: { params: of({}), queryParams: of({}), snapshot: {} } }
-      ]
-    });
+        { provide: MatBottomSheetRef, useValue: { dismiss: () => { } } },
+        { provide: ActivatedRoute, useValue: { params: of({}), queryParams: of({}), snapshot: {} } },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
     service = TestBed.inject(GlobeService);
   });
 

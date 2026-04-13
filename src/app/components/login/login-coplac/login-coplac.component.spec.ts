@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -11,6 +11,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { of } from 'rxjs';
 
 import { LoginCoplacComponent } from './login-coplac.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('LoginCoplacComponent', () => {
   let component: LoginCoplacComponent;
@@ -18,19 +19,21 @@ describe('LoginCoplacComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginCoplacComponent ],
-      imports: [HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
-      providers: [
+    declarations: [LoginCoplacComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule, TranslateModule.forRoot()],
+    providers: [
         { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(null) }) } },
-        { provide: MatDialogRef, useValue: { close: () => {} } },
+        { provide: MatDialogRef, useValue: { close: () => { } } },
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: MatBottomSheetRef, useValue: { dismiss: () => {} } },
+        { provide: MatBottomSheetRef, useValue: { dismiss: () => { } } },
         { provide: ActivatedRoute, useValue: { params: of({}), queryParams: of({}), snapshot: {} } },
         { provide: JwtHelperService, useValue: { isTokenExpired: () => false } },
-        { provide: KeycloakService, useValue: { isLoggedIn: () => false, login: () => {} } }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        { provide: KeycloakService, useValue: { isLoggedIn: () => false, login: () => { } } },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(LoginCoplacComponent);

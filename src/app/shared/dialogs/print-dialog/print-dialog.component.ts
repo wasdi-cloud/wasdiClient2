@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import FadeoutUtils from "../../../lib/utils/FadeoutJSUtils";
 import {PrinterService} from "../../../services/api/printer.service";
 
