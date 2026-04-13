@@ -3,8 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
+import { LeafletModule } from '@bluehalo/ngx-leaflet';
+import { LeafletDrawModule } from '@bluehalo/ngx-leaflet-draw';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';

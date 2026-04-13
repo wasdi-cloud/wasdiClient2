@@ -59,7 +59,6 @@ export default class WasdiUtils {
                 break;
             case "INFO":
             case "ENVIRONMENTUPDATE":
-            case "DELETEPROCESSOR":
                 sUserMessage = oMessage.payload;
                 break;
             case "REDEPLOYPROCESSOR":

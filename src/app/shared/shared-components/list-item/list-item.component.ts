@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ProcessorService} from 'src/app/services/api/processor.service';
 import {MapService} from 'src/app/services/map.service';
 
-import * as $ from 'jquery';
+import $ from 'jquery';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import {Subscription} from 'rxjs';
 import {NotificationDisplayService} from "../../../services/notification-display.service";

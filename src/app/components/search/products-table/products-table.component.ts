@@ -7,7 +7,7 @@ import { ProductInfoComponent } from '../product-info/product-info.component';
 import { MapService } from 'src/app/services/map.service';
 import { PagesService } from 'src/app/services/pages.service';
 
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-products-table',
