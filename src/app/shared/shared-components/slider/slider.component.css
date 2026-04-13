@@ -3,16 +3,16 @@
 }
 
 .wasdi-slider {
-    --mdc-slider-active-track-color: #009036;
-    --mdc-slider-inactive-track-color: #C7CBD3;
-    --mdc-slider-disabled-active-track-color: #697589;
+    --mat-slider-active-track-color: #009036;
+    --mat-slider-inactive-track-color: #C7CBD3;
+    --mat-slider-disabled-active-track-color: #697589;
     --mat-mdc-focus-indicator-color: green;
 
     --mat-slider-focus-state-layer-color: rgba(0, 144, 54, 0.12);
 }
 
 .wasdi-slider:disabled {
-    --mdc-slider-active-track-color: #697589;
+    --mat-slider-active-track-color: #697589;
 }
 
 ::ng-deep.wasdi-slider .mdc-slider__thumb .mdc-slider__thumb-knob {
