@@ -60,3 +60,4 @@ sonar-project.properties
 /mongo/data
 src/assets/environment.js
 package-lock.json
+.vscode/
