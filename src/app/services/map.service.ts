@@ -181,7 +181,9 @@ export class MapService {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       maxZoom: 18,
       // this option disables loading tiles outside of the world bounds.
-      noWrap: true
+      noWrap: true,
+      // send the origin as Referer to avoid OSM 403 Access Blocked errors
+      referrerPolicy: 'origin'
     });
 
     // Topo Map
@@ -279,7 +281,7 @@ export class MapService {
     });
 
 
-    this.m_oOSMBasic.addTo(oMap)
+    this.m_oEsriWorldStreetMap.addTo(oMap)
 
     this.initGeoSearchPluginForOpenStreetMap(oMap);
     this.addMousePositionAndScale(oMap);
@@ -296,7 +298,7 @@ export class MapService {
     oMap.fitBounds(oBoundaries);
     oMap.setZoom(3);
 
-    this.setActiveLayer(oMap,this.m_oOSMBasic)
+    this.setActiveLayer(oMap,this.m_oEsriWorldStreetMap)
     //add event on base change
     oMap.on('baselayerchange',  (e:any)=>{
       this.setActiveLayer(oMap,e.layer);
