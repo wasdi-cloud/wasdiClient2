@@ -60,6 +60,13 @@ export class NavLayersComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /**
+   * Return the visible bands in reverse order so the list follows the GIS convention.
+   */
+  getVisibleBandsForDisplay(): Array<any> {
+    return [...this.m_aoVisibleBands].reverse();
+  }
+
   /********** Band Visibility Options *********/
   /**
    * Handle Opacity input from opacity slider
@@ -192,10 +199,15 @@ export class NavLayersComponent implements OnInit {
   }
 
   drop(event: any) {
+    const iVisibleBandCount = this.m_aoVisibleBands.length;
+    if (iVisibleBandCount === 0) {
+      return;
+    }
+
     moveItemInArray(
       this.m_aoVisibleBands,
-      event.previousIndex,
-      event.currentIndex
+      iVisibleBandCount - 1 - event.previousIndex,
+      iVisibleBandCount - 1 - event.currentIndex
     );
     this.handleLayerOrder();
   }

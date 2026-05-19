@@ -5,11 +5,11 @@
     >
       <ul
         cdkDropList
-        [cdkDropListData]="m_aoVisibleBands.reverse()"
+        [cdkDropListData]="getVisibleBandsForDisplay()"
         (cdkDropListDropped)="drop($event)"
         class="list-group pe-1"
         >
-        @for (oBand of m_aoVisibleBands.reverse(); track oBand) {
+        @for (oBand of getVisibleBandsForDisplay(); track oBand.layerId) {
           <li
             cdkDrag
             class="list-group-item d-flex flex-column mt-2"

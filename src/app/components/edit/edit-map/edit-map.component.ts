@@ -126,6 +126,11 @@ export class EditMapComponent implements OnInit, OnChanges, AfterViewInit, OnDes
    */
   private m_iPreviousVisibleBandsCount = 0;
 
+  /**
+   * Tracks the visible bands already applied to the map so we can update only the delta.
+   */
+  private m_oPreviousVisibleBandsById = new Map<string, string>();
+
   constructor(
     private m_oMapEngineService: MapEngineService,
     private m_oNotificationDisplayService: NotificationDisplayService,
@@ -143,6 +148,10 @@ export class EditMapComponent implements OnInit, OnChanges, AfterViewInit, OnDes
 
   ngAfterViewInit(): void {
     this.m_oMapEngineService.initMap('bigMapContainer');
+    const oMap = this.m_oMapEngineService.getMap();
+    if (oMap) {
+      this.m_oMapEngineService.initGeocoder(oMap);
+    }
     this.setupFeatureInfoClickHandler();
     this.syncMapSize();
     this.syncVisibleBandsOnMap();
@@ -169,7 +178,21 @@ export class EditMapComponent implements OnInit, OnChanges, AfterViewInit, OnDes
     const oMap = this.m_oMapEngineService.getMap();
     if (!oMap || !Array.isArray(this.m_aoVisibleBands) || this.m_aoVisibleBands.length === 0) {
       this.m_iPreviousVisibleBandsCount = Array.isArray(this.m_aoVisibleBands) ? this.m_aoVisibleBands.length : 0;
+      this.m_oPreviousVisibleBandsById.clear();
       return;
+    }
+
+    const oCurrentVisibleBandsById = new Map<string, any>();
+    for (const oBand of this.m_aoVisibleBands) {
+      if (oBand?.layerId) {
+        oCurrentVisibleBandsById.set(oBand.layerId, oBand);
+      }
+    }
+
+    for (const [sLayerId] of this.m_oPreviousVisibleBandsById.entries()) {
+      if (!oCurrentVisibleBandsById.has(sLayerId)) {
+        this.m_oMapEngineService.removeLayerMap2DByServer(sLayerId);
+      }
     }
 
     for (const oBand of this.m_aoVisibleBands) {
@@ -177,7 +200,10 @@ export class EditMapComponent implements OnInit, OnChanges, AfterViewInit, OnDes
         continue;
       }
 
-      this.m_oMapEngineService.addLayerMap2DByServer(oBand.layerId, oBand.geoserverUrl);
+      const sPreviousServer = this.m_oPreviousVisibleBandsById.get(oBand.layerId);
+      if (sPreviousServer !== oBand.geoserverUrl) {
+        this.m_oMapEngineService.addLayerMap2DByServer(oBand.layerId, oBand.geoserverUrl);
+      }
     }
 
     if (this.m_iPreviousVisibleBandsCount === 0 && this.m_aoVisibleBands.length === 1) {
@@ -188,6 +214,11 @@ export class EditMapComponent implements OnInit, OnChanges, AfterViewInit, OnDes
     }
 
     this.m_iPreviousVisibleBandsCount = this.m_aoVisibleBands.length;
+    this.m_oPreviousVisibleBandsById = new Map<string, string>(
+      this.m_aoVisibleBands
+        .filter((oBand) => oBand?.layerId && oBand?.geoserverUrl)
+        .map((oBand) => [oBand.layerId, oBand.geoserverUrl])
+    );
   }
 
   goWorkspaceHome() {

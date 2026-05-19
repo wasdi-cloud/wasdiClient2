@@ -18,7 +18,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
 import { StylesDialogComponent } from './toolbar-dialogs/styles-dialog/styles-dialog.component';
 import {PrintDialogComponent} from "../../../shared/dialogs/print-dialog/print-dialog.component";
-import {MapService} from "../../../services/map.service";
+import { MapEngineService } from 'src/app/services/map-engine/map-engine.service';
 
 
 
@@ -53,7 +53,7 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
     private m_oRabbitStompService: RabbitStompService,
     private m_oTranslate: TranslateService,
-    private m_oMapService:MapService
+    private m_oMapEngineService: MapEngineService
   ) { }
 
   ngOnInit() {
@@ -175,10 +175,13 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
             wmsUrl:this.m_aoVisibleBands[i].geoserverUrl,
           })
     }
+    const oActiveLayer = this.m_oMapEngineService.getActiveLayer();
+    const oMap = this.m_oMapEngineService.getMap();
+
     let oPrintPayload={
-      baseMap:this.m_oMapService.getActiveLayer()._url,
-      zoomLevel:this.m_oMapService.getMap().getZoom(),
-      center:this.m_oMapService.getMap().getCenter(),
+      baseMap:oActiveLayer?._url,
+      zoomLevel:oMap?.getZoom?.(),
+      center:oMap?.getCenter?.(),
       format:"",
       wmsLayers:aoBandsToPrints,
       wkts:[]

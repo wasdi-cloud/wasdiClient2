@@ -144,6 +144,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     this.m_iHookIndex = this.m_oRabbitStompService.addMessageHook("PUBLISHBAND",
       this,
       this.publishBandMessageHook, false);
+    console.log('ProductsListComponent.ngOnInit: registered PUBLISHBAND hook index=' + this.m_iHookIndex);
 
     // Save the reference to the active workspace
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
@@ -208,10 +209,50 @@ export class ProductsListComponent implements OnChanges, OnInit {
   publishBandMessageHook(oRabbitMessage, oController) {
     // Get the payload
     let oPublishedBand = oRabbitMessage.payload;
+    console.log('ProductsListComponent.publishBandMessageHook: messageCode=' + oRabbitMessage.messageCode + ', band=' + oPublishedBand?.bandName + ', product=' + oPublishedBand?.productName);
     // Find the band object
-    let oBand = oController.getBandByProductAndBandName(oPublishedBand.productName, oPublishedBand.bandName);
+    let oBand = oController.getBandByProductAndBandName(oPublishedBand?.productName, oPublishedBand?.bandName);
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oBand)) {
+      oBand = oController.findBandByPublishedPayload(oPublishedBand);
+    }
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oBand)) {
+      console.log('ProductsListComponent.publishBandMessageHook: band not found in workspace list, using payload fallback object');
+      oBand = {
+        name: oPublishedBand?.bandName,
+        productName: oPublishedBand?.productName
+      };
+    }
     // Call received Publish Band Message
     oController.receivedPublishBandMessage(oRabbitMessage, oBand);
+  }
+
+  private findBandByPublishedPayload(oPublishedBand: any): any {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPublishedBand) || !Array.isArray(this.m_aoWorkspaceProductsList)) {
+      return null;
+    }
+
+    for (const oProduct of this.m_aoWorkspaceProductsList) {
+      const bProductMatches = oProduct?.name === oPublishedBand.productName
+        || oProduct?.fileName === oPublishedBand.productName
+        || oProduct?.productFriendlyName === oPublishedBand.productName;
+
+      if (!bProductMatches) {
+        continue;
+      }
+
+      const aoBands = oProduct?.bandsGroups?.bands;
+      if (!Array.isArray(aoBands)) {
+        continue;
+      }
+
+      for (const oBand of aoBands) {
+        if (oBand?.name === oPublishedBand.bandName) {
+          return oBand;
+        }
+      }
+    }
+
+    return null;
   }
 
 
@@ -495,7 +536,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     this.m_oFileBufferService.publishBand(sFileName, this.m_oActiveWorkspace.workspaceId, oBand.name).subscribe(oResponse => {
 
-      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO" && FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse.messageResult)) {
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO") {
         //If the Band is already published:
         if (oResponse.messageCode === "PUBLISHBAND") {
           this.receivedPublishBandMessage(oResponse, oBand);
@@ -570,6 +611,15 @@ export class ProductsListComponent implements OnChanges, OnInit {
       console.log("ProductListComponent.receivedPublishBandMessage: Error Published band is empty...");
       return false;
     }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oActiveBand)) {
+      oActiveBand = {
+        name: oPublishedBand.bandName,
+        productName: oPublishedBand.productName
+      };
+    }
+
+    console.log('ProductsListComponent.receivedPublishBandMessage: layerId=' + oPublishedBand.layerId + ', geoserverUrl=' + oPublishedBand.geoserverUrl);
     oActiveBand.bbox = oPublishedBand.boundingBox;
     oActiveBand.geoserverBoundingBox = oPublishedBand.geoserverBoundingBox;
     oActiveBand.geoserverUrl = oPublishedBand.geoserverUrl;
@@ -579,7 +629,11 @@ export class ProductsListComponent implements OnChanges, OnInit {
     oActiveBand['bVisibleNow'] = true;
 
     oActiveBand['productName'] = oPublishedBand.productName
-    this.m_aoVisibleBands.push(oActiveBand);
+
+    const bAlreadyVisible = this.m_aoVisibleBands.some((oBand) => oBand?.layerId === oActiveBand.layerId);
+    if (!bAlreadyVisible) {
+      this.m_aoVisibleBands.push(oActiveBand);
+    }
 
     this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
 

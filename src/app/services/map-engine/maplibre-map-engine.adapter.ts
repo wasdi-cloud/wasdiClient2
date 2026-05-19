@@ -90,15 +90,10 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     const aoPairs: Array<[number, number]> = [];
 
     const addPair = (aValue: any) => {
-      if (!Array.isArray(aValue) || aValue.length < 2) {
-        return;
+      const oPair = this.normalizePointPairToLngLat(aValue);
+      if (oPair) {
+        aoPairs.push(oPair);
       }
-      const fLat = Number(aValue[0]);
-      const fLng = Number(aValue[1]);
-      if (isNaN(fLat) || isNaN(fLng)) {
-        return;
-      }
-      aoPairs.push([fLat, fLng]);
     };
 
     const walk = (aValue: any) => {
@@ -122,21 +117,49 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
       return null;
     }
 
-    let fMinLat = aoPairs[0][0];
-    let fMaxLat = aoPairs[0][0];
-    let fMinLng = aoPairs[0][1];
-    let fMaxLng = aoPairs[0][1];
+    let fMinLng = aoPairs[0][0];
+    let fMaxLng = aoPairs[0][0];
+    let fMinLat = aoPairs[0][1];
+    let fMaxLat = aoPairs[0][1];
 
     for (const aPair of aoPairs) {
-      if (aPair[0] < fMinLat) fMinLat = aPair[0];
-      if (aPair[0] > fMaxLat) fMaxLat = aPair[0];
-      if (aPair[1] < fMinLng) fMinLng = aPair[1];
-      if (aPair[1] > fMaxLng) fMaxLng = aPair[1];
+      if (aPair[0] < fMinLng) fMinLng = aPair[0];
+      if (aPair[0] > fMaxLng) fMaxLng = aPair[0];
+      if (aPair[1] < fMinLat) fMinLat = aPair[1];
+      if (aPair[1] > fMaxLat) fMaxLat = aPair[1];
     }
 
     return [[fMinLng, fMinLat], [fMaxLng, fMaxLat]];
   }
 
+  private normalizePointPairToLngLat(aValue: any): [number, number] | null {
+    if (!Array.isArray(aValue) || aValue.length < 2) {
+      return null;
+    }
+
+    const fFirst = Number(aValue[0]);
+    const fSecond = Number(aValue[1]);
+    if (isNaN(fFirst) || isNaN(fSecond)) {
+      return null;
+    }
+
+    const bFirstCanBeLat = Math.abs(fFirst) <= 90;
+    const bSecondCanBeLat = Math.abs(fSecond) <= 90;
+
+    if (bFirstCanBeLat && !bSecondCanBeLat) {
+      return [fSecond, fFirst];
+    }
+
+    if (!bFirstCanBeLat && bSecondCanBeLat) {
+      return [fFirst, fSecond];
+    }
+
+    if (bFirstCanBeLat && bSecondCanBeLat) {
+      return [fSecond, fFirst];
+    }
+
+    return null;
+  }
   private sanitizeId(sInput: string): string {
     return (sInput || '').replace(/[^a-zA-Z0-9_-]/g, '_');
   }
@@ -145,10 +168,9 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     const aoValues = sBbox.split(',');
     const aoPairs: Array<[number, number]> = [];
     for (let iIndex = 0; iIndex < aoValues.length - 1; iIndex += 2) {
-      const fLat = Number(aoValues[iIndex]);
-      const fLng = Number(aoValues[iIndex + 1]);
-      if (!isNaN(fLat) && !isNaN(fLng)) {
-        aoPairs.push([fLat, fLng]);
+      const oPair = this.normalizePointPairToLngLat([aoValues[iIndex], aoValues[iIndex + 1]]);
+      if (oPair) {
+        aoPairs.push(oPair);
       }
     }
     return aoPairs;
@@ -193,6 +215,7 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
       }),
       getLatLngs: () => [aoLatLngs],
       toGeoJSON: () => ({
+
         type: 'Feature',
         geometry: {
           type: 'Polygon',
