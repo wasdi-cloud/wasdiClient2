@@ -309,7 +309,6 @@ mat-bottom-sheet-container-medium,
 
 .wasdi-maplibre-theme .maplibregl-ctrl-group > button,
 .wasdi-maplibre-theme .maplibregl-ctrl button,
-.wasdi-maplibre-theme .maplibregl-ctrl .maplibregl-ctrl-icon,
 .wasdi-maplibre-theme .maplibregl-ctrl button.maplibre-search-button {
   width: 40px;
   height: 40px;
@@ -317,8 +316,7 @@ mat-bottom-sheet-container-medium,
   margin: 2px;
   border: 0 !important;
   border-bottom: 0 !important;
-  background: rgba(27, 33, 43, 0.86) !important;
-  background-image: none !important;
+  background: #000000 !important;
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -326,12 +324,32 @@ mat-bottom-sheet-container-medium,
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
   outline: none;
   overflow: hidden;
+  padding: 0;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl button .maplibregl-ctrl-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background-size: 24px 24px !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
 }
 
 .wasdi-maplibre-theme .maplibregl-ctrl button:hover,
-.wasdi-maplibre-theme .maplibregl-ctrl .maplibregl-ctrl-icon:hover,
 .wasdi-maplibre-theme .maplibregl-ctrl button.maplibre-search-button:hover {
-  background: rgba(27, 33, 43, 0.96) !important;
+  background: #1a1a1a !important;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-icon {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
 }
 
 .wasdi-maplibre-theme .maplibregl-ctrl .material-symbols-outlined {
@@ -346,9 +364,41 @@ mat-bottom-sheet-container-medium,
   font-size: 24px;
 }
 
-/* Built-in fullscreen icon uses a background-image; invert to white for dark button */
-.wasdi-maplibre-theme .maplibregl-ctrl-fullscreen .maplibregl-ctrl-icon {
-  filter: brightness(0) invert(1);
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-zoom-in,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-zoom-out,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-fullscreen,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-shrink {
+  background: #000000 !important;
+}
+
+/* Override built-in control background-images with white SVG versions */
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='29' height='29' fill='%23fff' viewBox='0 0 29 29'%3E%3Cpath d='M14.5 8.5c-.75 0-1.5.75-1.5 1.5v3h-3c-.75 0-1.5.75-1.5 1.5S9.25 16 10 16h3v3c0 .75.75 1.5 1.5 1.5S16 19.75 16 19v-3h3c.75 0 1.5-.75 1.5-1.5S19.75 13 19 13h-3v-3c0-.75-.75-1.5-1.5-1.5'/%3E%3C/svg%3E") !important;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='29' height='29' fill='%23fff' viewBox='0 0 29 29'%3E%3Cpath d='M10 13c-.75 0-1.5.75-1.5 1.5S9.25 16 10 16h9c.75 0 1.5-.75 1.5-1.5S19.75 13 19 13z'/%3E%3C/svg%3E") !important;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-fullscreen .maplibregl-ctrl-icon {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='29' height='29' fill='%23fff' viewBox='0 0 29 29'%3E%3Cpath d='M24 16v5.5c0 1.75-.75 2.5-2.5 2.5H16v-1l3-1.5-4-5.5 1-1 5.5 4 1.5-3zM6 16l1.5 3 5.5-4 1 1-4 5.5 3 1.5v1H7.5C5.75 24 5 23.25 5 21.5V16zm7-11v1l-3 1.5 4 5.5-1 1-5.5-4L6 13H5V7.5C5 5.75 5.75 5 7.5 5zm11 2.5c0-1.75-.75-2.5-2.5-2.5H16v1l3 1.5-4 5.5 1 1 5.5-4 1.5 3h1z'/%3E%3C/svg%3E") !important;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-shrink .maplibregl-ctrl-icon {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='29' height='29' fill='%23fff' viewBox='0 0 29 29'%3E%3Cpath d='M18.5 16c-1.75 0-2.5.75-2.5 2.5V24h1l1.5-3 5.5 4 1-1-4-5.5 3-1.5v-1zM13 18.5c0-1.75-.75-2.5-2.5-2.5H5v1l3 1.5L4 24l1 1 5.5-4 1.5 3h1zm3-8c0 1.75.75 2.5 2.5 2.5H24v-1l-3-1.5L25 5l-1-1-5.5 4L17 5h-1zM10.5 13c1.75 0 2.5-.75 2.5-2.5V5h-1l-1.5 3L5 4 4 5l4 5.5L5 12v1z'/%3E%3C/svg%3E") !important;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-zoom-in:hover .maplibregl-ctrl-icon,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-zoom-out:hover .maplibregl-ctrl-icon,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-fullscreen:hover .maplibregl-ctrl-icon,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-shrink:hover .maplibregl-ctrl-icon,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-zoom-in:active .maplibregl-ctrl-icon,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-zoom-out:active .maplibregl-ctrl-icon,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-fullscreen:active .maplibregl-ctrl-icon,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibregl-ctrl-shrink:active .maplibregl-ctrl-icon {
+  background-position: center !important;
+  background-size: 24px 24px !important;
+  transform: none !important;
 }
 
 /* Keep plus/minus readable on dark background */

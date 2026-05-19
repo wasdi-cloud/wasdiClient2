@@ -10,7 +10,6 @@ import { LoginComponent } from './components/login/login.component';
 import { LoginCoplacComponent } from './components/login/login-coplac/login-coplac.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { SearchOrbit } from './components/plan/search-orbit.component';
 import { SearchComponent } from './components/search/search.component';
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
@@ -30,7 +29,6 @@ const routes: Routes = [
   { path: 'settings', component: AdminComponent, canActivate: [AuthGuard]  },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
-  { path: 'plan', component: SearchOrbit, canActivate: [AuthGuard] },
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'subscriptions', component: SubscriptionsPurchaseComponent, canActivate: [AuthGuard] },
   { path: 'workspaces', component: WorkspacesComponent, canActivate: [AuthGuard] },

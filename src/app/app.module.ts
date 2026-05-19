@@ -180,11 +180,6 @@ import { LoginRedirectComponent } from './components/login-redirect/login-redire
 import { EnvService } from './services/env.service';
 import { PrintDialogComponent } from './shared/dialogs/print-dialog/print-dialog.component';
 import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.component';
-import { SearchOrbit } from './components/plan/search-orbit.component';
-import { SearchOrbitResourcesComponent } from './components/plan/search-orbit-resources/search-orbit-resources.component';
-import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
-import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
-import { PlanTreeComponent } from './components/plan/plan-tree/plan-tree.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -302,12 +297,7 @@ import { PlanTreeComponent } from './components/plan/plan-tree/plan-tree.compone
         LoginCoplacComponent,
         LoginRedirectComponent,
         PrintDialogComponent,
-        PreviewDialogComponent,
-        SearchOrbit,
-        SearchOrbitResourcesComponent,
-        SearchOrbitResultsComponent,
-        PlanMapComponent,
-        PlanTreeComponent
+        PreviewDialogComponent
     ],
     bootstrap: [AppComponent], imports: [AppRoutingModule,
         BrowserModule,
