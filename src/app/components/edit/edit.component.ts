@@ -5,8 +5,6 @@ import { Title } from '@angular/platform-browser';
 //Service Imports:
 import { ConsoleService } from 'src/app/services/api/console.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { GlobeService } from 'src/app/services/globe.service';
-import { MapService } from 'src/app/services/map.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 import { ProductService } from 'src/app/services/api/product.service';
@@ -46,9 +44,7 @@ export class EditComponent implements OnInit, OnDestroy {
     private m_oRouter: Router,
     private m_oTitleService: Title,
     private m_oTranslate: TranslateService,
-    private m_oWorkspaceService: WorkspaceService,
-    private m_oGlobeService: GlobeService,
-    private m_oMapService: MapService) { }
+    private m_oWorkspaceService: WorkspaceService) { }
 
   /**
    * Map Status: 2D (true) or 3D (false):
@@ -164,8 +160,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.m_oRabbitStompService.unsubscribe();
-    this.m_oGlobeService.clearGlobe();
-    this.m_oMapService.clearMap();
   }
 
   receivedRabbitMessage(oMessage, oController) {
