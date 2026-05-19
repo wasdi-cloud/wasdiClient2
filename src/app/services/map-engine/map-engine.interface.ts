@@ -1,5 +1,9 @@
 import { Observable } from 'rxjs';
 
+export interface MapInitOptions {
+  showFullscreenControl?: boolean;
+}
+
 /**
  * Framework-agnostic map engine contract used by UI components.
  *
@@ -17,8 +21,8 @@ export interface IMapEngine {
 
   setMap(map: any): void;
   getMap(): any;
-  initMapSingleton(mapDivId: string): any;
-  initMap(mapDivId: string): void;
+  initMapSingleton(mapDivId: string, oOptions?: MapInitOptions): any;
+  initMap(mapDivId: string, oOptions?: MapInitOptions): void;
   clearMap(): void;
   resetDrawnItemsLayer(): void;
 

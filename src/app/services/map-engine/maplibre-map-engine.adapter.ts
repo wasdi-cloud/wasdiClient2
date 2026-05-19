@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable } from 'rxjs';
 import maplibregl from 'maplibre-gl';
 import { IMapEngine } from './map-engine.interface';
+import { MapInitOptions } from './map-engine.interface';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ManualBoundingBoxComponent } from 'src/app/shared/shared-components/manual-bounding-box/manual-bounding-box.component';
 
@@ -344,6 +345,63 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     };
   }
 
+  private addMousePositionControl(map: any): void {
+    if (!this.isMapLibreMap(map)) {
+      return;
+    }
+
+    if ((map as any).__wasdiMousePositionControlAdded) {
+      return;
+    }
+
+    const oControl = {
+      onAdd(oMap: any) {
+        const oContainer = document.createElement('div');
+        oContainer.className = 'maplibregl-ctrl maplibre-mouse-position-control';
+        oContainer.textContent = 'Lat: -, Lon: -';
+
+        const fOnMouseMove = (oEvent: any) => {
+          const fLat = Number(oEvent?.lngLat?.lat);
+          const fLng = Number(oEvent?.lngLat?.lng);
+          if (isNaN(fLat) || isNaN(fLng)) {
+            return;
+          }
+          oContainer.textContent = `Lat: ${fLat.toFixed(5)}, Lon: ${fLng.toFixed(5)}`;
+        };
+
+        const fOnMouseLeave = () => {
+          oContainer.textContent = 'Lat: -, Lon: -';
+        };
+
+        oMap.on('mousemove', fOnMouseMove);
+        oMap.on('mouseout', fOnMouseLeave);
+
+        (oContainer as any).__wasdiMouseMoveHandler = fOnMouseMove;
+        (oContainer as any).__wasdiMouseLeaveHandler = fOnMouseLeave;
+
+        return oContainer;
+      },
+      onRemove() {
+        const oContainer = (this as any)?._container;
+        if (!oContainer || !map) {
+          return;
+        }
+
+        const fOnMouseMove = (oContainer as any).__wasdiMouseMoveHandler;
+        const fOnMouseLeave = (oContainer as any).__wasdiMouseLeaveHandler;
+        if (fOnMouseMove) {
+          map.off('mousemove', fOnMouseMove);
+        }
+        if (fOnMouseLeave) {
+          map.off('mouseout', fOnMouseLeave);
+        }
+      }
+    };
+
+    map.addControl(oControl as any, 'bottom-left');
+    (map as any).__wasdiMousePositionControlAdded = true;
+  }
+
   private addBaseLayerControl(): void {
     const oMap = this.getMapLibreMap();
     if (!oMap) {
@@ -407,12 +465,17 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     return this.m_oMap;
   }
 
-  initMapSingleton(mapDivId: string): any {
-    this.initMap(mapDivId);
+  initMapSingleton(mapDivId: string, oOptions?: MapInitOptions): any {
+    this.initMap(mapDivId, oOptions);
     return this.getMap();
   }
 
-  initMap(mapDivId: string): void {
+  initMap(mapDivId: string, oOptions?: MapInitOptions): void {
+    const oResolvedOptions: MapInitOptions = {
+      showFullscreenControl: true,
+      ...oOptions
+    };
+
     const oContainer = document.getElementById(mapDivId);
     if (!oContainer) {
       this.m_oMap = null;
@@ -436,7 +499,10 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     });
 
     this.m_oMap.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
-    this.m_oMap.addControl(new maplibregl.FullscreenControl(), 'top-left');
+    if (oResolvedOptions.showFullscreenControl !== false) {
+      this.m_oMap.addControl(new maplibregl.FullscreenControl(), 'top-left');
+    }
+    this.addMousePositionControl(this.m_oMap);
     this.addBaseLayerControl();
     this.m_oActiveLayer = { _url: this.m_aoBaseLayers[0].url };
   }
@@ -462,7 +528,7 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
   }
 
   addMousePositionAndScale(map: any): void {
-    return;
+    this.addMousePositionControl(map);
   }
 
   initGeocoder(map: any): void {

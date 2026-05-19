@@ -141,8 +141,11 @@ export class WorkspacesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private initWorkspaceMap(): void {
-    this.m_oMapEngineService.initMap(this.m_sWorkspaceMapId);
+    this.m_oMapEngineService.initMap(this.m_sWorkspaceMapId, { showFullscreenControl: false });
     const oMap = this.m_oMapEngineService.getMap();
+    if (oMap) {
+      this.m_oMapEngineService.initGeocoder(oMap);
+    }
     if (oMap?.dragRotate?.disable) oMap.dragRotate.disable();
     if (oMap?.touchZoomRotate?.disableRotation) oMap.touchZoomRotate.disableRotation();
     this.forceMapResize();

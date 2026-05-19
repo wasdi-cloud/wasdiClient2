@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { IMapEngine } from './map-engine.interface';
 import { MapLibreMapEngineAdapter } from './maplibre-map-engine.adapter';
 import { MAP_ENGINE_FLAGS } from './map-engine.config';
+import { MapInitOptions } from './map-engine.interface';
 
 /**
  * Runtime selector for the active map engine implementation.
@@ -33,8 +34,8 @@ export class MapEngineService implements IMapEngine {
 
   setMap(map: any): void { this.m_oEngine.setMap(map); }
   getMap(): any { return this.m_oEngine.getMap(); }
-  initMapSingleton(mapDivId: string): any { return this.m_oEngine.initMapSingleton(mapDivId); }
-  initMap(mapDivId: string): void { this.m_oEngine.initMap(mapDivId); }
+  initMapSingleton(mapDivId: string, oOptions?: MapInitOptions): any { return this.m_oEngine.initMapSingleton(mapDivId, oOptions); }
+  initMap(mapDivId: string, oOptions?: MapInitOptions): void { this.m_oEngine.initMap(mapDivId, oOptions); }
   clearMap(): void { this.m_oEngine.clearMap(); }
   resetDrawnItemsLayer(): void { this.m_oEngine.resetDrawnItemsLayer(); }
 

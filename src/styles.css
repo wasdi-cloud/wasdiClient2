@@ -441,6 +441,30 @@ mat-bottom-sheet-container-medium,
   pointer-events: auto;
   padding: 0 10px;
 }
+
+.wasdi-maplibre-theme .maplibre-mouse-position-control {
+  margin: 0 0 10px 10px;
+  padding: 2px 8px;
+  min-height: 20px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  color: #222222;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  user-select: none;
+  pointer-events: none;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl-bottom-left .maplibregl-ctrl.maplibre-mouse-position-control {
+  float: left;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl-bottom-left {
+  pointer-events: none;
+}
 .mat-ripple {
   display: none !important;
 }
