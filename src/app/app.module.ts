@@ -3,8 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 //Import Modules
 import { AppRoutingModule } from './app-routing.module';
-import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import { LeafletDrawModule } from '@bluehalo/ngx-leaflet-draw';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
@@ -306,8 +304,6 @@ import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.
         FormsModule,
         TranslateModule.forRoot(),
         BrowserAnimationsModule,
-        LeafletModule,
-        LeafletDrawModule,
         MatSlideToggleModule,
         MatDialogModule,
         MatTreeModule,

@@ -7,7 +7,7 @@ import { Subject } from 'rxjs'
 import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
 import { ConfigurationService } from 'src/app/services/configuration.service';
 import { ConstantsService } from 'src/app/services/constants.service';
-import { MapService } from 'src/app/services/map.service';
+import { MapEngineService } from 'src/app/services/map-engine/map-engine.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { PagesService } from 'src/app/services/pages.service';
 import { SearchService } from 'src/app/search.service';
@@ -107,7 +107,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     private m_oConfigurationService: ConfigurationService,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oMapService: MapService,
+    private m_oMapEngineService: MapEngineService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oPageService: PagesService,
     private m_oRabbitStompService: RabbitStompService,
@@ -517,13 +517,12 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   deleteProducts(sProviderName: string) {
     //check if layers list is empty
     if (!this.isEmptyProductsList()) {
-      const oMap = this.m_oMapService.getMap();
       /* remove rectangle in map*/
       for (let oProduct of this.m_aoProductsList) {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.provider) && oProduct.provider === sProviderName) {
           let oRectangle = oProduct.rectangle;
           if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
-            this.m_oMapService.removeLayerFromMap(oRectangle);
+            this.m_oMapEngineService.removeLayerFromMap(oRectangle);
           }
         }
       }

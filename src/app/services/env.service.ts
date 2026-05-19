@@ -44,14 +44,6 @@ export class EnvService {
     return this._env.baseurl || 'https://www.wasdi.net/';
   }
 
-  get CESIUM_BASE_URL(): string {
-    return this._env.CESIUM_BASE_URL || 'https://www.wasdi.net/assets/cesium/';
-  }
-
-  get cesiumToken(): string {
-    return this._env.cesiumToken || "";
-  }
-
   get rabbitUser(): string {
     return this._env.RABBIT_USER || "wasdi";
   }
