@@ -126,7 +126,7 @@ export class ViewElementFactory {
             }
             else {
                 let oNow = new Date();
-                oViewElement.m_sDate = formatDate(oNow, "dd/MM/YYYY", "en");
+                oViewElement.m_sDate = formatDate(oNow, "dd/MM/yyyy", "en");
             }
         } 
         else if (oControl.type === "productlist") {

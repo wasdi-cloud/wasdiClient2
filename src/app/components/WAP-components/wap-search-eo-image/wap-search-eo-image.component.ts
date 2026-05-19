@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MapService } from 'src/app/services/map.service';
 import { TranslateService } from '@ngx-translate/core';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -32,7 +31,6 @@ export class WapSearchEoImageComponent {
   constructor(
     private m_oConfigurationService: ConfigurationService,
     private m_oLightSearchService: LightSearchService,
-    public m_oMapService: MapService,
     private m_oOpenSearchService: OpenSearchService,
     private m_oTranslateService: TranslateService) { }
 

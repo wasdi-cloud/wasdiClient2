@@ -83,7 +83,7 @@
           <td>{{oUser.userId}}</td>
           <td>{{oUser.surname}}</td>
           <td>{{oUser.name}}</td>
-          <td>{{oUser.lastLogin | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
+          <td>{{oUser.lastLogin | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
           <td class="d-flex flex-row justify-content-end">
             <span (click)="setSelectedUser(oUser)" data-bs-toggle="offcanvas" href="#userTime"
               role="button" aria-controls="userTime" class="material-symbols-outlined">
@@ -133,13 +133,13 @@
     (m_oInputChange)="setInputSelections($event, 'surname')"></app-input-field>
     <!-- Registration date -->
     <app-input-field [m_sLabel]="'Registration Date'" [m_bIsReadonly]="true"
-    [m_sInputValue]="m_oSelectedUser.registrationDate? (m_oSelectedUser.registrationDate | date: 'dd/MM/YYYY HH:mm:ss') : 'N/A'"></app-input-field>
+    [m_sInputValue]="m_oSelectedUser.registrationDate? (m_oSelectedUser.registrationDate | date: 'dd/MM/yyyy HH:mm:ss') : 'N/A'"></app-input-field>
     <!-- Confirmation date -->
     <app-input-field [m_sLabel]="'Confirmation Date'" [m_bIsReadonly]="true"
-    [m_sInputValue]="m_oSelectedUser.confirmationDate ? (m_oSelectedUser.confirmationDate | date: 'dd/MM/YYYY HH:mm:ss'): 'N/A'"></app-input-field>
+    [m_sInputValue]="m_oSelectedUser.confirmationDate ? (m_oSelectedUser.confirmationDate | date: 'dd/MM/yyyy HH:mm:ss'): 'N/A'"></app-input-field>
     <!-- Last Login -->
     <app-input-field [m_sLabel]="'Last Login'" [m_bIsReadonly]="true"
-    [m_sInputValue]="m_oSelectedUser.lastLogin ? (m_oSelectedUser.lastLogin | date: 'dd/MM/YYYY HH:mm:ss'): 'N/A'"></app-input-field>
+    [m_sInputValue]="m_oSelectedUser.lastLogin ? (m_oSelectedUser.lastLogin | date: 'dd/MM/yyyy HH:mm:ss'): 'N/A'"></app-input-field>
     <!-- default node -->
     <app-dropdown [m_sLabel]="'Default Node'" [m_aoDropdownItems]="m_aoNodes"
       [m_aoSelectedItems]="m_oSelectedUser.defaultNode"
