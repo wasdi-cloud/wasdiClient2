@@ -1,24 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-
-//Import Services:
-import { ConstantsService } from 'src/app/services/constants.service';
-import { GlobeService } from 'src/app/services/globe.service';
-import { NotificationDisplayService } from 'src/app/services/notification-display.service';
-import { OpportunitySearchService } from 'src/app/services/api/opportunity-search.service';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/services/api/product.service';
-import { TranslateService } from '@ngx-translate/core';
-import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { MapEngineService } from 'src/app/services/map-engine/map-engine.service';
 
 
 //Import Models:;
 import { Workspace } from 'src/app/shared/models/workspace.model';
 
-//Import Utilities:
-import WasdiUtils from 'src/app/lib/utils/WasdiJSUtils';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-
-//Declare Cesium:
-declare let Cesium: any;
 
 /**
  * Definitio of the Workspace View Mode obtained by the server
@@ -47,7 +35,7 @@ export interface WorkspaceViewModel {
     standalone: false
 })
 
-export class WorkspacesComponent implements OnInit {
+export class WorkspacesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /**
    * Array of available workspaces
@@ -58,34 +46,6 @@ export class WorkspacesComponent implements OnInit {
    * Workspace actually seletected
    */
   m_oActiveWorkspace!: WorkspaceViewModel;
-
-  /**
-   * List of the users that shares the workspace
-   */
-  m_asSharedUsers!: string[];
-
-  /**
-   * Reference to the timer function used to update satellilte positions
-   */
-  m_oSetIntervalReference: any;
-
-  /**
-   * Flag to know if we need to show satellites or not
-   */
-  m_bShowSatellites: boolean;
-
-  /**
-   * Array of the input tracks for each satellite
-   */
-  m_aoSatelliteInputTracks: any[] = [];
-  /**
-   * Array of the actual position of each satellite
-   */
-  m_aoSatellitePositions: any[] = [];
-
-  m_oFakePosition: any = null;
-  m_oUfoPointer: any;
-  m_aoSateliteInputTraks: any[] = [];
 
   m_bLoadingWSFiles: boolean = false;
 
@@ -156,34 +116,90 @@ export class WorkspacesComponent implements OnInit {
   m_bDestroyCalled = false;
 
   m_aoSelectedWorkspaces: Array<Workspace> = [];
-  constructor(
 
-    private m_oGlobeService: GlobeService,
-    private m_oOpportunitySearchService: OpportunitySearchService,
+  private readonly m_sWorkspaceMapId = 'workspacesMap';
+  private m_aoWorkspaceRectangles: any[] = [];
+  private m_iWorkspaceRenderToken = 0;
+
+  constructor(
+    private m_oMapEngineService: MapEngineService,
     private m_oProductService: ProductService,
     ) { }
 
 
   ngOnInit(): void {
     this.m_bDestroyCalled = false;
-    this.m_oGlobeService.initRotateGlobe('CesiumContainer3');
-    this.getTrackSatellite();
-    this.m_bShowSatellites = true;
+  }
 
-    this.m_oSetIntervalReference = setInterval(() => {
-      this.updateSatellitesPositions();
-    }, 15000)
+  ngAfterViewInit(): void {
+    this.initWorkspaceMap();
   }
 
   ngOnDestroy(): void {
     this.m_bDestroyCalled = true;
+    this.m_oMapEngineService.clearMap();
+  }
 
-    //Destroy Interval after closing:
-    if (this.m_oSetIntervalReference) {
-      clearInterval(this.m_oSetIntervalReference);
+  private initWorkspaceMap(): void {
+    this.m_oMapEngineService.initMap(this.m_sWorkspaceMapId);
+    const oMap = this.m_oMapEngineService.getMap();
+    if (oMap?.dragRotate?.disable) oMap.dragRotate.disable();
+    if (oMap?.touchZoomRotate?.disableRotation) oMap.touchZoomRotate.disableRotation();
+    this.forceMapResize();
+  }
+
+  private forceMapResize(): void {
+    const oMap = this.m_oMapEngineService.getMap();
+    if (!oMap?.resize) {
+      return;
     }
 
-    this.m_oGlobeService.clearGlobe()
+    // Run a couple of delayed resizes to handle route transitions/layout settling.
+    setTimeout(() => oMap.resize(), 0);
+    setTimeout(() => oMap.resize(), 120);
+  }
+
+  private renderWorkspaceFootprints(): void {
+    let oMap = this.m_oMapEngineService.getMap();
+    if (!oMap) {
+      this.initWorkspaceMap();
+      oMap = this.m_oMapEngineService.getMap();
+    }
+
+    this.m_iWorkspaceRenderToken += 1;
+    const iRenderToken = this.m_iWorkspaceRenderToken;
+
+    for (const oRectangle of this.m_aoWorkspaceRectangles) {
+      this.m_oMapEngineService.removeLayerFromMap(oRectangle);
+    }
+    this.m_aoWorkspaceRectangles = [];
+
+    if (!Array.isArray(this.m_aoProducts) || this.m_aoProducts.length === 0) {
+      return;
+    }
+
+    const fDrawFootprints = () => {
+      if (this.m_bDestroyCalled || iRenderToken !== this.m_iWorkspaceRenderToken) {
+        return;
+      }
+
+      this.m_oMapEngineService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts, '');
+      this.m_aoWorkspaceRectangles = this.m_aoProducts
+        .map((oProduct: any) => oProduct?.rectangle)
+        .filter((oRectangle: any) => !!oRectangle);
+      this.m_oMapEngineService.flyToWorkspaceBoundingBox(this.m_aoProducts);
+      this.forceMapResize();
+    };
+
+    const bStyleLoaded = !!(oMap?.isStyleLoaded?.() || oMap?.loaded?.());
+    if (bStyleLoaded) {
+      fDrawFootprints();
+      return;
+    }
+
+    if (oMap?.once) {
+      oMap.once('load', fDrawFootprints);
+    }
   }
 
   /**
@@ -191,8 +207,6 @@ export class WorkspacesComponent implements OnInit {
    * @param oWorkspace
    */
   onShowWorkspace(oWorkspace: Workspace) {
-
-    this.m_oGlobeService.removeAllEntities();
     this.loadProductList(oWorkspace)
   }
 
@@ -221,166 +235,25 @@ export class WorkspacesComponent implements OnInit {
 
         if (this.m_bDestroyCalled) return;
 
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+        if (Array.isArray(oResponse)) {
+          this.m_aoProducts = [...oResponse];
+        } else {
           this.m_aoProducts = [];
-          for (let iIndex = 0; iIndex < oResponse.length; iIndex++) {
-            this.m_aoProducts.push(oResponse[iIndex]);
-          }
         }
+
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_aoProducts) || this.m_aoProducts.length == 0) {
           FadeoutUtils.verboseLog("WorkspacesComponent.loadProductList No products to show")
-        } else {
-          //add globe bounding box
-          this.m_oGlobeService.addAllWorkspaceRectanglesOnGlobe(this.m_aoProducts);
         }
+
+        this.renderWorkspaceFootprints();
 
         this.m_bLoadingWSFiles = false;
       },
-      error: oError => { }
-    });
-    return true;
-  }
-
-  onSelectProduct(oProduct: any) {
-    if (this.m_oSelectedProduct === oProduct) {
-      this.m_oSelectedProduct = null;
-      return false;
-    }
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.aBounds) === true) {
-      return false;
-    }
-
-    this.m_oSelectedProduct = oProduct;
-    let aBounds = oProduct.aBounds;
-    let aBoundsLength = aBounds.length;
-    let aoRectangleBounds = [];
-    let oGlobe = this.m_oGlobeService.getGlobe();
-
-    // let temp = null;
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct) === true) {
-      return false;
-    }
-
-    this.m_oGlobeService.stopRotationGlobe();
-
-    for (let iIndexBound = 0; iIndexBound < aBoundsLength - 1; iIndexBound = iIndexBound + 2) {
-      aoRectangleBounds.push(new Cesium.Cartographic.fromDegrees(aBounds[iIndexBound], aBounds[iIndexBound + 1]));
-    }
-
-    let zoom = Cesium.Rectangle.fromCartographicArray(aoRectangleBounds);
-    oGlobe.camera.setView({
-      destination: zoom,
-      orientation: {
-        heading: 0.0,
-        pitch: -Cesium.Math.PI_OVER_TWO,
-        roll: 0.0
+      error: oError => {
+        this.m_bLoadingWSFiles = false;
       }
     });
-
     return true;
-  }
-
-  getTrackSatellite() {
-    let iSat = 0;
-
-    this.m_aoSatelliteInputTracks = this.m_oGlobeService.getSatelliteTrackInputList();
-
-    //Remove all old Entities from the map:
-    this.m_oGlobeService.removeAllEntities();
-
-    for (let iSat = 0; iSat < this.m_aoSatelliteInputTracks.length; iSat++) {
-      let oActualSat = this.m_aoSatelliteInputTracks[iSat];
-
-      this.m_oOpportunitySearchService.getTrackSatellite(this.m_aoSatelliteInputTracks[iSat].name).subscribe(oResponse => {
-        if (oResponse) {
-
-          if (oResponse.currentPosition) {
-            for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliteInputTracks.length; iOriginalSat++) {
-              if (this.m_aoSatelliteInputTracks[iOriginalSat].name === oResponse.code) {
-                oActualSat = this.m_aoSatelliteInputTracks[iOriginalSat];
-                break;
-              }
-            }
-
-            let sDescription = oActualSat.description;
-            sDescription += "\n";
-            sDescription += oResponse.currentTime;
-
-            let oActualPosition = this.m_oGlobeService.drawPointWithImage(WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.currentPosition), oActualSat.icon, sDescription, oActualSat.label, 32, 32);
-            this.m_aoSatellitePositions.push(oActualPosition);
-
-            if (this.m_oFakePosition === null) {
-              if (oResponse.lastPositions != null) {
-
-                let iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
-
-                this.m_oFakePosition = oResponse.lastPositions[iFakeIndex];
-
-                let aoUfoPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(this.m_oFakePosition);
-                aoUfoPosition[2] = aoUfoPosition[2] * 4;
-                this.m_oUfoPointer = this.m_oGlobeService.drawPointWithImage(aoUfoPosition, "assets/icons/alien.svg", "U.F.O.", "?");
-
-                iFakeIndex = Math.floor(Math.random() * (oResponse.lastPositions.length));
-                let aoMoonPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oResponse.lastPositions[iFakeIndex]);
-                aoMoonPosition[2] = 384400000;
-
-                this.m_oGlobeService.drawPointWithImage(aoMoonPosition, "assets/icons/sat_death.svg", "Moon", "-");
-              }
-            }
-          }
-        }
-      })
-    }
-  }
-
-  updateSatellitesPositions() {
-    if (!this.m_aoSatellitePositions) {
-      return false;
-    }
-
-    this.m_aoSatelliteInputTracks = this.m_oGlobeService.getSatelliteTrackInputList();
-
-    this.updatePosition();
-
-    return true;
-  }
-
-  updatePosition() {
-    let sSatellites: string = "";
-    for (let iSat = 0; iSat < this.m_aoSatelliteInputTracks.length; iSat++) {
-      sSatellites += this.m_aoSatelliteInputTracks[iSat].name + "-";
-    }
-
-    this.m_oOpportunitySearchService.getUpdatedTrackSatellite(sSatellites).subscribe(
-      oResponse => {
-        if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-          for (let iSatellites = 0; iSatellites < oResponse.length; iSatellites++) {
-            let oActualDataByServer = oResponse[iSatellites];
-
-            let iIndexActualSatellitePosition = this.getIndexActualSatellitePositions(oResponse[iSatellites].code);
-
-            if (iIndexActualSatellitePosition >= 0) {
-              let oSatellite = this.m_aoSatellitePositions[iIndexActualSatellitePosition];
-              let aPosition = WasdiUtils.projectConvertCurrentPositionFromServerInCesiumDegrees(oActualDataByServer.currentPosition);
-              let oCesiumBoundaries = Cesium.Cartesian3.fromDegrees(aPosition[0], aPosition[1], aPosition[2]);
-              this.m_oGlobeService.updateEntityPosition(oSatellite, oCesiumBoundaries);
-            }
-          }
-        }
-      }
-    )
-  }
-
-  getIndexActualSatellitePositions(sCode: string) {
-    for (let iOriginalSat = 0; iOriginalSat < this.m_aoSatelliteInputTracks.length; iOriginalSat++) {
-      if (this.m_aoSateliteInputTraks[iOriginalSat]) {
-        if (this.m_aoSateliteInputTraks[iOriginalSat].name === sCode) {
-          return iOriginalSat;
-        }
-      }
-
-    }
-    return -1;
   }
 
   getSelectedWorkspace(oEvent) {

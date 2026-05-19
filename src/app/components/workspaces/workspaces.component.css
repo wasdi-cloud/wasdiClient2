@@ -3,7 +3,7 @@ main {
     position: relative;
 }
 
-.globe-container {
+.workspace-map-container {
     height: calc(100vh - 3rem);
     width: calc(100% + 2rem);
     position: absolute;
@@ -11,9 +11,13 @@ main {
     z-index: 1;
 }
 
-div.cesium-container {
+div.workspace-map {
     height: calc(100vh - 3rem);
     width: 100%;
+}
+
+.workspace-map :is(.maplibregl-ctrl-top-left, .maplibregl-ctrl-bottom-right) {
+    display: none !important;
 }
 
 .workspaces-menu {

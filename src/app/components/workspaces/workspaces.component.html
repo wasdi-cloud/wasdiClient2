@@ -1,6 +1,6 @@
 <main class="workspaces-container">
-  <div class="globe-container">
-    <div class="cesium-container" id="CesiumContainer3"></div>
+  <div class="workspace-map-container">
+    <div class="workspace-map" id="workspacesMap"></div>
     <app-workspaces-menu class="workspaces-menu" [m_aoProducts]="m_aoProducts"
     (m_oActiveWorkspaceOutput)="getSelectedWorkspace($event)"></app-workspaces-menu>
     @if (m_oSelectedWorkspace.name) {

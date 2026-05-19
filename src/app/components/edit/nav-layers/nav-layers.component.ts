@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
   OnInit,
 } from '@angular/core';
@@ -17,7 +16,6 @@ import {
 
 //Import Services:
 import { ConstantsService } from 'src/app/services/constants.service';
-import { GlobeService } from 'src/app/services/globe.service';
 import { MapService } from 'src/app/services/map.service';
 import { StylesDialogComponent } from 'src/app/components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
 
@@ -30,16 +28,13 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 
-//Declare Leaflet:
-declare const L: any;
-
 @Component({
     selector: 'app-nav-layers',
     templateUrl: './nav-layers.component.html',
     styleUrls: ['./nav-layers.component.css'],
     standalone: false
 })
-export class NavLayersComponent implements OnInit, OnChanges {
+export class NavLayersComponent implements OnInit {
   //Set opacity to 100% by default
   m_iOpacityVal = 100;
 
@@ -58,50 +53,18 @@ export class NavLayersComponent implements OnInit, OnChanges {
    */
   @Output() m_aoVisibleBandsChange = new EventEmitter();
 
-  /**
-   * Actually active tab
-   */
-  m_sActiveTab: string = 'nav';
   m_iOpacity: string;
-
-  /**
-   * 2D/3D Flag: is a property linked the flag in edit component
-   */
-  private m_b2DMapModeOn: boolean = true;
-
-  public get b2DMapModeOn(): boolean {
-    return this.m_b2DMapModeOn;
-  }
-
-  @Input() public set b2DMapModeOn(bValue: boolean) {
-    this.m_b2DMapModeOn = bValue;
-  }
 
   constructor(
     private m_oClipboard: Clipboard,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oGlobeService: GlobeService,
     private m_oMapService: MapService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService
   ) {}
 
   ngOnInit(): void {}
-
-  ngOnChanges(): void {
-    //Only set active tab to layers if it is the FIRST band published
-    if (
-      this.m_aoVisibleBands !== undefined &&
-      this.m_aoVisibleBands.length === 1
-    ) {
-      this.setActiveTab('layers');
-    }
-  }
-
-  setActiveTab(sTabName: string) {
-    this.m_sActiveTab = sTabName;
-  }
 
   /********** Band Visibility Options *********/
   /**
@@ -169,17 +132,7 @@ export class NavLayersComponent implements OnInit, OnChanges {
     }
 
     let sLayerId = 'wasdi:' + oBand.layerId;
-
-    if (this.m_b2DMapModeOn) {
-      this.removeBandLayersIn2dMaps(sLayerId);
-    }
-
-    if (this.m_b2DMapModeOn === false) {
-      this.removeBandLayersIn3dMaps(sLayerId);
-      //If the layers isn't georeferenced remove the Corresponding rectangle
-      this.removeRedSquareIn3DMap(sLayerId);
-    }
-
+    this.removeBandLayersIn2dMaps(sLayerId);
     this.removeBandImageFromVisibleList(oBand);
     return true;
   }
@@ -205,68 +158,12 @@ export class NavLayersComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Remove Band Image from 3D Map by layer Id
-   * @param sLayerId
-   * @returns {void}
-   */
-  removeBandLayersIn3dMaps(sLayerId): void {
-    // We are in 3d Mode
-    let aoGlobeLayers = this.m_oGlobeService.getGlobeLayers();
-
-    //Remove band layer
-    for (
-      let iIndexLayer = 0;
-      iIndexLayer < aoGlobeLayers.length;
-      iIndexLayer++
-    ) {
-      let oLayer = aoGlobeLayers.get(iIndexLayer);
-      if (
-        FadeoutUtils.utilsIsStrNullOrEmpty(sLayerId) === false &&
-        FadeoutUtils.utilsIsObjectNullOrUndefined(oLayer) === false &&
-        oLayer.imageryProvider.layers === sLayerId
-      ) {
-        aoGlobeLayers.remove(oLayer);
-        iIndexLayer = 0;
-      } else {
-        if (
-          !FadeoutUtils.utilsIsObjectNullOrUndefined(
-            oLayer.imageryProvider.layers
-          )
-        ) {
-          let sMapLayer = 'wasdi:' + oLayer.imageryProvider.layers;
-          if (
-            FadeoutUtils.utilsIsStrNullOrEmpty(sLayerId) === false &&
-            FadeoutUtils.utilsIsObjectNullOrUndefined(oLayer) === false &&
-            sMapLayer == sLayerId
-          ) {
-            aoGlobeLayers.remove(oLayer);
-            iIndexLayer = 0;
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Remove non-georeferenced entities from the map
-   * @param sLayerId
-   * @returns {void}
-   */
-  removeRedSquareIn3DMap(sLayerId): void {
-    this.m_oGlobeService.removeAllEntities();
-  }
-
-  /**
    * Reframe Band Image on the map (either in 2D OR 3D)
    * @param geoserverBoundingBox
    * @returns {void}
    */
   zoomOnBandImage(geoserverBoundingBox): void {
-    if (this.m_b2DMapModeOn === true) {
-      this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(
-        geoserverBoundingBox
-      );
-    }
+    this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(geoserverBoundingBox);
   }
 
   /**

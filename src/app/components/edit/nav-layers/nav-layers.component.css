@@ -2,14 +2,6 @@
     height: 100%;
 }
 
-#smallMapContainer {
-    height: 97%
-}
-
-.map-container-panel {
-    height: 100%;
-}
-
 .list-group-item {
     border: 1px solid var(--neutral10);
     border-radius: 8px;

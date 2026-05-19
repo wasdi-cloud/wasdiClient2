@@ -51,13 +51,15 @@
       (m_iFilteredProducts)="getFilteredProductsLength($event)"
       (m_oDownloadProgress)="getProductDownloadStatus($event)"
     ></app-products-list>
-    <div class="nav-layer-container">
-      <app-nav-layers
-        [m_aoVisibleBands]="m_aoVisibleBands"
-        [m_b2DMapMode]="m_b2DMapModeOn"
-        (m_aoVisibleBandsChange)="getVisibleBands($event)"
-      ></app-nav-layers>
-    </div>
+    @if (m_aoVisibleBands.length > 0) {
+      <div class="nav-layer-container">
+        <app-nav-layers
+          [m_aoVisibleBands]="m_aoVisibleBands"
+          [m_b2DMapMode]="m_b2DMapModeOn"
+          (m_aoVisibleBandsChange)="getVisibleBands($event)"
+        ></app-nav-layers>
+      </div>
+    }
   </div>
   <!-- Map Container with Floating Nav-->
   <div class="map map-container flex-grow-1">
