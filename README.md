@@ -23,8 +23,7 @@ This is the WASDI Client 2.0, built with Angular version 21. The client interact
 ## Technical Details
 
 WASDI Client uses:
-- **Leaflet** for 2D map visualization
-- **Cesium** for 3D globe visualization
+- **MapLibre GL** for map visualization
 - **RabbitMQ/STOMP** for asynchronous communication with the server
 - **Keycloak** for authentication by default (can also use an internal users table or have authentication disabled; see [WASDI config docs](https://wasdi.readthedocs.io/en/latest/))
 
@@ -42,12 +41,10 @@ window.__env.keycloakJs = 'https://127.0.0.1:8080/auth/js/keycloak.js'; // KEYCL
 window.__env.baseurl = 'https://127.0.0.1:8080/'; // BASE URL
 window.__env.RABBIT_USER = "";
 window.__env.RABBIT_PASSWORD = "";
-window.__env.CESIUM_BASE_URL = "https://127.0.0.1:8080/assets/cesium/";
-window.__env.cesiumToken = "";
 ```
 
 ## API Services
-In `src/app/services/api/` you will find an Angular service for each WASDI endpoint. The `services` folder also contains services for the globe, map, Ace editor, and other utilities.
+In `src/app/services/api/` you will find an Angular service for each WASDI endpoint. The `services` folder also contains services for map engine, Ace editor, and other utilities.
 
 ## Development
 
