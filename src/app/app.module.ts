@@ -147,7 +147,6 @@ import { WorkspacesMenuComponent } from './components/workspaces/workspaces-menu
 import { TextareaComponent } from './shared/shared-components/textarea/textarea.component';
 import { AppUiMenuComponent } from './components/app-ui/app-ui-menu/app-ui-menu.component';
 import { SliderComponent } from './shared/shared-components/slider/slider.component';
-import { InvaderComponent } from '../assets/invader/invader.component';
 import { TabComponent } from './shared/shared-components/tab/tab.component';
 import { AutocompleteComponent } from './shared/shared-components/autocomplete/autocomplete.component';
 import { DurationPipe } from './shared/pipes/duration.pipe';
@@ -178,6 +177,7 @@ import { LoginRedirectComponent } from './components/login-redirect/login-redire
 import { EnvService } from './services/env.service';
 import { PrintDialogComponent } from './shared/dialogs/print-dialog/print-dialog.component';
 import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.component';
+import { InvaderComponent } from '../assets/invader/invader.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -265,7 +265,6 @@ import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.
         TextareaComponent,
         AppUiMenuComponent,
         SliderComponent,
-        InvaderComponent,
         TabComponent,
         AutocompleteComponent,
         DurationPipe,
@@ -295,7 +294,8 @@ import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.
         LoginCoplacComponent,
         LoginRedirectComponent,
         PrintDialogComponent,
-        PreviewDialogComponent
+        PreviewDialogComponent,
+        InvaderComponent
     ],
     bootstrap: [AppComponent], imports: [AppRoutingModule,
         BrowserModule,
