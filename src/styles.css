@@ -298,6 +298,99 @@ mat-bottom-sheet-container-medium,
   border-color: #B4BAC4 !important;
 }
 
+/* MapLibre controls themed to match WASDI legacy style */
+.wasdi-maplibre-theme .maplibregl-ctrl-group {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl-group > button,
+.wasdi-maplibre-theme .maplibregl-ctrl button,
+.wasdi-maplibre-theme .maplibregl-ctrl .maplibregl-ctrl-icon,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibre-search-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px !important;
+  margin: 2px;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  background: rgba(27, 33, 43, 0.86) !important;
+  background-image: none !important;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+  outline: none;
+  overflow: hidden;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl button:hover,
+.wasdi-maplibre-theme .maplibregl-ctrl .maplibregl-ctrl-icon:hover,
+.wasdi-maplibre-theme .maplibregl-ctrl button.maplibre-search-button:hover {
+  background: rgba(27, 33, 43, 0.96) !important;
+}
+
+.wasdi-maplibre-theme .maplibregl-ctrl .material-symbols-outlined {
+  color: #FFFFFF;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.wasdi-maplibre-theme .maplibre-search-control .maplibre-search-button .material-symbols-outlined,
+.wasdi-maplibre-theme .maplibregl-ctrl button[title='Manual Bounding Box'] .material-symbols-outlined,
+.wasdi-maplibre-theme .maplibregl-ctrl button[title='Draw Rectangle'] .material-symbols-outlined {
+  font-size: 24px;
+}
+
+/* Built-in fullscreen icon uses a background-image; invert to white for dark button */
+.wasdi-maplibre-theme .maplibregl-ctrl-fullscreen .maplibregl-ctrl-icon {
+  filter: brightness(0) invert(1);
+}
+
+/* Keep plus/minus readable on dark background */
+.wasdi-maplibre-theme .maplibregl-ctrl-group button span {
+  color: #FFFFFF;
+}
+
+/* Search control: collapsed icon that expands input on hover/focus */
+.wasdi-maplibre-theme .maplibre-search-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.wasdi-maplibre-theme .maplibre-search-control input {
+  width: 0;
+  min-width: 0;
+  opacity: 0;
+  pointer-events: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--neutral20);
+  border-radius: 6px;
+  height: 34px;
+  font-size: 14px;
+  color: var(--neutral80);
+  background: #FFFFFF;
+  transition: width 160ms ease, opacity 140ms ease, padding 160ms ease;
+}
+
+.wasdi-maplibre-theme .maplibre-search-control.maplibre-search-expanded input,
+.wasdi-maplibre-theme .maplibre-search-control:focus-within input,
+.wasdi-maplibre-theme .maplibre-search-control:hover input {
+  width: 188px;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 0 10px;
+}
 .mat-ripple {
   display: none !important;
 }

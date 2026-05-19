@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { WorkspacesListDialogComponent } from '../workspaces-list-dialog/workspaces-list-dialog.component';
 import { ProductInfoComponent } from '../product-info/product-info.component';
-import { MapService } from 'src/app/services/map.service';
+import { MapEngineService } from 'src/app/services/map-engine/map-engine.service';
 import { PagesService } from 'src/app/services/pages.service';
 
 import $ from 'jquery';
@@ -42,7 +42,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   m_oClickSubscription: Subscription;
   constructor(
     public m_oDialog: MatDialog,
-    private m_oMapService: MapService,
+    private m_oMapEngine: MapEngineService,
     private m_oPageService: PagesService
   ) { }
 
@@ -79,7 +79,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.m_oClickSubscription = this.m_oMapService.m_oSelectedRectangle.subscribe(oResponse => {
+    this.m_oClickSubscription = this.m_oMapEngine.getSelectedRectangle$().subscribe(oResponse => {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
         if (oResponse.action === 'click') {
           let container = $('#results-table')
@@ -173,7 +173,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     for (let iIndexData = 0; iIndexData < this.m_aoProductsList.length; iIndexData++) {
       if (this.m_aoProductsList[iIndexData].provider !== sProvider) continue;
       let oProduct = this.m_aoProductsList[iIndexData]
-      let oRectangle = this.m_oMapService.addRectangleByBoundsArrayOnMap(oProduct, null, iIndexData);
+      let oRectangle = this.m_oMapEngine.addRectangleByBoundsArrayOnMap(oProduct, null, iIndexData);
       if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
         this.m_aoProductsList[iIndexData].rectangle = oRectangle
       }
@@ -181,7 +181,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     }
 
     if (aaoAllBounds.length > 0 && aaoAllBounds[0]?.length) {
-      this.m_oMapService.zoomOnBounds(aaoAllBounds);
+      this.m_oMapEngine.zoomOnBounds(aaoAllBounds);
     }
   }
 
@@ -223,7 +223,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     }
 
     let iLengthProductsList = this.m_aoProductsList.length;
-    let oMap = this.m_oMapService.getMap();
+    let oMap = this.m_oMapEngine.getMap();
     for (let iIndexProductsList = 0; iIndexProductsList < iLengthProductsList; iIndexProductsList++) {
       let oRectangle = this.m_aoProductsList[iIndexProductsList].rectangle;
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle))
@@ -293,7 +293,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     }
     else {
       let aaBounds = [[oNorthEast.lat, oNorthEast.lng], [oSouthWest.lat, oSouthWest.lng]];
-      if (this.m_oMapService.zoomOnBounds(aaBounds) == false) {
+      if (this.m_oMapEngine.zoomOnBounds(aaBounds) == false) {
         console.log("Error in zoom on bounds");
       }
     }

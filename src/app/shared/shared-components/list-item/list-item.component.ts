@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ProcessorService} from 'src/app/services/api/processor.service';
-import {MapService} from 'src/app/services/map.service';
+import {MapEngineService} from 'src/app/services/map-engine/map-engine.service';
 
 import $ from 'jquery';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -118,16 +118,23 @@ export class ListItemComponent implements OnInit, OnDestroy {
   constructor(
     private m_oChangeDetector: ChangeDetectorRef,
     private m_oDialog: MatDialog,
-    private m_oMapService: MapService,
+    private m_oMapEngine: MapEngineService,
     private m_oProcessorService: ProcessorService,
     private m_oNotificationDialog:NotificationDisplayService
   ) { }
   ngOnInit(): void {
-    this.m_oRectangleSubscription = this.m_oMapService.m_oSelectedRectangle.subscribe(oResponse => {
+    this.m_oRectangleSubscription = this.m_oMapEngine.getSelectedRectangle$().subscribe(oResponse => {
       if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProductListItem.rectangle) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
         if (oResponse.action === 'mouse-move') {
           if (oResponse.product.rectangle === this.m_oProductListItem.rectangle) {
-            $("#" + oResponse.product.id).toggleClass('highlighted');
+            const oElement = $("#" + oResponse.product.id);
+            if (oResponse.isHovering === true) {
+              oElement.addClass('highlighted');
+            } else if (oResponse.isHovering === false) {
+              oElement.removeClass('highlighted');
+            } else {
+              oElement.toggleClass('highlighted');
+            }
           }
         }
       }

@@ -1,7 +1,3 @@
-<div class="map-frame h-100 w-100">
-    <div leaflet leafletDraw class=" h-100 w-100" id="wasdiMapImport" [leafletOptions]="m_oMapOptions"
-        (leafletMapReady)="onMapReady($event)" [leafletDrawOptions]="m_oDrawOptions"
-        (leafletDrawCreated)="onDrawCreated($event)">
-        <div [leafletLayer]="m_oDrawnItems"></div>
-    </div>
+<div class="map-frame">
+    <div id="wasdiMapImport"></div>
 </div>

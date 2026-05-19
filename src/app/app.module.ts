@@ -16,7 +16,6 @@ import { AdminComponent } from './components/admin/admin.component';
 import { EditComponent } from './components/edit/edit.component';
 import { HeaderComponent } from './components/header/header.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
-import { SearchOrbit } from './components/plan/search-orbit.component';
 import { SearchComponent } from './components/search/search.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { LoginComponent } from './components/login/login.component';
@@ -25,7 +24,6 @@ import { ConfirmationDialogComponent } from './shared/dialogs/confirmation-dialo
 import { ErrorDialogComponent } from './shared/dialogs/error-dialog/error-dialog.component';
 import { ProductsListComponent } from './components/edit/products-list/products-list.component';
 import { EditToolbarComponent } from './components/edit/edit-toolbar/edit-toolbar.component';
-import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
 import { EditMapComponent } from './components/edit/edit-map/edit-map.component';
 import { ProcessesBarComponent } from './components/edit/processes-bar/processes-bar.component';
 import { ProductPropertiesDialogComponent } from './components/edit/products-list/product-properties-dialog/product-properties-dialog.component';
@@ -118,7 +116,6 @@ import { EditSubscriptionDialogComponent } from './dialogs/edit-subscription-dia
 import { ProjectInfoDialogComponent } from './dialogs/project-info-dialog/project-info-dialog.component';
 import { SubscriptionsPurchaseComponent } from './components/subscriptions-purchase/subscriptions-purchase.component';
 import { PackageManagerComponent } from './dialogs/package-manager/package-manager.component';
-import { SearchOrbitResourcesComponent } from './components/plan/search-orbit-resources/search-orbit-resources.component';
 import { SearchMapComponent } from './components/search/search-map/search-map.component';
 import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';
 import { ConfigurationService } from './services/configuration.service';
@@ -127,7 +124,6 @@ import { WorkspacesListDialogComponent } from './components/search/workspaces-li
 import { ProductInfoComponent } from './components/search/product-info/product-info.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
 import { FTPDialogComponent } from './components/edit/ftp-dialog/ftp-dialog.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchBtnGrpComponent } from './shared/shared-components/search-btn-grp/search-btn-grp.component';
@@ -159,7 +155,6 @@ import { AutocompleteComponent } from './shared/shared-components/autocomplete/a
 import { DurationPipe } from './shared/pipes/duration.pipe';
 import { ReviewInputComponent } from './components/app-details/app-reviews/review-input/review-input.component';
 import { ReviewComponent } from './components/app-details/app-reviews/review/review.component';
-import { PlanTreeComponent } from './components/plan/plan-tree/plan-tree.component';
 import { ProcessorTabPricingComponent } from './components/edit/edit-toolbar/toolbar-dialogs/new-app-dialog/processor-tab-pricing/processor-tab-pricing.component';
 import { JsonEditorComponent } from './shared/json-editor/json-editor.component';
 import { ProcessesBarTableComponent } from './components/edit/processes-bar/processes-bar-table/processes-bar-table.component';
@@ -185,6 +180,11 @@ import { LoginRedirectComponent } from './components/login-redirect/login-redire
 import { EnvService } from './services/env.service';
 import { PrintDialogComponent } from './shared/dialogs/print-dialog/print-dialog.component';
 import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.component';
+import { SearchOrbit } from './components/plan/search-orbit.component';
+import { SearchOrbitResourcesComponent } from './components/plan/search-orbit-resources/search-orbit-resources.component';
+import { SearchOrbitResultsComponent } from './components/plan/search-orbit-results/search-orbit-results.component';
+import { PlanMapComponent } from './components/plan/plan-map/plan-map.component';
+import { PlanTreeComponent } from './components/plan/plan-tree/plan-tree.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -192,7 +192,6 @@ import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.
         EditComponent,
         HeaderComponent,
         MarketplaceComponent,
-        SearchOrbit,
         SearchComponent,
         WorkspacesComponent,
         LoginComponent,
@@ -218,7 +217,6 @@ import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.
         WapTextboxComponent,
         WapDisplayComponent,
         EditToolbarComponent,
-        PlanMapComponent,
         EditMapComponent,
         PageNotFoundComponent,
         ProductPropertiesDialogComponent,
@@ -246,13 +244,11 @@ import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.
         ProjectInfoDialogComponent,
         SubscriptionsPurchaseComponent,
         PackageManagerComponent,
-        SearchOrbitResourcesComponent,
         SearchMapComponent,
         SearchFiltersComponent,
         ProductsTableComponent,
         WorkspacesListDialogComponent,
         ProductInfoComponent,
-        SearchOrbitResultsComponent,
         FTPDialogComponent,
         NavbarComponent,
         SearchBtnGrpComponent,
@@ -282,7 +278,6 @@ import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.
         DurationPipe,
         ReviewInputComponent,
         ReviewComponent,
-        PlanTreeComponent,
         ProcessorTabPricingComponent,
         JsonEditorComponent,
         ProcessesBarTableComponent,
@@ -307,17 +302,22 @@ import { PreviewDialogComponent } from './dialogs/preview-dialog/preview-dialog.
         LoginCoplacComponent,
         LoginRedirectComponent,
         PrintDialogComponent,
-        PreviewDialogComponent
+        PreviewDialogComponent,
+        SearchOrbit,
+        SearchOrbitResourcesComponent,
+        SearchOrbitResultsComponent,
+        PlanMapComponent,
+        PlanTreeComponent
     ],
     bootstrap: [AppComponent], imports: [AppRoutingModule,
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         FormsModule,
-        LeafletModule,
-        LeafletDrawModule,
         TranslateModule.forRoot(),
         BrowserAnimationsModule,
+        LeafletModule,
+        LeafletDrawModule,
         MatSlideToggleModule,
         MatDialogModule,
         MatTreeModule,

@@ -13,14 +13,6 @@ export const MenuItems = [
         routerLink: "/workspaces",
         materialIcon: "folder"
     },
-
-    //Plan: 
-    {
-        label: "ROOT_VIEW_NAV_BAR_LINK_SEARCH",
-        name: "plan",
-        routerLink: "/plan",
-        materialIcon: "calendar_month"
-    },
     // Search: 
     {
         label: "ROOT_VIEW_NAV_BAR_LINK_IMPORT",

@@ -6,7 +6,6 @@ import { EnvService } from "../services/env.service";
 //Import Fadeout Utilities:
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 import { ConstantsService } from './constants.service';
-import { MapService } from './map.service';
 
 //Declare Cesium:
 declare let Cesium: any;
@@ -49,10 +48,9 @@ export class GlobeService {
 
   /**
    * Create an instance of the service
-   * @param m_oMapService 
    * @param m_oConstantsService 
    */
-  constructor(private m_oMapService: MapService, private m_oConstantsService: ConstantsService,
+  constructor(private m_oConstantsService: ConstantsService,
     private m_oEnvService: EnvService
     ) 
   { 

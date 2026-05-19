@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, OnDestroy, Output, OnChanges, SimpleChanges, AfterViewChecked } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, AfterViewInit, OnDestroy, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MapService } from 'src/app/services/map.service';
+import { MapEngineService } from 'src/app/services/map-engine/map-engine.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { Observable } from 'rxjs';
-import * as L from 'leaflet';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-search-map',
@@ -11,7 +10,7 @@ import * as L from 'leaflet';
     styleUrls: ['./search-map.component.css'],
     standalone: false
 })
-export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class SearchMapComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() m_aoProducts: Observable<any>;
   m_aoProductsList: any;
   @Input() oMapInput: any = {
@@ -25,195 +24,115 @@ export class SearchMapComponent implements OnInit, OnDestroy, AfterViewChecked {
   };
   @Output() m_oMapInputChange = new EventEmitter;
 
-  m_oDrawnItems: any;
-  m_oDrawOptions: any;
-  m_oLayersControl: any;
   m_sErrorMessage: string;
-  m_bIsValid: boolean;
-  m_oMapOptions: any;
-  m_oManualBboxSubscription: any;
-  m_oMap: any;
+  m_bIsValid: boolean = true;
+
+  private m_oManualBboxSubscription: Subscription;
 
   constructor(
-    public m_oMapService: MapService,
+    private m_oMapEngine: MapEngineService,
     private m_oTranslate: TranslateService
-  ) {
-    this.m_oMapOptions = this.m_oMapService.m_oOptions;
-    this.m_oDrawOptions = this.m_oMapService.m_oDrawOptions;
-    this.m_oDrawnItems = this.m_oMapService.m_oDrawnItems;
-    this.m_oDrawOptions.edit.featureGroup = this.m_oDrawnItems;
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.m_sErrorMessage = "Error:"
+    this.m_sErrorMessage = 'Error:';
     this.m_bIsValid = true;
-
-    this.m_oManualBboxSubscription = this.m_oMapService.m_oManualBoundingBoxSubscription.subscribe(oResult => {
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
-        this.formatManualBbox(oResult);
-      }
-    })
   }
 
+  ngAfterViewInit(): void {
+    this.m_oMapEngine.initMap('wasdiMapImport');
+    const oMap = this.m_oMapEngine.getMap();
+    if (oMap) {
+      this.m_oMapEngine.initGeocoder(oMap);
+      this.m_oMapEngine.addManualBoundingBoxControl(oMap);
+      this.m_oMapEngine.addMousePositionAndScale(oMap);
+      // Issue 1 (invalidateSize equivalent): resize after DOM layout settles
+      setTimeout(() => oMap.resize(), 100);
+    }
 
-  ngAfterViewChecked(): void {
-    this.m_oMap.invalidateSize();
+    this.m_oManualBboxSubscription = this.m_oMapEngine.getManualBoundingBox$().subscribe(oResult => {
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResult) === false) {
+        if (!this.checkAreaFromBounds(oResult)) {
+          return;
+        }
+        this.formatManualBbox(oResult);
+      }
+    });
   }
 
   ngOnDestroy(): void {
-    FadeoutUtils.verboseLog("SearchMapComponent.ngOnDestroy")
-    this.m_oMapService.setMap(null);
-    this.m_oMapService.setDrawnItems()
-  }
-
-  onMapReady(oMap: L.Map) {
-    this.m_oMap = oMap;
-
-    this.m_oMapService.setMap(oMap);
-    this.m_oMapService.addMousePositionAndScale(oMap);
-    L.control.zoom({ position: 'bottomright' }).addTo(oMap);
-    this.m_oMapService.m_oLayersControl.addTo(oMap);
-    this.m_oMapService.initGeoSearchPluginForOpenStreetMap(oMap);
-    this.m_oMapService.addManualBbox(oMap);
-
-    this.m_oMap.fullscreenControl.link.innerHTML = "<span class='material-symbols-outlined'>fullscreen</span>"
-  }
-
-  onDrawCreated(oEvent: any) {
-
-    if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
-      this.m_oDrawnItems.clearLayers();
+    FadeoutUtils.verboseLog('SearchMapComponent.ngOnDestroy');
+    if (this.m_oManualBboxSubscription) {
+      this.m_oManualBboxSubscription.unsubscribe();
     }
-    let oDrawnItem = this.m_oMapService.onSearchDrawCreated(oEvent);
+    this.m_oMapEngine.clearMap();
+  }
 
-    //Add layer to map
-    //on draw created -> need to check area 
-    this.checkArea(oDrawnItem);
-    //If not valid after check
-    if (!this.m_bIsValid) {
-      //set layer color
-      oEvent.layer.options.color = "#FF0000"
+  private haversineDistanceKm(p1: {lat: number, lng: number}, p2: {lat: number, lng: number}): number {
+    const R = 6371;
+    const dLat = (p2.lat - p1.lat) * Math.PI / 180;
+    const dLng = (p2.lng - p1.lng) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2
+      + Math.cos(p1.lat * Math.PI / 180) * Math.cos(p2.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
 
-      //Add Confirmation dialog before removal
-      if (this.m_oDrawnItems && this.m_oDrawnItems.getLayers().length !== 0) {
-        this.m_oDrawnItems.clearLayers();
-      }
-
-      return false;
+  checkAreaFromBounds(oLayer: any): boolean {
+    if (!oLayer || !Array.isArray(oLayer._latlngs) || !Array.isArray(oLayer._latlngs[0])) {
+      return true;
     }
-    //If valid after check format the selected area for call: 
-    this.oMapInput = this.formatDrawnItem(oDrawnItem);
-    this.m_oMapInputChange.emit(this.oMapInput);
-    return true
-  }
-
-  formatDrawnItem(oLayer) {
-    let sFilter: string = '( footprint:"intersects(POLYGON(('
-
-    //Ensure layer variable is defined: 
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oLayer) === false) {
-      let iNumberOfPoints = oLayer[0].length;
-      let aaLatLngs = oLayer[0];
-      /*open search want the first point as end point */
-      let iLastlat = aaLatLngs[0].lat;
-      let iLastlng = aaLatLngs[0].lng;
-      for (let iIndexBounds = 0; iIndexBounds < iNumberOfPoints; iIndexBounds++) {
-
-        sFilter = sFilter + aaLatLngs[iIndexBounds].lng + " " + aaLatLngs[iIndexBounds].lat + ",";
-        //if(iIndexBounds != (iNumberOfPoints-1))
-        //    sFilter = sFilter + ",";
-      }
-      sFilter = sFilter + iLastlng + " " + iLastlat + ')))" )';
+    const aoPoints = oLayer._latlngs[0];
+    if (aoPoints.length < 3) {
+      return true;
     }
-    return sFilter
-  }
+    // Points from formatBoundsToLayer: [NW, NE, SE, SW, NW(close)]
+    const fWidth = this.haversineDistanceKm(aoPoints[0], aoPoints[1]);
+    const fHeight = this.haversineDistanceKm(aoPoints[1], aoPoints[2]);
+    const fArea = fWidth * fHeight;
+    const fMaxSide = Math.max(fWidth, fHeight);
+    const fMinSide = Math.min(fWidth, fHeight);
+    const fRatio = fMinSide > 0 ? fMaxSide / fMinSide : 0;
 
-  getDistance(pointFrom, pointTo) {
-    let markerFrom = L.circleMarker(pointFrom, { color: '#4AFF00', radius: 10 });
-    let markerTo = L.circleMarker(pointTo, { color: '#4AFF00', radius: 10 });
-
-    let from = markerFrom.getLatLng();
-    let to = markerTo.getLatLng();
-
-    let distance = parseInt((from.distanceTo(to)).toFixed(0)) / 1000;
-
-    return distance
-
-  }
-
-  checkArea(layer) {
-    /**
-     The following happens in this.onDrawCreated():  
-      oController.boundingBox.northEast = layer._bounds._northEast;
-      oController.boundingBox.southWest = layer._bounds._southWest;
-    */
-
-    let latlngs = layer
-    // height and width respectively
-    let oSide: number[] = [this.getDistance(latlngs[0][0], latlngs[0][1]), this.getDistance(latlngs[0][1], latlngs[0][2])];
-
-
-    let fMaxSide = Math.max(...oSide);
-
-    let fRatio = Math.max(...oSide) / Math.min(...oSide);
-
-    // first element is the array itself to be passed
-    let fArea = (L as any).GeometryUtil.geodesicArea(layer[0]) / 1000000;
-
-    if (fArea > this.oMapInput.maxArea && this.oMapInput.maxArea !== 0) {
-      // sErrorMessage = sErrorMessage.concat(this.m_oTranslateService.getTranslation());
+    this.m_bIsValid = true;
+    if (this.oMapInput.maxArea !== 0 && fArea > this.oMapInput.maxArea) {
       this.m_bIsValid = false;
     }
-
-    if (fMaxSide > this.oMapInput.maxSide && this.oMapInput.maxSide != 0) {
-      // sErrorMessage = sErrorMessage.concat($translate.getTranslationTable().WAP_SELECT_AREA_OVER_SIDE);
+    if (this.oMapInput.maxSide !== 0 && fMaxSide > this.oMapInput.maxSide) {
       this.m_bIsValid = false;
     }
-
-    if (fRatio > this.oMapInput.maxRatioSide && this.oMapInput.maxRatioSide != 0) {
-      // sErrorMessage = sErrorMessage.concat($translate.getTranslationTable().WAP_SELECT_AREA_OVER_RATIO);
+    if (this.oMapInput.maxRatioSide !== 0 && fRatio > this.oMapInput.maxRatioSide) {
       this.m_bIsValid = false;
     }
-
     return this.m_bIsValid;
   }
 
   zoomOnBounds(oRectangle: any) {
-    let oBounds = oRectangle.getBounds();
-    let oNorthEast = oBounds.getNorthEast();
-    let oSouthWest = oBounds.getSouthWest();
+    const oBounds = oRectangle.getBounds();
+    const oNorthEast = oBounds.getNorthEast();
+    const oSouthWest = oBounds.getSouthWest();
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oNorthEast) || FadeoutUtils.utilsIsObjectNullOrUndefined(oSouthWest)) {
-      console.log("Error in zoom on bounds");
-    }
-    else {
-      let aaBounds = [[oNorthEast.lat, oNorthEast.lng], [oSouthWest.lat, oSouthWest.lng]];
-
-      if (this.m_oMapService.zoomOnBounds(aaBounds) == false) {
-        console.log("Error in zoom on bounds");
+      console.log('Error in zoom on bounds');
+    } else {
+      const aaBounds = [[oNorthEast.lat, oNorthEast.lng], [oSouthWest.lat, oSouthWest.lng]];
+      if (this.m_oMapEngine.zoomOnBounds(aaBounds) === false) {
+        console.log('Error in zoom on bounds');
       }
     }
   }
 
-  formatManualBbox(oLayer) {
+  formatManualBbox(oLayer: any) {
     let sFilter = '( footprint:"intersects(POLYGON((';
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oLayer)) {
-      let iNumberOfPoints = oLayer._latlngs[0].length;
-      let aaLatLngs = oLayer._latlngs[0];
-      /*open search want the first point as end point */
-      let iLastlat = aaLatLngs[0].lat;
-      let iLastlng = aaLatLngs[0].lng;
-      for (let iIndexBounds = 0; iIndexBounds < iNumberOfPoints; iIndexBounds++) {
-
-        sFilter = sFilter + aaLatLngs[iIndexBounds].lng + " " + aaLatLngs[iIndexBounds].lat + ",";
-        //if(iIndexBounds != (iNumberOfPoints-1))
-        //    sFilter = sFilter + ",";
+      const aaLatLngs = oLayer._latlngs[0];
+      const iNumberOfPoints = aaLatLngs.length;
+      const iLastlat = aaLatLngs[0].lat;
+      const iLastlng = aaLatLngs[0].lng;
+      for (let iIndex = 0; iIndex < iNumberOfPoints; iIndex++) {
+        sFilter += aaLatLngs[iIndex].lng + ' ' + aaLatLngs[iIndex].lat + ',';
       }
-      sFilter = sFilter + iLastlng + " " + iLastlat + ')))" )';
+      sFilter += iLastlng + ' ' + iLastlat + ')))" )';
     }
-    //(%20footprint:%22Intersects(POLYGON((5.972671999999995%2036.232811331264955,20.123062624999992%2036.232811331264955,20.123062624999992%2048.3321995971576,5.972671999999995%2048.3321995971576,5.972671999999995%2036.232811331264955)))%22%20)
-    //set filter
-
     this.oMapInput = sFilter;
     this.m_oMapInputChange.emit(this.oMapInput);
   }
