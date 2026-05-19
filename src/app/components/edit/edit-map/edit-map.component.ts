@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnChanges, OnInit, AfterViewInit, OnDestroy, Output, Input, EventEmitter, SimpleChanges } from '@angular/core';
 import maplibregl from 'maplibre-gl';
 
 //Service Imports
@@ -14,7 +14,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
     standalone: false
 })
 
-export class EditMapComponent implements OnInit, OnDestroy {
+export class EditMapComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   /**
    * List of external WMS Layers added
@@ -61,7 +61,6 @@ export class EditMapComponent implements OnInit, OnDestroy {
     if (this.m_bIsLoadingProducts != value) {
       this.m_bIsLoadingProducts = value;
       if (!value) {
-        this.m_oMapEngineService.addAllWorkspaceRectanglesOnMap(this.m_aoProducts, '');
         this.goWorkspaceHome();
       }
     }
@@ -122,20 +121,75 @@ export class EditMapComponent implements OnInit, OnDestroy {
    */
   m_oFeatureInfoMarker = null;
 
+  /**
+   * Tracks the previous number of visible bands so we can zoom only when the first one appears.
+   */
+  private m_iPreviousVisibleBandsCount = 0;
+
   constructor(
     private m_oMapEngineService: MapEngineService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService) { }
 
   ngOnInit(): void {
+    this.m_b2DMapModeOutput.emit(true);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['m_aoVisibleBands'] && !changes['m_aoVisibleBands'].firstChange) {
+      this.syncVisibleBandsOnMap();
+    }
+  }
+
+  ngAfterViewInit(): void {
     this.m_oMapEngineService.initMap('bigMapContainer');
     this.setupFeatureInfoClickHandler();
-    this.m_b2DMapModeOutput.emit(true);
+    this.syncMapSize();
+    this.syncVisibleBandsOnMap();
   }
 
   ngOnDestroy(): void {
     this.m_oMapEngineService.clearMap();
   }
+
+  private syncMapSize(): void {
+    const oMap = this.m_oMapEngineService.getMap();
+    if (!oMap) {
+      return;
+    }
+
+    setTimeout(() => {
+      if (typeof oMap.resize === 'function') {
+        oMap.resize();
+      }
+    }, 0);
+  }
+
+  private syncVisibleBandsOnMap(): void {
+    const oMap = this.m_oMapEngineService.getMap();
+    if (!oMap || !Array.isArray(this.m_aoVisibleBands) || this.m_aoVisibleBands.length === 0) {
+      this.m_iPreviousVisibleBandsCount = Array.isArray(this.m_aoVisibleBands) ? this.m_aoVisibleBands.length : 0;
+      return;
+    }
+
+    for (const oBand of this.m_aoVisibleBands) {
+      if (!oBand?.layerId || !oBand?.geoserverUrl) {
+        continue;
+      }
+
+      this.m_oMapEngineService.addLayerMap2DByServer(oBand.layerId, oBand.geoserverUrl);
+    }
+
+    if (this.m_iPreviousVisibleBandsCount === 0 && this.m_aoVisibleBands.length === 1) {
+      const oFirstBand = this.m_aoVisibleBands[0];
+      if (oFirstBand?.geoserverBoundingBox) {
+        this.m_oMapEngineService.zoomBandImageOnGeoserverBoundingBox(oFirstBand.geoserverBoundingBox);
+      }
+    }
+
+    this.m_iPreviousVisibleBandsCount = this.m_aoVisibleBands.length;
+  }
+
   goWorkspaceHome() {
     this.m_oMapEngineService.flyToWorkspaceBoundingBox(this.m_aoProducts);
   }

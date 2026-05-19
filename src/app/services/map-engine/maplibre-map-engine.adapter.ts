@@ -847,6 +847,43 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     return true;
   }
 
+  removeLayerMap2DByServer(layerId: string): boolean {
+    const oMap = this.getMapLibreMap();
+    if (!this.isMapLibreMap(oMap) || !layerId) {
+      return false;
+    }
+
+    const sSanitizedLayerId = this.sanitizeId(layerId);
+    const sSourceId = `wms-${sSanitizedLayerId}-source`;
+    const sMapLayerId = `wms-${sSanitizedLayerId}-layer`;
+
+    if (oMap.getLayer(sMapLayerId)) {
+      oMap.removeLayer(sMapLayerId);
+    }
+    if (oMap.getSource(sSourceId)) {
+      oMap.removeSource(sSourceId);
+    }
+
+    return true;
+  }
+
+  setLayerMap2DOpacity(layerId: string, opacity: number): boolean {
+    const oMap = this.getMapLibreMap();
+    if (!this.isMapLibreMap(oMap) || !layerId) {
+      return false;
+    }
+
+    const sSanitizedLayerId = this.sanitizeId(layerId);
+    const sMapLayerId = `wms-${sSanitizedLayerId}-layer`;
+    if (!oMap.getLayer(sMapLayerId)) {
+      return false;
+    }
+
+    const fOpacity = Math.max(0, Math.min(1, opacity));
+    oMap.setPaintProperty(sMapLayerId, 'raster-opacity', fOpacity);
+    return true;
+  }
+
   addAllWorkspaceRectanglesOnMap(products: any[], color: string): boolean {
     if (!Array.isArray(products)) {
       return false;

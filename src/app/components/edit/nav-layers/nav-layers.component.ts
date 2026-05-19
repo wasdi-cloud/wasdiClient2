@@ -6,17 +6,11 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  CdkDragDrop,
-  CdkDropList,
-  CdkDropListGroup,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 //Import Services:
 import { ConstantsService } from 'src/app/services/constants.service';
-import { MapService } from 'src/app/services/map.service';
+import { MapEngineService } from 'src/app/services/map-engine/map-engine.service';
 import { StylesDialogComponent } from 'src/app/components/edit/edit-toolbar/toolbar-dialogs/styles-dialog/styles-dialog.component';
 
 //Import Models:
@@ -59,7 +53,7 @@ export class NavLayersComponent implements OnInit {
     private m_oClipboard: Clipboard,
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
-    private m_oMapService: MapService,
+    private m_oMapEngineService: MapEngineService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService
   ) {}
@@ -74,18 +68,7 @@ export class NavLayersComponent implements OnInit {
    * @returns {void}
    */
   setOpacity(iValue, sLayerId): void {
-    let iOpacity = iValue;
-    let oMap = this.m_oMapService.getMap();
-    let fPercentage = iOpacity / 100;
-
-    oMap.eachLayer(function (layer) {
-      if (
-        layer.options.layers == 'wasdi:' + sLayerId ||
-        layer.options.layers == sLayerId
-      ) {
-        layer.setOpacity(fPercentage);
-      }
-    });
+    this.m_oMapEngineService.setLayerMap2DOpacity(sLayerId, Number(iValue) / 100);
   }
 
   /**
@@ -143,18 +126,7 @@ export class NavLayersComponent implements OnInit {
    * @returns {void}
    */
   removeBandLayersIn2dMaps(sLayerId): void {
-    let oMap2D = this.m_oMapService.getMap();
-    oMap2D.eachLayer((layer) => {
-      let sMapLayer = layer.options.layers;
-      let sMapLayer2 = 'wasdi:' + layer.options.layers;
-
-      if (sLayerId && sMapLayer === sLayerId) {
-        oMap2D.removeLayer(layer);
-      }
-      if (sLayerId && sMapLayer2 === sLayerId) {
-        oMap2D.removeLayer(layer);
-      }
-    });
+    this.m_oMapEngineService.removeLayerMap2DByServer(sLayerId.replace('wasdi:', ''));
   }
 
   /**
@@ -163,7 +135,7 @@ export class NavLayersComponent implements OnInit {
    * @returns {void}
    */
   zoomOnBandImage(geoserverBoundingBox): void {
-    this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(geoserverBoundingBox);
+    this.m_oMapEngineService.zoomBandImageOnGeoserverBoundingBox(geoserverBoundingBox);
   }
 
   /**
@@ -233,19 +205,7 @@ export class NavLayersComponent implements OnInit {
    */
   handleLayerOrder(): void {
     this.m_aoVisibleBands.forEach((oLayer) => {
-      let oMap = this.m_oMapService.getMap();
-      oMap.eachLayer((oMapLayer) => {
-        if (oLayer.layerId === oMapLayer.options.layers) {
-          oMap.removeLayer(oMapLayer);
-        }
-      });
-    });
-
-    this.m_aoVisibleBands.forEach((oLayer) => {
-      this.m_oMapService.addLayerMap2DByServer(
-        oLayer.layerId,
-        oLayer.geoserverUrl
-      );
+      this.m_oMapEngineService.addLayerMap2DByServer(oLayer.layerId, oLayer.geoserverUrl);
     });
   }
 }

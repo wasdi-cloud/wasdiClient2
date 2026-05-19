@@ -312,11 +312,11 @@ export class EditComponent implements OnInit, OnDestroy {
   getVisibleBands(event: any) {
     if (event.visibleBands) {
       // When handling from Nav/layers component:
-      this.m_aoVisibleBands = event.visibleBands;
+      this.m_aoVisibleBands = [...event.visibleBands];
       this.setPublishedSetting(event.removedBand);
     } else {
       //When handling from Products List:p
-      this.m_aoVisibleBands = event;
+      this.m_aoVisibleBands = [...event];
     }
   }
 

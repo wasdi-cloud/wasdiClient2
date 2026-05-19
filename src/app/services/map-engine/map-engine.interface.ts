@@ -31,6 +31,8 @@ export interface IMapEngine {
   addRectangleByBoundsArrayOnMap(product: any, color: string, indexLayers: number): any;
   removeLayerFromMap(layer: any): boolean;
   addLayerMap2DByServer(layerId: string, server: string): boolean;
+  removeLayerMap2DByServer(layerId: string): boolean;
+  setLayerMap2DOpacity(layerId: string, opacity: number): boolean;
   addAllWorkspaceRectanglesOnMap(products: any[], color: string): boolean;
   flyToWorkspaceBoundingBox(products: any[]): boolean;
   zoomBandImageOnGeoserverBoundingBox(geoserverBoundingBox: any): void;

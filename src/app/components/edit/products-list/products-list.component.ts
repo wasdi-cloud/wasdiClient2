@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CatalogService } from 'src/app/services/api/catalog.service';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { FileBufferService } from 'src/app/services/api/file-buffer.service';
-import { MapService } from 'src/app/services/map.service';
+import { MapEngineService } from 'src/app/services/map-engine/map-engine.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessWorkspaceService } from 'src/app/services/api/process-workspace.service';
 import { ProductService } from 'src/app/services/api/product.service';
@@ -19,17 +19,12 @@ import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { ImportDialogComponent } from '../edit-toolbar/toolbar-dialogs/import-dialog/import-dialog.component';
 import { ProductPropertiesDialogComponent } from './product-properties-dialog/product-properties-dialog.component';
 
-//Leaflet Declaration:
-import * as L from "leaflet";
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Router } from '@angular/router';
 import { FTPDialogComponent } from '../ftp-dialog/ftp-dialog.component';
-import { GlobeService } from 'src/app/services/globe.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationsQueueService } from 'src/app/services/notifications-queue.service';
 import { WorkspacesListDialogComponent } from '../../search/workspaces-list-dialog/workspaces-list-dialog.component';
-
-declare let Cesium: any;
 
 @Component({
     selector: 'app-products-list',
@@ -132,8 +127,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
     private m_oConstantsService: ConstantsService,
     private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
-    private m_oGlobeService: GlobeService,
-    private m_oMapService: MapService,
+    private m_oMapEngineService: MapEngineService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProductService: ProductService,
     private m_oProcessWorkspaceService: ProcessWorkspaceService,
@@ -554,21 +548,7 @@ export class ProductsListComponent implements OnChanges, OnInit {
       return false;
     }
 
-    let sLayerId = 'wasdi:' + oBand.layerId;
-
-    let oMap2D = this.m_oMapService.getMap()
-
-    oMap2D.eachLayer(oLayer => {
-      let sMapLayer = oLayer.options.layers;
-      let sMapLayer2 = "wasdi:" + oLayer.options.layers;
-
-      if (sLayerId && sMapLayer === sLayerId) {
-        oMap2D.removeLayer(oLayer);
-      }
-      if (sLayerId && sMapLayer2 === sLayerId) {
-        oMap2D.removeLayer(oLayer);
-      }
-    })
+    this.m_oMapEngineService.removeLayerMap2DByServer(oBand.layerId);
 
     this.removeBandImageFromVisibleList(oBand)
     return true;
@@ -603,20 +583,10 @@ export class ProductsListComponent implements OnChanges, OnInit {
 
     this.m_aoVisibleBandsOutput.emit(this.m_aoVisibleBands);
 
-    let bAutoZoom = false;
+    this.m_oMapEngineService.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
 
-    if (this.m_aoVisibleBands.length == 1) {
-      bAutoZoom = true;
-    }
-
-    if (this.m_b2DMapMode === false) {
-      //if we are in 3D put the layer on the globe
-      this.m_oGlobeService.addLayerMap3DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
-      if (bAutoZoom) this.m_oGlobeService.zoomBandImageOnGeoserverBoundingBox(oPublishedBand.geoserverBoundingBox);
-    } else {
-      //if we are in 2D put it on the map
-      this.m_oMapService.addLayerMap2DByServer(oActiveBand.layerId, oActiveBand.geoserverUrl);
-      if (bAutoZoom) this.m_oMapService.zoomBandImageOnGeoserverBoundingBox(oPublishedBand.geoserverBoundingBox);
+    if (this.m_aoVisibleBands.length === 1) {
+      this.m_oMapEngineService.zoomBandImageOnGeoserverBoundingBox(oPublishedBand.geoserverBoundingBox);
     }
 
     return true;

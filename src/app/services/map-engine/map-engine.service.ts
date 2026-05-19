@@ -51,6 +51,12 @@ export class MapEngineService implements IMapEngine {
   addLayerMap2DByServer(layerId: string, server: string): boolean {
     return this.m_oEngine.addLayerMap2DByServer(layerId, server);
   }
+  removeLayerMap2DByServer(layerId: string): boolean {
+    return this.m_oEngine.removeLayerMap2DByServer(layerId);
+  }
+  setLayerMap2DOpacity(layerId: string, opacity: number): boolean {
+    return this.m_oEngine.setLayerMap2DOpacity(layerId, opacity);
+  }
   addAllWorkspaceRectanglesOnMap(products: any[], color: string): boolean {
     return this.m_oEngine.addAllWorkspaceRectanglesOnMap(products, color);
   }
