@@ -30,11 +30,6 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
       url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
     },
     {
-      id: 'topo',
-      label: 'Topo',
-      url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
-    },
-    {
       id: 'esri-street',
       label: 'Esri Street',
       url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
