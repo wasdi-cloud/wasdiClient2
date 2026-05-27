@@ -217,6 +217,11 @@
       </div>
     }
 
+    @if (m_bIsDisabled && !m_bParentItem) {
+      <div class="deployment-overlay">
+        <app-invader></app-invader>
+      </div>
+    }
     @if (m_bProcessorItem) {
       <div
         class="processor-item d-flex flex-row gap-2 w-100"
