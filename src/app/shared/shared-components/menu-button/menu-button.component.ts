@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
     selector: 'app-menu-button',
     templateUrl: './menu-button.component.html',
     styleUrls: ['./menu-button.component.css'],
-    standalone: false
+    standalone: true
 })
 export class MenuButtonComponent {
   /**

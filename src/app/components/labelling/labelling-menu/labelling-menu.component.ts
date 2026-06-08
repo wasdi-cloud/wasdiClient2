@@ -1,13 +1,13 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {ConstantsService} from "../../../services/constants.service";
 import {TranslatePipe} from "@ngx-translate/core";
-import {AppModule} from "../../../app.module";
+import {MenuButtonComponent} from "../../../shared/shared-components/menu-button/menu-button.component";
 
 @Component({
   selector: 'app-labelling-menu',
   imports: [
     TranslatePipe,
-    AppModule
+    MenuButtonComponent
   ],
   templateUrl: './labelling-menu.component.html',
   styleUrl: './labelling-menu.component.css',
