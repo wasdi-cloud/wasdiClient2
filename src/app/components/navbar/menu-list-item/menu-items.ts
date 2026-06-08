@@ -29,7 +29,7 @@ export const MenuItems = [
         materialIcon: "edit"
     },
     {
-      label: "ROOT_VIEW_NAV_BAR_LINK_SETTINGS",
+      label: "ROOT_VIEW_NAV_BAR_LINK_LABELLING",
       name: "labelling",
       routerLink: "/labelling/",
       materialIcon: "sell"
