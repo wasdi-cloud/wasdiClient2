@@ -308,7 +308,6 @@ import {InvaderComponent} from '../assets/invader/invader.component';
         ProcessesBarTableComponent,
         ProcessesBarComponent,
         AdminMenuComponent,
-        MenuButtonComponent,
         UserAccountComponent,
         ManageUsersComponent,
         ManageNodesComponent,
@@ -364,7 +363,8 @@ import {InvaderComponent} from '../assets/invader/invader.component';
     CdkMenu,
     CdkMenuItem,
     CdkMenuTrigger,
-    DragDropModule], providers: [
+    DragDropModule,
+    MenuButtonComponent], providers: [
         AuthService,
         ConstantsService,
         {
