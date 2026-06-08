@@ -1254,5 +1254,8 @@
     "PRINT_WAIT": "Wasdi est en train d'imprimer la carte, veuillez patienter.",
     "PRINT_PAYLOAD_TITLE": "Titre",
     "PRINT_PAYLOAD_DESCRIPTION": "Description",
-    "ADD_TITLE_AND_DESCRIPTION": "Ajouter un titre et une description"
+    "ADD_TITLE_AND_DESCRIPTION": "Ajouter un titre et une description",
+    "LABELLING_MENU_PROJECTS": "Dataset Projects",
+    "LABELLING_MENU_TEMPLATES": "Labelling Templates",
+    "LABELLING_MENU_LABELS": "Edit Labels"
 }

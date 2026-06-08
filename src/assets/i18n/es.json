@@ -1253,5 +1253,8 @@
     "PRINT_WAIT": "Wasdi está imprimiendo el mapa, por favor, espere.",
     "PRINT_PAYLOAD_TITLE": "Título",
     "PRINT_PAYLOAD_DESCRIPTION": "Descripción",
-    "ADD_TITLE_AND_DESCRIPTION": "Añadir Título y Descripción"
+    "ADD_TITLE_AND_DESCRIPTION": "Añadir Título y Descripción",
+    "LABELLING_MENU_PROJECTS": "Dataset Projects",
+    "LABELLING_MENU_TEMPLATES": "Labelling Templates",
+    "LABELLING_MENU_LABELS": "Edit Labels"
 }

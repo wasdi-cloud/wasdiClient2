@@ -1254,6 +1254,9 @@
     "PRINT_WAIT": "Wasdi sedang mencetak peta, harap tunggu.",
     "PRINT_PAYLOAD_TITLE": "Judul",
     "PRINT_PAYLOAD_DESCRIPTION": "Deskripsi",
-    "ADD_TITLE_AND_DESCRIPTION": "Tambahkan Judul & Deskripsi"
+    "ADD_TITLE_AND_DESCRIPTION": "Tambahkan Judul & Deskripsi",
+    "LABELLING_MENU_PROJECTS": "Dataset Projects",
+    "LABELLING_MENU_TEMPLATES": "Labelling Templates",
+    "LABELLING_MENU_LABELS": "Edit Labels"
 
 }

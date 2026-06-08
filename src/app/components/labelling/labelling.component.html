@@ -1,0 +1,18 @@
+<main class="d-flex">
+  <app-labelling-menu (m_sSelectedTab)="getActiveTab($event)"></app-labelling-menu>
+  <div class="dashboard-content flex-fill">
+    <div class="dashboard-content-wrapper">
+      @if (m_sActiveTab === 'projects') {
+        <app-labelling-projects></app-labelling-projects>
+      }
+      @if (m_sActiveTab === 'templates') {
+        <app-labelling-templates
+        ></app-labelling-templates>
+      }
+      @if (m_sActiveTab === 'labels') {
+        <app-labelling-labels
+        ></app-labelling-labels>
+      }
+    </div>
+  </div>
+</main>

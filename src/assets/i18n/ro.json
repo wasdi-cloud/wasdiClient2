@@ -1254,5 +1254,8 @@
     "PRINT_WAIT": "Wasdi imprimă harta, vă rugăm să așteptați.",
     "PRINT_PAYLOAD_TITLE": "Titlu",
     "PRINT_PAYLOAD_DESCRIPTION": "Descriere",
-    "ADD_TITLE_AND_DESCRIPTION": "Adaugă Titlu & Descriere"
+    "ADD_TITLE_AND_DESCRIPTION": "Adaugă Titlu & Descriere",
+    "LABELLING_MENU_PROJECTS": "Dataset Projects",
+    "LABELLING_MENU_TEMPLATES": "Labelling Templates",
+    "LABELLING_MENU_LABELS": "Edit Labels"
 }

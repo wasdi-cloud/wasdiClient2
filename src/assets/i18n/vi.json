@@ -1268,5 +1268,8 @@
     "PRINT_WAIT": "Wasdi đang in bản đồ, vui lòng chờ.",
     "PRINT_PAYLOAD_TITLE": "Tiêu đề",
     "PRINT_PAYLOAD_DESCRIPTION": "Mô tả",
-    "ADD_TITLE_AND_DESCRIPTION": "Thêm Tiêu đề & Mô tả"
+    "ADD_TITLE_AND_DESCRIPTION": "Thêm Tiêu đề & Mô tả",
+    "LABELLING_MENU_PROJECTS": "Dataset Projects",
+    "LABELLING_MENU_TEMPLATES": "Labelling Templates",
+    "LABELLING_MENU_LABELS": "Edit Labels"
 }

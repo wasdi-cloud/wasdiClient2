@@ -19,6 +19,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { IsSignedInGuard } from './auth/is-signed-in.guard';
 import {PaymentSuccessComponent} from "./components/subscriptions-purchase/payment-success/payment-success.component";
 import { LoginRedirectComponent } from './components/login-redirect/login-redirect.component';
+import {LabellingComponent} from "./components/labelling/labelling.component";
 
 const routes: Routes = [
   //{ path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'settings', component: AdminComponent, canActivate: [AuthGuard]  },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
+  { path: 'labelling', component: LabellingComponent, canActivate: [AuthGuard] },
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'subscriptions', component: SubscriptionsPurchaseComponent, canActivate: [AuthGuard] },
   { path: 'workspaces', component: WorkspacesComponent, canActivate: [AuthGuard] },
