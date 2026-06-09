@@ -15,10 +15,9 @@ export class LabellingTemplatesService {
   /**
    * get list of templates
    * @returns
-   * @param sLabbelingTempaletId
    */
-  getList(sLabbelingTempaletId: string) {
-    return this.m_oHttp.get<any>(this.APIURL + '/getList?labelling_template_url=' + sLabbelingTempaletId);
+  getListByUser() {
+    return this.m_oHttp.get<any>(this.APIURL + '/list');
   };
 
   /**
@@ -27,7 +26,7 @@ export class LabellingTemplatesService {
    * @param oTemplate
    */
   create(oTemplate: any) {
-    return this.m_oHttp.post(this.APIURL + '/create', oTemplate);
+    return this.m_oHttp.post(this.APIURL, oTemplate);
   };
 
   /**
@@ -36,8 +35,8 @@ export class LabellingTemplatesService {
    * @param sTemplateId
    * @param oTemplate
    */
-  update(sTemplateId: string, oTemplate: any) {
-    return this.m_oHttp.get<any>(this.APIURL + '/update?template_id=' + sTemplateId, oTemplate);
+  update(oTemplate: any) {
+    return this.m_oHttp.get<any>(this.APIURL, oTemplate);
   };
 
   /**
@@ -46,7 +45,7 @@ export class LabellingTemplatesService {
    * @param sTemplateId
    */
   delete(sTemplateId: string) {
-    return this.m_oHttp.delete<any>(this.APIURL + '/delete/?template_id=' + sTemplateId);
+    return this.m_oHttp.delete<any>(this.APIURL + '?templateId=' + sTemplateId);
   };
 
   /**
@@ -56,6 +55,14 @@ export class LabellingTemplatesService {
    */
   getByProject(sProjectId: string) {
     return this.m_oHttp.get(this.APIURL + '/getByProject?project_id=' + sProjectId);
+  };
+  /**
+   * get Template By Id
+   * @returns
+   * @param sTemplateId
+   */
+  getById(sTemplateId: string) {
+    return this.m_oHttp.get(this.APIURL + '?templateId=' + sTemplateId);
   };
 
   /**
