@@ -1,0 +1,14 @@
+main {
+  min-height: calc(100vh - 3rem);
+}
+
+div.dashboard-content {
+  padding: 32px;
+  overflow-y: auto;
+  height: calc(100vh - 3rem);
+}
+
+div.dashboard-content-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}

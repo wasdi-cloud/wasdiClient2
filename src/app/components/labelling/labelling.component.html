@@ -6,8 +6,10 @@
         <app-labelling-projects></app-labelling-projects>
       }
       @if (m_sActiveTab === 'templates') {
-        <app-labelling-templates
-        ></app-labelling-templates>
+        <app-labelling-templates (m_oTabChange)="getActiveTab($event)"></app-labelling-templates>
+      }
+      @if (m_sActiveTab === 'create-template') {
+        <app-create-template-label (m_oTabChange)="getActiveTab($event)"></app-create-template-label>
       }
       @if (m_sActiveTab === 'labels') {
         <app-labelling-labels

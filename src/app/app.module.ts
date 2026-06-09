@@ -210,6 +210,14 @@ import {EnvService} from './services/env.service';
 import {PrintDialogComponent} from './shared/dialogs/print-dialog/print-dialog.component';
 import {PreviewDialogComponent} from './dialogs/preview-dialog/preview-dialog.component';
 import {InvaderComponent} from '../assets/invader/invader.component';
+import {LabellingComponent} from "./components/labelling/labelling.component";
+import {LabellingTemplatesComponent} from "./components/labelling/labelling-templates/labelling-templates.component";
+import {LabellingLabelsComponent} from "./components/labelling/labelling-labels/labelling-labels.component";
+import {LabellingMenuComponent} from "./components/labelling/labelling-menu/labelling-menu.component";
+import {LabellingProjectsComponent} from "./components/labelling/labelling-projects/labelling-projects.component";
+import {
+  CreateTemplateLabelComponent
+} from "./components/labelling/create-template-label/create-template-label.component";
 
 @NgModule({
     declarations: [
@@ -278,7 +286,13 @@ import {InvaderComponent} from '../assets/invader/invader.component';
         FTPDialogComponent,
         NavbarComponent,
         SearchBtnGrpComponent,
+        LabellingComponent,
+        LabellingTemplatesComponent,
         DragAndDropDirective,
+        LabellingLabelsComponent,
+        LabellingMenuComponent,
+        LabellingProjectsComponent,
+        CreateTemplateLabelComponent,
         DragAndDropComponent,
         NotificationSnackbarComponent,
         ConvertMsToTimePipe,

@@ -5,12 +5,9 @@ import {MenuButtonComponent} from "../../../shared/shared-components/menu-button
 
 @Component({
   selector: 'app-labelling-menu',
-  imports: [
-    TranslatePipe,
-    MenuButtonComponent
-  ],
   templateUrl: './labelling-menu.component.html',
   styleUrl: './labelling-menu.component.css',
+  standalone: false,
 })
 export class LabellingMenuComponent {
   @Output() m_sSelectedTab: EventEmitter<string> = new EventEmitter<string>();

@@ -1,1 +1,82 @@
-<p>labelling-templates works!</p>
+<div class="d-flex flex-fill flex-column gap-5 w-100 h-100">
+
+  <div class="header font-bold d-flex flex-row justify-content-between align-items-center w-100">
+    <div>
+      Label Templates Library
+    </div>
+    <app-button [m_sLabel]="'Add New Template'" (click)="navigateToCreate()"></app-button>
+  </div>
+
+  <div class="d-flex flex-column flex-fill gap-2 w-100">
+    <div class="d-flex flex-row align-items-center bg-white p-2 border-bottom" style="border-radius: 8px 8px 0 0;">
+      <div style="width: 300px;">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search templates..."
+          [value]="m_sSearchText"
+          (input)="onSearchChange($event)">
+      </div>
+    </div>
+
+    @if (m_bIsLoading) {
+      <div class="p-5 text-center text-muted font-bold flex-fill bg-white w-100">
+        Loading templates...
+      </div>
+    }
+
+    @if (m_sError) {
+      <div class="p-5 text-center text-danger font-bold flex-fill bg-white w-100">
+        {{ m_sError }}
+      </div>
+    }
+
+    @if (!m_bIsLoading && !m_sError) {
+      <div class="table-wrapper flex-fill w-100">
+
+        @if (filteredTemplates.length > 0) {
+          <table>
+            <thead class="table-heading-container">
+            <tr>
+              <td>Template name</td>
+              <td>Created At</td>
+              <td>Creator</td>
+              <td></td>
+            </tr>
+            </thead>
+            <tbody>
+              @for (item of filteredTemplates; track item.id) {
+                <tr>
+                  <td class="font-bold">{{ item.name }}</td>
+                  <td>{{ formatDate(item.created) }}</td>
+                  <td>{{ item.creator }}</td>
+
+                  <td>
+                    <div class="d-flex gap-1 justify-content-end align-items-center">
+                      <span class="material-symbols-outlined" (click)="navigateToTemplate(item.id, 'view')">
+                        visibility
+                      </span>
+
+                      @if (item.canEdit) {
+                        <span class="material-symbols-outlined" (click)="navigateToTemplate(item.id, 'edit')">
+                          edit
+                        </span>
+                        <span class="material-symbols-outlined" (click)="handleDelete(item.id)">
+                          delete
+                        </span>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
+          <div class="p-5 text-center text-muted bg-white w-100">
+            No templates found.
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -6,17 +6,14 @@ import {LabellingProjectsComponent} from "./labelling-projects/labelling-project
 import {LabellingTemplatesComponent} from "./labelling-templates/labelling-templates.component";
 import {LabellingLabelsComponent} from "./labelling-labels/labelling-labels.component";
 import {LabellingMenuComponent} from "./labelling-menu/labelling-menu.component";
+import {ButtonComponent} from "../../shared/shared-components/button/button.component";
 
 @Component({
   selector: 'app-labelling',
-  imports: [
-    LabellingProjectsComponent,
-    LabellingTemplatesComponent,
-    LabellingLabelsComponent,
-    LabellingMenuComponent
-  ],
   templateUrl: './labelling.component.html',
   styleUrl: './labelling.component.css',
+  host: { 'class': 'flex-fill' },
+  standalone: false
 })
 export class LabellingComponent {
   m_sActiveTab: string = 'projects';

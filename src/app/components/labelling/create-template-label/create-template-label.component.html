@@ -1,0 +1,177 @@
+<div class="flex-fill d-flex flex-column gap-5 p-4">
+
+  <div class="header font-bold d-flex flex-row justify-content-between align-items-center">
+    Create New Template
+    <div class="d-flex gap-2">
+      <app-button [m_sLabel]="'Cancel'" [m_bMuted]="true" (click)="onCancel()"></app-button>
+      <app-button [m_sLabel]="'Save Template'" (click)="saveTemplate()"></app-button>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column gap-3">
+    <div class="input-header font-bold" style="font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
+      1. General Information
+    </div>
+
+    <div class="d-flex flex-row justify-items-stretch gap-2">
+      <app-input-field class="flex-fill" [m_sLabel]="'Template Name'" [m_sInputValue]="m_oTemplate.name"
+                       (m_oInputChange)="getUserInput($event, 'name')"></app-input-field>
+    </div>
+
+    <div class="d-flex flex-row justify-items-stretch gap-2">
+      <app-input-field class="flex-fill" [m_sLabel]="'Description'" [m_sInputValue]="m_oTemplate.description"
+                       (m_oInputChange)="getUserInput($event, 'description')"></app-input-field>
+    </div>
+
+    <div class="mt-2">
+      <label class="font-bold text-muted" style="font-size: 14px;">Allowed Geometries</label>
+      <div class="d-flex gap-4 mt-2">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="checkPolygon" [(ngModel)]="m_oTemplate.hasPolygons">
+          <label class="form-check-label" for="checkPolygon">Polygons</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="checkLines" [(ngModel)]="m_oTemplate.hasLines">
+          <label class="form-check-label" for="checkLines">Lines</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="checkPoints" [(ngModel)]="m_oTemplate.hasPoints">
+          <label class="form-check-label" for="checkPoints">Points</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column gap-3">
+    <div class="input-header font-bold" style="font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
+      2. Attributes Schema
+    </div>
+    <p class="mb-0 pb-0 text-muted">Define the data attributes that will be attached to these labels.</p>
+
+    <div class="p-3 bg-light border rounded d-flex flex-column gap-3">
+      <div class="d-flex flex-row align-items-end gap-3">
+        <app-input-field class="flex-fill" [m_sLabel]="'Attribute Name'" [m_sInputValue]="m_oNewAttribute.name"
+                         (m_oInputChange)="getNewAttributeInput($event, 'name')"></app-input-field>
+
+        <div class="flex-fill">
+          <app-dropdown [m_sLabel]="'Data Type'" [m_aoDropdownItems]="m_aoAttributeTypes"
+                        (m_oSelectionChange)="onTypeChange($event)"></app-dropdown>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="checkOptional" [(ngModel)]="m_oNewAttribute.isOptional">
+          <label class="form-check-label text-muted" for="checkOptional">Optional</label>
+        </div>
+
+        <app-button [m_sLabel]="'+ Add'" (click)="addAttribute()"></app-button>
+      </div>
+
+      @if (m_oNewAttribute.type === 'Category') {
+        <div class="d-flex flex-row">
+          <app-input-field class="flex-fill" [m_sLabel]="'Category Values (comma separated)'"
+                           [m_sInputValue]="m_oNewAttribute.categoryValuesStr" (m_oInputChange)="getNewAttributeInput($event, 'categoryValuesStr')"></app-input-field>
+        </div>
+      }
+    </div>
+
+    @if (m_aoAttributes.length > 0) {
+      <div class="table-wrapper flex-fill border rounded mt-2">
+        <table class="w-100">
+          <thead class="table-heading-container bg-white border-bottom">
+          <tr>
+            <th class="p-2">Name</th>
+            <th class="p-2">Type</th>
+            <th class="p-2">Requirement</th>
+            <th class="p-2 text-end">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (attr of m_aoAttributes; track attr.name; let i = $index) {
+              <tr class="border-bottom">
+                <td class="p-2 font-bold">{{ attr.name }}</td>
+                <td class="p-2">{{ attr.type }}</td>
+                <td class="p-2">
+                  <span class="badge" [class.bg-danger]="!attr.isOptional" [class.bg-secondary]="attr.isOptional">
+                    {{ attr.isOptional ? 'Optional' : 'Mandatory' }}
+                  </span>
+                </td>
+                <td class="p-2 text-end">
+                  <span class="material-symbols-outlined text-danger" style="cursor: pointer;" (click)="removeAttribute(i)">
+                    delete
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="text-center p-4 text-muted border rounded" style="border-style: dashed !important;">
+        No attributes added yet.
+      </div>
+    }
+  </div>
+
+  <div class="d-flex flex-column gap-3 mb-5">
+    <div class="input-header font-bold" style="font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
+      3. Visual Style
+    </div>
+
+    <div class="d-flex gap-4 mt-2">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="styleType" id="singleColor"
+               [value]="true" [(ngModel)]="m_oTemplate.isFixedColour">
+        <label class="form-check-label" for="singleColor">Single Color</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="styleType" id="categoryStyle"
+               [value]="false" [(ngModel)]="m_oTemplate.isFixedColour" [disabled]="!hasCategoryAttributes()">
+        <label class="form-check-label" for="categoryStyle" [class.text-muted]="!hasCategoryAttributes()">
+          Attribute Based
+          @if (!hasCategoryAttributes()) {
+            <small class="ms-1">(Requires a Category attribute)</small>
+          }
+        </label>
+      </div>
+    </div>
+
+    <div class="p-3 bg-light border rounded mt-2" style="max-width: 500px;">
+
+      @if (m_oTemplate.isFixedColour) {
+        <label class="font-bold text-muted mb-2 d-block">Feature Color</label>
+        <div class="d-flex align-items-center gap-2">
+          <input type="color" class="form-control form-control-color p-0 border-0"
+                 [(ngModel)]="m_oTemplate.fixedColourStr" style="width: 40px; height: 40px; background: none;">
+          <input type="text" class="form-control" style="width: 120px;" [(ngModel)]="m_oTemplate.fixedColourStr">
+        </div>
+      }
+
+      @else {
+        <app-dropdown [m_sLabel]="'Select Category Attribute'"
+                      [m_aoDropdownItems]="getCategoryDropdownOptions()"
+                      (m_oSelectionChange)="onCategoryAttributeChange($event)"></app-dropdown>
+
+        @if (m_oTemplate.colourAttributeName) {
+          <div class="mt-4 border-top pt-3">
+            <label class="font-bold text-muted mb-3 d-block">Legend Colors</label>
+
+            @for (catVal of getSelectedCategoryValues(); track catVal.value) {
+              <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2">
+                <span class="font-bold">{{ catVal.value }}</span>
+                <div class="d-flex align-items-center gap-2">
+                  <input type="color" class="form-control form-control-color p-0 border-0"
+                         [(ngModel)]="catVal.colorStr" style="width: 30px; height: 30px; background: none;">
+                  <input type="text" class="form-control form-control-sm text-uppercase" style="width: 90px;"
+                         [(ngModel)]="catVal.colorStr">
+                </div>
+              </div>
+            }
+
+          </div>
+        }
+      }
+    </div>
+
+  </div>
+
+</div>

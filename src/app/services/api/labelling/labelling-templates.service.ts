@@ -26,7 +26,7 @@ export class LabellingTemplatesService {
    * @param oTemplate
    */
   create(oTemplate: any) {
-    return this.m_oHttp.post(this.APIURL, oTemplate);
+    return this.m_oHttp.post(this.APIURL, oTemplate,{ responseType: 'text' });
   };
 
   /**
