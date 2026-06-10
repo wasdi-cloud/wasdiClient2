@@ -1,10 +1,15 @@
 <div class="flex-fill d-flex flex-column gap-5 p-4">
 
   <div class="header font-bold d-flex flex-row justify-content-between align-items-center">
-    Create New Template
+    {{ m_sMode === 'create' ? 'Create New Template' : m_sMode === 'edit' ? 'Edit Template' : 'View Template' }}
     <div class="d-flex gap-2">
-      <app-button [m_sLabel]="'Cancel'" [m_bMuted]="true" (click)="onCancel()"></app-button>
-      <app-button [m_sLabel]="'Save Template'" (click)="saveTemplate()"></app-button>
+      @if (m_sMode === 'view') {
+        <app-button [m_sLabel]="'Edit'" (click)="switchToEdit()"></app-button>
+      }
+      @if (m_sMode !== 'view') {
+        <app-button [m_sLabel]="'Cancel'" [m_bMuted]="true" (click)="onCancel()"></app-button>
+        <app-button [m_sLabel]="m_sMode === 'edit' ? 'Update Template' : 'Save Template'" (click)="onSave()"></app-button>
+      }
     </div>
   </div>
 
@@ -14,12 +19,12 @@
     </div>
 
     <div class="d-flex flex-row justify-items-stretch gap-2">
-      <app-input-field class="flex-fill" [m_sLabel]="'Template Name'" [m_sInputValue]="m_oTemplate.name"
+      <app-input-field [m_bIsDisabled]="m_bIsReadOnly" class="flex-fill" [m_sLabel]="'Template Name'" [m_sInputValue]="m_oTemplate.name"
                        (m_oInputChange)="getUserInput($event, 'name')"></app-input-field>
     </div>
 
     <div class="d-flex flex-row justify-items-stretch gap-2">
-      <app-input-field class="flex-fill" [m_sLabel]="'Description'" [m_sInputValue]="m_oTemplate.description"
+      <app-input-field  [m_bIsDisabled]="m_bIsReadOnly" class="flex-fill" [m_sLabel]="'Description'" [m_sInputValue]="m_oTemplate.description"
                        (m_oInputChange)="getUserInput($event, 'description')"></app-input-field>
     </div>
 
@@ -27,15 +32,15 @@
       <label class="font-bold text-muted" style="font-size: 14px;">Allowed Geometries</label>
       <div class="d-flex gap-4 mt-2">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="checkPolygon" [(ngModel)]="m_oTemplate.hasPolygons">
-          <label class="form-check-label" for="checkPolygon">Polygons</label>
+          <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="checkPolygon" [(ngModel)]="m_oTemplate.hasPolygons">
+          <label class="form-check-label"  for="checkPolygon">Polygons</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="checkLines" [(ngModel)]="m_oTemplate.hasLines">
+          <input class="form-check-input"  [disabled]="m_bIsReadOnly" type="checkbox" id="checkLines" [(ngModel)]="m_oTemplate.hasLines">
           <label class="form-check-label" for="checkLines">Lines</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="checkPoints" [(ngModel)]="m_oTemplate.hasPoints">
+          <input class="form-check-input"  [disabled]="m_bIsReadOnly"type="checkbox" id="checkPoints" [(ngModel)]="m_oTemplate.hasPoints">
           <label class="form-check-label" for="checkPoints">Points</label>
         </div>
       </div>
@@ -47,32 +52,34 @@
       2. Attributes Schema
     </div>
     <p class="mb-0 pb-0 text-muted">Define the data attributes that will be attached to these labels.</p>
+    @if (!m_bIsReadOnly) {
+      <div class="p-3 bg-light border rounded d-flex flex-column gap-3">
+        <div class="d-flex flex-row align-items-end gap-3">
+          <app-input-field class="flex-fill" [m_sLabel]="'Attribute Name'" [m_sInputValue]="m_oNewAttribute.name"
+                           (m_oInputChange)="getNewAttributeInput($event, 'name')"></app-input-field>
 
-    <div class="p-3 bg-light border rounded d-flex flex-column gap-3">
-      <div class="d-flex flex-row align-items-end gap-3">
-        <app-input-field class="flex-fill" [m_sLabel]="'Attribute Name'" [m_sInputValue]="m_oNewAttribute.name"
-                         (m_oInputChange)="getNewAttributeInput($event, 'name')"></app-input-field>
+          <div class="flex-fill">
+            <app-dropdown [m_sLabel]="'Data Type'" [m_aoDropdownItems]="m_aoAttributeTypes"
+                          (m_oSelectionChange)="onTypeChange($event)"></app-dropdown>
+          </div>
 
-        <div class="flex-fill">
-          <app-dropdown [m_sLabel]="'Data Type'" [m_aoDropdownItems]="m_aoAttributeTypes"
-                        (m_oSelectionChange)="onTypeChange($event)"></app-dropdown>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="checkOptional" [(ngModel)]="m_oNewAttribute.isOptional">
+            <label class="form-check-label text-muted" for="checkOptional">Optional</label>
+          </div>
+
+          <app-button [m_sLabel]="'+ Add'" (click)="addAttribute()"></app-button>
         </div>
 
-        <div class="form-check mb-2">
-          <input class="form-check-input" type="checkbox" id="checkOptional" [(ngModel)]="m_oNewAttribute.isOptional">
-          <label class="form-check-label text-muted" for="checkOptional">Optional</label>
-        </div>
-
-        <app-button [m_sLabel]="'+ Add'" (click)="addAttribute()"></app-button>
+        @if (m_oNewAttribute.type === 'Category') {
+          <div class="d-flex flex-row">
+            <app-input-field class="flex-fill" [m_sLabel]="'Category Values (comma separated)'"
+                             [m_sInputValue]="m_oNewAttribute.categoryValuesStr" (m_oInputChange)="getNewAttributeInput($event, 'categoryValuesStr')"></app-input-field>
+          </div>
+        }
       </div>
+    }
 
-      @if (m_oNewAttribute.type === 'Category') {
-        <div class="d-flex flex-row">
-          <app-input-field class="flex-fill" [m_sLabel]="'Category Values (comma separated)'"
-                           [m_sInputValue]="m_oNewAttribute.categoryValuesStr" (m_oInputChange)="getNewAttributeInput($event, 'categoryValuesStr')"></app-input-field>
-        </div>
-      }
-    </div>
 
     @if (m_aoAttributes.length > 0) {
       <div class="table-wrapper flex-fill border rounded mt-2">
@@ -95,11 +102,13 @@
                     {{ attr.isOptional ? 'Optional' : 'Mandatory' }}
                   </span>
                 </td>
-                <td class="p-2 text-end">
+                @if (!m_bIsReadOnly) {
+                  <td class="p-2 text-end">
                   <span class="material-symbols-outlined text-danger" style="cursor: pointer;" (click)="removeAttribute(i)">
                     delete
                   </span>
-                </td>
+                  </td>
+                }
               </tr>
             }
           </tbody>
@@ -119,7 +128,7 @@
 
     <div class="d-flex gap-4 mt-2">
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="styleType" id="singleColor"
+        <input [disabled]="m_bIsReadOnly" class="form-check-input" type="radio" name="styleType" id="singleColor"
                [value]="true" [(ngModel)]="m_oTemplate.isFixedColour">
         <label class="form-check-label" for="singleColor">Single Color</label>
       </div>
@@ -140,9 +149,9 @@
       @if (m_oTemplate.isFixedColour) {
         <label class="font-bold text-muted mb-2 d-block">Feature Color</label>
         <div class="d-flex align-items-center gap-2">
-          <input type="color" class="form-control form-control-color p-0 border-0"
+          <input [disabled]="m_bIsReadOnly" type="color" class="form-control form-control-color p-0 border-0"
                  [(ngModel)]="m_oTemplate.fixedColourStr" style="width: 40px; height: 40px; background: none;">
-          <input type="text" class="form-control" style="width: 120px;" [(ngModel)]="m_oTemplate.fixedColourStr">
+          <input [readOnly]="m_bIsReadOnly" type="text" class="form-control" style="width: 120px;" [(ngModel)]="m_oTemplate.fixedColourStr">
         </div>
       }
 

@@ -35,8 +35,9 @@ export class LabellingTemplatesService {
    * @param sTemplateId
    * @param oTemplate
    */
-  update(oTemplate: any) {
-    return this.m_oHttp.get<any>(this.APIURL, oTemplate);
+  update(sTemplateId:string,oTemplate: any) {
+    oTemplate.id = sTemplateId;
+    return this.m_oHttp.put<any>(this.APIURL, oTemplate);
   };
 
   /**

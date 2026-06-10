@@ -2,6 +2,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Router} from "@angular/router";
 import {LabellingTemplatesService} from "../../../services/api/labelling/labelling-templates.service";
 import {ConstantsService} from "../../../services/constants.service";
+import {TemplateStateService} from "../../../services/api/labelling/template-state.service";
 
 @Component({
   selector: 'app-labelling-templates',
@@ -23,19 +24,18 @@ export class LabellingTemplatesComponent implements OnInit {
   constructor(
     private m_oRouter: Router,
     private m_oTemplateService: LabellingTemplatesService,
-    private m_oConstantService: ConstantsService
+    private m_oConstantService: ConstantsService,
+    private m_oTemplateState: TemplateStateService
   ) {
   }
 
   navigateToCreate() {
-    // Tell the parent to change the @if statement!
+    this.m_oTemplateState.setState(null, 'create');   // ← add
     this.m_oTabChange.emit('create-template');
   }
 
-  navigateToTemplate(sTemplateId: string, sMode: string) {
-    // If you plan to use the same component for editing/viewing later,
-    // you would emit the tab change and pass the ID via a shared service.
-    // For now, let's just emit the tab change.
+  navigateToTemplate(sTemplateId: string, sMode: 'view' | 'edit') {
+    this.m_oTemplateState.setState(sTemplateId, sMode);  // ← add
     this.m_oTabChange.emit('create-template');
   }
 
