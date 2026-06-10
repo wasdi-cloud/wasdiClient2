@@ -52,16 +52,23 @@
                   <td>{{ item.creator }}</td>
 
                   <td>
-                    <div class="d-flex gap-1 justify-content-end align-items-center">
-                      <span class="material-symbols-outlined" (click)="navigateToTemplate(item.id, 'view')">
+                    <div class=" d-flex gap-1 justify-content-end align-items-center">
+                      <span
+                        class="material-symbols-outlined action-icon"
+                        (click)="navigateToTemplate(item.id, 'view')">
                         visibility
                       </span>
 
                       @if (item.canEdit) {
-                        <span class="material-symbols-outlined" (click)="navigateToTemplate(item.id, 'edit')">
+                        <span
+                          class="material-symbols-outlined action-icon"
+                          (click)="navigateToTemplate(item.id, 'edit')">
                           edit
                         </span>
-                        <span class="material-symbols-outlined" (click)="handleDelete(item.id)">
+
+                        <span
+                          class="material-symbols-outlined action-icon delete-icon"
+                          (click)="handleDelete(item.id)">
                           delete
                         </span>
                       }
