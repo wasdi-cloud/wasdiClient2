@@ -218,6 +218,9 @@ import {LabellingProjectsComponent} from "./components/labelling/labelling-proje
 import {
   CreateTemplateLabelComponent
 } from "./components/labelling/create-template-label/create-template-label.component";
+import {
+  CreateLabellingProjectComponent
+} from "./components/labelling/create-labelling-project/create-labelling-project.component";
 
 @NgModule({
     declarations: [
@@ -293,6 +296,7 @@ import {
         LabellingMenuComponent,
         LabellingProjectsComponent,
         CreateTemplateLabelComponent,
+        CreateLabellingProjectComponent,
         DragAndDropComponent,
         NotificationSnackbarComponent,
         ConvertMsToTimePipe,

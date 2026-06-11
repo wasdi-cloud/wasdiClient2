@@ -5,7 +5,7 @@ import {ConstantsService} from "../../constants.service";
 @Injectable({
   providedIn: 'root',
 })
-export class ProjectsService {
+export class LabellingProjectsService {
   APIURL: string = this.oConstantsService.getAPIURL() + '/labelling/datasets';
   m_bIgnoreWorkspaceApiUrl: boolean = this.oConstantsService.getIgnoreWorkspaceApiUrl();
 
@@ -25,7 +25,7 @@ export class ProjectsService {
    * @returns
    */
   getProjectsByUser() {
-    return this.m_oHttp.get(this.APIURL + '/getByUser');
+    return this.m_oHttp.get(this.APIURL + '/list');
   };
 
   /**
@@ -33,8 +33,8 @@ export class ProjectsService {
    * @returns
    * @param sDatasetId
    */
-  getDataset(sDatasetId: string) {
-    let sUrl = this.APIURL + '/getDataset?dataset_id=' + sDatasetId;
+  getDatasetById(sDatasetId: string) {
+    let sUrl = this.APIURL+'?datasetId=' + sDatasetId;
     return this.m_oHttp.get<any>(sUrl);
   };
 
@@ -71,6 +71,16 @@ export class ProjectsService {
    * @param oDatasetProject
    */
   createProject(oDatasetProject: any) {
-    return this.m_oHttp.post(this.APIURL + '/create', oDatasetProject);
+    return this.m_oHttp.post(this.APIURL, oDatasetProject);
+  }
+  /**
+   * update a project
+   * @returns
+   * @param sDatasetProjectId
+   * @param oDatasetProject
+   */
+  updateProject(sDatasetProjectId:string,oDatasetProject: any) {
+    oDatasetProject.id = sDatasetProjectId;
+    return this.m_oHttp.put(this.APIURL, oDatasetProject);
   }
 }

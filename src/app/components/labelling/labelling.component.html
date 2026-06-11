@@ -3,7 +3,10 @@
   <div class="dashboard-content flex-fill">
     <div class="dashboard-content-wrapper">
       @if (m_sActiveTab === 'projects') {
-        <app-labelling-projects></app-labelling-projects>
+        <app-labelling-projects (m_oTabChange)="getActiveTab($event)"></app-labelling-projects>
+      }
+      @if (m_sActiveTab === 'create-project') {
+        <app-create-labelling-project (m_oTabChange)="getActiveTab($event)"></app-create-labelling-project>
       }
       @if (m_sActiveTab === 'templates') {
         <app-labelling-templates (m_oTabChange)="getActiveTab($event)"></app-labelling-templates>
