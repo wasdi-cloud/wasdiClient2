@@ -93,11 +93,26 @@
 
                   <td>
                     <div class="d-flex gap-1 justify-content-end align-items-center">
+
+                      <span class="material-symbols-outlined action-icon text-success"
+                            title="Open Project Workspace"
+                            (click)="openProject(item.id)">
+                        open_in_new
+                      </span>
+
                       <span class="material-symbols-outlined action-icon text-primary"
-                            title="Open Project"
-                            (click)="navigateToProject(item.id, item.userRole)">
+                            title="View Project Details"
+                            (click)="navigateToProject(item.id, 'view')">
                         visibility
                       </span>
+
+                      @if (item.userRole?.toUpperCase() === 'OWNER') {
+                        <span class="material-symbols-outlined action-icon text-primary"
+                              title="Edit Project"
+                              (click)="navigateToProject(item.id, 'edit')">
+                          edit
+                        </span>
+                      }
 
                       @if (m_bIsLoggedIn && item.userRole?.toUpperCase() !== 'GUEST' && item.userRole?.toUpperCase() !== 'OWNER') {
                         <span class="material-symbols-outlined action-icon text-warning"

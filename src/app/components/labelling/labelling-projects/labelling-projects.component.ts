@@ -129,9 +129,16 @@ export class LabellingProjectsComponent implements OnInit {
     this.m_oTabChange.emit('create-project');
   }
 
-  navigateToProject(sProjectId: string, sRole: string) {
-    this.m_oProjectState.setState(sProjectId, 'view'); // Set actual Project ID
+  // FIX 1: Tell the function to accept the mode ('view' or 'edit')
+  navigateToProject(sProjectId: string, sMode: 'view' | 'edit') {
+    this.m_oProjectState.setState(sProjectId, sMode); // Pass the requested mode dynamically!
     this.m_oTabChange.emit('create-project');
+  }
+
+  // FIX 2: Add the placeholder Open function
+  openProject(sProjectId: string) {
+    console.log("🚀 Open Project clicked for ID:", sProjectId, "- Placeholder, doing nothing for now!");
+    // Future logic: Route to the actual labelling map/workspace!
   }
 
   handleLeaveProject(oProject: any) {
