@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from "@angular/router";
 import {NotificationDisplayService} from "../../../services/notification-display.service";
 import {LabellingTemplatesService} from "../../../services/api/labelling/labelling-templates.service";
@@ -15,6 +15,11 @@ export class CreateTemplateLabelComponent implements OnInit {
   m_sMode: 'create' | 'view' | 'edit' = 'create';
   m_sTemplateId: string | null = null;
   m_bIsLoading: boolean = false;
+
+  // --- NEW: Add Inputs so it can be embedded in the offcanvas ---
+  @Input() m_bIsEmbedded: boolean = false;
+  @Input() m_sEmbeddedMode: 'create' | 'view' | 'edit' = 'create';
+  @Input() m_sEmbeddedTemplateId: string | null = null;
   // Create an event emitter to talk to the parent
   @Output() m_oTabChange = new EventEmitter<string>();
 // Main Template Payload State
@@ -53,9 +58,18 @@ export class CreateTemplateLabelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.m_sMode = this.m_oTemplateState.mode;
-    this.m_sTemplateId = this.m_oTemplateState.templateId;
-    if (this.m_sTemplateId) {
+    // 1. Check if we are embedded inside the offcanvas
+    if (this.m_bIsEmbedded) {
+      this.m_sMode = this.m_sEmbeddedMode;
+      this.m_sTemplateId = this.m_sEmbeddedTemplateId;
+    } else {
+      // 2. Otherwise, use standard full-page tab routing
+      this.m_sMode = this.m_oTemplateState.mode;
+      this.m_sTemplateId = this.m_oTemplateState.templateId;
+    }
+
+    // 3. Load the data
+    if (this.m_sTemplateId && this.m_sMode !== 'create') {
       this.loadTemplate(this.m_sTemplateId);
     }
   }

@@ -152,12 +152,34 @@
 
       <app-button [m_sLabel]="'View'" [m_bMuted]="true"
                   [m_bDisabled]="!m_oProject.templateId"
-                  (click)="viewSelectedTemplate()"></app-button>
+                  data-bs-toggle="offcanvas" href="#templateViewOffcanvas" role="button">
+      </app-button>
 
       <app-button [m_sLabel]="'+ New'" [m_bDisabled]="m_bIsReadOnly"
                   (click)="createNewTemplate()"></app-button>
     </div>
 
+  </div>
+
+</div>
+
+<div class="offcanvas offcanvas-end" data-bs-backdrop="true" tabindex="-1" id="templateViewOffcanvas" style="width: 800px; background-color: #f8f9fa;">
+
+  <div class="d-flex justify-content-between align-items-center font-bold pb-3 border-bottom px-4 pt-4 bg-white">
+    <span style="font-size: 18px;">View Labelling Template</span>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+  <div class="d-flex flex-fill flex-column overflow-auto p-4">
+    @if (m_oProject.templateId) {
+      <app-create-template-label
+        [m_bIsEmbedded]="true"
+        [m_sEmbeddedMode]="'view'"
+        [m_sEmbeddedTemplateId]="m_oProject.templateId">
+      </app-create-template-label>
+    } @else {
+      <div class="text-muted text-center mt-5">No template selected.</div>
+    }
   </div>
 
 </div>
