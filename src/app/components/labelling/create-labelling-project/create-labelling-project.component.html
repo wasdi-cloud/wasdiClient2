@@ -4,6 +4,7 @@
     {{ m_sMode === 'create' ? 'Create New Project' : m_sMode === 'edit' ? 'Edit Project' : 'View Project' }}
     <div class="d-flex gap-2">
       @if (m_sMode === 'view') {
+        <app-button [m_sLabel]="'Close'" [m_bMuted]="true" (click)="closeView()"></app-button>
         <app-button [m_sLabel]="'Edit'" (click)="switchToEdit()"></app-button>
       }
       @if (m_sMode !== 'view') {
@@ -108,8 +109,12 @@
 
     <div class="d-flex flex-column w-50">
       <label class="font-bold text-muted mb-1" style="font-size: 12px;">EO Mission</label>
-      <app-dropdown [m_bIsDisabled]="m_bIsReadOnly" [m_sLabel]="'Select Mission'" [m_aoDropdownItems]="m_aoMissions"
-                    (m_oSelectionChange)="onMissionChange($event)"></app-dropdown>
+      <app-dropdown [m_bIsDisabled]="m_bIsReadOnly"
+                    [m_sLabel]="'Select Mission'"
+                    [m_aoDropdownItems]="m_aoMissions"
+                    [m_aoSelectedItems]="m_oSelectedMissionObj"
+                    (m_oSelectionChange)="onMissionChange($event)">
+      </app-dropdown>
     </div>
 
     <div class="mt-2">
@@ -136,8 +141,12 @@
         @if (m_bLoadingTemplates) {
           <div class="text-muted" style="font-size: 13px;">⏳ Loading templates...</div>
         } @else {
-          <app-dropdown [m_bIsDisabled]="m_bIsReadOnly" [m_sLabel]="''" [m_aoDropdownItems]="m_aoTemplates"
-                        (m_oSelectionChange)="onTemplateChange($event)"></app-dropdown>
+          <app-dropdown [m_bIsDisabled]="m_bIsReadOnly"
+                        [m_sLabel]="''"
+                        [m_aoDropdownItems]="m_aoTemplates"
+                        [m_aoSelectedItems]="m_oSelectedTemplateObj"
+                        (m_oSelectionChange)="onTemplateChange($event)">
+          </app-dropdown>
         }
       </div>
 

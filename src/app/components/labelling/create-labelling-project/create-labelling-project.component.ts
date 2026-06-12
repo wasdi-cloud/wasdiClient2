@@ -16,6 +16,10 @@ import {LabellingProjectsStateService} from "../../../services/api/labelling/lab
 export class CreateLabellingProjectComponent implements OnInit{
   @Output() m_oTabChange = new EventEmitter<string>();
 
+  // NEW: Object references so the dropdown component displays correctly
+  m_oSelectedMissionObj: any = null;
+  m_oSelectedTemplateObj: any = null;
+
   // State Management
   m_sMode: 'create' | 'view' | 'edit' = 'create';
   m_sProjectId: string | null = null;
@@ -68,7 +72,7 @@ export class CreateLabellingProjectComponent implements OnInit{
 
   ngOnInit(): void {
     this.m_sMode = this.m_oProjectState.mode;
-    this.m_sProjectId = this.m_oProjectState.projectId; // <--- Makes semantic sense now!
+    this.m_sProjectId = this.m_oProjectState.projectId;
 
     this.fetchTemplates();
 
@@ -77,6 +81,10 @@ export class CreateLabellingProjectComponent implements OnInit{
     } else {
       const oToday = new Date();
       this.m_oProject.startDateStr = oToday.toISOString().split('T')[0];
+
+      // Default Mission for Create Mode
+      this.m_oProject.missions = "S2";
+      this.m_oSelectedMissionObj = this.m_aoMissions.find(m => m.value === "S2");
     }
   }
 
@@ -85,7 +93,11 @@ export class CreateLabellingProjectComponent implements OnInit{
     this.m_bLoadingTemplates = true;
     this.m_oTemplateService.getListByUser().subscribe({
       next: (oResponse: any) => {
-        this.m_aoTemplates = oResponse || [];
+        // Handle array mapping trap just in case
+        this.m_aoTemplates = oResponse?.body ? oResponse.body : oResponse || [];
+
+        // Sync the template object so the dropdown populates!
+        this.syncSelectedTemplate();
         this.m_bLoadingTemplates = false;
       },
       error: () => {
@@ -98,7 +110,6 @@ export class CreateLabellingProjectComponent implements OnInit{
   loadProject(sId: string) {
     this.m_bIsLoading = true;
 
-    // Replace with your actual service method for fetching a single project
     this.m_oProjectService.getDatasetById(sId).subscribe({
       next: (oResponse: any) => {
         const oData = oResponse.body || oResponse;
@@ -114,14 +125,12 @@ export class CreateLabellingProjectComponent implements OnInit{
           this.m_oProject.annotatorSeeAllLabels = oData.annotatorSeeAllLabels ?? true;
           this.m_oProject.reviewRequired = oData.reviewRequired || false;
           this.m_oProject.minReviewCount = oData.minReviewCount || 1;
-          this.m_oProject.missions = oData.mission || oData.missions || "S2"; // Note: Check if backend sends 'mission' or 'missions'
-          this.m_oProject.templateId = oData.templateId || "";
 
-          // Map Epoch dates back to YYYY-MM-DD strings for the UI
+          // Map Dates
           this.m_oProject.startDateStr = this.fromEpochToDateString(oData.startDate);
           this.m_oProject.endDateStr = this.fromEpochToDateString(oData.endDate);
 
-          // Map Tasks Array back to the Checkbox Object
+          // Map Tasks
           if (oData.tasks && Array.isArray(oData.tasks)) {
             this.m_oTasks = {
               SEMANTING_SEGMENTATION: oData.tasks.includes('SEMANTING_SEGMENTATION'),
@@ -129,6 +138,14 @@ export class CreateLabellingProjectComponent implements OnInit{
               OTHER: oData.tasks.includes('OTHER')
             };
           }
+
+          // FIX: Sync Mission Dropdown Object
+          this.m_oProject.missions = oData.missions || "S2";
+          this.m_oSelectedMissionObj = this.m_aoMissions.find(m => m.value === this.m_oProject.missions) || null;
+
+          // FIX: Sync Template Dropdown Object
+          this.m_oProject.templateId = oData.templateId || "";
+          this.syncSelectedTemplate();
         }
         this.m_bIsLoading = false;
       },
@@ -140,6 +157,13 @@ export class CreateLabellingProjectComponent implements OnInit{
     });
   }
 
+  // Helper to match the template ID to the actual object in the array
+  private syncSelectedTemplate() {
+    if (this.m_oProject.templateId && this.m_aoTemplates.length > 0) {
+      this.m_oSelectedTemplateObj = this.m_aoTemplates.find(t => t.id === this.m_oProject.templateId) || null;
+    }
+  }
+
   // --- INPUT HANDLERS ---
   getUserInput(oEvent: any, sField: string) {
     this.m_oProject[sField] = oEvent.event ? oEvent.event.target.value : oEvent.target.value;
@@ -148,23 +172,15 @@ export class CreateLabellingProjectComponent implements OnInit{
   // --- INPUT HANDLERS ---
 
   onMissionChange(oEvent: any) {
-    // 1. Get the actual selected item (Angular Material wraps it in oEvent.value)
     const oSelected = oEvent.value || oEvent;
-
-    // 2. Extract ONLY the string value
     this.m_oProject.missions = oSelected.value || oSelected.name || oSelected;
-
-    console.log("Mission set strictly to:", this.m_oProject.missions); // Sanity check!
+    this.m_oSelectedMissionObj = oSelected; // Update the UI state
   }
 
   onTemplateChange(oEvent: any) {
-    // 1. Get the actual selected item
     const oSelected = oEvent.value || oEvent;
-
-    // 2. Extract ONLY the ID string (handling both 'id' or 'templateId' just in case)
     this.m_oProject.templateId = oSelected.id || oSelected.templateId || oSelected;
-
-    console.log("Template ID set strictly to:", this.m_oProject.templateId); // Sanity check!
+    this.m_oSelectedTemplateObj = oSelected; // Update the UI state
   }
 
   // Add these two navigation methods:
