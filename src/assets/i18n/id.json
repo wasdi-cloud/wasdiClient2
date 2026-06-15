@@ -96,6 +96,7 @@
 	"ROOT_VIEW_NAV_BAR_LINK_SETTINGS": "Pengaturan",
 	"ROOT_VIEW_NAV_BAR_LINK_FEEDBACK": "Tanggapan",
   "ROOT_VIEW_NAV_BAR_LINK_LABELLING": "Labelling",
+  "ROOT_VIEW_NAV_BAR_LINK_ASSISTANT": "Assistant",
 	"ROOT_VIEW_LINK_HELP": "Docs",
 	"ROOT_VIEW_LINK_LOG_OUT": "Keluar",
 	"ROOT_VIEW_LABEL_USER": "Pengguna",
@@ -1258,6 +1259,7 @@
     "ADD_TITLE_AND_DESCRIPTION": "Tambahkan Judul & Deskripsi",
     "LABELLING_MENU_PROJECTS": "Dataset Projects",
     "LABELLING_MENU_TEMPLATES": "Labelling Templates",
-    "LABELLING_MENU_LABELS": "Edit Labels"
-
+    "LABELLING_MENU_LABELS": "Edit Labels",
+	"WASDAI_NEW_CHAT": "New Chat",
+    "WASDAI_TITLE": "WASDAI - AI Assistant"
 }

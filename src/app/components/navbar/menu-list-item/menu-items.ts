@@ -34,6 +34,12 @@ export const MenuItems = [
       routerLink: "/labelling/",
       materialIcon: "sell"
     },
+    {
+      label: "ROOT_VIEW_NAV_BAR_LINK_ASSISTANT",
+      name: "assistant",
+      routerLink: "/assistant/",
+      materialIcon: "robot"
+    },    
     // Settings
     {
         label: "ROOT_VIEW_NAV_BAR_LINK_SETTINGS",
