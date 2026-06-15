@@ -4,6 +4,34 @@
     cursor: pointer;
     padding: 12px;
     width: 100%;
+    position: relative;
+}
+
+.deployment-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: rgba(var(--neutral15-rgb, 220, 220, 220), 0.55);
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.deployment-overlay ::ng-deep #invader {
+    margin: 0;
+    width: 100%;
+    position: relative;
+}
+
+.deployment-overlay ::ng-deep .invader {
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .product-item-container {

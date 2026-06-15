@@ -518,8 +518,7 @@ export class NewAppDialogComponent implements OnInit {
       let sErrorMessage = "Please fill the name of the parameter to read to get the area requesed by the user"  
       this.m_oNotificationDisplayService.openAlertDialog(sErrorMessage);
       return;
-    }        
-
+    }
 
     let sMessage = 'Processor Data Updated';
 
@@ -545,7 +544,33 @@ export class NewAppDialogComponent implements OnInit {
               next: (oResponse) => {
                 this.m_oNotificationDisplayService.openSnackBar(sMessage);
                 this.m_bIsUpdated = true;
-                this.onDismiss();
+
+                //Check if there was also a file uploaded:
+                if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === false) {
+
+                  let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value;
+                  let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value;
+
+                  this.m_oProcessorService.updateProcessorFiles(
+                      sFileName,
+                      this.m_oInputProcessor.processorId,
+                      oSelectedFile
+                    ).subscribe({
+                      next: (oResponse) => {
+                        this.m_bDeploymentOngoing = true;
+                        this.onDismiss();
+                      },
+                      error: (oError) => {
+                        this.m_oNotificationDisplayService.openAlertDialog(
+                          `Error in updating ${this.m_oInputProcessor.processorName} files !!!`
+                        );
+                        this.m_bDeploymentOngoing = false;
+                      },
+                    });
+                }
+                else {
+                  this.onDismiss();
+                }
               },
               error: (oError) => {
                 this.m_oNotificationDisplayService.openAlertDialog(
@@ -560,29 +585,6 @@ export class NewAppDialogComponent implements OnInit {
           );
         },
       });
-
-    //Check if there was also a file uploaded:
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value) === false) {
-
-      let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value;
-      let sFileName = this.m_oProcessorForm.get('processorBasicInfo.sSelectedFileName').value;
-
-      this.m_oProcessorService.updateProcessorFiles(
-          sFileName,
-          this.m_oInputProcessor.processorId,
-          oSelectedFile
-        ).subscribe({
-          next: (oResponse) => {
-            this.m_bDeploymentOngoing = true;
-          },
-          error: (oError) => {
-            this.m_oNotificationDisplayService.openAlertDialog(
-              `Error in updating ${this.m_oInputProcessor.processorName} files !!!`
-            );
-            this.m_bDeploymentOngoing = false;
-          },
-        });
-    }
 
     //Update the APP UI JSON
     this.addAppJSON(false);

@@ -36,9 +36,6 @@ mat-select {
 ::ng-deep div.mat-mdc-select-panel {
     padding: 0 !important;
     border-radius: 4px !important;
-    right: 50px !important;
-    transform: translate(-12px, 2px) !important;
-    max-width: 150%;
     z-index: 1000;
 }
 
