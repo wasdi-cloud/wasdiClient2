@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild, ElementRef } from '@angular/core';
+import { Component, signal, ViewChild, ElementRef, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
@@ -17,14 +17,29 @@ interface Message {
   templateUrl: './assistant-chat.component.html',
   styleUrl: './assistant-chat.component.css',
 })
-export class AssistantChatComponent {
+export class AssistantChatComponent implements OnChanges {
   @ViewChild('promptInput') promptInput!: ElementRef<HTMLTextAreaElement>;
+
+  @Input() chatId: string | null = null;
+  @Input() initialMessages: Message[] = [];
 
   messages = signal<Message[]>([]);
   isLoading = signal(false);
+  isDisabled = signal(true);
 
   constructor() {
     this.initializeMockMessages();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['chatId']) {
+      // Enable/disable based on chatId
+      this.isDisabled.set(!this.chatId);
+    }
+    if (changes['initialMessages']) {
+      // Load messages from parent when chat is selected
+      this.messages.set(this.initialMessages || []);
+    }
   }
 
   /**

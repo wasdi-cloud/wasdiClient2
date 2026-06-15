@@ -7,6 +7,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {TranslateModule} from '@ngx-translate/core';
 import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
+import { MarkdownModule } from 'ngx-markdown';
 
 //Import Main Components
 import {AppComponent} from './app.component';
@@ -353,6 +354,7 @@ import {
     ReactiveFormsModule,
     FormsModule,
     TranslateModule.forRoot(),
+    MarkdownModule.forRoot(),
     BrowserAnimationsModule,
     MatSlideToggleModule,
     MatDialogModule,

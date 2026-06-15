@@ -4,7 +4,7 @@
     
             @for (msg of messages(); track msg.id) {
             <div [class]="'message-bubble ' + msg.role">
-                <markdown [data]="msg.content" [katex]="true" [lineNumbers]="true"></markdown>
+                <markdown [data]="msg.content" [lineNumbers]="true"></markdown>
 
                 @if (msg.attachments?.length) {
                 <div class="attachment-grid">
@@ -24,9 +24,9 @@
     </div>
 
   <div class="input-container">
-    <textarea #promptInput placeholder="Ask about your EO data..."></textarea>
-    <button (click)="submit(promptInput.value)" [disabled]="isLoading()">
-      {{ isLoading() ? 'Thinking...' : 'Send' }}
+    <textarea #promptInput placeholder="Ask about your EO data..." [disabled]="isDisabled()"></textarea>
+    <button class="wasdi-btn" (click)="submit(promptInput.value)" [disabled]="isDisabled() || isLoading()">
+      {{ isDisabled() ? 'Select a chat' : (isLoading() ? 'Thinking...' : 'Send') }}
     </button>
   </div>
 </div>
