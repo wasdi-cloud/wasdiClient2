@@ -18,6 +18,7 @@ export interface IMapEngine {
   getManualBoundingBox$(): Observable<any>;
   getSelectedRectangle$(): Observable<any>;
   emitSelectedRectangle(event: any): void;
+  upsertSelectionRectangle(fWest: number, fSouth: number, fEast: number, fNorth: number): void;
 
   setMap(map: any): void;
   getMap(): any;

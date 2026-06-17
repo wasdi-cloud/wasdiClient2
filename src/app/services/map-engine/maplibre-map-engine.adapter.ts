@@ -228,7 +228,7 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     };
   }
 
-  private upsertSelectionRectangle(fWest: number, fSouth: number, fEast: number, fNorth: number): void {
+  public upsertSelectionRectangle(fWest: number, fSouth: number, fEast: number, fNorth: number): void {
     const oMap = this.getMapLibreMap();
     if (!oMap) {
       return;

@@ -44,6 +44,9 @@ export class MapEngineService implements IMapEngine {
   addManualBoundingBoxControl(map: any, bShowDelete?: boolean): void {
     this.m_oEngine.addManualBoundingBoxControl(map, bShowDelete);
   }
+  upsertSelectionRectangle(fWest: number, fSouth: number, fEast: number, fNorth: number): void {
+    this.m_oEngine.upsertSelectionRectangle(fWest, fSouth, fEast, fNorth);
+  }
 
   onSearchDrawCreated(event: any): any { return this.m_oEngine.onSearchDrawCreated(event); }
   zoomOnBounds(bounds: any, map?: any): boolean { return this.m_oEngine.zoomOnBounds(bounds, map); }
