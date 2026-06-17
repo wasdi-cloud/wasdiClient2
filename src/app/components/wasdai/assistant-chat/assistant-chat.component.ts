@@ -2,6 +2,7 @@ import { Component, signal, ViewChild, ElementRef, Input, OnChanges, SimpleChang
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
+import { AssistantService } from '../../../services/api/ai/assistant.service';
 
 interface Message {
   id: string;
@@ -27,7 +28,7 @@ export class AssistantChatComponent implements OnChanges {
   isLoading = signal(false);
   isDisabled = signal(true);
 
-  constructor() {
+  constructor(private assistantService: AssistantService) {
     this.initializeMockMessages();
   }
 
@@ -54,7 +55,9 @@ export class AssistantChatComponent implements OnChanges {
    * @param prompt - The user's input text
    */
   submit(prompt: string): void {
-    if (!prompt.trim()) {
+    const trimmedPrompt = prompt.trim();
+
+    if (!trimmedPrompt || !this.chatId) {
       return;
     }
 
@@ -62,7 +65,7 @@ export class AssistantChatComponent implements OnChanges {
     const userMessage: Message = {
       id: this.generateMessageId(),
       role: 'user',
-      content: prompt,
+      content: trimmedPrompt,
       timestamp: new Date(),
     };
 
@@ -74,42 +77,97 @@ export class AssistantChatComponent implements OnChanges {
       this.promptInput.nativeElement.value = '';
     }
 
-    // Simulate AI response after a delay
     this.isLoading.set(true);
-    setTimeout(() => {
-      this.simulateAIResponse(prompt);
-      this.isLoading.set(false);
-    }, 1000);
+    this.assistantService.chat(this.chatId, trimmedPrompt).subscribe({
+      next: (response: unknown) => {
+        const assistantMessage: Message = {
+          id: this.generateMessageId(),
+          role: 'assistant',
+          content: this.extractAssistantContent(response),
+          attachments: this.extractAttachments(response),
+          timestamp: new Date(),
+        };
+
+        this.messages.set([...this.messages(), assistantMessage]);
+      },
+      error: () => {
+        const errorMessage: Message = {
+          id: this.generateMessageId(),
+          role: 'assistant',
+          content:
+            'I could not process your request right now. Please try again in a few moments.',
+          timestamp: new Date(),
+        };
+
+        this.messages.set([...this.messages(), errorMessage]);
+      },
+      complete: () => {
+        this.isLoading.set(false);
+      },
+    });
   }
 
-  /**
-   * Simulate an AI response (mock method to be replaced with real API call)
-   * @param userPrompt - The original user prompt
-   */
-  private simulateAIResponse(userPrompt: string): void {
-    const mockResponses: { [key: string]: string } = {
-      default:
-        '# Response to your query\n\nI\'m processing your request about your WASDI workspace. This is a mock response that will be replaced with real AI assistance once the API is implemented.\n\n**Key points:**\n- Point 1\n- Point 2\n- Point 3\n\n```python\n# Example code\nprint("This is a code block")\n```',
-      analysis: `## Analysis Results\n\nBased on your EO data, here are the insights:\n\n### Metrics\n- Coverage: 95%\n- Quality: High\n- Bands: 12\n\nLet me know if you need more details!`,
-      help: `## How can I help?\n\nI can assist you with:\n1. Analyzing your EO data\n2. Processing satellite imagery\n3. Answering WASDI platform questions\n4. Generating reports\n\nWhat would you like to explore?`,
-    };
+  private extractAssistantContent(response: unknown): string {
+    if (typeof response === 'string') {
+      return response;
+    }
 
-    const responseKey = userPrompt.toLowerCase().includes('analyz')
-      ? 'analysis'
-      : userPrompt.toLowerCase().includes('help')
-        ? 'help'
-        : 'default';
+    if (response && typeof response === 'object') {
+      const payload = response as Record<string, unknown>;
+      const candidates = [
+        payload['content'],
+        payload['response'],
+        payload['message'],
+        payload['text'],
+      ];
 
-    const assistantMessage: Message = {
-      id: this.generateMessageId(),
-      role: 'assistant',
-      content: mockResponses[responseKey],
-      attachments: [], // Add sample image URLs if needed
-      timestamp: new Date(),
-    };
+      for (const candidate of candidates) {
+        if (typeof candidate === 'string' && candidate.trim()) {
+          return candidate;
+        }
+      }
 
-    const currentMessages = this.messages();
-    this.messages.set([...currentMessages, assistantMessage]);
+      const data = payload['data'];
+      if (data && typeof data === 'object') {
+        const dataPayload = data as Record<string, unknown>;
+        const nestedCandidates = [
+          dataPayload['content'],
+          dataPayload['response'],
+          dataPayload['message'],
+          dataPayload['text'],
+        ];
+
+        for (const candidate of nestedCandidates) {
+          if (typeof candidate === 'string' && candidate.trim()) {
+            return candidate;
+          }
+        }
+      }
+    }
+
+    return 'No response content received from the assistant API.';
+  }
+
+  private extractAttachments(response: unknown): string[] {
+    if (!response || typeof response !== 'object') {
+      return [];
+    }
+
+    const payload = response as Record<string, unknown>;
+    const direct = payload['attachments'];
+    if (Array.isArray(direct)) {
+      return direct.filter((value): value is string => typeof value === 'string');
+    }
+
+    const data = payload['data'];
+    if (data && typeof data === 'object') {
+      const nested = (data as Record<string, unknown>)['attachments'];
+      if (Array.isArray(nested)) {
+        return nested.filter((value): value is string => typeof value === 'string');
+      }
+    }
+
+    return [];
   }
 
   /**
