@@ -71,10 +71,15 @@ export class WasdaiComponent implements OnInit {
   onNewChat(): void {
     this.m_oAssistantService.newChat().subscribe({
       next: (chatId: string) => {
-        this.currentChatId.set(chatId);
-        this.currentChatMessages.set([]);
-        this.m_sActiveTab = chatId;
-        console.log('New chat created with ID:', chatId);
+        // Check if response is HTTP 200 and body is not empty
+        if (chatId && chatId.trim().length > 0) {
+          this.currentChatId.set(chatId);
+          this.currentChatMessages.set([]);
+          this.m_sActiveTab = chatId;
+          console.log('New chat created with ID:', chatId);
+        } else {
+          this.m_oNotificationDisplayService.openSnackBar('Error: Empty response from server');
+        }
       },
       error: (err) => {
         console.error('Error creating new chat:', err);
