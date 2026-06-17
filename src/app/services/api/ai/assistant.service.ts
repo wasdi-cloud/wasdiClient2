@@ -12,8 +12,14 @@ export class AssistantService {
 
   constructor(
     private m_oConstantsService: ConstantsService,
-    private m_oHttp: HttpClient
-  ) {}
+    private m_oHttp: HttpClient) 
+  {
+
+    // Check if the URL ends with a slash, and if so, slice it off
+    if (this.APIURL && this.APIURL.endsWith('/')) {
+      this.APIURL = this.APIURL.slice(0, -1);
+    }
+  }
 
 
   /**
