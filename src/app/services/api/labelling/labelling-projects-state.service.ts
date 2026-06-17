@@ -8,6 +8,9 @@ export class LabellingProjectsStateService {
   m_sLabellingProjectId: string | null = null;
   m_sMode: 'create' | 'view' | 'edit' = 'create';
 
+  // NEW: Tracks the project currently open for the "Labels" workspace
+  m_sActiveWorkspaceProjectId: string | null = null;
+
   get projectId(): string | null {
     return this.m_sLabellingProjectId;
   }

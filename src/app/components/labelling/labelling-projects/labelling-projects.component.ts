@@ -50,7 +50,7 @@ export class LabellingProjectsComponent implements OnInit {
     private m_oRouter: Router,
     private m_oProjectService: LabellingProjectsService,
     private m_oConstantService: ConstantsService,
-    private m_oProjectState: LabellingProjectsStateService,
+    protected m_oProjectState: LabellingProjectsStateService,
     private m_oNotificationService: NotificationDisplayService
   ) {}
 
@@ -60,6 +60,18 @@ export class LabellingProjectsComponent implements OnInit {
     this.m_bIsLoggedIn = !!this.m_sCurrentUserId;
 
     this.loadProjects();
+  }
+
+  openProject(sProjectId: string) {
+    if (this.m_oProjectState.m_sActiveWorkspaceProjectId === sProjectId) {
+      // It is already open! The user wants to close it.
+      this.m_oProjectState.m_sActiveWorkspaceProjectId = null;
+      this.m_oNotificationService.openSnackBar("Workspace closed.", "Close", "success-snackbar");
+    } else {
+      // It's closed! The user wants to open it.
+      this.m_oProjectState.m_sActiveWorkspaceProjectId = sProjectId;
+      this.m_oTabChange.emit('labels'); // Navigate to the Labels tab!
+    }
   }
 
   // --- DATA FETCHING ---
@@ -135,11 +147,7 @@ export class LabellingProjectsComponent implements OnInit {
     this.m_oTabChange.emit('create-project');
   }
 
-  // FIX 2: Add the placeholder Open function
-  openProject(sProjectId: string) {
-    console.log("🚀 Open Project clicked for ID:", sProjectId, "- Placeholder, doing nothing for now!");
-    // Future logic: Route to the actual labelling map/workspace!
-  }
+
 
   handleLeaveProject(oProject: any) {
     // if (oProject.userRole?.toUpperCase() === 'OWNER' && oProject.ownersCount <= 1) {

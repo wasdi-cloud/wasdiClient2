@@ -1,5 +1,5 @@
 <main class="d-flex">
-  <app-labelling-menu (m_sSelectedTab)="getActiveTab($event)"></app-labelling-menu>
+  <app-labelling-menu [m_sActiveTab]="m_sActiveTab" (m_sSelectedTab)="getActiveTab($event)"></app-labelling-menu>
   <div class="dashboard-content flex-fill">
     <div class="dashboard-content-wrapper">
       @if (m_sActiveTab === 'projects') {

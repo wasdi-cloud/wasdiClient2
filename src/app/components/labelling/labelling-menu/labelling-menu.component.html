@@ -5,9 +5,19 @@
     </div>
     <div class="menu-container d-flex flex-column gap-1">
       @for (oMenuItem of m_aoMenuButtons; track oMenuItem) {
-        <app-menu-button [m_sLabel]="oMenuItem.label | translate"
-                         [m_bIsActive]="m_sActiveTab === oMenuItem.title" [m_sIcon]="oMenuItem.icon"
-                         (click)="setActiveTab(oMenuItem.title)"></app-menu-button>
+
+        <div [style.cursor]="isDisabled(oMenuItem.title) ? 'not-allowed' : 'pointer'"
+             [style.opacity]="isDisabled(oMenuItem.title) ? '0.5' : '1'">
+
+          <app-menu-button [m_sLabel]="oMenuItem.label | translate"
+                           [m_bIsActive]="m_sActiveTab === oMenuItem.title"
+                           [m_sIcon]="oMenuItem.icon"
+                           [style.pointer-events]="isDisabled(oMenuItem.title) ? 'none' : 'auto'"
+                           (click)="setActiveTab(oMenuItem.title)">
+          </app-menu-button>
+
+        </div>
+
       }
     </div>
   </div>
