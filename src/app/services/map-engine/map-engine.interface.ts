@@ -28,7 +28,7 @@ export interface IMapEngine {
 
   addMousePositionAndScale(map: any): void;
   initGeocoder(map: any): void;
-  addManualBoundingBoxControl(map: any): void;
+  addManualBoundingBoxControl(map: any, bShowDelete?: boolean): void;
 
   onSearchDrawCreated(event: any): any;
   zoomOnBounds(bounds: any, map?: any): boolean;

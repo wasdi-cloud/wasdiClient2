@@ -41,7 +41,9 @@ export class MapEngineService implements IMapEngine {
 
   addMousePositionAndScale(map: any): void { this.m_oEngine.addMousePositionAndScale(map); }
   initGeocoder(map: any): void { this.m_oEngine.initGeocoder(map); }
-  addManualBoundingBoxControl(map: any): void { this.m_oEngine.addManualBoundingBoxControl(map); }
+  addManualBoundingBoxControl(map: any, bShowDelete?: boolean): void {
+    this.m_oEngine.addManualBoundingBoxControl(map, bShowDelete);
+  }
 
   onSearchDrawCreated(event: any): any { return this.m_oEngine.onSearchDrawCreated(event); }
   zoomOnBounds(bounds: any, map?: any): boolean { return this.m_oEngine.zoomOnBounds(bounds, map); }

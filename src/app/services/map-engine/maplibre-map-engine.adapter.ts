@@ -519,7 +519,25 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
   }
 
   resetDrawnItemsLayer(): void {
-    return;
+    const oMap = this.getMapLibreMap();
+    if (!oMap) {
+      return;
+    }
+
+    // Remove the custom fill layer
+    if (oMap.getLayer('search-selection-fill')) {
+      oMap.removeLayer('search-selection-fill');
+    }
+
+    // Remove the custom line layer
+    if (oMap.getLayer('search-selection-line')) {
+      oMap.removeLayer('search-selection-line');
+    }
+
+    // Remove the custom data source
+    if (oMap.getSource('search-selection-source')) {
+      oMap.removeSource('search-selection-source');
+    }
   }
 
   addMousePositionAndScale(map: any): void {
@@ -606,7 +624,7 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     map.addControl(oSearchControl as any, 'top-right');
   }
 
-  addManualBoundingBoxControl(map: any): void {
+  addManualBoundingBoxControl(map: any, bShowDelete?: boolean): void{
     if (!this.isMapLibreMap(map)) {
       return;
     }
@@ -649,7 +667,18 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
       oController.m_oDrawStartLngLat = null;
       map.getCanvas().style.cursor = oController.m_bDrawMode ? 'crosshair' : '';
     });
-
+    if (bShowDelete) {
+      const oTrashControl = this.createIconControl('Clear Selection', 'delete', () => {
+        // Logic centralized: wipe the layers...
+        oController.resetDrawnItemsLayer();
+        // ...and tell the component the bbox is now null!
+        oController.m_oManualBoundingBoxSubscription.next(null);
+      });
+      // Add custom red color specifically for the trash icon
+      const oTrashElement = oTrashControl.onAdd();
+      oTrashElement.querySelector('span').style.color = '#dc3545';
+      map.addControl(oTrashControl as any, 'top-right');
+    }
     map.addControl(oManualControl as any, 'top-right');
     map.addControl(oDrawControl as any, 'top-right');
 

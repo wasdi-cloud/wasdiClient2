@@ -6,6 +6,7 @@ import {LabellingTemplatesService} from "../../../services/api/labelling/labelli
 import {TemplateStateService} from "../../../services/api/labelling/template-state.service";
 import FadeoutUtils from "../../../lib/utils/FadeoutJSUtils";
 import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
+import {MapEngineService} from "../../../services/map-engine/map-engine.service";
 
 @Component({
   selector: 'app-create-labelling-project',
@@ -63,12 +64,97 @@ export class CreateLabellingProjectComponent implements OnInit{
     private m_oProjectService: LabellingProjectsService,
     private m_oTemplateService: LabellingTemplatesService,
     private m_oProjectState: LabellingProjectsStateService,
-    private m_oTemplateState: TemplateStateService
+    private m_oTemplateState: TemplateStateService,
+    private m_oMapEngineService:MapEngineService,
   ) {}
 
   get m_bIsReadOnly(): boolean {
     return this.m_sMode === 'view';
   }
+  // --- MAP & AOI LOGIC ---
+
+  onGlobalToggle(bIsGlobal: boolean) {
+    this.m_oProject.isGlobal = bIsGlobal;
+
+    // If they unchecked Global, we need to wait 1 tick for Angular to render the
+    // <div id="aoiMapContainer">, then tell the MapEngine to initialize it.
+    if (!bIsGlobal) {
+      setTimeout(() => {
+        this.initAoiMap();
+      }, 100);
+    } else {
+      // If they switch back to Global, clear the bbox and map
+      this.m_oProject.bbox = "";
+      this.m_oMapEngineService.clearMap();
+    }
+  }
+
+  // --- MAP & AOI LOGIC ---
+
+  private initAoiMap() {
+    this.m_oMapEngineService.initMap('aoiMapContainer');
+    const oMap = this.m_oMapEngineService.getMap();
+
+    if (oMap) {
+      this.m_oMapEngineService.initGeocoder(oMap);
+
+      // Centralized Call: Pass !this.m_bIsReadOnly to show/hide the trash can automatically
+      this.m_oMapEngineService.addManualBoundingBoxControl(oMap, !this.m_bIsReadOnly);
+
+      // Listen for changes (Draw OR Clear)
+      this.m_oMapEngineService.getManualBoundingBox$().subscribe((oBounds: any) => {
+        if (oBounds) {
+          this.convertBoundsToWKT(oBounds);
+        } else {
+          // When the centralized trash can is clicked, it emits null.
+          // We catch it here to clear our project object.
+          this.m_oProject.bbox = "";
+          console.log("AOI Cleared via Centralized Trash Can");
+        }
+      });
+    }
+  }
+
+  clearAoi() {
+    if (this.m_bIsReadOnly) return;
+    console.log(this.m_oProject.bbox);
+    // 1. Clear the hidden WKT string
+    this.m_oProject.bbox = "";
+
+    // 2. Wipe the drawing layer visually WITHOUT refreshing the map!
+    this.m_oMapEngineService.resetDrawnItemsLayer();
+  }
+
+  private convertBoundsToWKT(oBounds: any) {
+    console.log("📍 RAW MAP BOUNDS RECEIVED:", oBounds);
+
+    if (!oBounds) return;
+
+    // SCENARIO A: GeoJSON Polygon (MapboxDraw / MapLibre default format)
+    if (oBounds.geometry && oBounds.geometry.type === 'Polygon') {
+      const aoCoords = oBounds.geometry.coordinates[0];
+      // Map through the array of points and join them with spaces/commas for WKT
+      const sCoordString = aoCoords.map((pt: any[]) => `${pt[0]} ${pt[1]}`).join(', ');
+      this.m_oProject.bbox = `POLYGON((${sCoordString}))`;
+      console.log("✅ WKT Generated (GeoJSON):", this.m_oProject.bbox);
+      return;
+    }
+
+    // SCENARIO B: Classic Leaflet/MapLibre Bounds format
+    if (oBounds._sw && oBounds._ne) {
+      const minX = oBounds._sw.lng;
+      const minY = oBounds._sw.lat;
+      const maxX = oBounds._ne.lng;
+      const maxY = oBounds._ne.lat;
+
+      this.m_oProject.bbox = `POLYGON((${minX} ${minY}, ${maxX} ${minY}, ${maxX} ${maxY}, ${minX} ${maxY}, ${minX} ${minY}))`;
+      console.log("✅ WKT Generated (Bounds):", this.m_oProject.bbox);
+      return;
+    }
+
+    console.warn("❌ Unknown bounds format received:", oBounds);
+  }
+
 
   ngOnInit(): void {
     this.m_sMode = this.m_oProjectState.mode;
@@ -125,6 +211,10 @@ export class CreateLabellingProjectComponent implements OnInit{
           this.m_oProject.annotatorSeeAllLabels = oData.annotatorSeeAllLabels ?? true;
           this.m_oProject.reviewRequired = oData.reviewRequired || false;
           this.m_oProject.minReviewCount = oData.minReviewCount || 1;
+
+          if (!this.m_oProject.isGlobal) {
+            setTimeout(() => this.initAoiMap(), 100);
+          }
 
           // Map Dates
           this.m_oProject.startDateStr = this.fromEpochToDateString(oData.startDate);
