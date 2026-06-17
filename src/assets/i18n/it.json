@@ -95,6 +95,8 @@
 	"ROOT_VIEW_NAV_BAR_LINK_SEARCH": "Pianifica",
 	"ROOT_VIEW_NAV_BAR_LINK_SETTINGS": "Impostazioni",
 	"ROOT_VIEW_NAV_BAR_LINK_FEEDBACK": "Feedback",
+  "ROOT_VIEW_NAV_BAR_LINK_LABELLING": "Labelling",
+  "ROOT_VIEW_NAV_BAR_LINK_ASSISTANT": "Assistant",
 	"ROOT_VIEW_LINK_HELP": "Documentazione",
 	"ROOT_VIEW_LINK_LOG_OUT": "Log-out",
 	"ROOT_VIEW_LABEL_USER": "Utente",
@@ -1253,5 +1255,10 @@
     "PRINT_WAIT": "Wasdi sta stampando la mappa, si prega di attendere.",
     "PRINT_PAYLOAD_TITLE": "Titolo",
     "PRINT_PAYLOAD_DESCRIPTION": "Descrizione",
-    "ADD_TITLE_AND_DESCRIPTION": "Aggiungi Titolo e Descrizione"
+    "ADD_TITLE_AND_DESCRIPTION": "Aggiungi Titolo e Descrizione",
+    "LABELLING_MENU_PROJECTS": "Dataset Projects",
+    "LABELLING_MENU_TEMPLATES": "Labelling Templates",
+    "LABELLING_MENU_LABELS": "Edit Labels",
+	"WASDAI_NEW_CHAT": "Nuova chat",
+    "WASDAI_TITLE": "WASDAI - AI Assistant"
 }

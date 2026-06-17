@@ -1,0 +1,206 @@
+<div class="labels-container">
+
+
+  <!-- ═══════════════════════════════════════════
+       MAP
+  ════════════════════════════════════════════ -->
+  <div class="labels-map-frame">
+    <!-- Toolbar floats over the map -->
+    <div class="labels-toolbar-overlay">
+
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <span class="badge badge-total">🏷️ Labels: {{ m_aoFeatures.length }}</span>
+          <span class="badge badge-validated">✅ Validated: {{ m_iValidatedCount }}</span>
+
+          <app-button [m_sLabel]="'↩️ Undo'"
+                      [m_bDisabled]="m_aoPastFeatures.length === 0"
+                      [m_bMuted]="true"
+                      (click)="onUndo()">
+          </app-button>
+
+          <app-button [m_sLabel]="m_bRefreshing ? '⏳ Refreshing...' : '🔄 Refresh'"
+                      [m_bDisabled]="m_bRefreshing"
+                      [m_bMuted]="true"
+                      (click)="onRefresh()">
+          </app-button>
+
+          <app-button [m_sLabel]="'📤 Upload Shapes'"
+                      [m_bMuted]="true"
+                      (click)="m_oFileInput.click()">
+          </app-button>
+          <input #m_oFileInput type="file" accept=".geojson,.json,.zip" style="display:none"
+                 (change)="onFileUpload($event)">
+
+          <app-button [m_sLabel]="m_bSaving ? 'Saving...' : '💾 Save Labels'"
+                      [m_bDisabled]="m_bSaving"
+                      (click)="onSaveLabels()">
+          </app-button>
+        </div>
+
+        <div class="toolbar-right">
+          <div class="toolbar-group">
+            <span class="toolbar-label">Edit Mode:</span>
+            <label class="radio-label">
+              <input type="radio" name="editMode" value="vertices" [(ngModel)]="m_sEditMode"> 🎯 Vertices
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="editMode" value="move" [(ngModel)]="m_sEditMode"> ✋ Move
+            </label>
+          </div>
+
+          <div class="toolbar-divider"></div>
+
+          <div class="toolbar-group">
+            <span class="toolbar-label">Style By:</span>
+            <label class="radio-label">
+              <input type="radio" name="styleBy" value="label" [(ngModel)]="m_sStyleBy"> Label
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="styleBy" value="annotator" [(ngModel)]="m_sStyleBy"> Annotator
+            </label>
+          </div>
+
+          <div class="toolbar-divider"></div>
+
+          <select class="toolbar-select" [(ngModel)]="m_sFilterCollab">
+            <option value="all">All Annotators</option>
+            @for (c of m_aoCollaborators; track c.id) {
+              <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+
+          <label class="radio-label">
+            <input type="checkbox" [(ngModel)]="m_bShowValidatedOnly"> Show Validated Only
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- The actual map canvas -->
+    <div id="labelsMapContainer" class="labels-map-container"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       COLLAPSIBLE TABLE — pinned to bottom
+  ════════════════════════════════════════════ -->
+  <div class="table-panel" [class.table-panel--expanded]="m_bTableExpanded">
+
+    <div class="table-header" (click)="m_bTableExpanded = !m_bTableExpanded">
+      <span style="font-size: 13px; font-weight: 600;">📋 Feature Attributes</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size: 11px; color: #888;">{{ m_aoFilteredFeatures.length }} row(s)</span>
+        <span class="toggle-icon">{{ m_bTableExpanded ? '▼' : '▲' }}</span>
+      </div>
+    </div>
+
+    @if (m_bTableExpanded) {
+      <div class="table-body">
+        <table>
+          <thead>
+          <tr>
+            <th>Color</th>
+            @for (attr of m_aoTemplateAttributes; track attr.name) {
+              <th>{{ attr.name }}</th>
+            }
+            <th>Measurement</th>
+            <th>Annotator</th>
+            <th>Reviews</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (feature of m_aoFilteredFeatures; track feature.id) {
+              <tr [class.row--selected]="feature.id === m_sSelectedFeatureId"
+                  (click)="m_sSelectedFeatureId = feature.id">
+
+                <td>
+                  <div class="color-dot"
+                       [style.background]="feature.properties?.['portColor'] || '#3b82f6'">
+                  </div>
+                </td>
+
+                @for (attr of m_aoTemplateAttributes; track attr.name) {
+                  <td>
+                    @if (isEditing(feature.id, attr.name)) {
+                      @if (attr.type === 'category') {
+                        <select autoFocus
+                                [(ngModel)]="m_sEditValue"
+                                (change)="onDropdownChange(feature.id, attr.name)"
+                                (click)="$event.stopPropagation()"
+                                class="cell-input">
+                          <option value="">-- Select --</option>
+                          @for (cat of attr.categoryValues; track cat.value) {
+                            <option [value]="cat.value">{{ cat.value }}</option>
+                          }
+                        </select>
+                      } @else {
+                        <input autoFocus
+                               [type]="attr.type === 'float' || attr.type === 'integer' ? 'number' : 'text'"
+                               [(ngModel)]="m_sEditValue"
+                               (blur)="onSaveEdit()"
+                               (keydown)="onEditKeyDown($event)"
+                               (click)="$event.stopPropagation()"
+                               class="cell-input">
+                      }
+                    } @else {
+                      <div class="cell-view"
+                           [class.cell-missing]="!feature.properties[attr.name] && !attr.isOptional"
+                           (click)="onStartEdit(feature.id, attr.name, feature.properties[attr.name], $event)">
+                        {{ feature.properties[attr.name] || (attr.isOptional ? 'N/A' : 'Missing!') }}
+                        <span class="edit-hint">✎</span>
+                      </div>
+                    }
+                  </td>
+                }
+
+                <td>{{ feature.properties?.['measurement'] }}</td>
+                <td>{{ feature.properties?.['annotator'] }}</td>
+
+                <td>
+                  @if (feature.properties?.['isValidated']) {
+                    <span class="badge-validated-pill">✅ Validated</span>
+                  } @else {
+                    <span class="badge-count-pill">👍 {{ feature.properties?.['reviewCount'] || 0 }}</span>
+                  }
+                </td>
+
+                <td>
+                  <div class="actions-cell">
+                    <button class="action-btn" title="Approve"
+                            [disabled]="hasCurrentUserApproved(feature)"
+                            (click)="$event.stopPropagation(); onApprove(feature)">✅</button>
+
+                    <button class="action-btn" title="Notes & Issues"
+                            style="position:relative;"
+                            (click)="$event.stopPropagation(); onOpenIssues(feature)">
+                      {{ getIssueIcon(feature) }}
+                      @if (getUnresolvedCount(feature) > 0) {
+                        <span class="issue-count">{{ getUnresolvedCount(feature) }}</span>
+                      }
+                    </button>
+
+                    <button class="action-btn" title="Save"
+                            (click)="$event.stopPropagation(); onSaveLabels()">💾</button>
+
+                    <button class="action-btn action-btn--danger" title="Delete"
+                            (click)="$event.stopPropagation(); onDelete(feature.id)">❌</button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td [colSpan]="3 + m_aoTemplateAttributes.length + 3"
+                    style="text-align:center; color:#aaa; padding:20px; font-style:italic;">
+                  No labels yet — start drawing on the map!
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+</div>

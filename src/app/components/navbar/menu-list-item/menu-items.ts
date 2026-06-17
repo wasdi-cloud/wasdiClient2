@@ -13,7 +13,7 @@ export const MenuItems = [
         routerLink: "/workspaces",
         materialIcon: "folder"
     },
-    // Search: 
+    // Search:
     {
         label: "ROOT_VIEW_NAV_BAR_LINK_IMPORT",
         name: "search",
@@ -28,13 +28,26 @@ export const MenuItems = [
         routerLink: "/edit/",
         materialIcon: "edit"
     },
+    {
+      label: "ROOT_VIEW_NAV_BAR_LINK_LABELLING",
+      name: "labelling",
+      routerLink: "/labelling/",
+      materialIcon: "sell"
+    },
+    {
+      label: "ROOT_VIEW_NAV_BAR_LINK_ASSISTANT",
+      name: "assistant",
+      routerLink: "/assistant/",
+      materialIcon: "robot"
+    },    
     // Settings
     {
         label: "ROOT_VIEW_NAV_BAR_LINK_SETTINGS",
         name: "settings",
         routerLink: "/settings",
         materialIcon: "settings"
-    }
+    },
+
 ];
 
 export const Documentation = {

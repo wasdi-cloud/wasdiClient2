@@ -120,6 +120,10 @@ export class ConstantsService {
     return this.APIURL;
   }
 
+  getAssistantURL() {
+    return this.URL.replace("wwww", "ai").replace("test", "testai").replace("wasdiwebserver", "assistant")
+  }
+
   /**
   * Get flag ignore workspace's Api Url
   * @returns {boolean}
