@@ -158,15 +158,31 @@ export class LabellingProjectsComponent implements OnInit {
   }
 
   handleDeleteProject(oProject: any) {
-    // if (confirm(`⚠️ WARNING: Are you sure you want to completely delete "${oProject.name}"? This action cannot be undone.`)) {
-    //   this.m_oProjectService.delete(oProject.id).subscribe({
-    //     next: () => {
-    //       this.m_oNotificationService.openSnackBar("Project deleted successfully.", "Close", "success-snackbar");
-    //       this.loadProjects();
-    //     },
-    //     error: () => this.m_oNotificationService.openAlertDialog("Failed to delete project.", "Error", "danger")
-    //   });
-    // }
+    // 1. Confirm before deleting
+    if (confirm(`⚠️ WARNING: Are you sure you want to completely delete "${oProject.name}"? This action cannot be undone.`)) {
+
+      // 2. Call the service
+      this.m_oProjectService.deleteProject(oProject.id).subscribe({
+        next: () => {
+          this.m_oNotificationService.openSnackBar("Project deleted successfully.", "Close", "success-snackbar");
+          this.loadProjects(); // Refresh the table
+        },
+        error: (oError: any) => {
+          // 3. The Angular Parsing Trap Interceptor
+          // If Java sends a 200 OK but an empty body, Angular's HttpClient might throw an error trying to parse it as JSON.
+          if (oError.status === 200 || oError.status === 204) {
+            this.m_oNotificationService.openSnackBar("Project deleted successfully.", "Close", "success-snackbar");
+            this.loadProjects(); // Refresh the table
+          } else if (oError.status === 401) {
+            // Your backend throws 401 if they aren't the owner
+            this.m_oNotificationService.openAlertDialog("You do not have permission to delete this project. Only the creator can delete it.", "Unauthorized", "danger");
+          } else {
+            console.error("Delete Error:", oError);
+            this.m_oNotificationService.openAlertDialog("Failed to delete project.", "Error", "danger");
+          }
+        }
+      });
+    }
   }
 
   // Helper for UI Badges

@@ -83,4 +83,15 @@ export class LabellingProjectsService {
     oDatasetProject.id = sDatasetProjectId;
     return this.m_oHttp.put(this.APIURL, oDatasetProject);
   }
+
+  /**
+   * Deletes a labelling project (Dataset)
+   * @param sDatasetId The ID of the dataset to delete
+   */
+  deleteProject(sDatasetId: string) {
+    return this.m_oHttp.delete(this.APIURL, {
+      params: { datasetId: sDatasetId },
+      observe: 'response' // Helps catch empty 200 OK responses
+    });
+  }
 }
