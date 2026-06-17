@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild, ElementRef, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { Component, signal, ViewChild, ElementRef, Input, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
@@ -18,8 +18,9 @@ interface Message {
   templateUrl: './assistant-chat.component.html',
   styleUrl: './assistant-chat.component.css',
 })
-export class AssistantChatComponent implements OnChanges {
+export class AssistantChatComponent implements OnChanges, AfterViewInit {
   @ViewChild('promptInput') promptInput!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('messagesContainer') messagesContainer!: ElementRef<HTMLDivElement>;
 
   @Input() chatId: string | null = null;
   @Input() initialMessages: Message[] = [];
@@ -32,6 +33,10 @@ export class AssistantChatComponent implements OnChanges {
     this.initializeMockMessages();
   }
 
+  ngAfterViewInit(): void {
+    this.scrollToBottom();
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['chatId']) {
       // Enable/disable based on chatId
@@ -40,6 +45,7 @@ export class AssistantChatComponent implements OnChanges {
     if (changes['initialMessages']) {
       // Load messages from parent when chat is selected
       this.messages.set(this.initialMessages || []);
+      this.scrollToBottom();
     }
   }
 
@@ -71,6 +77,7 @@ export class AssistantChatComponent implements OnChanges {
 
     const currentMessages = this.messages();
     this.messages.set([...currentMessages, userMessage]);
+    this.scrollToBottom();
 
     // Clear input
     if (this.promptInput) {
@@ -89,6 +96,7 @@ export class AssistantChatComponent implements OnChanges {
         };
 
         this.messages.set([...this.messages(), assistantMessage]);
+        this.scrollToBottom();
       },
       error: () => {
         const errorMessage: Message = {
@@ -100,6 +108,7 @@ export class AssistantChatComponent implements OnChanges {
         };
 
         this.messages.set([...this.messages(), errorMessage]);
+        this.scrollToBottom();
       },
       complete: () => {
         this.isLoading.set(false);
@@ -170,6 +179,17 @@ export class AssistantChatComponent implements OnChanges {
     return [];
   }
 
+  private scrollToBottom(): void {
+    requestAnimationFrame(() => {
+      if (!this.messagesContainer) {
+        return;
+      }
+
+      const container = this.messagesContainer.nativeElement;
+      container.scrollTop = container.scrollHeight;
+    });
+  }
+
   /**
    * Generate a unique message ID
    */
@@ -182,6 +202,7 @@ export class AssistantChatComponent implements OnChanges {
    */
   clearHistory(): void {
     this.messages.set([]);
+    this.scrollToBottom();
   }
 
   /**
