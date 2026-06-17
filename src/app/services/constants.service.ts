@@ -121,8 +121,7 @@ export class ConstantsService {
   }
 
   getAssistantURL() {
-    //return this.URL.replace("wasdiwebserver", "assistant")
-    return "https://testai.wasdi.net/assistant";
+    return this.URL.replace("wwww", "ai").replace("test", "testai").replace("wasdiwebserver", "assistant")
   }
 
   /**
