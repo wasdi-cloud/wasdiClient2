@@ -1,5 +1,5 @@
 <div class="ai-container">
-    <div class="messages-container">
+  <div class="messages-container" #messagesContainer>
         <section class="message-feed">
     
             @for (msg of messages(); track msg.id) {
@@ -23,10 +23,16 @@
         </section>
     </div>
 
+  @if (isLoading()) {
+  <div class="loading-container">
+    <app-invader></app-invader>
+  </div>
+  } @else {
   <div class="input-container">
     <textarea #promptInput placeholder="Ask about your EO data..." [disabled]="isDisabled()"></textarea>
-    <button class="wasdi-btn" (click)="submit(promptInput.value)" [disabled]="isDisabled() || isLoading()">
-      {{ isDisabled() ? 'Select a chat' : (isLoading() ? 'Thinking...' : 'Send') }}
+    <button class="wasdi-btn" (click)="submit(promptInput.value)" [disabled]="isDisabled()">
+      {{ isDisabled() ? 'Select a chat' : 'Send' }}
     </button>
   </div>
+  }
 </div>

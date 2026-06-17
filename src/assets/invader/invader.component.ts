@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
     selector: 'app-invader',
     templateUrl: './invader.component.html',
     styleUrls: ['./invader.component.css'],
-    standalone: false
+    standalone: true
 })
 export class InvaderComponent {
 
