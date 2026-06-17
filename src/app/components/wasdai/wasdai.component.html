@@ -1,0 +1,31 @@
+<main class="d-flex">
+  <aside class="chat-sidebar">
+    <div class="chat-header">
+      <button class="new-chat-btn" (click)="onNewChat()">
+        <span class="material-symbols-outlined">add_circle</span>
+        New Chat
+      </button>
+    </div>
+    <div class="chat-list">
+      @if (isLoadingChats()) {
+        <div class="loading">Loading chats...</div>
+      } @else if (chats().length === 0) {
+        <div class="empty-message">No chats yet. Create one to start!</div>
+      } @else {
+        <ul class="chat-items">
+          @for (chat of chats(); track chat.chatId) {
+            <li class="chat-item" [class.active]="m_sActiveTab === chat.chatId" (click)="onSelectChat(chat.chatId)">
+              <span class="chat-title">Chat - {{ chat.title }}</span>
+              <span class="chat-id">{{ chat.chatId }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  </aside>
+  <div class="dashboard-content flex-fill">
+    <div class="dashboard-content-wrapper">
+        <app-assistant-chat [chatId]="currentChatId()" [initialMessages]="currentChatMessages()"></app-assistant-chat>
+    </div>
+  </div>
+</main>

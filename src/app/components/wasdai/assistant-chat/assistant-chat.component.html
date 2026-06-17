@@ -1,0 +1,32 @@
+<div class="ai-container">
+    <div class="messages-container">
+        <section class="message-feed">
+    
+            @for (msg of messages(); track msg.id) {
+            <div [class]="'message-bubble ' + msg.role">
+                <markdown [data]="msg.content" [lineNumbers]="true"></markdown>
+
+                @if (msg.attachments?.length) {
+                <div class="attachment-grid">
+                    @for (url of msg.attachments; track url) {
+                    <img [src]="url" class="eo-preview-thumb" alt="AI Generated Preview" />
+                    }
+                </div>
+                }
+            </div>
+            } @empty {
+            <div class="empty-state">
+                <i class="fa fa-sparkles"></i>
+                <p>How can I assist with your WASDI workspace today?</p>
+            </div>
+            }
+        </section>
+    </div>
+
+  <div class="input-container">
+    <textarea #promptInput placeholder="Ask about your EO data..." [disabled]="isDisabled()"></textarea>
+    <button class="wasdi-btn" (click)="submit(promptInput.value)" [disabled]="isDisabled() || isLoading()">
+      {{ isDisabled() ? 'Select a chat' : (isLoading() ? 'Thinking...' : 'Send') }}
+    </button>
+  </div>
+</div>
