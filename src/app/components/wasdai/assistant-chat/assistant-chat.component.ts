@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
 import { AssistantService } from '../../../services/api/ai/assistant.service';
+import { InvaderComponent } from '../../../../assets/invader/invader.component';
 
 interface Message {
   id: string;
@@ -14,7 +15,7 @@ interface Message {
 
 @Component({
   selector: 'app-assistant-chat',
-  imports: [CommonModule, FormsModule, MarkdownModule],
+  imports: [CommonModule, FormsModule, MarkdownModule, InvaderComponent],
   templateUrl: './assistant-chat.component.html',
   styleUrl: './assistant-chat.component.css',
 })

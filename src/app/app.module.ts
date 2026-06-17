@@ -345,8 +345,7 @@ import {
         LoginCoplacComponent,
         LoginRedirectComponent,
         PrintDialogComponent,
-        PreviewDialogComponent,
-        InvaderComponent
+        PreviewDialogComponent
     ],
     bootstrap: [AppComponent], imports: [AppRoutingModule,
     BrowserModule,
@@ -384,7 +383,8 @@ import {
     CdkMenuItem,
     CdkMenuTrigger,
     DragDropModule,
-    MenuButtonComponent], providers: [
+    MenuButtonComponent,
+    InvaderComponent], providers: [
         AuthService,
         ConstantsService,
         {
