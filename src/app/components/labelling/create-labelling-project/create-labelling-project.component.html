@@ -9,7 +9,8 @@
       }
       @if (m_sMode !== 'view') {
         <app-button [m_sLabel]="'Cancel'" [m_bMuted]="true" (click)="closeView()"></app-button>
-        <app-button [m_sLabel]="m_sMode === 'edit' ? 'Update Project' : 'Create Project'" (click)="onSave()"></app-button>
+        <app-button [m_sLabel]="m_sMode === 'edit' ? 'Update Project' : 'Create Project'"
+                    (click)="onSave()"></app-button>
       }
     </div>
   </div>
@@ -20,14 +21,17 @@
     </div>
 
     <div class="d-flex flex-row justify-items-stretch gap-2">
-      <app-input-field [m_bIsDisabled]="m_bIsReadOnly" class="flex-fill" [m_sLabel]="'Project Name *'" [m_sInputValue]="m_oProject.name"
+      <app-input-field [m_bIsDisabled]="m_bIsReadOnly" class="flex-fill" [m_sLabel]="'Project Name *'"
+                       [m_sInputValue]="m_oProject.name"
                        (m_oInputChange)="getUserInput($event, 'name')"></app-input-field>
-      <app-input-field [m_bIsDisabled]="m_bIsReadOnly" class="flex-fill" [m_sLabel]="'External Link (Optional)'" [m_sInputValue]="m_oProject.link"
+      <app-input-field [m_bIsDisabled]="m_bIsReadOnly" class="flex-fill" [m_sLabel]="'External Link (Optional)'"
+                       [m_sInputValue]="m_oProject.link"
                        (m_oInputChange)="getUserInput($event, 'link')"></app-input-field>
     </div>
 
     <div class="d-flex flex-row justify-items-stretch gap-2">
-      <app-input-field [m_bIsDisabled]="m_bIsReadOnly" class="flex-fill" [m_sLabel]="'Description'" [m_sInputValue]="m_oProject.description"
+      <app-input-field [m_bIsDisabled]="m_bIsReadOnly" class="flex-fill" [m_sLabel]="'Description'"
+                       [m_sInputValue]="m_oProject.description"
                        (m_oInputChange)="getUserInput($event, 'description')"></app-input-field>
     </div>
 
@@ -44,11 +48,13 @@
 
     <div class="d-flex gap-4 mt-3">
       <div class="form-check">
-        <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="checkPublic" [(ngModel)]="m_oProject.isPublic">
+        <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="checkPublic"
+               [(ngModel)]="m_oProject.isPublic">
         <label class="form-check-label" for="checkPublic">Make Project Public</label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="checkGlobal" [(ngModel)]="m_oProject.isGlobal">
+        <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="checkGlobal"
+               [ngModel]="m_oProject.isGlobal" (ngModelChange)="onGlobalToggle($event)">
         <label class="form-check-label" for="checkGlobal">Project Area is Global</label>
       </div>
     </div>
@@ -56,18 +62,22 @@
 
   @if (!m_oProject.isGlobal) {
     <div class="d-flex flex-column gap-3">
-      <div class="input-header font-bold" style="font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
-        2. Area of Interest (AOI)
+
+      <div class="d-flex justify-content-between align-items-center" style="border-bottom: 1px solid #eee; padding-bottom: 8px;">
+        <div class="input-header font-bold m-0" style="font-size: 18px;">
+          2. Area of Interest (AOI)
+        </div>
+
+
       </div>
-      <app-input-field [m_bIsDisabled]="m_bIsReadOnly" class="flex-fill" [m_sLabel]="'Bounding Box (WKT Polygon)'"
-                       [m_sPlaceholder]="'POLYGON((...))'"
-                       [m_sInputValue]="m_oProject.bbox" (m_oInputChange)="getUserInput($event, 'bbox')"></app-input-field>
-      <small class="text-muted">Map integration pending. Please paste a valid WKT POLYGON string.</small>
+
+      <div id="aoiMapContainer" style="height: 400px; width: 100%; border-radius: 8px; border: 1px solid #ccc; overflow: hidden; position: relative;"></div>
     </div>
   }
 
   <div class="d-flex flex-column gap-3 p-3 rounded" style="background: #f0f7ff; border: 1px solid #cce5ff;">
-    <div class="input-header font-bold" style="font-size: 18px; border-bottom: 1px solid #cce5ff; padding-bottom: 8px; color: #0056b3;">
+    <div class="input-header font-bold"
+         style="font-size: 18px; border-bottom: 1px solid #cce5ff; padding-bottom: 8px; color: #0056b3;">
       3. Labelling Protocol
     </div>
 
@@ -89,14 +99,16 @@
 
     <div class="d-flex align-items-center gap-4 mt-3">
       <div class="form-check mb-0">
-        <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="checkReview" [(ngModel)]="m_oProject.reviewRequired">
+        <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="checkReview"
+               [(ngModel)]="m_oProject.reviewRequired">
         <label class="form-check-label font-bold" for="checkReview">Review Required</label>
       </div>
 
       @if (m_oProject.reviewRequired) {
         <div class="d-flex align-items-center gap-2">
           <label class="mb-0 text-muted" style="font-size: 14px;">Min Reviews:</label>
-          <input type="number" class="form-control form-control-sm" [disabled]="m_bIsReadOnly" style="width: 70px;" [(ngModel)]="m_oProject.minReviewCount">
+          <input type="number" class="form-control form-control-sm" [disabled]="m_bIsReadOnly" style="width: 70px;"
+                 [(ngModel)]="m_oProject.minReviewCount">
         </div>
       }
     </div>
@@ -121,15 +133,18 @@
       <label class="font-bold text-muted" style="font-size: 14px;">Tasks</label>
       <div class="d-flex gap-4 mt-2">
         <div class="form-check">
-          <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="taskSeg" [(ngModel)]="m_oTasks.SEMANTING_SEGMENTATION">
+          <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="taskSeg"
+                 [(ngModel)]="m_oTasks.SEMANTING_SEGMENTATION">
           <label class="form-check-label" for="taskSeg">Semantic Segmentation</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="taskObj" [(ngModel)]="m_oTasks.OBJECT_DETECTION">
+          <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="taskObj"
+                 [(ngModel)]="m_oTasks.OBJECT_DETECTION">
           <label class="form-check-label" for="taskObj">Object Detection</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="taskOth" [(ngModel)]="m_oTasks.OTHER">
+          <input class="form-check-input" [disabled]="m_bIsReadOnly" type="checkbox" id="taskOth"
+                 [(ngModel)]="m_oTasks.OTHER">
           <label class="form-check-label" for="taskOth">Other</label>
         </div>
       </div>
@@ -163,7 +178,8 @@
 
 </div>
 
-<div class="offcanvas offcanvas-end" data-bs-backdrop="true" tabindex="-1" id="templateViewOffcanvas" style="width: 800px; background-color: #f8f9fa;">
+<div class="offcanvas offcanvas-end" data-bs-backdrop="true" tabindex="-1" id="templateViewOffcanvas"
+     style="width: 800px; background-color: #f8f9fa;">
 
   <div class="d-flex justify-content-between align-items-center font-bold pb-3 border-bottom px-4 pt-4 bg-white">
     <span style="font-size: 18px;">View Labelling Template</span>

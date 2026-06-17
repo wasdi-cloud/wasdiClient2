@@ -1,5 +1,6 @@
 main {
   min-height: calc(100vh - 3rem);
+  display: flex;           /* ← add this */
 }
 
 div.dashboard-content {
@@ -11,4 +12,22 @@ div.dashboard-content {
 div.dashboard-content-wrapper {
   max-width: 1000px;
   margin: 0 auto;
+}
+
+/* ── Labels tab: strip all constraints ───────────────────── */
+div.dashboard-content--fullscreen {
+  padding: 0 !important;
+  overflow: hidden !important;
+  height: calc(100vh - 3rem) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+div.dashboard-content-wrapper--fullscreen {
+  max-width: 100% !important;
+  margin: 0 !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
 }

@@ -50,7 +50,7 @@ export class LabellingProjectsComponent implements OnInit {
     private m_oRouter: Router,
     private m_oProjectService: LabellingProjectsService,
     private m_oConstantService: ConstantsService,
-    private m_oProjectState: LabellingProjectsStateService,
+    protected m_oProjectState: LabellingProjectsStateService,
     private m_oNotificationService: NotificationDisplayService
   ) {}
 
@@ -60,6 +60,18 @@ export class LabellingProjectsComponent implements OnInit {
     this.m_bIsLoggedIn = !!this.m_sCurrentUserId;
 
     this.loadProjects();
+  }
+
+  openProject(sProjectId: string) {
+    if (this.m_oProjectState.m_sActiveWorkspaceProjectId === sProjectId) {
+      // It is already open! The user wants to close it.
+      this.m_oProjectState.m_sActiveWorkspaceProjectId = null;
+      this.m_oNotificationService.openSnackBar("Workspace closed.", "Close", "success-snackbar");
+    } else {
+      // It's closed! The user wants to open it.
+      this.m_oProjectState.m_sActiveWorkspaceProjectId = sProjectId;
+      this.m_oTabChange.emit('labels'); // Navigate to the Labels tab!
+    }
   }
 
   // --- DATA FETCHING ---
@@ -135,11 +147,7 @@ export class LabellingProjectsComponent implements OnInit {
     this.m_oTabChange.emit('create-project');
   }
 
-  // FIX 2: Add the placeholder Open function
-  openProject(sProjectId: string) {
-    console.log("🚀 Open Project clicked for ID:", sProjectId, "- Placeholder, doing nothing for now!");
-    // Future logic: Route to the actual labelling map/workspace!
-  }
+
 
   handleLeaveProject(oProject: any) {
     // if (oProject.userRole?.toUpperCase() === 'OWNER' && oProject.ownersCount <= 1) {
@@ -158,15 +166,31 @@ export class LabellingProjectsComponent implements OnInit {
   }
 
   handleDeleteProject(oProject: any) {
-    // if (confirm(`⚠️ WARNING: Are you sure you want to completely delete "${oProject.name}"? This action cannot be undone.`)) {
-    //   this.m_oProjectService.delete(oProject.id).subscribe({
-    //     next: () => {
-    //       this.m_oNotificationService.openSnackBar("Project deleted successfully.", "Close", "success-snackbar");
-    //       this.loadProjects();
-    //     },
-    //     error: () => this.m_oNotificationService.openAlertDialog("Failed to delete project.", "Error", "danger")
-    //   });
-    // }
+    // 1. Confirm before deleting
+    if (confirm(`⚠️ WARNING: Are you sure you want to completely delete "${oProject.name}"? This action cannot be undone.`)) {
+
+      // 2. Call the service
+      this.m_oProjectService.deleteProject(oProject.id).subscribe({
+        next: () => {
+          this.m_oNotificationService.openSnackBar("Project deleted successfully.", "Close", "success-snackbar");
+          this.loadProjects(); // Refresh the table
+        },
+        error: (oError: any) => {
+          // 3. The Angular Parsing Trap Interceptor
+          // If Java sends a 200 OK but an empty body, Angular's HttpClient might throw an error trying to parse it as JSON.
+          if (oError.status === 200 || oError.status === 204) {
+            this.m_oNotificationService.openSnackBar("Project deleted successfully.", "Close", "success-snackbar");
+            this.loadProjects(); // Refresh the table
+          } else if (oError.status === 401) {
+            // Your backend throws 401 if they aren't the owner
+            this.m_oNotificationService.openAlertDialog("You do not have permission to delete this project. Only the creator can delete it.", "Unauthorized", "danger");
+          } else {
+            console.error("Delete Error:", oError);
+            this.m_oNotificationService.openAlertDialog("Failed to delete project.", "Error", "danger");
+          }
+        }
+      });
+    }
   }
 
   // Helper for UI Badges

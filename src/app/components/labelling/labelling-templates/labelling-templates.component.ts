@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {LabellingTemplatesService} from "../../../services/api/labelling/labelling-templates.service";
 import {ConstantsService} from "../../../services/constants.service";
 import {TemplateStateService} from "../../../services/api/labelling/template-state.service";
+import {NotificationDisplayService} from "../../../services/notification-display.service";
 
 @Component({
   selector: 'app-labelling-templates',
@@ -25,7 +26,8 @@ export class LabellingTemplatesComponent implements OnInit {
     private m_oRouter: Router,
     private m_oTemplateService: LabellingTemplatesService,
     private m_oConstantService: ConstantsService,
-    private m_oTemplateState: TemplateStateService
+    private m_oTemplateState: TemplateStateService,
+    private m_oNotificationService: NotificationDisplayService
   ) {
   }
 
@@ -96,9 +98,30 @@ export class LabellingTemplatesComponent implements OnInit {
   }
 
   // Delete Handler
+  // Delete Handler
   handleDelete(sTemplateId: string) {
-    if (confirm("Are you sure you want to delete this template?")) {
-      this.m_aoLabelTemplates = this.m_aoLabelTemplates.filter(t => t.templateId !== sTemplateId);
+    if (confirm("⚠️ WARNING: Are you sure you want to completely delete this template? This action cannot be undone.")) {
+
+      this.m_oTemplateService.delete(sTemplateId).subscribe({
+        next: () => {
+          this.m_oNotificationService.openSnackBar("Template deleted successfully.", "Close", "success-snackbar");
+          this.loadLabelTemplates(); // Refresh the list from the server
+        },
+        error: (oError: any) => {
+          // The Angular Parsing Trap Interceptor
+          if (oError.status === 200 || oError.status === 204) {
+            this.m_oNotificationService.openSnackBar("Template deleted successfully.", "Close", "success-snackbar");
+            this.loadLabelTemplates(); // Refresh the list from the server
+          } else if (oError.status === 401) {
+            // Catches your backend's specific !oTemplate.getCreator().equals(oUser.getUserId()) check
+            this.m_oNotificationService.openAlertDialog("You do not have permission to delete this template. Only the creator can delete it.", "Unauthorized", "danger");
+          } else {
+            console.error("Delete Error:", oError);
+            this.m_oNotificationService.openAlertDialog("Failed to delete template.", "Error", "danger");
+          }
+        }
+      });
+
     }
   }
 
