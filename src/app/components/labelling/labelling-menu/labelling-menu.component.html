@@ -1,11 +1,11 @@
-<div class="secondary-nav">
-  <div class="user-options-container">
-    <div class="header">
-      {{"ADMIN_MENU_USER" | translate}}
-    </div>
-    <div class="menu-container d-flex flex-column gap-1">
-      @for (oMenuItem of m_aoMenuButtons; track oMenuItem) {
+<div class="secondary-nav h-100 d-flex flex-column">
 
+  <div class="user-options-container mb-4">
+    <div class="header">
+      {{ "ADMIN_MENU_USER" | translate }} </div>
+
+    <div class="menu-container d-flex flex-column gap-1">
+      @for (oMenuItem of m_aoMenuButtons; track oMenuItem.title) {
         <div [style.cursor]="isDisabled(oMenuItem.title) ? 'not-allowed' : 'pointer'"
              [style.opacity]="isDisabled(oMenuItem.title) ? '0.5' : '1'">
 
@@ -15,10 +15,77 @@
                            [style.pointer-events]="isDisabled(oMenuItem.title) ? 'none' : 'auto'"
                            (click)="setActiveTab(oMenuItem.title)">
           </app-menu-button>
-
         </div>
-
       }
     </div>
   </div>
+
+  @if (m_oProjectState.m_sActiveWorkspaceProjectId) {
+    <div class="user-options-container border-top pt-3 flex-fill overflow-hidden d-flex flex-column">
+
+      <div class="header mb-2">
+        <span class="text-uppercase" style="font-size: 11px; font-weight: 600; color: #888;">
+          Project Images
+        </span>
+      </div>
+
+      <div class="image-list-container d-flex flex-column gap-2 overflow-y-auto pb-3 px-1">
+
+        @for (img of m_aoProjectImages; track img.id) {
+          <div class="image-item p-2 rounded shadow-sm border bg-white d-flex flex-column gap-2"
+               style="cursor: pointer;"
+               [class.border-primary]="img.id === m_sSelectedImageId"
+               (click)="onSelectImage(img)">
+
+            <div class="d-flex align-items-center justify-content-between">
+
+              <div class="d-flex align-items-center gap-2 text-truncate" [title]="img.name">
+                <span class="material-symbols-outlined" style="font-size: 18px;"
+                      [class.text-primary]="img.id === m_sSelectedImageId"
+                      [class.text-muted]="img.id !== m_sSelectedImageId">
+                  {{ img.id === m_sSelectedImageId ? 'radio_button_checked' : 'radio_button_unchecked' }}
+                </span>
+                <span class="text-truncate" style="font-size: 12px; font-weight: 500;"
+                      [class.text-primary]="img.id === m_sSelectedImageId">
+                  {{ img.name }}
+                </span>
+              </div>
+
+              <div class="d-flex align-items-center gap-1 ms-2 flex-shrink-0">
+                <button class="action-icon-btn" title="Image Settings" (click)="onImageSettings(img, $event)">
+                  <span class="material-symbols-outlined" style="font-size: 16px;">settings</span>
+                </button>
+
+                <button class="action-icon-btn" title="Change Style" (click)="onEditImageStyle(img, $event)">
+                  <span class="material-symbols-outlined" style="font-size: 16px;">palette</span>
+                </button>
+              </div>
+            </div>
+
+            @if (img.id === m_sSelectedImageId) {
+              <div class="d-flex align-items-center gap-2 px-1 mt-1" (click)="$event.stopPropagation()">
+                <span class="material-symbols-outlined text-muted" style="font-size: 14px;" title="Opacity">opacity</span>
+                <input type="range" class="form-range custom-slider flex-fill"
+                       min="0" max="100" [value]="img.opacity"
+                       (input)="onOpacityChange(img, $event)">
+                <span style="font-size: 10px; color: #888; width: 24px; text-align: right;">{{ img.opacity }}%</span>
+              </div>
+            }
+
+          </div>
+        } @empty {
+          <div class="text-center text-muted p-3" style="font-size: 12px; font-style: italic;">
+            No images in this project yet.
+          </div>
+        }
+
+        <button class="btn-add-image mt-1" (click)="onAddImage()">
+          <span class="material-symbols-outlined" style="font-size: 18px;">add_photo_alternate</span>
+          <span>Add Image</span>
+        </button>
+
+      </div>
+    </div>
+  }
+
 </div>

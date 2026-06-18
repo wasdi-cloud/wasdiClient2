@@ -1,0 +1,68 @@
+/* Removes default button styling for the mini icons */
+.action-icon-btn {
+  background: none;
+  border: none;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #6c757d;
+  transition: all 0.2s ease;
+}
+
+.action-icon-btn:hover {
+  background-color: #f0f0f0;
+  color: #212529;
+}
+
+.image-item {
+  transition: border-color 0.2s ease;
+}
+
+.image-item:hover {
+  border-color: #b0c4de !important;
+}
+
+/* Ensure the sidebar takes full height and list scrolls nicely */
+.image-list-container::-webkit-scrollbar {
+  width: 4px;
+}
+.image-list-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+/* Custom dashed Add Image Button */
+.btn-add-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  background-color: transparent;
+  border: 1px dashed #adb5bd;
+  border-radius: 6px;
+  color: #6c757d;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add-image:hover {
+  border-color: #0d6efd;
+  color: #0d6efd;
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Slim down the HTML range slider */
+.custom-slider {
+  height: 4px;
+}
+.custom-slider::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4px; /* Centers the thumb vertically */
+}
