@@ -49,7 +49,7 @@ export class WorkspacesListDialogComponent implements OnInit {
   m_oActiveWorkspace: Workspace = {} as Workspace;
 
   /**
-   * The selected product for single selection 
+   * The selected product for single selection
    */
   m_oSelectedProduct: any = null;
 
@@ -95,25 +95,43 @@ export class WorkspacesListDialogComponent implements OnInit {
     this.m_oWorkspaceService.getWorkspacesInfoListByUser().subscribe({
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
-          this.m_aoWorkspaceList = oResponse;
           this.m_bIsLoadingWorkspaceList = false;
 
-          // If there is an Active Workspace, move it to the first position to display first:
-          if (this.m_oActiveWorkspace.workspaceId && this.m_bIsSharingProduct === false) {
-            this.m_aoWorkspaceList.forEach((oWorkspace, iIndex) => {
-              if (oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
-                this.m_aoWorkspaceList.splice(iIndex, 1);
-                this.m_aoWorkspaceList.unshift(oWorkspace);
-                // Add the workspace to the selected workspaces array:
-                this.m_aoSelectedWorkspaces.push(oWorkspace);
-                oWorkspace.selected = true
-              }
-            })
+          // ── NEW: IS THIS A LABELLING WORKSPACE IMPORT? ──
+          if (this.m_oData.targetWorkspaceId) {
+
+            // 1. Filter the list so ONLY the target workspace appears
+            this.m_aoWorkspaceList = oResponse.filter(oWorkspace => oWorkspace.workspaceId === this.m_oData.targetWorkspaceId);
+
+            // 2. Automatically select it to save the user a click!
+            if (this.m_aoWorkspaceList.length > 0) {
+              this.m_aoWorkspaceList[0].selected = true;
+              this.m_aoSelectedWorkspaces.push(this.m_aoWorkspaceList[0]);
+            }
+
+          } else {
+            // ── ORIGINAL LOGIC: NORMAL SEARCH BEHAVIOR ──
+            this.m_aoWorkspaceList = oResponse;
+
+            // If there is an Active Workspace, move it to the first position to display first:
+            if (this.m_oActiveWorkspace.workspaceId && this.m_bIsSharingProduct === false) {
+              this.m_aoWorkspaceList.forEach((oWorkspace, iIndex) => {
+                if (oWorkspace.workspaceId === this.m_oActiveWorkspace.workspaceId) {
+                  this.m_aoWorkspaceList.splice(iIndex, 1);
+                  this.m_aoWorkspaceList.unshift(oWorkspace);
+                  // Add the workspace to the selected workspaces array:
+                  this.m_aoSelectedWorkspaces.push(oWorkspace);
+                  oWorkspace.selected = true
+                }
+              });
+            }
           }
         }
       },
-      error: oError => { }
-    })
+      error: oError => {
+        this.m_bIsLoadingWorkspaceList = false;
+      }
+    });
   }
 
   /**
@@ -143,7 +161,7 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   /**
    * Select one Workspace
-   * @param oWorkspace 
+   * @param oWorkspace
    */
   selectWorkspace(event: any, oWorkspace: any): void {
     oWorkspace.selected = !oWorkspace.selected;
@@ -246,13 +264,13 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   /**
    * Callback function to download a product
-   * @param sUrl 
-   * @param sFileName 
-   * @param sWorkspaceId 
-   * @param sBounds 
-   * @param oProvider 
-   * @param oCallback 
-   * @param oError 
+   * @param sUrl
+   * @param sFileName
+   * @param sWorkspaceId
+   * @param sBounds
+   * @param oProvider
+   * @param oCallback
+   * @param oError
    */
   downloadProduct(sUrl: string, sFileName: string, sWorkspaceId: string, sBounds: string, oProvider: any, oCallback: any, oError: any, sPlatformType: string) {
     let sMessage: string;
@@ -333,7 +351,7 @@ export class WorkspacesListDialogComponent implements OnInit {
 
   /**
    * Get the bounds of a product and make it a string
-   * @param oProduct 
+   * @param oProduct
    * @returns string
    */
   getBounds(oProduct): string {

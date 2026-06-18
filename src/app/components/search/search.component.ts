@@ -19,8 +19,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspaces-list-dialog.component';
 
+
+
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: 'app-search',
@@ -37,12 +40,12 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   public m_aoMissions: Array<any> = [];
 
   /**
-   * When the clear filters button should be enabled in the HTML 
+   * When the clear filters button should be enabled in the HTML
    */
   public m_bClearFiltersEnabled: boolean;
 
   /**
-   * 
+   *
    */
   m_bIsVisibleListOfLayers: boolean = false;
   m_bIsPaginatedList: boolean = true;
@@ -66,6 +69,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   m_oActiveWorkspace: any;
 
+
+  m_sTargetWorkspaceId: string | null = null;
+
   // Filter for Basic Search:
   m_oSearchModel = {
     textQuery: '',
@@ -82,7 +88,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     ingestionTo: ''
   }
 
-  //Filter For CronTab Feature: 
+  //Filter For CronTab Feature:
   m_oAdvancedFilter = {
     filterActive: "Seasons",//Seasons,Range,Months
     savedData: [],
@@ -114,6 +120,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     private m_oResultsOfSearchService: ResultOfSearchService,
     private m_oSearchService: SearchService,
     private m_oTranslate: TranslateService,
+    private m_oRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -123,6 +130,13 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     if (this.m_oConfigurationService.getConfiguration() === null) {
       this.m_oConfigurationService.loadConfiguration();
     }
+    // ── NEW: CATCH THE HANDSHAKE ──
+    this.m_oRoute.queryParams.subscribe(params => {
+      if (params['targetWorkspace']) {
+        this.m_sTargetWorkspaceId = params['targetWorkspace'];
+        console.log("🔍 Search Page opened in Labelling Import Mode! Target Workspace:", this.m_sTargetWorkspaceId);
+      }
+    });
   }
 
   //Wait until After Content is initialized and then check - on check call the config file
@@ -206,10 +220,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
     this.m_bClearFiltersEnabled = false;
 
-    //Clear any layers and relatives on the map: 
+    //Clear any layers and relatives on the map:
     this.deleteProducts(oProvider.name);
 
-    //Hide any previous results: 
+    //Hide any previous results:
     this.m_bIsVisibleListOfLayers = true;
     this.m_bIsPaginatedList = true;
 
@@ -471,11 +485,11 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   }
   /**
    * Get the Layers List
-   * @param aoData 
-   * @returns 
+   * @param aoData
+   * @returns
    */
   generateLayersList(aoData: any) {
-    //Ensure Input data is defined: 
+    //Ensure Input data is defined:
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData) === true) {
       return false;
     }
@@ -545,7 +559,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   /**
    * Listens for changes to the Search Map Component and sets the SearchModel
-   * @param oEvent 
+   * @param oEvent
    */
   getMapInput(oEvent: string) {
     // Ensure oEvent is defined and if defined, set the geoselection string to the recieved Event Emitter
@@ -555,13 +569,13 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   /**
-   * Listens for changes to the Mission Filter in the Search Filters Component and sets the SearchModel 
-   * @param oEvent 
+   * Listens for changes to the Mission Filter in the Search Filters Component and sets the SearchModel
+   * @param oEvent
    */
   getMissionFilter(oEvent: any) {
-    //Ensure oEvent is Defined: 
+    //Ensure oEvent is Defined:
     if (oEvent) {
-      //Extract Passed Values from oEvent model to Search Model: 
+      //Extract Passed Values from oEvent model to Search Model:
       this.m_oSearchModel.textQuery = oEvent.textQuery;
       this.m_oSearchModel.missionFilter = oEvent.missionFilter;
       this.m_oSearchModel.sensingPeriodFrom = oEvent.sensingPeriodFrom;
@@ -638,7 +652,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       return null;
     }
 
-    //Split the Object Summary at commas: 
+    //Split the Object Summary at commas:
     let asSplit = sObjectSummary.split(",");
 
     let oNewSummary = { Date: "", Instrument: "", Mode: "", Satellite: "", Size: "" };
@@ -665,7 +679,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   /**
    * Convert Polygon to Boudns Format
-   * @param sPolygon 
+   * @param sPolygon
    */
   getPolygonToBounds(sPolygon: string) {
 
@@ -714,7 +728,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       width: '60vw',
       data: {
         isSharing: false,
-        products: aoListOfSelectedProducts
+        products: aoListOfSelectedProducts,
+        targetWorkspaceId: this.m_sTargetWorkspaceId
       }
     })
     return true;

@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ConstantsService} from "../../../services/constants.service";
 import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-labelling-menu',
@@ -42,7 +43,8 @@ export class LabellingMenuComponent {
 
   constructor(
     private m_oConstantsService: ConstantsService,
-    public m_oProjectState: LabellingProjectsStateService
+    public m_oProjectState: LabellingProjectsStateService,
+    private m_oRouter:Router
   ) {
   }
 
@@ -86,8 +88,18 @@ export class LabellingMenuComponent {
   // ── IMAGE ACTIONS ──
 
   onAddImage() {
-    console.log('Open Add Image Dialog');
-    // TODO: Open a dialog to search/import new imagery to this labelling project
+    // WARNING: We will add the "Save Changes" check here later!
+
+    // Assuming you know the Workspace ID for this project.
+    // If you only have the Project ID, just pass that instead!
+    const sTargetWorkspaceId = "YOUR_PROJECTS_WORKSPACE_ID";
+
+    console.log('Navigating to Search Page for Workspace:', sTargetWorkspaceId);
+
+    // Navigate to the search page, but append a secret query parameter!
+    this.m_oRouter.navigate(['/search'], {
+      queryParams: { targetWorkspace: sTargetWorkspaceId }
+    });
   }
 
   onToggleImageVisibility(oImage: any) {
