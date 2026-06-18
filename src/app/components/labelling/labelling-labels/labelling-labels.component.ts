@@ -68,7 +68,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   m_bShowValidatedOnly: boolean = false;
 
   // ── Table state ─────────────────────────────────────────────────────────────
-  m_bTableExpanded: boolean = true;
+  m_bTableExpanded: boolean = false;
   m_sSelectedFeatureId: string | null = null;
 
   // ── Inline edit state ───────────────────────────────────────────────────────

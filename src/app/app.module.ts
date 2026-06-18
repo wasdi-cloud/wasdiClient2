@@ -222,6 +222,7 @@ import {
 import {
   CreateLabellingProjectComponent
 } from "./components/labelling/create-labelling-project/create-labelling-project.component";
+import {LabellingToolbarComponent} from "./components/labelling/labelling-toolbar/labelling-toolbar.component";
 
 @NgModule({
     declarations: [
@@ -297,6 +298,7 @@ import {
         LabellingMenuComponent,
         LabellingProjectsComponent,
         CreateTemplateLabelComponent,
+        LabellingToolbarComponent,
         CreateLabellingProjectComponent,
         DragAndDropComponent,
         NotificationSnackbarComponent,
