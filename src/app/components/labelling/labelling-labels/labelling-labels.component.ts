@@ -68,7 +68,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   m_bShowValidatedOnly: boolean = false;
 
   // ── Table state ─────────────────────────────────────────────────────────────
-  m_bTableExpanded: boolean = true;
+  m_bTableExpanded: boolean = false;
   m_sSelectedFeatureId: string | null = null;
 
   // ── Inline edit state ───────────────────────────────────────────────────────
@@ -123,22 +123,96 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     const oMap = this.m_oMapEngineService.getMap();
 
     if (oMap) {
-      this.m_oMapEngineService.initGeocoder(oMap);
-      this.m_oMapEngineService.addManualBoundingBoxControl(oMap, true);
+      // ── Replace the old Bounding Box control with the new Draw Control ──
+      this.m_oMapEngineService.initDrawControl(oMap);
 
-      this.m_oMapEngineService.getManualBoundingBox$().subscribe((oEvent: any) => {
+      // Listen for the new Draw Events
+      this.m_oMapEngineService.getDrawEvents$().subscribe((oEvent: any) => {
         if (oEvent) {
           this.handleDrawUpdate(oEvent);
         }
       });
 
-      // Give MapLibre one tick to measure the container before rendering tiles
       setTimeout(() => {
         if (typeof oMap.resize === 'function') {
           oMap.resize();
         }
       }, 0);
     }
+  }
+
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // DRAW EVENTS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  private handleDrawUpdate(oEvent: any): void {
+    if (!oEvent || !oEvent.features) return;
+
+    this.saveHistory();
+
+    const aoUpdatedFeatures = oEvent.features;
+
+    if (oEvent.type === 'create') {
+      // Handle new shapes
+      const newFeatures = aoUpdatedFeatures.map((oRaw: any) => this.createNewFeature(oRaw));
+      this.m_aoFeatures = [...this.m_aoFeatures, ...newFeatures];
+    } else if (oEvent.type === 'update') {
+      // Handle shape edits (moving vertices)
+      this.m_aoFeatures = this.m_aoFeatures.map(existingFeature => {
+        const updatedRaw = aoUpdatedFeatures.find((f: any) => f.id === existingFeature.id);
+        if (updatedRaw) {
+          return {
+            ...existingFeature,
+            geometry: updatedRaw.geometry,
+            properties: {
+              ...existingFeature.properties,
+              measurement: this.calcMeasurement(updatedRaw.geometry)
+            }
+          };
+        }
+        return existingFeature;
+      });
+    } else if (oEvent.type === 'delete') {
+      // Handle shape deletion from the map UI
+      const deletedIds = aoUpdatedFeatures.map((f: any) => f.id);
+      this.m_aoFeatures = this.m_aoFeatures.filter(f => !deletedIds.includes(f.id));
+    }
+  }
+
+  // Helper to construct the full feature object
+  private createNewFeature(oRaw: any): LabelFeature {
+    const sId = oRaw.id; // Mapbox Draw generates an ID automatically
+    const sMeasurement = this.calcMeasurement(oRaw.geometry);
+    const oDynamicProps: { [key: string]: any } = {};
+    let sColor = '#3b82f6';
+
+    this.m_aoTemplateAttributes.forEach(attr => {
+      oDynamicProps[attr.name] = '';
+      if (attr.categoryValues && attr.categoryValues.length > 0) {
+        oDynamicProps[attr.name] = attr.categoryValues[0].value;
+        sColor = attr.categoryValues[0].color;
+      }
+    });
+
+    return {
+      id: sId,
+      type: 'Feature',
+      geometry: oRaw.geometry,
+      properties: {
+        id: sId,
+        annotator: this.m_sCurrentUser,
+        status: 'Pending',
+        timestamp: new Date().toISOString(),
+        measurement: sMeasurement,
+        portColor: sColor,
+        isValidated: false,
+        reviewCount: 0,
+        reviewers: [],
+        reviewNotes: [],
+        ...oDynamicProps
+      }
+    } as LabelFeature;
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -166,59 +240,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // DRAW EVENTS
   // ═══════════════════════════════════════════════════════════════════════════
 
-  private handleDrawUpdate(oEvent: any): void {
-    // Adapt this to whatever your MapEngineService emits
-    const aoRawFeatures: any[] = oEvent.features || oEvent || [];
 
-    this.saveHistory();
-
-    this.m_aoFeatures = aoRawFeatures.map((oRaw: any) => {
-      const sId = oRaw.id || `drawn-${Date.now()}-${Math.random()}`;
-      const oExisting = this.m_aoFeatures.find(f => f.id === sId);
-
-      const sMeasurement = this.calcMeasurement(oRaw.geometry);
-
-      if (oExisting) {
-        // Shape was edited — keep existing properties, update measurement
-        return {
-          ...oExisting,
-          geometry: oRaw.geometry,
-          properties: { ...oExisting.properties, measurement: sMeasurement }
-        };
-      }
-
-      // Brand-new shape
-      const oDynamicProps: { [key: string]: any } = {};
-      let sColor = '#3b82f6';
-
-      this.m_aoTemplateAttributes.forEach(attr => {
-        oDynamicProps[attr.name] = '';
-        if (attr.categoryValues && attr.categoryValues.length > 0) {
-          oDynamicProps[attr.name] = attr.categoryValues[0].value;
-          sColor = attr.categoryValues[0].color;
-        }
-      });
-
-      return {
-        id: sId,
-        type: 'Feature',
-        geometry: oRaw.geometry,
-        properties: {
-          id: sId,
-          annotator: this.m_sCurrentUser,
-          status: 'Pending',
-          timestamp: new Date().toISOString(),
-          measurement: sMeasurement,
-          portColor: sColor,
-          isValidated: false,
-          reviewCount: 0,
-          reviewers: [],
-          reviewNotes: [],
-          ...oDynamicProps
-        }
-      } as LabelFeature;
-    });
-  }
 
   /** Push current features back to the map layer. */
   private syncMapFeatures(): void {

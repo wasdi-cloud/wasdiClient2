@@ -7,6 +7,7 @@ import { IMapEngine } from './map-engine.interface';
 import { MapInitOptions } from './map-engine.interface';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { ManualBoundingBoxComponent } from 'src/app/shared/shared-components/manual-bounding-box/manual-bounding-box.component';
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
 /**
  * MapLibre implementation used by the map engine selector.
@@ -22,6 +23,8 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
   private m_oManualBoundingBoxSubscription = new BehaviorSubject<any>(null);
   private m_oSelectedRectangleSubscription = new BehaviorSubject<any>(null);
   private m_oManualBboxInput: any = null;
+  private m_oDrawControl: any = null;
+  private m_oDrawEventsSubscription = new BehaviorSubject<any>(null);
 
   private readonly m_aoBaseLayers = [
     {
@@ -80,6 +83,42 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
       return this.m_oMap;
     }
     return null;
+  }
+
+  initDrawControl(map: any): void {
+    if (!this.isMapLibreMap(map)) {
+      return;
+    }
+
+    // Initialize the drawing tool
+    this.m_oDrawControl = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+        polygon: true,
+        line_string: true,
+        point: true,
+        trash: true
+      },
+      // You can customize styles here if needed
+    });
+
+    map.addControl(this.m_oDrawControl, 'top-left');
+
+    // Listen for Draw Events and emit them to the component
+    map.on('draw.create', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'create', features: e.features }));
+    map.on('draw.update', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'update', features: e.features }));
+    map.on('draw.delete', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'delete', features: e.features }));
+  }
+
+  getDrawEvents$(): Observable<any> {
+    return this.m_oDrawEventsSubscription.asObservable();
+  }
+
+  // Helper to load existing features into the draw control
+  setDrawFeatures(features: any[]): void {
+    if (this.m_oDrawControl) {
+      this.m_oDrawControl.set({ type: 'FeatureCollection', features: features });
+    }
   }
 
   private normalizeBoundsToLngLat(aBounds: any): [[number, number], [number, number]] | null {

@@ -1,4 +1,4 @@
-/* Custom Colour Sets */
+@import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'; /* Custom Colour Sets */
 :root {
   /* Main Colours */
   --darkAccessible: #006526;

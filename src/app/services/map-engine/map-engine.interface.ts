@@ -19,6 +19,8 @@ export interface IMapEngine {
   getSelectedRectangle$(): Observable<any>;
   emitSelectedRectangle(event: any): void;
   upsertSelectionRectangle(fWest: number, fSouth: number, fEast: number, fNorth: number): void;
+  initDrawControl(map: any): void;
+  getDrawEvents$(): Observable<any>;
 
   setMap(map: any): void;
   getMap(): any;
