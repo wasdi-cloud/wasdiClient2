@@ -63,6 +63,14 @@
         <span class="font-bold text-muted">Mode:</span>
         <div class="btn-group shadow-sm" role="group">
 
+          <input type="radio" class="btn-check" name="editMode" id="mode0" value="draw"
+                 [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
+          <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
+                 for="mode0"
+                 [matTooltip]="'Draw Polygon'">
+            <span class="material-symbols-outlined" style="font-size: 18px;">draw</span>
+          </label>
+
           <input type="radio" class="btn-check" name="editMode" id="mode1" value="vertices"
                  [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
           <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"

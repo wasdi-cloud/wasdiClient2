@@ -62,7 +62,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   m_aoCollaborators: Collaborator[] = [];
 
   // ── Toolbar state ───────────────────────────────────────────────────────────
-  m_sEditMode: 'vertices' | 'move' = 'vertices';
+  m_sEditMode: 'draw' | 'vertices' | 'move' = 'move';
   m_sStyleBy: 'label' | 'annotator' = 'label';
   m_sFilterCollab: string = 'all';
   m_bShowValidatedOnly: boolean = false;
@@ -147,38 +147,84 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // ═══════════════════════════════════════════════════════════════════════════
 
   private handleDrawUpdate(oEvent: any): void {
-    if (!oEvent || !oEvent.features) return;
+    if (!oEvent) return;
 
     this.saveHistory();
-
-    const aoUpdatedFeatures = oEvent.features;
+    const aoUpdatedFeatures = oEvent.features || [];
 
     if (oEvent.type === 'create') {
-      // Handle new shapes
       const newFeatures = aoUpdatedFeatures.map((oRaw: any) => this.createNewFeature(oRaw));
       this.m_aoFeatures = [...this.m_aoFeatures, ...newFeatures];
     } else if (oEvent.type === 'update') {
-      // Handle shape edits (moving vertices)
       this.m_aoFeatures = this.m_aoFeatures.map(existingFeature => {
         const updatedRaw = aoUpdatedFeatures.find((f: any) => f.id === existingFeature.id);
         if (updatedRaw) {
           return {
             ...existingFeature,
             geometry: updatedRaw.geometry,
-            properties: {
-              ...existingFeature.properties,
-              measurement: this.calcMeasurement(updatedRaw.geometry)
-            }
+            properties: { ...existingFeature.properties, measurement: this.calcMeasurement(updatedRaw.geometry) }
           };
         }
         return existingFeature;
       });
     } else if (oEvent.type === 'delete') {
-      // Handle shape deletion from the map UI
       const deletedIds = aoUpdatedFeatures.map((f: any) => f.id);
       this.m_aoFeatures = this.m_aoFeatures.filter(f => !deletedIds.includes(f.id));
+
+    } else if (oEvent.type === 'selection') {
+      this.m_sSelectedFeatureId = aoUpdatedFeatures.length > 0 ? aoUpdatedFeatures[0].id : null;
+
+      // ── THE FIX: FORCE SYNC MAPBOX TO YOUR TOOLBAR ──
+    } else if (oEvent.type === 'force_sync') {
+      // Whenever Mapbox tries to do its own thing on click, we force it back to the toolbar's choice
+      setTimeout(() => {
+        if (this.m_sEditMode === 'vertices') {
+          this.m_oMapEngineService.changeDrawMode('direct_select', oEvent.featureId);
+        } else if (this.m_sEditMode === 'move') {
+          this.m_oMapEngineService.changeDrawMode('simple_select', oEvent.featureId);
+        }
+      }, 0);
+
+      // ── ONLY SYNC BACK IF THE USER DOUBLE CLICKS ──
+    } else if (oEvent.type === 'modechange') {
+      if (oEvent.mode === 'direct_select') this.m_sEditMode = 'vertices';
+      else if (oEvent.mode === 'simple_select') this.m_sEditMode = 'move';
+      else if (oEvent.mode === 'draw_polygon') this.m_sEditMode = 'draw';
+
+      const oCanvas = this.m_oMapEngineService.getMap()?.getCanvas();
+      if (oCanvas) {
+        oCanvas.style.cursor = oEvent.mode === 'draw_polygon' ? 'crosshair' : 'pointer';
+      }
     }
   }
+
+  onEditModeChange(sMode: 'draw' | 'vertices' | 'move'): void {
+    this.m_sEditMode = sMode;
+
+    const oCanvas = this.m_oMapEngineService.getMap()?.getCanvas();
+    if (oCanvas) {
+      oCanvas.style.cursor = sMode === 'draw' ? 'crosshair' : 'pointer';
+    }
+
+    // Pass the currently selected feature ID (if any) so the mode changes correctly
+    if (sMode === 'draw') {
+      this.m_oMapEngineService.changeDrawMode('draw_polygon');
+    } else if (sMode === 'move') {
+      this.m_oMapEngineService.changeDrawMode('simple_select', this.m_sSelectedFeatureId || undefined);
+    } else if (sMode === 'vertices') {
+      this.m_oMapEngineService.changeDrawMode('direct_select', this.m_sSelectedFeatureId || undefined);
+    }
+  }
+
+  onDelete(sId: string): void {
+    if (!confirm('Delete this label?')) return;
+    this.saveHistory();
+    this.m_aoFeatures = this.m_aoFeatures.filter(f => f.id !== sId);
+
+    // ── Tell Mapbox Draw to delete it from the map! ──
+    this.m_oMapEngineService.deleteDrawFeature(sId);
+  }
+
 
   // Helper to construct the full feature object
   private createNewFeature(oRaw: any): LabelFeature {
@@ -376,13 +422,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     });
   }
 
-  onDelete(sId: string): void {
-    if (!confirm('Delete this label?')) return;
-    this.saveHistory();
-    this.m_aoFeatures = this.m_aoFeatures.filter(f => f.id !== sId);
-    this.syncMapFeatures();
-    // TODO: sync deletion to backend
-  }
+
 
   // ═══════════════════════════════════════════════════════════════════════════
   // ISSUES MODAL
