@@ -69,23 +69,59 @@ export class WasdaiComponent implements OnInit {
   }
 
   onNewChat(): void {
+    // Generate a unique ID and timestamp for the new chat
+    const timestamp = Date.now();
+    const chatId = `chat-${timestamp}`;
+    const formattedTimestamp = this.formatTimestamp(timestamp);
+
+    // Create new chat object
+    const newChat: ChatListViewModel = {
+      chatId: chatId,
+      timestamp: timestamp,
+      title: formattedTimestamp,
+      prompts: [],
+      answers: []
+    };
+
+    // Add to local chat list immediately for UI feedback
+    this.chats.set([newChat, ...this.chats()]);
+    this.currentChatId.set(chatId);
+    this.currentChatMessages.set([]);
+    this.m_sActiveTab = chatId;
+
+    // Also persist on the server
     this.m_oAssistantService.newChat().subscribe({
-      next: (chatId: string) => {
-        // Check if response is HTTP 200 and body is not empty
-        if (chatId && chatId.trim().length > 0) {
-          this.currentChatId.set(chatId);
-          this.currentChatMessages.set([]);
-          this.m_sActiveTab = chatId;
-          console.log('New chat created with ID:', chatId);
-        } else {
-          this.m_oNotificationDisplayService.openSnackBar('Error: Empty response from server');
+      next: (serverChatId: string) => {
+        if (serverChatId && serverChatId.trim().length > 0) {
+          // Update the local chat with the server ID
+          const updatedChats = this.chats().map(chat =>
+            chat.chatId === chatId ? { ...chat, chatId: serverChatId } : chat
+          );
+          this.chats.set(updatedChats);
+          this.currentChatId.set(serverChatId);
+          this.m_sActiveTab = serverChatId;
+          console.log('New chat created with server ID:', serverChatId);
         }
       },
       error: (err) => {
-        console.error('Error creating new chat:', err);
-        this.m_oNotificationDisplayService.openSnackBar('Error creating new chat');
+        console.error('Error syncing chat with server:', err);
+        this.m_oNotificationDisplayService.openSnackBar('Chat created locally but sync failed');
       }
     });
+  }
+
+  /**
+   * Format timestamp to YYYY-MM-DD_HH:MM format
+   */
+  private formatTimestamp(timestamp: number): string {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}_${hours}:${minutes}`;
   }
 
   onSelectChat(chatId: string): void {
