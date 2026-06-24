@@ -63,13 +63,13 @@ export class LabellingProjectsComponent implements OnInit {
   }
 
   openProject(sProjectId: string) {
-    if (this.m_oProjectState.m_sActiveWorkspaceProjectId === sProjectId) {
+    if (this.m_oProjectState.m_sActiveProjectId === sProjectId) {
       // It is already open! The user wants to close it.
-      this.m_oProjectState.m_sActiveWorkspaceProjectId = null;
+      this.m_oProjectState.m_sActiveProjectId = null;
       this.m_oNotificationService.openSnackBar("Workspace closed.", "Close", "success-snackbar");
     } else {
       // It's closed! The user wants to open it.
-      this.m_oProjectState.m_sActiveWorkspaceProjectId = sProjectId;
+      this.m_oProjectState.m_sActiveProjectId = sProjectId;
       this.m_oTabChange.emit('labels'); // Navigate to the Labels tab!
     }
   }

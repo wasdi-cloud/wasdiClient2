@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {BehaviorSubject} from "rxjs";
 
 export type LabellingProjectMode = 'create' | 'view' | 'edit';
 @Injectable({
@@ -9,7 +10,11 @@ export class LabellingProjectsStateService {
   m_sMode: 'create' | 'view' | 'edit' = 'create';
 
   // NEW: Tracks the project currently open for the "Labels" workspace
-  m_sActiveWorkspaceProjectId: string | null = null;
+  m_sActiveProjectId: string | null = null;
+
+  // ── Track the currently selected image ──
+  private m_oActiveImageSubject = new BehaviorSubject<string | null>(null);
+  public m_oActiveImage$ = this.m_oActiveImageSubject.asObservable();
 
   get projectId(): string | null {
     return this.m_sLabellingProjectId;
@@ -27,6 +32,10 @@ export class LabellingProjectsStateService {
   clearState(): void {
     this.m_sLabellingProjectId = null;
     this.m_sMode = 'create';
+  }
+
+  setActiveImage(sImageName: string): void {
+    this.m_oActiveImageSubject.next(sImageName);
   }
 }
 

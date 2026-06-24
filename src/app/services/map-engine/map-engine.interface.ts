@@ -23,6 +23,7 @@ export interface IMapEngine {
   getDrawEvents$(): Observable<any>;
   changeDrawMode(mode: string,featureId?: string): void;
   deleteDrawFeature(featureId: string): void
+  setDrawFeatures(features: any[]): void; // <-- Add this
 
   setMap(map: any): void;
   getMap(): any;
