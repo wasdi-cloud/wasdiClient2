@@ -3,7 +3,7 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
-  ElementRef, AfterViewInit
+  ElementRef, AfterViewInit, HostListener
 } from '@angular/core';
 import { MapEngineService } from '../../../services/map-engine/map-engine.service';
 import {LabelsService} from "../../../services/api/labelling/labels.service";
@@ -123,6 +123,19 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     this.m_oMapEngineService.clearMap();
   }
 
+
+  // ── KEYBOARD SHORTCUTS ──
+  @HostListener('document:keydown.control.z', ['$event'])
+  @HostListener('document:keydown.meta.z', ['$event'])
+  onCtrlZ(event: Event): void {   // <--- Change KeyboardEvent to Event
+                                  // Prevent the browser's default undo action
+    event.preventDefault();
+
+    if (this.m_aoPastFeatures.length > 0) {
+      this.onUndo();
+    }
+  }
+
   // ═══════════════════════════════════════════════════════════════════════════
   // MAP INIT
   // ═══════════════════════════════════════════════════════════════════════════
@@ -174,8 +187,12 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   private handleDrawUpdate(oEvent: any): void {
     if (!oEvent) return;
 
-    this.saveHistory();
     const aoUpdatedFeatures = oEvent.features || [];
+
+    // ── THE FIX: Only save history for actual shape modifications! ──
+    if (oEvent.type === 'create' || oEvent.type === 'update' || oEvent.type === 'delete') {
+      this.saveHistory();
+    }
 
     if (oEvent.type === 'create') {
       const newFeatures = aoUpdatedFeatures.map((oRaw: any) => this.createNewFeature(oRaw));
@@ -302,8 +319,16 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   /** Call this BEFORE mutating m_aoFeatures to snapshot the current state. */
   private saveHistory(): void {
-    const snapshot = this.m_aoFeatures.map(f => ({ ...f, properties: { ...f.properties } }));
+    // Deep copy the properties so editing an attribute doesn't mutate the past!
+    const snapshot = this.m_aoFeatures.map(f => ({
+      ...f,
+      geometry: { ...f.geometry },
+      properties: { ...f.properties }
+    }));
+
     this.m_aoPastFeatures = [...this.m_aoPastFeatures, snapshot];
+
+    // Keep a maximum of 30 undo steps to prevent memory bloat
     if (this.m_aoPastFeatures.length > 30) {
       this.m_aoPastFeatures.shift();
     }
@@ -311,10 +336,20 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   onUndo(): void {
     if (this.m_aoPastFeatures.length === 0) return;
-    const previous = this.m_aoPastFeatures[this.m_aoPastFeatures.length - 1];
-    this.m_aoPastFeatures = this.m_aoPastFeatures.slice(0, -1);
-    this.m_aoFeatures = previous;
-    this.syncMapFeatures();
+
+    // 1. Pop the last state off the stack
+    const previousState = this.m_aoPastFeatures.pop();
+    if (!previousState) return;
+
+    // 2. Restore the Angular state
+    this.m_aoFeatures = previousState;
+
+    // 3. FORCE MAPBOX TO REDRAW THE REVERTED STATE
+    if (this.m_oMapEngineService) {
+      this.m_oMapEngineService.setDrawFeatures(this.m_aoFeatures);
+    }
+
+    console.log(`↩️ Undo triggered! Reverted to ${this.m_aoFeatures.length} shapes.`);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
