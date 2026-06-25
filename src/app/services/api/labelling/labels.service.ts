@@ -25,8 +25,10 @@ export class LabelsService {
   }
 
   // POST: Create a new label
-  createLabel(oLabelViewModel: any): Observable<string> {
-    return this.m_oHttp.post<string>(this.APIURL, oLabelViewModel);
+  // POST: Create a new label
+  createLabel(oLabelViewModel: any): Observable<any> {
+    // We add responseType: 'text' so Angular accepts the raw UUID string without crashing!
+    return this.m_oHttp.post(this.APIURL, oLabelViewModel, { responseType: 'text' });
   }
 
   // PUT: Update an existing label

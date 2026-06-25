@@ -42,7 +42,7 @@
                     [m_sSize]="'small'"
                     [m_bRounded]="true"
                     [matTooltip]="'Upload Shapes'"
-                    (click)="triggerFileUpload()">
+                    (click)="m_oUploadClick.emit()">
         </app-button>
         <input #fileInput type="file" accept=".geojson,.json,.zip" style="display:none" (change)="onFileSelected($event)">
       </li>

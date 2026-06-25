@@ -63,6 +63,9 @@ export class MapEngineService implements IMapEngine {
   setDrawFeatures(features: any[]): void {
     this.m_oEngine.setDrawFeatures(features); // <-- Add this
   }
+  zoomToBbox(bbox: [number, number, number, number]): void{
+    this.m_oEngine.zoomToBbox(bbox);
+  }
 
   onSearchDrawCreated(event: any): any { return this.m_oEngine.onSearchDrawCreated(event); }
   zoomOnBounds(bounds: any, map?: any): boolean { return this.m_oEngine.zoomOnBounds(bounds, map); }

@@ -7,6 +7,9 @@ import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@
   standalone: false
 })
 export class LabellingToolbarComponent {
+
+
+  @Output() m_oUploadClick = new EventEmitter<void>();
   // ── Stats & State (Inputs) ──
   @Input() m_iTotalFeatures: number = 0;
   @Input() m_iValidatedCount: number = 0;

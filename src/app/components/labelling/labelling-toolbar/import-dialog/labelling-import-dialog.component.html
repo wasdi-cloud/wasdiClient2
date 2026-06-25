@@ -1,0 +1,28 @@
+<div class="dialog d-flex flex-column justify-content-between h-100 p-3">
+  <div class="dialog-header d-flex flex-row justify-content-between font-bold align-items-center">
+    Import Shapes (GeoJSON / Shapefile)
+    <span class="close-btn material-symbols-outlined" style="cursor: pointer;" (click)="onDismiss()">close</span>
+  </div>
+
+  <div class="dialog-content flex-fill d-flex flex-column gap-3 mt-4">
+    <div class="text-muted">
+      Select or drag-and-drop a <strong>.geojson</strong> or <strong>.zip</strong> (Shapefile) to import labels into your current view.
+    </div>
+
+    <div class="drag-drop-container p-4 border rounded bg-light text-center">
+      <app-drag-and-drop (m_oSelectedFileOutput)="getSelectedFile($event)"></app-drag-and-drop>
+    </div>
+
+    @if (m_oFile) {
+      <div class="text-success font-bold d-flex align-items-center gap-2">
+        <span class="material-symbols-outlined">check_circle</span>
+        Selected: {{ m_sFileName }}
+      </div>
+    }
+  </div>
+
+  <div class="dialog-footer d-flex flex-row gap-2 justify-content-end mt-4">
+    <app-button [m_sLabel]="'KEY_PHRASES.CANCEL' | translate" [m_bMuted]="true" (click)="onDismiss()"></app-button>
+    <app-button [m_sLabel]="'DIALOG_IMPORT_IMPORT' | translate" [m_bDisabled]="!m_oFile" (click)="onImport()"></app-button>
+  </div>
+</div>

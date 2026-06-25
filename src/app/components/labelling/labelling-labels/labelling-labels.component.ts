@@ -10,6 +10,8 @@ import {LabelsService} from "../../../services/api/labelling/labels.service";
 import {forkJoin, Observable, of} from "rxjs";
 import {catchError, tap} from "rxjs/operators";
 import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
+import {MatDialog} from "@angular/material/dialog";
+import {LabellingImportDialogComponent} from "../labelling-toolbar/import-dialog/labelling-import-dialog.component";
 
 // ── Lightweight interfaces ────────────────────────────────────────────────────
 
@@ -101,7 +103,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   constructor(
     private m_oMapEngineService: MapEngineService
     ,private m_oLabelService: LabelsService
-    ,private m_oProjectState: LabellingProjectsStateService
+    ,private m_oProjectState: LabellingProjectsStateService,
+    private m_oDialog: MatDialog
   ) {}
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -117,6 +120,130 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   }
   ngAfterViewInit(): void {
     this.initMap();
+  }
+
+  onOpenImportDialog(): void {
+    const oDialogRef = this.m_oDialog.open(LabellingImportDialogComponent, {
+      width: '500px',
+      disableClose: true
+    });
+
+    oDialogRef.afterClosed().subscribe(oResult => {
+      console.log("🚪 Dialog closed. Result:", oResult); // <--- Add this!
+
+      if (!oResult) {
+        console.log("User cancelled the dialog.");
+        return;
+      }
+
+      // As long as we have a file, send it!
+      if (oResult.file) {
+        this.processImportedFile(oResult.file, oResult.name || oResult.file.name);
+      } else {
+        console.error("❌ Dialog closed, but no file was found in the result!", oResult);
+      }
+    });
+  }
+
+  // ── Add the second parameter (sFileName) ──
+  async processImportedFile(oFile: any, sFileName: string): Promise<void> {
+    const sExt = sFileName.split('.').pop()?.toLowerCase();
+
+    try {
+      let oGeojson: any = null;
+
+      if (sExt === 'geojson' || sExt === 'json') {
+
+        // ── BULLETPROOF TEXT READER ──
+        const sText = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsText(oFile);
+        });
+
+        oGeojson = JSON.parse(sText);
+
+      } else if (sExt === 'zip') {
+
+        // ── BULLETPROOF ARRAY BUFFER READER ──
+        const oBuffer = await new Promise<ArrayBuffer>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as ArrayBuffer);
+          reader.onerror = reject;
+          reader.readAsArrayBuffer(oFile);
+        });
+
+        const shp = (await import('shpjs')).default;
+        const oResult = await shp(oBuffer);
+
+        if (Array.isArray(oResult)) {
+          oGeojson = { type: 'FeatureCollection', features: oResult.flatMap((g: any) => g.features) };
+        } else {
+          oGeojson = oResult;
+        }
+
+      } else {
+        console.warn('Unsupported file format:', sExt);
+        return;
+      }
+
+      if (!oGeojson?.features?.length) {
+        console.warn('No features found in file.');
+        return;
+      }
+
+      this.saveHistory();
+
+      const aoImported: LabelFeature[] = oGeojson.features.map((oRaw: any, i: number) => {
+        const sId = oRaw.id || `imported-${Date.now()}-${i}`;
+        return this.createNewFeature({ id: sId, geometry: oRaw.geometry });
+      });
+
+      this.m_aoFeatures = [...this.m_aoFeatures, ...aoImported];
+
+      if (this.m_oMapEngineService) {
+        this.m_oMapEngineService.setDrawFeatures(this.m_aoFeatures);
+        // ── NEW: ZOOM TO THE IMPORTED SHAPES ──
+        const bbox = this.getBboxForFeatures(aoImported);
+        if (bbox) {
+          this.m_oMapEngineService.zoomToBbox(bbox);
+        }
+      }
+      console.log(`✅ Imported ${aoImported.length} features`);
+
+    } catch (oError) {
+      console.error('File upload error:', oError);
+    }
+  }
+
+  // ── Helper to calculate the bounds of imported shapes ──
+  private getBboxForFeatures(features: LabelFeature[]): [number, number, number, number] | null {
+    if (!features || features.length === 0) return null;
+
+    let minLng = Infinity, minLat = Infinity, maxLng = -Infinity, maxLat = -Infinity;
+
+    // Recursive function to handle nested coordinate arrays
+    const extractCoords = (coords: any[]) => {
+      if (typeof coords[0] === 'number') {
+        const [lng, lat] = coords;
+        if (lng < minLng) minLng = lng;
+        if (lat < minLat) minLat = lat;
+        if (lng > maxLng) maxLng = lng;
+        if (lat > maxLat) maxLat = lat;
+      } else if (Array.isArray(coords)) {
+        coords.forEach(extractCoords);
+      }
+    };
+
+    features.forEach(f => {
+      if (f.geometry && f.geometry.coordinates) {
+        extractCoords(f.geometry.coordinates);
+      }
+    });
+
+    if (minLng === Infinity) return null;
+    return [minLng, minLat, maxLng, maxLat]; // [west, south, east, north]
   }
 
   ngOnDestroy(): void {
@@ -789,6 +916,12 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   // 2. SAVE ALL DIRTY ROWS (Triggered by Toolbar button)
   onSaveLabels(): void {
+
+    if (!this.m_sCurrentImageName || !this.m_sCurrentDatasetId) {
+      console.warn('❌ Cannot save: No image or dataset selected!');
+      alert('Please select an image from the sidebar before saving labels.');
+      return;
+    }
     if (this.m_bSaving) return;
 
     // Find all features that have unsaved changes
