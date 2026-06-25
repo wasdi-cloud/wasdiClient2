@@ -39,7 +39,7 @@ export class LabellingMenuComponent {
   ];
 
   // Track the single active image
-  m_sSelectedImageId: string | null = 'img1';
+  m_sSelectedImageId: string | null = null;
 
   constructor(
     private m_oConstantsService: ConstantsService,
@@ -60,8 +60,9 @@ export class LabellingMenuComponent {
   onSelectImage(oImage: any) {
     if (this.m_sSelectedImageId !== oImage.id) {
       this.m_sSelectedImageId = oImage.id;
-      console.log(`Switched active image to: ${oImage.name}`);
-      // TODO: Call this.m_oMapEngineService to swap the active map layer
+
+      console.log(`🖼️ Switched active image to: ${oImage.name}`);
+      this.m_oProjectState.setActiveImage(oImage.name);
     }
   }
 
@@ -82,7 +83,7 @@ export class LabellingMenuComponent {
   }
 
   isDisabled(sTitle: string): boolean {
-    return sTitle === 'labels' && !this.m_oProjectState.m_sActiveWorkspaceProjectId;
+    return sTitle === 'labels' && !this.m_oProjectState.m_sActiveProjectId;
   }
 
   // ── IMAGE ACTIONS ──
@@ -92,7 +93,7 @@ export class LabellingMenuComponent {
 
     // Assuming you know the Workspace ID for this project.
     // If you only have the Project ID, just pass that instead!
-    const sTargetWorkspaceId = "YOUR_PROJECTS_WORKSPACE_ID";
+    const sTargetWorkspaceId = "labelling_"+this.m_oProjectState.m_sActiveProjectId;
 
     console.log('Navigating to Search Page for Workspace:', sTargetWorkspaceId);
 

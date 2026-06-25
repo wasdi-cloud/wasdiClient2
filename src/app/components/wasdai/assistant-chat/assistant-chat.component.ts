@@ -29,6 +29,10 @@ export class AssistantChatComponent implements OnChanges, AfterViewInit {
   messages = signal<Message[]>([]);
   isLoading = signal(false);
   isDisabled = signal(true);
+  // Streaming buffers and timers for client-side throttling
+  private streamingBuffers: Record<string, string> = {};
+  private streamingTimers: Record<string, number> = {};
+  private streamingFinished: Record<string, boolean> = {};
 
   constructor(private assistantService: AssistantService) {
     this.initializeMockMessages();
@@ -85,21 +89,26 @@ export class AssistantChatComponent implements OnChanges, AfterViewInit {
       this.promptInput.nativeElement.value = '';
     }
 
+    // Create empty assistant message that will be updated with streaming content
+    const assistantMessageId = this.generateMessageId();
+    const assistantMessage: Message = {
+      id: assistantMessageId,
+      role: 'assistant',
+      content: '',
+      timestamp: new Date(),
+    };
+
+    this.messages.set([...this.messages(), assistantMessage]);
+    this.scrollToBottom();
+
     this.isLoading.set(true);
     this.assistantService.chat(this.chatId, trimmedPrompt).subscribe({
-      next: (response: unknown) => {
-        const assistantMessage: Message = {
-          id: this.generateMessageId(),
-          role: 'assistant',
-          content: this.extractAssistantContent(response),
-          attachments: this.extractAttachments(response),
-          timestamp: new Date(),
-        };
-
-        this.messages.set([...this.messages(), assistantMessage]);
-        this.scrollToBottom();
+      next: (chunk: string) => {
+        try { console.debug('[AssistantChat] received chunk', { len: chunk.length, preview: chunk.slice(0,100) }); } catch(e) {}
+        // Buffer the incoming chunk and reveal it gradually for typing effect
+        this.handleStreamChunk(assistantMessageId, chunk);
       },
-      error: () => {
+      error: (err) => {
         const errorMessage: Message = {
           id: this.generateMessageId(),
           role: 'assistant',
@@ -107,11 +116,14 @@ export class AssistantChatComponent implements OnChanges, AfterViewInit {
             'I could not process your request right now. Please try again in a few moments.',
           timestamp: new Date(),
         };
-
+        try { console.error('[AssistantChat] stream error', err); } catch(e) {}
         this.messages.set([...this.messages(), errorMessage]);
         this.scrollToBottom();
+        this.isLoading.set(false);
       },
       complete: () => {
+        try { console.debug('[AssistantChat] stream complete for', assistantMessageId); } catch(e) {}
+        this.finishStream(assistantMessageId);
         this.isLoading.set(false);
       },
     });
@@ -156,6 +168,55 @@ export class AssistantChatComponent implements OnChanges, AfterViewInit {
     }
 
     return 'No response content received from the assistant API.';
+  }
+
+  /**
+   * Buffer incoming stream chunks and reveal them gradually.
+   */
+private handleStreamChunk(messageId: string, chunk: string) {
+  this.messages.update(msgs => {
+    // create a brand NEW array reference so Angular detects the change
+    const newMsgs = [...msgs]; 
+    
+    // find and update the specific message
+    const idx = newMsgs.findIndex(m => m.id === messageId);
+    if (idx >= 0) {
+      newMsgs[idx] = { 
+        ...newMsgs[idx], 
+        content: newMsgs[idx].content + chunk 
+      };
+    }
+    
+    // return the new array to trigger the UI render immediately
+    return newMsgs;
+  });
+
+  this.scrollToBottom();
+}
+
+  /**
+   * Mark stream finished; flush remaining buffer and stop timer.
+   */
+  private finishStream(messageId: string) {
+    this.streamingFinished[messageId] = true;
+    const remaining = this.streamingBuffers[messageId] || '';
+    if (remaining) {
+      this.messages.update(msgs => {
+        const idx = msgs.findIndex(m => m.id === messageId);
+        if (idx >= 0) {
+          msgs[idx] = { ...msgs[idx], content: msgs[idx].content + remaining };
+        }
+        return msgs;
+      });
+      this.scrollToBottom();
+      delete this.streamingBuffers[messageId];
+    }
+
+    if (this.streamingTimers[messageId]) {
+      clearInterval(this.streamingTimers[messageId]);
+      delete this.streamingTimers[messageId];
+    }
+    delete this.streamingFinished[messageId];
   }
 
   private extractAttachments(response: unknown): string[] {

@@ -3,9 +3,13 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
-  ElementRef, AfterViewInit
+  ElementRef, AfterViewInit, HostListener
 } from '@angular/core';
 import { MapEngineService } from '../../../services/map-engine/map-engine.service';
+import {LabelsService} from "../../../services/api/labelling/labels.service";
+import {forkJoin, Observable, of} from "rxjs";
+import {catchError, tap} from "rxjs/operators";
+import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
 
 // ── Lightweight interfaces ────────────────────────────────────────────────────
 
@@ -62,7 +66,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   m_aoCollaborators: Collaborator[] = [];
 
   // ── Toolbar state ───────────────────────────────────────────────────────────
-  m_sEditMode: 'vertices' | 'move' = 'vertices';
+  m_sEditMode: 'draw' | 'vertices' | 'move' = 'move';
   m_sStyleBy: 'label' | 'annotator' = 'label';
   m_sFilterCollab: string = 'all';
   m_bShowValidatedOnly: boolean = false;
@@ -86,21 +90,26 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   m_oActiveIssueFeature: LabelFeature | null = null;
   m_sIssueInput: string = '';
 
-  // ── Current user (replace with your real auth service) ──────────────────────
+  // ── Current user (todo replace with your real auth service) ──────────────────────
   m_sCurrentUser: string = 'current@user.com';
+
+  m_sCurrentDatasetId: string = null;
+  m_sCurrentImageName: string = '';
 
   // ─────────────────────────────────────────────────────────────────────────────
 
-  constructor(private m_oMapEngineService: MapEngineService) {}
+  constructor(
+    private m_oMapEngineService: MapEngineService
+    ,private m_oLabelService: LabelsService
+    ,private m_oProjectState: LabellingProjectsStateService
+  ) {}
 
   // ═══════════════════════════════════════════════════════════════════════════
   // LIFECYCLE
   // ═══════════════════════════════════════════════════════════════════════════
 
   ngOnInit(): void {
-    // Init map after view renders
-    // setTimeout(() => this.initMap(), 100);
-
+      this.m_sCurrentDatasetId=this.m_oProjectState.m_sActiveProjectId
     // TODO: inject and call your real services here, e.g.:
     // this.loadTemplate();
     // this.loadCollaborators();
@@ -114,6 +123,19 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     this.m_oMapEngineService.clearMap();
   }
 
+
+  // ── KEYBOARD SHORTCUTS ──
+  @HostListener('document:keydown.control.z', ['$event'])
+  @HostListener('document:keydown.meta.z', ['$event'])
+  onCtrlZ(event: Event): void {   // <--- Change KeyboardEvent to Event
+                                  // Prevent the browser's default undo action
+    event.preventDefault();
+
+    if (this.m_aoPastFeatures.length > 0) {
+      this.onUndo();
+    }
+  }
+
   // ═══════════════════════════════════════════════════════════════════════════
   // MAP INIT
   // ═══════════════════════════════════════════════════════════════════════════
@@ -123,10 +145,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     const oMap = this.m_oMapEngineService.getMap();
 
     if (oMap) {
-      // ── Replace the old Bounding Box control with the new Draw Control ──
       this.m_oMapEngineService.initDrawControl(oMap);
 
-      // Listen for the new Draw Events
       this.m_oMapEngineService.getDrawEvents$().subscribe((oEvent: any) => {
         if (oEvent) {
           this.handleDrawUpdate(oEvent);
@@ -137,6 +157,24 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         if (typeof oMap.resize === 'function') {
           oMap.resize();
         }
+
+        // ── LISTEN FOR IMAGE SWITCHES FROM THE SIDEBAR ──
+        this.m_oProjectState.m_oActiveImage$.subscribe(sImageName => {
+          if (sImageName && sImageName !== this.m_sCurrentImageName) {
+
+            this.m_sCurrentImageName = sImageName;
+
+            // 1. Wipe the old labels off the map and table
+            this.m_aoFeatures = [];
+            this.m_aoPastFeatures = []; // Clear undo history
+            this.m_sSelectedFeatureId = null;
+            this.m_oMapEngineService.setDrawFeatures([]);
+
+            // 2. Fetch the new labels for the selected image
+            this.loadFeatures();
+          }
+        });
+
       }, 0);
     }
   }
@@ -147,42 +185,100 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // ═══════════════════════════════════════════════════════════════════════════
 
   private handleDrawUpdate(oEvent: any): void {
-    if (!oEvent || !oEvent.features) return;
+    if (!oEvent) return;
 
-    this.saveHistory();
+    const aoUpdatedFeatures = oEvent.features || [];
 
-    const aoUpdatedFeatures = oEvent.features;
+    // ── THE FIX: Only save history for actual shape modifications! ──
+    if (oEvent.type === 'create' || oEvent.type === 'update' || oEvent.type === 'delete') {
+      this.saveHistory();
+    }
 
     if (oEvent.type === 'create') {
-      // Handle new shapes
       const newFeatures = aoUpdatedFeatures.map((oRaw: any) => this.createNewFeature(oRaw));
       this.m_aoFeatures = [...this.m_aoFeatures, ...newFeatures];
     } else if (oEvent.type === 'update') {
-      // Handle shape edits (moving vertices)
       this.m_aoFeatures = this.m_aoFeatures.map(existingFeature => {
         const updatedRaw = aoUpdatedFeatures.find((f: any) => f.id === existingFeature.id);
         if (updatedRaw) {
           return {
             ...existingFeature,
             geometry: updatedRaw.geometry,
-            properties: {
-              ...existingFeature.properties,
-              measurement: this.calcMeasurement(updatedRaw.geometry)
-            }
+            properties: { ...existingFeature.properties, measurement: this.calcMeasurement(updatedRaw.geometry),isDirty: true }
           };
         }
         return existingFeature;
       });
     } else if (oEvent.type === 'delete') {
-      // Handle shape deletion from the map UI
       const deletedIds = aoUpdatedFeatures.map((f: any) => f.id);
-      this.m_aoFeatures = this.m_aoFeatures.filter(f => !deletedIds.includes(f.id));
+      deletedIds.forEach((sId: string) => this.onDelete(sId, true));
+      // this.m_aoFeatures = this.m_aoFeatures.filter(f => !deletedIds.includes(f.id));
+
+    } else if (oEvent.type === 'selection') {
+      this.m_sSelectedFeatureId = aoUpdatedFeatures.length > 0 ? aoUpdatedFeatures[0].id : null;
+
+      // ── THE FIX: FORCE SYNC MAPBOX TO YOUR TOOLBAR ──
+    } else if (oEvent.type === 'force_sync') {
+      // Whenever Mapbox tries to do its own thing on click, we force it back to the toolbar's choice
+      setTimeout(() => {
+        if (this.m_sEditMode === 'vertices') {
+          this.m_oMapEngineService.changeDrawMode('direct_select', oEvent.featureId);
+        } else if (this.m_sEditMode === 'move') {
+          this.m_oMapEngineService.changeDrawMode('simple_select', oEvent.featureId);
+        }
+      }, 0);
+
+      // ── ONLY SYNC BACK IF THE USER DOUBLE CLICKS ──
+    } else if (oEvent.type === 'modechange') {
+      if (oEvent.mode === 'direct_select') this.m_sEditMode = 'vertices';
+      else if (oEvent.mode === 'simple_select') this.m_sEditMode = 'move';
+      else if (oEvent.mode === 'draw_polygon') this.m_sEditMode = 'draw';
+
+      const oCanvas = this.m_oMapEngineService.getMap()?.getCanvas();
+      if (oCanvas) {
+        oCanvas.style.cursor = oEvent.mode === 'draw_polygon' ? 'crosshair' : 'pointer';
+      }
     }
   }
 
+  private patchFeatureProperty(sId: string, sKey: string, oValue: any): void {
+    this.m_aoFeatures = this.m_aoFeatures.map(f => {
+      if (f.id !== sId) return f;
+      return {
+        ...f,
+        properties: {
+          ...f.properties,
+          [sKey]: oValue,
+          isDirty: true // <-- FLAG: Attribute was edited
+        }
+      };
+    });
+  }
+
+  onEditModeChange(sMode: 'draw' | 'vertices' | 'move'): void {
+    this.m_sEditMode = sMode;
+
+    const oCanvas = this.m_oMapEngineService.getMap()?.getCanvas();
+    if (oCanvas) {
+      oCanvas.style.cursor = sMode === 'draw' ? 'crosshair' : 'pointer';
+    }
+
+    // Pass the currently selected feature ID (if any) so the mode changes correctly
+    if (sMode === 'draw') {
+      this.m_oMapEngineService.changeDrawMode('draw_polygon');
+    } else if (sMode === 'move') {
+      this.m_oMapEngineService.changeDrawMode('simple_select', this.m_sSelectedFeatureId || undefined);
+    } else if (sMode === 'vertices') {
+      this.m_oMapEngineService.changeDrawMode('direct_select', this.m_sSelectedFeatureId || undefined);
+    }
+  }
+
+
+
+
   // Helper to construct the full feature object
   private createNewFeature(oRaw: any): LabelFeature {
-    const sId = oRaw.id; // Mapbox Draw generates an ID automatically
+    const sId = oRaw.id;
     const sMeasurement = this.calcMeasurement(oRaw.geometry);
     const oDynamicProps: { [key: string]: any } = {};
     let sColor = '#3b82f6';
@@ -210,6 +306,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         reviewCount: 0,
         reviewers: [],
         reviewNotes: [],
+        isNew: true,    // <-- FLAG: This has never been saved
+        isDirty: true,  // <-- FLAG: Needs to be saved
         ...oDynamicProps
       }
     } as LabelFeature;
@@ -221,8 +319,16 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   /** Call this BEFORE mutating m_aoFeatures to snapshot the current state. */
   private saveHistory(): void {
-    const snapshot = this.m_aoFeatures.map(f => ({ ...f, properties: { ...f.properties } }));
+    // Deep copy the properties so editing an attribute doesn't mutate the past!
+    const snapshot = this.m_aoFeatures.map(f => ({
+      ...f,
+      geometry: { ...f.geometry },
+      properties: { ...f.properties }
+    }));
+
     this.m_aoPastFeatures = [...this.m_aoPastFeatures, snapshot];
+
+    // Keep a maximum of 30 undo steps to prevent memory bloat
     if (this.m_aoPastFeatures.length > 30) {
       this.m_aoPastFeatures.shift();
     }
@@ -230,10 +336,20 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   onUndo(): void {
     if (this.m_aoPastFeatures.length === 0) return;
-    const previous = this.m_aoPastFeatures[this.m_aoPastFeatures.length - 1];
-    this.m_aoPastFeatures = this.m_aoPastFeatures.slice(0, -1);
-    this.m_aoFeatures = previous;
-    this.syncMapFeatures();
+
+    // 1. Pop the last state off the stack
+    const previousState = this.m_aoPastFeatures.pop();
+    if (!previousState) return;
+
+    // 2. Restore the Angular state
+    this.m_aoFeatures = previousState;
+
+    // 3. FORCE MAPBOX TO REDRAW THE REVERTED STATE
+    if (this.m_oMapEngineService) {
+      this.m_oMapEngineService.setDrawFeatures(this.m_aoFeatures);
+    }
+
+    console.log(`↩️ Undo triggered! Reverted to ${this.m_aoFeatures.length} shapes.`);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -252,23 +368,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // SAVE / REFRESH / UPLOAD
   // ═══════════════════════════════════════════════════════════════════════════
 
-  onSaveLabels(): void {
-    if (this.m_bSaving) return;
-    this.m_bSaving = true;
 
-    // TODO: Replace with your real service call, e.g.:
-    // this.m_oLabelService.syncLabels(this.m_sImageId, this.buildPayload()).subscribe({
-    //   next: () => { /* show success */ },
-    //   error: () => { /* show error */ },
-    //   complete: () => { this.m_bSaving = false; }
-    // });
-
-    // Simulated delay for now:
-    setTimeout(() => {
-      console.log('💾 Save payload:', this.buildSavePayload());
-      this.m_bSaving = false;
-    }, 800);
-  }
 
   onRefresh(): void {
     if (this.m_bRefreshing) return;
@@ -376,13 +476,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     });
   }
 
-  onDelete(sId: string): void {
-    if (!confirm('Delete this label?')) return;
-    this.saveHistory();
-    this.m_aoFeatures = this.m_aoFeatures.filter(f => f.id !== sId);
-    this.syncMapFeatures();
-    // TODO: sync deletion to backend
-  }
+
 
   // ═══════════════════════════════════════════════════════════════════════════
   // ISSUES MODAL
@@ -506,12 +600,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // PRIVATE UTILITIES
   // ═══════════════════════════════════════════════════════════════════════════
 
-  private patchFeatureProperty(sId: string, sKey: string, oValue: any): void {
-    this.m_aoFeatures = this.m_aoFeatures.map(f => {
-      if (f.id !== sId) return f;
-      return { ...f, properties: { ...f.properties, [sKey]: oValue } };
-    });
-  }
+
 
   private updateFeatureNotes(sId: string, oNewNote: ReviewNote): void {
     this.m_aoFeatures = this.m_aoFeatures.map(f => {
@@ -549,5 +638,206 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     if (oGeometry.type?.includes('Polygon')) return '~area km²';
     if (oGeometry.type?.includes('LineString')) return '~length km';
     return '1 point';
+  }
+
+  // Mapper: Transforms Backend LabelViewModel to Mapbox Feature
+  private mapViewModelToFeature(vm: any): LabelFeature {
+    // 1. Parse the stringified geometry back into a JSON object
+    let parsedGeometry;
+    try {
+      parsedGeometry = JSON.parse(vm.geometry);
+    } catch (e) {
+      console.error(`Invalid geometry string for label ${vm.id}`, vm.geometry);
+      parsedGeometry = { type: 'Point', coordinates: [0, 0] }; // Fallback to prevent crash
+    }
+
+    // 2. Unpack the Key/Value array into a flat object for your table columns
+    const dynamicProps: { [key: string]: any } = {};
+    if (vm.attributes && Array.isArray(vm.attributes)) {
+      vm.attributes.forEach((attr: any) => {
+        dynamicProps[attr.key] = attr.value;
+      });
+    }
+
+    return {
+      id: vm.id,
+      type: 'Feature',
+      geometry: parsedGeometry,
+      properties: {
+        id: vm.id,
+        annotator: vm.annotator || 'Unknown',
+        status: vm.isValidated ? 'Validated' : 'Pending',
+        timestamp: new Date().toISOString(), // Fallback if backend doesn't provide
+        measurement: this.calcMeasurement(parsedGeometry),
+        portColor: '#3b82f6', // You could logic this out based on your dynamicProps!
+        isValidated: vm.isValidated || false,
+        reviewCount: vm.reviewCount || 0,
+        reviewers: vm.reviewers || [],
+        reviewNotes: vm.reviewNotes || [],
+        isNew: false,   // <-- FLAG: This came from the DB, so it's not new!
+        isDirty: false, // <-- FLAG: It hasn't been edited yet!
+        ...dynamicProps
+      }
+    } as LabelFeature;
+  }
+
+  private loadFeatures(): void {
+    this.m_bRefreshing = true;
+
+    this.m_oLabelService.getLabelsByImage(this.m_sCurrentDatasetId, this.m_sCurrentImageName).subscribe({
+      next: (aoViewModels) => {
+        // 1. Map backend data to Mapbox format
+        this.m_aoFeatures = aoViewModels.map(vm => this.mapViewModelToFeature(vm));
+
+        // 2. Snapshot history so 'Undo' works properly
+        this.saveHistory();
+
+        // 3. Inject the shapes into the Mapbox Engine!
+        if (this.m_oMapEngineService) {
+          this.m_oMapEngineService.setDrawFeatures(this.m_aoFeatures);
+        }
+
+        console.log(`✅ Loaded ${this.m_aoFeatures.length} labels from backend.`);
+      },
+      error: (err) => {
+        console.error("Failed to load features:", err);
+      },
+      complete: () => {
+        this.m_bRefreshing = false;
+      }
+    });
+  }
+
+  // Mapper: Transforms Mapbox Feature to your Backend LabelViewModel
+  private mapFeatureToViewModel(f: LabelFeature): any {
+    const geomType = f.geometry.type;
+
+    // Convert dynamic attributes to the Key/Value array your backend expects
+    const aoAttributes = this.m_aoTemplateAttributes.map(attr => ({
+      key: attr.name,
+      value: f.properties[attr.name] || ''
+    }));
+
+    return {
+      id: f.properties['isNew'] ? null : f.id, // Backend generates ID on POST
+      geometry: JSON.stringify(f.geometry),    // Pass geometry as string
+      isPoint: geomType === 'Point',
+      isLine: geomType === 'LineString',
+      isPolygon: geomType === 'Polygon',
+      isMultiPolygon: geomType === 'MultiPolygon',
+      annotator: f.properties['annotator'],
+      image: this.m_sCurrentImageName,
+      datasetId: this.m_sCurrentDatasetId,
+      reviewers: f.properties['reviewers'] || [],
+      reviewNotes: f.properties['reviewNotes'] || [],
+      attributes: aoAttributes,
+      reviewCount: f.properties['reviewCount'] || 0,
+      isValidated: f.properties['isValidated'] || false
+    };
+  }
+
+  // Upsert a single feature (Returns Observable)
+  private upsertFeature$(f: LabelFeature): Observable<any> {
+    const oPayload = this.mapFeatureToViewModel(f);
+    const isNew = f.properties['isNew'];
+
+    const oApiCall$ = isNew
+      ? this.m_oLabelService.createLabel(oPayload)
+      : this.m_oLabelService.updateLabel(oPayload);
+
+    return oApiCall$.pipe(
+      tap((response: any) => {
+        // If it was a POST, the backend returned the new real ID
+        const sRealId = isNew && typeof response === 'string' ? response : f.id;
+
+        // Update local state: mark as saved and swap ID if it was new
+        this.m_aoFeatures = this.m_aoFeatures.map(feature => {
+          if (feature.id === f.id) {
+            return {
+              ...feature,
+              id: sRealId,
+              properties: { ...feature.properties, id: sRealId, isNew: false, isDirty: false }
+            };
+          }
+          return feature;
+        });
+
+        // Tell mapbox draw about the new real ID
+        if (isNew && this.m_oMapEngineService) {
+          // Optional: You may need a method in adapter to swap Mapbox IDs,
+          // but keeping the local mapping is usually enough.
+        }
+      }),
+      catchError(error => {
+        console.error(`Failed to save label ${f.id}`, error);
+        return of(null); // Continue other saves even if this one fails
+      })
+    );
+  }
+
+  // 1. SAVE SINGLE ROW (Triggered by Table button)
+  onSaveSingleLabel(f: LabelFeature): void {
+    if (!f.properties['isDirty']) {
+      console.log('No changes to save for this label.');
+      return;
+    }
+
+    this.upsertFeature$(f).subscribe(() => {
+      console.log(`✅ Saved single label: ${f.id}`);
+    });
+  }
+
+  // 2. SAVE ALL DIRTY ROWS (Triggered by Toolbar button)
+  onSaveLabels(): void {
+    if (this.m_bSaving) return;
+
+    // Find all features that have unsaved changes
+    const aoDirtyFeatures = this.m_aoFeatures.filter(f => f.properties['isDirty']);
+
+    if (aoDirtyFeatures.length === 0) {
+      console.log('All labels are already up to date!');
+      return;
+    }
+
+    this.m_bSaving = true;
+
+    // Create an array of API calls
+    const aoSaveRequests$ = aoDirtyFeatures.map(f => this.upsertFeature$(f));
+
+    // Run them all in parallel!
+    forkJoin(aoSaveRequests$).subscribe({
+      next: (results) => {
+        console.log(`✅ Bulk saved ${results.length} labels successfully!`);
+      },
+      complete: () => {
+        this.m_bSaving = false;
+      }
+    });
+  }
+
+  // 3. DELETE (Triggered by Table or Map UI)
+  onDelete(sId: string, bFromMapEvent: boolean = false): void {
+    const oFeature = this.m_aoFeatures.find(f => f.id === sId);
+    if (!oFeature) return;
+
+    if (!bFromMapEvent && !confirm('Delete this label?')) return;
+
+    this.saveHistory();
+
+    // 1. Remove from local table
+    this.m_aoFeatures = this.m_aoFeatures.filter(f => f.id !== sId);
+
+    // 2. Tell Mapbox Draw to erase it (if it wasn't already deleted from the map UI)
+    if (!bFromMapEvent) {
+      this.m_oMapEngineService.deleteDrawFeature(sId);
+    }
+
+    // 3. Delete from Backend (ONLY if it was previously saved to the DB)
+    if (!oFeature.properties['isNew']) {
+      this.m_oLabelService.deleteLabel(sId).subscribe({
+        next: () => console.log(`🗑️ Deleted label ${sId} from backend.`),
+        error: (err) => console.error(`Failed to delete label ${sId}`, err)
+      });
+    }
   }
 }

@@ -22,7 +22,7 @@ export class LabellingToolbarComponent {
   @Output() m_oFileUpload = new EventEmitter<Event>();
 
   // ── Two-Way Bound Settings (Input + Output Change Event) ──
-  @Input() m_sEditMode: 'vertices' | 'move' = 'vertices';
+  @Input() m_sEditMode: 'draw' | 'vertices' | 'move' = 'move';
   @Output() m_sEditModeChange = new EventEmitter<'vertices' | 'move'>();
 
   @Input() m_sStyleBy: 'label' | 'annotator' = 'label';

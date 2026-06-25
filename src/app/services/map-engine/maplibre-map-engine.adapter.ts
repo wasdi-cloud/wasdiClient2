@@ -55,6 +55,7 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     private readonly m_oNgZone: NgZone
   ) {}
 
+
   private readonly m_oDefaultStyle: any = {
     version: 8,
     sources: {
@@ -86,32 +87,84 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
   }
 
   initDrawControl(map: any): void {
-    if (!this.isMapLibreMap(map)) {
-      return;
-    }
+    if (!this.isMapLibreMap(map)) return;
 
-    // Initialize the drawing tool
     this.m_oDrawControl = new MapboxDraw({
       displayControlsDefault: false,
-      controls: {
-        polygon: true,
-        line_string: true,
-        point: true,
-        trash: true
-      },
-      // You can customize styles here if needed
+      styles: [
+        { id: 'gl-draw-polygon-fill-active', type: 'fill', filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']], paint: { 'fill-color': '#3b82f6', 'fill-opacity': 0.2 } },
+        { id: 'gl-draw-polygon-fill-inactive', type: 'fill', filter: ['all', ['==', 'active', 'false'], ['==', '$type', 'Polygon']], paint: { 'fill-color': '#3b82f6', 'fill-opacity': 0.1 } },
+        { id: 'gl-draw-polygon-stroke-active', type: 'line', filter: ['all', ['==', 'active', 'true'], ['!=', '$type', 'Point']], paint: { 'line-color': '#3b82f6', 'line-width': 2 } },
+        { id: 'gl-draw-polygon-stroke-inactive', type: 'line', filter: ['all', ['==', 'active', 'false'], ['!=', '$type', 'Point']], paint: { 'line-color': '#3b82f6', 'line-width': 2 } },
+        { id: 'gl-draw-polygon-and-line-vertex-active', type: 'circle', filter: ['all', ['==', 'meta', 'vertex'], ['==', '$type', 'Point']], paint: { 'circle-radius': 6, 'circle-color': '#ffffff', 'circle-stroke-width': 2, 'circle-stroke-color': '#3b82f6' } },
+        { id: 'gl-draw-polygon-and-line-midpoint-active', type: 'circle', filter: ['all', ['==', 'meta', 'midpoint'], ['==', '$type', 'Point']], paint: { 'circle-radius': 4, 'circle-color': '#3b82f6', 'circle-stroke-width': 1, 'circle-stroke-color': '#ffffff' } },
+        { id: 'gl-draw-point-active', type: 'circle', filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Point'], ['!=', 'meta', 'midpoint'], ['!=', 'meta', 'vertex']], paint: { 'circle-radius': 6, 'circle-color': '#3b82f6', 'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff' } },
+        { id: 'gl-draw-point-inactive', type: 'circle', filter: ['all', ['==', 'active', 'false'], ['==', '$type', 'Point'], ['!=', 'meta', 'midpoint'], ['!=', 'meta', 'vertex']], paint: { 'circle-radius': 5, 'circle-color': '#3b82f6', 'circle-stroke-width': 1, 'circle-stroke-color': '#ffffff' } }
+      ]
     });
 
     map.addControl(this.m_oDrawControl, 'top-left');
 
-    // Listen for Draw Events and emit them to the component
     map.on('draw.create', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'create', features: e.features }));
     map.on('draw.update', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'update', features: e.features }));
     map.on('draw.delete', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'delete', features: e.features }));
+
+    // ── THE FIX: STRICT MODE ENFORCEMENT ON SELECTION ──
+    map.on('draw.selectionchange', (e: any) => {
+      // 1. Emit the selection to the Angular component so the table highlights
+      this.m_oDrawEventsSubscription.next({ type: 'selection', features: e.features });
+
+      // 2. If the user clicks a shape, Mapbox automatically switches to 'simple_select' (Move).
+      // We must immediately intercept this and force it into the mode the toolbar currently dictates.
+      if (e.features.length > 0) {
+        // We emit a special 'force_sync' event so the component can tell us what mode to enforce
+        this.m_oDrawEventsSubscription.next({ type: 'force_sync', featureId: e.features[0].id });
+      }
+    });
+
+    map.on('draw.modechange', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'modechange', mode: e.mode }));
   }
+
+  changeDrawMode(mode: string, featureId?: string): void {
+    if (!this.m_oDrawControl) return;
+
+    try {
+      if (mode === 'direct_select') {
+        // VERTICES MODE: Must have a specific feature ID to edit vertices!
+        const targetId = featureId || this.m_oDrawControl.getSelectedIds()[0];
+        if (targetId) {
+          this.m_oDrawControl.changeMode('direct_select', { featureId: targetId });
+        } else {
+          // If no shape is clicked yet, default to simple_select until they click one
+          this.m_oDrawControl.changeMode('simple_select');
+        }
+      } else if (mode === 'simple_select') {
+        // MOVE MODE: Keep the current selection active so it doesn't disappear
+        const targetIds = featureId ? [featureId] : this.m_oDrawControl.getSelectedIds();
+        this.m_oDrawControl.changeMode('simple_select', { featureIds: targetIds });
+      } else {
+        // DRAW MODE
+        this.m_oDrawControl.changeMode(mode);
+      }
+    } catch (e) {
+      console.warn("Mapbox Draw Mode Error:", e);
+    }
+  }
+
+
 
   getDrawEvents$(): Observable<any> {
     return this.m_oDrawEventsSubscription.asObservable();
+  }
+
+
+
+
+
+  deleteDrawFeature(featureId: string): void {
+    if (this.m_oDrawControl) {
+      this.m_oDrawControl.delete(featureId);
+    }
   }
 
   // Helper to load existing features into the draw control

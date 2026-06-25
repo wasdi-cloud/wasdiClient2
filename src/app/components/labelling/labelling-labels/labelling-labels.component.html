@@ -13,6 +13,7 @@
       [m_bRefreshing]="m_bRefreshing"
       [m_bSaving]="m_bSaving"
       [m_aoCollaborators]="m_aoCollaborators"
+      (m_sEditModeChange)="onEditModeChange($event)"
       [(m_sEditMode)]="m_sEditMode"
       [(m_sStyleBy)]="m_sStyleBy"
       [(m_sFilterCollab)]="m_sFilterCollab"
@@ -127,7 +128,9 @@
                     </button>
 
                     <button class="action-btn" title="Save"
-                            (click)="$event.stopPropagation(); onSaveLabels()">💾</button>
+                            [class.text-primary]="feature.properties['isDirty']"
+                            [disabled]="!feature.properties['isDirty']"
+                            (click)="$event.stopPropagation(); onSaveSingleLabel(feature)">💾</button>
 
                     <button class="action-btn action-btn--danger" title="Delete"
                             (click)="$event.stopPropagation(); onDelete(feature.id)">❌</button>

@@ -3,15 +3,15 @@
 
     <ul class="navbar-nav d-flex flex-row align-items-center gap-2">
       <li class="nav-item d-flex align-items-center">
-  <span class="badge bg-light text-dark border me-1 d-flex align-items-center gap-1 px-2 py-1" [matTooltip]="'Total Labels'">
-    <span class="material-symbols-outlined" style="font-size: 14px;">label</span>
-    {{ m_iTotalFeatures }}
-  </span>
+        <span class="badge bg-light text-dark border me-1 d-flex align-items-center gap-1 px-2 py-1" [matTooltip]="'Total Labels'">
+          <span class="material-symbols-outlined" style="font-size: 14px;">label</span>
+          {{ m_iTotalFeatures }}
+        </span>
 
         <span class="badge bg-success-subtle text-success border border-success d-flex align-items-center gap-1 px-2 py-1" [matTooltip]="'Validated Labels'">
-    <span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
+          <span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
           {{ m_iValidatedCount }}
-  </span>
+        </span>
       </li>
 
       <div class="toolbar-divider mx-2"></div>
@@ -46,6 +46,17 @@
         </app-button>
         <input #fileInput type="file" accept=".geojson,.json,.zip" style="display:none" (change)="onFileSelected($event)">
       </li>
+
+      <!-- ── NEW: EXPORT PROJECT BUTTON ── -->
+      <li class="nav-item">
+        <app-button [m_sIconLeft]="'download'"
+                    [m_bMuted]="true"
+                    [m_sSize]="'small'"
+                    [m_bRounded]="true"
+                    [matTooltip]="'Export Project'">
+        </app-button>
+      </li>
+
       <li class="nav-item ms-2">
         <app-button [m_sIconLeft]="'save'"
                     [m_bDisabled]="m_bSaving"
@@ -62,6 +73,14 @@
       <li class="nav-item d-flex align-items-center gap-2" style="font-size: 13px;">
         <span class="font-bold text-muted">Mode:</span>
         <div class="btn-group shadow-sm" role="group">
+
+          <input type="radio" class="btn-check" name="editMode" id="mode0" value="draw"
+                 [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
+          <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
+                 for="mode0"
+                 [matTooltip]="'Draw Polygon'">
+            <span class="material-symbols-outlined" style="font-size: 18px;">draw</span>
+          </label>
 
           <input type="radio" class="btn-check" name="editMode" id="mode1" value="vertices"
                  [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
@@ -98,6 +117,16 @@
             <option [value]="c.id">{{ c.name }}</option>
           }
         </select>
+      </li>
+
+      <!-- ── NEW: ADD COLLABORATORS BUTTON ── -->
+      <li class="nav-item">
+        <app-button [m_sIconLeft]="'person_add'"
+                    [m_bMuted]="true"
+                    [m_sSize]="'small'"
+                    [m_bRounded]="true"
+                    [matTooltip]="'Add Collaborators'">
+        </app-button>
       </li>
 
       <li class="nav-item form-check form-switch mb-0 d-flex align-items-center gap-2">
