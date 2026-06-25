@@ -1,125 +1,110 @@
-<div class="d-flex justify-content-center" style="background: #f4f6f8; min-height: 100vh; padding: 40px;">
+<div class="d-flex flex-fill flex-column gap-5 w-100 h-100">
 
-  @if (!m_sProjectId) {
-    <div class="text-center" style="padding: 40px;">
-      <h3 class="mb-4">Error: No project selected.</h3>
-      <app-button [m_sLabel]="'Go to Home'" (click)="m_oTabChange.emit('projects')"></app-button>
+  <div class="header font-bold d-flex flex-row justify-content-between align-items-center w-100">
+    <div class="d-flex align-items-center">
+      Export Data
+      <span class="text-muted fw-normal ms-2" style="font-size: 16px;">| {{ m_sProjectTitle }}</span>
     </div>
-  }
 
-  @if (m_sProjectId) {
-    <div class="d-flex flex-column gap-3" style="width: 100%; max-width: 600px;">
+    <div class="d-flex flex-row gap-2">
+      <app-button [m_sLabel]="'Cancel'"
+                  [m_bMuted]="true"
+                  [m_bDisabled]="m_bIsGenerating"
+                  (click)="goBackToProject()">
+      </app-button>
 
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <div>
-          <h2 style="margin: 0; color: #333;">📦 Export Data</h2>
-          <p style="margin: 5px 0 0 0; color: #666;">
-            Project: <strong>{{ m_sProjectTitle }}</strong>
-          </p>
+      <app-button [m_sLabel]="'Download Export'"
+                  [m_sIconLeft]="'download'"
+                  [m_bDisabled]="m_bIsGenerating || !m_sProjectId"
+                  (click)="handleDownload()">
+      </app-button>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column flex-fill align-items-center w-100">
+    <div class="d-flex flex-column gap-4 w-100" style="max-width: 700px;">
+
+      @if (!m_sProjectId) {
+        <div class="p-5 text-center text-danger font-bold bg-white border w-100" style="border-radius: 8px;">
+          Error: No project selected. Please return to the workspace.
         </div>
-        <app-button [m_sLabel]="'Cancel'"
-                    [m_bMuted]="true"
-                    [m_bDisabled]="m_bIsGenerating"
-                    (click)="goBackToProject()">
-        </app-button>
-      </div>
+      }
 
-      @if (m_bIsGenerating) {
-        <div class="card shadow-sm border-0" style="padding: 50px 20px; text-align: center; border-radius: 8px;">
-          <div style="font-size: 40px; margin-bottom: 15px;">⏳</div>
-          <h3 style="color: #0050b3; margin: 0 0 10px 0;">Packaging Your Data...</h3>
+      @if (m_sProjectId && m_bIsGenerating) {
+        <div class="p-5 text-center bg-white border d-flex flex-column align-items-center justify-content-center w-100" style="border-radius: 8px;">
+          <span class="material-symbols-outlined text-primary mb-3 icon-spin" style="font-size: 48px;">sync</span>
+          <h4 class="font-bold text-primary mb-3">Packaging Your Data...</h4>
 
-          <div class="mx-auto text-start" style="background: #e6f7ff; border: 1px solid #91d5ff; border-radius: 6px; padding: 15px; width: 100%; max-width: 400px;">
-            <p style="color: #0050b3; font-size: 14px; margin: 0; font-weight: bold;">
-              Please do not close or leave this page.
-            </p>
-            <p style="color: #666; font-size: 13px; margin: 8px 0 0 0; line-height: 1.5;">
+          <div class="bg-light border p-3 text-start text-muted" style="border-radius: 6px; max-width: 450px;">
+            <div class="font-bold text-dark mb-1">Please do not close or leave this page.</div>
+            <div style="font-size: 13px;">
               We are compiling your Shapefiles {{ m_bIncludeRawData ? 'and Raw Imagery ' : '' }}into a secure ZIP archive. This may take a few moments depending on the project size.
-            </p>
+            </div>
           </div>
         </div>
       }
 
-      @if (!m_bIsGenerating) {
+      @if (m_sProjectId && !m_bIsGenerating) {
 
-        <div class="card shadow-sm border-0 mb-2" style="padding: 20px; border-radius: 8px;">
-          <h5 style="margin: 0 0 15px 0; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">1. Configuration</h5>
+        <div class="bg-white border p-4 w-100" style="border-radius: 8px;">
+          <div class="font-bold border-bottom pb-2 mb-4" style="font-size: 16px;">1. Configuration</div>
 
-          <div style="padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid #eee;">
-            <label style="font-size: 13px; font-weight: bold; color: #555;">Raw Imagery</label>
-
+          <div class="mb-4">
+            <div class="font-bold text-muted mb-2" style="font-size: 12px; letter-spacing: 0.5px;">RAW IMAGERY</div>
             @if (m_bRawDataHosted) {
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="checkbox" id="rawCheck"
-                       [(ngModel)]="m_bIncludeRawData">
-                <label class="form-check-label text-dark" for="rawCheck" style="font-size: 14px;">
-                  Include Raw Satellite Images (GeoTIFF)
-                </label>
-                <div style="font-size: 11px; color: #888; margin-top: 5px;">
-                  Warning: This allows downloading large files. Make sure you have a stable connection.
-                </div>
+              <div class="form-check d-flex align-items-center gap-2">
+                <input class="form-check-input mt-0" type="checkbox" id="rawCheck" [(ngModel)]="m_bIncludeRawData">
+                <label class="form-check-label" for="rawCheck" style="font-size: 14px;">Include Raw Satellite Images (GeoTIFF)</label>
+              </div>
+              <div class="text-muted mt-1" style="font-size: 12px; margin-left: 28px;">
+                Warning: This allows downloading large files. Make sure you have a stable internet connection.
               </div>
             } @else {
-              <div style="color: #999; font-size: 13px; margin-top: 5px;">
-                <em>Raw data is not hosted on this platform. Only labels are available.</em>
+              <div class="text-muted fst-italic" style="font-size: 13px;">
+                Raw data is not hosted on this platform. Only labels are available.
               </div>
             }
           </div>
 
           <div>
-            <label style="font-size: 13px; font-weight: bold; color: #555;">Label Validation</label>
-
+            <div class="font-bold text-muted mb-2" style="font-size: 12px; letter-spacing: 0.5px;">LABEL VALIDATION</div>
             @if (m_bReviewMode) {
-              <div class="d-flex flex-column gap-2 mt-2">
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="labelFilter" id="filter1" value="validated"
-                         [(ngModel)]="m_sLabelFilter">
-                  <label class="form-check-label text-dark" for="filter1" style="font-size: 14px;">
-                    Export only Validated Labels (Recommended)
-                  </label>
+              <div class="d-flex flex-column gap-2">
+                <div class="form-check d-flex align-items-center gap-2">
+                  <input class="form-check-input mt-0" type="radio" name="labelFilter" id="filterValidated" value="validated" [(ngModel)]="m_sLabelFilter">
+                  <label class="form-check-label" for="filterValidated" style="font-size: 14px;">Export only Validated Labels (Recommended)</label>
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="labelFilter" id="filter2" value="all"
-                         [(ngModel)]="m_sLabelFilter">
-                  <label class="form-check-label text-dark" for="filter2" style="font-size: 14px;">
-                    Export All Labels (Including Unreviewed)
-                  </label>
+                <div class="form-check d-flex align-items-center gap-2">
+                  <input class="form-check-input mt-0" type="radio" name="labelFilter" id="filterAll" value="all" [(ngModel)]="m_sLabelFilter">
+                  <label class="form-check-label" for="filterAll" style="font-size: 14px;">Export All Labels (Including Unreviewed)</label>
                 </div>
               </div>
             } @else {
-              <div style="margin-top: 5px; font-size: 13px; color: #666;">
+              <div class="text-muted" style="font-size: 13px;">
                 This project does not require review. All accessible labels will be exported.
               </div>
             }
           </div>
         </div>
 
-        <div class="card shadow-sm border-0 mb-3" style="background: #f9f9f9; border: 1px solid #e0e0e0; padding: 20px; border-radius: 8px;">
-          <h5 style="margin: 0 0 15px 0; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">2. Export Summary</h5>
-
-          <div style="font-size: 13px; color: #555; line-height: 1.6;">
-            <p style="margin: 0;">The system will generate <strong>Shapefiles (.shp)</strong> containing:</p>
-            <ul style="margin-top: 5px; padding-left: 20px;">
-              <li>Geometry Data (Polygons/Lines/Points)</li>
-              <li>Feature Attributes (Class, Area, etc.)</li>
+        <div class="bg-light border p-4 w-100" style="border-radius: 8px;">
+          <div class="font-bold border-bottom pb-2 mb-3" style="font-size: 16px;">2. Export Summary</div>
+          <div class="text-muted" style="font-size: 13px;">
+            <div class="mb-2">The system will generate <strong>Shapefiles (.shp)</strong> containing:</div>
+            <ul class="mb-0" style="padding-left: 20px; line-height: 1.8;">
+              <li>Geometry Data (Polygons, Lines, Points)</li>
+              <li>Feature Attributes (Class, Measurement, etc.)</li>
               <li>Metadata: Annotator Name, Timestamp</li>
-              <li>Source Info: Satellite Image Name, Date (Y/M/D)</li>
+              <li>Source Info: Satellite Image Name, Date</li>
               @if (m_bReviewMode) {
-                <li style="color: #007bff;">Review Status: Validated Flag, Reviewer Name, Timestamp</li>
+                <li class="text-primary font-bold">Review Status: Validated Flag, Reviewer Name</li>
               }
             </ul>
           </div>
         </div>
 
-        <button class="btn btn-success w-100 d-flex justify-content-center align-items-center gap-2"
-                style="padding: 15px; font-size: 16px; border-radius: 8px;"
-                [disabled]="m_bIsGenerating"
-                (click)="handleDownload()">
-          <span class="material-symbols-outlined">download</span> Download Export Package
-        </button>
-
       }
-
     </div>
-  }
+  </div>
+
 </div>
