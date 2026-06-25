@@ -347,8 +347,7 @@ import {LabellingToolbarComponent} from "./components/labelling/labelling-toolba
         LoginCoplacComponent,
         LoginRedirectComponent,
         PrintDialogComponent,
-        PreviewDialogComponent,
-        InvaderComponent
+        PreviewDialogComponent
     ],
     bootstrap: [AppComponent], imports: [AppRoutingModule,
     BrowserModule,
@@ -386,7 +385,8 @@ import {LabellingToolbarComponent} from "./components/labelling/labelling-toolba
     CdkMenuItem,
     CdkMenuTrigger,
     DragDropModule,
-    MenuButtonComponent], providers: [
+    MenuButtonComponent,
+    InvaderComponent], providers: [
         AuthService,
         ConstantsService,
         {
