@@ -1,0 +1,125 @@
+<div class="d-flex justify-content-center" style="background: #f4f6f8; min-height: 100vh; padding: 40px;">
+
+  @if (!m_sProjectId) {
+    <div class="text-center" style="padding: 40px;">
+      <h3 class="mb-4">Error: No project selected.</h3>
+      <app-button [m_sLabel]="'Go to Home'" (click)="m_oTabChange.emit('projects')"></app-button>
+    </div>
+  }
+
+  @if (m_sProjectId) {
+    <div class="d-flex flex-column gap-3" style="width: 100%; max-width: 600px;">
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          <h2 style="margin: 0; color: #333;">📦 Export Data</h2>
+          <p style="margin: 5px 0 0 0; color: #666;">
+            Project: <strong>{{ m_sProjectTitle }}</strong>
+          </p>
+        </div>
+        <app-button [m_sLabel]="'Cancel'"
+                    [m_bMuted]="true"
+                    [m_bDisabled]="m_bIsGenerating"
+                    (click)="goBackToProject()">
+        </app-button>
+      </div>
+
+      @if (m_bIsGenerating) {
+        <div class="card shadow-sm border-0" style="padding: 50px 20px; text-align: center; border-radius: 8px;">
+          <div style="font-size: 40px; margin-bottom: 15px;">⏳</div>
+          <h3 style="color: #0050b3; margin: 0 0 10px 0;">Packaging Your Data...</h3>
+
+          <div class="mx-auto text-start" style="background: #e6f7ff; border: 1px solid #91d5ff; border-radius: 6px; padding: 15px; width: 100%; max-width: 400px;">
+            <p style="color: #0050b3; font-size: 14px; margin: 0; font-weight: bold;">
+              Please do not close or leave this page.
+            </p>
+            <p style="color: #666; font-size: 13px; margin: 8px 0 0 0; line-height: 1.5;">
+              We are compiling your Shapefiles {{ m_bIncludeRawData ? 'and Raw Imagery ' : '' }}into a secure ZIP archive. This may take a few moments depending on the project size.
+            </p>
+          </div>
+        </div>
+      }
+
+      @if (!m_bIsGenerating) {
+
+        <div class="card shadow-sm border-0 mb-2" style="padding: 20px; border-radius: 8px;">
+          <h5 style="margin: 0 0 15px 0; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">1. Configuration</h5>
+
+          <div style="padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid #eee;">
+            <label style="font-size: 13px; font-weight: bold; color: #555;">Raw Imagery</label>
+
+            @if (m_bRawDataHosted) {
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" id="rawCheck"
+                       [(ngModel)]="m_bIncludeRawData">
+                <label class="form-check-label text-dark" for="rawCheck" style="font-size: 14px;">
+                  Include Raw Satellite Images (GeoTIFF)
+                </label>
+                <div style="font-size: 11px; color: #888; margin-top: 5px;">
+                  Warning: This allows downloading large files. Make sure you have a stable connection.
+                </div>
+              </div>
+            } @else {
+              <div style="color: #999; font-size: 13px; margin-top: 5px;">
+                <em>Raw data is not hosted on this platform. Only labels are available.</em>
+              </div>
+            }
+          </div>
+
+          <div>
+            <label style="font-size: 13px; font-weight: bold; color: #555;">Label Validation</label>
+
+            @if (m_bReviewMode) {
+              <div class="d-flex flex-column gap-2 mt-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="labelFilter" id="filter1" value="validated"
+                         [(ngModel)]="m_sLabelFilter">
+                  <label class="form-check-label text-dark" for="filter1" style="font-size: 14px;">
+                    Export only Validated Labels (Recommended)
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="labelFilter" id="filter2" value="all"
+                         [(ngModel)]="m_sLabelFilter">
+                  <label class="form-check-label text-dark" for="filter2" style="font-size: 14px;">
+                    Export All Labels (Including Unreviewed)
+                  </label>
+                </div>
+              </div>
+            } @else {
+              <div style="margin-top: 5px; font-size: 13px; color: #666;">
+                This project does not require review. All accessible labels will be exported.
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-3" style="background: #f9f9f9; border: 1px solid #e0e0e0; padding: 20px; border-radius: 8px;">
+          <h5 style="margin: 0 0 15px 0; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">2. Export Summary</h5>
+
+          <div style="font-size: 13px; color: #555; line-height: 1.6;">
+            <p style="margin: 0;">The system will generate <strong>Shapefiles (.shp)</strong> containing:</p>
+            <ul style="margin-top: 5px; padding-left: 20px;">
+              <li>Geometry Data (Polygons/Lines/Points)</li>
+              <li>Feature Attributes (Class, Area, etc.)</li>
+              <li>Metadata: Annotator Name, Timestamp</li>
+              <li>Source Info: Satellite Image Name, Date (Y/M/D)</li>
+              @if (m_bReviewMode) {
+                <li style="color: #007bff;">Review Status: Validated Flag, Reviewer Name, Timestamp</li>
+              }
+            </ul>
+          </div>
+        </div>
+
+        <button class="btn btn-success w-100 d-flex justify-content-center align-items-center gap-2"
+                style="padding: 15px; font-size: 16px; border-radius: 8px;"
+                [disabled]="m_bIsGenerating"
+                (click)="handleDownload()">
+          <span class="material-symbols-outlined">download</span> Download Export Package
+        </button>
+
+      }
+
+    </div>
+  }
+</div>

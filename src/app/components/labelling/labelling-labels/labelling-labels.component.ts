@@ -3,7 +3,7 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
-  ElementRef, AfterViewInit, HostListener
+  ElementRef, AfterViewInit, HostListener, EventEmitter, Output
 } from '@angular/core';
 import { MapEngineService } from '../../../services/map-engine/map-engine.service';
 import {LabelsService} from "../../../services/api/labelling/labels.service";
@@ -12,6 +12,7 @@ import {catchError, tap} from "rxjs/operators";
 import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
 import {MatDialog} from "@angular/material/dialog";
 import {LabellingImportDialogComponent} from "../labelling-toolbar/import-dialog/labelling-import-dialog.component";
+import {Router} from "@angular/router";
 
 // ── Lightweight interfaces ────────────────────────────────────────────────────
 
@@ -53,6 +54,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   // ── File input ref ──────────────────────────────────────────────────────────
   @ViewChild('m_oFileInput') m_oFileInputRef!: ElementRef<HTMLInputElement>;
+
+  @Output() m_oTabChange = new EventEmitter<string>();
 
   // ── Map ─────────────────────────────────────────────────────────────────────
   private m_oMap: any = null;
@@ -104,7 +107,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     private m_oMapEngineService: MapEngineService
     ,private m_oLabelService: LabelsService
     ,private m_oProjectState: LabellingProjectsStateService,
-    private m_oDialog: MatDialog
+    private m_oDialog: MatDialog,
   ) {}
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -912,6 +915,11 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     this.upsertFeature$(f).subscribe(() => {
       console.log(`✅ Saved single label: ${f.id}`);
     });
+  }
+
+  onOpenExportPage(): void {
+    // Pass the state variables just like React's navigate()
+    this.m_oTabChange.emit('export');
   }
 
   // 2. SAVE ALL DIRTY ROWS (Triggered by Toolbar button)

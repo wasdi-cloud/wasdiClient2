@@ -31,6 +31,8 @@ export class LabellingToolbarComponent {
   @Input() m_sStyleBy: 'label' | 'annotator' = 'label';
   @Output() m_sStyleByChange = new EventEmitter<'label' | 'annotator'>();
 
+  @Output() m_oExport = new EventEmitter<void>();
+
   @Input() m_sFilterCollab: string = 'all';
   @Output() m_sFilterCollabChange = new EventEmitter<string>();
 
