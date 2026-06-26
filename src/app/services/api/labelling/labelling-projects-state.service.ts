@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 
 export type LabellingProjectMode = 'create' | 'view' | 'edit';
 @Injectable({
@@ -17,6 +17,10 @@ export class LabellingProjectsStateService {
   // ── Track the currently selected image ──
   private m_oActiveImageSubject = new BehaviorSubject<string | null>(null);
   public m_oActiveImage$ = this.m_oActiveImageSubject.asObservable();
+
+  // Emits whenever a labelling project workspace is opened/closed.
+  private m_oProjectWorkspaceChangedSubject = new Subject<void>();
+  public m_oProjectWorkspaceChanged$ = this.m_oProjectWorkspaceChangedSubject.asObservable();
 
   get projectId(): string | null {
     return this.m_sLabellingProjectId;
@@ -48,6 +52,10 @@ export class LabellingProjectsStateService {
 
   setActiveImage(sImageName: string): void {
     this.m_oActiveImageSubject.next(sImageName);
+  }
+
+  notifyProjectWorkspaceChanged(): void {
+    this.m_oProjectWorkspaceChangedSubject.next();
   }
 }
 

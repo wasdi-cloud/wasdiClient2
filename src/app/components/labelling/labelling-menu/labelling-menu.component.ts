@@ -1,7 +1,9 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ConstantsService} from "../../../services/constants.service";
 import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
 import {Router} from "@angular/router";
+import { ProductService } from 'src/app/services/api/product.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-labelling-menu',
@@ -9,7 +11,7 @@ import {Router} from "@angular/router";
   styleUrl: './labelling-menu.component.css',
   standalone: false,
 })
-export class LabellingMenuComponent {
+export class LabellingMenuComponent implements OnInit {
   @Output() m_sSelectedTab: EventEmitter<string> = new EventEmitter<string>();
 
   @Input() m_sActiveTab: string = 'projects';
@@ -33,19 +35,65 @@ export class LabellingMenuComponent {
   ];
 
   // ── MOCK DATA FOR IMAGES (Replace with your actual API call later) ──
-  m_aoProjectImages = [
-    {id: 'img1', name: 'rome_sentinel_2.tif', opacity: 100},
-    {id: 'img2', name: 'rome_classification.tif', opacity: 100}
-  ];
+  m_aoProjectImages = [ ];
 
   // Track the single active image
   m_sSelectedImageId: string | null = null;
 
+  private m_oDestroy$ = new Subject<void>();
+
   constructor(
     private m_oConstantsService: ConstantsService,
     public m_oProjectState: LabellingProjectsStateService,
+    public m_oProductService: ProductService,
     private m_oRouter:Router
   ) {
+  }
+
+  ngOnInit() {
+    //this.loadProjectImages();
+
+    this.m_oProjectState.m_oProjectWorkspaceChanged$
+      .pipe(takeUntil(this.m_oDestroy$))
+      .subscribe(() => {
+        this.onProjectWorkspaceChanged();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.m_oDestroy$.next();
+    this.m_oDestroy$.complete();
+  }
+
+  onProjectWorkspaceChanged(): void {
+    this.loadProjectImages();
+  }
+
+  private loadProjectImages(): void {
+    const sTargetWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
+
+    this.m_aoProjectImages = [];
+    this.m_sSelectedImageId = null;
+
+    if (!sTargetWorkspaceId) {
+      return;
+    }
+
+    this.m_oProductService.getProductListByWorkspace(sTargetWorkspaceId).subscribe({
+      next: oResponse => {
+
+        for (let i = 0; i < oResponse.length; i++) {
+          let oProjectImage = {}
+          oProjectImage['id'] = oResponse[i].name;
+          oProjectImage['name'] = oResponse[i].name;
+          oProjectImage['opacity'] = 100;
+          this.m_aoProjectImages.push(oProjectImage);
+        }
+      },
+      error: oError => {
+
+      }
+    });
   }
 
   setActiveTab(sInputTab: string) {
@@ -61,7 +109,7 @@ export class LabellingMenuComponent {
     if (this.m_sSelectedImageId !== oImage.id) {
       this.m_sSelectedImageId = oImage.id;
 
-      console.log(`🖼️ Switched active image to: ${oImage.name}`);
+      console.log(`Switched active image to: ${oImage.name}`);
       this.m_oProjectState.setActiveImage(oImage.name);
     }
   }

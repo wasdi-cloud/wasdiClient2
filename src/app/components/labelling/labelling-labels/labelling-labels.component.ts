@@ -12,7 +12,10 @@ import {catchError, tap} from "rxjs/operators";
 import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
 import {MatDialog} from "@angular/material/dialog";
 import {LabellingImportDialogComponent} from "../labelling-toolbar/import-dialog/labelling-import-dialog.component";
-import {Router} from "@angular/router";
+import {FileBufferService} from "../../../services/api/file-buffer.service";
+import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { TranslateService } from '@ngx-translate/core';
 
 // ── Lightweight interfaces ────────────────────────────────────────────────────
 
@@ -108,6 +111,9 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     ,private m_oLabelService: LabelsService
     ,private m_oProjectState: LabellingProjectsStateService,
     private m_oDialog: MatDialog,
+    private m_oFileBufferService: FileBufferService,
+    private m_oTranslate: TranslateService,
+    private m_oNotificationDisplayService: NotificationDisplayService
   ) {}
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -292,6 +298,33 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         this.m_oProjectState.m_oActiveImage$.subscribe(sImageName => {
           if (sImageName && sImageName !== this.m_sCurrentImageName) {
 
+            let sWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
+
+            this.m_oFileBufferService.publishBand(sImageName, sWorkspaceId, "B1").subscribe({
+              next: oResponse => {
+                if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO") {
+                  //If the Band is already published:
+                  if (oResponse.messageCode === "PUBLISHBAND") {
+                    this.receivedPublishBandMessage(oResponse);
+                  }
+                  else {
+                    let sNotificationMsg = "PUBLISHING BAND";
+                    this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg);
+                  }
+                }
+                else {
+                  let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
+                  this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg);
+                }
+              },
+              error: oError => {
+                console.error("Error publishing band:", oError);
+                let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
+                this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg);
+              }
+            });
+
+
             this.m_sCurrentImageName = sImageName;
 
             // 1. Wipe the old labels off the map and table
@@ -309,6 +342,18 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     }
   }
 
+    receivedPublishBandMessage(oMessage: any) {
+      let oPublishedBand = oMessage.payload;
+  
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPublishedBand)) {
+        console.log("ProductListComponent.receivedPublishBandMessage: Error Published band is empty...");
+        return false;
+      }
+
+      console.log("ProductListComponent.receivedPublishBandMessage: layerId=" + oPublishedBand.layerId);
+      
+      return true;
+    }
 
   // ═══════════════════════════════════════════════════════════════════════════
   // DRAW EVENTS
