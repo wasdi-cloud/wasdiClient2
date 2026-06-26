@@ -16,6 +16,7 @@ import {FileBufferService} from "../../../services/api/file-buffer.service";
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ConstantsService } from 'src/app/services/constants.service';
 
 // ── Lightweight interfaces ────────────────────────────────────────────────────
 
@@ -113,7 +114,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
     private m_oTranslate: TranslateService,
-    private m_oNotificationDisplayService: NotificationDisplayService
+    private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oConstantsService: ConstantsService
   ) {}
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -300,7 +302,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
             let sWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
 
-            this.m_oFileBufferService.publishBand(sImageName, sWorkspaceId, "B1").subscribe({
+            this.m_oFileBufferService.publishBand(sImageName+".zip", sWorkspaceId, "B1").subscribe({
               next: oResponse => {
                 if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO") {
                   //If the Band is already published:
@@ -351,6 +353,10 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       }
 
       console.log("ProductListComponent.receivedPublishBandMessage: layerId=" + oPublishedBand.layerId);
+
+      // TODO: In reality we need to get the workspace node and from there the node WMS URL.
+      // Now we are in test there is only the main node 
+      this.m_oMapEngineService.addLayerMap2DByServer(oPublishedBand.layerId, this.m_oConstantsService.getWmsUrlGeoserver());
       
       return true;
     }
