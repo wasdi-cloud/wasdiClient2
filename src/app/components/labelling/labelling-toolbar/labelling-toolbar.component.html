@@ -42,7 +42,7 @@
                     [m_sSize]="'small'"
                     [m_bRounded]="true"
                     [matTooltip]="'Upload Shapes'"
-                    (click)="triggerFileUpload()">
+                    (click)="m_oUploadClick.emit()">
         </app-button>
         <input #fileInput type="file" accept=".geojson,.json,.zip" style="display:none" (change)="onFileSelected($event)">
       </li>
@@ -53,8 +53,8 @@
                     [m_bMuted]="true"
                     [m_sSize]="'small'"
                     [m_bRounded]="true"
-                    [matTooltip]="'Export Project'">
-        </app-button>
+                    [matTooltip]="'Export Project'"
+                    (click)="m_oExport.emit()"> </app-button>
       </li>
 
       <li class="nav-item ms-2">

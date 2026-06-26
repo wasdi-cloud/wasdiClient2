@@ -125,6 +125,18 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     map.on('draw.modechange', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'modechange', mode: e.mode }));
   }
 
+  // ── Add this to your MapEngineService ──
+  zoomToBbox(bbox: [number, number, number, number]): void {
+    const map = this.getMap();
+    if (!map) return;
+
+    map.fitBounds(bbox, {
+      padding: 50, // Gives a nice 50px margin around the shapes
+      duration: 1500, // Smooth 1.5 second flying animation
+      maxZoom: 18 // Prevents it from zooming in too uncomfortably close on a single point
+    });
+  }
+
   changeDrawMode(mode: string, featureId?: string): void {
     if (!this.m_oDrawControl) return;
 

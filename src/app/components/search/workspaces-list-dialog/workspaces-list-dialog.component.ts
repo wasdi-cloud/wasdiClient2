@@ -11,6 +11,8 @@ import { Workspace } from 'src/app/shared/models/workspace.model';
 
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import {ActivatedRoute, Route} from "@angular/router";
+import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
 @Component({
     selector: 'app-workspaces-list-dialog',
     templateUrl: './workspaces-list-dialog.component.html',
@@ -57,6 +59,7 @@ export class WorkspacesListDialogComponent implements OnInit {
    * Holder for the user's search input
    */
   m_sSearch: string = ""
+  private m_sTargetWorkspaceId: string='';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public m_oData: any,
@@ -65,7 +68,9 @@ export class WorkspacesListDialogComponent implements OnInit {
     private m_oFileBufferService: FileBufferService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService,
-    private m_oWorkspaceService: WorkspaceService
+    private m_oWorkspaceService: WorkspaceService,
+    private m_oRoute:ActivatedRoute,
+    private m_oProjectState:LabellingProjectsStateService
   ) { }
 
   ngOnInit(): void {
@@ -83,6 +88,16 @@ export class WorkspacesListDialogComponent implements OnInit {
     if (this.m_oData.sharing) {
       this.m_bIsSharingProduct = this.m_oData.sharing;
     }
+    this.m_oRoute.queryParams.subscribe(params => {
+      if (params['filterWs']) {
+        if(params['filterWs'] === 'true'){
+          console.log(this.m_oProjectState)
+          this.m_sTargetWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
+          console.log("🔍 Search Page opened in Labelling Import Mode! Target Workspace:", this.m_sTargetWorkspaceId);
+        }
+
+      }
+    });
   }
 
   /********** API CALLS **********/
@@ -96,12 +111,10 @@ export class WorkspacesListDialogComponent implements OnInit {
       next: oResponse => {
         if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) === false) {
           this.m_bIsLoadingWorkspaceList = false;
-
           // ── NEW: IS THIS A LABELLING WORKSPACE IMPORT? ──
-          if (this.m_oData.targetWorkspaceId) {
-
+          if (this.m_sTargetWorkspaceId) {
             // 1. Filter the list so ONLY the target workspace appears
-            this.m_aoWorkspaceList = oResponse.filter(oWorkspace => oWorkspace.workspaceId === this.m_oData.targetWorkspaceId);
+            this.m_aoWorkspaceList = oResponse.filter(oWorkspace => oWorkspace.workspaceId === this.m_sTargetWorkspaceId);
 
             // 2. Automatically select it to save the user a click!
             if (this.m_aoWorkspaceList.length > 0) {

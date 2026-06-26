@@ -24,6 +24,7 @@ export interface IMapEngine {
   changeDrawMode(mode: string,featureId?: string): void;
   deleteDrawFeature(featureId: string): void
   setDrawFeatures(features: any[]): void; // <-- Add this
+  zoomToBbox(bbox: [number, number, number, number]): void;
 
   setMap(map: any): void;
   getMap(): any;

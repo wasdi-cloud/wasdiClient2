@@ -7,6 +7,9 @@ import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@
   standalone: false
 })
 export class LabellingToolbarComponent {
+
+
+  @Output() m_oUploadClick = new EventEmitter<void>();
   // ── Stats & State (Inputs) ──
   @Input() m_iTotalFeatures: number = 0;
   @Input() m_iValidatedCount: number = 0;
@@ -27,6 +30,8 @@ export class LabellingToolbarComponent {
 
   @Input() m_sStyleBy: 'label' | 'annotator' = 'label';
   @Output() m_sStyleByChange = new EventEmitter<'label' | 'annotator'>();
+
+  @Output() m_oExport = new EventEmitter<void>();
 
   @Input() m_sFilterCollab: string = 'all';
   @Output() m_sFilterCollabChange = new EventEmitter<string>();
