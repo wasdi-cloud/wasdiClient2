@@ -130,13 +130,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     if (this.m_oConfigurationService.getConfiguration() === null) {
       this.m_oConfigurationService.loadConfiguration();
     }
-    // ── NEW: CATCH THE HANDSHAKE ──
-    this.m_oRoute.queryParams.subscribe(params => {
-      if (params['targetWorkspace']) {
-        this.m_sTargetWorkspaceId = params['targetWorkspace'];
-        console.log("🔍 Search Page opened in Labelling Import Mode! Target Workspace:", this.m_sTargetWorkspaceId);
-      }
-    });
   }
 
   //Wait until After Content is initialized and then check - on check call the config file
