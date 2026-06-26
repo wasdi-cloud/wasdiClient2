@@ -103,8 +103,8 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   }
   /**
    * Sets the Active Provider and emits the Provider to the Parent for Switching Layers List
-   * @param oProvider 
-   * @returns 
+   * @param oProvider
+   * @returns
    */
   setActiveProvider(oProvider) {
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oProvider)) {
@@ -375,8 +375,8 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle the expand more/less chevron in the list item component
-   * @param oEvent 
-   * @param oProvider 
+   * @param oEvent
+   * @param oProvider
    */
   toggleActiveProviderOpen(oEvent, oProvider: any): void {
     if (oProvider.name === this.m_oActiveProvider.name) {
@@ -388,9 +388,10 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
 
   /********** Pagination Handler Functions **********/
 
+
   /**
    * Handle change in number of products per page from paginator
-   * @param event 
+   * @param event
    */
   changeNumberOfProductsPerPage(event): void {
     this.m_iItemsPerPage = event;
@@ -407,8 +408,8 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
 
   /**
    * Read pagination object + change page from paginator
-   * @param oEvent 
-   * @param sProviderName 
+   * @param oEvent
+   * @param sProviderName
    */
   handlePagination(oEvent, sProviderName: string) {
     this.m_oPageService.changePage(oEvent.pageIndex, sProviderName)

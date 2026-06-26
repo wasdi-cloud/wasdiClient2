@@ -89,17 +89,8 @@ export class LabellingMenuComponent {
   // ── IMAGE ACTIONS ──
 
   onAddImage() {
-    // WARNING: We will add the "Save Changes" check here later!
-
-    // Assuming you know the Workspace ID for this project.
-    // If you only have the Project ID, just pass that instead!
-    const sTargetWorkspaceId = "labelling_"+this.m_oProjectState.m_sActiveProjectId;
-
-    console.log('Navigating to Search Page for Workspace:', sTargetWorkspaceId);
-
-    // Navigate to the search page, but append a secret query parameter!
     this.m_oRouter.navigate(['/search'], {
-      queryParams: { targetWorkspace: sTargetWorkspaceId }
+      queryParams: { filterWs: true }
     });
   }
 
