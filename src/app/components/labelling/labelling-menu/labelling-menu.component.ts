@@ -4,6 +4,7 @@ import {LabellingProjectsStateService} from "../../../services/api/labelling/lab
 import {Router} from "@angular/router";
 import { ProductService } from 'src/app/services/api/product.service';
 import { Subject, takeUntil } from 'rxjs';
+import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 
 @Component({
   selector: 'app-labelling-menu',
@@ -13,6 +14,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class LabellingMenuComponent implements OnInit {
   @Output() m_sSelectedTab: EventEmitter<string> = new EventEmitter<string>();
+  @Output() publishBandMessage: EventEmitter<any> = new EventEmitter<any>();
 
   @Input() m_sActiveTab: string = 'projects';
 
@@ -34,7 +36,7 @@ export class LabellingMenuComponent implements OnInit {
     },
   ];
 
-  // ── MOCK DATA FOR IMAGES (Replace with your actual API call later) ──
+  // List of Project images
   m_aoProjectImages = [ ];
 
   // Track the single active image
@@ -42,11 +44,23 @@ export class LabellingMenuComponent implements OnInit {
 
   private m_oDestroy$ = new Subject<void>();
 
+  /**
+  * Message hook to receive the Downloaded File Message from Rabbit
+  */
+  m_iDownloadedFileHookIndex: number = -1;
+
+  /**
+  * Message hook to receive the Publish Band Message from Rabbit
+  */
+  m_iPublishBandHookIndex: number = -1;
+
+
   constructor(
     private m_oConstantsService: ConstantsService,
     public m_oProjectState: LabellingProjectsStateService,
     public m_oProductService: ProductService,
-    private m_oRouter:Router
+    private m_oRouter:Router,
+    private m_oRabbitStompService: RabbitStompService
   ) {
   }
 
@@ -54,6 +68,7 @@ export class LabellingMenuComponent implements OnInit {
     //this.loadProjectImages();
     if (this.m_oProjectState.getTargetWorkspaceId()) {
       this.loadProjectImages();
+      this.registerRabbitHooks();
     }
 
     this.m_oProjectState.m_oProjectWorkspaceChanged$
@@ -63,14 +78,55 @@ export class LabellingMenuComponent implements OnInit {
       });
   }
 
+  registerRabbitHooks() {
+    this.m_oRabbitStompService.subscribe(this.m_oProjectState.getTargetWorkspaceId());
+
+    this.m_iDownloadedFileHookIndex  = this.m_oRabbitStompService.addMessageHook("DOWNLOAD",
+      this,
+      this.receivedDownloadedFileMessage, false);
+    console.log('LabellingMenuComponent.ngOnInit: registered DOWNLOAD hook index=' + this.m_iDownloadedFileHookIndex);
+
+    this.m_iPublishBandHookIndex = this.m_oRabbitStompService.addMessageHook("PUBLISHBAND",
+    this,
+    this.publishBandMessageHook, false);
+    console.log('LabellingMenuComponent.ngOnInit: registered PUBLISHBAND hook index=' + this.m_iPublishBandHookIndex);
+    
+    this.m_oRabbitStompService.subscribe(this.m_oProjectState.getTargetWorkspaceId());
+  }
+
   ngOnDestroy(): void {
     this.m_oDestroy$.next();
     this.m_oDestroy$.complete();
     this.m_oProjectState.setActiveImage(null);
+    this.m_oRabbitStompService.unsubscribe();
+
+    if (this.m_iDownloadedFileHookIndex != -1) {
+      this.m_oRabbitStompService.removeMessageHook(this.m_iDownloadedFileHookIndex);
+    }
+
+    if (this.m_iPublishBandHookIndex!= -1) {
+      this.m_oRabbitStompService.removeMessageHook(this.m_iPublishBandHookIndex);
+    }    
+  }
+
+  publishBandMessageHook(oRabbitMessage, oController) {
+    oController.receivedPublishBandMessage(oRabbitMessage);
+  }
+
+  receivedPublishBandMessage(oRabbitMessage) {
+    this.publishBandMessage.emit(oRabbitMessage);
+  }
+
+  receivedDownloadedFileMessage(oRabbitMessage, oController) {
+    console.log("LabellingMenuComponent.receivedDownloadedFileMessage: ", oRabbitMessage);
+    oController.loadProjectImages();
   }
 
   onProjectWorkspaceChanged(): void {
-    this.loadProjectImages();
+    if (this.m_oProjectState.getTargetWorkspaceId()) {
+      this.loadProjectImages();
+      this.registerRabbitHooks();
+    }
   }
 
   private loadProjectImages(): void {

@@ -99,18 +99,18 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   m_oActiveIssueFeature: LabelFeature | null = null;
   m_sIssueInput: string = '';
 
-  // ── Current user (todo replace with your real auth service) ──────────────────────
-  m_sCurrentUser: string = 'current@user.com';
+  // ── Current user
+  m_sCurrentUser: string = '';
 
   m_sCurrentDatasetId: string = null;
   m_sCurrentImageName: string = '';
+  m_sCurrentLayerId: string = '';
 
-  // ─────────────────────────────────────────────────────────────────────────────
 
   constructor(
-    private m_oMapEngineService: MapEngineService
-    ,private m_oLabelService: LabelsService
-    ,private m_oProjectState: LabellingProjectsStateService,
+    private m_oMapEngineService: MapEngineService,
+    private m_oLabelService: LabelsService,
+    private m_oProjectState: LabellingProjectsStateService,
     private m_oDialog: MatDialog,
     private m_oFileBufferService: FileBufferService,
     private m_oTranslate: TranslateService,
@@ -123,11 +123,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // ═══════════════════════════════════════════════════════════════════════════
 
   ngOnInit(): void {
-      this.m_sCurrentDatasetId=this.m_oProjectState.m_sActiveProjectId
-    // TODO: inject and call your real services here, e.g.:
-    // this.loadTemplate();
-    // this.loadCollaborators();
-    // this.loadFeatures();
+    this.m_sCurrentDatasetId=this.m_oProjectState.m_sActiveProjectId
+    this.m_sCurrentUser = this.m_oConstantsService.getUserId();
   }
   ngAfterViewInit(): void {
     this.initMap();
@@ -301,6 +298,10 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       this.m_oProjectState.m_oActiveImage$.subscribe(sImageName => {
         if (sImageName && sImageName !== this.m_sCurrentImageName) {
 
+          if (this.m_sCurrentLayerId)  {
+            this.m_oMapEngineService.removeLayerMap2DByServer(this.m_sCurrentLayerId);
+          }
+
           let sWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
 
           this.m_oFileBufferService.publishBand(sImageName+".zip", sWorkspaceId, "B1").subscribe({
@@ -343,22 +344,23 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     }
   }
 
-    receivedPublishBandMessage(oMessage: any) {
-      let oPublishedBand = oMessage.payload;
-  
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPublishedBand)) {
-        console.log("ProductListComponent.receivedPublishBandMessage: Error Published band is empty...");
-        return false;
-      }
+  receivedPublishBandMessage(oMessage: any) {
+    let oPublishedBand = oMessage.payload;
 
-      console.log("ProductListComponent.receivedPublishBandMessage: layerId=" + oPublishedBand.layerId);
-
-      // TODO: In reality we need to get the workspace node and from there the node WMS URL.
-      // Now we are in test there is only the main node 
-      this.m_oMapEngineService.addLayerMap2DByServer(oPublishedBand.layerId, this.m_oConstantsService.getWmsUrlGeoserver());
-      
-      return true;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPublishedBand)) {
+      console.log("ProductListComponent.receivedPublishBandMessage: Error Published band is empty...");
+      return false;
     }
+
+    console.log("ProductListComponent.receivedPublishBandMessage: layerId=" + oPublishedBand.layerId);
+
+    // TODO: In reality we need to get the workspace node and from there the node WMS URL.
+    // Now we are in test there is only the main node     
+    this.m_oMapEngineService.addLayerMap2DByServer(oPublishedBand.layerId, this.m_oConstantsService.getWmsUrlGeoserver());
+    this.m_sCurrentLayerId = oPublishedBand.layerId;
+    
+    return true;
+  }
 
   // ═══════════════════════════════════════════════════════════════════════════
   // DRAW EVENTS
@@ -877,7 +879,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
           this.m_oMapEngineService.setDrawFeatures(this.m_aoFeatures);
         }
 
-        console.log(`✅ Loaded ${this.m_aoFeatures.length} labels from backend.`);
+        console.log(`Loaded ${this.m_aoFeatures.length} labels from backend.`);
       },
       error: (err) => {
         console.error("Failed to load features:", err);
