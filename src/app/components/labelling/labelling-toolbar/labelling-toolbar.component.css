@@ -1,0 +1,25 @@
+.labels-toolbar-overlay {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.toolbar-pill {
+  pointer-events: all;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid #dde1e7;
+  border-radius: 999px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: #d0d0d0;
+}

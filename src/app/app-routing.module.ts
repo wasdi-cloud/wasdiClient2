@@ -21,6 +21,7 @@ import {PaymentSuccessComponent} from "./components/subscriptions-purchase/payme
 import { LoginRedirectComponent } from './components/login-redirect/login-redirect.component';
 import {LabellingComponent} from "./components/labelling/labelling.component";
 import { WasdaiComponent } from './components/wasdai/wasdai.component';
+import {LabellingExportComponent} from "./components/labelling/labelling-export/labelling-export.component";
 
 const routes: Routes = [
   //{ path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'login-coplac', component: LoginCoplacComponent, canActivate: [IsSignedInGuard] },
   { path: 'login&iss', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'settings', component: AdminComponent, canActivate: [AuthGuard]  },
+  { path: 'export-project', component: LabellingExportComponent, canActivate: [AuthGuard]  },
   { path: 'edit/:workspaceId', component: EditComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'labelling', component: LabellingComponent, canActivate: [AuthGuard] },

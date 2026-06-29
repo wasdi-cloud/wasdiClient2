@@ -3,6 +3,7 @@ import { IMapEngine } from './map-engine.interface';
 import { MapLibreMapEngineAdapter } from './maplibre-map-engine.adapter';
 import { MAP_ENGINE_FLAGS } from './map-engine.config';
 import { MapInitOptions } from './map-engine.interface';
+import {Observable} from "rxjs";
 
 /**
  * Runtime selector for the active map engine implementation.
@@ -46,6 +47,24 @@ export class MapEngineService implements IMapEngine {
   }
   upsertSelectionRectangle(fWest: number, fSouth: number, fEast: number, fNorth: number): void {
     this.m_oEngine.upsertSelectionRectangle(fWest, fSouth, fEast, fNorth);
+  }
+  initDrawControl(map: any): void {
+    this.m_oEngine.initDrawControl(map);
+  }
+  getDrawEvents$(): Observable<any> {
+    return this.m_oEngine.getDrawEvents$();
+  }
+  deleteDrawFeature(featureId: string): void {
+    this.m_oEngine.deleteDrawFeature(featureId);
+  }
+  changeDrawMode(mode: string, featureId?: string): void{
+    this.m_oEngine.changeDrawMode(mode,featureId);
+  }
+  setDrawFeatures(features: any[]): void {
+    this.m_oEngine.setDrawFeatures(features); // <-- Add this
+  }
+  zoomToBbox(bbox: [number, number, number, number]): void{
+    this.m_oEngine.zoomToBbox(bbox);
   }
 
   onSearchDrawCreated(event: any): any { return this.m_oEngine.onSearchDrawCreated(event); }

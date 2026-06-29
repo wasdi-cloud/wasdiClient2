@@ -19,7 +19,10 @@
         <app-create-template-label (m_oTabChange)="getActiveTab($event)"></app-create-template-label>
       }
       @if (m_sActiveTab === 'labels') {
-        <app-labelling-labels></app-labelling-labels>
+        <app-labelling-labels (m_oTabChange)="getActiveTab($event)" ></app-labelling-labels>
+      }
+      @if (m_sActiveTab === 'export') {
+        <app-labelling-export (m_oTabChange)="getActiveTab($event)"></app-labelling-export>
       }
 
     </div>

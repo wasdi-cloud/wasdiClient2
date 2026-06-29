@@ -1,0 +1,140 @@
+<div class="labels-toolbar-overlay pt-2">
+  <nav class="navbar navbar-expand-lg d-flex flex-row align-items-center justify-content-between px-3 toolbar-pill shadow-sm">
+
+    <ul class="navbar-nav d-flex flex-row align-items-center gap-2">
+      <li class="nav-item d-flex align-items-center">
+        <span class="badge bg-light text-dark border me-1 d-flex align-items-center gap-1 px-2 py-1" [matTooltip]="'Total Labels'">
+          <span class="material-symbols-outlined" style="font-size: 14px;">label</span>
+          {{ m_iTotalFeatures }}
+        </span>
+
+        <span class="badge bg-success-subtle text-success border border-success d-flex align-items-center gap-1 px-2 py-1" [matTooltip]="'Validated Labels'">
+          <span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
+          {{ m_iValidatedCount }}
+        </span>
+      </li>
+
+      <div class="toolbar-divider mx-2"></div>
+
+      <li class="nav-item">
+        <app-button [m_sIconLeft]="'undo'"
+                    [m_bDisabled]="!m_bCanUndo"
+                    [m_bMuted]="true"
+                    [m_sSize]="'small'"
+                    [m_bRounded]="true"
+                    [matTooltip]="'Undo'"
+                    (click)="m_oUndo.emit()">
+        </app-button>
+      </li>
+      <li class="nav-item">
+        <app-button [m_sIconLeft]="'refresh'"
+                    [m_bDisabled]="m_bRefreshing"
+                    [m_bMuted]="true"
+                    [m_sSize]="'small'"
+                    [m_bRounded]="true"
+                    [matTooltip]="m_bRefreshing ? 'Refreshing...' : 'Refresh'"
+                    (click)="m_oRefresh.emit()">
+        </app-button>
+      </li>
+      <li class="nav-item">
+        <app-button [m_sIconLeft]="'upload'"
+                    [m_bMuted]="true"
+                    [m_sSize]="'small'"
+                    [m_bRounded]="true"
+                    [matTooltip]="'Upload Shapes'"
+                    (click)="m_oUploadClick.emit()">
+        </app-button>
+        <input #fileInput type="file" accept=".geojson,.json,.zip" style="display:none" (change)="onFileSelected($event)">
+      </li>
+
+      <!-- ── NEW: EXPORT PROJECT BUTTON ── -->
+      <li class="nav-item">
+        <app-button [m_sIconLeft]="'download'"
+                    [m_bMuted]="true"
+                    [m_sSize]="'small'"
+                    [m_bRounded]="true"
+                    [matTooltip]="'Export Project'"
+                    (click)="m_oExport.emit()"> </app-button>
+      </li>
+
+      <li class="nav-item ms-2">
+        <app-button [m_sIconLeft]="'save'"
+                    [m_bDisabled]="m_bSaving"
+                    [m_sSize]="'small'"
+                    [m_bRounded]="true"
+                    [matTooltip]="m_bSaving ? 'Saving...' : 'Save Labels'"
+                    (click)="m_oSave.emit()">
+        </app-button>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav d-flex flex-row align-items-center gap-3 ms-4">
+
+      <li class="nav-item d-flex align-items-center gap-2" style="font-size: 13px;">
+        <span class="font-bold text-muted">Mode:</span>
+        <div class="btn-group shadow-sm" role="group">
+
+          <input type="radio" class="btn-check" name="editMode" id="mode0" value="draw"
+                 [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
+          <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
+                 for="mode0"
+                 [matTooltip]="'Draw Polygon'">
+            <span class="material-symbols-outlined" style="font-size: 18px;">draw</span>
+          </label>
+
+          <input type="radio" class="btn-check" name="editMode" id="mode1" value="vertices"
+                 [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
+          <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
+                 for="mode1"
+                 [matTooltip]="'Edit Vertices'">
+            <span class="material-symbols-outlined" style="font-size: 18px;">format_shapes</span>
+          </label>
+
+          <input type="radio" class="btn-check" name="editMode" id="mode2" value="move"
+                 [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
+          <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
+                 for="mode2"
+                 [matTooltip]="'Move Shape'">
+            <span class="material-symbols-outlined" style="font-size: 18px;">open_with</span>
+          </label>
+        </div>
+      </li>
+
+      <li class="nav-item d-flex align-items-center gap-2" style="font-size: 13px;">
+        <span class="font-bold text-muted">Style:</span>
+        <select class="form-select form-select-sm rounded-pill" style="width: 110px;"
+                [ngModel]="m_sStyleBy" (ngModelChange)="m_sStyleByChange.emit($event)">
+          <option value="label">By Label</option>
+          <option value="annotator">By Annotator</option>
+        </select>
+      </li>
+
+      <li class="nav-item">
+        <select class="form-select form-select-sm rounded-pill" style="width: 140px;"
+                [ngModel]="m_sFilterCollab" (ngModelChange)="m_sFilterCollabChange.emit($event)">
+          <option value="all">All Annotators</option>
+          @for (c of m_aoCollaborators; track c.id) {
+            <option [value]="c.id">{{ c.name }}</option>
+          }
+        </select>
+      </li>
+
+      <!-- ── NEW: ADD COLLABORATORS BUTTON ── -->
+      <li class="nav-item">
+        <app-button [m_sIconLeft]="'person_add'"
+                    [m_bMuted]="true"
+                    [m_sSize]="'small'"
+                    [m_bRounded]="true"
+                    [matTooltip]="'Add Collaborators'">
+        </app-button>
+      </li>
+
+      <li class="nav-item form-check form-switch mb-0 d-flex align-items-center gap-2">
+        <input class="form-check-input mt-0" type="checkbox" id="validatedToggle"
+               [ngModel]="m_bShowValidatedOnly" (ngModelChange)="m_bShowValidatedOnlyChange.emit($event)">
+        <label class="form-check-label text-muted" for="validatedToggle" style="font-size: 13px;">Validated Only</label>
+      </li>
+    </ul>
+
+  </nav>
+</div>

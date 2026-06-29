@@ -95,16 +95,16 @@
                   <td>
                     <div class="d-flex gap-1 justify-content-end align-items-center">
 
-                      @if (m_oProjectState.m_sActiveWorkspaceProjectId === item.id) {
+                      @if (m_oProjectState.m_sActiveProjectId === item.id) {
                         <span class="material-symbols-outlined action-icon text-danger"
                               title="Close Project Workspace"
-                              (click)="openProject(item.id)">
+                              (click)="openProject(item)">
                           close
                         </span>
                       } @else {
                         <span class="material-symbols-outlined action-icon text-success"
                               title="Open Project Workspace"
-                              (click)="openProject(item.id)">
+                              (click)="openProject(item)">
                           open_in_new
                         </span>
                       }
