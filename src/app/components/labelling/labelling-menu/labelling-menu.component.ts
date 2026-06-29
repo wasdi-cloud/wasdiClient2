@@ -52,6 +52,9 @@ export class LabellingMenuComponent implements OnInit {
 
   ngOnInit() {
     //this.loadProjectImages();
+    if (this.m_oProjectState.getTargetWorkspaceId()) {
+      this.loadProjectImages();
+    }
 
     this.m_oProjectState.m_oProjectWorkspaceChanged$
       .pipe(takeUntil(this.m_oDestroy$))
@@ -102,6 +105,8 @@ export class LabellingMenuComponent implements OnInit {
     }
     this.m_sActiveTab = sInputTab;
     this.m_sSelectedTab.emit(this.m_sActiveTab);
+
+
   }
 
 
