@@ -102,6 +102,8 @@ export class LabellingMenuComponent implements OnInit {
     }
     this.m_sActiveTab = sInputTab;
     this.m_sSelectedTab.emit(this.m_sActiveTab);
+
+
   }
 
 
