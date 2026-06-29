@@ -295,52 +295,51 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         if (typeof oMap.resize === 'function') {
           oMap.resize();
         }
+      }, 0);
 
-        // ── LISTEN FOR IMAGE SWITCHES FROM THE SIDEBAR ──
-        this.m_oProjectState.m_oActiveImage$.subscribe(sImageName => {
-          if (sImageName && sImageName !== this.m_sCurrentImageName) {
+      // ── LISTEN FOR IMAGE SWITCHES FROM THE SIDEBAR ──
+      this.m_oProjectState.m_oActiveImage$.subscribe(sImageName => {
+        if (sImageName && sImageName !== this.m_sCurrentImageName) {
 
-            let sWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
+          let sWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
 
-            this.m_oFileBufferService.publishBand(sImageName+".zip", sWorkspaceId, "B1").subscribe({
-              next: oResponse => {
-                if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO") {
-                  //If the Band is already published:
-                  if (oResponse.messageCode === "PUBLISHBAND") {
-                    this.receivedPublishBandMessage(oResponse);
-                  }
-                  else {
-                    let sNotificationMsg = "PUBLISHING BAND";
-                    this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg);
-                  }
+          this.m_oFileBufferService.publishBand(sImageName+".zip", sWorkspaceId, "B1").subscribe({
+            next: oResponse => {
+              if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse) && oResponse.messageResult != "KO") {
+                //If the Band is already published:
+                if (oResponse.messageCode === "PUBLISHBAND") {
+                  this.receivedPublishBandMessage(oResponse);
                 }
                 else {
-                  let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
+                  let sNotificationMsg = "PUBLISHING BAND";
                   this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg);
                 }
-              },
-              error: oError => {
-                console.error("Error publishing band:", oError);
+              }
+              else {
                 let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
                 this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg);
               }
-            });
+            },
+            error: oError => {
+              console.error("Error publishing band:", oError);
+              let sNotificationMsg = this.m_oTranslate.instant("MSG_PUBLISH_BAND_ERROR");
+              this.m_oNotificationDisplayService.openSnackBar(sNotificationMsg);
+            }
+          });
 
 
-            this.m_sCurrentImageName = sImageName;
+          this.m_sCurrentImageName = sImageName;
 
-            // 1. Wipe the old labels off the map and table
-            this.m_aoFeatures = [];
-            this.m_aoPastFeatures = []; // Clear undo history
-            this.m_sSelectedFeatureId = null;
-            this.m_oMapEngineService.setDrawFeatures([]);
+          // 1. Wipe the old labels off the map and table
+          this.m_aoFeatures = [];
+          this.m_aoPastFeatures = []; // Clear undo history
+          this.m_sSelectedFeatureId = null;
+          this.m_oMapEngineService.setDrawFeatures([]);
 
-            // 2. Fetch the new labels for the selected image
-            this.loadFeatures();
-          }
-        });
-
-      }, 0);
+          // 2. Fetch the new labels for the selected image
+          this.loadFeatures();
+        }
+      });      
     }
   }
 

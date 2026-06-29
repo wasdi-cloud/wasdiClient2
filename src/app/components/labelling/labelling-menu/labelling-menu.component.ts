@@ -66,6 +66,7 @@ export class LabellingMenuComponent implements OnInit {
   ngOnDestroy(): void {
     this.m_oDestroy$.next();
     this.m_oDestroy$.complete();
+    this.m_oProjectState.setActiveImage(null);
   }
 
   onProjectWorkspaceChanged(): void {
