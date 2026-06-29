@@ -1,7 +1,8 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
-
-// import { LabelService } from '...'; // Import your API service later
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { LabellingProjectsStateService } from "../../../services/api/labelling/labelling-projects-state.service";
+import { LabellingProjectsService } from "../../../services/api/labelling/labelling-projects.service"; // Adjust path!
+import { NotificationDisplayService } from '../../../services/notification-display.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-labelling-export',
@@ -14,7 +15,7 @@ export class LabellingExportComponent implements OnInit {
   @Output() m_oTabChange = new EventEmitter<string>();
 
   m_sProjectId: string | null = null;
-  m_sProjectTitle: string = "Current Project"; // You can pull this from state too!
+  m_sProjectTitle: string = "Current Project";
   m_bRawDataHosted: boolean = false;
   m_bReviewMode: boolean = false;
 
@@ -22,23 +23,26 @@ export class LabellingExportComponent implements OnInit {
   m_sLabelFilter: 'validated' | 'all' = 'validated';
   m_bIsGenerating: boolean = false;
 
-  constructor(private m_oProjectState: LabellingProjectsStateService) {
-  }
+  constructor(
+    private m_oProjectState: LabellingProjectsStateService,
+    private m_oProjectService: LabellingProjectsService, // 👈 Inject your API service
+    private m_oNotificationService: NotificationDisplayService
+  ) {}
 
   ngOnInit(): void {
-    // ── Grab the active project directly from your state service! ──
     this.m_sProjectId = this.m_oProjectState.m_sActiveProjectId;
-
-    // (Optional) If you have the project object stored in state, grab the title/settings here too:
-    // this.m_sProjectTitle = this.m_oProjectState.m_oActiveProject?.name || "Current Project";
+    if (this.m_oProjectState.m_sLabellingProjectName) {
+      this.m_sProjectTitle = this.m_oProjectState.m_sLabellingProjectName;
+    }
   }
 
   goBackToProject(): void {
-    // Navigate back to the workspace, passing the ID back so it can reload
     this.m_oTabChange.emit('labels');
   }
 
   async handleDownload(): Promise<void> {
+    if (!this.m_sProjectId) return;
+
     this.m_bIsGenerating = true;
 
     const oExportPayload = {
@@ -50,35 +54,32 @@ export class LabellingExportComponent implements OnInit {
     try {
       console.log('Sending export payload:', oExportPayload);
 
-      // TODO: Call your actual service here
-      // const blob = await lastValueFrom(this.m_oLabelService.triggerExport(oExportPayload));
+      // ── THE REAL API CALL ──
+      const blob = await lastValueFrom(this.m_oProjectService.exportDataset(oExportPayload));
 
-      // --- SIMULATED DELAY FOR NOW ---
-      const blob = await new Promise<Blob>(resolve => {
-        setTimeout(() => resolve(new Blob(['dummy content'], {type: 'application/zip'})), 2500);
-      });
-
-      // Create a temporary hidden link to force the browser to download it
+      // Create a temporary hidden link to force the browser to download the Blob
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `ComapVeda_Export_${this.m_sProjectTitle.replace(/\s+/g, '_')}.zip`;
+
+      const sSafeName = this.m_sProjectTitle.replace(/[^a-zA-Z0-9]/g, '_');
+      a.download = `ComapVeda_Export_${sSafeName}.zip`;
+
       document.body.appendChild(a);
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
 
-      // Show success notification here (using your NotificationDisplayService)
-      console.log("✅ Export package downloaded successfully!");
+      this.m_oNotificationService.openSnackBar("✅ Export package downloaded successfully!", "Close", "success-snackbar");
 
       // Go back automatically after success
       setTimeout(() => {
         this.goBackToProject();
       }, 1500);
 
-    } catch (error) {
-      console.error("Error generating export package.", error);
-      // Show error notification here
+    } catch (oError) {
+      console.error("Error generating export package.", oError);
+      this.m_oNotificationService.openAlertDialog("Failed to generate export package. Please try again.", "Export Error", "danger");
     } finally {
       this.m_bIsGenerating = false;
     }

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ConstantsService} from "../../constants.service";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,16 @@ export class LabellingProjectsService {
   getProjectsByUser() {
     return this.m_oHttp.get(this.APIURL + '/list');
   };
+
+
+  /**
+   * Triggers the dataset export and expects a ZIP file (Blob) in return.
+   */
+  exportDataset(oPayload: { projectId: string, includeRawData: boolean, labelFilter: string }): Observable<Blob> {
+    return this.m_oHttp.post<Blob>(this.APIURL + '/export', oPayload, {
+      responseType: 'blob' as 'json'
+    });
+  }
 
   /**
    * get full details about a project.
