@@ -109,7 +109,7 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     map.on('draw.update', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'update', features: e.features }));
     map.on('draw.delete', (e: any) => this.m_oDrawEventsSubscription.next({ type: 'delete', features: e.features }));
 
-    // ── THE FIX: STRICT MODE ENFORCEMENT ON SELECTION ──
+    // Intercept selection changes to enforce the current toolbar mode
     map.on('draw.selectionchange', (e: any) => {
       // 1. Emit the selection to the Angular component so the table highlights
       this.m_oDrawEventsSubscription.next({ type: 'selection', features: e.features });
@@ -1063,6 +1063,61 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
 
     return true;
   }
+
+addLayerMap2DByServerUnderDrawing(layerId: string, server: string): boolean {
+    const oMap = this.getMapLibreMap();
+    if (!this.isMapLibreMap(oMap)) {
+      return false;
+    }
+
+    if (!layerId || !server) {
+      return false;
+    }
+
+    const sSanitizedLayerId = this.sanitizeId(layerId);
+    const sSourceId = `wms-${sSanitizedLayerId}-source`;
+    const sMapLayerId = `wms-${sSanitizedLayerId}-layer`;
+
+    if (oMap.getLayer(sMapLayerId)) {
+      oMap.removeLayer(sMapLayerId);
+    }
+    if (oMap.getSource(sSourceId)) {
+      oMap.removeSource(sSourceId);
+    }
+
+    const sSeparator = server.includes('?') ? '&' : '?';
+    const sTileUrl = `${server}${sSeparator}service=WMS&request=GetMap&version=1.1.1&layers=${encodeURIComponent(layerId)}&styles=&format=image/png&transparent=true&srs=EPSG:3857&bbox={bbox-epsg-3857}&width=256&height=256`;
+
+    oMap.addSource(sSourceId, {
+      type: 'raster',
+      tiles: [sTileUrl],
+      tileSize: 256
+    });
+
+    
+    let sFirstDrawLayerId: string | undefined = undefined;
+    const aoMapLayers = oMap.getStyle().layers;
+
+    // Scan all layers in the map from bottom to top
+    for (const oLayer of aoMapLayers) {
+      // Mapbox Draw prefixes all its layers with 'gl-draw-'
+      if (oLayer.id.startsWith('gl-draw-')) {
+        sFirstDrawLayerId = oLayer.id;
+        break; // We found the lowest draw layer! Stop looking.
+      }
+    }    
+
+    oMap.addLayer({
+      id: sMapLayerId,
+      type: 'raster',
+      source: sSourceId,
+      paint: {
+        'raster-opacity': 1
+      }
+    }, sFirstDrawLayerId ? sFirstDrawLayerId : undefined);
+
+    return true;
+  }  
 
   removeLayerMap2DByServer(layerId: string): boolean {
     const oMap = this.getMapLibreMap();

@@ -3,7 +3,7 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
-  ElementRef, AfterViewInit, HostListener, EventEmitter, Output
+  ElementRef, AfterViewInit, HostListener, EventEmitter, Output, Input
 } from '@angular/core';
 import { MapEngineService } from '../../../services/map-engine/map-engine.service';
 import {LabelsService} from "../../../services/api/labelling/labels.service";
@@ -60,6 +60,11 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   @ViewChild('m_oFileInput') m_oFileInputRef!: ElementRef<HTMLInputElement>;
 
   @Output() m_oTabChange = new EventEmitter<string>();
+  @Input() set publishBandMessage(oMessage: any) {
+    if (oMessage) {
+      this.receivedPublishBandMessage(oMessage);
+    }
+  }
 
   // ── Map ─────────────────────────────────────────────────────────────────────
   private m_oMap: any = null;
@@ -356,7 +361,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
     // TODO: In reality we need to get the workspace node and from there the node WMS URL.
     // Now we are in test there is only the main node     
-    this.m_oMapEngineService.addLayerMap2DByServer(oPublishedBand.layerId, this.m_oConstantsService.getWmsUrlGeoserver());
+    this.m_oMapEngineService.addLayerMap2DByServerUnderDrawing(oPublishedBand.layerId, this.m_oConstantsService.getWmsUrlGeoserver());
     this.m_sCurrentLayerId = oPublishedBand.layerId;
     
     return true;

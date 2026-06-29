@@ -90,8 +90,6 @@ export class LabellingMenuComponent implements OnInit {
     this,
     this.publishBandMessageHook, false);
     console.log('LabellingMenuComponent.ngOnInit: registered PUBLISHBAND hook index=' + this.m_iPublishBandHookIndex);
-    
-    this.m_oRabbitStompService.subscribe(this.m_oProjectState.getTargetWorkspaceId());
   }
 
   ngOnDestroy(): void {
