@@ -91,11 +91,8 @@ export class WorkspacesListDialogComponent implements OnInit {
     this.m_oRoute.queryParams.subscribe(params => {
       if (params['filterWs']) {
         if(params['filterWs'] === 'true'){
-          console.log(this.m_oProjectState)
           this.m_sTargetWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
-          console.log("🔍 Search Page opened in Labelling Import Mode! Target Workspace:", this.m_sTargetWorkspaceId);
         }
-
       }
     });
   }
