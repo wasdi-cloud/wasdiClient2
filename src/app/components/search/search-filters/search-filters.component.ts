@@ -112,28 +112,27 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
 
           if (oDataset!== null) {
             let sMission = oDataset.mission;
-            let bIsGlobal = oDataset.isGlobal;
 
             if (FadeoutUtils.utilsIsStrNullOrEmpty(sMission) === false) {
-              for (let iIndexMission = 0; iIndexMission < this.m_aoMissions.length; iIndexMission++) {
-                if (this.m_aoMissions[iIndexMission].name === sMission) {
-                  this.m_oPreSelectedMission =  this.m_aoMissions[iIndexMission];
-                  this.setActiveMission(this.m_aoMissions[iIndexMission]);
-                  break;
-                }
-              }
-            }
-
-            if (bIsGlobal == false) {
-              let sBbox = oDataset.bbox;
-              if (FadeoutUtils.utilsIsStrNullOrEmpty(sBbox) === false) {
-                console.log("SearchFiltersComponent.ngOnInit: setting bbox from dataset: " + sBbox);
+              let oMission = this.getMissionByName(sMission);
+              if (oMission !== null) {
+                this.m_oPreSelectedMission = oMission;
+                this.setActiveMission(oMission);
               }
             }
           }
         }
       }
     });
+  }
+
+  getMissionByName(sMissionName: string): any {
+    for (let iIndexMission = 0; iIndexMission < this.m_aoMissions.length; iIndexMission++) {
+      if (this.m_aoMissions[iIndexMission].name === sMissionName) {
+        return this.m_aoMissions[iIndexMission];
+      }
+    }
+    return null;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

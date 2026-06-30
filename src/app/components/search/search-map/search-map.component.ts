@@ -56,9 +56,8 @@ export class SearchMapComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       this.m_oMapEngine.initGeocoder(oMap);
       this.m_oMapEngine.addManualBoundingBoxControl(oMap);
       this.m_oMapEngine.addMousePositionAndScale(oMap);
-      // Issue 1 (invalidateSize equivalent): resize after DOM layout settles
+      // Resize after DOM layout settles
       setTimeout(() => oMap.resize(), 100);
-      this.applyForcedBboxIfNeeded();
       setTimeout(() => this.applyForcedBboxIfNeeded(), 150);
     }
 
