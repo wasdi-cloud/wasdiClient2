@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MapEngineService } from '../../../services/map-engine/map-engine.service';
 import {LabelsService} from "../../../services/api/labelling/labels.service";
-import {forkJoin, Observable, of} from "rxjs";
+import {forkJoin, Observable, of, Subscription} from "rxjs";
 import {catchError, tap} from "rxjs/operators";
 import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
 import {MatDialog} from "@angular/material/dialog";
@@ -110,6 +110,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   m_sCurrentDatasetId: string = null;
   m_sCurrentImageName: string = '';
   m_sCurrentLayerId: string = '';
+  private m_oDrawEventsSubscription: Subscription | null = null;
+  private m_oActiveImageSubscription: Subscription | null = null;
 
 
   constructor(
@@ -223,7 +225,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
           this.m_oMapEngineService.zoomToBbox(bbox);
         }
       }
-      console.log(`✅ Imported ${aoImported.length} features`);
+      console.log(`Imported ${aoImported.length} features`);
 
     } catch (oError) {
       console.error('File upload error:', oError);
@@ -260,6 +262,16 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   }
 
   ngOnDestroy(): void {
+    if (this.m_oDrawEventsSubscription) {
+      this.m_oDrawEventsSubscription.unsubscribe();
+      this.m_oDrawEventsSubscription = null;
+    }
+
+    if (this.m_oActiveImageSubscription) {
+      this.m_oActiveImageSubscription.unsubscribe();
+      this.m_oActiveImageSubscription = null;
+    }
+
     this.m_oMapEngineService.clearMap();
   }
 
@@ -287,7 +299,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     if (oMap) {
       this.m_oMapEngineService.initDrawControl(oMap);
 
-      this.m_oMapEngineService.getDrawEvents$().subscribe((oEvent: any) => {
+      this.m_oDrawEventsSubscription = this.m_oMapEngineService.getDrawEvents$().subscribe((oEvent: any) => {
         if (oEvent) {
           this.handleDrawUpdate(oEvent);
         }
@@ -300,7 +312,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       }, 0);
 
       // ── LISTEN FOR IMAGE SWITCHES FROM THE SIDEBAR ──
-      this.m_oProjectState.m_oActiveImage$.subscribe(sImageName => {
+      this.m_oActiveImageSubscription = this.m_oProjectState.m_oActiveImage$.subscribe(sImageName => {
         if (sImageName && sImageName !== this.m_sCurrentImageName) {
 
           if (this.m_sCurrentLayerId)  {

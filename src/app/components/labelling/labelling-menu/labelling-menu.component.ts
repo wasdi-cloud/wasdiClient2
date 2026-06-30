@@ -96,15 +96,16 @@ export class LabellingMenuComponent implements OnInit {
     this.m_oDestroy$.next();
     this.m_oDestroy$.complete();
     this.m_oProjectState.setActiveImage(null);
-    this.m_oRabbitStompService.unsubscribe();
+
+    if (this.m_iPublishBandHookIndex!= -1) {
+      this.m_oRabbitStompService.removeMessageHook(this.m_iPublishBandHookIndex);
+    }    
 
     if (this.m_iDownloadedFileHookIndex != -1) {
       this.m_oRabbitStompService.removeMessageHook(this.m_iDownloadedFileHookIndex);
     }
 
-    if (this.m_iPublishBandHookIndex!= -1) {
-      this.m_oRabbitStompService.removeMessageHook(this.m_iPublishBandHookIndex);
-    }    
+    this.m_oRabbitStompService.unsubscribe();
   }
 
   publishBandMessageHook(oRabbitMessage, oController) {
