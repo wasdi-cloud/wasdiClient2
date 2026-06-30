@@ -76,6 +76,11 @@ export class WorkspacesListDialogComponent implements OnInit {
   ngOnInit(): void {
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
 
+    const bCameFromLabelling = this.m_oRoute.snapshot.queryParamMap.get('filterWs') === 'true';
+    if (bCameFromLabelling) {
+      this.m_sTargetWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
+    }
+
     this.getWorkspaces();
     this.getWorkflowsByUser();
     if (this.m_oData.product) {
@@ -88,13 +93,6 @@ export class WorkspacesListDialogComponent implements OnInit {
     if (this.m_oData.sharing) {
       this.m_bIsSharingProduct = this.m_oData.sharing;
     }
-    this.m_oRoute.queryParams.subscribe(params => {
-      if (params['filterWs']) {
-        if(params['filterWs'] === 'true'){
-          this.m_sTargetWorkspaceId = this.m_oProjectState.getTargetWorkspaceId();
-        }
-      }
-    });
   }
 
   /********** API CALLS **********/
@@ -229,7 +227,7 @@ export class WorkspacesListDialogComponent implements OnInit {
       }
       this.downloadProduct(sUrl, this.m_oSelectedProduct.title, this.m_aoSelectedWorkspaces[iWorkspaceIndex].workspaceId, sBound, this.m_oSelectedProduct.provider, null, oError, this.m_oSelectedProduct.platform);
     }
-    this.onDismiss();
+    this.onDismiss(true);
   }
 
   /**
@@ -268,7 +266,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         }
       }
     }
-    this.onDismiss();
+    this.onDismiss(true);
     return true;
   }
 
@@ -356,7 +354,7 @@ export class WorkspacesListDialogComponent implements OnInit {
         });
       }
     }
-    this.onDismiss()
+    this.onDismiss(true)
   }
 
   /**
@@ -376,7 +374,7 @@ export class WorkspacesListDialogComponent implements OnInit {
    * Close Dialog Window
    * @returns void
    */
-  onDismiss(): void {
-    this.m_oDialogRef.close();
+  onDismiss(bAddedToWorkspace: boolean = false): void {
+    this.m_oDialogRef.close({ addedToWorkspace: bAddedToWorkspace });
   }
 }

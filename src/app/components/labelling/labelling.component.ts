@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {NotificationDisplayService} from "../../services/notification-display.service";
 
 import {TranslateService} from "@ngx-translate/core";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-labelling',
@@ -16,10 +17,15 @@ export class LabellingComponent {
 
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oTranslate: TranslateService) {
+    private m_oTranslate: TranslateService,
+    private m_oRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    const sTab = this.m_oRoute.snapshot.queryParamMap.get('tab');
+    if (sTab === 'labels') {
+      this.m_sActiveTab = 'labels';
+    }
   }
 
   getActiveTab(sEvent: string) {
