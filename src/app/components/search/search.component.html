@@ -10,7 +10,7 @@
             (m_oNavigateBackOutput)="getNavigationFilters($event)" (m_oActiveProviderChange)="getActiveProvider($event)"
             (m_oSelectedProducts)="getSelectedProducts($event)"></app-products-table>
         <div class="map map-container flex-fill">
-            <app-search-map [m_aoProducts]="m_oProductSubject.asObservable()"
+            <app-search-map [m_aoProducts]="m_oProductSubject.asObservable()" [m_sForcedBbox]="m_sForcedBbox"
                 (m_oMapInputChange)="getMapInput($event)"></app-search-map>
         </div>
     </div>

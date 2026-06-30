@@ -23,12 +23,10 @@ export class LabellingComponent {
   }
 
   getActiveTab(sEvent: string) {
-    console.log("PARENT RECEIVED EVENT:", sEvent);
     this.m_sActiveTab = sEvent;
   }
 
   onPublishBandMessage(oMessage: any): void {
-    console.log("Parent received publish band message:", oMessage);
     this.m_oPublishBandMessage = oMessage;
   }
 }

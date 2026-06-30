@@ -3,19 +3,19 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 //Import Services:
 import { AdvancedSearchService } from 'src/app/services/search/advanced-search.service';
 import { MissionFiltersService } from 'src/app/services/mission-filters.service';
-import { PagesService } from 'src/app/services/pages.service';
 import { ResultOfSearchService } from 'src/app/services/result-of-search.service';
 import { SearchService } from 'src/app/search.service';
+import {LabellingProjectsStateService} from "../../../services/api/labelling/labelling-projects-state.service";
 
 //Angular Materials Imports: 
 import { MatSelectChange } from '@angular/material/select';
 
 //Import Utilities:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import { MatDialog } from '@angular/material/dialog';
 import { OpenSearchService } from 'src/app/services/api/open-search.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-search-filters',
@@ -82,16 +82,18 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
 
   m_bUseCronTab: boolean = false;
 
+  m_oPreSelectedMission = null;
+
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,
-    private m_oDialog: MatDialog,
     private m_oOpenSearchService: OpenSearchService,
-    private m_oPagesService: PagesService,
     private m_oMissionFiltersService: MissionFiltersService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oResultsOfSearchService: ResultOfSearchService,
     private m_oSearchService: SearchService,
-    private m_oTranslate: TranslateService
+    private m_oTranslate: TranslateService,
+    private m_oLabellingProjectsStateService: LabellingProjectsStateService,
+    private m_oRoute:ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -102,11 +104,46 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
     this.setFilterTypeAsTimePeriod();
     this.initDefaultYears();//TODO REMOVE IT
     this.initDefaultMonths();//TODO REMOVE IT
+
+    this.m_oRoute.queryParams.subscribe(params => {
+      if (params['filterWs']) {
+        if(params['filterWs'] === 'true'){
+          let oDataset = this.m_oLabellingProjectsStateService.getDataset();
+
+          if (oDataset!== null) {
+            let sMission = oDataset.mission;
+            let bIsGlobal = oDataset.isGlobal;
+
+            if (FadeoutUtils.utilsIsStrNullOrEmpty(sMission) === false) {
+              for (let iIndexMission = 0; iIndexMission < this.m_aoMissions.length; iIndexMission++) {
+                if (this.m_aoMissions[iIndexMission].name === sMission) {
+                  this.m_oPreSelectedMission =  this.m_aoMissions[iIndexMission];
+                  this.setActiveMission(this.m_aoMissions[iIndexMission]);
+                  break;
+                }
+              }
+            }
+
+            if (bIsGlobal == false) {
+              let sBbox = oDataset.bbox;
+              if (FadeoutUtils.utilsIsStrNullOrEmpty(sBbox) === false) {
+                console.log("SearchFiltersComponent.ngOnInit: setting bbox from dataset: " + sBbox);
+              }
+            }
+          }
+        }
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.m_aoMissions.length > 0) {
+      if (this.m_oPreSelectedMission !== null) {
+        this.setActiveMission(this.m_oPreSelectedMission);
+      } 
+      else {
       this.setActiveMission(this.m_aoMissions[0]);
+      }
     }
   }
   /************ SET DEFAULT VALUE METHODS ************/
@@ -300,7 +337,6 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
    */
   setActiveMission(oMission) {
     this.m_oActiveMission = oMission;
-    console.log(this.m_oActiveMission)
 
     this.setMissionFilter(this.m_oActiveMission);
     if (this.m_oActiveMission && this.m_oActiveMission.filters) {

@@ -67,6 +67,7 @@ export class LabellingProjectsComponent implements OnInit {
       // It is already open! The user wants to close it.
       this.m_oProjectState.m_sActiveProjectId = null;
       this.m_oProjectState.m_sLabellingProjectName = null;
+      this.m_oProjectState.setDataset(null);
       this.m_oProjectState.notifyProjectWorkspaceChanged();
       this.m_oNotificationService.openSnackBar("Workspace closed.", "Close", "success-snackbar");
     } else {
@@ -74,6 +75,8 @@ export class LabellingProjectsComponent implements OnInit {
       this.m_oProjectState.m_sActiveProjectId = oDataset.id;
       this.m_oProjectState.m_sLabellingProjectName = oDataset.name;
       this.m_oProjectState.setTargetWorkspaceId(oDataset.workspaceId);
+      this.m_oProjectState.setDataset(oDataset);
+
       this.m_oProjectState.notifyProjectWorkspaceChanged();
 
       this.m_oTabChange.emit('labels'); // Navigate to the Labels tab!

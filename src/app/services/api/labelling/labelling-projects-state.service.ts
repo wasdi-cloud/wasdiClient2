@@ -22,6 +22,8 @@ export class LabellingProjectsStateService {
   private m_oProjectWorkspaceChangedSubject = new Subject<void>();
   public m_oProjectWorkspaceChanged$ = this.m_oProjectWorkspaceChangedSubject.asObservable();
 
+  private m_oDataset = null;
+
   get projectId(): string | null {
     return this.m_sLabellingProjectId;
   }
@@ -31,6 +33,13 @@ export class LabellingProjectsStateService {
     return this.m_sMode;
   }
 
+  getDataset() {
+    return this.m_oDataset;
+  }
+
+  setDataset(oDataset: any) {
+    this.m_oDataset = oDataset;
+  }
 
   getTargetWorkspaceId(): string | null {
     return this._m_sTargetWorkspaceId;

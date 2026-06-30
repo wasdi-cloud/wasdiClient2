@@ -1260,5 +1260,6 @@
     "LABELLING_MENU_TEMPLATES": "Labelling Templates",
     "LABELLING_MENU_LABELS": "Edit Labels",
 	"WASDAI_NEW_CHAT": "Nuova chat",
-    "WASDAI_TITLE": "WASDAI - AI Assistant"
+    "WASDAI_TITLE": "WASDAI - AI Assistant",
+    "LABELLING_MENU_TITLE": "Images Labelling Tool"
 }
