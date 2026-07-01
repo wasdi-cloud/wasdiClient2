@@ -11,19 +11,17 @@ import { MapEngineService } from 'src/app/services/map-engine/map-engine.service
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { PagesService } from 'src/app/services/pages.service';
 import { SearchService } from 'src/app/search.service';
-import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
 import { ResultOfSearchService } from 'src/app/services/result-of-search.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute } from '@angular/router';
 
 //Component/Dialog Imports:
 import { MatDialog } from '@angular/material/dialog';
 import { WorkspacesListDialogComponent } from './workspaces-list-dialog/workspaces-list-dialog.component';
 
-
-
 //Utilities Imports:
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
-import {ActivatedRoute} from "@angular/router";
+import { LabellingProjectsStateService } from 'src/app/services/api/labelling/labelling-projects-state.service';
 
 @Component({
     selector: 'app-search',
@@ -71,6 +69,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
 
   m_sTargetWorkspaceId: string | null = null;
+  m_sForcedBbox: string | null = null;
 
   // Filter for Basic Search:
   m_oSearchModel = {
@@ -116,31 +115,51 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     private m_oMapEngineService: MapEngineService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oPageService: PagesService,
-    private m_oRabbitStompService: RabbitStompService,
     private m_oResultsOfSearchService: ResultOfSearchService,
     private m_oSearchService: SearchService,
     private m_oTranslate: TranslateService,
-    private m_oRoute: ActivatedRoute
+    private m_oLabellingProjectsStateService: LabellingProjectsStateService,
+    private m_oRoute:ActivatedRoute
+    
   ) { }
 
   ngOnInit(): void {
-    FadeoutUtils.verboseLog("SearchComponent.ngOnInit")
     this.m_oPageService.setFunction(this.executeSearch, this);
     this.m_oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
     if (this.m_oConfigurationService.getConfiguration() === null) {
       this.m_oConfigurationService.loadConfiguration();
     }
+
+    this.m_oRoute.queryParams.subscribe(params => {
+      if (params['filterWs']) {
+        if(params['filterWs'] === 'true'){
+          let oDataset = this.m_oLabellingProjectsStateService.getDataset();
+
+          if (oDataset!== null) {
+            let bIsGlobal = oDataset.isGlobal;
+
+            if (bIsGlobal == false) {
+              let sBbox = oDataset.bbox;
+              if (FadeoutUtils.utilsIsStrNullOrEmpty(sBbox) === false) {
+                this.m_sForcedBbox = sBbox;
+                console.log("SearchComponent.ngOnInit: setting bbox from dataset: " + sBbox);
+              }
+            }
+          }
+        }
+      }
+    });    
   }
 
   //Wait until After Content is initialized and then check - on check call the config file
   ngAfterContentChecked(): void {
     if (this.m_oConfigurationService.getConfiguration() !== null) {
       this.m_aoMissions = this.m_oConfigurationService.getConfiguration().missions;
+
     }
   }
 
   ngOnDestroy(): void {
-    FadeoutUtils.verboseLog("SearchComponent.ngOnDestroy")
   }
 
   m_fUtcDateConverter(oDate) {

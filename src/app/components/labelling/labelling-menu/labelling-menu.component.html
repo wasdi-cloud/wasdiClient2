@@ -2,7 +2,7 @@
 
   <div class="user-options-container mb-4">
     <div class="header">
-      {{ "ADMIN_MENU_USER" | translate }} </div>
+      {{ "LABELLING_MENU_TITLE" | translate }} </div>
 
     <div class="menu-container d-flex flex-column gap-1">
       @for (oMenuItem of m_aoMenuButtons; track oMenuItem.title) {
@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  @if (m_oProjectState.m_sActiveProjectId) {
+  @if (m_oProjectState.m_sActiveProjectId && (m_sActiveTab === 'labels' )) {
     <div class="user-options-container border-top pt-3 flex-fill overflow-hidden d-flex flex-column">
 
       <div class="header mb-2">

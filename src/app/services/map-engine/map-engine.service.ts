@@ -76,6 +76,10 @@ export class MapEngineService implements IMapEngine {
   addLayerMap2DByServer(layerId: string, server: string): boolean {
     return this.m_oEngine.addLayerMap2DByServer(layerId, server);
   }
+
+  addLayerMap2DByServerUnderDrawing(layerId: string, server: string): boolean  {
+    return this.m_oEngine.addLayerMap2DByServerUnderDrawing(layerId, server);
+  }
   removeLayerMap2DByServer(layerId: string): boolean {
     return this.m_oEngine.removeLayerMap2DByServer(layerId);
   }

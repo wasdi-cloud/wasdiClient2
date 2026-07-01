@@ -2,11 +2,7 @@ import {Component} from '@angular/core';
 import {NotificationDisplayService} from "../../services/notification-display.service";
 
 import {TranslateService} from "@ngx-translate/core";
-import {LabellingProjectsComponent} from "./labelling-projects/labelling-projects.component";
-import {LabellingTemplatesComponent} from "./labelling-templates/labelling-templates.component";
-import {LabellingLabelsComponent} from "./labelling-labels/labelling-labels.component";
-import {LabellingMenuComponent} from "./labelling-menu/labelling-menu.component";
-import {ButtonComponent} from "../../shared/shared-components/button/button.component";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-labelling',
@@ -17,17 +13,26 @@ import {ButtonComponent} from "../../shared/shared-components/button/button.comp
 })
 export class LabellingComponent {
   m_sActiveTab: string = 'projects';
+  m_oPublishBandMessage: any = null;
 
   constructor(
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oTranslate: TranslateService) {
+    private m_oTranslate: TranslateService,
+    private m_oRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    const sTab = this.m_oRoute.snapshot.queryParamMap.get('tab');
+    if (sTab === 'labels') {
+      this.m_sActiveTab = 'labels';
+    }
   }
 
   getActiveTab(sEvent: string) {
-    console.log("🚨 PARENT RECEIVED EVENT:", sEvent);
     this.m_sActiveTab = sEvent;
+  }
+
+  onPublishBandMessage(oMessage: any): void {
+    this.m_oPublishBandMessage = oMessage;
   }
 }

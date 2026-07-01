@@ -6,6 +6,7 @@ import { WorkspacesListDialogComponent } from '../workspaces-list-dialog/workspa
 import { ProductInfoComponent } from '../product-info/product-info.component';
 import { MapEngineService } from 'src/app/services/map-engine/map-engine.service';
 import { PagesService } from 'src/app/services/pages.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import $ from 'jquery';
 
@@ -40,13 +41,17 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   m_iItemsPerPage: number = 10;
 
   m_oClickSubscription: Subscription;
+  
   constructor(
     public m_oDialog: MatDialog,
     private m_oMapEngine: MapEngineService,
-    private m_oPageService: PagesService
+    private m_oPageService: PagesService,
+    private m_oRoute: ActivatedRoute,
+    private m_oRouter: Router
   ) { }
 
   ngOnInit(): void {
+
     //Set the selected providers array and set the first selected Provider as the active provider
     this.m_aoSelectedProviders.subscribe(oResponse => {
       if (oResponse.length > 0) {
@@ -101,6 +106,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     this.m_oClickSubscription.unsubscribe();
     this.m_oSelectedProducts.unsubscribe();
   }
+
   /**
    * Sets the Active Provider and emits the Provider to the Parent for Switching Layers List
    * @param oProvider
@@ -261,23 +267,34 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     this.m_oSelectedProducts.emit(this.m_aoSelectedProducts);
   }
 
-  // selectAllProducts() {
-  //   this.m_bAllSelected = !this.m_bAllSelected;
-  //   for (let oProduct of this.m_aoProductsList) {
-  //     this.m_bAllSelected ? oProduct.selected = true : oProduct.select = false;
-  //   }
-  // }
   /**
    * Open dialog to add single product to a workspace
    */
-  sendSingleProductToWorkspace(oProduct): void {
+  sendSingleProductToWorkspace = (oProduct): void => {
     let oDialog = this.m_oDialog.open(WorkspacesListDialogComponent, {
       height: "70vh",
       width: '50vw',
       data: {
         product: oProduct
       }
-    })
+    });
+
+    oDialog.afterClosed().subscribe(oResult => {
+      if (!oResult || oResult.addedToWorkspace !== true) {
+        return;
+      }
+
+      const bOpenedFromLabelling = this.m_oRoute.snapshot.queryParamMap.get('filterWs') === 'true'
+        || this.m_oRoute.snapshot.queryParamMap.get('filterWs') === '1'
+        || this.m_oRouter.url.includes('filterWs=true')
+        || this.m_oRouter.url.includes('filterWs=1');
+
+      if (bOpenedFromLabelling) {
+        this.m_oRouter.navigate(['/labelling'], {
+          queryParams: { tab: 'labels' }
+        });
+      }
+    });
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, AfterViewInit, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, AfterViewInit, OnDestroy, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MapEngineService } from 'src/app/services/map-engine/map-engine.service';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -10,8 +10,9 @@ import { Observable, Subscription } from 'rxjs';
     styleUrls: ['./search-map.component.css'],
     standalone: false
 })
-export class SearchMapComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SearchMapComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   @Input() m_aoProducts: Observable<any>;
+  @Input() m_sForcedBbox: string | null = null;
   m_aoProductsList: any;
   @Input() oMapInput: any = {
     maxArea: 0,
@@ -26,6 +27,9 @@ export class SearchMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   m_sErrorMessage: string;
   m_bIsValid: boolean = true;
+  private m_sAppliedForcedBbox: string | null = null;
+  private m_iForcedBboxRetryCount: number = 0;
+  private readonly m_iMaxForcedBboxRetries: number = 20;
 
   private m_oManualBboxSubscription: Subscription;
 
@@ -39,6 +43,12 @@ export class SearchMapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.m_bIsValid = true;
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['m_sForcedBbox']) {
+      this.applyForcedBboxIfNeeded();
+    }
+  }
+
   ngAfterViewInit(): void {
     this.m_oMapEngine.initMap('wasdiMapImport');
     const oMap = this.m_oMapEngine.getMap();
@@ -46,8 +56,9 @@ export class SearchMapComponent implements OnInit, AfterViewInit, OnDestroy {
       this.m_oMapEngine.initGeocoder(oMap);
       this.m_oMapEngine.addManualBoundingBoxControl(oMap);
       this.m_oMapEngine.addMousePositionAndScale(oMap);
-      // Issue 1 (invalidateSize equivalent): resize after DOM layout settles
+      // Resize after DOM layout settles
       setTimeout(() => oMap.resize(), 100);
+      setTimeout(() => this.applyForcedBboxIfNeeded(), 150);
     }
 
     this.m_oManualBboxSubscription = this.m_oMapEngine.getManualBoundingBox$().subscribe(oResult => {
@@ -135,5 +146,104 @@ export class SearchMapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.oMapInput = sFilter;
     this.m_oMapInputChange.emit(this.oMapInput);
+  }
+
+  private applyForcedBboxIfNeeded(): void {
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(this.m_sForcedBbox)) {
+      return;
+    }
+
+    if (this.m_sAppliedForcedBbox === this.m_sForcedBbox) {
+      return;
+    }
+
+    const oMap = this.m_oMapEngine.getMap();
+    if (!oMap) {
+      if (this.m_iForcedBboxRetryCount < this.m_iMaxForcedBboxRetries) {
+        this.m_iForcedBboxRetryCount++;
+        setTimeout(() => this.applyForcedBboxIfNeeded(), 100);
+      }
+      return;
+    }
+
+    this.m_iForcedBboxRetryCount = 0;
+
+    const aBounds = this.parseForcedBbox(this.m_sForcedBbox);
+    if (!aBounds) {
+      return;
+    }
+
+    const fWest = aBounds[0];
+    const fSouth = aBounds[1];
+    const fEast = aBounds[2];
+    const fNorth = aBounds[3];
+
+    this.m_oMapEngine.upsertSelectionRectangle(fWest, fSouth, fEast, fNorth);
+    this.m_oMapEngine.zoomToBbox([fWest, fSouth, fEast, fNorth]);
+
+    const oLayer = this.createLayerFromBounds(fWest, fSouth, fEast, fNorth);
+    if (!this.checkAreaFromBounds(oLayer)) {
+      return;
+    }
+
+    this.formatManualBbox(oLayer);
+    this.m_sAppliedForcedBbox = this.m_sForcedBbox;
+  }
+
+  private parseForcedBbox(sBbox: string | null): [number, number, number, number] | null {
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sBbox)) {
+      return null;
+    }
+
+    const sNormalized = sBbox.trim();
+    const sLower = sNormalized.toLowerCase();
+
+    if (sLower.includes('intersects(polygon') || sLower.startsWith('polygon((') || sLower.startsWith('polygon ((') || sLower.startsWith('multipolygon(((') || sLower.startsWith('multipolygon (((')) {
+      const aoMatches = Array.from(sNormalized.matchAll(/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g));
+      if (aoMatches.length === 0) {
+        return null;
+      }
+
+      const afLng = aoMatches.map(oMatch => Number(oMatch[1])).filter(fValue => !isNaN(fValue));
+      const afLat = aoMatches.map(oMatch => Number(oMatch[2])).filter(fValue => !isNaN(fValue));
+
+      if (afLng.length === 0 || afLat.length === 0) {
+        return null;
+      }
+
+      const fWest = Math.min(...afLng);
+      const fEast = Math.max(...afLng);
+      const fSouth = Math.min(...afLat);
+      const fNorth = Math.max(...afLat);
+
+      return [fWest, fSouth, fEast, fNorth];
+    }
+
+    const afValues = sNormalized.split(',').map(sValue => Number(sValue.trim()));
+    if (afValues.length !== 4 || afValues.some(fValue => isNaN(fValue))) {
+      return null;
+    }
+
+    // Expected format: LATN,LONW,LATS,LONE
+    const fNorth = afValues[0];
+    const fWest = afValues[1];
+    const fSouth = afValues[2];
+    const fEast = afValues[3];
+
+    return [Math.min(fWest, fEast), Math.min(fSouth, fNorth), Math.max(fWest, fEast), Math.max(fSouth, fNorth)];
+  }
+
+  private createLayerFromBounds(fWest: number, fSouth: number, fEast: number, fNorth: number): any {
+    const aoLatLngs = [
+      { lat: fNorth, lng: fWest },
+      { lat: fNorth, lng: fEast },
+      { lat: fSouth, lng: fEast },
+      { lat: fSouth, lng: fWest },
+      { lat: fNorth, lng: fWest }
+    ];
+
+    return {
+      _latlngs: [aoLatLngs]
+    };
   }
 }
