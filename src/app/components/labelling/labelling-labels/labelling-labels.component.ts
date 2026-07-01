@@ -17,6 +17,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ConstantsService } from 'src/app/services/constants.service';
+import {LabellingTemplatesService} from "../../../services/api/labelling/labelling-templates.service";
 
 // ── Lightweight interfaces ────────────────────────────────────────────────────
 
@@ -122,7 +123,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     private m_oFileBufferService: FileBufferService,
     private m_oTranslate: TranslateService,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oConstantsService: ConstantsService
+    private m_oConstantsService: ConstantsService,
+    private m_oTemplateService: LabellingTemplatesService,
   ) {}
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -130,8 +132,58 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // ═══════════════════════════════════════════════════════════════════════════
 
   ngOnInit(): void {
-    this.m_sCurrentDatasetId=this.m_oProjectState.m_sActiveProjectId
+    this.m_sCurrentDatasetId = this.m_oProjectState.m_sActiveProjectId;
     this.m_sCurrentUser = this.m_oConstantsService.getUserId();
+
+    // Load the template dynamically!
+    if (this.m_oProjectState.m_sActiveTemplateId) {
+      this.m_oTemplateService.getById(this.m_oProjectState.m_sActiveTemplateId).subscribe({
+        next: (oTemplate: any) => {
+          console.log("✅ Loaded Template:", oTemplate.name);
+          this.parseTemplateAttributes(oTemplate);
+        },
+        error: (oError: any) => {
+          console.error("❌ Failed to load template", oError);
+          this.m_oNotificationDisplayService.openAlertDialog("Could not load project template.", "Error", "danger");
+        },
+      });
+    }
+  }
+
+  // ── Helper: Map Backend Template to Frontend Interface ──
+  private parseTemplateAttributes(oTemplate: any): void {
+    if (!oTemplate || !Array.isArray(oTemplate.attributes)) {
+      this.m_aoTemplateAttributes = [];
+      return;
+    }
+
+    this.m_aoTemplateAttributes = oTemplate.attributes.map((attr: any) => {
+      // 1. Convert the Backend Type (TEXT) to Frontend Type (text)
+      const sType = (attr.type || 'TEXT').toLowerCase() as 'text' | 'float' | 'integer' | 'category';
+
+      // 2. Map Category values and Integer Colors to Hex (#FA0000)
+      const aoCategoryValues: { value: string, color: string }[] = [];
+
+      if (sType === 'category' && Array.isArray(attr.categories)) {
+        attr.categories.forEach((sCatName: string, iIndex: number) => {
+          // Get the matching integer color, default to 0 (Black) if missing
+          const iColorInt = (attr.colours && attr.colours.length > iIndex) ? attr.colours[iIndex] : 0;
+
+          // Convert integer to Hex string (e.g., 16384000 -> #FA0000)
+          const sHexColor = '#' + (iColorInt).toString(16).padStart(6, '0');
+
+          aoCategoryValues.push({ value: sCatName, color: sHexColor });
+        });
+      }
+
+      // 3. Return the fully mapped object
+      return {
+        name: attr.name,
+        type: sType,
+        isOptional: !attr.isMandatory, // Flip mandatory to optional for the UI
+        categoryValues: aoCategoryValues
+      } as TemplateAttribute;
+    });
   }
   ngAfterViewInit(): void {
     this.initMap();
@@ -357,7 +409,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
           // 2. Fetch the new labels for the selected image
           this.loadFeatures();
         }
-      });      
+      });
     }
   }
 
@@ -372,10 +424,10 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     console.log("ProductListComponent.receivedPublishBandMessage: layerId=" + oPublishedBand.layerId);
 
     // TODO: In reality we need to get the workspace node and from there the node WMS URL.
-    // Now we are in test there is only the main node     
+    // Now we are in test there is only the main node
     this.m_oMapEngineService.addLayerMap2DByServerUnderDrawing(oPublishedBand.layerId, this.m_oConstantsService.getWmsUrlGeoserver());
     this.m_sCurrentLayerId = oPublishedBand.layerId;
-    
+
     return true;
   }
 
@@ -840,6 +892,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   }
 
   // Mapper: Transforms Backend LabelViewModel to Mapbox Feature
+  // Mapper: Transforms Backend LabelViewModel to Mapbox Feature
   private mapViewModelToFeature(vm: any): LabelFeature {
     // 1. Parse the stringified geometry back into a JSON object
     let parsedGeometry;
@@ -850,13 +903,38 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       parsedGeometry = { type: 'Point', coordinates: [0, 0] }; // Fallback to prevent crash
     }
 
-    // 2. Unpack the Key/Value array into a flat object for your table columns
+    // 2. Safely Extract Dynamic Attributes
     const dynamicProps: { [key: string]: any } = {};
+    let sRowColor = '#3b82f6'; // Default blue color
+
     if (vm.attributes && Array.isArray(vm.attributes)) {
+
       vm.attributes.forEach((attr: any) => {
-        dynamicProps[attr.key] = attr.value;
+        // Look for either 'name' or 'key' to be completely safe
+        const sKey = attr.name || attr.key;
+
+        if (sKey && attr.value !== undefined && attr.value !== null) {
+          dynamicProps[sKey] = attr.value;
+
+          // BONUS: If this is a category, lookup its color from the Template!
+          if ((attr.type === 'CATEGORY' || attr.type === 'category') && this.m_aoTemplateAttributes) {
+            const oTemplateAttr = this.m_aoTemplateAttributes.find(t => t.name === sKey);
+            if (oTemplateAttr && oTemplateAttr.categoryValues) {
+              const oMatch = oTemplateAttr.categoryValues.find(c => c.value === attr.value);
+              if (oMatch) {
+                sRowColor = oMatch.color; // Set the table row dot color!
+              }
+            }
+          }
+        }
       });
+
+    } else {
+      console.warn(`Label ${vm.id} has no attributes array attached to it!`);
     }
+
+    // 3. Log it to the console so you can verify it worked
+    console.log(`Mapped Label ${vm.id} Props:`, dynamicProps);
 
     return {
       id: vm.id,
@@ -866,16 +944,16 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         id: vm.id,
         annotator: vm.annotator || 'Unknown',
         status: vm.isValidated ? 'Validated' : 'Pending',
-        timestamp: new Date().toISOString(), // Fallback if backend doesn't provide
+        timestamp: new Date().toISOString(),
         measurement: this.calcMeasurement(parsedGeometry),
-        portColor: '#3b82f6', // You could logic this out based on your dynamicProps!
+        portColor: sRowColor, // <--- Dynamic Color is injected here!
         isValidated: vm.isValidated || false,
         reviewCount: vm.reviewCount || 0,
         reviewers: vm.reviewers || [],
         reviewNotes: vm.reviewNotes || [],
-        isNew: false,   // <-- FLAG: This came from the DB, so it's not new!
-        isDirty: false, // <-- FLAG: It hasn't been edited yet!
-        ...dynamicProps
+        isNew: false,
+        isDirty: false,
+        ...dynamicProps // <--- Values (a, b, c, cat) are injected here!
       }
     } as LabelFeature;
   }
@@ -908,18 +986,20 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   }
 
   // Mapper: Transforms Mapbox Feature to your Backend LabelViewModel
+  // Mapper: Transforms Mapbox Feature to your Backend LabelViewModel
   private mapFeatureToViewModel(f: LabelFeature): any {
     const geomType = f.geometry.type;
 
-    // Convert dynamic attributes to the Key/Value array your backend expects
+    // Convert dynamic attributes to the Array your backend expects
     const aoAttributes = this.m_aoTemplateAttributes.map(attr => ({
-      key: attr.name,
+      name: attr.name,  // ✅ Changed from 'key' to 'name' to match Java AttributeViewModel!
+      type: attr.type,  // Keeps Java from throwing the toUpperCase() 500 error
       value: f.properties[attr.name] || ''
     }));
 
     return {
-      id: f.properties['isNew'] ? null : f.id, // Backend generates ID on POST
-      geometry: JSON.stringify(f.geometry),    // Pass geometry as string
+      id: f.properties['isNew'] ? null : f.id,
+      geometry: JSON.stringify(f.geometry),
       isPoint: geomType === 'Point',
       isLine: geomType === 'LineString',
       isPolygon: geomType === 'Polygon',
@@ -929,7 +1009,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       datasetId: this.m_sCurrentDatasetId,
       reviewers: f.properties['reviewers'] || [],
       reviewNotes: f.properties['reviewNotes'] || [],
-      attributes: aoAttributes,
+      attributes: aoAttributes, // ✅ Sent to backend
       reviewCount: f.properties['reviewCount'] || 0,
       isValidated: f.properties['isValidated'] || false
     };
@@ -976,13 +1056,16 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   // 1. SAVE SINGLE ROW (Triggered by Table button)
   onSaveSingleLabel(f: LabelFeature): void {
-    if (!f.properties['isDirty']) {
-      console.log('No changes to save for this label.');
-      return;
-    }
+    if (!f.properties['isDirty']) return;
 
-    this.upsertFeature$(f).subscribe(() => {
-      console.log(`✅ Saved single label: ${f.id}`);
+    this.upsertFeature$(f).subscribe((res) => {
+      // ── ONLY LOG SUCCESS IF IT DIDN'T RETURN NULL ──
+      if (res) {
+        console.log(`✅ Saved single label: ${f.id}`);
+        this.m_oNotificationDisplayService.openSnackBar("Label saved!", "Close", "success-snackbar");
+      } else {
+        this.m_oNotificationDisplayService.openAlertDialog("Failed to save label.", "Error", "danger");
+      }
     });
   }
 
@@ -993,35 +1076,21 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   // 2. SAVE ALL DIRTY ROWS (Triggered by Toolbar button)
   onSaveLabels(): void {
+    if (!this.m_sCurrentImageName || !this.m_sCurrentDatasetId) return;
 
-    if (!this.m_sCurrentImageName || !this.m_sCurrentDatasetId) {
-      console.warn('❌ Cannot save: No image or dataset selected!');
-      alert('Please select an image from the sidebar before saving labels.');
-      return;
-    }
-    if (this.m_bSaving) return;
-
-    // Find all features that have unsaved changes
     const aoDirtyFeatures = this.m_aoFeatures.filter(f => f.properties['isDirty']);
-
-    if (aoDirtyFeatures.length === 0) {
-      console.log('All labels are already up to date!');
-      return;
-    }
+    if (aoDirtyFeatures.length === 0) return;
 
     this.m_bSaving = true;
-
-    // Create an array of API calls
     const aoSaveRequests$ = aoDirtyFeatures.map(f => this.upsertFeature$(f));
 
-    // Run them all in parallel!
     forkJoin(aoSaveRequests$).subscribe({
       next: (results) => {
-        console.log(`✅ Bulk saved ${results.length} labels successfully!`);
+        // Filter out the nulls from the failed saves
+        const successfulSaves = results.filter(r => r !== null);
+        console.log(`✅ Bulk saved ${successfulSaves.length} out of ${results.length} labels!`);
       },
-      complete: () => {
-        this.m_bSaving = false;
-      }
+      complete: () => { this.m_bSaving = false; }
     });
   }
 

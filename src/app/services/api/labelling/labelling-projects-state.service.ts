@@ -23,9 +23,10 @@ export class LabellingProjectsStateService {
   public m_oProjectWorkspaceChanged$ = this.m_oProjectWorkspaceChangedSubject.asObservable();
 
   private m_oDataset = null;
+  m_sActiveTemplateId: string|null=null;
 
   get projectId(): string | null {
-    return this.m_sLabellingProjectId;
+    return this.m_sActiveProjectId;
   }
 
 
@@ -50,12 +51,12 @@ export class LabellingProjectsStateService {
   }
 
   setState(sProjectId: string | null, sMode: 'create' | 'view' | 'edit'): void {
-    this.m_sLabellingProjectId = sProjectId;
+    this.m_sActiveProjectId = sProjectId;
     this.m_sMode = sMode;
   }
 
   clearState(): void {
-    this.m_sLabellingProjectId = null;
+    this.m_sActiveProjectId = null;
     this.m_sMode = 'create';
   }
 
