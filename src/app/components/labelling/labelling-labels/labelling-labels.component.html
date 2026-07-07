@@ -61,7 +61,7 @@
           <tbody>
             @for (feature of m_aoFilteredFeatures; track feature.id) {
               <tr [class.row--selected]="feature.id === m_sSelectedFeatureId"
-                  (click)="m_sSelectedFeatureId = feature.id">
+                  (click)="onSelectFeatureRow(feature)">
 
                 <td>
                   <div class="color-dot"

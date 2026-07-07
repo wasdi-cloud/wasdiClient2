@@ -803,8 +803,37 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   }
 
   onDropdownChange(sFeatureId: string, sAttrName: string): void {
-    this.patchFeatureProperty(sFeatureId, sAttrName, this.m_sEditValue);
+    let sNewColor: string | null = null;
+
+    // 1. If it's a category, find the matching color for the new dropdown selection
+    const oTemplateAttr = this.m_aoTemplateAttributes.find(t => t.name === sAttrName);
+    if (oTemplateAttr && (oTemplateAttr.type === 'category')) {
+      const oMatch = oTemplateAttr.categoryValues?.find(c => c.value === this.m_sEditValue);
+      if (oMatch) {
+        sNewColor = oMatch.color;
+      }
+    }
+
+    // 2. Patch the feature in Angular
+    this.m_aoFeatures = this.m_aoFeatures.map(f => {
+      if (f.id !== sFeatureId) return f;
+      return {
+        ...f,
+        properties: {
+          ...f.properties,
+          [sAttrName]: this.m_sEditValue,
+          ...(sNewColor ? { portColor: sNewColor } : {}), // Update the color!
+          isDirty: true
+        }
+      };
+    });
+
     this.m_oEditingCell = { featureId: null, attrName: null };
+
+    // 3. Sync the updated colors back to Mapbox Draw!
+    if (this.m_oMapEngineService) {
+      this.m_oMapEngineService.setDrawFeatures(this.m_aoFeatures);
+    }
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -984,8 +1013,24 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       }
     });
   }
-
-  // Mapper: Transforms Mapbox Feature to your Backend LabelViewModel
+// ── HELPER: Validate Required Fields ──
+  private isValidFeature(f: LabelFeature): boolean {
+    for (const attr of this.m_aoTemplateAttributes) {
+      if (!attr.isOptional) {
+        const value = f.properties[attr.name];
+        // Check if it's undefined, null, or an empty string
+        if (value === undefined || value === null || value === '') {
+          this.m_oNotificationDisplayService.openAlertDialog(
+            `Missing required field: "${attr.name}". Please fill it before saving.`,
+            "Validation Error",
+            "danger"
+          );
+          return false;
+        }
+      }
+    }
+    return true;
+  }
   // Mapper: Transforms Mapbox Feature to your Backend LabelViewModel
   private mapFeatureToViewModel(f: LabelFeature): any {
     const geomType = f.geometry.type;
@@ -1058,13 +1103,12 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   onSaveSingleLabel(f: LabelFeature): void {
     if (!f.properties['isDirty']) return;
 
+    // 🛑 VALIDATION CHECK
+    if (!this.isValidFeature(f)) return;
+
     this.upsertFeature$(f).subscribe((res) => {
-      // ── ONLY LOG SUCCESS IF IT DIDN'T RETURN NULL ──
       if (res) {
-        console.log(`✅ Saved single label: ${f.id}`);
         this.m_oNotificationDisplayService.openSnackBar("Label saved!", "Close", "success-snackbar");
-      } else {
-        this.m_oNotificationDisplayService.openAlertDialog("Failed to save label.", "Error", "danger");
       }
     });
   }
@@ -1081,17 +1125,31 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     const aoDirtyFeatures = this.m_aoFeatures.filter(f => f.properties['isDirty']);
     if (aoDirtyFeatures.length === 0) return;
 
+    // 🛑 VALIDATION CHECK FOR ALL DIRTY FEATURES
+    for (const f of aoDirtyFeatures) {
+      if (!this.isValidFeature(f)) return; // Stops the entire save process if one is missing!
+    }
+
     this.m_bSaving = true;
     const aoSaveRequests$ = aoDirtyFeatures.map(f => this.upsertFeature$(f));
 
     forkJoin(aoSaveRequests$).subscribe({
       next: (results) => {
-        // Filter out the nulls from the failed saves
         const successfulSaves = results.filter(r => r !== null);
-        console.log(`✅ Bulk saved ${successfulSaves.length} out of ${results.length} labels!`);
+        this.m_oNotificationDisplayService.openSnackBar(`Bulk saved ${successfulSaves.length} labels!`, "Close", "success-snackbar");
       },
       complete: () => { this.m_bSaving = false; }
     });
+  }
+
+  // ── MAP INTERACTIONS: Zoom to Row ──
+  onSelectFeatureRow(feature: LabelFeature): void {
+    this.m_sSelectedFeatureId = feature.id;
+
+    const bbox = this.getBboxForFeatures([feature]);
+    if (bbox && this.m_oMapEngineService) {
+      this.m_oMapEngineService.zoomToBbox(bbox);
+    }
   }
 
   // 3. DELETE (Triggered by Table or Map UI)
