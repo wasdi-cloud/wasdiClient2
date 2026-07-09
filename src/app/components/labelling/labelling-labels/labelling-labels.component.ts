@@ -422,12 +422,12 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       return false;
     }
 
-    console.log("ProductListComponent.receivedPublishBandMessage: layerId=" + oPublishedBand.layerId);
-
-    // TODO: In reality we need to get the workspace node and from there the node WMS URL.
-    // Now we are in test there is only the main node
     this.m_oMapEngineService.addLayerMap2DByServerUnderDrawing(oPublishedBand.layerId, this.m_oConstantsService.getWmsUrlGeoserver());
+
     this.m_sCurrentLayerId = oPublishedBand.layerId;
+
+    // ── THE FIX: Send the ID across the bridge to the Sidebar! ──
+    this.m_oProjectState.m_sActiveGeoserverLayerId = oPublishedBand.layerId;
 
     return true;
   }

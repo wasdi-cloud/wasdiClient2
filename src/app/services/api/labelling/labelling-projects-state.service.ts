@@ -6,8 +6,9 @@ export type LabellingProjectMode = 'create' | 'view' | 'edit';
   providedIn: 'root',
 })
 export class LabellingProjectsStateService {
-  m_sLabellingProjectId: string | null = null;
   m_sLabellingProjectName: string | null = null;
+
+  public m_sActiveGeoserverLayerId: string | null = null;
   m_sMode: 'create' | 'view' | 'edit' = 'create';
 
   // NEW: Tracks the project currently open for the "Labels" workspace
