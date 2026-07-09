@@ -43,6 +43,7 @@ export class LabellingToolbarComponent {
   @ViewChild('fileInput') m_oFileInputRef!: ElementRef<HTMLInputElement>;
 
   // ── Methods ──
+  @Output() m_oAddCollab = new EventEmitter<any>();
   triggerFileUpload() {
     this.m_oFileInputRef.nativeElement.click();
   }

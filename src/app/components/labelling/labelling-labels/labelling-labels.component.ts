@@ -18,6 +18,7 @@ import { NotificationDisplayService } from 'src/app/services/notification-displa
 import { TranslateService } from '@ngx-translate/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 import {LabellingTemplatesService} from "../../../services/api/labelling/labelling-templates.service";
+import {ShareDialogComponent, ShareDialogModel} from "../../../shared/dialogs/share-dialog/share-dialog.component";
 
 // ── Lightweight interfaces ────────────────────────────────────────────────────
 
@@ -800,6 +801,37 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   onEditKeyDown(oEvent: KeyboardEvent): void {
     if (oEvent.key === 'Enter') this.onSaveEdit();
     if (oEvent.key === 'Escape') this.m_oEditingCell = { featureId: null, attrName: null };
+  }
+
+  // Make sure to import these from their correct paths!
+  // import { ShareDialogComponent, ShareDialogModel } from '...';
+
+  // ── COLLABORATION: Open the Share Dialog ──
+  onOpenShareDialog(): void {
+    if (!this.m_sCurrentDatasetId) {
+      this.m_oNotificationDisplayService.openAlertDialog("No project selected to share.", "Error", "danger");
+      return;
+    }
+
+    // Prepare the resource object that <app-share-ui> expects.
+    // It usually needs at least the ID and the name of the resource being shared.
+    const oProjectResource = {
+      id: this.m_sCurrentDatasetId,
+      name: this.m_oProjectState.m_sLabellingProjectName || "Labelling Project"
+    };
+
+    // Open the standard WASDI Share Dialog
+    const oDialogRef = this.m_oDialog.open(ShareDialogComponent, {
+      width: '700px', // Standard width for the share UI
+      disableClose: false,
+      data: new ShareDialogModel('DATASET', oProjectResource) // 👈 NOTE: Adjust 'DATASET' to whatever resourceType your <app-share-ui> expects!
+    });
+
+    oDialogRef.afterClosed().subscribe(bResult => {
+      console.log("Share dialog closed.");
+      // Optional: If you need to refresh your collaborators list after sharing, do it here!
+      // this.loadCollaborators();
+    });
   }
 
   onDropdownChange(sFeatureId: string, sAttrName: string): void {
