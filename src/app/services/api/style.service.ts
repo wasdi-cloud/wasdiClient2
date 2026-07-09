@@ -45,16 +45,7 @@ export class StyleService {
     urlParams = urlParams + "&" + "styleId=" + sStyleId;
 
     let sAPIUrl = this.APIURL;
-
-    // Download styles is not a distributed API
-    // if (typeof sUrl !== "undefined") {
-    //   if (sUrl !== null) {
-    //     if (sUrl !== "") {
-    //       sAPIUrl = sUrl;
-    //     }
-    //   }
-    // }
-
+    
     window.location.href = sAPIUrl + "/styles/download" + urlParams;
   };
 
