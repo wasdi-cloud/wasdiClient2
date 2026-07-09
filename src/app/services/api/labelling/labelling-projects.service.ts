@@ -89,6 +89,17 @@ export class LabellingProjectsService {
   createProject(oDatasetProject: any) {
     return this.m_oHttp.post(this.APIURL, oDatasetProject);
   }
+
+  /**
+   * Allows the current user to leave a project they were invited to.
+   * @param sDatasetId The ID of the dataset to leave
+   */
+  leaveProject(sDatasetId: string) {
+    return this.m_oHttp.delete(this.APIURL + '/leave', {
+      params: { datasetId: sDatasetId },
+      observe: 'response' // Helps catch empty 200 OK responses
+    });
+  }
   /**
    * update a project
    * @returns

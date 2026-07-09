@@ -163,19 +163,26 @@ export class LabellingProjectsComponent implements OnInit {
 
 
   handleLeaveProject(oProject: any) {
-    // if (oProject.userRole?.toUpperCase() === 'OWNER' && oProject.ownersCount <= 1) {
-    //   this.m_oNotificationService.openAlertDialog("You are the only owner. Invite another co-owner or delete the project.", "Warning", "warning");
-    //   return;
-    // }
-    // if (confirm(`Are you sure you want to leave ${oProject.name}?`)) {
-    //   this.m_oProjectService.leaveProject(oProject.id, this.m_sCurrentUserId).subscribe({
-    //     next: () => {
-    //       this.m_oNotificationService.openSnackBar("You have left the project.", "Close", "success-snackbar");
-    //       this.loadProjects();
-    //     },
-    //     error: () => this.m_oNotificationService.openAlertDialog("Failed to leave project.", "Error", "danger")
-    //   });
-    // }
+    if (confirm(`Are you sure you want to leave "${oProject.name}"? You will lose access to it immediately.`)) {
+
+      this.m_oProjectService.leaveProject(oProject.id).subscribe({
+        next: () => {
+          this.m_oNotificationService.openSnackBar("You have successfully left the project.", "Close", "success-snackbar");
+          this.loadProjects(); // Refresh the table so it disappears!
+        },
+        error: (oError: any) => {
+          // The Angular Parsing Trap Interceptor
+          if (oError.status === 200 || oError.status === 204) {
+            this.m_oNotificationService.openSnackBar("You have successfully left the project.", "Close", "success-snackbar");
+            this.loadProjects();
+          } else {
+            console.error("Leave Error:", oError);
+            this.m_oNotificationService.openAlertDialog("Failed to leave project.", "Error", "danger");
+          }
+        }
+      });
+
+    }
   }
 
   handleDeleteProject(oProject: any) {
