@@ -71,6 +71,11 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // ── Map ─────────────────────────────────────────────────────────────────────
   private m_oMap: any = null;
 
+  // ── Template Color Rules ──
+  m_bIsFixedColour: boolean = true;
+  m_sColourAttributeName: string = '';
+  m_sDefaultColor: string = '#3b82f6'; // Standard blue fallback
+
   // ── Feature state ───────────────────────────────────────────────────────────
   m_aoFeatures: LabelFeature[] = [];
   m_aoPastFeatures: LabelFeature[][] = [];   // undo stack (max 30)
@@ -141,6 +146,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       this.m_oTemplateService.getById(this.m_oProjectState.m_sActiveTemplateId).subscribe({
         next: (oTemplate: any) => {
           console.log("✅ Loaded Template:", oTemplate.name);
+          this.m_bIsFixedColour = oTemplate.isFixedColour;
+          this.m_sColourAttributeName = oTemplate.colourAttributeName || '';
           this.parseTemplateAttributes(oTemplate);
         },
         error: (oError: any) => {
@@ -533,13 +540,17 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     const sId = oRaw.id;
     const sMeasurement = this.calcMeasurement(oRaw.geometry);
     const oDynamicProps: { [key: string]: any } = {};
-    let sColor = '#3b82f6';
+    let sColor = this.m_sDefaultColor; // Start with fallback
 
     this.m_aoTemplateAttributes.forEach(attr => {
       oDynamicProps[attr.name] = '';
       if (attr.categoryValues && attr.categoryValues.length > 0) {
         oDynamicProps[attr.name] = attr.categoryValues[0].value;
-        sColor = attr.categoryValues[0].color;
+
+        // ── ONLY APPLY COLOR IF IT MATCHES THE RULES ──
+        if (!this.m_bIsFixedColour && attr.name === this.m_sColourAttributeName) {
+          sColor = attr.categoryValues[0].color;
+        }
       }
     });
 
@@ -553,13 +564,13 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         status: 'Pending',
         timestamp: new Date().toISOString(),
         measurement: sMeasurement,
-        portColor: sColor,
+        portColor: sColor, // <--- Assigned here!
         isValidated: false,
         reviewCount: 0,
         reviewers: [],
         reviewNotes: [],
-        isNew: true,    // <-- FLAG: This has never been saved
-        isDirty: true,  // <-- FLAG: Needs to be saved
+        isNew: true,
+        isDirty: true,
         ...oDynamicProps
       }
     } as LabelFeature;
@@ -837,12 +848,14 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   onDropdownChange(sFeatureId: string, sAttrName: string): void {
     let sNewColor: string | null = null;
 
-    // 1. If it's a category, find the matching color for the new dropdown selection
-    const oTemplateAttr = this.m_aoTemplateAttributes.find(t => t.name === sAttrName);
-    if (oTemplateAttr && (oTemplateAttr.type === 'category')) {
-      const oMatch = oTemplateAttr.categoryValues?.find(c => c.value === this.m_sEditValue);
-      if (oMatch) {
-        sNewColor = oMatch.color;
+    // ── ONLY LOOKUP COLOR IF THIS IS THE DESIGNATED COLOR ATTRIBUTE ──
+    if (!this.m_bIsFixedColour && sAttrName === this.m_sColourAttributeName) {
+      const oTemplateAttr = this.m_aoTemplateAttributes.find(t => t.name === sAttrName);
+      if (oTemplateAttr && (oTemplateAttr.type === 'category')) {
+        const oMatch = oTemplateAttr.categoryValues?.find(c => c.value === this.m_sEditValue);
+        if (oMatch) {
+          sNewColor = oMatch.color;
+        }
       }
     }
 
@@ -854,7 +867,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         properties: {
           ...f.properties,
           [sAttrName]: this.m_sEditValue,
-          ...(sNewColor ? { portColor: sNewColor } : {}), // Update the color!
+          ...(sNewColor ? { portColor: sNewColor } : {}), // Safely apply new color
           isDirty: true
         }
       };
@@ -977,13 +990,15 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         if (sKey && attr.value !== undefined && attr.value !== null) {
           dynamicProps[sKey] = attr.value;
 
-          // BONUS: If this is a category, lookup its color from the Template!
-          if ((attr.type === 'CATEGORY' || attr.type === 'category') && this.m_aoTemplateAttributes) {
-            const oTemplateAttr = this.m_aoTemplateAttributes.find(t => t.name === sKey);
-            if (oTemplateAttr && oTemplateAttr.categoryValues) {
-              const oMatch = oTemplateAttr.categoryValues.find(c => c.value === attr.value);
-              if (oMatch) {
-                sRowColor = oMatch.color; // Set the table row dot color!
+          // ── ONLY EXTRACT COLOR IF RULES MATCH ──
+          if (!this.m_bIsFixedColour && sKey === this.m_sColourAttributeName) {
+            if ((attr.type === 'CATEGORY' || attr.type === 'category') && this.m_aoTemplateAttributes) {
+              const oTemplateAttr = this.m_aoTemplateAttributes.find(t => t.name === sKey);
+              if (oTemplateAttr && oTemplateAttr.categoryValues) {
+                const oMatch = oTemplateAttr.categoryValues.find(c => c.value === attr.value);
+                if (oMatch) {
+                  sRowColor = oMatch.color;
+                }
               }
             }
           }
