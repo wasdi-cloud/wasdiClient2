@@ -8,7 +8,9 @@ import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@
 })
 export class LabellingToolbarComponent {
 
-
+// Add these two Inputs near your other stats/state inputs!
+  @Input() m_bCanDraw: boolean = false;
+  @Input() m_bCanShare: boolean = false;
   @Output() m_oUploadClick = new EventEmitter<void>();
   // ── Stats & State (Inputs) ──
   @Input() m_iTotalFeatures: number = 0;

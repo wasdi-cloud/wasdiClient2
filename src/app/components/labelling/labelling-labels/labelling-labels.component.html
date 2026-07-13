@@ -7,6 +7,8 @@
   <div class="labels-map-frame">
     <!-- Toolbar floats over the map -->
     <app-labelling-toolbar
+      [m_bCanDraw]="canDraw()"
+      [m_bCanShare]="m_sUserRole === 'OWNER'"
       [m_iTotalFeatures]="m_aoFeatures.length"
       [m_iValidatedCount]="m_iValidatedCount"
       [m_bCanUndo]="m_aoPastFeatures.length > 0"
@@ -72,7 +74,7 @@
 
                 @for (attr of m_aoTemplateAttributes; track attr.name) {
                   <td>
-                    @if (isEditing(feature.id, attr.name)) {
+                    @if (isEditing(feature.id, attr.name) && canEdit(feature)) {
                       @if (attr.type === 'category') {
                         <select autoFocus
                                 [(ngModel)]="m_sEditValue"
@@ -116,27 +118,48 @@
                 </td>
 
                 <td>
-                  <div class="actions-cell">
-                    <button class="action-btn" title="Approve"
-                            [disabled]="hasCurrentUserApproved(feature)"
-                            (click)="$event.stopPropagation(); onApprove(feature)">✅</button>
+                  <div class="actions-cell d-flex gap-2 align-items-center justify-content-center">
 
-                    <button class="action-btn" title="Notes & Issues"
+                    @if (canValidate()) {
+                      <button class="action-btn text-success" title="Approve"
+                              [disabled]="hasCurrentUserApproved(feature)"
+                              (click)="$event.stopPropagation(); onApprove(feature)">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">task_alt</span>
+                      </button>
+                    }
+
+                    <button class="action-btn text-warning" title="Notes & Issues"
                             style="position:relative;"
                             (click)="$event.stopPropagation(); onOpenIssues(feature)">
-                      {{ getIssueIcon(feature) }}
+
+                      <span class="material-symbols-outlined" style="font-size: 18px;">
+                        {{ getIssueIcon(feature) }}
+                      </span>
+
                       @if (getUnresolvedCount(feature) > 0) {
-                        <span class="issue-count">{{ getUnresolvedCount(feature) }}</span>
+                        <span class="position-absolute translate-middle badge rounded-pill bg-danger"
+                              style="top: 5px; left: 100%; font-size: 9px; padding: 3px 5px;">
+                          {{ getUnresolvedCount(feature) }}
+                        </span>
                       }
                     </button>
 
-                    <button class="action-btn" title="Save"
-                            [class.text-primary]="feature.properties['isDirty']"
-                            [disabled]="!feature.properties['isDirty']"
-                            (click)="$event.stopPropagation(); onSaveSingleLabel(feature)">💾</button>
+                    @if (canEdit(feature)) {
+                      <button class="action-btn" title="Save"
+                              [class.text-primary]="feature.properties['isDirty']"
+                              [class.text-muted]="!feature.properties['isDirty']"
+                              [disabled]="!feature.properties['isDirty']"
+                              (click)="$event.stopPropagation(); onSaveSingleLabel(feature)">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">save</span>
+                      </button>
+                    }
 
-                    <button class="action-btn action-btn--danger" title="Delete"
-                            (click)="$event.stopPropagation(); onDelete(feature.id)">❌</button>
+                    @if (canDelete(feature)) {
+                      <button class="action-btn text-danger" title="Delete"
+                              (click)="$event.stopPropagation(); onDelete(feature.id)">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
+                      </button>
+                    }
                   </div>
                 </td>
               </tr>
@@ -155,3 +178,74 @@
   </div>
 
 </div>
+<!-- ═══════════════════════════════════════════
+       ISSUE LOG OVERLAY MODAL
+  ════════════════════════════════════════════ -->
+@if (m_oActiveIssueFeature) {
+  <div class="issue-modal-backdrop" (click)="onCloseIssues()">
+    <div class="issue-modal-panel d-flex flex-column" (click)="$event.stopPropagation()">
+
+      <div class="issue-modal-header d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
+        <div class="d-flex align-items-center gap-2">
+          <span class="material-symbols-outlined text-warning">flag</span>
+          <h6 class="mb-0 font-bold">Issue Log & Notes</h6>
+        </div>
+        <button class="btn-close" (click)="onCloseIssues()"></button>
+      </div>
+
+      <div class="issue-modal-body p-3 flex-fill" style="overflow-y: auto; max-height: 400px; background-color: #f8f9fa;">
+
+        @if (!m_oActiveIssueFeature.properties['reviewNotes'] || m_oActiveIssueFeature.properties['reviewNotes'].length === 0) {
+          <div class="text-center text-muted p-4 fst-italic" style="font-size: 13px;">
+            No notes or issues reported for this label yet.
+          </div>
+        }
+
+        @for (note of m_oActiveIssueFeature.properties['reviewNotes']; track note.id) {
+          <div class="card mb-2 border-0 shadow-sm" [class.opacity-75]="note.resolved">
+            <div class="card-body p-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="avatar-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                       style="width: 24px; height: 24px; border-radius: 50%; font-size: 10px; font-weight: bold;">
+                    {{ note.sender.charAt(0).toUpperCase() }}
+                  </div>
+                  <span class="font-bold" style="font-size: 13px;">{{ note.sender }}</span>
+                </div>
+
+                @if (!note.resolved) {
+                  <button class="btn btn-sm btn-outline-success px-2 py-0" style="font-size: 11px;"
+                          (click)="onResolveNote(note.id)">
+                    Mark Resolved
+                  </button>
+                } @else {
+                  <span class="badge bg-success-subtle text-success border border-success" style="font-size: 11px;">Resolved</span>
+                }
+              </div>
+              <div class="text-dark" style="font-size: 13px; margin-left: 32px;">
+                {{ note.note }}
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="issue-modal-footer p-3 border-top bg-white">
+          <textarea class="form-control mb-2" rows="2" style="font-size: 13px; resize: none;"
+                    placeholder="Type a new issue, question, or note..."
+                    [(ngModel)]="m_sIssueInput"
+                    (keydown.enter)="$event.preventDefault(); onSendIssue()">
+          </textarea>
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-light btn-sm font-bold" (click)="onCloseIssues()">Close</button>
+          <button class="btn btn-primary btn-sm font-bold px-3"
+                  [disabled]="!m_sIssueInput.trim()"
+                  (click)="onSendIssue()">
+            Post Note
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+}

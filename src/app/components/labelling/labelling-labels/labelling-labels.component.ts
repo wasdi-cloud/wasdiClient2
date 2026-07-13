@@ -68,6 +68,11 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     }
   }
 
+  m_sUserRole: string = 'GUEST';
+  m_bAnnotatorsSeeAll: boolean = true;
+  m_bReviewRequired: boolean = false;
+  m_iMinReviews: number = 1;
+
   // ── Map ─────────────────────────────────────────────────────────────────────
   private m_oMap: any = null;
 
@@ -140,6 +145,17 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   ngOnInit(): void {
     this.m_sCurrentDatasetId = this.m_oProjectState.m_sActiveProjectId;
     this.m_sCurrentUser = this.m_oConstantsService.getUserId();
+
+    // ── EXTRACT ROLE & PROJECT SETTINGS ──
+    const oProject = this.m_oProjectState.getDataset();
+    if (oProject) {
+      this.m_sUserRole = (oProject.userRole || 'GUEST').toUpperCase();
+
+      // Fallback defaults if the backend fields are slightly differently named
+      this.m_bAnnotatorsSeeAll = oProject.annotatorsSeeAllLabels !== false;
+      this.m_bReviewRequired = oProject.reviewRequired === true;
+      this.m_iMinReviews = oProject.minReviewCount || 1;
+    }
 
     // Load the template dynamically!
     if (this.m_oProjectState.m_sActiveTemplateId) {
@@ -348,6 +364,27 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     }
   }
 
+
+  // ── PERMISSION GUARDS ──
+
+  canDraw(): boolean {
+    return this.m_sUserRole === 'OWNER' || this.m_sUserRole === 'ANNOTATOR';
+  }
+
+  canEdit(oFeature: LabelFeature): boolean {
+    if (this.m_sUserRole === 'OWNER') return true;
+    // Annotators can only edit their OWN labels
+    if (this.m_sUserRole === 'ANNOTATOR' && oFeature.properties['annotator'] === this.m_sCurrentUser) return true;
+    return false;
+  }
+
+  canValidate(): boolean {
+    return this.m_sUserRole === 'OWNER' || this.m_sUserRole === 'REVIEWER';
+  }
+
+  canDelete(oFeature: LabelFeature): boolean {
+    return this.canEdit(oFeature); // Usually same rules as editing
+  }
   // ═══════════════════════════════════════════════════════════════════════════
   // MAP INIT
   // ═══════════════════════════════════════════════════════════════════════════
@@ -515,6 +552,12 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   }
 
   onEditModeChange(sMode: 'draw' | 'vertices' | 'move'): void {
+
+    if (!this.canDraw() && (sMode === 'draw' || sMode === 'vertices')) {
+      this.m_oNotificationDisplayService.openSnackBar("You do not have permission to draw or edit shapes.", "Close", "warning");
+      return;
+    }
+
     this.m_sEditMode = sMode;
 
     const oCanvas = this.m_oMapEngineService.getMap()?.getCanvas();
@@ -529,6 +572,54 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       this.m_oMapEngineService.changeDrawMode('simple_select', this.m_sSelectedFeatureId || undefined);
     } else if (sMode === 'vertices') {
       this.m_oMapEngineService.changeDrawMode('direct_select', this.m_sSelectedFeatureId || undefined);
+    }
+  }
+
+  onSendIssue(): void {
+    if (!this.m_sIssueInput.trim() || !this.m_oActiveIssueFeature) return;
+
+    const oNote: ReviewNote = {
+      id: Date.now().toString(),
+      sender: this.m_sCurrentUser,
+      note: this.m_sIssueInput.trim(),
+      resolved: false
+    };
+
+    // 1. Update the local arrays
+    this.updateFeatureNotes(this.m_oActiveIssueFeature.id, oNote);
+    this.m_sIssueInput = '';
+
+    // 2. Auto-save it instantly so comments aren't lost!
+    this.patchFeatureProperty(this.m_oActiveIssueFeature.id, 'isDirty', true);
+
+    // We pass the updated feature from our array to the save function
+    const oUpdatedFeature = this.m_aoFeatures.find(f => f.id === this.m_oActiveIssueFeature!.id);
+    if (oUpdatedFeature) {
+      this.onSaveSingleLabel(oUpdatedFeature);
+    }
+  }
+
+  onResolveNote(sNoteId: string): void {
+    if (!this.m_oActiveIssueFeature) return;
+
+    // 1. Mark the specific note as resolved
+    const aoUpdated = (this.m_oActiveIssueFeature.properties['reviewNotes'] as ReviewNote[] || [])
+      .map(n => n.id === sNoteId ? { ...n, resolved: true } : n);
+
+    // 2. Update the main table array
+    this.patchFeatureProperty(this.m_oActiveIssueFeature.id, 'reviewNotes', aoUpdated);
+    this.patchFeatureProperty(this.m_oActiveIssueFeature.id, 'isDirty', true);
+
+    // 3. Keep the modal in sync immediately
+    this.m_oActiveIssueFeature = {
+      ...this.m_oActiveIssueFeature,
+      properties: { ...this.m_oActiveIssueFeature.properties, reviewNotes: aoUpdated }
+    };
+
+    // 4. Auto-save the resolution to the DB!
+    const oUpdatedFeature = this.m_aoFeatures.find(f => f.id === this.m_oActiveIssueFeature!.id);
+    if (oUpdatedFeature) {
+      this.onSaveSingleLabel(oUpdatedFeature);
     }
   }
 
@@ -718,22 +809,24 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // ═══════════════════════════════════════════════════════════════════════════
 
   onApprove(oFeature: LabelFeature): void {
-    if (this.hasCurrentUserApproved(oFeature)) return;
-
-    // TODO: call your API, then update local state on success:
-    // this.m_oLabelService.approveLabel(oFeature.id).subscribe(res => { ... });
+    if (!this.canValidate() || this.hasCurrentUserApproved(oFeature)) return;
 
     this.m_aoFeatures = this.m_aoFeatures.map(f => {
       if (f.id !== oFeature.id) return f;
       const aoReviewers = [...(f.properties['reviewers'] || []), this.m_sCurrentUser];
       const iCount = aoReviewers.length;
+
+      // ── CHECK AGAINST PROJECT SETTINGS ──
+      const bIsValidated = this.m_bReviewRequired ? (iCount >= this.m_iMinReviews) : true;
+
       return {
         ...f,
         properties: {
           ...f.properties,
           reviewers: aoReviewers,
           reviewCount: iCount,
-          isValidated: iCount >= 2   // adjust threshold to your minReviewCount
+          isValidated: bIsValidated,
+          isDirty: true // Mark dirty so they can save the approval!
         }
       };
     });
@@ -754,37 +847,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     this.m_oActiveIssueFeature = null;
   }
 
-  onSendIssue(): void {
-    if (!this.m_sIssueInput.trim() || !this.m_oActiveIssueFeature) return;
-    const oNote: ReviewNote = {
-      id: Date.now().toString(),
-      sender: this.m_sCurrentUser,
-      note: this.m_sIssueInput.trim(),
-      resolved: false
-    };
 
-    // TODO: call this.m_oLabelService.sendNote(featureId, noteText).subscribe(...)
 
-    this.updateFeatureNotes(this.m_oActiveIssueFeature.id, oNote);
-    this.m_sIssueInput = '';
-  }
-
-  onResolveNote(sNoteId: string): void {
-    if (!this.m_oActiveIssueFeature) return;
-
-    // TODO: call this.m_oLabelService.resolveNote(featureId, noteId).subscribe(...)
-
-    const aoUpdated = (this.m_oActiveIssueFeature.properties['reviewNotes'] as ReviewNote[] || [])
-      .map(n => n.id === sNoteId ? { ...n, resolved: true } : n);
-
-    this.patchFeatureProperty(this.m_oActiveIssueFeature.id, 'reviewNotes', aoUpdated);
-
-    // Keep the modal in sync
-    this.m_oActiveIssueFeature = {
-      ...this.m_oActiveIssueFeature,
-      properties: { ...this.m_oActiveIssueFeature.properties, reviewNotes: aoUpdated }
-    };
-  }
 
   // ═══════════════════════════════════════════════════════════════════════════
   // INLINE EDIT
@@ -888,6 +952,12 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   get m_aoFilteredFeatures(): LabelFeature[] {
     return this.m_aoFeatures.filter(f => {
       const oProps = f.properties || {};
+
+      // ── ENFORCE ANNOTATOR VISIBILITY RESTRICTION ──
+      if (this.m_sUserRole === 'ANNOTATOR' && !this.m_bAnnotatorsSeeAll) {
+        if (oProps['annotator'] !== this.m_sCurrentUser) return false;
+      }
+
       if (this.m_sFilterCollab !== 'all' &&
         oProps['annotator']?.toLowerCase() !== this.m_sFilterCollab.toLowerCase()) {
         return false;
@@ -916,9 +986,9 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   getIssueIcon(oFeature: LabelFeature): string {
     const aoNotes: ReviewNote[] = oFeature.properties['reviewNotes'] || [];
     const iUnresolved = aoNotes.filter(n => !n.resolved).length;
-    if (iUnresolved > 0) return '🚩';
-    if (aoNotes.length > 0) return '💬';
-    return '📭';
+    if (iUnresolved > 0) return 'flag';
+    if (aoNotes.length > 0) return 'chat';
+    return 'add_comment';
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
