@@ -32,43 +32,54 @@
       <div class="image-list-container d-flex flex-column gap-2 overflow-y-auto pb-3 px-1">
 
         @for (img of m_aoProjectImages; track img.id) {
-          <div class="image-item p-2 rounded shadow-sm border bg-white d-flex flex-column gap-2"
-               style="cursor: pointer;"
-               [class.border-primary]="img.id === m_sSelectedImageId"
+          <div class="list-group-item d-flex flex-column"
+               [class.image-item--selected]="img.id === m_sSelectedImageId"
                (click)="onSelectImage(img)">
 
-            <div class="d-flex align-items-center justify-content-between">
+            <div class="layer-title d-flex flex-row justify-content-between gap-2">
 
-              <div class="d-flex align-items-center gap-2 text-truncate" [title]="img.name">
-                <span class="material-symbols-outlined" style="font-size: 18px;"
-                      [class.text-primary]="img.id === m_sSelectedImageId"
-                      [class.text-muted]="img.id !== m_sSelectedImageId">
-                  {{ img.id === m_sSelectedImageId ? 'radio_button_checked' : 'radio_button_unchecked' }}
-                </span>
-                <span class="text-truncate" style="font-size: 12px; font-weight: 500;"
-                      [class.text-primary]="img.id === m_sSelectedImageId">
-                  {{ img.name }}
-                </span>
+              <div class="legend-container justify-self-start align-self-start d-flex flex-row mt-1"
+                   matTooltip="Layer Style Options">
+                <div class="legend-dot"></div>
+                <div class="legend-dot dot-2"></div>
+                <div class="legend-dot dot-3"></div>
               </div>
 
-              <div class="d-flex align-items-center gap-1 ms-2 flex-shrink-0">
-                <button class="action-icon-btn" title="Image Settings" (click)="onImageSettings(img, $event)">
-                  <span class="material-symbols-outlined" style="font-size: 16px;">settings</span>
-                </button>
+              <div class="band-title d-flex flex-column flex-fill gap-1 mt-1" [title]="img.name">
+                <p class="band-info font-bold" style="color: #212529;">{{ img.name }}</p>
+                <p class="band-info text-muted" style="font-size: 11px;">Project Imagery</p>
+              </div>
 
-                <button class="action-icon-btn" title="Change Style" (click)="onEditImageStyle(img, $event)">
-                  <span class="material-symbols-outlined" style="font-size: 16px;">palette</span>
-                </button>
+              <div class="button-options d-flex flex-row gap-1 align-items-start mt-1">
+                <app-button
+                  [m_bMuted]="true"
+                  [m_sIconLeft]="'settings'"
+                  [m_sSize]="'small'"
+                  (click)="$event.stopPropagation(); onImageSettings(img, $event)"
+                  matTooltip="Image Settings">
+                </app-button>
+                <app-button
+                  [m_bMuted]="true"
+                  [m_sIconLeft]="img.isVisible === false ? 'visibility_off' : 'visibility'"
+                  [m_sSize]="'small'"
+                  (click)="$event.stopPropagation(); onToggleImageVisibility(img)"
+                  [matTooltip]="img.isVisible === false ? 'Show Layer' : 'Hide Layer'">
+                </app-button>
               </div>
             </div>
 
             @if (img.id === m_sSelectedImageId) {
-              <div class="d-flex align-items-center gap-2 px-1 mt-1" (click)="$event.stopPropagation()">
-                <span class="material-symbols-outlined text-muted" style="font-size: 14px;" title="Opacity">opacity</span>
-                <input type="range" class="form-range custom-slider flex-fill"
-                       min="0" max="100" [value]="img.opacity"
-                       (input)="onOpacityChange(img, $event)">
-                <span style="font-size: 10px; color: #888; width: 24px; text-align: right;">{{ img.opacity }}%</span>
+              <div class="font-bold d-flex flex-row align-items-center gap-2 pe-2 mt-3 pt-2 border-top" (click)="$event.stopPropagation()">
+                <span class="text-muted" style="font-size: 12px;">Opacity:</span>
+
+                <div class="slider-container flex-fill">
+                  <app-slider
+                    [m_bHasThumbLabel]="true"
+                    [m_iValue]="img.opacity || 100"
+                    (m_oSelectionChange)="onOpacityChange(img, $event)">
+                  </app-slider>
+                </div>
+
               </div>
             }
 

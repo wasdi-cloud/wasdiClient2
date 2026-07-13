@@ -202,9 +202,9 @@ export class LabellingMenuComponent implements OnInit {
     console.log(`Open Style Dialog for ${oImage.name}`);
   }
 
-  onOpacityChange(oImage: any, event: Event) {
-    const sValue = (event.target as HTMLInputElement).value;
-    oImage.opacity = parseInt(sValue, 10);
+  onOpacityChange(oImage: any, newOpacityValue: number | string) {
+    // The app-slider emits the value directly, so we just parse it to be safe
+    oImage.opacity = typeof newOpacityValue === 'string' ? parseInt(newOpacityValue, 10) : newOpacityValue;
 
     // ── READ THE ID FROM THE BRIDGE ──
     const sLayerId = this.m_oProjectState.m_sActiveGeoserverLayerId;
