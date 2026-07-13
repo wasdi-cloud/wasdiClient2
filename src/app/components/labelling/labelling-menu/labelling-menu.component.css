@@ -72,12 +72,6 @@
   border-color: #b0c4de;
 }
 
-/* ── Selected State Highlight ── */
-.image-item--selected {
-  background-color: #f0f7ff !important;
-  border-color: #0d6efd !important;
-  box-shadow: 0 0 0 1px #0d6efd !important;
-}
 
 /* ── Text Layout ── */
 div.layer-title {
