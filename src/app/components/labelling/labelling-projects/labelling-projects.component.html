@@ -92,52 +92,51 @@
                     }
                   </td>
 
-                  <td>
-                    <div class="d-flex gap-1 justify-content-end align-items-center">
+                  <td class="d-flex flex-row justify-content-end gap-1 align-items-center">
 
-                      @if (m_oProjectState.m_sActiveProjectId === item.id) {
-                        <span class="material-symbols-outlined action-icon text-danger"
-                              title="Close Project Workspace"
-                              (click)="openProject(item)">
-                          close
-                        </span>
-                      } @else {
-                        <span class="material-symbols-outlined action-icon text-success"
-                              title="Open Project Workspace"
-                              (click)="openProject(item)">
-                          open_in_new
-                        </span>
-                      }
-                      <span class="material-symbols-outlined action-icon text-primary"
-                            title="View Project Details"
-                            (click)="navigateToProject(item.id, 'view')">
-                        visibility
+                    @if (m_oProjectState.m_sActiveProjectId === item.id) {
+                      <span class="material-symbols-outlined"
+                            title="Close Project Workspace"
+                            (click)="openProject(item)">
+                        close
                       </span>
+                    } @else {
+                      <span class="material-symbols-outlined"
+                            title="Open Project Workspace"
+                            (click)="openProject(item)">
+                        open_in_new
+                      </span>
+                    }
 
-                      @if (item.userRole?.toUpperCase() === 'OWNER') {
-                        <span class="material-symbols-outlined action-icon text-primary"
-                              title="Edit Project"
-                              (click)="navigateToProject(item.id, 'edit')">
-                          edit
-                        </span>
-                      }
+                    <span class="material-symbols-outlined"
+                          title="View Project Details"
+                          (click)="navigateToProject(item.id, 'view')">
+                      visibility
+                    </span>
 
-                      @if (m_bIsLoggedIn && item.userRole?.toUpperCase() !== 'GUEST' && item.userRole?.toUpperCase() !== 'OWNER') {
-                        <span class="material-symbols-outlined action-icon text-warning"
-                              title="Leave Project"
-                              (click)="handleLeaveProject(item)">
-                          logout
-                        </span>
-                      }
+                    @if (item.userRole?.toUpperCase() === 'OWNER') {
+                      <span class="material-symbols-outlined"
+                            title="Edit Project"
+                            (click)="navigateToProject(item.id, 'edit')">
+                        edit
+                      </span>
+                    }
 
-                      @if (item.userRole?.toUpperCase() === 'OWNER') {
-                        <span class="material-symbols-outlined action-icon delete-icon text-danger"
-                              title="Delete Project"
-                              (click)="handleDeleteProject(item)">
-                          delete
-                        </span>
-                      }
-                    </div>
+                    @if (m_bIsLoggedIn && item.userRole?.toUpperCase() !== 'GUEST' && item.userRole?.toUpperCase() !== 'OWNER') {
+                      <span class="material-symbols-outlined"
+                            title="Leave Project"
+                            (click)="handleLeaveProject(item)">
+                        logout
+                      </span>
+                    }
+
+                    @if (item.userRole?.toUpperCase() === 'OWNER') {
+                      <span class="material-symbols-outlined"
+                            title="Delete Project"
+                            (click)="handleDeleteProject(item)">
+                        delete
+                      </span>
+                    }
                   </td>
                 </tr>
               }

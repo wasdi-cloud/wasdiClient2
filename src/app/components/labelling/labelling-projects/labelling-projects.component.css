@@ -47,6 +47,8 @@ th {
   padding: 6px 12px 6px 8px;
   height: 44px;
 }
+
+/* DELETE THESE 3 BLOCKS */
 .action-icon {
   cursor: pointer;
   padding: 4px;

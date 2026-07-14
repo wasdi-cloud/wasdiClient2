@@ -6,13 +6,14 @@ export type LabellingProjectMode = 'create' | 'view' | 'edit';
   providedIn: 'root',
 })
 export class LabellingProjectsStateService {
-  m_sLabellingProjectId: string | null = null;
   m_sLabellingProjectName: string | null = null;
+
+  public m_sActiveGeoserverLayerId: string | null = null;
   m_sMode: 'create' | 'view' | 'edit' = 'create';
 
   // NEW: Tracks the project currently open for the "Labels" workspace
   m_sActiveProjectId: string | null = null;
-  private _m_sTargetWorkspaceId: string | null = null;
+  private m_sTargetWorkspaceId: string | null = null;
 
   // ── Track the currently selected image ──
   private m_oActiveImageSubject = new BehaviorSubject<string | null>(null);
@@ -23,9 +24,10 @@ export class LabellingProjectsStateService {
   public m_oProjectWorkspaceChanged$ = this.m_oProjectWorkspaceChangedSubject.asObservable();
 
   private m_oDataset = null;
+  m_sActiveTemplateId: string|null=null;
 
   get projectId(): string | null {
-    return this.m_sLabellingProjectId;
+    return this.m_sActiveProjectId;
   }
 
 
@@ -42,20 +44,20 @@ export class LabellingProjectsStateService {
   }
 
   getTargetWorkspaceId(): string | null {
-    return this._m_sTargetWorkspaceId;
+    return this.m_sTargetWorkspaceId;
   }
 
   setTargetWorkspaceId(value: string | null) {
-    this._m_sTargetWorkspaceId = value;
+    this.m_sTargetWorkspaceId = value;
   }
 
   setState(sProjectId: string | null, sMode: 'create' | 'view' | 'edit'): void {
-    this.m_sLabellingProjectId = sProjectId;
+    this.m_sActiveProjectId = sProjectId;
     this.m_sMode = sMode;
   }
 
   clearState(): void {
-    this.m_sLabellingProjectId = null;
+    this.m_sActiveProjectId = null;
     this.m_sMode = 'create';
   }
 

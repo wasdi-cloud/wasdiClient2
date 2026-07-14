@@ -33,7 +33,109 @@
   border-radius: 4px;
 }
 
-/* Custom dashed Add Image Button */
+
+
+.btn-add-image:hover {
+  border-color: #0d6efd;
+  color: #0d6efd;
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Slim down the HTML range slider */
+.custom-slider {
+  height: 4px;
+}
+.custom-slider::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4px; /* Centers the thumb vertically */
+}
+
+/* ── Selected State Highlight (Green Theme) ── */
+.image-item--selected {
+  background-color: #f4fbf7 !important;     /* Very subtle light green */
+  border-color: #198754 !important;         /* Solid green border */
+  box-shadow: 0 0 0 1px #198754 !important; /* Crisp green outline */
+}
+/* ── Main Item Container ── */
+.list-group-item {
+  border: 1px solid #e0e0e0; /* Matches --neutral10 */
+  border-radius: 8px;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+  border-color: #b0c4de;
+}
+
+
+/* ── Text Layout ── */
+div.layer-title {
+  width: 100%;
+}
+
+.band-title {
+  font-size: 13px;
+  max-width: 55%;
+}
+
+.band-title:hover p.font-bold {
+  color: #198754 !important; /* Matches --wasdiGreen */
+}
+
+p.band-info {
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* ── The 3-Dot Legend ── */
+div.legend-container {
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 4px;
+  gap: 2px;
+  background-color: #ffffff;
+}
+
+div.legend-dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: #adb5bd; /* Matches --neutral25 */
+}
+
+div.dot-2 {
+  background-color: #ffc107; /* Matches --wasdiWarn */
+}
+
+div.dot-3 {
+  background-color: #dc3545; /* Matches --wasdiDanger */
+}
+
+/* ── Slider Styles ── */
+div.slider-container {
+  padding-left: 2px;
+}
+
+.custom-slider {
+  height: 4px;
+}
+.custom-slider::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+}
+
+/* ── Custom dashed Add Image Button ── */
 .btn-add-image {
   display: flex;
   align-items: center;
@@ -55,14 +157,4 @@
   border-color: #0d6efd;
   color: #0d6efd;
   background-color: rgba(13, 110, 253, 0.05);
-}
-
-/* Slim down the HTML range slider */
-.custom-slider {
-  height: 4px;
-}
-.custom-slider::-webkit-slider-thumb {
-  width: 12px;
-  height: 12px;
-  margin-top: -4px; /* Centers the thumb vertically */
 }

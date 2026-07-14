@@ -5,6 +5,8 @@ import {Router} from "@angular/router";
 import { ProductService } from 'src/app/services/api/product.service';
 import { Subject, takeUntil } from 'rxjs';
 import { RabbitStompService } from 'src/app/services/rabbit-stomp.service';
+import {MapEngineService} from "../../../services/map-engine/map-engine.service";
+import FadeoutUtils from "../../../lib/utils/FadeoutJSUtils";
 
 @Component({
   selector: 'app-labelling-menu',
@@ -36,11 +38,17 @@ export class LabellingMenuComponent implements OnInit {
     },
   ];
 
+
+
+  // ── ADD THIS: Track the active Geoserver Layer ID ──
+  m_sActiveLayerId: string | null = null;
+
   // List of Project images
   m_aoProjectImages = [ ];
 
   // Track the single active image
   m_sSelectedImageId: string | null = null;
+  m_sCurrentLayerId: string | null = null;
 
   private m_oDestroy$ = new Subject<void>();
 
@@ -60,7 +68,8 @@ export class LabellingMenuComponent implements OnInit {
     public m_oProjectState: LabellingProjectsStateService,
     public m_oProductService: ProductService,
     private m_oRouter:Router,
-    private m_oRabbitStompService: RabbitStompService
+    private m_oRabbitStompService: RabbitStompService,
+    private m_oMapEngineService: MapEngineService
   ) {
   }
 
@@ -99,7 +108,7 @@ export class LabellingMenuComponent implements OnInit {
 
     if (this.m_iPublishBandHookIndex!= -1) {
       this.m_oRabbitStompService.removeMessageHook(this.m_iPublishBandHookIndex);
-    }    
+    }
 
     if (this.m_iDownloadedFileHookIndex != -1) {
       this.m_oRabbitStompService.removeMessageHook(this.m_iDownloadedFileHookIndex);
@@ -112,7 +121,15 @@ export class LabellingMenuComponent implements OnInit {
     oController.receivedPublishBandMessage(oRabbitMessage);
   }
 
-  receivedPublishBandMessage(oRabbitMessage) {
+
+
+  // Update this method:
+  receivedPublishBandMessage(oRabbitMessage: any) {
+    // ── THE TRICK: Catch the ID as it passes through the Menu! ──
+    if (oRabbitMessage && oRabbitMessage.payload && oRabbitMessage.payload.layerId) {
+      this.m_sActiveLayerId = oRabbitMessage.payload.layerId;
+    }
+
     this.publishBandMessage.emit(oRabbitMessage);
   }
 
@@ -185,10 +202,20 @@ export class LabellingMenuComponent implements OnInit {
     console.log(`Open Style Dialog for ${oImage.name}`);
   }
 
-  onOpacityChange(oImage: any, event: Event) {
-    const sValue = (event.target as HTMLInputElement).value;
-    oImage.opacity = parseInt(sValue, 10);
-    // TODO: Update opacity on the map
+  onOpacityChange(oImage: any, newOpacityValue: number | string) {
+    // The app-slider emits the value directly, so we just parse it to be safe
+    oImage.opacity = typeof newOpacityValue === 'string' ? parseInt(newOpacityValue, 10) : newOpacityValue;
+
+    // ── READ THE ID FROM THE BRIDGE ──
+    const sLayerId = this.m_oProjectState.m_sActiveGeoserverLayerId;
+
+    if (sLayerId) {
+      // Convert 0-100 to 0.0-1.0 for Mapbox
+      const fMapboxOpacity = oImage.opacity / 100;
+      this.m_oMapEngineService.setLayerMap2DOpacity(sLayerId, fMapboxOpacity);
+    } else {
+      console.warn("Opacity change ignored: No active Geoserver Layer ID found in state.");
+    }
   }
 
   isDisabled(sTitle: string): boolean {

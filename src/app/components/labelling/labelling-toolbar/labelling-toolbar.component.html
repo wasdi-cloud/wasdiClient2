@@ -16,16 +16,29 @@
 
       <div class="toolbar-divider mx-2"></div>
 
-      <li class="nav-item">
-        <app-button [m_sIconLeft]="'undo'"
-                    [m_bDisabled]="!m_bCanUndo"
-                    [m_bMuted]="true"
-                    [m_sSize]="'small'"
-                    [m_bRounded]="true"
-                    [matTooltip]="'Undo'"
-                    (click)="m_oUndo.emit()">
-        </app-button>
-      </li>
+      @if (m_bCanDraw) {
+        <li class="nav-item">
+          <app-button [m_sIconLeft]="'undo'"
+                      [m_bDisabled]="!m_bCanUndo"
+                      [m_bMuted]="true"
+                      [m_sSize]="'small'"
+                      [m_bRounded]="true"
+                      [matTooltip]="'Undo'"
+                      (click)="m_oUndo.emit()">
+          </app-button>
+        </li>
+        <li class="nav-item">
+          <app-button [m_sIconLeft]="'upload'"
+                      [m_bMuted]="true"
+                      [m_sSize]="'small'"
+                      [m_bRounded]="true"
+                      [matTooltip]="'Upload Shapes'"
+                      (click)="m_oUploadClick.emit()">
+          </app-button>
+          <input #fileInput type="file" accept=".geojson,.json,.zip" style="display:none" (change)="onFileSelected($event)">
+        </li>
+      }
+
       <li class="nav-item">
         <app-button [m_sIconLeft]="'refresh'"
                     [m_bDisabled]="m_bRefreshing"
@@ -36,18 +49,7 @@
                     (click)="m_oRefresh.emit()">
         </app-button>
       </li>
-      <li class="nav-item">
-        <app-button [m_sIconLeft]="'upload'"
-                    [m_bMuted]="true"
-                    [m_sSize]="'small'"
-                    [m_bRounded]="true"
-                    [matTooltip]="'Upload Shapes'"
-                    (click)="m_oUploadClick.emit()">
-        </app-button>
-        <input #fileInput type="file" accept=".geojson,.json,.zip" style="display:none" (change)="onFileSelected($event)">
-      </li>
 
-      <!-- ── NEW: EXPORT PROJECT BUTTON ── -->
       <li class="nav-item">
         <app-button [m_sIconLeft]="'download'"
                     [m_bMuted]="true"
@@ -57,15 +59,17 @@
                     (click)="m_oExport.emit()"> </app-button>
       </li>
 
-      <li class="nav-item ms-2">
-        <app-button [m_sIconLeft]="'save'"
-                    [m_bDisabled]="m_bSaving"
-                    [m_sSize]="'small'"
-                    [m_bRounded]="true"
-                    [matTooltip]="m_bSaving ? 'Saving...' : 'Save Labels'"
-                    (click)="m_oSave.emit()">
-        </app-button>
-      </li>
+      @if (m_bCanDraw) {
+        <li class="nav-item ms-2">
+          <app-button [m_sIconLeft]="'save'"
+                      [m_bDisabled]="m_bSaving"
+                      [m_sSize]="'small'"
+                      [m_bRounded]="true"
+                      [matTooltip]="m_bSaving ? 'Saving...' : 'Save Labels'"
+                      (click)="m_oSave.emit()">
+          </app-button>
+        </li>
+      }
     </ul>
 
     <ul class="navbar-nav d-flex flex-row align-items-center gap-3 ms-4">
@@ -74,27 +78,29 @@
         <span class="font-bold text-muted">Mode:</span>
         <div class="btn-group shadow-sm" role="group">
 
-          <input type="radio" class="btn-check" name="editMode" id="mode0" value="draw"
-                 [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
-          <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
-                 for="mode0"
-                 [matTooltip]="'Draw Polygon'">
-            <span class="material-symbols-outlined" style="font-size: 18px;">draw</span>
-          </label>
+          @if (m_bCanDraw) {
+            <input type="radio" class="btn-check" name="editMode" id="mode0" value="draw"
+                   [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
+            <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
+                   for="mode0"
+                   [matTooltip]="'Draw Polygon'">
+              <span class="material-symbols-outlined" style="font-size: 18px;">draw</span>
+            </label>
 
-          <input type="radio" class="btn-check" name="editMode" id="mode1" value="vertices"
-                 [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
-          <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
-                 for="mode1"
-                 [matTooltip]="'Edit Vertices'">
-            <span class="material-symbols-outlined" style="font-size: 18px;">format_shapes</span>
-          </label>
+            <input type="radio" class="btn-check" name="editMode" id="mode1" value="vertices"
+                   [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
+            <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
+                   for="mode1"
+                   [matTooltip]="'Edit Vertices'">
+              <span class="material-symbols-outlined" style="font-size: 18px;">format_shapes</span>
+            </label>
+          }
 
           <input type="radio" class="btn-check" name="editMode" id="mode2" value="move"
                  [ngModel]="m_sEditMode" (ngModelChange)="m_sEditModeChange.emit($event)">
           <label class="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center justify-content-center px-2"
                  for="mode2"
-                 [matTooltip]="'Move Shape'">
+                 [matTooltip]="'Move Shape / Pan Map'">
             <span class="material-symbols-outlined" style="font-size: 18px;">open_with</span>
           </label>
         </div>
@@ -119,15 +125,17 @@
         </select>
       </li>
 
-      <!-- ── NEW: ADD COLLABORATORS BUTTON ── -->
-      <li class="nav-item">
-        <app-button [m_sIconLeft]="'person_add'"
-                    [m_bMuted]="true"
-                    [m_sSize]="'small'"
-                    [m_bRounded]="true"
-                    [matTooltip]="'Add Collaborators'">
-        </app-button>
-      </li>
+      @if (m_bCanShare) {
+        <li class="nav-item">
+          <app-button [m_sIconLeft]="'person_add'"
+                      [m_bMuted]="true"
+                      [m_sSize]="'small'"
+                      [m_bRounded]="true"
+                      (click)="m_oAddCollab.emit()"
+                      [matTooltip]="'Add Collaborators'">
+          </app-button>
+        </li>
+      }
 
       <li class="nav-item form-check form-switch mb-0 d-flex align-items-center gap-2">
         <input class="form-check-input mt-0" type="checkbox" id="validatedToggle"

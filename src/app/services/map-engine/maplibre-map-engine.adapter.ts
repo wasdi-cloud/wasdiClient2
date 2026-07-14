@@ -91,15 +91,16 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
 
     this.m_oDrawControl = new MapboxDraw({
       displayControlsDefault: false,
+      userProperties: true,
       styles: [
-        { id: 'gl-draw-polygon-fill-active', type: 'fill', filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']], paint: { 'fill-color': '#3b82f6', 'fill-opacity': 0.2 } },
-        { id: 'gl-draw-polygon-fill-inactive', type: 'fill', filter: ['all', ['==', 'active', 'false'], ['==', '$type', 'Polygon']], paint: { 'fill-color': '#3b82f6', 'fill-opacity': 0.1 } },
-        { id: 'gl-draw-polygon-stroke-active', type: 'line', filter: ['all', ['==', 'active', 'true'], ['!=', '$type', 'Point']], paint: { 'line-color': '#3b82f6', 'line-width': 2 } },
-        { id: 'gl-draw-polygon-stroke-inactive', type: 'line', filter: ['all', ['==', 'active', 'false'], ['!=', '$type', 'Point']], paint: { 'line-color': '#3b82f6', 'line-width': 2 } },
+        { id: 'gl-draw-polygon-fill-active', type: 'fill', filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']], paint: { 'fill-color': ['coalesce', ['get', 'user_portColor'], '#3b82f6'], 'fill-opacity': 0.2 } },
+        { id: 'gl-draw-polygon-fill-inactive', type: 'fill', filter: ['all', ['==', 'active', 'false'], ['==', '$type', 'Polygon']], paint: { 'fill-color': ['coalesce', ['get', 'user_portColor'], '#3b82f6'], 'fill-opacity': 0.1 } },
+        { id: 'gl-draw-polygon-stroke-active', type: 'line', filter: ['all', ['==', 'active', 'true'], ['!=', '$type', 'Point']], paint: { 'line-color': ['coalesce', ['get', 'user_portColor'], '#3b82f6'], 'line-width': 2 } },
+        { id: 'gl-draw-polygon-stroke-inactive', type: 'line', filter: ['all', ['==', 'active', 'false'], ['!=', '$type', 'Point']], paint: { 'line-color': ['coalesce', ['get', 'user_portColor'], '#3b82f6'], 'line-width': 2 } },
         { id: 'gl-draw-polygon-and-line-vertex-active', type: 'circle', filter: ['all', ['==', 'meta', 'vertex'], ['==', '$type', 'Point']], paint: { 'circle-radius': 6, 'circle-color': '#ffffff', 'circle-stroke-width': 2, 'circle-stroke-color': '#3b82f6' } },
         { id: 'gl-draw-polygon-and-line-midpoint-active', type: 'circle', filter: ['all', ['==', 'meta', 'midpoint'], ['==', '$type', 'Point']], paint: { 'circle-radius': 4, 'circle-color': '#3b82f6', 'circle-stroke-width': 1, 'circle-stroke-color': '#ffffff' } },
-        { id: 'gl-draw-point-active', type: 'circle', filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Point'], ['!=', 'meta', 'midpoint'], ['!=', 'meta', 'vertex']], paint: { 'circle-radius': 6, 'circle-color': '#3b82f6', 'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff' } },
-        { id: 'gl-draw-point-inactive', type: 'circle', filter: ['all', ['==', 'active', 'false'], ['==', '$type', 'Point'], ['!=', 'meta', 'midpoint'], ['!=', 'meta', 'vertex']], paint: { 'circle-radius': 5, 'circle-color': '#3b82f6', 'circle-stroke-width': 1, 'circle-stroke-color': '#ffffff' } }
+        { id: 'gl-draw-point-active', type: 'circle', filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Point'], ['!=', 'meta', 'midpoint'], ['!=', 'meta', 'vertex']], paint: { 'circle-radius': 6, 'circle-color': ['coalesce', ['get', 'user_portColor'], '#3b82f6'], 'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff' } },
+        { id: 'gl-draw-point-inactive', type: 'circle', filter: ['all', ['==', 'active', 'false'], ['==', '$type', 'Point'], ['!=', 'meta', 'midpoint'], ['!=', 'meta', 'vertex']], paint: { 'circle-radius': 5, 'circle-color': ['coalesce', ['get', 'user_portColor'], '#3b82f6'], 'circle-stroke-width': 1, 'circle-stroke-color': '#ffffff' } }
       ]
     });
 
@@ -1094,7 +1095,7 @@ addLayerMap2DByServerUnderDrawing(layerId: string, server: string): boolean {
       tileSize: 256
     });
 
-    
+
     let sFirstDrawLayerId: string | undefined = undefined;
     const aoMapLayers = oMap.getStyle().layers;
 
@@ -1105,7 +1106,7 @@ addLayerMap2DByServerUnderDrawing(layerId: string, server: string): boolean {
         sFirstDrawLayerId = oLayer.id;
         break; // We found the lowest draw layer! Stop looking.
       }
-    }    
+    }
 
     oMap.addLayer({
       id: sMapLayerId,
@@ -1117,7 +1118,7 @@ addLayerMap2DByServerUnderDrawing(layerId: string, server: string): boolean {
     }, sFirstDrawLayerId ? sFirstDrawLayerId : undefined);
 
     return true;
-  }  
+  }
 
   removeLayerMap2DByServer(layerId: string): boolean {
     const oMap = this.getMapLibreMap();

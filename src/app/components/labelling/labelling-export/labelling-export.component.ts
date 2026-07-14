@@ -16,11 +16,13 @@ export class LabellingExportComponent implements OnInit {
 
   m_sProjectId: string | null = null;
   m_sProjectTitle: string = "Current Project";
-  m_bRawDataHosted: boolean = false;
-  m_bReviewMode: boolean = false;
 
-  m_bIncludeRawData: boolean = false;
-  m_sLabelFilter: 'validated' | 'all' = 'validated';
+// ── THE FIX: Set these to true so the UI shows the toggles! ──
+  m_bRawDataHosted: boolean = true;
+  m_bReviewMode: boolean = true;
+
+  m_bIncludeRawData: boolean = false; // Default un-checked to save bandwidth
+  m_sLabelFilter: 'validated' | 'all' = 'validated'; // Default to validated
   m_bIsGenerating: boolean = false;
 
   constructor(
@@ -77,9 +79,30 @@ export class LabellingExportComponent implements OnInit {
         this.goBackToProject();
       }, 1500);
 
-    } catch (oError) {
+    } catch (oError: any) {
       console.error("Error generating export package.", oError);
-      this.m_oNotificationService.openAlertDialog("Failed to generate export package. Please try again.", "Export Error", "danger");
+
+      // ── THE FIX: Gracefully handle the 404 "Empty" response ──
+      if (oError.status === 404) {
+        // If Java sent a text message, display it! Otherwise, use a friendly default.
+        const sErrorMessage = (typeof oError.error === 'string')
+          ? oError.error
+          : "There are no labels matching your filters to export.";
+
+        this.m_oNotificationService.openAlertDialog(
+          sErrorMessage,
+          "Nothing to Export",
+          "warning" // Use a yellow warning instead of a red danger alert
+        );
+      } else {
+        // Handle actual 500 server crashes
+        this.m_oNotificationService.openAlertDialog(
+          "Failed to generate export package. Please try again.",
+          "Export Error",
+          "danger"
+        );
+      }
+
     } finally {
       this.m_bIsGenerating = false;
     }

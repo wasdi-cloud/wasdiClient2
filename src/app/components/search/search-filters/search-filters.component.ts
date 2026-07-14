@@ -82,7 +82,7 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
 
   m_bUseCronTab: boolean = false;
 
-  m_oPreSelectedMission = null;
+  m_sPreSelectedMission = null;
 
   constructor(
     private m_oAdvancedSearchService: AdvancedSearchService,
@@ -114,9 +114,11 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
             let sMission = oDataset.mission;
 
             if (FadeoutUtils.utilsIsStrNullOrEmpty(sMission) === false) {
+
+              this.m_sPreSelectedMission = sMission;
+
               let oMission = this.getMissionByName(sMission);
-              if (oMission !== null) {
-                this.m_oPreSelectedMission = oMission;
+              if (oMission !== null) {  
                 this.setActiveMission(oMission);
               }
             }
@@ -137,11 +139,18 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.m_aoMissions.length > 0) {
-      if (this.m_oPreSelectedMission !== null) {
-        this.setActiveMission(this.m_oPreSelectedMission);
+      if (this.m_sPreSelectedMission !== null) {
+        let oMission = this.getMissionByName(this.m_sPreSelectedMission);
+
+        if (oMission !== null) {
+          this.setActiveMission(oMission) 
+        }
+        else {
+          this.setActiveMission(this.m_aoMissions[0]);
+        }
       } 
       else {
-      this.setActiveMission(this.m_aoMissions[0]);
+        this.setActiveMission(this.m_aoMissions[0]);
       }
     }
   }

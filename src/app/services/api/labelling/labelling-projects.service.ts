@@ -50,31 +50,36 @@ export class LabellingProjectsService {
   };
 
   /**
-   * lisCollaborators
-   * @returns
+   * Get Collaborators
    * @param sDatasetId
    */
-  lisCollaborators(sDatasetId: string) {
-    return this.m_oHttp.get<any>(this.APIURL + '/admin/resourcePermissions?dataset_id=' + sDatasetId);
-  };
+  getCollaborators(sDatasetId: string) {
+    // I renamed this from lisCollaborators so it matches your share-ui component call!
+    return this.m_oHttp.get<any[]>(`${this.APIURL}/collaborators?datasetId=${sDatasetId}`);
+  }
 
   /**
-   * invite Collab
-   * @returns
-   * @param oCollab
+   * Invite Collaborator
+   * @param sDatasetId
+   * @param sUserId
+   * @param sRoleId
    */
-  inviteCollaborator(oCollab: any) {
-    return this.m_oHttp.post(this.APIURL + '/inviteCollaborator', oCollab);
-  };
+  addCollaborator(sDatasetId: string, sUserId: string, sRoleId: string) {
+    // FIX: Using '&' to chain parameters properly
+    const sUrl = `${this.APIURL}/collaborators?datasetId=${sDatasetId}&userId=${sUserId}&roleId=${sRoleId}`;
+    return this.m_oHttp.post(sUrl, {});
+  }
 
   /**
-   * remove collab
-   * @returns
-   * @param sCollabId
+   * Remove Collaborator
+   * @param sDatasetId
+   * @param sUserId
    */
-  removeCollaborator(sCollabId: string) {
-    return this.m_oHttp.delete(this.APIURL + '/removeCollaborator?id=' + sCollabId);
-  };
+  deleteCollaborator(sDatasetId: string, sUserId: string) {
+    // FIX: Hitting the correct endpoint and passing BOTH required parameters
+    const sUrl = `${this.APIURL}/collaborators?datasetId=${sDatasetId}&userId=${sUserId}`;
+    return this.m_oHttp.delete(sUrl);
+  }
 
   /**
    * Create a project
@@ -83,6 +88,17 @@ export class LabellingProjectsService {
    */
   createProject(oDatasetProject: any) {
     return this.m_oHttp.post(this.APIURL, oDatasetProject);
+  }
+
+  /**
+   * Allows the current user to leave a project they were invited to.
+   * @param sDatasetId The ID of the dataset to leave
+   */
+  leaveProject(sDatasetId: string) {
+    return this.m_oHttp.delete(this.APIURL + '/leave', {
+      params: { datasetId: sDatasetId },
+      observe: 'response' // Helps catch empty 200 OK responses
+    });
   }
   /**
    * update a project

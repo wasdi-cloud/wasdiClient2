@@ -14,6 +14,8 @@ import { WorkspaceService } from 'src/app/services/api/workspace.service';
 import { WorkflowService } from 'src/app/services/api/workflow.service';
 
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
+import {LabellingProjectsService} from "../../../../services/api/labelling/labelling-projects.service";
+import {LabellingProjectsStateService} from "../../../../services/api/labelling/labelling-projects-state.service";
 
 @Component({
     selector: 'app-share-ui',
@@ -50,7 +52,9 @@ export class ShareUiComponent implements OnInit {
     private m_oStyleService: StyleService,
     private m_oTranslate: TranslateService,
     private m_oWorkflowService: WorkflowService,
-    private m_oWorkspaceService: WorkspaceService
+    private m_oWorkspaceService: WorkspaceService,
+    private m_oLabellingProjectsService: LabellingProjectsService,
+    private m_oLabellingProjectsState:LabellingProjectsStateService
   ) {}
 
   ngOnInit() {
@@ -61,6 +65,11 @@ export class ShareUiComponent implements OnInit {
     ) {
       this.resource[`${this.resource.resourceType.toLowerCase()}Id`] =
         this.resource.resourceId;
+    }
+
+    if (this.resourceType === 'DATASET') {
+      this.m_aoShareOptions = ['ANNOTATOR', 'REVIEWER'];
+      this.m_sPermission = 'ANNOTATOR'; // Set default dropdown selection
     }
 
     this.getEnabledUsers();
@@ -213,6 +222,32 @@ export class ShareUiComponent implements OnInit {
             );
           },
         });
+    }
+
+    if (this.resourceType === 'DATASET') {
+      // Using this.resource.id is safer here so the component remains reusable!
+      const projectId = this.resource.id || this.m_oLabellingProjectsState.m_sActiveProjectId;
+
+      if (projectId) {
+        this.m_oLabellingProjectsService.getCollaborators(projectId).subscribe({
+          next: (oResponse: any[]) => {
+            // 1. Map Java's 'userRole' to Angular's 'permissions' so the HTML table dropdown works!
+            this.m_aoSharedUsers = (oResponse || []).map(user => ({
+              userId: user.userId,
+              permissions: user.userRole
+            }));
+
+            this.m_bLoadingUsers = false;
+
+            // 2. This line tells the HTML to show the photo if the array is empty!
+            this.m_bShowUsers = this.m_aoSharedUsers.length > 0;
+          },
+          error: (oError: any) => {
+            this.m_bLoadingUsers = false;
+            this.m_oNotificationDisplayService.openAlertDialog('Could not get dataset collaborators', 'Error', 'danger');
+          }
+        });
+      }
     }
   }
 
@@ -521,6 +556,24 @@ export class ShareUiComponent implements OnInit {
             },
           });
       }
+
+      // ── ADD COLLABORATOR ──
+      if (this.resourceType === 'DATASET') {
+        const projectId = this.resource.id || this.m_oLabellingProjectsState.m_sActiveProjectId;
+
+        this.m_oLabellingProjectsService.addCollaborator(projectId, this.m_sUserIdSearch, this.m_sPermission).subscribe({
+          next: (oResponse: any) => {
+            this.getEnabledUsers();
+            let sMessage = this.m_oTranslate.instant('KEY_PHRASES.SUCCESS');
+            this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
+            this.m_sUserIdSearch = ''; // Clear the input field
+          },
+          error: (oError: any) => {
+            let sErrorMsg = oError.status === 409 ? 'User is already a collaborator.' : 'Error adding collaborator.';
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, 'Error', 'alert');
+          }
+        });
+      }
     }
   }
 
@@ -715,6 +768,21 @@ export class ShareUiComponent implements OnInit {
             );
           },
         });
+    }
+    // ── REMOVE COLLABORATOR ──
+    if (this.resourceType === 'DATASET') {
+      const projectId = this.resource.id || this.m_oLabellingProjectsState.m_sActiveProjectId;
+
+      this.m_oLabellingProjectsService.deleteCollaborator(projectId, sUserId).subscribe({
+        next: (oResponse: any) => {
+          let sMessage = this.m_oTranslate.instant('KEY_PHRASES.SUCCESS');
+          this.m_oNotificationDisplayService.openSnackBar(sMessage, '', 'success-snackbar');
+          this.getEnabledUsers();
+        },
+        error: (oError: any) => {
+          this.m_oNotificationDisplayService.openAlertDialog('Failed to remove collaborator.', 'Error', 'alert');
+        }
+      });
     }
   }
 

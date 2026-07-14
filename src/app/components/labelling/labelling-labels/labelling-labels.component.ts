@@ -17,6 +17,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ConstantsService } from 'src/app/services/constants.service';
+import {LabellingTemplatesService} from "../../../services/api/labelling/labelling-templates.service";
+import {ShareDialogComponent, ShareDialogModel} from "../../../shared/dialogs/share-dialog/share-dialog.component";
 
 // ── Lightweight interfaces ────────────────────────────────────────────────────
 
@@ -66,8 +68,18 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     }
   }
 
+  m_sUserRole: string = 'GUEST';
+  m_bAnnotatorsSeeAll: boolean = true;
+  m_bReviewRequired: boolean = false;
+  m_iMinReviews: number = 1;
+
   // ── Map ─────────────────────────────────────────────────────────────────────
   private m_oMap: any = null;
+
+  // ── Template Color Rules ──
+  m_bIsFixedColour: boolean = true;
+  m_sColourAttributeName: string = '';
+  m_sDefaultColor: string = '#3b82f6'; // Standard blue fallback
 
   // ── Feature state ───────────────────────────────────────────────────────────
   m_aoFeatures: LabelFeature[] = [];
@@ -122,7 +134,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     private m_oFileBufferService: FileBufferService,
     private m_oTranslate: TranslateService,
     private m_oNotificationDisplayService: NotificationDisplayService,
-    private m_oConstantsService: ConstantsService
+    private m_oConstantsService: ConstantsService,
+    private m_oTemplateService: LabellingTemplatesService,
   ) {}
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -130,8 +143,71 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // ═══════════════════════════════════════════════════════════════════════════
 
   ngOnInit(): void {
-    this.m_sCurrentDatasetId=this.m_oProjectState.m_sActiveProjectId
+    this.m_sCurrentDatasetId = this.m_oProjectState.m_sActiveProjectId;
     this.m_sCurrentUser = this.m_oConstantsService.getUserId();
+
+    // ── EXTRACT ROLE & PROJECT SETTINGS ──
+    const oProject = this.m_oProjectState.getDataset();
+    if (oProject) {
+      this.m_sUserRole = (oProject.userRole || 'GUEST').toUpperCase();
+
+      // Fallback defaults if the backend fields are slightly differently named
+      this.m_bAnnotatorsSeeAll = oProject.annotatorsSeeAllLabels !== false;
+      this.m_bReviewRequired = oProject.reviewRequired === true;
+      this.m_iMinReviews = oProject.minReviewCount || 1;
+    }
+
+    // Load the template dynamically!
+    if (this.m_oProjectState.m_sActiveTemplateId) {
+      this.m_oTemplateService.getById(this.m_oProjectState.m_sActiveTemplateId).subscribe({
+        next: (oTemplate: any) => {
+          console.log("✅ Loaded Template:", oTemplate.name);
+          this.m_bIsFixedColour = oTemplate.isFixedColour;
+          this.m_sColourAttributeName = oTemplate.colourAttributeName || '';
+          this.parseTemplateAttributes(oTemplate);
+        },
+        error: (oError: any) => {
+          console.error("❌ Failed to load template", oError);
+          this.m_oNotificationDisplayService.openAlertDialog("Could not load project template.", "Error", "danger");
+        },
+      });
+    }
+  }
+
+  // ── Helper: Map Backend Template to Frontend Interface ──
+  private parseTemplateAttributes(oTemplate: any): void {
+    if (!oTemplate || !Array.isArray(oTemplate.attributes)) {
+      this.m_aoTemplateAttributes = [];
+      return;
+    }
+
+    this.m_aoTemplateAttributes = oTemplate.attributes.map((attr: any) => {
+      // 1. Convert the Backend Type (TEXT) to Frontend Type (text)
+      const sType = (attr.type || 'TEXT').toLowerCase() as 'text' | 'float' | 'integer' | 'category';
+
+      // 2. Map Category values and Integer Colors to Hex (#FA0000)
+      const aoCategoryValues: { value: string, color: string }[] = [];
+
+      if (sType === 'category' && Array.isArray(attr.categories)) {
+        attr.categories.forEach((sCatName: string, iIndex: number) => {
+          // Get the matching integer color, default to 0 (Black) if missing
+          const iColorInt = (attr.colours && attr.colours.length > iIndex) ? attr.colours[iIndex] : 0;
+
+          // Convert integer to Hex string (e.g., 16384000 -> #FA0000)
+          const sHexColor = '#' + (iColorInt).toString(16).padStart(6, '0');
+
+          aoCategoryValues.push({ value: sCatName, color: sHexColor });
+        });
+      }
+
+      // 3. Return the fully mapped object
+      return {
+        name: attr.name,
+        type: sType,
+        isOptional: !attr.isMandatory, // Flip mandatory to optional for the UI
+        categoryValues: aoCategoryValues
+      } as TemplateAttribute;
+    });
   }
   ngAfterViewInit(): void {
     this.initMap();
@@ -288,6 +364,27 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     }
   }
 
+
+  // ── PERMISSION GUARDS ──
+
+  canDraw(): boolean {
+    return this.m_sUserRole === 'OWNER' || this.m_sUserRole === 'ANNOTATOR';
+  }
+
+  canEdit(oFeature: LabelFeature): boolean {
+    if (this.m_sUserRole === 'OWNER') return true;
+    // Annotators can only edit their OWN labels
+    if (this.m_sUserRole === 'ANNOTATOR' && oFeature.properties['annotator'] === this.m_sCurrentUser) return true;
+    return false;
+  }
+
+  canValidate(): boolean {
+    return this.m_sUserRole === 'OWNER' || this.m_sUserRole === 'REVIEWER';
+  }
+
+  canDelete(oFeature: LabelFeature): boolean {
+    return this.canEdit(oFeature); // Usually same rules as editing
+  }
   // ═══════════════════════════════════════════════════════════════════════════
   // MAP INIT
   // ═══════════════════════════════════════════════════════════════════════════
@@ -357,7 +454,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
           // 2. Fetch the new labels for the selected image
           this.loadFeatures();
         }
-      });      
+      });
     }
   }
 
@@ -369,13 +466,13 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       return false;
     }
 
-    console.log("ProductListComponent.receivedPublishBandMessage: layerId=" + oPublishedBand.layerId);
-
-    // TODO: In reality we need to get the workspace node and from there the node WMS URL.
-    // Now we are in test there is only the main node     
     this.m_oMapEngineService.addLayerMap2DByServerUnderDrawing(oPublishedBand.layerId, this.m_oConstantsService.getWmsUrlGeoserver());
+
     this.m_sCurrentLayerId = oPublishedBand.layerId;
-    
+
+    // ── THE FIX: Send the ID across the bridge to the Sidebar! ──
+    this.m_oProjectState.m_sActiveGeoserverLayerId = oPublishedBand.layerId;
+
     return true;
   }
 
@@ -455,6 +552,12 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   }
 
   onEditModeChange(sMode: 'draw' | 'vertices' | 'move'): void {
+
+    if (!this.canDraw() && (sMode === 'draw' || sMode === 'vertices')) {
+      this.m_oNotificationDisplayService.openSnackBar("You do not have permission to draw or edit shapes.", "Close", "warning");
+      return;
+    }
+
     this.m_sEditMode = sMode;
 
     const oCanvas = this.m_oMapEngineService.getMap()?.getCanvas();
@@ -472,6 +575,54 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     }
   }
 
+  onSendIssue(): void {
+    if (!this.m_sIssueInput.trim() || !this.m_oActiveIssueFeature) return;
+
+    const oNote: ReviewNote = {
+      id: Date.now().toString(),
+      sender: this.m_sCurrentUser,
+      note: this.m_sIssueInput.trim(),
+      resolved: false
+    };
+
+    // 1. Update the local arrays
+    this.updateFeatureNotes(this.m_oActiveIssueFeature.id, oNote);
+    this.m_sIssueInput = '';
+
+    // 2. Auto-save it instantly so comments aren't lost!
+    this.patchFeatureProperty(this.m_oActiveIssueFeature.id, 'isDirty', true);
+
+    // We pass the updated feature from our array to the save function
+    const oUpdatedFeature = this.m_aoFeatures.find(f => f.id === this.m_oActiveIssueFeature!.id);
+    if (oUpdatedFeature) {
+      this.onSaveSingleLabel(oUpdatedFeature);
+    }
+  }
+
+  onResolveNote(sNoteId: string): void {
+    if (!this.m_oActiveIssueFeature) return;
+
+    // 1. Mark the specific note as resolved
+    const aoUpdated = (this.m_oActiveIssueFeature.properties['reviewNotes'] as ReviewNote[] || [])
+      .map(n => n.id === sNoteId ? { ...n, resolved: true } : n);
+
+    // 2. Update the main table array
+    this.patchFeatureProperty(this.m_oActiveIssueFeature.id, 'reviewNotes', aoUpdated);
+    this.patchFeatureProperty(this.m_oActiveIssueFeature.id, 'isDirty', true);
+
+    // 3. Keep the modal in sync immediately
+    this.m_oActiveIssueFeature = {
+      ...this.m_oActiveIssueFeature,
+      properties: { ...this.m_oActiveIssueFeature.properties, reviewNotes: aoUpdated }
+    };
+
+    // 4. Auto-save the resolution to the DB!
+    const oUpdatedFeature = this.m_aoFeatures.find(f => f.id === this.m_oActiveIssueFeature!.id);
+    if (oUpdatedFeature) {
+      this.onSaveSingleLabel(oUpdatedFeature);
+    }
+  }
+
 
 
 
@@ -480,13 +631,17 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     const sId = oRaw.id;
     const sMeasurement = this.calcMeasurement(oRaw.geometry);
     const oDynamicProps: { [key: string]: any } = {};
-    let sColor = '#3b82f6';
+    let sColor = this.m_sDefaultColor; // Start with fallback
 
     this.m_aoTemplateAttributes.forEach(attr => {
       oDynamicProps[attr.name] = '';
       if (attr.categoryValues && attr.categoryValues.length > 0) {
         oDynamicProps[attr.name] = attr.categoryValues[0].value;
-        sColor = attr.categoryValues[0].color;
+
+        // ── ONLY APPLY COLOR IF IT MATCHES THE RULES ──
+        if (!this.m_bIsFixedColour && attr.name === this.m_sColourAttributeName) {
+          sColor = attr.categoryValues[0].color;
+        }
       }
     });
 
@@ -500,13 +655,13 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         status: 'Pending',
         timestamp: new Date().toISOString(),
         measurement: sMeasurement,
-        portColor: sColor,
+        portColor: sColor, // <--- Assigned here!
         isValidated: false,
         reviewCount: 0,
         reviewers: [],
         reviewNotes: [],
-        isNew: true,    // <-- FLAG: This has never been saved
-        isDirty: true,  // <-- FLAG: Needs to be saved
+        isNew: true,
+        isDirty: true,
         ...oDynamicProps
       }
     } as LabelFeature;
@@ -654,22 +809,24 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   // ═══════════════════════════════════════════════════════════════════════════
 
   onApprove(oFeature: LabelFeature): void {
-    if (this.hasCurrentUserApproved(oFeature)) return;
-
-    // TODO: call your API, then update local state on success:
-    // this.m_oLabelService.approveLabel(oFeature.id).subscribe(res => { ... });
+    if (!this.canValidate() || this.hasCurrentUserApproved(oFeature)) return;
 
     this.m_aoFeatures = this.m_aoFeatures.map(f => {
       if (f.id !== oFeature.id) return f;
       const aoReviewers = [...(f.properties['reviewers'] || []), this.m_sCurrentUser];
       const iCount = aoReviewers.length;
+
+      // ── CHECK AGAINST PROJECT SETTINGS ──
+      const bIsValidated = this.m_bReviewRequired ? (iCount >= this.m_iMinReviews) : true;
+
       return {
         ...f,
         properties: {
           ...f.properties,
           reviewers: aoReviewers,
           reviewCount: iCount,
-          isValidated: iCount >= 2   // adjust threshold to your minReviewCount
+          isValidated: bIsValidated,
+          isDirty: true // Mark dirty so they can save the approval!
         }
       };
     });
@@ -690,37 +847,8 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     this.m_oActiveIssueFeature = null;
   }
 
-  onSendIssue(): void {
-    if (!this.m_sIssueInput.trim() || !this.m_oActiveIssueFeature) return;
-    const oNote: ReviewNote = {
-      id: Date.now().toString(),
-      sender: this.m_sCurrentUser,
-      note: this.m_sIssueInput.trim(),
-      resolved: false
-    };
 
-    // TODO: call this.m_oLabelService.sendNote(featureId, noteText).subscribe(...)
 
-    this.updateFeatureNotes(this.m_oActiveIssueFeature.id, oNote);
-    this.m_sIssueInput = '';
-  }
-
-  onResolveNote(sNoteId: string): void {
-    if (!this.m_oActiveIssueFeature) return;
-
-    // TODO: call this.m_oLabelService.resolveNote(featureId, noteId).subscribe(...)
-
-    const aoUpdated = (this.m_oActiveIssueFeature.properties['reviewNotes'] as ReviewNote[] || [])
-      .map(n => n.id === sNoteId ? { ...n, resolved: true } : n);
-
-    this.patchFeatureProperty(this.m_oActiveIssueFeature.id, 'reviewNotes', aoUpdated);
-
-    // Keep the modal in sync
-    this.m_oActiveIssueFeature = {
-      ...this.m_oActiveIssueFeature,
-      properties: { ...this.m_oActiveIssueFeature.properties, reviewNotes: aoUpdated }
-    };
-  }
 
   // ═══════════════════════════════════════════════════════════════════════════
   // INLINE EDIT
@@ -750,9 +878,71 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     if (oEvent.key === 'Escape') this.m_oEditingCell = { featureId: null, attrName: null };
   }
 
+  // Make sure to import these from their correct paths!
+  // import { ShareDialogComponent, ShareDialogModel } from '...';
+
+  // ── COLLABORATION: Open the Share Dialog ──
+  onOpenShareDialog(): void {
+    if (!this.m_sCurrentDatasetId) {
+      this.m_oNotificationDisplayService.openAlertDialog("No project selected to share.", "Error", "danger");
+      return;
+    }
+
+    // Prepare the resource object that <app-share-ui> expects.
+    // It usually needs at least the ID and the name of the resource being shared.
+    const oProjectResource = {
+      id: this.m_sCurrentDatasetId,
+      name: this.m_oProjectState.m_sLabellingProjectName || "Labelling Project"
+    };
+
+    // Open the standard WASDI Share Dialog
+    const oDialogRef = this.m_oDialog.open(ShareDialogComponent, {
+      width: '700px', // Standard width for the share UI
+      disableClose: false,
+      data: new ShareDialogModel('DATASET', oProjectResource) // 👈 NOTE: Adjust 'DATASET' to whatever resourceType your <app-share-ui> expects!
+    });
+
+    oDialogRef.afterClosed().subscribe(bResult => {
+      console.log("Share dialog closed.");
+      // Optional: If you need to refresh your collaborators list after sharing, do it here!
+      // this.loadCollaborators();
+    });
+  }
+
   onDropdownChange(sFeatureId: string, sAttrName: string): void {
-    this.patchFeatureProperty(sFeatureId, sAttrName, this.m_sEditValue);
+    let sNewColor: string | null = null;
+
+    // ── ONLY LOOKUP COLOR IF THIS IS THE DESIGNATED COLOR ATTRIBUTE ──
+    if (!this.m_bIsFixedColour && sAttrName === this.m_sColourAttributeName) {
+      const oTemplateAttr = this.m_aoTemplateAttributes.find(t => t.name === sAttrName);
+      if (oTemplateAttr && (oTemplateAttr.type === 'category')) {
+        const oMatch = oTemplateAttr.categoryValues?.find(c => c.value === this.m_sEditValue);
+        if (oMatch) {
+          sNewColor = oMatch.color;
+        }
+      }
+    }
+
+    // 2. Patch the feature in Angular
+    this.m_aoFeatures = this.m_aoFeatures.map(f => {
+      if (f.id !== sFeatureId) return f;
+      return {
+        ...f,
+        properties: {
+          ...f.properties,
+          [sAttrName]: this.m_sEditValue,
+          ...(sNewColor ? { portColor: sNewColor } : {}), // Safely apply new color
+          isDirty: true
+        }
+      };
+    });
+
     this.m_oEditingCell = { featureId: null, attrName: null };
+
+    // 3. Sync the updated colors back to Mapbox Draw!
+    if (this.m_oMapEngineService) {
+      this.m_oMapEngineService.setDrawFeatures(this.m_aoFeatures);
+    }
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -762,6 +952,12 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   get m_aoFilteredFeatures(): LabelFeature[] {
     return this.m_aoFeatures.filter(f => {
       const oProps = f.properties || {};
+
+      // ── ENFORCE ANNOTATOR VISIBILITY RESTRICTION ──
+      if (this.m_sUserRole === 'ANNOTATOR' && !this.m_bAnnotatorsSeeAll) {
+        if (oProps['annotator'] !== this.m_sCurrentUser) return false;
+      }
+
       if (this.m_sFilterCollab !== 'all' &&
         oProps['annotator']?.toLowerCase() !== this.m_sFilterCollab.toLowerCase()) {
         return false;
@@ -790,9 +986,9 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   getIssueIcon(oFeature: LabelFeature): string {
     const aoNotes: ReviewNote[] = oFeature.properties['reviewNotes'] || [];
     const iUnresolved = aoNotes.filter(n => !n.resolved).length;
-    if (iUnresolved > 0) return '🚩';
-    if (aoNotes.length > 0) return '💬';
-    return '📭';
+    if (iUnresolved > 0) return 'flag';
+    if (aoNotes.length > 0) return 'chat';
+    return 'add_comment';
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -840,6 +1036,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   }
 
   // Mapper: Transforms Backend LabelViewModel to Mapbox Feature
+  // Mapper: Transforms Backend LabelViewModel to Mapbox Feature
   private mapViewModelToFeature(vm: any): LabelFeature {
     // 1. Parse the stringified geometry back into a JSON object
     let parsedGeometry;
@@ -850,13 +1047,40 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       parsedGeometry = { type: 'Point', coordinates: [0, 0] }; // Fallback to prevent crash
     }
 
-    // 2. Unpack the Key/Value array into a flat object for your table columns
+    // 2. Safely Extract Dynamic Attributes
     const dynamicProps: { [key: string]: any } = {};
+    let sRowColor = '#3b82f6'; // Default blue color
+
     if (vm.attributes && Array.isArray(vm.attributes)) {
+
       vm.attributes.forEach((attr: any) => {
-        dynamicProps[attr.key] = attr.value;
+        // Look for either 'name' or 'key' to be completely safe
+        const sKey = attr.name || attr.key;
+
+        if (sKey && attr.value !== undefined && attr.value !== null) {
+          dynamicProps[sKey] = attr.value;
+
+          // ── ONLY EXTRACT COLOR IF RULES MATCH ──
+          if (!this.m_bIsFixedColour && sKey === this.m_sColourAttributeName) {
+            if ((attr.type === 'CATEGORY' || attr.type === 'category') && this.m_aoTemplateAttributes) {
+              const oTemplateAttr = this.m_aoTemplateAttributes.find(t => t.name === sKey);
+              if (oTemplateAttr && oTemplateAttr.categoryValues) {
+                const oMatch = oTemplateAttr.categoryValues.find(c => c.value === attr.value);
+                if (oMatch) {
+                  sRowColor = oMatch.color;
+                }
+              }
+            }
+          }
+        }
       });
+
+    } else {
+      console.warn(`Label ${vm.id} has no attributes array attached to it!`);
     }
+
+    // 3. Log it to the console so you can verify it worked
+    console.log(`Mapped Label ${vm.id} Props:`, dynamicProps);
 
     return {
       id: vm.id,
@@ -866,16 +1090,16 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         id: vm.id,
         annotator: vm.annotator || 'Unknown',
         status: vm.isValidated ? 'Validated' : 'Pending',
-        timestamp: new Date().toISOString(), // Fallback if backend doesn't provide
+        timestamp: new Date().toISOString(),
         measurement: this.calcMeasurement(parsedGeometry),
-        portColor: '#3b82f6', // You could logic this out based on your dynamicProps!
+        portColor: sRowColor, // <--- Dynamic Color is injected here!
         isValidated: vm.isValidated || false,
         reviewCount: vm.reviewCount || 0,
         reviewers: vm.reviewers || [],
         reviewNotes: vm.reviewNotes || [],
-        isNew: false,   // <-- FLAG: This came from the DB, so it's not new!
-        isDirty: false, // <-- FLAG: It hasn't been edited yet!
-        ...dynamicProps
+        isNew: false,
+        isDirty: false,
+        ...dynamicProps // <--- Values (a, b, c, cat) are injected here!
       }
     } as LabelFeature;
   }
@@ -906,20 +1130,38 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       }
     });
   }
-
+// ── HELPER: Validate Required Fields ──
+  private isValidFeature(f: LabelFeature): boolean {
+    for (const attr of this.m_aoTemplateAttributes) {
+      if (!attr.isOptional) {
+        const value = f.properties[attr.name];
+        // Check if it's undefined, null, or an empty string
+        if (value === undefined || value === null || value === '') {
+          this.m_oNotificationDisplayService.openAlertDialog(
+            `Missing required field: "${attr.name}". Please fill it before saving.`,
+            "Validation Error",
+            "danger"
+          );
+          return false;
+        }
+      }
+    }
+    return true;
+  }
   // Mapper: Transforms Mapbox Feature to your Backend LabelViewModel
   private mapFeatureToViewModel(f: LabelFeature): any {
     const geomType = f.geometry.type;
 
-    // Convert dynamic attributes to the Key/Value array your backend expects
+    // Convert dynamic attributes to the Array your backend expects
     const aoAttributes = this.m_aoTemplateAttributes.map(attr => ({
-      key: attr.name,
+      name: attr.name,  // ✅ Changed from 'key' to 'name' to match Java AttributeViewModel!
+      type: attr.type,  // Keeps Java from throwing the toUpperCase() 500 error
       value: f.properties[attr.name] || ''
     }));
 
     return {
-      id: f.properties['isNew'] ? null : f.id, // Backend generates ID on POST
-      geometry: JSON.stringify(f.geometry),    // Pass geometry as string
+      id: f.properties['isNew'] ? null : f.id,
+      geometry: JSON.stringify(f.geometry),
       isPoint: geomType === 'Point',
       isLine: geomType === 'LineString',
       isPolygon: geomType === 'Polygon',
@@ -929,7 +1171,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
       datasetId: this.m_sCurrentDatasetId,
       reviewers: f.properties['reviewers'] || [],
       reviewNotes: f.properties['reviewNotes'] || [],
-      attributes: aoAttributes,
+      attributes: aoAttributes, // ✅ Sent to backend
       reviewCount: f.properties['reviewCount'] || 0,
       isValidated: f.properties['isValidated'] || false
     };
@@ -976,13 +1218,15 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   // 1. SAVE SINGLE ROW (Triggered by Table button)
   onSaveSingleLabel(f: LabelFeature): void {
-    if (!f.properties['isDirty']) {
-      console.log('No changes to save for this label.');
-      return;
-    }
+    if (!f.properties['isDirty']) return;
 
-    this.upsertFeature$(f).subscribe(() => {
-      console.log(`✅ Saved single label: ${f.id}`);
+    // 🛑 VALIDATION CHECK
+    if (!this.isValidFeature(f)) return;
+
+    this.upsertFeature$(f).subscribe((res) => {
+      if (res) {
+        this.m_oNotificationDisplayService.openSnackBar("Label saved!", "Close", "success-snackbar");
+      }
     });
   }
 
@@ -993,36 +1237,36 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
   // 2. SAVE ALL DIRTY ROWS (Triggered by Toolbar button)
   onSaveLabels(): void {
+    if (!this.m_sCurrentImageName || !this.m_sCurrentDatasetId) return;
 
-    if (!this.m_sCurrentImageName || !this.m_sCurrentDatasetId) {
-      console.warn('❌ Cannot save: No image or dataset selected!');
-      alert('Please select an image from the sidebar before saving labels.');
-      return;
-    }
-    if (this.m_bSaving) return;
-
-    // Find all features that have unsaved changes
     const aoDirtyFeatures = this.m_aoFeatures.filter(f => f.properties['isDirty']);
+    if (aoDirtyFeatures.length === 0) return;
 
-    if (aoDirtyFeatures.length === 0) {
-      console.log('All labels are already up to date!');
-      return;
+    // 🛑 VALIDATION CHECK FOR ALL DIRTY FEATURES
+    for (const f of aoDirtyFeatures) {
+      if (!this.isValidFeature(f)) return; // Stops the entire save process if one is missing!
     }
 
     this.m_bSaving = true;
-
-    // Create an array of API calls
     const aoSaveRequests$ = aoDirtyFeatures.map(f => this.upsertFeature$(f));
 
-    // Run them all in parallel!
     forkJoin(aoSaveRequests$).subscribe({
       next: (results) => {
-        console.log(`✅ Bulk saved ${results.length} labels successfully!`);
+        const successfulSaves = results.filter(r => r !== null);
+        this.m_oNotificationDisplayService.openSnackBar(`Bulk saved ${successfulSaves.length} labels!`, "Close", "success-snackbar");
       },
-      complete: () => {
-        this.m_bSaving = false;
-      }
+      complete: () => { this.m_bSaving = false; }
     });
+  }
+
+  // ── MAP INTERACTIONS: Zoom to Row ──
+  onSelectFeatureRow(feature: LabelFeature): void {
+    this.m_sSelectedFeatureId = feature.id;
+
+    const bbox = this.getBboxForFeatures([feature]);
+    if (bbox && this.m_oMapEngineService) {
+      this.m_oMapEngineService.zoomToBbox(bbox);
+    }
   }
 
   // 3. DELETE (Triggered by Table or Map UI)
