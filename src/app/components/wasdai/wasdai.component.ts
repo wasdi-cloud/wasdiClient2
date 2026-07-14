@@ -31,6 +31,12 @@ interface Message {
 
 export class WasdaiComponent implements OnInit {
   m_sActiveTab: string | null = null;
+  readonly assistantModels: string[] = [
+    'mistral-large-latest',
+    'mistral-medium-latest',
+    'mistral-small-latest',
+  ];
+  readonly defaultAssistantModel = 'mistral-small-latest';
   chats = signal<ChatListViewModel[]>([]);
   isLoadingChats = signal(false);
   currentChatId = signal<string | null>(null);

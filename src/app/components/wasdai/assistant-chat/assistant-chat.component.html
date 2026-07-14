@@ -30,6 +30,20 @@
   } @else {
   <div class="input-container">
     <textarea #promptInput placeholder="Ask about your EO data..." [disabled]="isDisabled()"></textarea>
+    <div class="model-select-container">
+      <label class="model-select-label" for="assistantModelSelect">Model</label>
+      <select
+        id="assistantModelSelect"
+        class="model-select"
+        [(ngModel)]="selectedModel"
+        [disabled]="isDisabled()"
+        aria-label="Model selection"
+      >
+        @for (model of modelOptions; track model) {
+        <option [value]="model">{{ model }}</option>
+        }
+      </select>
+    </div>
     <button class="wasdi-btn" (click)="submit(promptInput.value)" [disabled]="isDisabled()">
       {{ isDisabled() ? 'Select a chat' : 'Send' }}
     </button>

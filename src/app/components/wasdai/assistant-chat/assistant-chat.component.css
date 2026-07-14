@@ -53,6 +53,37 @@ textarea {
   background-color: white;
 }
 
+.model-select {
+  min-width: 220px;
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  font-size: 14px;
+}
+
+.model-select-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 220px;
+}
+
+.model-select-label {
+  font-size: 12px;
+  color: #43526b;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.model-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
 /* --- Fixed Scrollbar Target --- */
 .messages-container::-webkit-scrollbar {
   width: 8px;

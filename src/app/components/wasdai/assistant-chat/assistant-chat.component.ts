@@ -25,6 +25,12 @@ export class AssistantChatComponent implements OnChanges, AfterViewInit {
 
   @Input() chatId: string | null = null;
   @Input() initialMessages: Message[] = [];
+  @Input() modelOptions: string[] = [
+    'mistral-large-latest',
+    'mistral-medium-latest',
+    'mistral-small-latest',
+  ];
+  @Input() selectedModel = 'mistral-small-latest';
 
   messages = signal<Message[]>([]);
   isLoading = signal(false);
@@ -51,6 +57,26 @@ export class AssistantChatComponent implements OnChanges, AfterViewInit {
       // Load messages from parent when chat is selected
       this.messages.set(this.initialMessages || []);
       this.scrollToBottom();
+    }
+
+    if (changes['modelOptions'] || changes['selectedModel']) {
+      this.ensureValidModelSelection();
+    }
+  }
+
+  private ensureValidModelSelection(): void {
+    if (!Array.isArray(this.modelOptions) || this.modelOptions.length === 0) {
+      this.modelOptions = [
+        'mistral-large-latest',
+        'mistral-medium-latest',
+        'mistral-small-latest',
+      ];
+    }
+
+    if (!this.modelOptions.includes(this.selectedModel)) {
+      this.selectedModel = this.modelOptions.includes('mistral-small-latest')
+        ? 'mistral-small-latest'
+        : this.modelOptions[0];
     }
   }
 
@@ -102,7 +128,7 @@ export class AssistantChatComponent implements OnChanges, AfterViewInit {
     this.scrollToBottom();
 
     this.isLoading.set(true);
-    this.assistantService.chat(this.chatId, trimmedPrompt).subscribe({
+    this.assistantService.chat(this.chatId, trimmedPrompt, this.selectedModel).subscribe({
         next: (sChunk: string) => {
         try { console.debug('[AssistantChat] received chunk', { len: sChunk.length, preview: sChunk.slice(0,100) }); } catch(e) {}
         // Buffer the incoming chunk and reveal it gradually for typing effect

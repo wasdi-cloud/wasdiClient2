@@ -27,12 +27,18 @@ export class AssistantService {
    * Chat with the assistant - streams the response chunk by chunk
    * @param sChatId
    * @param sPrompt
+   * @param sModel
    * @returns  Observable that emits text chunks as they stream in real-time
    */
-  chat(sChatId: string, sPrompt: string): Observable<string> {
+  chat(sChatId: string, sPrompt: string, sModel: string = "mistral-small-latest"): Observable<string> {
     return new Observable(observer => {
       const streamChat = async () => {
-        const sUrl = this.APIURL + '/chat?chatId=' + sChatId;
+        let sUrl = this.APIURL + '/chat?chatId=' + sChatId;
+
+        if (sModel) {
+          sUrl += '&model=' + encodeURIComponent(sModel);
+        }
+
         try {
           // Include session token header (fetch bypasses Angular interceptors)
           const sToken = this.m_oConstantsService.getSessionId();
