@@ -91,6 +91,7 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
 
     this.m_oDrawControl = new MapboxDraw({
       displayControlsDefault: false,
+      userProperties: true,
       styles: [
         { id: 'gl-draw-polygon-fill-active', type: 'fill', filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']], paint: { 'fill-color': ['coalesce', ['get', 'user_portColor'], '#3b82f6'], 'fill-opacity': 0.2 } },
         { id: 'gl-draw-polygon-fill-inactive', type: 'fill', filter: ['all', ['==', 'active', 'false'], ['==', '$type', 'Polygon']], paint: { 'fill-color': ['coalesce', ['get', 'user_portColor'], '#3b82f6'], 'fill-opacity': 0.1 } },
