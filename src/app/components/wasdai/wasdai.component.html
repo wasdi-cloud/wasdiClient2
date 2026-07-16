@@ -25,7 +25,12 @@
   </aside>
   <div class="dashboard-content flex-fill">
     <div class="dashboard-content-wrapper">
-        <app-assistant-chat [chatId]="currentChatId()" [initialMessages]="currentChatMessages()"></app-assistant-chat>
+        <app-assistant-chat
+          [chatId]="currentChatId()"
+          [initialMessages]="currentChatMessages()"
+          [modelOptions]="assistantModels"
+          [selectedModel]="defaultAssistantModel"
+        ></app-assistant-chat>
     </div>
   </div>
 </main>

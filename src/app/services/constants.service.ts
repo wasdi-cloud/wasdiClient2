@@ -121,6 +121,10 @@ export class ConstantsService {
   }
 
   getAssistantURL() {
+    if (this.URL.includes("127.0.0.1:8080")) {
+      return this.URL.replace("8080", "8000").replace("wasdiwebserver", "assistant");
+    }
+    
     return this.URL.replace("wwww", "ai").replace("test", "testai").replace("wasdiwebserver", "assistant")
   }
 
