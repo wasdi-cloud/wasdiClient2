@@ -19,6 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ConstantsService } from 'src/app/services/constants.service';
 import {LabellingTemplatesService} from "../../../services/api/labelling/labelling-templates.service";
 import {ShareDialogComponent, ShareDialogModel} from "../../../shared/dialogs/share-dialog/share-dialog.component";
+import * as turf from '@turf/turf';
 
 // ── Lightweight interfaces ────────────────────────────────────────────────────
 
@@ -1030,14 +1031,41 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
   }
 
   private calcMeasurement(oGeometry: any): string {
-    // Lightweight fallback — swap for turf.js if available
-    if (!oGeometry) return '0';
-    if (oGeometry.type?.includes('Polygon')) return '~area km²';
-    if (oGeometry.type?.includes('LineString')) return '~length km';
-    return '1 point';
+    if (!oGeometry || !oGeometry.type) return '0';
+
+    try {
+      if (oGeometry.type.includes('Polygon')) {
+        // turf.area calculates square meters based on the Earth's curvature
+        const iAreaSqMeters = turf.area(oGeometry);
+
+        // If it's larger than 1,000,000 sq meters, format as km²
+        if (iAreaSqMeters > 1000000) {
+          return (iAreaSqMeters / 1000000).toFixed(2) + ' km²';
+        }
+        return iAreaSqMeters.toFixed(2) + ' m²';
+      }
+
+      if (oGeometry.type.includes('LineString')) {
+        // turf.length calculates kilometers by default
+        const iLengthKm = turf.length(oGeometry);
+
+        // If it's less than 1km, format as meters
+        if (iLengthKm < 1) {
+          return (iLengthKm * 1000).toFixed(2) + ' m';
+        }
+        return iLengthKm.toFixed(2) + ' km';
+      }
+
+      if (oGeometry.type.includes('Point')) {
+        return 'Lat/Lng Point';
+      }
+    } catch (oError) {
+      console.warn("Failed to calculate measurement for geometry:", oGeometry, oError);
+    }
+
+    return 'N/A';
   }
 
-  // Mapper: Transforms Backend LabelViewModel to Mapbox Feature
   // Mapper: Transforms Backend LabelViewModel to Mapbox Feature
   private mapViewModelToFeature(vm: any): LabelFeature {
     // 1. Parse the stringified geometry back into a JSON object

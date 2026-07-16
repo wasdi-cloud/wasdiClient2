@@ -27,6 +27,7 @@
     "@ngx-translate/http-loader": "^17.0.0",
     "@popperjs/core": "^2.11.6",
     "@swimlane/ngx-charts": "24.0.0-alpha.0",
+    "@turf/turf": "^7.3.5",
     "@types/shpjs": "^3.4.7",
     "ace-builds": "^1.43.6",
     "bootstrap": "^5.3.8",
