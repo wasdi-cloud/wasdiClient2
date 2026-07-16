@@ -293,6 +293,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
 
       this.m_aoFeatures = [...this.m_aoFeatures, ...aoImported];
 
+      this.m_bTableExpanded = true;
       if (this.m_oMapEngineService) {
         this.m_oMapEngineService.setDrawFeatures(this.m_aoFeatures);
         // ── NEW: ZOOM TO THE IMPORTED SHAPES ──
@@ -493,6 +494,7 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
     if (oEvent.type === 'create') {
       const newFeatures = aoUpdatedFeatures.map((oRaw: any) => this.createNewFeature(oRaw));
       this.m_aoFeatures = [...this.m_aoFeatures, ...newFeatures];
+      this.m_bTableExpanded = true;
     } else if (oEvent.type === 'update') {
       this.m_aoFeatures = this.m_aoFeatures.map(existingFeature => {
         const updatedRaw = aoUpdatedFeatures.find((f: any) => f.id === existingFeature.id);
@@ -1119,6 +1121,9 @@ export class LabellingLabelsComponent implements OnInit, OnDestroy,AfterViewInit
         if (this.m_oMapEngineService) {
           this.m_oMapEngineService.setDrawFeatures(this.m_aoFeatures);
         }
+
+        // ── THE FIX: Auto-expand table if the image has labels ──
+        this.m_bTableExpanded = this.m_aoFeatures.length > 0;
 
         console.log(`Loaded ${this.m_aoFeatures.length} labels from backend.`);
       },
