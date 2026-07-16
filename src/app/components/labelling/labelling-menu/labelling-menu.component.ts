@@ -219,7 +219,14 @@ export class LabellingMenuComponent implements OnInit {
   }
 
   isDisabled(sTitle: string): boolean {
-    return sTitle === 'labels' && !this.m_oProjectState.m_sActiveProjectId;
+    // ── THE FIX: The Labels tab strictly requires an actively opened workspace! ──
+    if (sTitle === 'labels') {
+      // If there is no active project ID, disable the tab!
+      return !this.m_oProjectState.m_sActiveProjectId || this.m_oProjectState.m_sMode==='view'|| this.m_oProjectState.m_sMode==='edit';
+    }
+
+    // All other tabs (Projects, Templates) are always enabled
+    return false;
   }
 
   // ── IMAGE ACTIONS ──

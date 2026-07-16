@@ -71,7 +71,7 @@
 
       </div>
 
-      <div id="aoiMapContainer" style="height: 400px; width: 100%; border-radius: 8px; border: 1px solid #ccc; overflow: hidden; position: relative;"></div>
+      <div [style.pointer-events]="m_bIsReadOnly ? 'none' : 'auto'" id="aoiMapContainer" style="height: 400px; width: 100%; border-radius: 8px; border: 1px solid #ccc; overflow: hidden; position: relative;"></div>
     </div>
   }
 

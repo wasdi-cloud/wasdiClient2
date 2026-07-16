@@ -135,15 +135,17 @@ export class CreateLabellingProjectComponent implements OnInit{
       this.m_oMapEngineService.addManualBoundingBoxControl(oMap, !this.m_bIsReadOnly);
 
       // Listen for manual drawing changes
-      this.m_oMapEngineService.getManualBoundingBox$().subscribe((oBounds: any) => {
-        if (oBounds) {
-          this.convertBoundsToWKT(oBounds);
-        } else {
-          this.m_oProject.bbox = "";
-          console.log("AOI Cleared via Centralized Trash Can");
-        }
-      });
 
+      if (!this.m_bIsReadOnly) {
+        this.m_oMapEngineService.getManualBoundingBox$().subscribe((oBounds: any) => {
+          if (oBounds) {
+            this.convertBoundsToWKT(oBounds);
+          } else {
+            this.m_oProject.bbox = "";
+            console.log("AOI Cleared via Centralized Trash Can");
+          }
+        });
+      }
       // --- NEW: DRAW EXISTING SHAPE IF WE ARE IN EDIT/VIEW MODE ---
       // We wrap it in a tiny timeout to ensure MapLibre's canvas is 100% ready
       setTimeout(() => {
