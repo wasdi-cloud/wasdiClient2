@@ -37,7 +37,9 @@ export class ProductListItemComponent {
    * this is a constant list of the possible extensions of the files we can have in wasdi
    */
   m_asReadableFileExtensions = ["doc", "docx", "pdf", "txt", "log", "dot", "dotx", "rtf", "odt",
-    "csv", "htm", "html", "md"]
+    "csv", "htm", "html", "md", "json", "xml", "yaml", "yml", "ini", "cfg", "conf", "bat", "sh", "ps1", "tex", "texi", "texinfo",
+    "c", "cpp", "h", "hpp", "java", "py", "rb", "pl", "php", "js", "ts", "css", "scss", "less",
+    "sql"]
   m_asImageExtensions = ["jpg", "png", "svg","jpeg"];
 
   /**
