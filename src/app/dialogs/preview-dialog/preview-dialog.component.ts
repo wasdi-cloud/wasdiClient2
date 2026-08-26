@@ -14,6 +14,50 @@ export class PreviewDialogComponent {
   m_oPdfUrl!: SafeResourceUrl;
   m_oImageUrl!: SafeResourceUrl;
 
+  private readonly m_oMimeTypeMap: { [sExtension: string]: string } = {
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    pdf: 'application/pdf',
+    txt: 'text/plain',
+    log: 'text/plain',
+    dot: 'application/msword',
+    dotx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+    rtf: 'application/rtf',
+    odt: 'application/vnd.oasis.opendocument.text',
+    csv: 'text/csv',
+    htm: 'text/html',
+    html: 'text/html',
+    md: 'text/markdown',
+    json: 'application/json',
+    xml: 'application/xml',
+    yaml: 'application/yaml',
+    yml: 'application/yaml',
+    ini: 'text/plain',
+    cfg: 'text/plain',
+    conf: 'text/plain',
+    bat: 'text/plain',
+    sh: 'application/x-sh',
+    ps1: 'application/x-powershell',
+    tex: 'text/x-tex',
+    texi: 'application/x-texinfo',
+    texinfo: 'application/x-texinfo',
+    c: 'text/x-csrc',
+    cpp: 'text/x-c++src',
+    h: 'text/x-chdr',
+    hpp: 'text/x-c++hdr',
+    java: 'text/x-java-source',
+    py: 'text/x-python',
+    rb: 'text/x-ruby',
+    pl: 'text/x-perl',
+    php: 'application/x-httpd-php',
+    js: 'text/javascript',
+    ts: 'application/typescript',
+    css: 'text/css',
+    scss: 'text/x-scss',
+    less: 'text/x-less',
+    sql: 'application/sql'
+  };
+
   constructor(@Inject(MAT_DIALOG_DATA) public m_oData: { oPayload: any },
               private m_oCatalogService: CatalogService,
               private m_oSanitizer: DomSanitizer,
@@ -69,18 +113,11 @@ export class PreviewDialogComponent {
 // Add this helper method inside your PreviewDialogComponent
   private getMimeTypeFromFileName(sFileName: string): string {
     const sExtension = sFileName.split('.').pop()?.toLowerCase();
-    switch (sExtension) {
-      case 'pdf':
-        return 'application/pdf';
-      case 'txt':
-        return 'text/plain';
-      case 'doc':
-        return 'application/msword';
-      case 'docx':
-        return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-      default:
-        return 'application/octet-stream';
+    if (!sExtension) {
+      return 'application/octet-stream';
     }
+
+    return this.m_oMimeTypeMap[sExtension] ?? 'application/octet-stream';
   }
   onDownload(sFileName: string) {
     if (sFileName) {
