@@ -143,7 +143,8 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
     { name: 'Python 3.10 (Ubuntu 22.04)', id: 'python_pip_2' },
     { name: 'Python 3.8 (Ubuntu 20.04)', id: 'python_pip_2_ubuntu_20' },
     { name: 'Python 3.8 Conda', id: 'conda' },
-    { name: 'OGC Application Package', id: 'eoepca' },
+    { name: 'OGC Application Package', id: 'ogc_app_package' },
+    { name: 'EOEPCA / External ADES', id: 'eoepca' },
     { name: 'Custom Dockerfile',  id: 'personalized_docker'},
     { name: 'Local Python 3.12', id: 'local_python312' }
   ];
