@@ -29,16 +29,19 @@ export class SessionInjectorInterceptor implements HttpInterceptor {
     }
 
     if (!FadeoutUtils.utilsIsStrNullOrEmpty(sToken)) {
+      // Wrap legacy session token with "wasdi-" prefix for Authorization header
+      const sWrappedToken = this.wrapLegacyToken(sToken);
       oRequest = oRequest.clone({
         setHeaders: {
-          'x-session-token': sToken
+          'Authorization': 'Bearer ' + sWrappedToken
         }
       });  
     }
     else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oCookie.sessionId)) {
-      //Safeguard in case sessionId only in Cookie
+      // Safeguard in case sessionId only in Cookie
+      const sWrappedToken = this.wrapLegacyToken(oCookie.sessionId);
       oRequest = oRequest.clone({
-        setHeaders: { 'x-session-token': oCookie.sessionId }
+        setHeaders: { 'Authorization': 'Bearer ' + sWrappedToken }
       });
     }
     
@@ -51,5 +54,32 @@ export class SessionInjectorInterceptor implements HttpInterceptor {
         }
       })
     )
+  }
+
+  /**
+   * Wrap legacy WASDI session token with "wasdi-" prefix.
+   * Used for Authorization header format: "Bearer wasdi-<sessionId>"
+   * 
+   * @param sToken Session token
+   * @returns Wrapped token or original if already wrapped
+   */
+  private wrapLegacyToken(sToken: string): string {
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sToken)) {
+      return sToken;
+    }
+
+    // If already wrapped with "wasdi-", return as-is
+    if (sToken.startsWith('wasdi-')) {
+      return sToken;
+    }
+
+    // If it looks like a JWT (has 2 dots), return as-is (Phase 2)
+    const iDotCount = (sToken.match(/\./g) || []).length;
+    if (iDotCount === 2) {
+      return sToken;
+    }
+
+    // Otherwise, it's a legacy token - wrap it
+    return 'wasdi-' + sToken;
   }
 }
