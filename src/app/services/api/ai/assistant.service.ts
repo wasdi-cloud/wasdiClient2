@@ -138,6 +138,7 @@ export class AssistantService {
    */
   hello() {
     return this.m_oHttp.get(this.APIURL + '/hello' , { responseType: "text"});
+  }
 
   /**
    * Wrap legacy WASDI session token with "wasdi-" prefix.
@@ -165,7 +166,5 @@ export class AssistantService {
     // Otherwise, it's a legacy token - wrap it
     return 'wasdi-' + sToken;
   }
-
-}
 
 }
