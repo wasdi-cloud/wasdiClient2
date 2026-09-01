@@ -2,6 +2,7 @@ export interface Workspace {
     activeNode: boolean;
     apiUrl: string;
     creationDate: number;
+    isPublic: boolean;
     lastEditDate: number;
     name: string;
     nodeCode: string;

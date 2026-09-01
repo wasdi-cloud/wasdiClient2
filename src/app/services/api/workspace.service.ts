@@ -9,6 +9,7 @@ export interface WorkspaceViewModel {
   apiUrl: string;
   cloudProvider: string;
   creationDate: number;
+  isPublic: boolean;
   lastEditDate: number;
   name: string;
   nodeCode: string;
