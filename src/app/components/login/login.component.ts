@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
     // let sErrorHeader = this.m_oTranslate.instant("KEY_PHRASES.ERROR")
     this.m_oConstantsService.setUser({} as User);
     this.m_oAuthService.legacyLogin(oLoginInfo).subscribe((oResponse => {
-      if (oResponse.sessionId) {
+      if (oResponse.sessionId || oResponse.accessToken) {
         this.callbackLogin(oResponse, this)
       } else {
         this.m_oNotificationDisplayService.openAlertDialog("Could not complete login.<br>Please ensure both email and password are correct.", "", 'danger')
@@ -179,18 +179,21 @@ export class LoginComponent implements OnInit {
 
       
     } else {
-      window.localStorage["access_token"] = m_oData['access_token'];
-      window.localStorage["refresh_token"] = m_oData['refresh_token'];
+      const sAccessToken = m_oData.accessToken || m_oData['access_token'];
+      const sRefreshToken = m_oData.refreshToken || m_oData['refresh_token'];
+      window.localStorage["access_token"] = sAccessToken;
+      window.localStorage["refresh_token"] = sRefreshToken;
 
-      let oDecodedToken = this.m_oJwtService.decodeToken(m_oData["access_token"]);
+      let oDecodedToken = this.m_oJwtService.decodeToken(sAccessToken);
 
       oUser.userId = oDecodedToken.preferred_username;
       oUser.name = oDecodedToken.given_name;
       oUser.surname = oDecodedToken.family_name;
       oUser.type = m_oData.type;
       oUser.authProvider = "wasdi";
-      oUser.sessionId = m_oData['access_token'];
-      oUser["refreshToken"] = m_oData['refresh_token'];
+      oUser.sessionId = sAccessToken;
+      oUser.refreshToken = sRefreshToken;
+      oUser.expiresIn = m_oData.expiresIn;
 
       oController.m_oConstantsService.setUser(oUser);
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConstantsService } from '../../services/constants.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Workspace } from '../../shared/models/workspace.model';
 import { User } from '../../shared/models/user.model';
@@ -13,7 +13,13 @@ import { KeycloakService } from 'keycloak-angular';
 })
 export class AuthService {
 
-  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient, public m_oJwtHelper: JwtHelperService, private m_oKeycloakService: KeycloakService) { }
+  private m_oRefreshHttp: HttpClient;
+
+  constructor(private m_oConstantsService: ConstantsService, private m_oHttp: HttpClient,
+    private m_oHttpBackend: HttpBackend, public m_oJwtHelper: JwtHelperService,
+    private m_oKeycloakService: KeycloakService) {
+    this.m_oRefreshHttp = new HttpClient(this.m_oHttpBackend);
+  }
 
   APIURL: string = this.m_oConstantsService.getAPIURL();
   AUTHURL: string = this.m_oConstantsService.getAUTHURL();
@@ -96,6 +102,10 @@ export class AuthService {
 
   legacyLogin(oCredentials: any) {
     return this.m_oHttp.post<any>(this.APIURL + '/auth/login', oCredentials)
+  }
+
+  refreshToken(sRefreshToken: string) {
+    return this.m_oRefreshHttp.post<any>(this.APIURL + '/auth/refresh', { refreshToken: sRefreshToken });
   }
   /**
    * logout
