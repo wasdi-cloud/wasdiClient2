@@ -52,8 +52,6 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
   m_bIsVisibleLoadIcon: boolean = false;
   m_aoSelectedFiles: Array<any> = [];
 
-  m_bIsAccountCreated: boolean = false;
-
   m_bIsReadOnly: boolean = true;
 
   m_oSelectedStyle: any = null;
@@ -82,7 +80,6 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
     this.m_bIsReadOnly = this.m_oConstantsService.getActiveWorkspace().readOnly;
     this.getStyles();
     this.getPlatforms();
-    this.isCreatedAccountUpload();
   }
 
   changeActiveTab(sTabName: string) {
@@ -190,144 +187,6 @@ export class  ImportDialogComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }
-
-  /********************* SFTP ********************/
-  deleteStfpAccount() {
-    //ADD FADEOUT UTILS:
-    if (!this.m_oUser || !this.m_oUser.userId) {
-      return false;
-    }
-    this.m_bIsVisibleLoadIcon = true;
-    this.m_oAuthService.deleteAccountUpload(this.m_oUser.userId).subscribe({
-      next: oResponse => {
-        if (oResponse !== null && oResponse !== undefined) {
-          this.isCreatedAccountUpload();
-          this.m_bIsVisibleLoadIcon = false;
-        }
-      },
-      error: oError => {
-        //ADD ERROR DIALOG
-        console.log("Import Dialog Controller:  error during delete account");
-        this.m_bIsVisibleLoadIcon = false;
-      }
-    })
-    return true;
-  }
-
-  updateStfpPassword() {
-    //FADEOUT UTILS OBJECT NULL
-    if (!this.m_sEmailNewPassword || !this.m_sEmailNewPassword) {
-      return false;
-    }
-
-    this.m_bIsVisibleLoadIcon = true;
-    this.m_oAuthService.updatePasswordUpload(this.m_sEmailNewPassword).subscribe({
-      next: oResponse => {
-        if (oResponse) {
-          this.m_bIsVisibleLoadIcon = false;
-        }
-      },
-      error: oError => {
-        if (oError) {
-          console.log("Import Dialog Controller:  error during creation new password");
-        }
-        this.m_bIsVisibleLoadIcon = false;
-      }
-    })
-    return true;
-  }
-
-  createAccountUpload() {
-    //ADD FADEOUT UTILS OBJECT NULL | STRING NULL | CHECK IS EMAIL
-    if (!this.m_sEmailNewUser) {
-      return false;
-    }
-    this.m_bIsVisibleLoadIcon;
-    this.m_oAuthService.createAccountUpload(this.m_sEmailNewUser).subscribe({
-      next: oResponse => {
-        if (oResponse !== null && oResponse !== undefined) {
-          this.isCreatedAccountUpload();
-        } else {
-          //CREATE ALERT DIALOG
-          //ERROR SERVER WAS NOT ABLE TO CREATE AN ACCOUNT.
-        }
-      },
-      error: oError => {
-        //CREATE ALERT DIALOG
-        //SERVER ERROR
-        this.m_bIsVisibleLoadIcon = false;
-      }
-    });
-    return true;
-  }
-
-  isCreatedAccountUpload() {
-    this.m_oAuthService.isCreatedAccountUpload().subscribe({
-      next: oResponse => {
-        if (oResponse !== null && oResponse !== undefined) {
-          this.m_bIsAccountCreated = false;
-        } else {
-          this.m_bIsAccountCreated = true;
-          this.getListsFiles();
-        }
-      },
-      error: oError => {
-        if (oError) {
-          console.log("Import Dialog Controller: : error during check if the account is created");
-        }
-      }
-    })
-  }
-
-  getListsFiles() {
-    this.m_oAuthService.getListFilesUpload().subscribe({
-      next: oResponse => {
-        if (oResponse !== null && oResponse !== undefined) {
-          this.m_aoListOfFiles = oResponse;
-        }
-      },
-      error: oError => {
-        if (oError) {
-          console.log("Import Dialog Controller: : error during get-list");
-        }
-      }
-    })
-  }
-
-  isAccountCreated() {
-    if (this.m_bIsAccountCreated) {
-      return true;
-    }
-    return false;
-  }
-
-  ingestAllSelectedFiles() {
-    let iSelectedFilesLength = this.m_aoSelectedFiles.length;
-
-    for (let iSelectedFileIndex = 0; iSelectedFileIndex < iSelectedFilesLength; iSelectedFileIndex++) {
-      if (this.ingestFile(this.m_aoSelectedFiles[iSelectedFileIndex]) === false) {
-        console.log("Problem Ingesting file at index:" + iSelectedFileIndex);
-      }
-    }
-  }
-
-  ingestFile(oSelectedFile: any) {
-    //FADEOUT UTILS:
-    if (!oSelectedFile) {
-      return false;
-    }
-    this.m_oCatalogService.ingestFile(oSelectedFile, this.m_oConstantsService.getActiveWorkspace().workspaceId).subscribe({
-      next: oResponse => {
-        if (oResponse) {
-          console.log("SftpUploadController error during ingest file");
-        }
-      },
-      error: oError => {
-        console.log(oError);
-      }
-    });
-    return true;
   }
 
   getFileInput(oEvent: any) {

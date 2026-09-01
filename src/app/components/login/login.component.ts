@@ -114,8 +114,8 @@ export class LoginComponent implements OnInit {
     }
 
     let oUser = {} as User;
-    //If the user logs in with legacy login:
-    if (m_oData.hasOwnProperty("sessionId")) {
+    // Legacy login responses contain a non-empty session ID; Keycloak responses contain accessToken.
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(m_oData.accessToken) && !FadeoutUtils.utilsIsStrNullOrEmpty(m_oData.sessionId)) {
       oUser.userId = m_oData.userId;
       oUser.authProvider = 'wasdi';
       oUser.name = m_oData.name;
