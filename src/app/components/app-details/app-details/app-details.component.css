@@ -252,12 +252,19 @@ nav,
 }
 
 .btn-run-app {
+  display: block;
+}
+
+.btn-run-app ::ng-deep .wasdi-btn {
+  width: 100%;
+  min-height: 48px;
   background: var(--wasdiGreen);
   color: #FFFFFF;
   font-weight: 700;
+  transition: background-color 0.2s ease;
 }
 
-.btn-run-app:hover {
+.btn-run-app ::ng-deep .wasdi-btn:hover:not([disabled]) {
   background: var(--darkAccessible);
 }
 
