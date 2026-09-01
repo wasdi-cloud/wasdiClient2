@@ -22,6 +22,36 @@ export class AssistantService {
     }
   }
 
+  /**
+   * Returns the explicit WASDI session header value used by the assistant backend.
+   * This is required because the assistant service is served by a separate backend
+   * that authenticates legacy WASDI sessions through x-session-token.
+   */
+  private getSessionHeaderValue(): string | undefined {
+    const sToken = this.m_oConstantsService.getSessionId();
+    const oCookie = this.m_oConstantsService.getCookie('oUser');
+
+    return !FadeoutUtils.utilsIsStrNullOrEmpty(sToken)
+      ? sToken
+      : (oCookie && oCookie.sessionId) ? oCookie.sessionId : undefined;
+  }
+
+  /**
+   * Build headers for the assistant backend including the explicit session token.
+   */
+  private getAssistantHeaders(extraHeaders: Record<string, string> = {}): Record<string, string> {
+    const headers: Record<string, string> = {
+      ...extraHeaders
+    };
+
+    const sSessionHeader = this.getSessionHeaderValue();
+    if (sSessionHeader) {
+      headers['x-session-token'] = sSessionHeader;
+    }
+
+    return headers;
+  }
+
 
   /**
    * Chat with the assistant - streams the response chunk by chunk
@@ -42,44 +72,34 @@ export class AssistantService {
         try {
           // MCP/LLM server uses x-session-token (not OAuth/JWT)
           // fetch bypasses Angular interceptors, so we add the header explicitly here
-          const sToken = this.m_oConstantsService.getSessionId();
-          const oCookie = this.m_oConstantsService.getCookie('oUser');
-          const sessionHeader = !FadeoutUtils.utilsIsStrNullOrEmpty(sToken)
-            ? sToken
-            : (oCookie && oCookie.sessionId) ? oCookie.sessionId : undefined;
-
-          const headers: Record<string, string> = {
+          const headers = this.getAssistantHeaders({
             'Content-Type': 'application/json',
             'Accept': 'text/plain'
-          };
-          if (sessionHeader) {
-            // Add x-session-token header for MCP/LLM server (legacy WASDI session auth)
-            headers['x-session-token'] = sessionHeader;
-          }
+          });
 
-          const response = await fetch(sUrl, {
+          const oResponse = await fetch(sUrl, {
             method: 'POST',
             headers,
             body: JSON.stringify(sPrompt)
           });
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+          if (!oResponse.ok) {
+            throw new Error(`HTTP error! status: ${oResponse.status}`);
           }
 
-          const reader = response.body?.getReader();
-          if (!reader) {
+          const oReader = oResponse.body?.getReader();
+          if (!oReader) {
             throw new Error('Response body is not readable');
           }
 
-          const decoder = new TextDecoder();
+          const oDecoder = new TextDecoder();
 
           try {
             while (true) {
-              const { done, value } = await reader.read();
+              const { done, value } = await oReader.read();
               if (done) break;
               
-              const chunk = decoder.decode(value, { stream: true });
+              const chunk = oDecoder.decode(value, { stream: true });
               // Debug log chunk size and preview
               try { console.debug('[AssistantService] chunk', { len: chunk.length, preview: chunk.slice(0,100) }); } catch (e) {}
               observer.next(chunk);
@@ -87,7 +107,7 @@ export class AssistantService {
             try { console.debug('[AssistantService] stream complete'); } catch (e) {}
             observer.complete();
           } finally {
-            reader.releaseLock();
+            oReader.releaseLock();
           }
         } catch (error) {
           try { console.error('[AssistantService] stream error', error); } catch (e) {}
@@ -106,7 +126,9 @@ export class AssistantService {
    */
   newChat() {
     let sUrl = this.APIURL + '/newChat';
-    return this.m_oHttp.get(sUrl);
+    return this.m_oHttp.get(sUrl, {
+      headers: this.getAssistantHeaders()
+    });
   }
 
    /**
@@ -115,7 +137,9 @@ export class AssistantService {
    */
   listChat() {
     let sUrl = this.APIURL + '/listChat';
-    return this.m_oHttp.get(sUrl);
+    return this.m_oHttp.get(sUrl, {
+      headers: this.getAssistantHeaders()
+    });
   }
   
    /**
@@ -125,7 +149,9 @@ export class AssistantService {
    */
   getChat(sChatId: string) {
     let sUrl = this.APIURL + '/getChat?chatId=' + sChatId;
-    return this.m_oHttp.get(sUrl);
+    return this.m_oHttp.get(sUrl, {
+      headers: this.getAssistantHeaders()
+    });
   }  
 
   /**
@@ -137,7 +163,10 @@ export class AssistantService {
    * @returns
    */
   hello() {
-    return this.m_oHttp.get(this.APIURL + '/hello' , { responseType: "text"});
+    return this.m_oHttp.get(this.APIURL + '/hello', {
+      headers: this.getAssistantHeaders(),
+      responseType: "text"
+    });
   }
 
   /**
