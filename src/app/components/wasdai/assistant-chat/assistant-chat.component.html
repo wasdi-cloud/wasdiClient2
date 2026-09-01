@@ -4,7 +4,7 @@
     
             @for (msg of messages(); track msg.id) {
             <div [class]="'message-bubble ' + msg.role">
-                <markdown [data]="msg.content" [lineNumbers]="true"></markdown>
+              <markdown [data]="msg.content"></markdown>
 
                 @if (msg.attachments?.length) {
                 <div class="attachment-grid">
@@ -15,9 +15,12 @@
                 }
             </div>
             } @empty {
-            <div class="empty-state">
-                <i class="fa fa-sparkles"></i>
-                <p>How can I assist with your WASDI workspace today?</p>
+            <div class="hero-welcome">
+              <div class="hero-icon">
+                <span class="material-symbols-outlined">smart_toy</span>
+              </div>
+              <div class="hero-title">How can I assist today?</div>
+              <div class="hero-sub">Ask me anything about your EO data, processing workflows, or WASDI features.</div>
             </div>
             }
         </section>
@@ -27,23 +30,30 @@
   <div class="loading-container">
     <app-invader></app-invader>
   </div>
-  } @else {
-  <div class="input-container">
-    <textarea #promptInput placeholder="Ask about your EO data..." [disabled]="isDisabled()"></textarea>
-    <select
-      id="assistantModelSelect"
-      class="model-select"
-      [(ngModel)]="selectedModel"
-      [disabled]="isDisabled()"
-      aria-label="Model selection"
-    >
-      @for (model of modelOptions; track model) {
-      <option [value]="model">{{ model }}</option>
-      }
-    </select>
-    <button class="wasdi-btn" (click)="submit(promptInput.value)" [disabled]="isDisabled()">
-      {{ isDisabled() ? 'Select a chat' : 'Send' }}
-    </button>
-  </div>
   }
+
+  <!-- Floating Input Dock -->
+  <div class="input-dock-wrapper">
+    <div class="input-dock">
+      <textarea #promptInput 
+        class="chat-textarea"
+        placeholder="Ask about your EO data..."
+        [disabled]="isDisabled()"
+        >
+      </textarea>
+      <div class="dock-toolbar">
+        <select class="model-select"
+          [(ngModel)]="selectedModel"
+          [disabled]="isDisabled()">
+          @for (model of modelOptions; track model) {
+            <option [value]="model">{{model}}</option>
+          }
+        </select>
+        <button class="btn-send" (click)="submit(promptInput.value)" [disabled]="isDisabled()">
+          <span class="material-symbols-outlined">send</span>
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

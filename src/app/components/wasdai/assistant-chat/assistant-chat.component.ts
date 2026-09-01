@@ -39,6 +39,7 @@ export class AssistantChatComponent implements OnChanges, AfterViewInit {
   private streamingBuffers: Record<string, string> = {};
   private streamingTimers: Record<string, number> = {};
   private streamingFinished: Record<string, boolean> = {};
+  private readonly processingNotice = '[The WASDI AI agent is processing your request...]';
 
   constructor(private assistantService: AssistantService) {
     this.initializeMockMessages();
@@ -199,26 +200,33 @@ export class AssistantChatComponent implements OnChanges, AfterViewInit {
   /**
    * Buffer incoming stream chunks and reveal them gradually.
    */
-private handleStreamChunk(messageId: string, chunk: string) {
-  this.messages.update(msgs => {
-    // create a brand NEW array reference so Angular detects the change
-    const newMsgs = [...msgs]; 
-    
-    // find and update the specific message
-    const idx = newMsgs.findIndex(m => m.id === messageId);
-    if (idx >= 0) {
-      newMsgs[idx] = { 
-        ...newMsgs[idx], 
-        content: newMsgs[idx].content + chunk 
-      };
-    }
-    
-    // return the new array to trigger the UI render immediately
-    return newMsgs;
-  });
+  private handleStreamChunk(messageId: string, chunk: string): void {
+    this.messages.update(messages => {
+      const updatedMessages = [...messages];
+      const messageIndex = updatedMessages.findIndex(message => message.id === messageId);
 
-  this.scrollToBottom();
-}
+      if (messageIndex >= 0) {
+        const content = updatedMessages[messageIndex].content + chunk;
+        updatedMessages[messageIndex] = {
+          ...updatedMessages[messageIndex],
+          content: this.getVisibleStreamContent(content),
+        };
+      }
+
+      return updatedMessages;
+    });
+
+    this.scrollToBottom();
+  }
+
+  private getVisibleStreamContent(content: string): string {
+    if (!content.startsWith(this.processingNotice)) {
+      return content;
+    }
+
+    const responseContent = content.slice(this.processingNotice.length);
+    return responseContent.trim() ? responseContent.trimStart() : this.processingNotice;
+  }
 
   /**
    * Mark stream finished; flush remaining buffer and stop timer.
