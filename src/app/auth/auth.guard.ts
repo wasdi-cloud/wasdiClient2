@@ -4,7 +4,8 @@ import { KeycloakService } from 'keycloak-angular';
 import { ConstantsService } from '../services/constants.service';
 import { AuthService } from './service/auth.service';
 import { WorkspaceService } from '../services/api/workspace.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 import { Title } from '@angular/platform-browser';  
 
@@ -25,83 +26,30 @@ export class AuthGuard  {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    this.oAuthService.checkSession().subscribe({
-      next: (oResponse) => {
-        if (oResponse.userId) {
-          let oSkin = this.m_oConstantsService.getSkin();
-
-          if (!oSkin.bLoadedFromServer) {
-
-            let sSkin = oResponse.skin;
-
-            const sHost = window.location.hostname;
-            if (sHost.startsWith('coplac')) {
-              sSkin = 'coplac';
-            }
-
-            this.oAuthService.getSkin(sSkin).subscribe({
-              next: oResponse => {
-                if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
-                  console.error("LoginComponent.callbackLogin: Skin is null or undefined");
-                }
-                else {
-                  oResponse["bLoadedFromServer"] = true;
-                  this.m_oConstantsService.setSkin(oResponse);
-                  const m_oCurrentSkin = this.m_oConstantsService.getSkin();
-                  var sBrandMainColor = m_oCurrentSkin.brandMainColor;
-                  var sBrandSecondaryColor = m_oCurrentSkin.brandSecondaryColor;
-                  document.documentElement.style.setProperty('--neutral50Brand', sBrandMainColor);
-                  document.documentElement.style.setProperty('--wasdiGreen', sBrandSecondaryColor);
-                  if (m_oCurrentSkin.logoText.includes('coplac')) {
-                    let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
-                    if (!oLink) {
-                      oLink = document.createElement('link');
-                      oLink.type = 'image/x-icon';
-                      oLink.rel = 'icon';
-                      document.getElementsByTagName('head')[0].appendChild(oLink);
-                    }
-                    oLink.href = 'assets/icons/favicon-coplac.ico';
-                    this.m_oTitleService.setTitle('Copernicus LAC');
-                  }
-                }
-              },
-              error: oError => {
-                //oController.m_oNotificationDisplayService.openAlertDialog("Could not load skin", "", 'danger')
-              }
-            });
-          }
-
-          // Load and set the last workspace if it exists
-          this.loadLastWorkspace(oResponse);
-
-          return true;
-        }
-        else {
-          this.m_oConstantsService.setUser(oResponse);
-          this.redirectToLogin();
-          return false;
-        }
-      },
-    });
-    if (!this.oAuthService.getTokenObject()?.access_token) {
-      this.redirectToLogin();
-      return false;
+  ): Observable<boolean | UrlTree> {
+    if (!this.oAuthService.getTokenObject()?.access_token || !this.m_oConstantsService.getUser().userId) {
+      return of(this.getLoginUrlTree());
     }
-    // If the User isn't set in the constants service
-    if (!this.m_oConstantsService.getUser().userId) {
-      this.redirectToLogin();
-      return false;
-    }
-    return true;
+
+    return this.oAuthService.checkSession().pipe(
+      map(oResponse => {
+        if (!oResponse.userId) {
+          this.m_oConstantsService.setUser({} as any);
+          return this.getLoginUrlTree();
+        }
+
+        this.loadSkin(oResponse);
+        this.loadLastWorkspace(oResponse);
+        return true;
+      }),
+      catchError(() => {
+        this.m_oConstantsService.setUser({} as any);
+        return of(this.getLoginUrlTree());
+      })
+    );
   }
 
-  redirectToLogin() {
-
+  private getLoginUrlTree(): UrlTree {
     const sHost = window.location.hostname;
     let sRedirectLink = '/login';
 
@@ -109,7 +57,44 @@ export class AuthGuard  {
       sRedirectLink = '/login-coplac';
     }
 
-    this.oRouter.navigate([sRedirectLink]);
+    return this.oRouter.parseUrl(sRedirectLink);
+  }
+
+  private loadSkin(oSessionUser: any): void {
+    const oSkin = this.m_oConstantsService.getSkin();
+    if (oSkin.bLoadedFromServer) {
+      return;
+    }
+
+    let sSkin = oSessionUser.skin;
+    if (window.location.hostname.startsWith('coplac')) {
+      sSkin = 'coplac';
+    }
+
+    this.oAuthService.getSkin(sSkin).subscribe({
+      next: oResponse => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oResponse)) {
+          return;
+        }
+
+        oResponse["bLoadedFromServer"] = true;
+        this.m_oConstantsService.setSkin(oResponse);
+        const oCurrentSkin = this.m_oConstantsService.getSkin();
+        document.documentElement.style.setProperty('--neutral50Brand', oCurrentSkin.brandMainColor);
+        document.documentElement.style.setProperty('--wasdiGreen', oCurrentSkin.brandSecondaryColor);
+        if (oCurrentSkin.logoText.includes('coplac')) {
+          let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+          if (!oLink) {
+            oLink = document.createElement('link');
+            oLink.type = 'image/x-icon';
+            oLink.rel = 'icon';
+            document.getElementsByTagName('head')[0].appendChild(oLink);
+          }
+          oLink.href = 'assets/icons/favicon-coplac.ico';
+          this.m_oTitleService.setTitle('Copernicus LAC');
+        }
+      }
+    });
   }
 
   /**
