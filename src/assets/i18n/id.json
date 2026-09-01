@@ -987,6 +987,9 @@
 	"MARKET_LEAST_USED": "Paling Sedikit Digunakan",
 	"MARKET_MAX_PRICE": "Harga Maks",
 	"MARKET_CLEAR_FILTERS": "Hapus filter",
+    "MARKET_ALL_APPLICATIONS": "Semua Aplikasi",
+    "MARKET_FEATURED": "Aplikasi Unggulan dan Tren",
+    "MARKET_ALL_DEVELOPERS": "Semua Pengembang",
 
 	"MARKET_CARD_PUBLISHER": "Penerbit",
 	"MARKET_CARD_PRICE": "Gratis",

@@ -986,6 +986,10 @@
     "MARKET_LEAST_USED": "Ít được sử dụng nhất",
     "MARKET_MAX_PRICE": "Giá tối đa",
     "MARKET_CLEAR_FILTERS": "Xóa bộ lọc",
+    "MARKET_ALL_APPLICATIONS": "Tất cả ứng dụng",
+    "MARKET_FEATURED": "Ứng dụng nổi bật và thịnh hành",
+    "MARKET_ALL_DEVELOPERS": "Tất cả nhà phát triển",
+    
 
     "MARKET_CARD_PUBLISHER": "Nhà xuất bản",
     "MARKET_CARD_PRICE": "Miễn phí",

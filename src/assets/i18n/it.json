@@ -986,6 +986,10 @@
 	"MARKET_LEAST_USED": "Meno utilizzato",
 	"MARKET_MAX_PRICE": "Prezzo massimo",
 	"MARKET_CLEAR_FILTERS": "Cancella filtri",
+    "MARKET_ALL_APPLICATIONS": "Tutte le applicazioni",
+    "MARKET_FEATURED": "Applicazioni in evidenza e di tendenza",
+    "MARKET_ALL_DEVELOPERS": "Tutti gli sviluppatori",
+	
 
 	"MARKET_CARD_PUBLISHER": "Editore",
 	"MARKET_CARD_PRICE": "Gratuito",

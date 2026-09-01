@@ -992,6 +992,9 @@
 
     "MARKET_CARD_PUBLISHER": "Publisher",
     "MARKET_CARD_PRICE": "Free",
+    "MARKET_ALL_APPLICATIONS": "All Applications",
+    "MARKET_FEATURED": "Featured and Trending Applications",
+    "MARKET_ALL_DEVELOPERS": "All Developers",
 
     "DIALOG_SHARE_UI": "Collaborators",
     "DIALOG_SHARE_NO_ONE": "There is no one here...",

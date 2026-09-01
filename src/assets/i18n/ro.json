@@ -986,6 +986,10 @@
 	"MARKET_LEAST_USED": "Cel mai puțin folosit",
 	"MARKET_MAX_PRICE": "Preț maxim",
 	"MARKET_CLEAR_FILTERS": "Ștergeți filtrele",
+    "MARKET_ALL_APPLICATIONS": "Toate aplicațiile",
+    "MARKET_FEATURED": "Aplicații recomandate și în tendințe",
+    "MARKET_ALL_DEVELOPERS": "Toți dezvoltatorii",
+    
 
 	"MARKET_CARD_PUBLISHER": "Editor",
 	"MARKET_CARD_PRICE": "Gratuit",
