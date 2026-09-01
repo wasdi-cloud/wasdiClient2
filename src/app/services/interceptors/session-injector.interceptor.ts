@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { EMPTY, from, Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { ConstantsService } from '../constants.service';
-import { User } from 'src/app/shared/models/user.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 
 @Injectable({
@@ -32,26 +31,16 @@ export class SessionInjectorInterceptor implements HttpInterceptor {
   }
 
   private injectAuthorizationHeader(oRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const oUser = this.m_oConstantsService.getUser();
     const sAuthorizationHeader = this.m_oConstantsService.getAuthorizationHeaderValue();
-    if (!oUser.userId || FadeoutUtils.utilsIsStrNullOrEmpty(sAuthorizationHeader)) {
-      this.m_oRouter.navigateByUrl('login');
-      return EMPTY;
-    }
-
-    oRequest = oRequest.clone({
-      setHeaders: { 'Authorization': sAuthorizationHeader }
-    });
     
-    return next.handle(oRequest).pipe(
-      tap(event => {
-        if (event instanceof HttpResponse) {
-          if (event.status === 200) {
-
-          }
-        }
-      })
-    )
+    // Add authorization header if available; allow unauthenticated requests to proceed
+    if (!FadeoutUtils.utilsIsStrNullOrEmpty(sAuthorizationHeader)) {
+      oRequest = oRequest.clone({
+        setHeaders: { 'Authorization': sAuthorizationHeader }
+      });
+    }
+    
+    return next.handle(oRequest);
   }
 
   private isAccessTokenExpiringSoon(): boolean {
