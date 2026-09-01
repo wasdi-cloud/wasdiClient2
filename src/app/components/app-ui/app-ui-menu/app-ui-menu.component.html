@@ -1,18 +1,20 @@
-<div class="menu-container">
-  <div>
-    <div class="menu-header">{{"DIALOG_PROCESSOR_TAB_UI" | translate}}</div>
+<aside class="menu-container">
+  <div class="menu-title">{{"DIALOG_PROCESSOR_TAB_UI" | translate}}</div>
+  <div class="tabs-list">
     <ul>
       @for (oTab of m_aoTabs; track oTab) {
-        <li [class.active]="m_sActiveTab === oTab.name"
-        (click)="setActiveTab(oTab.name)">{{oTab.name}}</li>
+        <li [class.active]="m_sActiveTab === oTab.name" (click)="setActiveTab(oTab.name)">
+          <span>{{oTab.name}}</span>
+          @if (m_sActiveTab === oTab.name) { <span class="material-symbols-outlined">chevron_right</span> }
+        </li>
       }
-      <li [class.active]="m_sActiveTab === 'help'" (click)="setActiveTab('help')">Help</li>
-      <li [class.active]="m_sActiveTab === 'history'" (click)="setActiveTab('history')">History</li>
-      <li [class.active]="m_sActiveTab === 'json'" (click)="setActiveTab('json')">JSON</li>
+      <li [class.active]="m_sActiveTab === 'help'" (click)="setActiveTab('help')"><span>Help</span><span class="material-symbols-outlined">help</span></li>
+      <li class="fixed-tab" [class.active]="m_sActiveTab === 'history'" (click)="setActiveTab('history')"><span>History</span><span class="material-symbols-outlined">history</span></li>
+      <li class="fixed-tab" [class.active]="m_sActiveTab === 'json'" (click)="setActiveTab('json')"><span>JSON</span><span class="material-symbols-outlined">code</span></li>
     </ul>
   </div>
-  <div>
-    <div class="menu-header">{{'APP_UI_RUN_APP_LABEL' | translate}}</div>
+  <div class="execution-box">
+    <div class="exec-label">{{'APP_UI_RUN_APP_LABEL' | translate}}</div>
     <div class="run-app-container">
       <div class="d-flex flex-row align-items-center gap-1">
         <input type="checkbox" class="wasdi-checkbox" checked="true" name="IsNew"
@@ -52,4 +54,4 @@
         </span>
       </div>
     </div>
-  </div>
+</aside>

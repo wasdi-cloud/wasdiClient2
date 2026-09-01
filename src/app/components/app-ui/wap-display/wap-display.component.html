@@ -1,5 +1,5 @@
 @for (oControl of getTabControls(); track oControl; let i = $index) {
-  <div class="d-flex flex-column" style="padding-bottom:20px;">
+  <div class="wap-field" [class.full-width]="oControl.type === 'bbox' || oControl.type === 'productscombo' || oControl.type === 'searcheoimage' || oControl.type === 'table' || oControl.type === 'textbox'">
     <!-- <label for="oControl">{{oControl.label}}</label> -->
     <!-- WAP Checkbox -->
     @if (oControl.type === 'boolean') {

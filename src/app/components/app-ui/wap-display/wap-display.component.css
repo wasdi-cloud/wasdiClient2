@@ -1,0 +1,39 @@
+.wap-field {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+:host {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1.25rem 1.5rem;
+}
+
+.wap-field.full-width {
+	grid-column: 1 / -1;
+}
+
+.wap-field ::ng-deep app-wap-check-box,
+.wap-field ::ng-deep app-wap-date-time-picker,
+.wap-field ::ng-deep app-wap-dropdown,
+.wap-field ::ng-deep app-wap-list-box,
+.wap-field ::ng-deep app-wap-numeric-box,
+.wap-field ::ng-deep app-wap-products-combo,
+.wap-field ::ng-deep app-wap-search-eo-image,
+.wap-field ::ng-deep app-wap-select-area,
+.wap-field ::ng-deep app-wap-slider,
+.wap-field ::ng-deep app-wap-table,
+.wap-field ::ng-deep app-wap-textbox {
+	width: 100%;
+}
+
+@media (max-width: 700px) {
+	:host {
+		grid-template-columns: 1fr;
+	}
+
+	.wap-field.full-width {
+		grid-column: auto;
+	}
+}
