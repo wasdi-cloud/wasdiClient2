@@ -12,6 +12,7 @@ export interface User {
     brandMainColor: string;
     brandSecondaryColor: string;
     lastWorkspace?: string;
+    accessToken?: string;
     refreshToken?: string;
     expiresIn?: number;
 }

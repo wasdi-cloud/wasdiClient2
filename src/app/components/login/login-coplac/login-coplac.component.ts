@@ -163,7 +163,8 @@ form: any = {
       oUser.surname = oDecodedToken.family_name;
       oUser.type = m_oData.type;
       oUser.authProvider = "wasdi";
-      oUser.sessionId = sAccessToken;
+      oUser.sessionId = m_oData.sessionId;
+      oUser.accessToken = sAccessToken;
       oUser.refreshToken = sRefreshToken;
       oUser.expiresIn = m_oData.expiresIn;
 

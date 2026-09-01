@@ -138,11 +138,24 @@ export class ConstantsService {
 
   getSessionId() {
     if (Object.keys(this.m_oUser).length !== 0) {
-      if (this.m_oUser.sessionId !== null) {
+      if (!FadeoutUtils.utilsIsStrNullOrEmpty(this.m_oUser.sessionId)) {
         return this.m_oUser.sessionId;
       }
     }
     return "";
+  }
+
+  getAuthorizationHeaderValue(): string {
+    const oUser = this.getUser();
+    if (!FadeoutUtils.utilsIsStrNullOrEmpty(oUser.accessToken)) {
+      return 'Bearer ' + oUser.accessToken;
+    }
+
+    if (!FadeoutUtils.utilsIsStrNullOrEmpty(oUser.sessionId)) {
+      return 'Bearer wasdi-' + oUser.sessionId;
+    }
+
+    return '';
   }
 
   pad(number: number, length: number) {
