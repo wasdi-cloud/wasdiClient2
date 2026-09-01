@@ -140,6 +140,11 @@ export class EditComponent implements OnInit, OnDestroy {
         this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
         this.openWorkspace(this.m_sWorkspaceId);
       }
+      else if (this.m_oConstantsService.getLastWorkspaceId()) {
+        //Try to load the last workspace user was working on
+        this.m_sWorkspaceId = this.m_oConstantsService.getLastWorkspaceId();
+        this.openWorkspace(this.m_sWorkspaceId);
+      }
       else {
         //If unable to identify workspace, re-route to workspaces tab
         this.m_oRouter.navigateByUrl('/workspaces')

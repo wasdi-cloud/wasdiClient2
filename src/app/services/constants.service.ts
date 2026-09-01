@@ -46,6 +46,8 @@ export class ConstantsService {
 
   m_oActiveWorkspace: Workspace = {} as Workspace;
 
+  m_sLastWorkspaceId: string = "";
+
   m_sRabbitUser: string = this.m_oEnvService.rabbitUser;
 
   m_sRabbitPassword: string = this.m_oEnvService.rabbitPassword;
@@ -212,6 +214,14 @@ export class ConstantsService {
 
   getActiveWorkspace() {
     return this.m_oActiveWorkspace;
+  }
+
+  setLastWorkspaceId(sWorkspaceId: string) {
+    this.m_sLastWorkspaceId = sWorkspaceId;
+  }
+
+  getLastWorkspaceId(): string {
+    return this.m_sLastWorkspaceId;
   }
 
   setSelectedApplication(sProcessorName: string) {

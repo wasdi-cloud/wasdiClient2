@@ -98,24 +98,17 @@ export class AuthGuard  {
   }
 
   /**
-   * Load and set the last workspace if it exists in the user profile
+   * Store the last workspace ID if no active workspace is set
+   * The actual workspace will be loaded by the editor component when needed
    * @param oUser User object from the session check response
    */
   private loadLastWorkspace(oUser: any): void {
-    // Check if lastWorkspace property exists and is not null or empty
-    if (oUser && oUser.lastWorkspace && oUser.lastWorkspace.trim() !== '') {
-      this.m_oWorkspaceService.getWorkspaceEditorViewModel(oUser.lastWorkspace).subscribe({
-        next: (oWorkspaceViewModel) => {
-          if (oWorkspaceViewModel) {
-            // Convert WorkspaceViewModel to Workspace and set as active
-            this.m_oConstantsService.setActiveWorkspace(oWorkspaceViewModel as any);
-          }
-        },
-        error: (oError) => {
-          // Silently fail if workspace cannot be loaded - user can manually select a workspace
-          console.warn("Could not load last workspace: " + oUser.lastWorkspace, oError);
-        }
-      });
+    // Only store lastWorkspace ID if active workspace is not set
+    const oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+    if ((FadeoutUtils.utilsIsObjectNullOrUndefined(oActiveWorkspace) || !oActiveWorkspace.workspaceId) &&
+        oUser && oUser.lastWorkspace && oUser.lastWorkspace.trim() !== '') {
+      // Store the ID for later loading in the editor
+      this.m_oConstantsService.setLastWorkspaceId(oUser.lastWorkspace);
     }
   }
 }
