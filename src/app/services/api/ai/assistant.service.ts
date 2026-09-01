@@ -40,7 +40,8 @@ export class AssistantService {
         }
 
         try {
-          // Include session token header (fetch bypasses Angular interceptors)
+          // MCP/LLM server uses x-session-token (not OAuth/JWT)
+          // fetch bypasses Angular interceptors, so we add the header explicitly here
           const sToken = this.m_oConstantsService.getSessionId();
           const oCookie = this.m_oConstantsService.getCookie('oUser');
           const sessionHeader = !FadeoutUtils.utilsIsStrNullOrEmpty(sToken)
@@ -52,9 +53,8 @@ export class AssistantService {
             'Accept': 'text/plain'
           };
           if (sessionHeader) {
-            // Wrap legacy session token with "wasdi-" prefix for Authorization header
-            const sWrappedToken = this.wrapLegacyToken(sessionHeader);
-            headers['Authorization'] = 'Bearer ' + sWrappedToken;
+            // Add x-session-token header for MCP/LLM server (legacy WASDI session auth)
+            headers['x-session-token'] = sessionHeader;
           }
 
           const response = await fetch(sUrl, {
