@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@a
 import { KeycloakService } from 'keycloak-angular';
 import { ConstantsService } from '../services/constants.service';
 import { AuthService } from './service/auth.service';
+import { WorkspaceService } from '../services/api/workspace.service';
 import { Observable } from 'rxjs';
 import FadeoutUtils from '../lib/utils/FadeoutJSUtils';
 import { Title } from '@angular/platform-browser';  
@@ -16,6 +17,7 @@ export class AuthGuard  {
     public oAuthService: AuthService,
     private m_oConstantsService: ConstantsService,
     private m_oKeycloakService: KeycloakService,
+    private m_oWorkspaceService: WorkspaceService,
     private oRouter: Router,
     private m_oTitleService: Title
   ) { }
@@ -74,6 +76,9 @@ export class AuthGuard  {
             });
           }
 
+          // Load and set the last workspace if it exists
+          this.loadLastWorkspace(oResponse);
+
           return true;
         }
         else {
@@ -105,5 +110,27 @@ export class AuthGuard  {
     }
 
     this.oRouter.navigate([sRedirectLink]);
+  }
+
+  /**
+   * Load and set the last workspace if it exists in the user profile
+   * @param oUser User object from the session check response
+   */
+  private loadLastWorkspace(oUser: any): void {
+    // Check if lastWorkspace property exists and is not null or empty
+    if (oUser && oUser.lastWorkspace && oUser.lastWorkspace.trim() !== '') {
+      this.m_oWorkspaceService.getWorkspaceEditorViewModel(oUser.lastWorkspace).subscribe({
+        next: (oWorkspaceViewModel) => {
+          if (oWorkspaceViewModel) {
+            // Convert WorkspaceViewModel to Workspace and set as active
+            this.m_oConstantsService.setActiveWorkspace(oWorkspaceViewModel as any);
+          }
+        },
+        error: (oError) => {
+          // Silently fail if workspace cannot be loaded - user can manually select a workspace
+          console.warn("Could not load last workspace: " + oUser.lastWorkspace, oError);
+        }
+      });
+    }
   }
 }

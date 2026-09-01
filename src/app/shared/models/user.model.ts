@@ -11,4 +11,5 @@ export interface User {
     skin: string;
     brandMainColor: string;
     brandSecondaryColor: string;
+    lastWorkspace?: string;
 }

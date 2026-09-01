@@ -77,9 +77,9 @@ export class LoginComponent implements OnInit {
 
   checkKeycloakAuthStatus(oController) {
     if (this.m_oKeycloak.authenticated) {
-      if (this.m_oKeycloak.idToken) {
+      if (this.m_oKeycloak.token) {
         const aoDataTokens = {
-          'access_token': this.m_oKeycloak.idToken,
+          'access_token': this.m_oKeycloak.token,
           'refresh_token': this.m_oKeycloak.refreshToken
         }
 
