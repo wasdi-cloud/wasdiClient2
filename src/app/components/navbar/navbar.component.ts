@@ -98,6 +98,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       } else {
         this.m_oActiveWorkspace = oWorkspace;
         this.sActiveWorkspaceId = oWorkspace.workspaceId;
+        this.m_bEditIsActive = true;
       }
     })
 

@@ -8,7 +8,7 @@
     }
     <router-outlet></router-outlet>
   </div>
-  @if (m_sLocation === 'edit' || m_sLocation=== 'plan' || m_sLocation === 'search') {
+  @if (m_sLocation === 'edit' || m_sLocation === 'plan' || m_sLocation === 'search' || m_sLocation === 'marketplace') {
     <div>
       <app-processes-bar [m_bIsOpen]="false" [m_oActiveWorkspace]="m_oActiveWorkspace"></app-processes-bar>
     </div>

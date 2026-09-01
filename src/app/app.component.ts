@@ -35,10 +35,16 @@ export class AppComponent implements OnInit {
     });
     this.m_oRouterEvents = this.m_oRouter.events.subscribe((oEvent: any) => {
       if (oEvent instanceof NavigationEnd) {
-        if (oEvent.url.includes('edit')) {
+        // Extract the first path segment, ignoring query params and fragments
+        let sPath = oEvent.url.split('?')[0].split('#')[0];
+        
+        if (sPath.includes('edit')) {
           this.setActiveLocation('edit');
         } else {
-          this.setActiveLocation(oEvent.url.slice(1));
+          // Get the first path segment after the leading slash
+          let aPathSegments = sPath.split('/').filter(s => s);
+          let sFirstSegment = aPathSegments.length > 0 ? aPathSegments[0] : '';
+          this.setActiveLocation(sFirstSegment);
         }
       }
     });

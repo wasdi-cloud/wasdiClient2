@@ -1,71 +1,113 @@
-<main class="d-flex flex-row flex-fill">
-  <div class="d-flex flex-row flex-fill">
-    <app-marketplace-filters class="collapse-closed"
-      [m_asDefaultSelectedCategories]="m_asDefaultCategories"
-      (m_oAppFilterOutput)="getAppFilter($event)">
-    </app-marketplace-filters>
-    <!-- Marketplace App Cards -->
-    <div class="app-cards-container w-100 ">
-      <!-- Sorting Container -->
-      <div class="d-flex flex-row pb-3 gap-2 justify-content-between align-items-center">
-        <app-button class="show-filter-btn" [m_bOutline]="true" [m_sLabel]="'Filters'.toUpperCase()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"></app-button>
-        <div class="d-flex flex-row gap-2 justify-content-end align-items-center">
-          <p class="font-bold m-0 p-0">{{"SORT_BY" | translate}}:</p>
-          <div class="category-tag flex-row align-items-center gap-1" (click)="setSorting('name')"
-            [class.active]="m_oAppFilter.orderBy === 'name'">
-            <span class="material-symbols-outlined">
-              sort_by_alpha
-            </span>
-            <p>{{"MARKET_NAME" | translate}}</p>
-            @if (m_oAppFilter.orderBy === 'name') {
-              <span class="material-symbols-outlined">
-                {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-              </span>
-            }
-          </div>
-          <div class="category-tag d-flex flex-row align-items-center gap-1" (click)="setSorting('date')"
-            [class.active]="m_oAppFilter.orderBy === 'date'">
-            <span class="material-symbols-outlined">
-              sort_by_alpha
-            </span>
-            <p>{{ "KEY_PHRASES.DATE" | translate}}</p>
-            @if (m_oAppFilter.orderBy === 'date') {
-              <span class="material-symbols-outlined">
-                {{m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-              </span>
-            }
-          </div>
-          <div class="category-tag flex-row align-items-center gap-1" (click)="setSorting('price')"
-            [class.active]="m_oAppFilter.orderBy === 'price'">
-            <span class="material-symbols-outlined">
-              sort_by_alpha
-            </span>
-            <p>{{ "MARKET_PRICE" | translate}}</p>
+<main class="marketplace-main">
+  <!-- Main content area with full width -->
+  <div class="marketplace-content flex-fill">
+    <!-- Featured Applications Section (conditional) -->
+    @if (m_aoFeaturedApplications && m_aoFeaturedApplications.length > 0) {
+      <div class="featured-section">
+        <div class="section-header">
+          <span class="material-symbols-outlined featured-icon">local_fire_department</span>
+          <span class="header-text">{{"MARKETPLACE_FEATURED" | translate}}</span>
+        </div>
+        <div class="featured-carousel">
+          @for (oProcessor of m_aoFeaturedApplications; track oProcessor) {
+            <app-card class="featured-card" [m_oProcessor]="oProcessor"></app-card>
+          }
+        </div>
+      </div>
+    }
 
-            @if (m_oAppFilter.orderBy === 'price') {
-              <span class="material-symbols-outlined">
-                {{ m_oAppFilter.orderDirection==-1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+    <!-- Horizontal Filters Panel -->
+    <div class="horizontal-filters-panel">
+      <!-- Search and Developer Row -->
+      <div class="filters-top-row">
+        <div class="search-wrapper">
+          <span class="material-symbols-outlined search-icon">search</span>
+          <input type="text" 
+            class="search-input"
+            placeholder="{{'MARKET_SEARCH_APP' | translate}}"
+            [(ngModel)]="m_sNameFilter"
+            (input)="refreshAppList()">
+        </div>
+
+        <select class="developer-select" [(ngModel)]="m_sDeveloperSearch">
+          <option value="">{{"MARKET_ALL_DEVELOPERS" | translate}}</option>
+          @for (oPublisher of m_aoPublishers; track oPublisher) {
+            <option [value]="oPublisher.publisher">{{oPublisher.nickName}}</option>
+          }
+        </select>
+
+        <!-- Sort Buttons -->
+        <div class="sort-group">
+          <span class="sort-label">{{"SORT_BY" | translate}}:</span>
+          <button class="sort-btn" 
+            [class.active]="m_oAppFilter.orderBy === 'name'"
+            (click)="setSorting('name')">
+            <span class="material-symbols-outlined">sort_by_alpha</span>
+            <span>{{"MARKET_NAME" | translate}}</span>
+            @if (m_oAppFilter.orderBy === 'name') {
+              <span class="material-symbols-outlined sort-icon">
+                {{ m_oAppFilter.orderDirection === -1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
               </span>
             }
-          </div>
+          </button>
+          <button class="sort-btn"
+            [class.active]="m_oAppFilter.orderBy === 'date'"
+            (click)="setSorting('date')">
+            <span class="material-symbols-outlined">sort_by_alpha</span>
+            <span>{{"KEY_PHRASES.DATE" | translate}}</span>
+            @if (m_oAppFilter.orderBy === 'date') {
+              <span class="material-symbols-outlined sort-icon">
+                {{ m_oAppFilter.orderDirection === -1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+              </span>
+            }
+          </button>
+          <button class="sort-btn"
+            [class.active]="m_oAppFilter.orderBy === 'price'"
+            (click)="setSorting('price')">
+            <span class="material-symbols-outlined">sort_by_alpha</span>
+            <span>{{"MARKET_PRICE" | translate}}</span>
+            @if (m_oAppFilter.orderBy === 'price') {
+              <span class="material-symbols-outlined sort-icon">
+                {{ m_oAppFilter.orderDirection === -1 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+              </span>
+            }
+          </button>
         </div>
       </div>
 
-      <div class="processor-cards-container row p-0">
-        @for (oProcessor of m_aoApplications; track oProcessor) {
-          <app-card class="pb-4 col-xxl-3 col-xl-4 col-lg-6 col-md-6 col-sm-6"
-          [m_oProcessor]="oProcessor"></app-card>
+      <!-- Category Tags Row -->
+      <div class="category-ribbon">
+        @for (oCategory of m_asCategoryOptions; track oCategory) {
+          <button class="category-tag"
+            [class.active]="m_aoSelectedCategories.indexOf(oCategory.id) !== -1"
+            (click)="categoriesChanged(oCategory)">
+            {{oCategory.category}}
+          </button>
         }
       </div>
-      <div class="d-flex flex-row justify-content-center my-3">
-        <app-button class="m-auto" [m_sLabel]="'Load More'" [m_bDisabled]="!m_bLoadMoreEnabled"
-        (click)="loadMore()"></app-button>
+    </div>
+
+    <!-- Applications Grid -->
+    <div class="applications-section">
+      <div class="section-header">
+        <span class="header-text">{{"ALL_APPLICATIONS" | translate}}</span>
       </div>
+      
+      <div class="processor-cards-container">
+        @for (oProcessor of m_aoApplications; track oProcessor) {
+          <app-card class="app-card-grid" [m_oProcessor]="oProcessor"></app-card>
+        }
+      </div>
+
+      <!-- Load More Button -->
+      @if (m_aoApplications.length > 0) {
+        <div class="load-more-container">
+          <app-button class="load-more-btn" 
+            [m_sLabel]="'Load More'" 
+            [m_bDisabled]="!m_bLoadMoreEnabled"
+            (click)="loadMore()"></app-button>
+        </div>
+      }
     </div>
   </div>
 </main>
-
-<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-  <!--app-marketplace-filters
-(m_oAppFilterOutput)="getAppFilter($event)"></app-marketplace-filters-->
-</div>

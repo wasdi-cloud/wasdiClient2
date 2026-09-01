@@ -135,9 +135,10 @@ export class EditComponent implements OnInit, OnDestroy {
     if (!this.m_oActiveWorkspace) {
 
       //Check route for workspace id
-      if (this.m_oActivatedRoute.snapshot.params['workspaceId']) {
+      const sWorkspaceIdFromRoute = this.m_oActivatedRoute.snapshot.params['workspaceId'];
+      if (sWorkspaceIdFromRoute && sWorkspaceIdFromRoute !== 'undefined') {
         //Assign and set new workspace id
-        this.m_sWorkspaceId = this.m_oActivatedRoute.snapshot.params['workspaceId']
+        this.m_sWorkspaceId = sWorkspaceIdFromRoute;
         this.openWorkspace(this.m_sWorkspaceId);
       }
       else if (this.m_oConstantsService.getLastWorkspaceId()) {

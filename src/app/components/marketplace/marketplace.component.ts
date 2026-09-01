@@ -4,6 +4,7 @@ import { ConstantsService } from 'src/app/services/constants.service';
 import { ImageService } from 'src/app/services/api/image.service';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
 import { ProcessorService } from 'src/app/services/api/processor.service';
+import { ProcessorMediaService } from 'src/app/services/api/processor-media.service';
 import { TranslateService } from '@ngx-translate/core';
 import { User } from 'src/app/shared/models/user.model';
 import { filter, take } from 'rxjs/operators';
@@ -49,6 +50,7 @@ export class MarketplaceComponent implements OnInit {
   }
 
   m_aoApplications: any = [];
+  m_aoFeaturedApplications: any = [];
 
   m_asCategoryOptions: any = [];
   m_aoPublishers: any = [];
@@ -78,11 +80,16 @@ export class MarketplaceComponent implements OnInit {
     private m_oImageService: ImageService,
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oProcessorService: ProcessorService,
+    private m_oProcessorMediaService: ProcessorMediaService,
     private m_oTranslate: TranslateService,
   ) { }
 
   ngOnInit(): void {
     this.m_oActiveUser = this.m_oConstantsService.getUser();
+
+    // Load categories and publishers for filters
+    this.getCategories();
+    this.getPublishers();
 
     this.m_oConstantsService.m_oSkin$
     .pipe(
@@ -128,6 +135,9 @@ export class MarketplaceComponent implements OnInit {
               this.m_aoApplications = this.m_aoApplications.concat(this.setDefaultImagesAndVotes(oResponse));
             }
           }
+
+          // Update featured applications list
+          this.updateFeaturedApplications();
 
           //If there is no data, disable the 'Load More' Button
           if (oResponse.length > 0) {
@@ -180,6 +190,60 @@ export class MarketplaceComponent implements OnInit {
   }
 
   /**
+   * Extract featured applications (top-rated apps with score > 3)
+   * @returns {void}
+   */
+  updateFeaturedApplications(): void {
+    if (this.m_aoApplications && this.m_aoApplications.length > 0) {
+      // Get applications with score >= 4 as featured, limit to 3
+      this.m_aoFeaturedApplications = this.m_aoApplications
+        .filter((app: any) => app.score >= 4)
+        .sort((a: any, b: any) => b.score - a.score)
+        .slice(0, 3);
+    } else {
+      this.m_aoFeaturedApplications = [];
+    }
+  }
+
+  /**
+   * Get categories for filter dropdown
+   * @returns {void}
+   */
+  getCategories(): void {
+    let sCategoriesError = this.m_oTranslate.instant('MSG_WAPPS_CATEGORY_ERROR');
+    this.m_oProcessorMediaService.getCategories().subscribe({
+      next: (oResponse) => {
+        if (oResponse.length === 0) {
+          this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
+        }
+        this.m_asCategoryOptions = oResponse;
+      },
+      error: (oError) => {
+        this.m_oNotificationDisplayService.openAlertDialog(sCategoriesError);
+      },
+    });
+  }
+
+  /**
+   * Get publishers/developers for dropdown
+   * @returns {void}
+   */
+  getPublishers(): void {
+    let sPublishersError = this.m_oTranslate.instant('MSG_WAPPS_PUBLISHER_ERROR');
+    this.m_oProcessorMediaService.getPublishersFilterList().subscribe({
+      next: (oResponse: any) => {
+        if (!oResponse || oResponse.length === 0) {
+          this.m_oNotificationDisplayService.openAlertDialog(sPublishersError);
+        }
+        this.m_aoPublishers = oResponse || [];
+      },
+      error: (oError) => {
+        this.m_oNotificationDisplayService.openAlertDialog(sPublishersError);
+      },
+    });
+  }
+
+  /**
    * Refresh the application list when filters or search text is updated
    * @returns {void}
    */
@@ -209,6 +273,10 @@ export class MarketplaceComponent implements OnInit {
               this.m_aoApplications = this.m_aoApplications.concat(this.setDefaultImagesAndVotes(oResponse));
             }
           }
+
+          // Update featured applications list
+          this.updateFeaturedApplications();
+
           //If there is no data, do not enable the Load More button
           if (oResponse.length > 0) {
             this.m_bLoadMoreEnabled = true;
@@ -322,6 +390,20 @@ export class MarketplaceComponent implements OnInit {
     this.m_oAppFilter.page = 0;
 
 
+    this.refreshAppList();
+  }
+
+  /**
+   * Handle developer dropdown selection change
+   * @returns {void}
+   */
+  onDeveloperChange(): void {
+    if (this.m_sDeveloperSearch) {
+      this.m_oAppFilter.publishers = [this.m_sDeveloperSearch];
+    } else {
+      this.m_oAppFilter.publishers = [];
+    }
+    this.m_oAppFilter.page = 0;
     this.refreshAppList();
   }
 
