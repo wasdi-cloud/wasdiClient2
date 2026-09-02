@@ -144,7 +144,7 @@
               </div>
             </div>
           }
-          @if (!m_bRedeployOngoing && (!m_bEditMode || m_sSourceType === 'UPLOAD')) {
+          @if (!m_bRedeployOngoing && m_sSourceType === 'UPLOAD') {
             <div class="flex-fill">
               <app-drag-and-drop
                 (m_oSelectedFileOutput)="getSelectedFile($event)"
