@@ -127,7 +127,7 @@ export class ConstantsService {
       return this.URL.replace("8080", "8000").replace("wasdiwebserver", "assistant");
     }
     
-    return this.URL.replace("wwww", "ai").replace("test", "testai").replace("wasdiwebserver", "assistant")
+    return this.URL.replace("www", "ai").replace("test", "testai").replace("wasdiwebserver", "assistant")
   }
 
   /**
