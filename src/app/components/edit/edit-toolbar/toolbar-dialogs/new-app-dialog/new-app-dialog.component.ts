@@ -620,6 +620,7 @@ export class NewAppDialogComponent implements OnInit {
 
     if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSelectedFile)) {
       oSelectedFile = new FormData();
+      oSelectedFile.append('source', 'git');
     }
 
     this.m_oProcessorService
