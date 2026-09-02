@@ -194,15 +194,17 @@ export class MarketplaceComponent implements OnInit {
    * @returns {void}
    */
   updateFeaturedApplications(): void {
-    if (this.m_aoApplications && this.m_aoApplications.length > 0) {
-      // Get applications with score >= 4 as featured, limit to 3
-      this.m_aoFeaturedApplications = this.m_aoApplications
-        .filter((app: any) => app.score >= 4)
-        .sort((a: any, b: any) => b.score - a.score)
-        .slice(0, 3);
-    } else {
-      this.m_aoFeaturedApplications = [];
-    }
+    //TODO: FEATURED
+    // if (this.m_aoApplications && this.m_aoApplications.length > 0) {
+    //   // Get applications with score >= 4 as featured, limit to 3
+    //   this.m_aoFeaturedApplications = this.m_aoApplications
+    //     .filter((app: any) => app.score >= 4)
+    //     .sort((a: any, b: any) => b.score - a.score)
+    //     .slice(0, 3);
+    // } else {
+    //   this.m_aoFeaturedApplications = [];
+    // }
+    this.m_aoFeaturedApplications = [];
   }
 
   /**
