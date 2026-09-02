@@ -470,6 +470,7 @@
 	"DIALOG_PROCESSOR_BASE_FILE": "File",
 	"DIALOG_PROCESSOR_SOURCE_UPLOAD": "Unggah",
 	"DIALOG_PROCESSOR_GIT_REPOSITORY_URL": "URL repositori Git",
+	"DIALOG_PROCESSOR_GIT_UPDATE": "Perbarui dari Git",
 	"DIALOG_PROCESSOR_BASE_DRAG_FILES": "Drag dan drop .zip file atau single file di sini untuk memperbaharui Aplikasi WASDI anda atau klik untuk mencari.",
 	"DIALOG_PROCESSOR_BASE_NO_UPDATE": "Pembaruan File tidak tersedia untuk Tipe Aplikasi ini",
 	"DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Penjelasan Singkat",

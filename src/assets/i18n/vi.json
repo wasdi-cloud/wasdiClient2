@@ -468,6 +468,7 @@
     "DIALOG_PROCESSOR_BASE_FILE": "Tệp",
     "DIALOG_PROCESSOR_SOURCE_UPLOAD": "Tải lên",
     "DIALOG_PROCESSOR_GIT_REPOSITORY_URL": "URL kho Git",
+    "DIALOG_PROCESSOR_GIT_UPDATE": "Cập nhật từ Git",
     "DIALOG_PROCESSOR_BASE_DRAG_FILES": "Kéo và thả vào đây tệp .zip hoặc tệp đơn để cập nhật ứng dụng WASDI của bạn hoặc nhấp để chọn tệp.",
     "DIALOG_PROCESSOR_BASE_NO_UPDATE": "Tệp cập nhật không có đối với Loại Ứng dụng này",
     "DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Mô tả ngắn gọn",

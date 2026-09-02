@@ -468,6 +468,7 @@
     "DIALOG_PROCESSOR_BASE_FILE": "File",
     "DIALOG_PROCESSOR_SOURCE_UPLOAD": "Upload",
     "DIALOG_PROCESSOR_GIT_REPOSITORY_URL": "Git-Repository-URL",
+    "DIALOG_PROCESSOR_GIT_UPDATE": "Aus Git aktualisieren",
 	"DIALOG_PROCESSOR_BASE_DRAG_FILES": "Ziehen Sie die .zip- oder Einzeldatei hierher, um Ihre WASDI App zu aktualisieren, oder klicken Sie zum Durchsuchen.",
 	"DIALOG_PROCESSOR_BASE_NO_UPDATE": "Dateiaktualisierung für diesen Anwendungstyp nicht verfügbar",
 	"DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Kurzbeschreibung",

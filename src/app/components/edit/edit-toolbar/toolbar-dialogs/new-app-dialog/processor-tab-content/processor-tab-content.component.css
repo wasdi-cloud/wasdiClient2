@@ -45,6 +45,18 @@ div.json-sample-container {
   font-size: 18px;
 }
 
+.git-update-container {
+  min-height: 132px;
+  border: 1px dashed var(--neutral20);
+  border-radius: 6px;
+  background: var(--neutral5);
+}
+
+.git-update-container > .material-symbols-outlined {
+  color: var(--wasdiGreen);
+  font-size: 28px;
+}
+
 div.textarea-container {
   height: 25%;
 }

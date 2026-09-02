@@ -124,7 +124,7 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
    */
   m_sSelectedFileName: string;
 
-  m_sSourceType: 'UPLOAD' | 'GIT' = 'UPLOAD';
+  @Input() m_sSourceType: 'UPLOAD' | 'GIT' = 'UPLOAD';
 
   private readonly m_asGitSupportedProcessorTypes = [
     'python312',

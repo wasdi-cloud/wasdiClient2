@@ -468,6 +468,7 @@
     "DIALOG_PROCESSOR_BASE_FILE": "Fişier",
     "DIALOG_PROCESSOR_SOURCE_UPLOAD": "Încărcare",
     "DIALOG_PROCESSOR_GIT_REPOSITORY_URL": "URL depozit Git",
+    "DIALOG_PROCESSOR_GIT_UPDATE": "Actualizare din Git",
 	"DIALOG_PROCESSOR_BASE_DRAG_FILES": "Trageți și plasați aici fișierul .zip sau un singur fișier pentru a vă actualiza aplicația WASDI sau faceți clic pentru a naviga.",
 	"DIALOG_PROCESSOR_BASE_NO_UPDATE": "Actualizarea fișierului nu este disponibilă pentru acest tip de aplicație",
 	"DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Scurtă Descriere",

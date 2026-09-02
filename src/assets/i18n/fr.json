@@ -470,6 +470,7 @@
 	"DIALOG_PROCESSOR_BASE_FILE": "Fichier",
 	"DIALOG_PROCESSOR_SOURCE_UPLOAD": "Téléversement",
 	"DIALOG_PROCESSOR_GIT_REPOSITORY_URL": "URL du dépôt Git",
+	"DIALOG_PROCESSOR_GIT_UPDATE": "Mettre à jour depuis Git",
 	"DIALOG_PROCESSOR_BASE_DRAG_FILES": "Faites glisser et déposez ici le .zip ou le fichier unique pour mettre à jour votre application WASDI ou cliquez pour parcourir",
 	"DIALOG_PROCESSOR_BASE_NO_UPDATE": "Mise à jour du fichier non disponible pour ce type d'application",
 	"DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Description courte",

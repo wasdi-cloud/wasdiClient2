@@ -120,7 +120,7 @@
               </div>
               <div class="file-container d-flex flex-row justify-content-between">
                 <div class="d-flex flex-row align-items-center gap-2">
-                  <span class="material-symbols-outlined"> folder_zip </span>
+                  <span class="material-symbols-outlined">{{ m_sSourceType === 'GIT' ? 'code' : 'folder_zip' }}</span>
                   {{ m_sProcessorName }}
                 </div>
                 <div class="d-flex flex-row gap-3">
@@ -144,11 +144,21 @@
               </div>
             </div>
           }
-          @if (!m_bRedeployOngoing && (m_bEditMode || m_sSourceType === 'UPLOAD')) {
+          @if (!m_bRedeployOngoing && (!m_bEditMode || m_sSourceType === 'UPLOAD')) {
             <div class="flex-fill">
               <app-drag-and-drop
                 (m_oSelectedFileOutput)="getSelectedFile($event)"
               ></app-drag-and-drop>
+            </div>
+          }
+          @if (m_bEditMode && !m_bRedeployOngoing && m_sSourceType === 'GIT') {
+            <div class="git-update-container d-flex flex-column align-items-center justify-content-center gap-2">
+              <span class="material-symbols-outlined">sync</span>
+              <app-button
+                [m_sLabel]="'DIALOG_PROCESSOR_GIT_UPDATE' | translate"
+                [m_sIconLeft]="'sync'"
+                (click)="forceProcessorRefresh(m_sProcessorId)"
+              ></app-button>
             </div>
           }
           @if (m_bRedeployOngoing) {

@@ -135,6 +135,7 @@ export class NewAppDialogComponent implements OnInit {
     publisher: string;
     readOnly: boolean;
     sharedWithMe: boolean;
+    sourceType: 'UPLOAD' | 'GIT';
     type: string;
   } = {
     deploymentOngoing: false,
@@ -149,6 +150,7 @@ export class NewAppDialogComponent implements OnInit {
     publisher: '',
     readOnly: false,
     sharedWithMe: false,
+    sourceType: 'UPLOAD',
     type: '',
   };
   /**
