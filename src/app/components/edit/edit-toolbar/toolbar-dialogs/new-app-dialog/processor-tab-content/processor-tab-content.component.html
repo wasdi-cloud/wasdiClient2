@@ -55,6 +55,26 @@
           (m_oSelectionChange)="setSelectedType($event)"
         ></app-autocomplete>
       }
+      @if (!m_bEditMode && isGitSourceSupported()) {
+        <div class="source-selector d-flex" role="group">
+          <button type="button" [class.active]="m_sSourceType === 'UPLOAD'" (click)="setSourceType('UPLOAD')">
+            <span class="material-symbols-outlined">folder_zip</span>
+            {{ "DIALOG_PROCESSOR_SOURCE_UPLOAD" | translate }}
+          </button>
+          <button type="button" [class.active]="m_sSourceType === 'GIT'" (click)="setSourceType('GIT')">
+            <span class="material-symbols-outlined">code</span>
+            Git
+          </button>
+        </div>
+      }
+      @if (!m_bEditMode && m_sSourceType === 'GIT') {
+        <app-input-field
+          [m_sLabel]="'DIALOG_PROCESSOR_GIT_REPOSITORY_URL' | translate"
+          [m_sPlaceholder]="'https://github.com/owner/repository.git'"
+          [m_sInputValue]="m_oProcessorBasicInfo.get('sGitRepositoryUrl').value"
+          (m_oInputChange)="m_oProcessorBasicInfo.patchValue({ sGitRepositoryUrl: $event.event.target.value })"
+        ></app-input-field>
+      }
       <div class="textarea-container">
         <app-textarea
           [m_sLabel]="'DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION' | translate"
@@ -124,7 +144,7 @@
               </div>
             </div>
           }
-          @if (!m_bRedeployOngoing) {
+          @if (!m_bRedeployOngoing && (m_bEditMode || m_sSourceType === 'UPLOAD')) {
             <div class="flex-fill">
               <app-drag-and-drop
                 (m_oSelectedFileOutput)="getSelectedFile($event)"

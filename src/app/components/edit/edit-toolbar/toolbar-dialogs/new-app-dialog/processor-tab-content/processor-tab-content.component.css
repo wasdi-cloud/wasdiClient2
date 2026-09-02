@@ -18,6 +18,33 @@ div.json-sample-container {
   background: var(--neutral5);
 }
 
+.source-selector {
+  width: fit-content;
+  border: 1px solid var(--neutral20);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.source-selector button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 0;
+  background: var(--neutral5);
+  color: var(--neutral70);
+}
+
+.source-selector button.active {
+  background: var(--wasdiGreen);
+  color: #ffffff;
+}
+
+.source-selector .material-symbols-outlined {
+  font-size: 18px;
+}
+
 div.textarea-container {
   height: 25%;
 }

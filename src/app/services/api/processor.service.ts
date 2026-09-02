@@ -157,11 +157,17 @@ export class ProcessorService {
      * @param sJsonSample
      * @param sPublic
      * @param oBody
+     * @param sGitRepositoryUrl
      * @returns {*}
      */
-  uploadProcessor(sWorkspaceId: string, sName: string, sVersion: string, sDescription: string, sType: string, sJsonSample: string, sPublic: string, oBody: object) {
+    uploadProcessor(sWorkspaceId: string, sName: string, sVersion: string, sDescription: string, sType: string, sJsonSample: string, sPublic: string, oBody: object, sGitRepositoryUrl: string = '') {
 
-    return this.m_oHttp.post<Response>(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic), oBody);
+      let sGitParameter = '';
+      if (!FadeoutUtils.utilsIsStrNullOrEmpty(sGitRepositoryUrl)) {
+        sGitParameter = '&gitRepositoryUrl=' + encodeURIComponent(sGitRepositoryUrl);
+      }
+
+      return this.m_oHttp.post<Response>(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic) + sGitParameter, oBody);
   };
 
   /**

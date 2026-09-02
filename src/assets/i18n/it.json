@@ -466,6 +466,8 @@
 	"DIALOG_PROCESSOR_BASE_FORCE_CLEAN_REDEPLOY": "Forza Reset del flag redeploy in corso",
 	"DIALOG_PROCESSOR_BASE_DRAG_ZIP": "Drag and Drop qui il file .zip con la tua WASDI App or clicca per selzionarlo.",
 	"DIALOG_PROCESSOR_BASE_FILE": "File",
+	"DIALOG_PROCESSOR_SOURCE_UPLOAD": "Caricamento",
+	"DIALOG_PROCESSOR_GIT_REPOSITORY_URL": "URL repository Git",
 	"DIALOG_PROCESSOR_BASE_DRAG_FILES": "Drag and Drop qui il file .zip con la tua WASDI App or clicca per selzionarlo.",
 	"DIALOG_PROCESSOR_BASE_NO_UPDATE": "Aggiornamento file non disponibile con questo tipo di applicazione",
 	"DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Descrizione breve",

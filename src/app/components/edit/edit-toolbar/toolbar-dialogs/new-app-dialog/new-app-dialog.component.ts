@@ -304,6 +304,7 @@ export class NewAppDialogComponent implements OnInit {
         bIsPublic: this.m_oInputProcessor.isPublic,
         oSelectedFile: this.m_oSelectedFile,
         sSelectedFileName: '',
+        sGitRepositoryUrl: '',
         sProcessorVersion: this.m_oInputProcessor.processorVersion
       }),
 
@@ -594,13 +595,12 @@ export class NewAppDialogComponent implements OnInit {
    * Deploy a New Processor to the server
    */
   public postNewProcessor(): boolean {
-    if (
-      FadeoutUtils.utilsIsObjectNullOrUndefined(
-        this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value
-      ) === true
-    ) {
+    let oSelectedFile = this.m_oProcessorForm.get('processorBasicInfo.oSelectedFile').value;
+    let sGitRepositoryUrl = this.m_oProcessorForm.get('processorBasicInfo.sGitRepositoryUrl').value;
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSelectedFile) && FadeoutUtils.utilsIsStrNullOrEmpty(sGitRepositoryUrl)) {
       this.m_oNotificationDisplayService.openAlertDialog(
-        'Please add a .zip file containing your processor'
+        'Please add a .zip file or a public Git repository URL'
       );
       return false;
     }
@@ -618,12 +618,9 @@ export class NewAppDialogComponent implements OnInit {
     this.m_oInputProcessor.processorName =
       this.m_oInputProcessor.processorName.toLowerCase();
 
-    let oSelectedFile = this.m_oProcessorForm.get(
-      'processorBasicInfo.oSelectedFile'
-    ).value;
-    let sFileName = this.m_oProcessorForm.get(
-      'processorBasicInfo.sSelectedFileName'
-    ).value;
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oSelectedFile)) {
+      oSelectedFile = new FormData();
+    }
 
     this.m_oProcessorService
       .uploadProcessor(
@@ -634,7 +631,8 @@ export class NewAppDialogComponent implements OnInit {
         sType,
         this.m_oInputProcessor.paramsSample,
         this.m_oInputProcessor.isPublic,
-        oSelectedFile
+        oSelectedFile,
+        sGitRepositoryUrl
       )
       .subscribe({
         next: (oResponse) => {

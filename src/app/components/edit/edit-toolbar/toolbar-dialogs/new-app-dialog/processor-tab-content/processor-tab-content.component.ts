@@ -124,6 +124,21 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
    */
   m_sSelectedFileName: string;
 
+  m_sSourceType: 'UPLOAD' | 'GIT' = 'UPLOAD';
+
+  private readonly m_asGitSupportedProcessorTypes = [
+    'python312',
+    'pip_oneshot',
+    'octave',
+    'java_17_Ubuntu_22',
+    'ubuntu_idl372',
+    'csharp',
+    'python_pip_2',
+    'python_pip_2_ubuntu_20',
+    'conda',
+    'personalized_docker'
+  ];
+
   /**
    * Is the build log component currently being shown?
    */
@@ -252,8 +267,30 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
         this.m_oProcessorBasicInfo.patchValue({
           oType: oType,
         });
+
+        if (!this.isGitSourceSupported()) {
+          this.setSourceType('UPLOAD');
+        }
       }
     });
+  }
+
+  isGitSourceSupported(): boolean {
+    return this.m_asGitSupportedProcessorTypes.includes(this.m_oProcessorBasicInfo.get('oType').value?.id);
+  }
+
+  setSourceType(sSourceType: 'UPLOAD' | 'GIT'): void {
+    this.m_sSourceType = sSourceType;
+
+    if (sSourceType === 'UPLOAD') {
+      this.m_oProcessorBasicInfo.patchValue({ sGitRepositoryUrl: '' });
+    }
+    else {
+      this.m_oProcessorBasicInfo.patchValue({
+        oSelectedFile: null,
+        sSelectedFileName: ''
+      });
+    }
   }
 
   onFileSelect(input: any) {
