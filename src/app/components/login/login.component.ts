@@ -190,7 +190,7 @@ export class LoginComponent implements OnInit {
       oUser.name = oDecodedToken.given_name;
       oUser.surname = oDecodedToken.family_name;
       oUser.type = m_oData.type;
-      oUser.authProvider = "wasdi";
+      oUser.authProvider = "keycloak";
       oUser.sessionId = m_oData.sessionId;
       oUser.accessToken = sAccessToken;
       oUser.refreshToken = sRefreshToken;
