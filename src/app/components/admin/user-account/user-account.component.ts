@@ -154,6 +154,15 @@ export class UserAccountComponent implements OnInit {
     return this.m_oUser.authProvider;
   }
 
+  isKeycloakUser(): boolean {
+    return (this.m_oUser?.authProvider || '').toLowerCase() === 'keycloak';
+  }
+
+  getKeycloakAccountUrl(): string {
+    const sAuthUrl = this.m_oConstantsService.getAUTHURL().replace(/\/$/, '');
+    return `${sAuthUrl}/account/`;
+  }
+
   getUserInfo() {
     return {
       name: this.m_oEditUser.fname,

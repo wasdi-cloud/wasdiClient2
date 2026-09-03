@@ -47,9 +47,10 @@
 
     <div class="settings-card">
       <div class="card-title">Password &amp; Security</div>
-      <div class="card-subtitle">Update your account access credentials.</div>
+      <div class="card-subtitle" *ngIf="!isKeycloakUser()">Update your account access credentials.</div>
+      <div class="card-subtitle" *ngIf="isKeycloakUser()">Manage your password securely through Keycloak.</div>
 
-      <div class="password-stack">
+      <div class="password-stack" *ngIf="!isKeycloakUser()">
         <app-input-field [m_sLabel]="'Current password'" [m_sInputType]="'password'" [m_sIconRight]="'visibility'"
           [m_sInputValue]="m_oEditPassword.currentPassword" (m_oInputChange)="setPasswordInput($event, 'currentPassword')"></app-input-field>
         <app-input-field [m_sLabel]="'New password'" [m_sInputType]="'password'" [m_sIconRight]="'visibility'"
@@ -57,6 +58,9 @@
         <app-input-field [m_sLabel]="'Confirm new password'" [m_sInputType]="'password'" [m_sIconRight]="'visibility'"
           [m_sInputValue]="m_oEditPassword.newPasswordConfirm" (m_oInputChange)="setPasswordInput($event, 'newPasswordConfirm')"></app-input-field>
       </div>
+      <a class="keycloak-password-link" *ngIf="isKeycloakUser()" [href]="getKeycloakAccountUrl()" target="_blank" rel="noopener noreferrer">
+        Open Keycloak password settings
+      </a>
     </div>
 
     <div class="action-bar">
