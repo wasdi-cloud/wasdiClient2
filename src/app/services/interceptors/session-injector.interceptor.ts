@@ -17,6 +17,10 @@ export class SessionInjectorInterceptor implements HttpInterceptor {
     private m_oAuthService: AuthService, private m_oJwtService: JwtHelperService) { }
 
   intercept(oRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (this.shouldSkipTokenRefresh(oRequest)) {
+      return this.injectAuthorizationHeader(oRequest, next);
+    }
+
     if (this.isAccessTokenExpiringSoon()) {
       return from(this.refreshPasswordGrantToken()).pipe(
         switchMap(() => this.injectAuthorizationHeader(oRequest, next)),
@@ -28,6 +32,11 @@ export class SessionInjectorInterceptor implements HttpInterceptor {
     }
 
     return this.injectAuthorizationHeader(oRequest, next);
+  }
+
+  private shouldSkipTokenRefresh(oRequest: HttpRequest<any>): boolean {
+    const sUrl = oRequest.url.toLowerCase();
+    return sUrl.includes('/auth/refresh') || sUrl.includes('/auth/login');
   }
 
   private injectAuthorizationHeader(oRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
