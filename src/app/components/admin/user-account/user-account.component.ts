@@ -9,6 +9,7 @@ import { User } from 'src/app/shared/models/user.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { AdminDashboardService } from 'src/app/services/api/admin-dashboard.service';
 
 @Component({
     selector: 'app-user-account',
@@ -72,7 +73,8 @@ export class UserAccountComponent implements OnInit {
     private m_oNotificationDisplayService: NotificationDisplayService,
     private m_oTranslate: TranslateService,
     private m_oCreditsService: CreditsService,
-    private m_oSubscriptionService: SubscriptionService
+    private m_oSubscriptionService: SubscriptionService,
+    private m_oAdminDashboardService: AdminDashboardService
   ) {
     //Register translation languages:
     m_oTranslate.addLangs(['en', 'es', 'fr', 'it', 'de', 'vi', 'id', 'ro']);
@@ -186,7 +188,51 @@ export class UserAccountComponent implements OnInit {
     });
   }
 
-  changeUserPassword() { }
+  setPasswordInput(oEvent, sField: 'currentPassword' | 'newPassword' | 'newPasswordConfirm') {
+    this.m_oEditPassword[sField] = oEvent.event.target.value;
+    this.m_bEditingPassword = true;
+  }
+
+  changeUserPassword() {
+    const sCurrentPassword = this.m_oEditPassword.currentPassword;
+    const sNewPassword = this.m_oEditPassword.newPassword;
+    const sNewPasswordConfirm = this.m_oEditPassword.newPasswordConfirm;
+
+    if (!sCurrentPassword || !sNewPassword || !sNewPasswordConfirm) {
+      this.m_oNotificationDisplayService.openAlertDialog('All password fields are required.', 'Password change failed', 'danger');
+      return;
+    }
+
+    if (sNewPassword !== sNewPasswordConfirm) {
+      this.m_oNotificationDisplayService.openAlertDialog('The new password and confirmation do not match.', 'Password change failed', 'danger');
+      return;
+    }
+
+    const oJsonToSend = {
+      currentPassword: sCurrentPassword,
+      newPassword: sNewPassword
+    };
+
+    this.m_oAuthService.changePassword(oJsonToSend).subscribe({
+      next: (oResponse: any) => {
+        if (oResponse && oResponse.boolValue === true) {
+          this.m_oNotificationDisplayService.openSnackBar('Password updated successfully.', '', 'success-snackbar');
+          this.m_oEditPassword = {
+            currentPassword: '',
+            newPassword: '',
+            newPasswordConfirm: ''
+          };
+          this.m_bEditingPassword = false;
+          return;
+        }
+
+        this.m_oNotificationDisplayService.openAlertDialog('Unable to change the password. Check your current password and try again.', 'Password change failed', 'danger');
+      },
+      error: () => {
+        this.m_oNotificationDisplayService.openAlertDialog('Unable to change the password. Check your current password and try again.', 'Password change failed', 'danger');
+      }
+    });
+  }
 
   onSaveChanges() {
     if (this.m_bEditingPassword) {
@@ -196,6 +242,27 @@ export class UserAccountComponent implements OnInit {
     if (this.m_bEditingUserInfo) {
       this.changeUserInfo();
     }
+  }
+
+  deleteMyAccount() {
+    const sMessage = 'This action cannot be reverted, and will clean all your data in WASDI. Are you sure to delete your account?';
+
+    this.m_oNotificationDisplayService.openConfirmationDialog(sMessage, 'Delete my account', 'danger').subscribe((bConfirmed: boolean) => {
+      if (!bConfirmed) {
+        return;
+      }
+
+      this.m_oAdminDashboardService.deleteUser(this.m_oUser.userId).subscribe({
+        next: () => {
+          this.m_oNotificationDisplayService.openSnackBar('Your account has been deleted.', 'Account deleted', 'success-snackbar');
+          this.m_oConstantsService.setUser({} as User);
+          this.m_oAuthService.logout();
+        },
+        error: () => {
+          this.m_oNotificationDisplayService.openAlertDialog('Unable to delete your account right now. Please try again later.', 'Delete account failed', 'danger');
+        }
+      });
+    });
   }
 
   getUserInfoInput(oEvent) {
