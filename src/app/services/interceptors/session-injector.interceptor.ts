@@ -36,7 +36,9 @@ export class SessionInjectorInterceptor implements HttpInterceptor {
 
   private shouldSkipTokenRefresh(oRequest: HttpRequest<any>): boolean {
     const sUrl = oRequest.url.toLowerCase();
-    return sUrl.includes('/auth/refresh') || sUrl.includes('/auth/login');
+    return sUrl.includes('/auth/refresh')
+      || sUrl.includes('/auth/login')
+      || sUrl.includes('/auth/checksession');
   }
 
   private injectAuthorizationHeader(oRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
