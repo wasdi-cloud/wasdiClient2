@@ -7,10 +7,9 @@ main {
 
 .editor-sidebar {
 	width: 478px;
+	flex-shrink: 0;
 	height: calc(100vh - 6rem);
-	padding: 10px;
-	padding-left: 0px;
-	padding-bottom: 0px;
+	padding: 10px 0px 0px 0px;
 	overflow: hidden;
 	z-index: 3;
 }

@@ -1,7 +1,15 @@
 <main class="d-flex flex-row flex-fill">
   <!-- Side Bar Container -->
-  <!--  appResizable [position]="'right'" [minResizeWidth]="475" -->
-  <div class="editor-sidebar d-flex flex-column">
+  <div
+    class="editor-sidebar d-flex flex-column"
+    appResizable
+    [position]="'right'"
+    [minResizeWidth]="350"
+    [maxResizeWidth]="900"
+    [borderWidth]="10"
+    [borderColor]="'var(--wasdiBlue10)'"
+    [m_iResizableGrabWidth]="10"
+  >
     <div class="workspace-location d-flex flex-column">
       <div class="d-flex flex-row gap-3 align-items-center">
         <app-button
