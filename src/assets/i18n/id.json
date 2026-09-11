@@ -549,6 +549,7 @@
     "DIALOG_LOGS_NAME": "Nama",
     "DIALOG_LOGS_STATUS": "Statusnya",
     "DIALOG_LOGS_DOWNLOAD": "Unduh",
+    "DIALOG_LOGS_PAGE_SIZE": "Ukuran halaman",
     "DIALOG_LOGS_DATE": "Tanggal",
     "DIALOG_LOGS_ROW": "Baris",
     "DIALOG_LOGS_REFRESH": "Segarkan",

@@ -161,7 +161,12 @@ export class ProcessWorkspaceService {
       sUrl = oWorkspace.apiUrl;
     }
 
-    sUrl = sUrl + '/process/byws?workspace=' + sWorkSpaceId + "&startindex=" + iStartIndex + "&endindex=" + iEndIndex;
+    // A null end index means "no pagination": the server returns all the processes
+    sUrl = sUrl + '/process/byws?workspace=' + sWorkSpaceId + "&startindex=" + iStartIndex;
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(iEndIndex)) {
+      sUrl += "&endindex=" + iEndIndex;
+    }
 
     if (sStatus) {
       if (sStatus !== "Status...") sUrl += "&status=" + sStatus;

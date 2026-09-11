@@ -548,6 +548,7 @@
 	"DIALOG_LOGS_NAME": "Nome: ",
 	"DIALOG_LOGS_STATUS": "Stato: ",
 	"DIALOG_LOGS_DOWNLOAD": "Scarica logs",
+	"DIALOG_LOGS_PAGE_SIZE": "Dimensione pagina",
 	"DIALOG_LOGS_DATE": "Data: ",
 	"DIALOG_LOGS_ROW": "Riga",
 	"DIALOG_LOGS_REFRESH": "Aggiorna",

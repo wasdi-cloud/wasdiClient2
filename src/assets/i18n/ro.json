@@ -548,6 +548,7 @@
 	"DIALOG_LOGS_NAME": "Nume: ",
 	"DIALOG_LOGS_STATUS": "Status: ",
 	"DIALOG_LOGS_DOWNLOAD": "Descărcare: ",
+	"DIALOG_LOGS_PAGE_SIZE": "Dimensiunea paginii",
 	"DIALOG_LOGS_DATE": "Dată: ",
 	"DIALOG_LOGS_ROW": "Rând",
 	"DIALOG_LOGS_REFRESH": "Reactualizează",

@@ -95,7 +95,13 @@
         }
       </tbody>
     </table>
-    <div class="d-flex flex-row justify-content-center w-100 my-2">
+    <div class="d-flex flex-row justify-content-center align-items-end gap-3 w-100 my-2">
+      <div class="d-flex flex-row align-items-center gap-2">
+        <label class="mb-0">{{'DIALOG_LOGS_PAGE_SIZE' | translate}}</label>
+        <app-dropdown style="width: 120px" [m_aoSelectedItems]="m_oSelectedPageSize"
+          [m_aoDropdownItems]="m_aoPageSizes"
+        (m_oSelectionChange)="catchPageSizeChange($event)"></app-dropdown>
+      </div>
       @if (m_bIsLoadMoreBtnClickable) {
         <app-button [m_sLabel]="'KEY_PHRASES.LOAD_MORE' | translate"
         (click)="getAllProcessesLogs()"></app-button>
