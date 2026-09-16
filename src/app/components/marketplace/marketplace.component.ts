@@ -8,6 +8,9 @@ import { ProcessorMediaService } from 'src/app/services/api/processor-media.serv
 import { TranslateService } from '@ngx-translate/core';
 import { User } from 'src/app/shared/models/user.model';
 import { filter, take } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { WorkspaceService } from 'src/app/services/api/workspace.service';
+import { NewAppDialogComponent } from '../edit/edit-toolbar/toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 
 //Angular Material Imports:
 
@@ -82,6 +85,8 @@ export class MarketplaceComponent implements OnInit {
     private m_oProcessorService: ProcessorService,
     private m_oProcessorMediaService: ProcessorMediaService,
     private m_oTranslate: TranslateService,
+    private m_oDialog: MatDialog,
+    private m_oWorkspaceService: WorkspaceService,
   ) { }
 
   ngOnInit(): void {
@@ -407,6 +412,58 @@ export class MarketplaceComponent implements OnInit {
     }
     this.m_oAppFilter.page = 0;
     this.refreshAppList();
+  }
+
+  openNewAppDialog(): void {
+    const oActiveWorkspace = this.m_oConstantsService.getActiveWorkspace();
+
+    if (oActiveWorkspace?.workspaceId) {
+      this.openNewAppDialogForWorkspace();
+      return;
+    }
+
+    const sLastWorkspaceId = this.m_oConstantsService.getLastWorkspaceId();
+    if (!sLastWorkspaceId) {
+      this.showWorkspaceError();
+      return;
+    }
+
+    this.m_oWorkspaceService.getWorkspaceEditorViewModel(sLastWorkspaceId).subscribe({
+      next: (oWorkspace) => {
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) || !oWorkspace.workspaceId) {
+          this.showWorkspaceError();
+          return;
+        }
+
+        this.m_oConstantsService.setActiveWorkspace(oWorkspace);
+        this.openNewAppDialogForWorkspace();
+      },
+      error: () => this.showWorkspaceError(),
+    });
+  }
+
+  private openNewAppDialogForWorkspace(): void {
+    this.m_oDialog
+      .open(NewAppDialogComponent, {
+        height: '95vh',
+        width: '95vw',
+        maxWidth: '95vw',
+        data: { editMode: false },
+      })
+      .afterClosed()
+      .subscribe((oChanged) => {
+        if (oChanged?.changed || oChanged === true) {
+          this.refreshAppList();
+        }
+      });
+  }
+
+  private showWorkspaceError(): void {
+    this.m_oNotificationDisplayService.openAlertDialog(
+      this.m_oTranslate.instant('MSG_ERROR_READING_WS'),
+      '',
+      'danger'
+    );
   }
 
   toggleShowFilters(bShowFilters: boolean) {

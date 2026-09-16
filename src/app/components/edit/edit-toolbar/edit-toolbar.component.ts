@@ -12,6 +12,7 @@ import { AppsDialogComponent } from './toolbar-dialogs/apps-dialog/apps-dialog.c
 import { ImportDialogComponent } from './toolbar-dialogs/import-dialog/import-dialog.component';
 import { ShareDialogComponent, ShareDialogModel } from 'src/app/shared/dialogs/share-dialog/share-dialog.component';
 import { WorkflowsDialogComponent } from './toolbar-dialogs/workflows-dialog/workflows-dialog.component';
+import { NewAppDialogComponent } from './toolbar-dialogs/new-app-dialog/new-app-dialog.component';
 
 import { Product } from 'src/app/shared/models/product.model';
 import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
@@ -79,6 +80,20 @@ export class EditToolbarComponent implements OnInit, OnDestroy {
     oAppsDialog.afterClosed().subscribe(() => {
       this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_sWorkspaceId);
     })
+  }
+
+  openNewAppDialog(): void {
+    this.m_oDialog
+      .open(NewAppDialogComponent, {
+        height: '95vh',
+        width: '95vw',
+        maxWidth: '95vw',
+        data: { editMode: false },
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.m_oProcessWorkspaceService.loadProcessesFromServer(this.m_sWorkspaceId);
+      });
   }
 
   openWorkflowsDialog(): void {

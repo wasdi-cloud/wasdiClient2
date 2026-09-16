@@ -36,6 +36,9 @@
           }
         </select>
 
+        <app-button [m_sLabel]="'EDITOR_OPERATION_TITLE_NEW_PROCESSOR' | translate"
+          [m_sIconLeft]="'add_box'" (click)="openNewAppDialog()"></app-button>
+
         <!-- Sort Buttons -->
         <div class="sort-group">
           <span class="sort-label">{{"SORT_BY" | translate}}:</span>
