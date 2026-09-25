@@ -996,6 +996,8 @@
 
     "MARKET_CARD_PUBLISHER": "Publisher",
     "MARKET_CARD_PRICE": "Free",
+    "MARKET_CARD_NEW": "New",
+    "MARKET_CARD_UPDATED": "Updated",
     "MARKET_ALL_APPLICATIONS": "All Applications",
     "MARKET_FEATURED": "Featured and Trending Applications",
     "MARKET_ALL_DEVELOPERS": "All Developers",

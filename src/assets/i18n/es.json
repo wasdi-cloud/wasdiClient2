@@ -997,6 +997,8 @@
 
 	"MARKET_CARD_PUBLISHER": "Editor",
 	"MARKET_CARD_PRICE": "Gratis",
+	"MARKET_CARD_NEW": "Nuevo",
+	"MARKET_CARD_UPDATED": "Actualizado",
 
 	"DIALOG_SHARE_UI": "Colaboradores",
     "DIALOG_SHARE_NO_ONE": "No hay nadie aquí...",

@@ -48,8 +48,8 @@ export class MarketplaceComponent implements OnInit {
     maxPrice: -1,
     itemsPerPage: 12,
     page: 0,
-    orderBy: "name",
-    orderDirection: 1
+    orderBy: "date",
+    orderDirection: -1
   }
 
   m_aoApplications: any = [];
@@ -125,6 +125,8 @@ export class MarketplaceComponent implements OnInit {
       // if default categories are provided, apply them to the filter 
       this.m_oAppFilter.categories = asDefaultCategories;
       this.m_asDefaultCategories = asDefaultCategories;
+      // Mark the corresponding tags as selected so the UI reflects the active filter
+      this.m_aoSelectedCategories = [...asDefaultCategories];
     }
     else {
       console.log("MarketplaceComponent.getApplications: No default categories");

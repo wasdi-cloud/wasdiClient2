@@ -997,6 +997,8 @@
 
 	"MARKET_CARD_PUBLISHER": "Penerbit",
 	"MARKET_CARD_PRICE": "Gratis",
+	"MARKET_CARD_NEW": "Baru",
+	"MARKET_CARD_UPDATED": "Diperbarui",
 
 	"DIALOG_SHARE_UI": "Kolaborator",
     "DIALOG_SHARE_NO_ONE": "Tidak ada seorang pun di sini...",
