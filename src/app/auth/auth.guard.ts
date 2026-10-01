@@ -67,6 +67,9 @@ export class AuthGuard  {
     }
 
     let sSkin = oSessionUser.skin;
+    if (FadeoutUtils.utilsIsStrNullOrEmpty(sSkin)) {
+      sSkin = this.m_oConstantsService.getUser().skin;
+    }
     if (window.location.hostname.startsWith('coplac')) {
       sSkin = 'coplac';
     }
@@ -82,19 +85,32 @@ export class AuthGuard  {
         const oCurrentSkin = this.m_oConstantsService.getSkin();
         document.documentElement.style.setProperty('--neutral50Brand', oCurrentSkin.brandMainColor);
         document.documentElement.style.setProperty('--wasdiGreen', oCurrentSkin.brandSecondaryColor);
-        if (oCurrentSkin.logoText.includes('coplac')) {
-          let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
-          if (!oLink) {
-            oLink = document.createElement('link');
-            oLink.type = 'image/x-icon';
-            oLink.rel = 'icon';
-            document.getElementsByTagName('head')[0].appendChild(oLink);
-          }
-          oLink.href = 'assets/icons/favicon-coplac.ico';
+
+        if (!FadeoutUtils.utilsIsStrNullOrEmpty(oCurrentSkin.tabTitle)) {
+          this.m_oTitleService.setTitle(oCurrentSkin.tabTitle);
+        }
+
+        if (!FadeoutUtils.utilsIsStrNullOrEmpty(oCurrentSkin.favIcon)) {
+          this.setFavIcon(oCurrentSkin.favIcon);
+        }
+
+        if (oCurrentSkin.logoText?.includes('coplac')) {
+          this.setFavIcon('assets/icons/favicon-coplac.ico');
           this.m_oTitleService.setTitle('Copernicus LAC');
         }
       }
     });
+  }
+
+  private setFavIcon(sHref: string): void {
+    let oLink: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+    if (!oLink) {
+      oLink = document.createElement('link');
+      oLink.type = 'image/x-icon';
+      oLink.rel = 'icon';
+      document.getElementsByTagName('head')[0].appendChild(oLink);
+    }
+    oLink.href = sHref;
   }
 
   /**
