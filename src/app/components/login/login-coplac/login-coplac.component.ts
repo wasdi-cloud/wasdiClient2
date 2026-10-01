@@ -84,9 +84,9 @@ form: any = {
 
   checkKeycloakAuthStatus(oController) {
     if (this.m_oKeycloak.authenticated) {
-      if (this.m_oKeycloak.idToken) {
+      if (this.m_oKeycloak.token) {
         const aoDataTokens = {
-          'access_token': this.m_oKeycloak.idToken,
+          'access_token': this.m_oKeycloak.token,
           'refresh_token': this.m_oKeycloak.refreshToken
         }
 
@@ -167,6 +167,7 @@ form: any = {
       oUser.accessToken = sAccessToken;
       oUser.refreshToken = sRefreshToken;
       oUser.expiresIn = m_oData.expiresIn;
+      oUser.role = m_oData.role;
 
       oController.m_oConstantsService.setUser(oUser);
 
