@@ -155,6 +155,32 @@ div.card-price {
     background: var(--wasdiWarn);
 }
 
+div.card-recency {
+    position: absolute;
+    display: flex;
+    padding: 0.4rem 0.65rem;
+    align-items: center;
+    gap: 10px;
+    left: 8px;
+    top: 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    font-style: normal;
+    line-height: normal;
+    color: #FFF;
+    z-index: 2;
+}
+
+.recency-new {
+    background: var(--wasdiBlue);
+}
+
+.recency-updated {
+    background: var(--darkAccessible);
+}
+
 @keyframes fly {
     0% {
         opacity: 1;

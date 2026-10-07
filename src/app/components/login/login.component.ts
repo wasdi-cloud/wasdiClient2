@@ -195,6 +195,7 @@ export class LoginComponent implements OnInit {
       oUser.accessToken = sAccessToken;
       oUser.refreshToken = sRefreshToken;
       oUser.expiresIn = m_oData.expiresIn;
+      oUser.role = m_oData.role;
 
       oController.m_oConstantsService.setUser(oUser);
 

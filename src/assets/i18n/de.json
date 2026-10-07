@@ -548,6 +548,7 @@
 	"DIALOG_LOGS_NAME": "Name: ",
 	"DIALOG_LOGS_STATUS": "Status: ",
 	"DIALOG_LOGS_DOWNLOAD": "Herunterladen",
+	"DIALOG_LOGS_PAGE_SIZE": "Seitengröße",
 	"DIALOG_LOGS_DATE": "Datum: ",
 	"DIALOG_LOGS_ROW": "Reihe",
 	"DIALOG_LOGS_REFRESH": "Aktualisieren",
@@ -995,6 +996,8 @@
 
 	"MARKET_CARD_PUBLISHER": "Herausgeber",
 	"MARKET_CARD_PRICE": "Kostenlos",
+	"MARKET_CARD_NEW": "Neu",
+	"MARKET_CARD_UPDATED": "Aktualisiert",
 
 	"DIALOG_SHARE_UI": "Mitwirkende",
     "DIALOG_SHARE_NO_ONE": "Hier gibt es niemanden...",

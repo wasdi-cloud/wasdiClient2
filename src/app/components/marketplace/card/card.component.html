@@ -2,6 +2,11 @@
     <div class="card-price" [class]="getStyle()">
         {{getPrice()}}
     </div>
+    @if (getRecencyBadge(); as sBadge) {
+        <div class="card-recency" [class]="'recency-' + sBadge">
+            {{ (sBadge === 'updated' ? 'MARKET_CARD_UPDATED' : 'MARKET_CARD_NEW') | translate}}
+        </div>
+    }
     <div class="card-img" style="background-image: url({{m_oProcessor.imgLink}})">
         <div class="overlay">
             <img src="assets/svg/market-ship.svg" class="scalein" alt="scalein">

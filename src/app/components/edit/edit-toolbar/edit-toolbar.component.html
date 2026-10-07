@@ -6,6 +6,11 @@
       [m_bRounded]="true"></app-button>
     </li>
     <li class="nav-item">
+      <app-button [m_sLabel]="('EDITOR_OPERATION_TITLE_NEW_PROCESSOR' | translate).toUpperCase()"
+        [m_sIconRight]="'add_box'" [m_bMuted]="true" [m_sSize]="'small'" (click)="openNewAppDialog()"
+      [m_bRounded]="true"></app-button>
+    </li>
+    <li class="nav-item">
       <app-button [m_sLabel]="('EDITOR_OPERATION_TITLE_WORKFLOW' | translate).toUpperCase()"
         [m_sIconRight]="'account_tree'" [m_bMuted]="true" (click)="openWorkflowsDialog()" [m_sSize]="'small'"
       [m_bRounded]="true"></app-button>

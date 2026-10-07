@@ -67,9 +67,25 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
 
 
   /**
+   * Available page sizes: -1 means "All" (no pagination)
+   */
+  public m_aoPageSizes = [
+    {name: "50", value: 50},
+    {name: "100", value: 100},
+    {name: "250", value: 250},
+    {name: "500", value: 500},
+    {name: "All", value: -1}
+  ];
+
+  /**
+   * Default Selected Page Size for the Page Size Dropdown
+   */
+  public m_oSelectedPageSize = this.m_aoPageSizes[0];
+
+  /**
    * Number of Processes for the get all Processes Request
    */
-  private m_iNumberOfProcessForRequest: number = 40;
+  private m_iNumberOfProcessForRequest: number = 50;
 
   /**
    * Integer of the first process to be requested
@@ -190,8 +206,11 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
       return false;
     }
 
+    let bLoadAll = this.m_iNumberOfProcessForRequest <= 0;
+    let iLastProcess = bLoadAll ? null : this.m_iLastProcess;
+
     let sWorkspaceId = this.m_oActiveWorkspace.workspaceId;
-    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(sWorkspaceId, this.m_iFirstProcess, this.m_iLastProcess, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
+    this.m_oProcessWorkspaceService.getFilteredProcessesFromServer(sWorkspaceId, this.m_iFirstProcess, iLastProcess, this.m_oFilter.sStatus, this.m_oFilter.sType, this.m_oFilter.sDate, this.m_oFilter.sName).subscribe(oResponse => {
       if (oResponse) {
         // //this replace the word download by fetch in the process coming for the server and also change the processes.payload the same way
         // for (let oResponseElement of oResponse) {
@@ -205,7 +224,7 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
         this.m_bIsLoadMoreBtnClickable = false;
       }
 
-      if (oResponse.length < this.m_iNumberOfProcessForRequest) {
+      if (bLoadAll || oResponse.length < this.m_iNumberOfProcessForRequest) {
         this.m_bIsLoadMoreBtnClickable = false;
       }
       else {
@@ -320,9 +339,17 @@ export class ProcessesBarTableComponent implements OnInit, OnDestroy {
   }
 
   resetCounters() {
-    this.m_iNumberOfProcessForRequest = 40;
     this.m_iFirstProcess = 0;
     this.m_iLastProcess = this.m_iNumberOfProcessForRequest;
+  }
+
+  catchPageSizeChange(oEvent) {
+    this.m_oSelectedPageSize = oEvent.value;
+    this.m_iNumberOfProcessForRequest = oEvent.value.value;
+    this.m_aoAllProcessesLogs = [];
+    this.m_bIsLoadMoreBtnClickable = true;
+    this.resetCounters();
+    this.getAllProcessesLogs();
   }
 
   clearFilters() {

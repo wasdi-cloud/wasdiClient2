@@ -548,7 +548,8 @@ export class AppsDialogComponent implements OnInit, OnDestroy, AfterViewInit {
         bRefresh = true
       }
       else if (oRabbitMessage.messageCode == 'INFO') {
-        if (oRabbitMessage.payload.includes("Re Deploy")) {
+        const sPayload = typeof oRabbitMessage.payload === 'string' ? oRabbitMessage.payload : '';
+        if (sPayload.includes("Deploy Done") || sPayload.includes("Re Deploy") || sPayload.includes("error deploying")) {
           bRefresh = true
         }
       }

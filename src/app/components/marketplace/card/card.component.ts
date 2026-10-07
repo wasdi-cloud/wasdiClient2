@@ -3,6 +3,11 @@ import { Router } from '@angular/router';
 import { ConstantsService } from 'src/app/services/constants.service';
 import { TranslateService } from '@ngx-translate/core';
 
+// Window (in ms) within which an app is still considered "New" since its upload
+const NEW_APP_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
+// Window (in ms) within which an app is still considered "Updated" since its last update
+const UPDATED_APP_WINDOW_MS = 14 * 24 * 60 * 60 * 1000;
+
 @Component({
     selector: 'app-card',
     templateUrl: './card.component.html',
@@ -52,5 +57,23 @@ export class CardComponent {
     else {
       return sMessage;
     }
+  }
+
+  /**
+   * Returns 'updated', 'new' or null based on uploadDate/updateDate recency.
+   * An "Updated" badge takes precedence over a "New" one.
+   */
+  getRecencyBadge(): 'updated' | 'new' | null {
+    const iNow = Date.now();
+
+    if (this.m_oProcessor.updateDate && (iNow - this.m_oProcessor.updateDate) < UPDATED_APP_WINDOW_MS) {
+      return 'updated';
+    }
+
+    if (this.m_oProcessor.uploadDate && (iNow - this.m_oProcessor.uploadDate) < NEW_APP_WINDOW_MS) {
+      return 'new';
+    }
+
+    return null;
   }
 }

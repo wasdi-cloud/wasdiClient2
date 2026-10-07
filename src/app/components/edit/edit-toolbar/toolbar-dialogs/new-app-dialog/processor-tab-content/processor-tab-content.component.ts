@@ -149,16 +149,14 @@ export class ProcessorTabContentComponent implements OnInit, AfterViewInit {
   m_asBuildLogs: Array<any> = [];
 
   m_aoProcessorTypes = [
-    { name: 'Python 3.12 (Ubuntu 24.10)', id: 'python312' },
-    { name: 'Python 3.10 PipOne Shot (Ubuntu 22.04)', id: 'pip_oneshot' },        
+    { name: 'Python 3.12 - Pip - Ubuntu 24.04', id: 'python312' },
+    { name: 'Python 3.12 - Conda - Ubuntu 24.04', id: 'conda' },
+    { name: 'OGC Application Package - CWL', id: 'ogc_app_package' },
+    { name: 'Python 3.10 - Pip - Ubuntu 22.04', id: 'pip_oneshot' },        
     { name: 'OCTAVE 6.x', id: 'octave' },
     { name: 'Java 17', id: 'java_17_Ubuntu_22' },
     { name: 'IDL 3.7.2', id: 'ubuntu_idl372' },
     { name: 'C# .NET Core', id: 'csharp' },
-    { name: 'Python 3.10 (Ubuntu 22.04)', id: 'python_pip_2' },
-    { name: 'Python 3.8 (Ubuntu 20.04)', id: 'python_pip_2_ubuntu_20' },
-    { name: 'Python 3.8 Conda', id: 'conda' },
-    { name: 'OGC Application Package', id: 'ogc_app_package' },
     { name: 'EOEPCA / External ADES', id: 'eoepca' },
     { name: 'Custom Dockerfile',  id: 'personalized_docker'},
     { name: 'Local Python 3.12', id: 'local_python312' }

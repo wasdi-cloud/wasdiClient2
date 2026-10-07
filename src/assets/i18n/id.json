@@ -549,6 +549,7 @@
     "DIALOG_LOGS_NAME": "Nama",
     "DIALOG_LOGS_STATUS": "Statusnya",
     "DIALOG_LOGS_DOWNLOAD": "Unduh",
+    "DIALOG_LOGS_PAGE_SIZE": "Ukuran halaman",
     "DIALOG_LOGS_DATE": "Tanggal",
     "DIALOG_LOGS_ROW": "Baris",
     "DIALOG_LOGS_REFRESH": "Segarkan",
@@ -996,6 +997,8 @@
 
 	"MARKET_CARD_PUBLISHER": "Penerbit",
 	"MARKET_CARD_PRICE": "Gratis",
+	"MARKET_CARD_NEW": "Baru",
+	"MARKET_CARD_UPDATED": "Diperbarui",
 
 	"DIALOG_SHARE_UI": "Kolaborator",
     "DIALOG_SHARE_NO_ONE": "Tidak ada seorang pun di sini...",
