@@ -32,4 +32,55 @@ describe('MissionFiltersService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('adds valid custom key-value filters only when the mission allows them', () => {
+    const mission = {
+      name: 'CDS',
+      indexname: 'platformname',
+      indexvalue: 'CDS',
+      allowCustomFilters: true,
+      filters: [{
+        indexname: 'dataset',
+        indexvalue: 'A'
+      }]
+    };
+
+    service.setAdvancedFilter(mission, [
+      { key: 'variable', value: 'air temperature' },
+      { key: 'invalid key', value: 'ignored' },
+      { key: 'unused', value: '  ' }
+    ]);
+
+    expect(service.getAdvancedFilter()).toContain('dataset:A');
+    expect(service.getAdvancedFilter()).toContain('variable:"air temperature"');
+    expect(service.getAdvancedFilter()).not.toContain('invalid key');
+    expect(service.getAdvancedFilter()).not.toContain('unused');
+  });
+
+  it('escapes query syntax in custom values', () => {
+    const mission = {
+      name: 'CDS',
+      indexname: 'platformname',
+      indexvalue: 'CDS',
+      allowCustomFilters: true,
+      filters: []
+    };
+
+    service.setAdvancedFilter(mission, [{ key: 'title', value: 'a" OR *' }]);
+
+    expect(service.getAdvancedFilter()).toContain('title:"a\\" OR \\*"');
+  });
+
+  it('does not include custom filters when the mission does not allow them', () => {
+    const mission = {
+      name: 'Other',
+      indexname: 'platformname',
+      indexvalue: 'OTHER',
+      filters: []
+    };
+
+    service.setAdvancedFilter(mission, [{ key: 'variable', value: 'temperature' }]);
+
+    expect(service.getAdvancedFilter()).not.toContain('variable');
+  });
 });

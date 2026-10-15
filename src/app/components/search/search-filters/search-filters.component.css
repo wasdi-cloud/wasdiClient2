@@ -28,3 +28,8 @@ p.clear-btn {
 .container {
     padding: 0 !important;
 }
+
+.custom-filters-container {
+    margin: 0 0 1rem;
+    width: 100%;
+}

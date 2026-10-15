@@ -75,6 +75,7 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
 
   m_aoFilters: Array<any> = [];
   m_aoVisibleFilters: Array<any> = [];
+  m_aoCustomFilters: Array<{ key: string; value: string }> = [];
 
   m_sDateTo: string = '';
   m_sDateFrom: string = '';
@@ -344,6 +345,9 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
    * @param oMission 
    */
   setActiveMission(oMission) {
+    if (this.m_oActiveMission?.indexname !== oMission?.indexname) {
+      this.m_aoCustomFilters = [];
+    }
     this.m_oActiveMission = oMission;
 
     this.setMissionFilter(this.m_oActiveMission);
@@ -363,6 +367,13 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
     if (oFilter.indexvalues && oFilter.indexvalues !== '') {
       return oFilter.indexvalues.split('|')
     }
+  }
+
+  hasCustomFiltersEnabled(): boolean {
+    const allowCustomFilters = this.m_oActiveMission?.allowCustomFilters;
+    return allowCustomFilters === true ||
+      (typeof allowCustomFilters === 'string' && allowCustomFilters.toLowerCase() === 'true') ||
+      this.m_oActiveMission?.name === 'CDS';
   }
 
   /**
@@ -408,12 +419,31 @@ export class SearchFiltersComponent implements OnInit, OnChanges {
     return true;
   }
 
+  addCustomFilter() {
+    this.m_aoCustomFilters.push({ key: '', value: '' });
+  }
+
+  removeCustomFilter(iIndex: number) {
+    this.m_aoCustomFilters.splice(iIndex, 1);
+    this.setMissionFilter(this.m_oActiveMission);
+  }
+
+  updateCustomFilter(iIndex: number, sField: 'key' | 'value', sValue: string) {
+    const oCustomFilter = this.m_aoCustomFilters[iIndex];
+    if (!oCustomFilter) {
+      return;
+    }
+
+    oCustomFilter[sField] = sValue;
+    this.setMissionFilter(this.m_oActiveMission);
+  }
+
   /**
    * Set the mission filter in the Mission Filter Service, the Search Service, and the Mission Model
    * @param oActiveMission 
    */
   setMissionFilter(oActiveMission) {
-    this.m_oMissionFiltersService.setAdvancedFilter(oActiveMission)
+    this.m_oMissionFiltersService.setAdvancedFilter(oActiveMission, this.m_aoCustomFilters)
     this.m_oMissionObject.missionFilter = this.m_oMissionFiltersService.getAdvancedFilter();
     this.m_oSearchService.setMissionFilter(this.m_oMissionObject.missionFilter);
 

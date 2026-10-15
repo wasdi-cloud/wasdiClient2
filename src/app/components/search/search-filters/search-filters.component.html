@@ -210,7 +210,43 @@
     }
   </div>
 </div>
-
+@if (hasCustomFiltersEnabled()) {
+  <div class="custom-filters-container">
+    <div class="d-flex flex-row justify-content-between align-items-center">
+      <strong>Custom filters</strong>
+      <button class="btn btn-sm btn-outline-secondary" type="button" (click)="addCustomFilter()">
+        Add filter
+      </button>
+    </div>
+    @for (oCustomFilter of m_aoCustomFilters; track $index) {
+      <div class="d-flex flex-row align-items-end gap-2 mt-2">
+        <div class="flex-fill">
+          <app-input-field
+            [m_sLabel]="'Key'"
+            [m_sInputValue]="oCustomFilter.key"
+            [m_sPattern]="'[A-Za-z0-9_][A-Za-z0-9_.-]*'"
+            (m_oInputChange)="updateCustomFilter($index, 'key', $event.event.target.value)"
+          ></app-input-field>
+        </div>
+        <div class="flex-fill">
+          <app-input-field
+            [m_sLabel]="'Value'"
+            [m_sInputValue]="oCustomFilter.value"
+            (m_oInputChange)="updateCustomFilter($index, 'value', $event.event.target.value)"
+          ></app-input-field>
+        </div>
+        <button
+          class="btn btn-sm btn-outline-secondary mb-1"
+          type="button"
+          aria-label="Remove custom filter"
+          (click)="removeCustomFilter($index)"
+        >
+          Remove
+        </button>
+      </div>
+    }
+  </div>
+}
 <app-button
   class="align-self-stretch"
   [m_sLabel]="'IMPORT_SEARCH_BUTTON' | translate"

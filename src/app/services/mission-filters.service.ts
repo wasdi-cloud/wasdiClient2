@@ -10,7 +10,7 @@ export class MissionFiltersService {
 
   missionFilter: string = '';
 
-  setAdvancedFilter(modelFilter: any) {
+  setAdvancedFilter(modelFilter: any, customFilters: Array<{ key: string; value: string }> = []) {
     let filter: string = '';
 
     if (modelFilter == null) return this.missionFilter;
@@ -70,6 +70,20 @@ export class MissionFiltersService {
         }
         else {
           filter = filter + ' AND ' + modelFilter.filters[j].indexvalue;
+        }
+      }
+    }
+    if (modelFilter.allowCustomFilters === true ||
+      (typeof modelFilter.allowCustomFilters === 'string' && modelFilter.allowCustomFilters.toLowerCase() === 'true') ||
+      modelFilter.name === 'CDS') {
+      for (const customFilter of customFilters) {
+        const key = customFilter.key.trim();
+        const value = customFilter.value.trim();
+        if (/^[A-Za-z0-9_][A-Za-z0-9_.-]*$/.test(key) && value !== '') {
+          const escapedValue = Array.from(value, character =>
+            '\\+-=&|><!(){}[]^"~*?:/'.includes(character) ? `\\${character}` : character
+          ).join('');
+          filter += ' AND ' + key + ':"' + escapedValue + '"';
         }
       }
     }
