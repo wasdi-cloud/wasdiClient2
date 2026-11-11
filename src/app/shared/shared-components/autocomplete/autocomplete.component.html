@@ -11,6 +11,10 @@
             <div class="flex-fill d-flex flex-column">
               <div>{{oInput.workspaceName}}</div>
               <div class="user-id">{{oInput.ownerUserId}}</div>
+              <div class="ws-details-small">{{oInput.workspaceId}}</div>
+              @if (oInput.nodeCode) {
+                <div class="ws-details-small">{{oInput.nodeCode}}</div>
+              }
             </div>
           }
           @if (oInput.workspaceName) {

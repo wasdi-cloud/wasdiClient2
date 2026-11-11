@@ -25,6 +25,7 @@
             <div class="d-flex flex-column gap-1">
               {{oWorkspace.workspaceName}}
               <span class="user-id">{{oWorkspace.ownerUserId}}</span>
+              <span class="ws-details-small">{{oWorkspace.workspaceId}} - {{oWorkspace.nodeCode}}</span>
             </div>
             <div class="d-flex flex-row gap-2">
               <app-button [m_sLabel]="'Open'" [m_bMuted]="true" [m_sSize]="'small'"

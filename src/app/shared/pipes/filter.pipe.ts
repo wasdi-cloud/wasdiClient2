@@ -56,7 +56,8 @@ export class FilterPipe implements PipeTransform {
       }
       //Filter for Workspaces where workspaceName is an attribute:
       else if (item.workspaceName) {
-        return item.workspaceName.toLocaleLowerCase().includes(searchText);
+        return item.workspaceName.toLocaleLowerCase().includes(searchText)
+          || (typeof item.workspaceId === 'string' && item.workspaceId.toLocaleLowerCase().includes(searchText));
       }
       else if (item.nodeCode) {
         return item.nodeCode.toLocaleLowerCase().includes(searchText);

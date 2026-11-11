@@ -41,6 +41,11 @@ input[type='search']::-webkit-search-cancel-button {
     font-size: 12px;
 }
 
+.ws-details-small {
+    font-size: 10px;
+    font-style: italic;
+}
+
 ::ng-deep div.mat-mdc-select-panel {
     padding: 0 !important;
     border-radius: 4px !important;

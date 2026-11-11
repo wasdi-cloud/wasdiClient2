@@ -49,6 +49,11 @@
     background-color: var(--wasdiGreenLight);
 }
 
+.ws-details-small {
+    font-size: 10px;
+    font-style: italic;
+}
+
 input.form-control {
     border-right: none;
     background: var(--neutral10);
