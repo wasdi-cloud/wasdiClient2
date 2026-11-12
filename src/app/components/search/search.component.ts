@@ -550,12 +550,17 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   deleteProducts(sProviderName: string) {
     //check if layers list is empty
     if (!this.isEmptyProductsList()) {
-      /* remove rectangle in map*/
+      /* remove rectangle or marker in map*/
       for (let oProduct of this.m_aoProductsList) {
         if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oProduct.provider) && oProduct.provider === sProviderName) {
           let oRectangle = oProduct.rectangle;
           if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
-            this.m_oMapEngineService.removeLayerFromMap(oRectangle);
+            // if it is a MapLibre marker (it has the method getElement and remove)
+            if (typeof oRectangle.getElement === 'function' && typeof oRectangle.remove === 'function') {
+              oRectangle.remove();
+            } else {
+              this.m_oMapEngineService.removeLayerFromMap(oRectangle);
+            }
           }
         }
       }

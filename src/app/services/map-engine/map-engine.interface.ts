@@ -40,7 +40,7 @@ export interface IMapEngine {
   onSearchDrawCreated(event: any): any;
   zoomOnBounds(bounds: any, map?: any): boolean;
   addRectangleByBoundsArrayOnMap(product: any, color: string, indexLayers: number): any;
-  addPinOnMap(oCoords: {lat: number, lon: number}, oProduct: any): any;
+  addMarkerOnMap(oCoords: {lat: number, lon: number}, oProduct: any): any;
   removeLayerFromMap(layer: any): boolean;
   addLayerMap2DByServer(layerId: string, server: string): boolean;
   addLayerMap2DByServerUnderDrawing(layerId: string, server: string): boolean;

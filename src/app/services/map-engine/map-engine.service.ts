@@ -75,8 +75,8 @@ export class MapEngineService implements IMapEngine {
     return this.m_oEngine.addRectangleByBoundsArrayOnMap(product, color, indexLayers);
   }
 
-  addPinOnMap(oCoords: {lat: number, lon: number}, oProduct: any): any {
-    return this.m_oEngine.addPinOnMap(oCoords, oProduct);
+  addMarkerOnMap(oCoords: {lat: number, lon: number}, oProduct: any): any {
+    return this.m_oEngine.addMarkerOnMap(oCoords, oProduct);
   }
   
   removeLayerFromMap(layer: any): boolean { return this.m_oEngine.removeLayerFromMap(layer); }

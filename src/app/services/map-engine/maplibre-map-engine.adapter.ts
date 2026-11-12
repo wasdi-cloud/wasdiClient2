@@ -999,20 +999,19 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     return oRectangleLike;
   }
 
-  addPinOnMap(oCoords: {lat: number, lon: number}, oProduct: any): any {
+  addMarkerOnMap(oCoords: {lat: number, lon: number}, oProduct: any): any {
     if (!this.m_oMap) return null;
 
     // create the marker on app
     // Note: MapLibre uses [lng, lat]
-    let oMarker = new maplibregl.Marker()
+    let oMarker = new maplibregl.Marker({ color: '#43526B' })
       .setLngLat([oCoords.lon, oCoords.lat])
       .addTo(this.m_oMap);
 
-    // Opzionale: aggiungiamo un popup al click per mostrare il nome del prodotto
-//    if (oProduct && oProduct.title) {
-//      let oPopup = new maplibregl.Popup({ offset: 25 }).setText(oProduct.title);
-//      oMarker.setPopup(oPopup);
-//    }
+    if (oProduct && oProduct.title) {
+      let oPopup = new maplibregl.Popup({ offset: 25 }).setText(oProduct.title);
+      oMarker.setPopup(oPopup);
+    }
 
     // TRICK FOR COMPATIBILITY
     // since in products-table.component.ts it calls removeFrom
