@@ -179,17 +179,36 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     for (let iIndexData = 0; iIndexData < this.m_aoProductsList.length; iIndexData++) {
       if (this.m_aoProductsList[iIndexData].provider !== sProvider) continue;
       let oProduct = this.m_aoProductsList[iIndexData]
-      let oRectangle = this.m_oMapEngine.addRectangleByBoundsArrayOnMap(oProduct, null, iIndexData);
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
-        this.m_aoProductsList[iIndexData].rectangle = oRectangle
-      }
-      aaoAllBounds.push(this.m_aoProductsList[iIndexData].bounds);
-    }
+      
+      if (oProduct.isPoint == true && oProduct.pointCoordinates) {
+        // if it is a point, then we add a Pin/Marker
+        let oPin = this.m_oMapEngine.addPinOnMap(oProduct.pointCoordinates, oProduct);
 
-    if (aaoAllBounds.length > 0 && aaoAllBounds[0]?.length) {
-      this.m_oMapEngine.zoomOnBounds(aaoAllBounds);
-    }
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPin) === false) {
+          this.m_aoProductsList[iIndexData].rectangle = oPin; 
+        }
+
+        // create a fake bound around the point for the zoom
+        aaoAllBounds.push([
+          [oProduct.pointCoordinates.lat, oProduct.pointCoordinates.lon],
+          [oProduct.pointCoordinates.lat, oProduct.pointCoordinates.lon]
+        ]);
+      }
+      else {
+        // draw the rectangle for non-point products
+        let oRectangle = this.m_oMapEngine.addRectangleByBoundsArrayOnMap(oProduct, null, iIndexData);
+
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
+          this.m_aoProductsList[iIndexData].rectangle = oRectangle
+        }
+        aaoAllBounds.push(this.m_aoProductsList[iIndexData].bounds);
+      }
+
+      if (aaoAllBounds.length > 0 && aaoAllBounds[0]?.length) {
+        this.m_oMapEngine.zoomOnBounds(aaoAllBounds);
+      }
   }
+}
 
 
   /********** Layer Information Management Methods **********/

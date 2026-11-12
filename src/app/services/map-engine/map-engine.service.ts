@@ -68,11 +68,19 @@ export class MapEngineService implements IMapEngine {
   }
 
   onSearchDrawCreated(event: any): any { return this.m_oEngine.onSearchDrawCreated(event); }
+
   zoomOnBounds(bounds: any, map?: any): boolean { return this.m_oEngine.zoomOnBounds(bounds, map); }
+
   addRectangleByBoundsArrayOnMap(product: any, color: string, indexLayers: number): any {
     return this.m_oEngine.addRectangleByBoundsArrayOnMap(product, color, indexLayers);
   }
+
+  addPinOnMap(oCoords: {lat: number, lon: number}, oProduct: any): any {
+    return this.m_oEngine.addPinOnMap(oCoords, oProduct);
+  }
+  
   removeLayerFromMap(layer: any): boolean { return this.m_oEngine.removeLayerFromMap(layer); }
+
   addLayerMap2DByServer(layerId: string, server: string): boolean {
     return this.m_oEngine.addLayerMap2DByServer(layerId, server);
   }

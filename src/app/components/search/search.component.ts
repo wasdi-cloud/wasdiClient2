@@ -509,24 +509,31 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     let iDataLength: number = aoData.length;
 
     for (let iIndexData = 0; iIndexData < iDataLength; iIndexData++) {
-      let oSummary = this.stringToObjectSummary(aoData[iIndexData].summary);//change summary string to array
+      let oItem = aoData[iIndexData];
+      let oSummary = this.stringToObjectSummary(oItem.summary);//change summary string to array
 
-      aoData[iIndexData].summary = oSummary;
+      oItem.summary = oSummary;
 
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData[iIndexData].preview) || FadeoutUtils.utilsIsStrNullOrEmpty(aoData[iIndexData].preview))
-        aoData[iIndexData].preview = "";//default value ( set it if there isn't the image)
+      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oItem.preview) || FadeoutUtils.utilsIsStrNullOrEmpty(oItem.preview))
+        oItem.preview = "";//default value ( set it if there isn't the image)
 
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(aoData[iIndexData].footprint) == false) {
-        //get bounds
-        var aoBounds = this.getPolygonToBounds(aoData[iIndexData].footprint);
-        aoData[iIndexData].bounds = aoBounds;
-        // aaoAllBounds.push(aoBounds);
+      if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oItem.footprint) && !FadeoutUtils.utilsIsStrNullOrEmpty(oItem.footprint)) {
+        //get bounds as a polygon
+        var aoBounds = this.getPolygonToBounds(oItem.footprint);
+        oItem.bounds = aoBounds;
+        oItem.isPoint = false;
+      }
+      else if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oItem.latLonPoint) && !FadeoutUtils.utilsIsStrNullOrEmpty(oItem.latLonPoint)) {
+        // get point coordinates
+        let oPointCoords = this.getWktPointToCoordinates(oItem.latLonPoint);
+        oItem.pointCoordinates = oPointCoords;
+        oItem.isPoint = true;
       }
 
-      aoData[iIndexData].rectangle = null;
-      aoData[iIndexData].checked = false;
+      oItem.rectangle = null;
+      oItem.checked = false;
 
-      this.m_aoProductsList.push(aoData[iIndexData]);
+      this.m_aoProductsList.push(oItem);
     }
     let iActive = this.m_iActiveProvidersTab;
 
@@ -725,6 +732,25 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     }
     return aasNewPolygon;
 
+  }
+
+  /**
+   * Convert WKT POINT to coordinates
+   */
+  getWktPointToCoordinates(sWktPoint: string): { lat: number, lon: number } | null {
+    if (!sWktPoint) return null;
+
+    // Regex to extract coordinates from POINT. 
+    const match = sWktPoint.match(/POINT\s*\(\s*([^\s]+)\s+([^\s]+)\s*\)/i);
+    
+    if (match && match.length === 3) {
+      return {
+        lon: parseFloat(match[1]), // longitude (X)
+        lat: parseFloat(match[2])  // latitude (Y)
+      };
+    }
+    
+    return null;
   }
 
   /********** OPEN DIALOG HANDLERS **********/

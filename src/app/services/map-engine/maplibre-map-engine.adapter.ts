@@ -999,6 +999,32 @@ export class MapLibreMapEngineAdapter implements IMapEngine {
     return oRectangleLike;
   }
 
+  addPinOnMap(oCoords: {lat: number, lon: number}, oProduct: any): any {
+    if (!this.m_oMap) return null;
+
+    // create the marker on app
+    // Note: MapLibre uses [lng, lat]
+    let oMarker = new maplibregl.Marker()
+      .setLngLat([oCoords.lon, oCoords.lat])
+      .addTo(this.m_oMap);
+
+    // Opzionale: aggiungiamo un popup al click per mostrare il nome del prodotto
+//    if (oProduct && oProduct.title) {
+//      let oPopup = new maplibregl.Popup({ offset: 25 }).setText(oProduct.title);
+//      oMarker.setPopup(oPopup);
+//    }
+
+    // TRICK FOR COMPATIBILITY
+    // since in products-table.component.ts it calls removeFrom
+    // but in MapLibre the markers are removed with .remove()
+    // we add dinamically removeFrom method for avoiding crashes in the table
+    (oMarker as any).removeFrom = (map: any) => {
+      oMarker.remove();
+    };
+
+    return oMarker;
+  }
+
   removeLayerFromMap(layer: any): boolean {
     const oMap = this.getMapLibreMap();
     if (!this.isMapLibreMap(oMap)) {
