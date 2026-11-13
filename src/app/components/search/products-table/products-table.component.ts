@@ -179,17 +179,36 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     for (let iIndexData = 0; iIndexData < this.m_aoProductsList.length; iIndexData++) {
       if (this.m_aoProductsList[iIndexData].provider !== sProvider) continue;
       let oProduct = this.m_aoProductsList[iIndexData]
-      let oRectangle = this.m_oMapEngine.addRectangleByBoundsArrayOnMap(oProduct, null, iIndexData);
-      if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
-        this.m_aoProductsList[iIndexData].rectangle = oRectangle
-      }
-      aaoAllBounds.push(this.m_aoProductsList[iIndexData].bounds);
-    }
+      
+      if (oProduct.isPoint == true && oProduct.pointCoordinates) {
+        // if it is a point, then we add a Pin/Marker
+        let oPin = this.m_oMapEngine.addMarkerOnMap(oProduct.pointCoordinates, oProduct);
 
-    if (aaoAllBounds.length > 0 && aaoAllBounds[0]?.length) {
-      this.m_oMapEngine.zoomOnBounds(aaoAllBounds);
-    }
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oPin) === false) {
+          this.m_aoProductsList[iIndexData].rectangle = oPin; 
+        }
+
+        // create a fake bound around the point for the zoom
+        aaoAllBounds.push([
+          [oProduct.pointCoordinates.lat, oProduct.pointCoordinates.lon],
+          [oProduct.pointCoordinates.lat, oProduct.pointCoordinates.lon]
+        ]);
+      }
+      else {
+        // draw the rectangle for non-point products
+        let oRectangle = this.m_oMapEngine.addRectangleByBoundsArrayOnMap(oProduct, null, iIndexData);
+
+        if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle) === false) {
+          this.m_aoProductsList[iIndexData].rectangle = oRectangle
+        }
+        aaoAllBounds.push(this.m_aoProductsList[iIndexData].bounds);
+      }
+
+      if (aaoAllBounds.length > 0 && aaoAllBounds[0]?.length) {
+        this.m_oMapEngine.zoomOnBounds(aaoAllBounds);
+      }
   }
+}
 
 
   /********** Layer Information Management Methods **********/
@@ -332,34 +351,58 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
 
   /**
    * Handle mouseover on product card
-   * @param oRectangle
+   * @param oShape
    * @returns boolean
    */
-  changeRectangleStyleMouseOver(oRectangle): boolean {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
+  changeRectangleStyleMouseOver(oShape): boolean {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oShape)) {
       console.log("Error: rectangle is undefined ");
       return false;
     }
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle._rawPxBounds)) {
+
+    // Check if it's a MapLibre Marker (Pins have the getElement() method)
+    if (typeof oShape.getElement === 'function') {
+      let oHtmlElement = oShape.getElement();
+      if (oHtmlElement) {
+        // Aggiunge solo l'ombra per far risaltare il pin in hover
+        oHtmlElement.style.filter = "drop-shadow(0px 0px 5px rgba(0,0,0,0.8))";
+      }
+      return true;
+    }
+
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oShape._rawPxBounds)) {
       return false;
     }
-    oRectangle.setStyle({ weight: 3, fillOpacity: 0.7 });
+
+    oShape.setStyle({ weight: 3, fillOpacity: 0.7 });
     return true;
   }
 
   /**
    * handle mouseleave on product card
-   * @param oRectangle
+   * @param oShape
    */
-  changeRectangleStyleMouseLeave(oRectangle) {
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle)) {
+  changeRectangleStyleMouseLeave(oShape) {
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oShape)) {
       console.log("Error: rectangle is undefined ");
       return false;
     }
-    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oRectangle._rawPxBounds)) {
+
+    // Reset MapLibre Marker
+    if (typeof oShape.getElement === 'function') {
+      let oHtmlElement = oShape.getElement();
+      if (oHtmlElement) {
+         oHtmlElement.style.filter = ""; // Remove the CSS filter to revert to original
+      }
+      return true;
+    }
+
+    // Reset rectangle style
+    if (FadeoutUtils.utilsIsObjectNullOrUndefined(oShape._rawPxBounds)) {
       return false;
     }
-    oRectangle.setStyle({ weight: 1, fillOpacity: 0.2 });
+
+    oShape.setStyle({ weight: 1, fillOpacity: 0.2 });
     return true;
   }
 

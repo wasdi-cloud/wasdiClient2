@@ -15,13 +15,13 @@
     </div>
   }
   @if (m_oData.oPayload.type === 'pdf') {
-    <div>
+    <div class="document-container">
       <iframe  [src]="m_oPdfUrl" class="document-preview"></iframe>
     </div>
   }
 
   @if (m_oData.oPayload.type === 'txt') {
-    <div>
+    <div class="document-container">
       <iframe  [src]="m_oPdfUrl" class="document-preview"></iframe>
     </div>
   }

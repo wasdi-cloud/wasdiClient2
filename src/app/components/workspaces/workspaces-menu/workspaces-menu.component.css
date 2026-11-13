@@ -49,6 +49,19 @@
     background-color: var(--wasdiGreenLight);
 }
 
+.ws-name {
+    font-weight: bold;
+}
+
+.user-id {
+    font-size: 12px;
+}
+
+.ws-details-small {
+    font-size: 10px;
+    font-style: italic;
+}
+
 input.form-control {
     border-right: none;
     background: var(--neutral10);

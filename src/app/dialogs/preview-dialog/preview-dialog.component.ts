@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {CatalogService} from "../../services/api/catalog.service";
 import { HttpEventType } from "@angular/common/http";
 
@@ -61,7 +61,9 @@ export class PreviewDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public m_oData: { oPayload: any },
               private m_oCatalogService: CatalogService,
               private m_oSanitizer: DomSanitizer,
+              private m_oDialogRef: MatDialogRef<PreviewDialogComponent>,
   ) {
+    this.m_oDialogRef.updateSize('80vw', '80vh');
     const oPayload = this.m_oData.oPayload;
 
     // Inside PreviewDialogComponent's constructor
