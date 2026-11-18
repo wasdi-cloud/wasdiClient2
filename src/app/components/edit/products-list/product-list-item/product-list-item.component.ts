@@ -97,7 +97,6 @@ export class ProductListItemComponent {
    * Clicked on the expand button
    */
   openProductBands() {
-
     if (this.m_oProduct?.fileName) {
       let sFileExtension = this.m_oProduct.fileName.split(".").pop()?.toLowerCase();
       //checking if the file is either text or image
@@ -108,6 +107,12 @@ export class ProductListItemComponent {
         this.m_bIsPreviewable = false;
       }
     }
+
+    // Call chart endpoint if product is previewable
+    if (this.m_bIsPreviewable) {
+      this.getProductChart();
+    }
+
     this.m_bIsOpen = !this.m_bIsOpen;
   }
 
@@ -260,6 +265,12 @@ export class ProductListItemComponent {
   }
 
   previewPdfOrImage(oProduct: any) {
+    // Check if this is a chart product
+    if (oProduct?.isChart) {
+      this.getProductChart();
+      return;
+    }
+
     let sFileName = this.m_oProduct?.fileName;
     if (sFileName) {
       let sFileExtension = sFileName.split(".").pop()?.toLowerCase();
@@ -325,5 +336,49 @@ export class ProductListItemComponent {
       oPreviewDialogRef.afterClosed().subscribe(result => {
       });
     }
+  }
+
+  /**
+   * Get chart data for the product
+   */
+  getProductChart() {
+    let sWorkspaceId = this.m_oConstantsService.getActiveWorkspace()?.workspaceId;
+    let sProductName = this.m_oProduct?.fileName;
+
+    if (!sWorkspaceId || !sProductName) {
+      console.error("ProductListItemComponent.getProductChart: Missing workspace ID or product name");
+      return;
+    }
+
+    // Hardcoded chart request for now
+    let oChartRequest = {
+      workspace: sWorkspaceId,
+      name: sProductName,
+      chartType: "line",
+      xAxis: "Date",
+      yAxis: "Area",
+      chartData: "flood-data"
+    };
+
+    this.m_oProductService.getProductChart(sProductName, sWorkspaceId, oChartRequest).subscribe({
+      next: (oResponse: any) => {
+        if (oResponse && oResponse.stringValue) {
+          try {
+            let oChartData = JSON.parse(oResponse.stringValue);
+            console.log("✅ SUCCESS: Chart data received successfully for product:", sProductName);
+            console.log("   Chart Type:", oChartData["chart-type"]);
+            console.log("   Chart Name:", oChartData["chart-name"]);
+            console.log("   X-Axis:", oChartData["x-axis-name"]);
+            console.log("   Y-Axis:", oChartData["y-axis-name"]);
+            console.log("   Full Chart Data:", oChartData);
+          } catch (oError) {
+            console.error("ProductListItemComponent.getProductChart: Error parsing chart data:", oError);
+          }
+        }
+      },
+      error: (oError: any) => {
+        console.error("ProductListItemComponent.getProductChart: Error fetching chart data:", oError);
+      }
+    });
   }
 }
