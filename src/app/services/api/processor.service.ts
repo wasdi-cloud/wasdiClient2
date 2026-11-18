@@ -158,16 +158,18 @@ export class ProcessorService {
      * @param sPublic
      * @param oBody
      * @param sGitRepositoryUrl
+    * @param bGpuInference
+    * @param bGpuTraining
      * @returns {*}
      */
-    uploadProcessor(sWorkspaceId: string, sName: string, sVersion: string, sDescription: string, sType: string, sJsonSample: string, sPublic: string, oBody: object, sGitRepositoryUrl: string = '') {
+      uploadProcessor(sWorkspaceId: string, sName: string, sVersion: string, sDescription: string, sType: string, sJsonSample: string, sPublic: string, oBody: object, sGitRepositoryUrl: string = '', bGpuInference: boolean = false, bGpuTraining: boolean = false) {
 
       let sGitParameter = '';
       if (!FadeoutUtils.utilsIsStrNullOrEmpty(sGitRepositoryUrl)) {
         sGitParameter = '&gitRepositoryUrl=' + encodeURIComponent(sGitRepositoryUrl);
       }
 
-      return this.m_oHttp.post<Response>(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic) + sGitParameter, oBody);
+      return this.m_oHttp.post<Response>(this.APIURL + '/processors/uploadprocessor?workspace=' + encodeURI(sWorkspaceId) + '&name=' + encodeURI(sName) + '&version=' + encodeURI(sVersion) + '&description=' + encodeURI(sDescription) + "&type=" + encodeURI(sType) + "&paramsSample=" + encodeURI(sJsonSample) + "&public=" + encodeURI(sPublic) + sGitParameter + `&gpuInference=${bGpuInference}&gpuTraining=${bGpuTraining}`, oBody);
   };
 
   /**

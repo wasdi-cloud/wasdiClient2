@@ -477,6 +477,8 @@
     "DIALOG_PROCESSOR_BASE_NO_UPDATE": "File Update not available for this Application Type",
     "DIALOG_PROCESSOR_BASE_SHORT_DESCRIPTION": "Description",
     "DIALOG_PROCESSOR_BASE_TIMEOUT": "Timeout expressed in minutes (-1 for no timeout)",
+    "DIALOG_PROCESSOR_GPU_INFERENCE": "GPU inference",
+    "DIALOG_PROCESSOR_GPU_TRAINING": "GPU training",
     "DIALOG_PROCESSOR_BASE_PUBLIC": "Make the application public",
     "DIALOG_PROCESSOR_BASE_JSON": "JSON Sample",
     "DIALOG_PROCESSOR_BASE_BUILD_LOGS": "View Build logs",

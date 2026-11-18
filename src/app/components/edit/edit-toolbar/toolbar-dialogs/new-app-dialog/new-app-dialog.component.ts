@@ -124,6 +124,8 @@ export class NewAppDialogComponent implements OnInit {
    */
   m_oInputProcessor: {
     deploymentOngoing: boolean;
+    gpuInference?: boolean;
+    gpuTraining?: boolean;
     imgLink: string;
     isPublic: any;
     minuteTimeout: number;
@@ -304,6 +306,8 @@ export class NewAppDialogComponent implements OnInit {
         sJSONSample: this.m_sJSONSample,
         iMinuteTimeout: this.m_iMinuteTimeout,
         bIsPublic: this.m_oInputProcessor.isPublic,
+        bGpuInference: this.m_oInputProcessor.gpuInference ?? false,
+        bGpuTraining: this.m_oInputProcessor.gpuTraining ?? false,
         oSelectedFile: this.m_oSelectedFile,
         sSelectedFileName: '',
         sGitRepositoryUrl: '',
@@ -438,6 +442,8 @@ export class NewAppDialogComponent implements OnInit {
 
     //Set time out (in minutes):
     this.m_oInputProcessor.minuteTimeout = this.m_oProcessorForm.get('processorBasicInfo.iMinuteTimeout').value;
+    this.m_oInputProcessor.gpuInference = this.m_oProcessorForm.get('processorBasicInfo.bGpuInference').value;
+    this.m_oInputProcessor.gpuTraining = this.m_oProcessorForm.get('processorBasicInfo.bGpuTraining').value;
 
     //Copy the brief description also in the detail view:
     this.m_oProcessorDetails.processorDescription = this.m_oProcessorForm.get('processorBasicInfo.sShortDescription').value;
@@ -635,7 +641,9 @@ export class NewAppDialogComponent implements OnInit {
         this.m_oInputProcessor.paramsSample,
         this.m_oInputProcessor.isPublic,
         oSelectedFile,
-        sGitRepositoryUrl
+        sGitRepositoryUrl,
+        this.m_oInputProcessor.gpuInference,
+        this.m_oInputProcessor.gpuTraining
       )
       .subscribe({
         next: (oResponse) => {
