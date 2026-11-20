@@ -17,6 +17,7 @@ import {MetadataAttributesDialogComponent} from '../metadata-attributes-dialog/m
 import {AttachmentService} from "../../../../services/api/attachment.service";
 import {CatalogService} from "../../../../services/api/catalog.service";
 import {PreviewDialogComponent} from "../../../../dialogs/preview-dialog/preview-dialog.component";
+import {PayloadDialogComponent, parseProductTimeSeries} from '../../payload-dialog/payload-dialog.component';
 
 
 @Component({
@@ -97,23 +98,15 @@ export class ProductListItemComponent {
    * Clicked on the expand button
    */
   openProductBands() {
-    if (this.m_oProduct?.fileName) {
-      let sFileExtension = this.m_oProduct.fileName.split(".").pop()?.toLowerCase();
-      //checking if the file is either text or image
-      if (sFileExtension && (this.m_asReadableFileExtensions.includes(sFileExtension) || this.m_asImageExtensions.includes(sFileExtension))) {
-        this.m_bIsPreviewable = true;
-
-      } else {
-        this.m_bIsPreviewable = false;
-      }
-    }
-
-    // Call chart endpoint if product is previewable
-    if (this.m_bIsPreviewable) {
-      this.getProductChart();
-    }
-
+    const sFileExtension = this.m_oProduct?.fileName?.split(".").pop()?.toLowerCase();
+    this.m_bIsPreviewable = this.isChartProduct(this.m_oProduct) ||
+      (!!sFileExtension && (this.m_asReadableFileExtensions.includes(sFileExtension) ||
+        this.m_asImageExtensions.includes(sFileExtension)));
     this.m_bIsOpen = !this.m_bIsOpen;
+  }
+
+  isChartProduct(oProduct: { chart?: boolean; isChart?: boolean } | null): boolean {
+    return (oProduct?.chart ?? oProduct?.isChart) === true;
   }
 
   /**
@@ -265,8 +258,7 @@ export class ProductListItemComponent {
   }
 
   previewPdfOrImage(oProduct: any) {
-    // Check if this is a chart product
-    if (oProduct?.isChart) {
+    if (this.isChartProduct(oProduct)) {
       this.getProductChart();
       return;
     }
@@ -353,32 +345,36 @@ export class ProductListItemComponent {
     // Hardcoded chart request for now
     let oChartRequest = {
       workspace: sWorkspaceId,
-      name: sProductName,
+      fileName: sProductName,
       chartType: "line",
-      xAxis: "Date",
-      yAxis: "Area",
-      chartData: "flood-data"
+      dataLabel: "air_pressure:287.0:point:PT0S"
     };
 
     this.m_oProductService.getProductChart(sProductName, sWorkspaceId, oChartRequest).subscribe({
       next: (oResponse: any) => {
-        if (oResponse && oResponse.stringValue) {
-          try {
-            let oChartData = JSON.parse(oResponse.stringValue);
-            console.log("✅ SUCCESS: Chart data received successfully for product:", sProductName);
-            console.log("   Chart Type:", oChartData["chart-type"]);
-            console.log("   Chart Name:", oChartData["chart-name"]);
-            console.log("   X-Axis:", oChartData["x-axis-name"]);
-            console.log("   Y-Axis:", oChartData["y-axis-name"]);
-            console.log("   Full Chart Data:", oChartData);
-          } catch (oError) {
-            console.error("ProductListItemComponent.getProductChart: Error parsing chart data:", oError);
+        try {
+          if (typeof oResponse?.stringValue !== 'string') {
+            throw new Error('Chart response is missing stringValue');
           }
+          const oProductChart = parseProductTimeSeries(oResponse.stringValue);
+          this.m_oDialog.open(PayloadDialogComponent, {
+            width: '900px',
+            maxWidth: '95vw',
+            ariaLabel: oProductChart['chart-name'],
+            data: { productChart: oProductChart }
+          });
+        } catch (oError) {
+          this.showChartPreviewError(oError);
         }
       },
-      error: (oError: any) => {
-        console.error("ProductListItemComponent.getProductChart: Error fetching chart data:", oError);
-      }
+      error: (oError: unknown) => this.showChartPreviewError(oError)
     });
+  }
+
+  private showChartPreviewError(oError: unknown): void {
+    console.error("ProductListItemComponent.getProductChart: Unable to preview chart:", oError);
+    this.m_oNotificationDisplayService.openAlertDialog(
+      this.m_oTranslate.instant("DIALOG_PAYLOAD_FETCH_ERROR"), "", "danger"
+    );
   }
 }
