@@ -35,6 +35,7 @@ export class WasdaiComponent implements OnInit {
     'mistral-large-latest',
     'mistral-medium-latest',
     'mistral-small-latest',
+    'gpt-4o-mini'
   ];
   readonly defaultAssistantModel = 'mistral-small-latest';
   chats = signal<ChatListViewModel[]>([]);
