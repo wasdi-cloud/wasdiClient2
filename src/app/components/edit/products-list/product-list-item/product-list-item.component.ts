@@ -17,6 +17,7 @@ import {MetadataAttributesDialogComponent} from '../metadata-attributes-dialog/m
 import {AttachmentService} from "../../../../services/api/attachment.service";
 import {CatalogService} from "../../../../services/api/catalog.service";
 import {PreviewDialogComponent} from "../../../../dialogs/preview-dialog/preview-dialog.component";
+import {PayloadDialogComponent, parseProductTimeSeries} from '../../payload-dialog/payload-dialog.component';
 
 
 @Component({
@@ -97,18 +98,15 @@ export class ProductListItemComponent {
    * Clicked on the expand button
    */
   openProductBands() {
-
-    if (this.m_oProduct?.fileName) {
-      let sFileExtension = this.m_oProduct.fileName.split(".").pop()?.toLowerCase();
-      //checking if the file is either text or image
-      if (sFileExtension && (this.m_asReadableFileExtensions.includes(sFileExtension) || this.m_asImageExtensions.includes(sFileExtension))) {
-        this.m_bIsPreviewable = true;
-
-      } else {
-        this.m_bIsPreviewable = false;
-      }
-    }
+    const sFileExtension = this.m_oProduct?.fileName?.split(".").pop()?.toLowerCase();
+    this.m_bIsPreviewable = this.isChartProduct(this.m_oProduct) ||
+      (!!sFileExtension && (this.m_asReadableFileExtensions.includes(sFileExtension) ||
+        this.m_asImageExtensions.includes(sFileExtension)));
     this.m_bIsOpen = !this.m_bIsOpen;
+  }
+
+  isChartProduct(oProduct: { chart?: boolean; isChart?: boolean } | null): boolean {
+    return (oProduct?.chart ?? oProduct?.isChart) === true;
   }
 
   /**
@@ -260,6 +258,11 @@ export class ProductListItemComponent {
   }
 
   previewPdfOrImage(oProduct: any) {
+    if (this.isChartProduct(oProduct)) {
+      this.getProductChart();
+      return;
+    }
+
     let sFileName = this.m_oProduct?.fileName;
     if (sFileName) {
       let sFileExtension = sFileName.split(".").pop()?.toLowerCase();
@@ -325,5 +328,59 @@ export class ProductListItemComponent {
       oPreviewDialogRef.afterClosed().subscribe(result => {
       });
     }
+  }
+
+  /**
+   * Get chart data for the product
+   */
+  getProductChart() {
+    let sWorkspaceId = this.m_oConstantsService.getActiveWorkspace()?.workspaceId;
+    let sProductName = this.m_oProduct?.fileName;
+
+    if (!sWorkspaceId || !sProductName) {
+      console.error("ProductListItemComponent.getProductChart: Missing workspace ID or product name");
+      return;
+    }
+
+    const oChartMetadata = this.m_oProduct?.chartMetadata;
+    if (typeof oChartMetadata?.chartType !== 'string' || !oChartMetadata.chartType.trim() ||
+        typeof oChartMetadata?.chartDataName !== 'string' || !oChartMetadata.chartDataName.trim()) {
+      this.showChartPreviewError(new Error('Product chart metadata is missing chartType or chartDataName'));
+      return;
+    }
+
+    let oChartRequest = {
+      workspace: sWorkspaceId,
+      fileName: sProductName,
+      chartType: oChartMetadata.chartType,
+      dataLabel: oChartMetadata.chartDataName
+    };
+
+    this.m_oProductService.getProductChart(sProductName, sWorkspaceId, oChartRequest).subscribe({
+      next: (oResponse: any) => {
+        try {
+          if (typeof oResponse?.stringValue !== 'string') {
+            throw new Error('Chart response is missing stringValue');
+          }
+          const oProductChart = parseProductTimeSeries(oResponse.stringValue);
+          this.m_oDialog.open(PayloadDialogComponent, {
+            width: '900px',
+            maxWidth: '95vw',
+            ariaLabel: oProductChart['chart-name'],
+            data: { productChart: oProductChart }
+          });
+        } catch (oError) {
+          this.showChartPreviewError(oError);
+        }
+      },
+      error: (oError: unknown) => this.showChartPreviewError(oError)
+    });
+  }
+
+  private showChartPreviewError(oError: unknown): void {
+    console.error("ProductListItemComponent.getProductChart: Unable to preview chart:", oError);
+    this.m_oNotificationDisplayService.openAlertDialog(
+      this.m_oTranslate.instant("DIALOG_PAYLOAD_FETCH_ERROR"), "", "danger"
+    );
   }
 }

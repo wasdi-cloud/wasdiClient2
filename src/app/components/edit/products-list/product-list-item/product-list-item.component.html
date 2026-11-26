@@ -172,7 +172,7 @@
           }
           @if (m_bIsPreviewable) {
             <li [class.container]="m_oProduct.bandsGroups?.bands?.length > 0 && m_bShowBands === true ">
-              <p [class.disabled-label]="m_oProduct?.bandsGroups?.bands?.length === 0" (click)="previewPdfOrImage(m_oProduct)">
+              <p [class.disabled-label]="!isChartProduct(m_oProduct) && m_oProduct?.bandsGroups?.bands?.length === 0" (click)="previewPdfOrImage(m_oProduct)">
                 <span class="bands-icon material-symbols-outlined">
                   visibility
                 </span>

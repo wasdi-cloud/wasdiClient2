@@ -93,4 +93,16 @@ export class ProductService {
 
     return this.oHttp.post<any>(sUrl, oBody, { observe: 'response' });
   };
+
+  getProductChart(sProductName: string, sWorkspaceId: string, oChartRequest: any) {
+
+    let oWorkspace = this.oConstantsService.getActiveWorkspace();
+    let sUrl = this.APIURL;
+
+    if (!FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace) && !FadeoutUtils.utilsIsObjectNullOrUndefined(oWorkspace.apiUrl) && !this.m_bIgnoreWorkspaceApiUrl) {
+      sUrl = oWorkspace.apiUrl;
+    }
+
+    return this.oHttp.post<any>(sUrl + "/product/chart", oChartRequest);
+  };
 }
