@@ -29,6 +29,7 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') m_oEditorRef!: ElementRef;
 
   @Input() m_oProduct?: any;
+  @Input() m_bAllowStyleSelection: boolean = false;
 
   m_bDisplayInfo: boolean = false;
   m_sSearchString!: string;
@@ -83,7 +84,7 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     if (!FadeoutUtils.utilsIsObjectNullOrUndefined(this.m_oData)) {
       this.m_oProduct = this.m_oData.product;
-
+      this.m_bAllowStyleSelection = this.m_oData.allowStyleSelection === true;
     }
   }
 
@@ -330,6 +331,14 @@ export class StylesDialogComponent implements OnInit, AfterViewInit {
         })
       }
     })
+  }
+
+  selectStyle(): void {
+    if (!this.m_oSelectedStyle.name) {
+      return;
+    }
+
+    this.m_oDialogRef.close(this.m_oSelectedStyle);
   }
 
   onDismiss(): void {

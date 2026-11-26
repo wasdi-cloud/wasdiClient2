@@ -158,7 +158,13 @@ export class ManageSharingComponent implements OnInit {
     this.m_oNotificationDisplayService.openSnackBar(sMsg);
   }
 
-  findResourceByPartialName() {
+  findResourceByPartialName(bIsPagination: boolean = false) {
+    if (bIsPagination === false) {
+      this.m_iOffset = 0;
+      this.m_bSearchedByResourceName = false;
+      this.m_aoFoundResources = [];
+    }
+
     this.m_oAdminDashboard.findResourceByPartialName(this.m_sResourceName, this.m_sSelectedType.toLowerCase(), this.m_iOffset, this.m_iLimit).subscribe({
       next: oResponse => {
         if (oResponse.length === 0) {
@@ -166,7 +172,6 @@ export class ManageSharingComponent implements OnInit {
         } else {
           this.m_bSearchedByResourceName = true;
           this.m_aoFoundResources = oResponse;
-          this.m_iOffset = 10;
         }
       },
       error: oError => {
@@ -196,7 +201,7 @@ export class ManageSharingComponent implements OnInit {
       this.m_iOffset -= this.m_iLimit
     }
     if (sTable === 'resource-by-name') {
-      this.findResourceByPartialName()
+      this.findResourceByPartialName(true)
     }
   }
 }

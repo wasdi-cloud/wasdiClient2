@@ -140,7 +140,11 @@
                 [m_bDisabled]="m_oSelectedStyle.name ? false : true" [m_sIconLeft]="'play_circle'"
               (click)="updateXml()"></app-button>
             }
-            @if (m_oProduct) {
+            @if (m_bAllowStyleSelection) {
+              <app-button [m_sLabel]="'Select'"
+              [m_bDisabled]="!m_oSelectedStyle.name" (click)="selectStyle()"></app-button>
+            }
+            @if (m_oProduct && !m_bAllowStyleSelection) {
               <app-button [m_sLabel]="'Apply'" [m_sIconLeft]="'play_circle'"
               [m_bDisabled]="!m_oSelectedStyle.name" (click)="applyStyleToProduct()"></app-button>
             }

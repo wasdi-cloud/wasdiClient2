@@ -13,6 +13,8 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 })
 export class SessionInjectorInterceptor implements HttpInterceptor {
 
+  private m_iLastLegacyCookieRefresh = 0;
+
   constructor(private m_oRouter: Router, private m_oConstantsService: ConstantsService,
     private m_oAuthService: AuthService, private m_oJwtService: JwtHelperService) { }
 
@@ -46,6 +48,12 @@ export class SessionInjectorInterceptor implements HttpInterceptor {
     
     // Add authorization header if available; allow unauthenticated requests to proceed
     if (!FadeoutUtils.utilsIsStrNullOrEmpty(sAuthorizationHeader)) {
+      const iNow = Date.now();
+      if (sAuthorizationHeader.startsWith('Bearer wasdi-') && iNow - this.m_iLastLegacyCookieRefresh >= 60 * 1000) {
+        this.m_oConstantsService.setUser(this.m_oConstantsService.getUser());
+        this.m_iLastLegacyCookieRefresh = iNow;
+      }
+
       oRequest = oRequest.clone({
         setHeaders: { 'Authorization': sAuthorizationHeader }
       });

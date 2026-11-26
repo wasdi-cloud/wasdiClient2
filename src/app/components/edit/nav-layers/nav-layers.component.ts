@@ -21,6 +21,7 @@ import FadeoutUtils from 'src/app/lib/utils/FadeoutJSUtils';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationDisplayService } from 'src/app/services/notification-display.service';
+import { ProductService } from 'src/app/services/api/product.service';
 
 @Component({
     selector: 'app-nav-layers',
@@ -55,6 +56,7 @@ export class NavLayersComponent implements OnInit {
     private m_oDialog: MatDialog,
     private m_oMapEngineService: MapEngineService,
     private m_oNotificationDisplayService: NotificationDisplayService,
+    private m_oProductService: ProductService,
     private m_oTranslate: TranslateService
   ) {}
 
@@ -184,11 +186,56 @@ export class NavLayersComponent implements OnInit {
     return sGeoserverUrl;
   }
 
-  openStylesDialog(): void {
-    this.m_oDialog.open(StylesDialogComponent, {
+  openStylesDialog(oBand: Band & { productName: string }): void {
+    let oDialogRef = this.m_oDialog.open(StylesDialogComponent, {
       height: '90vh',
       width: '90vw',
       maxWidth: '1500px',
+      data: {
+        allowStyleSelection: true
+      }
+    });
+
+    oDialogRef.afterClosed().subscribe((oSelectedStyle) => {
+      if (!oSelectedStyle?.name) {
+        return;
+      }
+
+      let oProduct = this.m_aoProducts.find((oProductItem) =>
+        oProductItem.name === oBand.productName
+        || oProductItem.fileName === oBand.productName
+        || oProductItem.productFriendlyName === oBand.productName
+      );
+
+      if (!oProduct) {
+        let sErrorMsg = this.m_oTranslate.instant('DIALOG_PRODUCT_EDITOR_UPDATE_ERROR');
+        this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
+        return;
+      }
+
+      let oProductViewModel = {
+        description: oProduct.description,
+        fileName: oProduct.fileName,
+        productFriendlyName: oProduct.productFriendlyName,
+        style: oSelectedStyle.name
+      };
+      let sWorkspaceId = this.m_oConstantsService.getActiveWorkspace().workspaceId;
+      let sSuccessMsg = this.m_oTranslate.instant('DIALOG_PRODUCT_EDITOR_UPDATE_SUCCESS');
+      let sErrorMsg = this.m_oTranslate.instant('DIALOG_PRODUCT_EDITOR_UPDATE_ERROR');
+
+      this.m_oProductService.updateProduct(oProductViewModel, sWorkspaceId).subscribe({
+        next: (oResponse) => {
+          if (oResponse.status === 200) {
+            oProduct.style = oSelectedStyle.name;
+            this.m_oNotificationDisplayService.openSnackBar(sSuccessMsg, '', 'success-snackbar');
+          } else {
+            this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
+          }
+        },
+        error: () => {
+          this.m_oNotificationDisplayService.openAlertDialog(sErrorMsg, '', 'danger');
+        }
+      });
     });
   }
 
