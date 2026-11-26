@@ -31,3 +31,13 @@ a.nav-link {
         max-width: 100% !important;
     }
 }
+
+.product-chart-preview {
+    width: 100%;
+    overflow: hidden;
+}
+
+.product-chart-preview .chart-container {
+    width: 100% !important;
+    height: min(440px, 65vh);
+}
