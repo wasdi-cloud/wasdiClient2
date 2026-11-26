@@ -342,12 +342,18 @@ export class ProductListItemComponent {
       return;
     }
 
-    // Hardcoded chart request for now
+    const oChartMetadata = this.m_oProduct?.chartMetadata;
+    if (typeof oChartMetadata?.chartType !== 'string' || !oChartMetadata.chartType.trim() ||
+        typeof oChartMetadata?.chartDataName !== 'string' || !oChartMetadata.chartDataName.trim()) {
+      this.showChartPreviewError(new Error('Product chart metadata is missing chartType or chartDataName'));
+      return;
+    }
+
     let oChartRequest = {
       workspace: sWorkspaceId,
       fileName: sProductName,
-      chartType: "line",
-      dataLabel: "air_pressure:287.0:point:PT0S"
+      chartType: oChartMetadata.chartType,
+      dataLabel: oChartMetadata.chartDataName
     };
 
     this.m_oProductService.getProductChart(sProductName, sWorkspaceId, oChartRequest).subscribe({
