@@ -24,7 +24,7 @@ export class PreviewDialogComponent {
     dotx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
     rtf: 'application/rtf',
     odt: 'application/vnd.oasis.opendocument.text',
-    csv: 'text/csv',
+    csv: 'text/plain',
     htm: 'text/html',
     html: 'text/html',
     md: 'text/markdown',
